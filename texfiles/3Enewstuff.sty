@@ -1,0 +1,302 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This file is a collection of style definitions written for
+%% JJJ 3E by R. Morelli.  They revise definitions inherited 
+%% from the 2E compositor.
+%%
+%% Paul: The idea here was to try and replace commands
+%%  that were specifically written for left- and right-hand
+%%  pages with a single command that would use a conditional
+%%  to format a figure for either type of page.  Similarly
+%%  for drop-in boxes, such as JavaRule and JavaTIP. 
+%%  Unfortunately, my LaTeX skills being what they are,
+%%  these don't work perfectly.  Most drop-in boxes
+%%  are correctly placed, but sometimes not.  In those
+%%  cases I use the boolean parameter [false] to reverse
+%%  the placement.
+%%
+%%  For figures, I rewrote \figa which is supposed to
+%%  place figures correctly (the captions) for LHS or
+%%  RHS pages.  I kept the original \figaleft and added
+%%  a \figaright to override \figa when it fails.
+%%
+%% Also, I started using the listings package to
+%% display program listings with syntax coloring. This
+%% allowed me to get rid of the CDT environments.
+%%
+%% Hopefully you can clean up the definitions and 
+%%  environments left over from 2E, so that when it
+%%  comes time to work on 4E, it won't be such a hassle.
+%% 
+%% -- ralph
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{ifthen}
+\usepackage{calc}
+\usepackage{listings}
+\lstloadlanguages{Java}
+\lstset{language=Java, commentstyle=\scriptsize}
+\newboolean{normal}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SSTUDY environment modifies the EXR environment from 2E.
+%% The main difference is that it uses the global counter
+%% SSTUDYcount, which is incremented automatically after each
+%% self-study exercise item. 
+%%
+%% IMPORTANT: SSTUDYcount must be reset at the beginning of
+%%  each chapter with the command:
+%%       \setcounter{SSTUDYcount}{1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newcounter{SSTUDYcount}
+\newlength{\hdrwidth}
+\newenvironment{SSTUDY}
+ {
+   \begin{list}%
+    {
+      %%%RAM\fontEXRN 
+      {\color{cyan}EXERCISE\,\,\thechapter.\arabic{SSTUDYcount}}\addtocounter{SSTUDYcount}{1}
+    }
+    {
+      \itemsep=6pt plus6pt minus3pt%
+      \topsep=0pt%
+      \itemindent=0pt%
+      \leftmargin=0pt%
+      \labelwidth=-10pt%
+      \labelsep=10pt%
+      \partopsep=0pt%
+      \parskip=0pt%
+      \parsep=0pt%
+    }
+ }
+ {
+  \end{list}
+ }%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \JavaRule defines a command that produces a Java Language Rule box
+%% that is properly formatted for either a LHS page or a RHS page. 
+%% #1 is the optional argument false or true (default)
+%% #2 is the name of the Java Language Rule
+%% #3 is the text of the JLR
+%% 
+%% If the default version of this does not correctly place the JavaRule
+%%   icon in the correct margin, use the optional argument [false].
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\JavaRule}[3][true] {%
+  \setboolean{normal}{#1}
+  \settowidth{\hdrwidth}{\,\,JAVA\,\,LANGUAGE\,\,RULE\,\,}
+    \par\nopagebreak\vspace{7pt plus7pt minus4pt}%
+    \noindent\fboxrule=0.5pt%
+    \fboxsep=6pt%
+  \ifthenelse{\boolean{normal}}
+  {\ifodd \thepage \hspace*{27.9pc} \else \hspace*{-3.7pc} \fi}
+  {\ifodd \thepage \hspace*{-3.7pc} \else \hspace*{27.9pc} \fi}
+    \psfig{file=../commonart/bx1_dg.eps}\par\nopagebreak\vspace{-32pt}%
+    \noindent\fbox{\parbox{26pc}{\vspace{-6pt}%
+    \hspace*{-6pt}{\color{cyan}\rule[-3pt]{\hdrwidth}{15pt}}\par\nopagebreak%
+    \vspace{-12pt}%
+    { %%%RAM\fontboxtwoh
+      \color{white}JAVA\,\,LANGUAGE\,\,RULE}\hspace*{10pt}%
+      {  %%%RAM\fontboxtwoh
+        \color{cyan}#2}\raggedright\hspace*{5pt}#3}%
+      }\par\nopagebreak\vspace{12pt plus10pt minus4pt}
+} % \JavaRule
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \JavaTIP defines various kinds of Java tip for a LHS or RHS page.
+%% #1 optional paramter; if true (default} it uses the page to decide 
+%%   whether odd or even side; if false, it reverses page.
+%% #2 is the type of tip: DEBUGGING TIP, PROGRAMMING TIP, EFFECTIVE DESIGN
+%% #3 is the name of the name of the tip.
+%% #4 is the text of the tip.
+%%
+%% If the default version of this does not correctly place the JavaTIP
+%%   icon in the correct margin, use the optional argument [false].
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newcommand{\JavaTIP}[4][true] {%
+  \setboolean{normal}{#1}
+%%\ifthenelse{\boolean{normal}}{\typeout{Normal=TRUE}}{\typeout{Normal=FALSE}}
+  \settowidth{\hdrwidth}{\,\,JAVA\,\,#2\,\,}
+  \par\nopagebreak\vspace{7pt plus7pt minus4pt}%
+  \noindent\fboxrule=0.5pt%
+  \fboxsep=6pt%
+  \ifthenelse{\boolean{normal}}
+  {\ifodd \thepage \hspace*{27.9pc} \else \hspace*{-3.7pc} \fi}
+  {\ifodd \thepage \hspace*{-3.7pc} \else \hspace*{27.9pc} \fi}
+  \psfig{file=../commonart/bx3_dg.eps}\par\nopagebreak\vspace{-32pt}
+  \noindent\fbox{\parbox{26pc}{\vspace{-6pt}%
+  \hspace*{-6pt}{\color{cyan}\rule[-3pt]{\hdrwidth}{15pt}}\par\nopagebreak%
+  \vspace{-12pt}%
+  { %%%RAM\fontboxtwoh
+    \color{white}JAVA\,#2}\hspace*{10pt}%
+    { %%%RAM\fontboxtwoh
+      \color{cyan}#3}\raggedright\hspace*{5pt}#4}%
+    }\par\nopagebreak\vspace{12pt plus10pt minus4pt}
+} % \JavaTIPRev
+%
+\def\JavaTIPOld#1#2#3 {%
+  \settowidth{\hdrwidth}{\,\,JAVA\,\,#1\,\,}
+  \par\nopagebreak\vspace{7pt plus7pt minus4pt}%
+  \noindent\fboxrule=0.5pt%
+  \fboxsep=6pt%
+  \ifodd \thepage \hspace*{27.9pc} \else \hspace*{-3.7pc} \fi
+  \psfig{file=../commonart/bx3_dg.eps}\par\nopagebreak\vspace{-32pt}
+  \noindent\fbox{\parbox{26pc}{\vspace{-6pt}%
+  \hspace*{-6pt}{\color{cyan}\rule[-3pt]{\hdrwidth}{15pt}}\par\nopagebreak%
+  \vspace{-12pt}%
+  { %%%RAM\fontboxtwoh
+    \color{white}JAVA\,#1}\hspace*{10pt}%
+    { %%%RAM\fontboxtwoh
+      \color{cyan}#2}\hspace*{5pt}#3}%
+    }\par\nopagebreak\vspace{12pt plus10pt minus4pt}
+} % \JavaTIP
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \jjjlisting replaces CDT from 2E. It should be used for code segments
+%%   and program listings within figures:
+%%
+%%  \begin{jjjlisting}\begin{lstlisting}...\end{lstlisting}\end{jjjlisting}
+%% 
+%% It sets up the style for Java code listings.
+%% #1: Optional parameter allows the default minipage width (26pc) to be
+%%  overridden for code that extends into the right margin.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newenvironment{jjjlisting}[1][26pc]
+{ \lstset{
+    %% breaklines=true,
+    language=Java, 
+    basicstyle=\small,
+    commentstyle=\color{cyan}\scriptsize,
+    stringstyle=\color{green},
+    showstringspaces=false,
+    frame=single,
+    frameround=tttt,
+    rulecolor=\color{cyan},
+    framerule=2pt,
+    framesep=0.25pc,
+    fillcolor=\color{cyanten}
+  }
+  \par\nopagebreak\begin{minipage}[t]{#1}\raggedright
+}
+{ \end{minipage}\noindent
+}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \jjjlistingleft is used to move figures into the left margin. This is
+%%  for program listings that are too wide to fit within the 26pc margins.
+%%
+%% #1: Optional width of the minipage.
+%% #2: \hspace offset into the left margin.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newenvironment{jjjlistingleft}[2][26pc]
+{ \lstset{
+    %% breaklines=true,
+    language=Java, 
+    basicstyle=\small,
+    commentstyle=\color{cyan}\scriptsize,
+    stringstyle=\color{green},
+    showstringspaces=false,
+    frame=single,
+    frameround=tttt,
+    rulecolor=\color{cyan},
+    framerule=2pt,
+    framesep=0.25pc,
+    fillcolor=\color{cyanten}
+  }
+  \par\nopagebreak
+  \hspace*{#2}\begin{minipage}[t]{#1}\raggedright
+}
+{ \end{minipage}\noindent
+}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% jjjprog is used for program listings that occur in figures.
+%%
+%% #1: The figure's caption.
+%%
+%% BUG: I couldn't get this to place the captions in the margins as in 2E
+%%  so this environment is not used.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newenvironment{jjjprog}[1]
+{
+   \hspace*{27.5pc}
+   \begin{minipage}[t]{12.5pc}
+   \protect
+   \caption{#1}
+   \end{minipage}
+   \small\baselineskip11pt\begin{minipage}[t]{27pc}%
+   \protect
+}
+{  \end{minipage}
+ }
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \figa redefines the \figa command from 2E. It attempts to place the
+%%  figure's caption correctly for a RHS or LHS page based on \thepage.
+%% #1 file name
+%% #2 caption
+%% BUG: Unfortunately, this code doesn't appear to work in all cases. I
+%%  think the problem is that many figures float to the next page.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\def\figa#1#2{%
+  \ifodd \thepage {
+    \protect\begin{minipage}[t]{27pc}%
+    \protect\vfill\centering\psfig{file=../#1}%
+    \end{minipage}\hspace*{1pc}%
+    \begin{minipage}[t]{12.5pc}%
+    \protect\vspace{-8pt}\caption{#2}%
+    \end{minipage}\hspace*{-13.5pc}%
+   } \else {
+    \hspace*{-13.5pc}\parbox[t]{12.5pc}{%
+    \protect\vspace{-8pt}\caption{#2}%
+    }\hspace*{1pc}%
+    \protect\parbox[t]{27pc}{%
+    \protect\vfill\centering\psfig{file=../#1}%
+    }
+   }%
+  \fi
+ } %% figa
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \figaright forces a figure to be placed for a RHS page.
+%%  figure's caption 
+%% #1 file name
+%% #2 caption
+%% BUG: Unfortunately, this code doesn't appear to work in all cases. I
+%%  think the problem is that many figures float to the next page.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\def\figaright#1#2{%
+    \protect\begin{minipage}[t]{27pc}%
+    \protect\vfill\centering\psfig{file=../#1}%
+    \end{minipage}\hspace*{1pc}%
+    \begin{minipage}[t]{12.5pc}%
+    \protect\vspace{-8pt}\caption{#2}%
+    \end{minipage}\hspace*{-13.5pc}%
+ } %% figa
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% jjjprogstart, jjjprogstop are used to surround Java program listings
+%%  in figures. They create a minipage. 
+%%
+%% #1: The figure's caption is placed below the figure in blue.
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\jjjprogstart{
+    \begin{minipage}{26pc}%
+    \protect}
+%
+\def\jjjprogstop#1{
+    \end{minipage}
+    \vspace{-7pt plus2pt minus2pt}
+    {\color{cyan}\caption{#1}}
+}
+%
+
+

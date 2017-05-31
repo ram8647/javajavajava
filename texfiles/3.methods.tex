@@ -1,0 +1,3162 @@
+%%%  Chapter 3: Methods: Communicating with Objects
+%%%  3rd Edition
+
+\setcounter{chapter}{2}
+\setcounter{SSTUDYcount}{1}
+\chapter{Methods: Communicating with Objects}
+\label{chapter-methods}
+\label{pg-chapter-methods}
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Understand the role that methods play in an
+  object-oriented program.
+\item  Know how to use parameters and arguments to pass data to an object.
+\item  Understand how constructor methods are used to instantiate objects.
+
+\item  Know the difference between passing a value and passing a reference
+   to an object.
+\item  Be able to design your own methods.
+\item  Know how to use the {\tt if-else} and {\tt while} control structures.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item Passing Information to an Object
+\item Constructor Methods
+\item Retrieving Information from an Object
+\item Passing a Value and Passing a Reference
+\item Flow of Control: Control Structures
+\item Testing an Improved {\tt OneRowNim}
+\item[] {{\color{cyan}Special Topic:} Intelligent Agents}
+\item From the Java Library: {\tt java.lang.Object}
+\item Object-Oriented Design: Inheritance and Polymorphism
+\item Drawing Lines and Defining Graphical Methods (Optional)
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+
+\noindent In this chapter, we take a look at Java methods and parameters.
+Methods and parameters are the primary mechanisms for passing
+information into and out of an object.  We will once again focus on
+the {\tt OneRowNim} simulation that we designed in the previous chapter.
+That version was sufficient to introduce us to Java
+objects and classes, but it was limited in its ability to
+communicate with other objects.
+
+In this chapter, we want to expand {\tt OneRowNim} to make our
+simulation more realistic.  We begin by learning how to pass
+information to an object.  That will enable us to specify the number of
+sticks to remove using a single method.  We then consider special
+methods called constructors, which
+are used to initialize an object's state when it is created.   We also
+learn how to retrieve information from an object.  That will enable us
+to request a {\tt OneRowNim} object for several different bits of information.
+Then we consider the {\tt if-else} and {\tt while} control structures
+which allow us to define more useful methods and write more realistic
+test programs.
+
+\section{Passing Information to an Object}
+\noindent  One convention of object-oriented programming is to
+provide {\tt public} methods to {\it set} and {\it get} the values of
+some of its {\tt private} instance variables. Methods that set or
+modify an object's instance variables are called {\bf mutator methods}.
+Methods that get or retrieve the value of an instance variable are
+called {\bf accessor methods}.
+
+\JavaTIP{EFFECTIVE DESIGN}{Accessor and Mutator
+Methods.}{An {\bf accessor method}\index{accessor method} is a public
+method used to {\it get} the value of an object's instance
+variable. Such methods are often named {\it getVarName()} where {\it
+VarName} is the name of the variable that's being accessed.  A {\bf
+mutator method}\index{mutator method} is a public method used to
+modify the value of one or more instance variables.  The special type
+of mutator method that {\it sets} or assigns a variable a specified
+value is often called {\it setVarName()}.}
+
+
+\noindent It is up to the designer of the class to determine
+which private
+variables require accessor and mutator methods.  If you were designing
+a {\tt BankAccount} class, you might want a public {\tt
+getAccountNumber()} method, so that clients could retrieve information
+about their bank accounts, but you would probably not want a public
+{\tt getAccountPassword()} method or a public {\tt setAccountBalance()}
+method.
+
+In the remainder of this section, we will be concerned
+with mutator methods. We defined three mutator methods named {\tt takeOne()},
+{\tt takeTwo()}, and {\tt takeThree} as part of the {\tt OneRowNim} class
+in the previous chapter.  All three of these method change the values of the
+instance variables {\tt nSticks} and {\tt player}.  All three methods have
+very similar bodies.  The definition of the {\tt takeOne()} is:
+
+%%%\newpage
+\begin{jjjlisting}
+\begin{lstlisting}
+public void takeOne()
+{   nSticks = nSticks - 1;
+    player = 3 - player;
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The only difference in the bodies of the other two methods is 
+that they subtract 2 and 3 from {\tt nSticks} instead of 1.  Instead
+of having three, virtually identical methods, It would be a more
+efficient design to define a single method where the number to be
+subtracted from {\tt nSticks} would be supplied as an argument when
+the method is called. In order to be able to handle such an argument,
+we must design a new method that uses a {\em parameter} to handle
+the argument. 
+
+A {\bf formal parameter}, or more simply, {\bf parameter}, is a
+variable used to pass
+%\begin{marginalnote}\it Parameter\end{marginalnote}
+\marginnote{Formal parameter}
+information into a method when the method is invoked.  The {\it type}
+and {\it variable name} of the formal parameter must appear in the
+{\it formal parameter list} that follows the method's name in the
+method header.  The formal parameter is used to hold a value that it
+is passed while the method is executing.
+
+\JavaRule{Formal Parameter.}{A {\bf formal
+parameter}\index{formal parameter} is a variable that serves as a
+storage location for information that is passed to a method.  To
+specify a formal parameter, you must provide a type identifier
+followed by variable identifier, and you must place this declaration
+inside the parentheses that follow the method's name.}
+
+\noindent Consider the following definition for a {\tt takeSticks()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void takeSticks(int num)
+{    nSticks = nSticks - num;
+     player = 3 - player;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Notice that executing the body of {\tt takeSticks()}
+when the parameter {\tt num} stores the value 1 accomplishes precisely
+the same task as executing {\tt takeOne()}. If, instead, a value of 2 or
+3 is stored in {\tt num}, then calling the method acts like {\tt takeTwo()}
+or {\tt takeThree()} respectively.  Thus, using parameters enables us to
+design methods that are more general in what they do, which is an important
+principle of good program design.
+
+Another example of a mutator method is one in which define a {\it set
+method} to allow the starting number of sticks to be set for an
+instance of {\tt OneRowNim}. For this, we could define:
+
+\label{meth-setsticks}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void setSticks(int sticks)
+{    nSticks = sticks;
+} // setSticks()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As we will see in Section~\ref{sec-constructors}, 
+we can also define a constructor method that can be used, when the
+game is created, to set the initial value of {\tt nSticks}. It is
+often desirable to have more than one method that sets the values of
+an objects' instance variables.
+
+If a method uses more than one parameter, use a comma to separate the
+individual parameter declarations in the method header.  For example,
+if we wanted a method for {\tt OneRowNim} that specified both the
+number of sticks for the start of a game and which player takes a turn
+first, it could be defined: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void setGame(int sticks, int starter) 
+{   nSticks = sticks; 
+    player = starter; 
+} // setGame()
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsubsection*{The Scope of Parameters, Variables, and Methods}
+
+\noindent The bodies of the mutator methods in the previous
+section make use of both instance variables and parameters.  It is
+important to note that there is a difference in where these two types
+of variables can be used. The {\bf scope}\index{scope} of a variable
+\marginnote{Scope}
+or method refers to where it can be used in a program.
+
+A parameter's scope\index{parameter scope} is limited to the body of
+the method in which it is declared. Variables that are declared in the
+body of a method have scope which extends from the point where they
+are declared to the end of the block of code in which they are
+declared. Parameters are local variables which are declared in the
+parameter list of a method's header and which have initial values
+specified by the arguments in a method call. The scope of a parameter
+is the same as the scope of a variable declared at the very beginning
+of the body of a method.
+\marginnote{Local scope}
+Once the flow of execution leaves a method, its parameters and other
+local variables cease to exist. The scope of local variables is
+referred to as {\bf local scope}\index{local scope}.
+
+\JavaRule{Scope.}{Local variables, that is,
+parameters and variables declared in the body of a method, have {\bf
+local scope}\index{local scope} which extends from the point at which
+they are defined to the end of the block of code in which they are
+defined. In particular, the scope of a parameter is the entire body of
+the method in which it is declared.}
+
+By contrast, instance variables, class variables, and all methods have
+scope that extends throughout the entire class, that is, {\bf class
+scope}.  They can be used in the body of any method and in the
+expressions that assign initial values to class level variables.
+There are two restrictions to remember.  First, instance variables and
+instance methods cannot be used in the body of a class method, one
+modified with {\tt static}, unless an instance of the class is created
+there and then the dot notation of qualified names must be used to
+\marginnote{Class scope}
+refer to the variable or method.  This is because class methods are
+called without reference to a particular instance of the class.  The
+{\tt main()} method of the {\tt OneRowNim} class that we defined in
+the previous chapter is an example of such a class method.  In that
+case, to test the instance methods of {\tt OneRowNim} we first created an 
+instance of {\tt OneRowNim} and used it to call its instance methods:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game = new OneRowNim(); // Create instance
+game.report();   // Call an instance method
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The second restriction involved in class scope is
+that one class level variable can be used in the expression that
+initializes a second class level variable only if the first is
+declared before the second.  There is no similar restriction on
+methods.
+
+\JavaRule{Scope.}{Class level variables, that is,
+instance variables and class variables have {\bf class
+scope}\index{class scope}, which extends throughout the class.
+Methods also have class scope.}
+
+Except for the restrictions noted above, methods and class level
+variables can be referred to within the same class by their simple
+names, with just the method (or variable) name itself,
+\marginnote{Simple vs. qualified names}
+rather than by their qualified names, with the dot operator.  Thus, in
+{\tt OneRowNim}, we can refer to {\tt nSticks} and {\tt report()}
+in the bodies of other instance methods. In a class method, such as
+{\tt main()}, we would have to create an instance of {\tt OneRowNim}
+with a name like {\tt game} and refer to {\tt game.report()}.
+
+\JavaRule{Qualified Names.}{Within the same class, references
+to class methods or class variables can be made in terms of simple
+names.  Within the bodies of instance methods, references to instance
+variables and references to other instance methods can also be made in
+terms of simple names.  However, within the bodies of class methods,
+qualified\index{qualified name} names, or dot notation, must be
+used to refer to instance methods or instance variables just like how
+they are referred to in other classes.}
+
+%%%REW FIGURE 3-3 page 119 and related discussion does not seem to me to
+%%%REW give precise enough info TO BE VERY HELPFUL
+%%%\begin{figure}[tb]
+%%%\figa{chptr03/nimlocal.eps}{Class scope extends through a class whereas
+%%%local scope is confined to individual methods.
+%%%\label{fig-scope}
+%%%\label{pg-fig-scope}}
+%%%\end{figure}
+
+%%%\vspace{-3pt}
+%%%\noindent One way to visualize the difference between
+%%%local and class scope is 
+%%%\marginnote{Class scope vs.  local scope}
+%%%to draw boxes around portions of a program to indicate an identifier's
+%%%scope (Fig.~\ref{fig-scope}). For class scope you would draw a box
+%%%around the entire class.  An instance variable or method can be used
+%%%anywhere within that box.  Similarly, draw boxes around each of the
+%%%methods in the class.  The scope of a method's parameters, if it has
+%%%any, would be confined within these smaller boxes.  From within a
+%%%smaller box you can refer to an instance variable, because the smaller
+%%%box is completely contained within the class's box.  But from within
+%%%one small box, you cannot refer to anything within one of the other
+%%%small boxes.  This is yet another sense in which both a method and a
+%%%\marginnote{Encapsulation}
+%%%class encapsulate their elements.
+
+\JavaTIP{DEBUGGING TIP}{Scope Error.}{It would be a syntax error
+to refer to a method's parameters or other local variables from
+outside the method.}
+
+\subsection{Arguments and Parameters}
+
+\noindent The new class definition for {\tt OneRowNim} is
+given in Figure~\ref{fig-ornclass2}. Note that now that we have a
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+public class OneRowNim
+{ private int nSticks = 7; // Start with 7 sticks
+  private int player = 1;  //Player 1 plays first
+
+  public void takeSticks(int num)
+  { nSticks = nSticks - num;
+    player = 3 - player;
+  }  // takeSticks()
+
+  public void report()
+  { System.out.println("Number of sticks left: " + nSticks);
+    System.out.println("Next turn by player " + player);
+  }   // report()
+} //OneRowNim1 class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt OneRowNim} class definition with {\tt takeSticks()} method.
+\label{fig-ornclass2}}
+\end{figure}
+single method, {\tt takeSticks()}, that can be used to take away a
+variable number of sticks, we have removed the three methods we wrote
+in the previous chapter, {\tt takeOne()}, {\tt takeTwo()}, and {\tt
+takeThree()}, from {\tt OneRowNim}.  Using a single method, with a
+parameter, is clearly a better design.  To see this, just imagine what
+we would have to do if we didn't use a parameter and we wanted to be
+able to take away four sticks, or five, or more. If we didn't have
+parameters, we'd have to write a separate method for each case, which
+is clearly a bad idea. Using parameters in this way leads to a more
+general useful method and thus is an example of the generality
+principle.
+
+
+Now let's consider how we would create a {\tt OneRowNim} instance and
+use the new method in the {\tt main()} method or in a different
+class. If we want to have an instance of {\tt OneRowNim} object to
+remove 3 sticks on the first move by using the {\tt takeSticks()}
+method, we need to pass the {\tt int} value 3 to the method. In order
+to effect this action, we would use the following statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game = new OneRowNim();
+game.takeSticks(3);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Because the definition of {\tt takeSticks()} includes a
+single {\tt int} parameter, we must supply a single {\tt int} value
+(such as 3), when we invoke it.  When the method is invoked, its
+formal parameter ({\tt num}) will be set to the value we supply (3).
+The value we supply does not have to be a literal {\tt int} value.  We
+can supply any expression or variable that evaluates to an {\tt int}
+value. For example: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int val = 7 - 5;
+game.takeSticks(val);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the value being passed to {\tt takeSticks()} is
+2, the value that {\tt val} has at the time the method call is made.
+
+It would be an error to try to pass a value that was not a
+{\tt int} to {\tt takeSticks()}. For example, each of the following
+invocations of {\tt takeSticks()} results in a syntax error:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+game.takeSticks();     // no argument is supplied
+game.takeSticks("3");  // "3" is a String, not an int
+game.takeSticks(int);  // int not is an int value
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As you recall from Chapter 0, the value that is 
+passed to a method when it is invoked is called 
+%\begin{marginalnote}\it Parameter vs.  argument\end{marginalnote}
+\marginnote{Parameter vs. argument}
+an argument. Even though the terms argument and
+parameter\index{parameter} are sometimes used interchangeably, it will
+be useful to observe a distinction.  We will use the term {\it
+parameter} to refer to the formal parameter---the variable used to
+pass data to a method---that occurs in the method definition.  We use
+the term {\it argument} to refer to the actual value that is supplied
+when the method is invoked.
+
+\JavaTIP{DEBUGGING TIP}{Type Error.}{It would be a syntax error
+to use an argument whose type doesn't match the type of
+its corresponding \mbox{parameter.}}
+
+\noindent The distinction between parameter and argument is related
+%\begin{marginalnote}\it Defining vs. calling a method\end{marginalnote}
+\marginnote{Defining vs. calling a method}
+to the difference between {\it defining} a method and {\it invoking} a
+method.  Defining a method is a matter of writing a method definition,
+such as
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void printStr(String s)
+{   System.out.println(s);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This definition defines a method that takes a
+single {\tt String} parameter, {\tt s}, and simply prints the value of
+its parameter.  On the other hand, invoking a method is a matter of
+\marginnote{Invoking a method}
+writing a method call statement, such as
+
+\begin{jjjlisting}
+\begin{lstlisting}
+printStr("HelloWorld");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This statement calls the {\tt printStr()} method and
+passes it the string ``HelloWorld''.  This notation assumes that the
+call to the instance method {\tt printStr()} is made within the body
+of another instance method of the same class.
+
+\subsection{Passing an {\tt int} value to a {\tt OneRowNim} method.}
+\noindent To get a clearer picture of the interaction that takes place when we
+invoke {\tt takeSticks()} and pass it an {\tt int} value, let's write a
+{\tt main()} method to test our new version of {\tt OneRowNim}.
+
+Our first version of {\tt main()} is shown in
+Figure~\ref{fig-testorn1}.  We will use it to trace how the parameter
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main (String argv[])
+{  OneRowNim game;        // Declare a OneRowNim object
+   game = new OneRowNim(); // Instantiate the references
+   game.takeSticks(3);     // remove 3 sticks
+} // main()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A {\tt main()} method to test the {\tt takeSticks()} method.
+\label{fig-testorn1}
+\label{pg-fig-testorn1}}
+\end{figure}
+of {\tt takeSticks()} interacts with the instance variables {\tt
+nSticks} and {\tt player}.  The statements in the {\tt main()} program
+simply create an instance of {\tt OneRowNim} that is referenced by
+{\tt game} and invoke the {\tt setSticks()} method with an argument
+of~3.
+
+To get a clearer understanding of how a parameter works, it will be
+instructive to trace through the code in {\tt main()}.  Figure~3.3
+displays how the states of the instance variables of {\tt game} and
+the parameter of {\tt takeSticks()} interact.
+
+\begin{figure}[tb]
+\figaleft{chptr03/param.eps}{Tracing the state of {\tt game} (a) Just
+before calling {\tt takeSticks(3)}. (b) Just before executing the body
+of {\tt takeSticks(3)}. (c) Just after executing the body of {\tt
+takeSticks(3)}. (d) After flow of control leaves {\tt takeSticks()}.}
+\label{fig-parameps}
+\end{figure}
+
+Executing the first two statements of {\tt main()} creates the
+instance {\tt game} of {\tt OneRowNim}. Figure~3.3(a)
+shows the initial state of {\tt game}. When the {\tt takeSticks(3)}
+method call is made, a parameter (which is a local variable) named
+{\tt num} is created and the value 3 is stored in it.  The state of
+the instance variables and the parameter are shown in (b). Then the
+body of {\tt takeSticks()} is executed. The new state of {\tt
+game} is shown in (c). After the flow of control leaves the body of {\tt
+takeSticks()} and returns to {\tt main()}, the memory location which
+stored the value of the parameter {\tt num} is released for other
+uses. The state of {\tt game} at this point is shown in (d). Notice
+that the value of {\tt nSticks} has been reduced to 4.
+
+\subsection{Passing keyboard input to {\tt takeSticks()}}
+
+\noindent To complete this section, let's modify our {\tt main()} method
+in Figure~\ref{fig-testorn1} so that it prompts the user to input an
+integer from the keyboard and then uses a Scanner object, introduced
+in the previous chapter, to read the integer. That integer will then
+be used as the argument in a call to {\tt takeSticks()}. These
+modifications have been incorporated into the revised version of the
+{\tt main()} method shown in Figure~\ref{fig-testorn2}.  If we now run
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.util.Scanner;
+    
+public static void main (String argv[])
+{ Scanner sc;             // Declare a Scanner variable
+  sc = Scanner.create(System.in); // Instantiate it
+  OneRowNim game;         // Declare a OneRowNim variable
+  game = new OneRowNim(); // Instantiate it
+  game.report();          // Report state of game
+  System.out.println("Input 1, 2, or 3 and hit enter:");
+  int num = sc.nextInt(); // Read an int from keyboard
+  game.takeSticks(num);   // Use the value read
+  game.report();          // Report state of game
+} // main()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A {\tt main()} method with keyboard input for {\tt One\-Row\-Nim}.
+\label{fig-testorn2}}
+\end{figure}
+this program the following output will be generated in the console
+window before waiting for keyboard input:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Number of sticks left: 7
+Next turn by player 1
+Input 1, 2, or 3 and hit enter:
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If the user then inputs a 2 from the keyboard, that input
+will be read and the {\tt takeSticks()} method will remove 2 sticks.
+The output in the console window will now look like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Number of sticks left: 7
+Next turn by player 1
+Input 1, 2, or 3 and hit enter:2
+Number of sticks left: 5
+Next turn by player 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Explain the difference between a {\it  method declaration} and
+a {\it method invocation}\index{method invocation}.
+
+\item  Explain the difference between a {\it formal parameter} and
+an {\it argument}.
+
+\item  Modify the {\tt OneRowNim} class of Figure~\ref{fig-testorn2}
+by adding two instance variables of type {\tt String} to store names
+of the two players. Choose names for the instance variables that would
+be appropriate for storing names for player one and player two.  Write
+a method named {\tt setNames()} with two string parameters which
+assigns the first parameter to the instance variable that you created
+for the name of player one.  The second parameter should be assigned
+to the other new instance variable.
+
+\item  Write a statement that calls the {\tt setName()} method of
+the previous exercise and sets the name of player one of {\tt game}
+to ``Xena'' and sets the name of player two to ``Yogi''.
+\end{SSTUDY}
+
+\section{Constructor Methods}
+\label{sec-constructors}
+\noindent In the previous section, we looked at several examples of 
+mutator methods that change the values of private instance variables
+of an object.  It is possible to define mutator methods to set the
+initial values of instance variables after an object is created, but
+initial values can also be set by constructors.
+
+As you recall from Chapter 0, a {\bf constructor\index{constructor}}
+method is used to create an
+%\begin{marginalnote}\it Constructor names\end{marginalnote}
+\marginnote{Constructor names}
+instance (or object) of a class and to assign initial values to
+instance variables.  A constructor declaration looks just like a
+method definition except it must have the same name as the class, and
+it cannot declare a result type.  Unlike the class level variables and
+methods of a class, constructors are not considered members of the
+class.  Therefore, they are not inherited by a class's subclasses.
+Access to constructors is governed by the access modifiers {\tt
+public} and {\tt private}.  Here is a simple constructor for our {\tt
+OneRowNim} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim()
+{   nSticks = 7;
+    player = 1;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This constructor merely sets the initial values of the instance
+%\begin{marginalnote}{\it Constructing an object\end{marginalnote}
+\marginnote{Constructing an object}
+variables, {\tt nSticks} and {\tt player}. In our current version of
+{\tt OneRowNim} these variables are given initial values by using
+initializer statements when they are first declared:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ private int nSticks = 7;
+ private int player = 1;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent So we now have two ways to initialize a class's instance
+\marginnote{Initializing variables}
+variables.  In the {\tt OneRowNim} class it doesn't really matter which
+way we do it.  However, the constructor provides more flexibility
+because it allows the state of the object to be initialized at runtime.  Of
+course, it would be somewhat redundant (though permissible) to
+initialize the same variable twice, once when it is declared and again
+in the constructor, so we should choose one or the other way to do
+this.   For now, let's stick with initializing the instance variables
+when they are declared.
+
+\JavaTIP{EFFECTIVE DESIGN}{Constructors.}{Constructors provide a flexible way
+to initialize an object's instance variables when the object is created.}
+
+\noindent A constructor cannot return a value and, therefore, its
+%\begin{marginalnote}\it Constructors can't return a value\end{marginalnote}
+\marginnote{Constructors can't return a value}
+declaration cannot include a return type.  Because they cannot return
+values, constructors cannot be invoked by a regular method
+invocation.  Instead, constructors are invoked as part of an
+{\it instance creation expression} when instance objects are created.  An
+instance creation expression involves the keyword {\tt new} followed
+by the constructor invocation:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game // Declare
+    = new OneRowNim(); // and instantiate game1
+OneRowNim game2 // Declare
+    = new OneRowNim(); // and instantiate game2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note here that we have combined variable declaration and
+instantiation into a single statement, whereas in some previous examples we
+used separate declaration and instantiation statements.  Either way is
+acceptable.
+
+\JavaRule{Constructors.}{Constructors cannot return a
+value.  Therefore, no return type should be declared when the
+constructor is defined.}
+
+\JavaTIP{DEBUGGING TIP}{When to Use Return.}{All method definitions
+except constructors must declare a return type.}
+
+\noindent Constructors should be used to perform the necessary initialization
+operations during object creation.   In the case of a {\tt OneRowNim}
+object, what initializations could be performed?
+%\begin{marginalnote}\it State initialization\end{marginalnote}
+\marginnote{State initialization}
+One initialization that would seem appropriate is to initialize the
+initial number of sticks to a number specified.  In order to do this,
+we would need a constructor with a single {\tt int} parameter:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim(int sticks)
+{   nSticks = sticks;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Now that we have this constructor we can use it
+when we create instances of {\tt OneRowNim}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game1 = new OneRowNim(21);
+OneRowNim game2 = new OneRowNim(13);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The effect of these statements is the same as if we
+had used the {\tt setSticks()} method that was discussed briefly on
+page~\pageref{meth-setsticks}.  The difference is that we can now set
+the number of sticks when we create the object.
+
+Should we keep the preceding constructor, or keep the {\tt
+setSticks()} method or keep both in our class definition?  The
+constructor can only be invoked as part of a {\tt new} statement when
+the object is created but the {\tt setSticks()} method could be called
+anytime we want. In many cases, having redundant methods for doing the
+same task in different ways would be an asset, because it allows for
+more flexibility in how the class could be used.  However, for a game
+like One Row Nim, a major concern is that the two instance variables
+get changed only in a manner consistent with the rules for One Row
+Nim.  The best way to guarantee this is to have {\tt takeSticks()} as
+the only method that changes the instance variables {\tt nSticks} and
+{\tt player}.  The only time that it should be possible to set the
+number of sticks for a game is when a constructor is used to create a
+new instance of {\tt OneRowNim}.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  What's wrong with the following
+constructor definition?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void OneRowNim(int sticks)
+{   nSticks = sticks;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Change the {\tt OneRowNim(int sticks)} constructor so
+that it sets the number of sticks and also have it also set player two
+as the player who takes the first turn.
+
+\end{SSTUDY}
+
+\subsection{Default Constructors}
+\label{sec-defaultconstructors}
+\noindent As we noted in Chapter 2, Java automatically provides a 
+{\it default constructor} when a class does not contain a constructor.
+
+\JavaRule{Default Constructor.}{If a class contains no
+constructor declarations, Java will automatically supply a default
+constructor\index{constructor default}. The default constructor takes
+no parameters.  If the class is {\tt public}, the default constructor
+will also be {\tt public} and, hence, accessible to other objects.}
+
+
+\noindent The default constructor's role is simply to create an
+instance (an object) of that class.  It takes no parameters.  In
+terms of what it does, the default constructor for {\tt OneRowNim}
+would be equivalent to a {\tt public} constructor method with an
+empty body:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim() { }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This explains why the following statement
+was valid when a class definition of {\tt OneRowNim} contained no
+explicit definition of a constructor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game = new OneRowNim();
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Constructor Overloading and Method Signatures}
+
+\noindent It is often quite useful to have more than one constructor for
+\marginnote{Flexible design}
+a given class.  For example, consider the following two {\tt
+OneRowNim} constructors:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim() {} // Constructor #1
+
+public OneRowNim(int sticks)   // Constructor #2
+{   nSticks = sticks;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first is an explicit representation
+of the default constructor.  The second is the constructor we defined
+earlier to initialize the number of sticks in a {\tt OneRowNim}
+object. Having multiple constructors lends flexibility to the design
+of a class. In this case, the first constructor merely accepts {\tt
+OneRowNim}'s default initial state. The second enables the user to
+initialize the number of sticks to something other than the default
+value.
+
+In Java, as in some other programming languages, when two different
+\marginnote{Method overloading}
+methods have the same name, it is known as {\bf method overloading}.
+In this case, {\tt OneRowNim} is used as the name for two distinct
+constructor methods.  What distinguishes one constructor from another
+is its {\it signature}, which consists of its name together with the
+number and types of formal parameters it takes.  Thus, our {\tt
+OneRowNim} constructors have the following distinct signatures:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim()
+OneRowNim(int)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Both have the same name, but the first takes no
+parameters, whereas the second takes a single {\tt int} parameter.
+
+The same point applies
+\marginnote{Methods are known by their \\signatures}
+to methods in general.  Two methods can have the same name as long as
+they have distinct signatures.  A {\bf method signature} consists of
+its name, and the number, types, and order of its formal parameters.
+A class may not contain two methods with the same signature, but it
+may contain several methods with the same name, provided each has a
+distinct signature.
+
+\JavaRule{Method Signature.}{A {\bf method signature}
+consists of the method's name, plus the number, types, and order of
+its formal parameters.  A class may not contain two methods with the
+same signature.}
+
+\noindent There is no limit to the amount of overloading
+that can be done in designing constructors and methods.  The only
+restriction is that each method have a distinct signature.  For
+example, suppose in addition to the two constructors we have already
+defined, we want a constructor that would let us set both the number
+of sticks and the player who starts first.  The following constructor
+will do what we want:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim(int sticks, int starter)
+{   nSticks = sticks; // Set the number of sticks
+    player = starter; // Set who starts
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent   When calling this constructor, we would have
+to take care to pass the number of sticks as the value of the first
+argument and either 1 or 2 as the value of the second argument:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game3 = new OneRowNim(14, 2);
+OneRowNim game4 = new OneRowNim(31, 1);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent  If we mistakenly reversed 14 and 2 in the first
+of these statements, we would end up with a {\tt OneRowNim} game that
+starts with 2 sticks and has player 14 as the player with the first
+move.
+
+We have now defined three constructor methods for the {\tt OneRowNim}
+class.  Each constructor has the name {\tt OneRowNim}, but each has a
+distinct signature:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim()
+OneRowNim(int)
+OneRowNim(int, int)
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Constructor Invocation}
+
+\noindent A constructor method is invoked only as part of a {\tt new}
+expression when an instance object is first created.  Each of
+\marginnote{A constructor is invoked once to create an object}
+these is a valid invocation of a {\tt OneRowNim} constructor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+                  // Default constructor
+OneRowNim game1 = new OneRowNim();   
+                  // Sets number of sticks
+OneRowNim game2 = new OneRowNim(21); 
+                  // Sets both instance variables
+OneRowNim game3 = new OneRowNim(19, 2); 
+\end{lstlisting}
+\end{jjjlisting}
+
+The following constructor invocations are invalid because there are no
+matching constructor definitions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+                  // No matching constructors
+OneRowNim game4 = new OneRowNim("21");  
+OneRowNim game5 = new OneRowNim(12, 2, 5);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the first case, there is no constructor method that takes
+a {\tt String} parameter, so there's no matching constructor.  In the
+second case, there is no constructor that takes three {\tt int}
+arguments.  In both cases, the Java compiler would complain that there
+is no constructor method that matches the invocation. 
+
+\JavaTIP{DEBUGGING TIP}{Method Call.}{The signature of
+the method call---its name and the number, types, and order of its
+arguments---must exactly match the signature of the method definition.}
+
+\section{Retrieving Information from an Object}
+
+\noindent The modifications we've made to the {\tt OneRowNim} class
+allow us to set the instance variables of a {\tt OneRowNim} object
+with a constructor, but there is no way for us to retrieve their
+values other than to use the {\tt report()} method to write a message
+to the console. We will want to be able to ask a {\tt OneRowNim}
+object to provide us with the number of sticks remaining and who plays
+next when we develop a graphical user interface for {\tt OneRowNim} in
+the next chapter.  We declared {\tt nSticks} and {\tt player} as {\tt
+private} variables, so we cannot access them directly.  Therefore, we
+will need accessor methods to {\it get} the values of each of the
+instance variables.  Consider the following method definitions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getSticks()
+{   return nSticks;
+}
+
+public int getPlayer()
+{   return player;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Recall that a method's {\it ResultType} is specified just
+in front of the {\it MethodName}. We want the two methods to return
+{\tt int} values that represent {\tt OneRowNim}'s instance
+variables. Therefore, their result types are both declared {\tt int}.
+
+Before we discuss how the value that is returned by a method is used
+when the method is called, let's consider one more method definition.
+Many methods that return a value do a computation rather than simply
+returning the value of an instance variable.  For example, suppose we
+wish to define a method for the {\tt OneRowNim} class that will notify
+the user of an instance of the class whether the game is over.  Thus
+we want a method that, when called, returns a {\tt true} or {\tt
+false} depending on whether or not all the sticks have been taken.
+{\tt gameOver()} is a descriptive name of such a method and the method
+should have a {\tt boolean} result type.  This method should return
+{\tt true} when the instance variable {\tt nSticks} no longer contains
+a positive {\tt int} value.  Thus we can define:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean gameOver()
+{   return (nSticks <= 0);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The expression {\tt (nSticks <= 0)} evaluates to a {\tt false} 
+value if {\tt nSticks} stores a positive value and it evaluates to
+{\tt true} otherwise.  Thus the value returned is precisely what is
+required.
+
+\subsection{Invoking a Method That Returns a Value}
+
+\noindent When we invoke a method that returns a value, the invocation
+\marginnote{Retrieving information}
+expression takes on, or is replaced by, the value that is returned.
+For example, if we execute the statements
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game1 = new OneRowNim(11);
+int sticksLeft = game1.getSticks();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the expression {\tt game1.getSticks()} will take
+on the value 11 after the {\tt getSticks()} method is finished
+executing.  At that point, the second statement above can be treated
+as if expression \mbox{\tt game1.getSticks()} is replaced with the
+value 11, which is assigned to {\tt sticksLeft}. In effect, the
+second statement is equivalent to the following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int sticksLeft = 11;
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\JavaRule{Evaluating Method Calls.}{A nonvoid method call is an
+expression that has a value of a particular type.  After the method is
+executed, the method call expression becomes the value returned.}
+
+We can use a value returned by a method call the same way we use a
+literal value of the same type.  It can be assigned to variables, be
+part of a numerical expression, or be an argument of another
+method. All of the following statements involve valid calls of methods
+that return values:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int fewerSticks = game1.getSticks() - 1;
+boolean done = game1.gameOver();
+System.out.println(game1.getPlayer());
+game1.getSticks();
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent In each statement, the method call can be replaced
+with the value it returns.  Notice that the last statement is valid
+but does nothing useful. In Java and some other languages like C and
+C++, methods that return a value can simply be called without making
+use of the value returned.  This may be useful to do if the method
+changes the state of instance variables or sends a message to another
+object or an output device. The method {\tt getSticks()} does nothing
+but return the value of {\tt nSticks}, so simply calling the method
+accomplishes nothing.
+
+\subsection{An Expanded {\tt OneRowNim} Class}
+
+\noindent Let's add the new methods that return values to our
+{\tt OneRowNim} class.  We might note that the {\tt report()} method
+from the previous chapter displays the values of {\tt nSticks} and
+{\tt player} in the console window which now could be done by using
+the methods {\tt getSticks()} and {\tt getPlayer()} with {\tt
+System.out.println()}.  However, calling {\tt report()} is an easy way
+to display the values of both instance variables but it cannot provide
+access to either variable as an {\tt int} value.
+%\begin{marginalnote}\it Redundancy and flexibility\end{marginalnote}
+\marginnote{Redundancy and flexibility}
+So let's keep all three methods in our class definition.  The
+inconvenience of a small amount of redundancy is outweighed by the
+added flexibility of being able to call all three methods.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Using Redundancy.}{Incorporating some
+redundancy into a class, such as providing more than one way to access
+the value of an instance variable, makes the class more widely usable.}
+
+\noindent Figure~\ref{fig-ornuml2} provides a UML class diagram of the 
+expanded {\tt OneRowNim} class.
+\begin{figure}[h!]
+\begin{center}
+\begin{tabular}{|l|} \hline
+OneRowNim\\ \hline
+$-$ nSticks: int  \\
+$-$ player: int  \\ \hline
+$+$ OneRowNim() \\
+$+$ OneRowNim(in sticks:int) \\
+$+$ OneRowNim(in sticks:int,in starter:int) \\
+$+$ takeSticks(in num:int) \\
+$+$ getSticks():int \\
+$+$ getPlayer():int \\
+$+$ gameOver():boolean \\
+$+$ report()\\ \hline
+\end{tabular}
+\end{center}
+\caption{A UML class diagram for the expanded {\tt OneRowNim}.}
+\label{fig-ornuml2}
+\end{figure}
+
+Let's also consider a new {\tt main()} method to test the new methods
+of the class.  A very short list of statements that call each of the
+three new methods returning values is given in the {\tt main()} method
+in Figure~\ref{fig-testorn3}
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String[] args) 
+{ OneRowNim game = new OneRowNim(13,2);
+  game.takeSticks(2);
+  System.out.print("The game is over is: ");
+  System.out.println(game.gameOver());
+  System.out.print("The next turn is by player: ");
+  System.out.println(game.getPlayer());
+  System.out.print("Sticks remaining: ");
+  System.out.println(game.getSticks());
+} //main()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A {\tt main()} method that tests the new methods for {\tt OneRowNim}
+\label{fig-testorn3}}
+\end{figure}
+
+\noindent The output to the console  when this program is run will
+be:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  The game is over is: false
+  The next turn is by player: 1
+  Sticks remaining: 11
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the constructor sets {\tt player} to 2, so
+{\tt player} stores the value 1 after one turn.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  What would these segments of Java
+code display on the screen?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim myGame = new OneRowNim(10,2);
+System.out.println(myGame.getPlayer());
+System.out.println(2 * myGame.getSticks());
+System.out.println(myGame.gameOver());
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Suppose that an {\tt int} instance variable named {\tt nMoves} is added
+to the {\tt OneRowNim} class that counts the number of moves taken in a
+One Row Nim game.  Write a Java method for the {\tt OneRowNim} class
+to {\it get}
+the value stored in {\tt nMoves}.
+
+\item  Write a method for the {\tt OneRowNim} class called {\tt
+player\-One\-Goes\-Next()}
+that returns a {\tt boolean} value.  The value returned should be
+true if and only
+if player one has the next turn.
+
+\end{SSTUDY}
+
+\section{Passing a Value and Passing a Reference}
+\label{sec-passby}
+\label{pg-sec-passby}
+
+\noindent The effect of passing arguments to a method differs depending on
+whether you are passing a value of primitive type\index{primitive
+type} (such as 5 or {\tt true}) or a value of reference
+type\index{reference type} (such as ``Hello'' or {\tt game1}).  When
+an argument of primitive type is
+\marginnote{Passing a primitive value}
+passed to a method, a copy of the argument is passed to the formal
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class PrimitiveCall
+{
+   public static void myMethod(int n)
+   {   System.out.println("myMethod: n= " + n);
+       n = 100;
+       System.out.println("myMethod: n= " + n);
+   } // myMethod()
+
+   public static void main(String argv[])
+   {   int k = 5;
+       System.out.println("main: k= " + k);
+       myMethod(k);
+       System.out.println("main: k= " + k);
+   } // main()
+} // PrimitiveCall
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Passing a primitive value to a method.
+\label{fig-primcall}
+\label{pg-fig-primcall}}
+\end{figure}
+parameter.  For example, consider the \mbox{\tt PrimitiveCall} class
+shown in Figure~\ref{fig-primcall}. Note that we have an {\tt int}
+%% proglist ch3/methodcalls/PrimitiveCall.java
+variable {\tt k}, which initially stores the value 5, and a method
+{\tt myMethod()}, which takes an {\tt int} parameter {\tt n}.  In this
+case, when we invoke {\tt myMethod(k)}, {\tt k}'s value (5) is copied
+into {\tt n} and stored there during the method.
+
+
+One implication of passing a copy of a primitive value to a method is that the
+original value of {\tt k} in {\tt main()} cannot be altered from
+inside the method.  Thus, the output generated by {\tt
+PrimitiveCall} would be
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  main: k= 5
+  myMethod: n= 5
+  myMethod: n= 100
+  main: k= 5
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that in {\tt main()}, {\tt k}'s value is
+printed both before and after {\tt myMethod()} is called, but that its
+value remains unaffected even though {\tt n}'s value is changed within
+the method. This is because {\tt myMethod()} contains just a {\it
+copy} of {\tt k}'s value, not {\tt k} itself. Any changes to the copy
+within {\tt myMethod()} leave {\tt k} unaltered (See Fig.~3.8).
+
+\JavaRule{Passing a Primitive Value.}{When a value of
+a primitive type, like {\tt boolean} or {\tt int}, is passed to a method, a
+copy of the value is passed. That's why its original value remains
+unchanged outside the method, even if the copy is changed inside the method.}
+
+\begin{figure}[b!]
+\figaright{chptr03/vparam.eps}{Tracing the state of variables k and n 
+in {\tt PrimitiveCall} (a) Just
+before calling {\tt myMethod(k) in main}. (b) Just before executing the body
+of {\tt myMethod()}. (c) Just after executing the body of {\tt
+myMethod()}. (d) After flow of control returns to {\tt main()}.}
+\label{fig-vparameps}
+\end{figure}
+\noindent In contrast to this, when an argument of a reference type
+is passed to a method, a copy of the reference to the object itself is
+assigned to the parameter. For example, in the case of a {\tt String}
+parameter or a {\tt OneRowNim} parameter, the method would be given a
+reference to the object--that is, the address of the object. The
+object itself is {\it not} passed, because it would be too inefficient
+to copy the entire object with all its data and methods.  However,
+because the object's reference gives the object's location in memory,
+the method will have access to the object and can make changes to the
+original object from within the method.
+
+
+For example, consider the {\tt ReferenceCall} class
+(Fig.~\ref{fig-refcall}). In this case, {\tt myMethod()} takes a
+%% proglist ch3/methodcalls/ReferenceCall.java
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class ReferenceCall
+{
+    public static void myMethod(OneRowNim g)
+    {   System.out.print("myMethod: Number of sticks: ");
+        System.out.println(g.getSticks());
+        g.takeSticks(3);
+        System.out.print("myMethod: Number of sticks: ");
+        System.out.println(g.getSticks());
+    } // myMethod()
+
+    public static void main(String argv[])
+    {   OneRowNim game = new OneRowNim(10);
+         System.out.print("main: Number of sticks: ");
+         System.out.println(game.getSticks());
+         myMethod(game);
+         System.out.print("main: Number of sticks: ");
+         System.out.println(game.getSticks());
+    }// main()
+} // ReferenceCall
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Passing a reference value to a method.
+\label{fig-refcall}}
+\end{figure}
+parameter {\tt g} of type {\tt OneRowNim}. Because a \mbox{\tt
+OneRowNim} instance is an object, {\tt g} is a reference variable.  So
+when {\tt myMethod(game)} is invoked in {\tt main()}, a reference to
+{\tt game} is passed to {\tt myMethod()}. Note that in {\tt
+myMethod()}, we use {\tt takeSticks(3)} to change the number of sticks
+of {\tt g} from 10 to 7 and that this change persists even after the
+method returns control to {\tt main()}. The reason is that during the
+method's execution, both {\tt game} and {\tt g} refer to the exact
+same object (see Fig.~3.10).  The output generated 
+by {\tt ReferenceCall} would be
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  main: Number of sticks: 10
+  myMethod: Number of sticks: 10
+  myMethod: Number of sticks: 7
+  main: Number of sticks: 7
+\end{lstlisting}
+\end{jjjlisting}
+
+%%% RAM: Why isn't this figure replaced.
+%%%\begin{figure}[b]
+%%%\vspace{12pt}\figa{chptr03/p136f1.eps}{In (a), when {\tt
+%%%myMethod(pet1)} is called, {\tt p} points to {\tt pet1}.  In (b), {\tt
+%%%myMethod()} has changed {\tt pet1}'s name to ``Mary.'' This change
+%%%will persist when the method returns.
+%%%\label{fig-refparam}
+%%%\label{pg-fig-refparam}}
+%%%\end{figure}
+
+\begin{figure}[tb]
+\figascaled{chptr03/rparam.eps}{0.8}{Tracing the state of {\tt OneRowNim} object
+in {\tt ReferenceCall} (a) Just
+before calling {\tt myMethod(game)}. (b) Just before executing the body
+of {\tt myMethod()}. (c) Just after executing the body of {\tt
+myMethod()}. (d) After flow of control returns to {\tt main()}.}
+\label{fig-rparameps}
+\end{figure}
+
+\noindent This illustrates that when passing a reference variable
+to a method, it is possible for the method to change the state of the
+object associated with the reference variable.  In subsequent chapters
+we will see ways to make use of this feature of reference parameters.
+
+\JavaRule[false]{Passing a Reference.}{When a reference to an
+object is passed to a method, any changes made to the object from
+within the method will persist when the method is finished executing.}
+
+\JavaTIP[false]{DEBUGGING TIP}{Side Effects.}{An unintended
+change to an object is called a {\bf side effect}. Care should be
+taken in designing methods that the method does not produce unwanted
+side effects in objects passed as reference parameters.}
+
+\section{Flow of Control: Control Structures}
+
+\noindent We have been ignoring a couple of problems with the
+definition of the {\tt OneRowNim} class.  One problem is that we would
+describe a One Row Nim game as two players taking turns until there
+are no more sticks. An object using {\tt OneRowNim} would need a way
+to repeatedly execute a group of statements. One command in Java that
+controls the repetition of a block of statements is called a {\it
+while loop}.  We will consider it later in this section.
+
+A second problem is with the definition of {\tt takeSticks()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  public void takeSticks(int num)
+  {   nSticks - num;
+      player = 3 - player;
+  }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It is possible to call this method with an argument greater
+than 3 or less than 1.  The call {\tt game.takeSticks(5)} will remove
+5 sticks even though the rules of One Row Nim say that you must remove
+1, 2, or 3.  While one might assume that the user interface should
+prevent the user from breaking this rule, it is a far better design if
+it was dealt with in {\tt OneRowNim}.  To do this we need a Java
+structure that executes different statements depending on whether the
+parameter is greater than 3, less than 1, or between 1 and 3.  The
+Java {\it if-else} statement has this capability.  A fuller treatment
+of control structures appears in Chapter 6, but in this section, we
+will briefly introduce a couple of simple control structures. This will
+enable us to write programs that take more interesting actions.
+
+\subsection{The Simple If Statement}
+\label{sec-if}
+\label{pg-sec-if}
+\noindent A {\bf selection} control structure, allows a program 
+to select between two or more alternative paths of execution. The if
+statement is the most basic selection control
+structure in Java. Most programming languages have its equivalent.
+\marginnote{Simple {\tt if} statement}
+
+\JavaRule{If Statement.}{The {\it if statement} has the following syntax: \\
+$
+\matrix{
+\hspace{1.1in}\mbox{\tt if} & ( \; {\it boolean\;expression} \; ) \cr
+\hspace{1.1in}\;\;\;\;         & {\it contained statement} \; ;  \cr
+}
+$}
+
+\noindent The statement contained in the if statement can be
+any valid Java statement, including a compound statement. (Recall from
+Chapter 1 that a compound statement is a set of statements contained
+within curly braces.)  The {\tt boolean expression} is an expression
+that is either {\tt true} or {\tt false}. We have seen examples of
+boolean expressions that involve {\tt int} variables, {\tt int}
+values, and the inequality or equality operators.  A method call to a
+method with a {\tt boolean} result type is another example of a {\tt
+boolean} expression.  Given this description of if statement syntax,
+the following are examples of valid if statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (true) System.out.println("Hello");
+if (nSticks <= 0) System.out.println("game is over");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For readability, we usually write an if statement with
+its contained statement indented on the next line:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  if (true)
+      System.out.println("Hello");
+  if (nSticks <= 0)
+      System.out.println("game is over");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The following are all examples of syntax errors involving
+the if statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if true                   // Parentheses are missing
+    System.out.println("Hello");
+
+if (nSticks <= 0) return   // Semicolon missing
+
+if ("true") return;  // "true" is not a boolean
+
+if (true) "Hello";    // "Hello" is  not a statement
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Semantically, the if statement\index{if statement} has the following
+interpretation: First, the boolean condition is evaluated.  If it is
+true, then the contained statement is executed; if it is false, then
+the contained statement is not executed.  This is shown in
+Figure~3.11. The flowchart clearly shows that program flow will take
+\marginfig{chptr03/3f12.eps}{Flowchart of the if statement.
+Diamond-shaped symbols at  the branch points contain {\tt boolean}
+expressions.  Rectangular  symbols can only contain executable
+statements.  Circles act  simply as connectors, to connect two
+or more paths.
+\label{fig-ifflowchart}}
+one or the other of the alternative paths coming out of the
+diamond-shaped boolean condition box.  The branch through the
+rectangular statement box will be taken when the boolean condition is
+true; otherwise the statement will be skipped.
+
+As another example, consider the definition of a {\tt
+getPlayerString()} method for the {\tt OneRowNim} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String getPlayerString()
+{
+  if (player == 1)
+    return "Player One"; // Exit the method
+  if (player == 2)
+    return "Player Two"; // Exit the method
+  return "Player error";   // Exit the method
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The flowchart in Figure~\ref{fig-getplayerflow} shows the program flow
+of the entire {\tt getPlayerString()} method.  It is important to note
+\begin{figure}[htb]
+\figascaled{chptr03/player.eps}{0.9}{Flowchart of the {\tt getPlayerString()} method.
+%%\figa{chptr03/player.eps}{Flowchart of the {\tt getPlayerString()} method.
+\label{fig-getplayerflow}}
+\end{figure}
+that when a {\tt return}\index{return statement} statement is executed
+in a method, control is returned immediately to the calling method.
+Thus, if {\tt player == 1 } is true, the string ``Player One'' is
+returned to the calling method and the {\tt getPlayerString()} method
+exits at this point.  If it is false, then {\tt player == 2} should be
+true (if we have a consistent state) and the string ``Player Two''
+should be returned and the method exited.  Thus, if we have a
+consistent state ---that is, if {\tt player} has value 1 or 2---then
+the third {\tt return} statement should never be reached.
+
+The following example shows the more common case where the statement
+contained in an if statement can be a compound statement:
+\marginnote{Compound statement}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (player == 1)
+{   String s = "Player One";
+    System.out.print (s);
+    System.out.println (" plays next");
+    System.out.println (" The game is not over");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If {\tt player == 1} is true, then all four statements
+in the contained compound statement will be executed.  Note here that
+\marginnote{Local scope}
+we are declaring the local variable, {\tt s}, in this block.  Its
+scope would extend only to the end of the block.  Note also that when
+we use a compound statement, the compound statement itself is not
+followed by a semicolon because it is already enclosed in braces.
+
+A common programming error is to forget the braces around the compound
+statement.  Merely indenting the statements following the if clause
+doesn't alter the logic of the if statement.   For example, the
+following if statement still has only one statement in its if clause:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (condition1)
+  System.out.println("One");
+  System.out.println("Two"); //Not part of if statement
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This segment will always print ``Two'' because the
+second {\tt println()} is not part of the if statement. To include it
+in the if statement, you must enclose both {\tt println()}
+statements within braces:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (condition1)
+{  System.out.println("One");
+   System.out.println("Two");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP{DEBUGGING TIP}{Indentation.}{Indentation can improve the
+readability of a program but doesn't affect its logic.  Braces must be
+used to group statements in the if clause.}
+
+%%%RAM\subsection{The {\ttHtwo if-else} Statement}
+
+\subsection{The {\tt if-else} Statement}
+\label{sec-ifelse}
+\label{pg-sec-ifelse}
+\noindent A second version of the if statement incorporates an {\tt
+else} clause into the structure.  This allows us to execute either of
+two separate statements (simple or compound) as the result of one
+boolean expression.  For example, the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (player == 1)
+    System.out.println("Player One");
+else
+    System.out.println("Player Two");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will print ``Player One'' if {\tt player == 1} is true.
+Otherwise, it will print ``Player Two''.
+
+\JavaRule{If-else Statement.}{The {\it if-else statement} has the
+following syntax: \\
+$
+\matrix{
+\hspace{1.1in}{\tt if} & ( \; {\it boolean\;expression } \; ) \cr
+\hspace{1.1in}\;\;\;\;\;\;\; & {\it statement1 } \;  ;          \cr
+\hspace{1.1in}\;\;{\tt else }  &                                  \cr
+\hspace{1.1in}\;\;\;\;\;\;\; & {\it statement2 } \;  ;          \cr
+}
+$}
+
+\noindent As in the case of the simple if statement, the
+%\begin{marginalnote}\it If-else syntax\end{marginalnote}
+\marginnote{If-else syntax}
+keyword {\tt if} is followed by a parenthesized {\it boolean
+expression}, which is followed by {\it statement1}, which may be
+either simple or compound.  If {\it statement1} is a simple statement,
+then it is followed by a semicolon.  The {\it else clause} follows
+immediately after {\it statement1}. It begins with the keyword {\tt
+else}, which is followed by {\it statement2}, which can also be either
+a simple or compound statement. Note that there is no boolean
+expression following the {\tt else} keyword. In an if-else statement,
+the boolean expression following the keyword {\tt if} goes with both
+the if and else clauses.
+
+Semantically, the if-else statement\index{if-else statement} has the
+%\begin{marginalnote}\it If-else semantics\end{marginalnote}
+%\marginnote{If-else semantics}
+following interpretation: If the {\it boolean expression} is true,
+execute {\it statement1}; otherwise execute {\it statement2}.  This
+\marginfig{chptr03/3f14.eps}{Flowchart of the {\tt if-else} statement.
+\label{fig-ifelsechart}}
+interpretation is shown in Figure~3.13.
+
+\subsection{The Nested if/else Multiway Selection Structure}
+\label{sec-multi}
+\label{pg-sec-multi}
+\noindent The statements that one inserts in place of {\it statement1} and {\it
+statement2} in the if-else statement can be any executable statement,
+%\begin{marginalnote}\it Multiple alternatives\end{marginalnote}
+%¥¥¥for pagination\marginnote{Multiple alternatives}
+including another if statement or if-else statement.  In other words,
+it is possible to embed one or more if-else statements inside another
+if-else statement, thereby creating a {\it nested\index{nested
+if-else}} control structure.  As with most things, making a control
+structure too complex isn't a good idea, but there is a standard
+nested if-else control structure that is very useful.  It is known as
+{\bf multiway selection\index{multiway selection}}. As shown in
+Figure~\ref{fig-multiway}, the multiway structure is used when you
+want to select one and only one option from several alternatives.
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{chptr03/multi.eps}{Flowchart of a nested if-else statement.
+%%\figa{chptr03/multi.eps}{Flowchart of a nested if-else statement.
+\label{fig-multiway}}
+\end{figure}
+%\end{figure}
+
+Suppose we have an {\tt int} variable {\tt num} that will contain one
+of the values $1$, $2$, or $3$ unless there has been an error assigning
+a value to it. Suppose that we want to write code that will write out
+the English word for the value in {\tt num}. In the example shown in
+Figure~\ref{fig-multiway} there are three alternatives plus an error
+state.  Here is the Java code for this example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (num == 1)
+   System.out.println("One");
+else if (num == 2)
+   System.out.println("Two");
+else if (num == 3)
+   System.out.println("Three");
+else
+   System.out.println("Error: Unknown value");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the multiway structure has a single
+entry point and that only one of the four possible alternatives is
+\marginnote{Multiple alternatives}
+executed.  The code will print exactly one of the strings.
+
+We will have many occasions to use the if-else structure.  Although it
+does not represent a significant change, we could rewrite our {\tt
+takeStick()} method to make use of the if-else instead of the somewhat
+obscure statement :
+
+\begin{jjjlisting}
+\begin{lstlisting}
+player = 3 - player;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent to change the value of player from $1$ to $2$ or vice versa:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String takeSticks(int num)
+{   nSticks = nSticks - num;
+  if (player == 1)
+    player = 2;   // From 1 to 2
+  else
+    player = 1;   // From 2 to 1
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In some respects this version of {\tt takeSticks()}
+involves four lines of code instead of one but is simpler
+to understand. The {\tt if}-statement tests whether the value of {\tt player}
+is $1$.  If it is, the value is changed to $2$.  If the value of {\tt player}
+is not $1$, then the value must be $2$ and so the value is changed to $1$.
+Both versions of the code will give precisely the same result, a programmer
+could choose to write the code either way.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+%<sec_flowchart:\thisCheadno>
+%<pg_sec_flowchart:\thispageno>
+
+\item  Consider the following method with
+{\tt boolean} parameter.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String getStatus(boolean isDone)
+{   if (isDone)
+        return "Done";
+    else
+        return "Not Done";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Draw a flowchart for the if-else version of the
+%\begin{marginalnote}\it Flowchart symbols\end{marginalnote}
+\marginnote{Flowchart symbols}
+{\tt getStatus()} method, using the figures in this section as a
+guide.  The if-else structure should be drawn exactly as shown in
+Figure~3.11. It should have a single entry point that leads directly
+to the top of a diamond-shaped box that contains a boolean condition.
+There should be two branches coming out of the condition box.  The one
+going to the right is the true case, and the one going to the left is
+the false case.  Each of these branches should contain one rectangular
+box, which contains the statements that would be executed in that
+case.  The left and right branches should be connected by a circular
+symbol that is aligned directly under the diamond box whose conditions
+it connects.  There should be a single exit arrow pointing directly
+down.
+
+
+\item  Identify the error in the following statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isHeavy == true)
+    System.out.println("Heavy");
+else ;
+    System.out.println("Light");
+
+if (isLong == true)
+    System.out.println("Long")
+else
+    System.out.println("Short");
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Suppose we have an {\tt  int} instance variable named {\tt player}
+in some class describing a three person game.  Write a method named
+{\tt getPlayerName()} that returns a {\tt String}.  It should return
+``Ann'', ``Bill'', ``Cal'', or ``Error'' when the value of {\tt
+player} is respectively 1, 2, 3, or any other value.
+
+\item  How does a parameter for a primitive type differ from a parameter
+for a reference type?
+
+\end{SSTUDY}
+
+%%%REW Subsection from chapter 6 on while inserted here
+\subsection{The While Structure}
+
+\noindent A {\bf repetition structure} 
+is a control structure that repeats a statement or sequence of
+statements in a controlled way.  Repetition structures are also
+referred to as {\bf loop structures}.  Many types of programming tasks
+require a repetition structure.  Consider some examples.
+
+\begin{itemize}
+
+\item You want to add up the squares of the numbers from 1 to 100.
+
+\item You want to compute compound interest on an amount of money in a
+savings account with a fixed interest rate if it is kept there for $30$ years.
+
+\item A computer security employee wants to try every possible password in
+order to break into an account of a suspected spy.
+
+\item You want to have players input moves for a turn in a game until
+the game is over. Our {\tt OneRowNim} is such an example.
+
+\end{itemize}
+
+We will study several different repetition structures of Java in depth in Chapter
+6.
+We will briefly consider the  while statement here so as to be able to
+define methods that are more powerful and more interesting.
+Let us write a method that solves a slight generalization
+of the first problem above.  We will use the while statement to sum the
+squares of integers from $1$ to a number specified as a parameter of the
+method.  Thus, the method call {\tt sumSquares(3)} should return the value
+$14$ since $1*1 + 2*2 + 3*3 = 1 + 4 + 9 = 14$.
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int sumSquares(int max)
+{ int num = 1;
+  int sum = 0;
+  while (num <=  max) { // While num <= max
+    sum = sum + num*num; // Add square to sum
+    num = num + 1;       // Add 1 to num
+  } //while
+  return sum;           // Return the sum
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that in this example, the variable {\tt num} gets
+assigned an initial value of $1$ before the {\tt while} statement.
+Note also that the {\tt boolean} expression {\tt num < max} in
+parentheses after {\tt while} states the condition for which we wish
+to continue summing squares.  Finally note that the last statement in
+the block following the {\tt boolean} expression adds $1$ to {\tt
+num}--that is, this variable is updated at the end of the block.
+
+The {\bf while statement}\index{while statement} is a loop statement
+in which the loop entry condition occurs before the loop body. It has
+the following general form:
+
+\JavaRule[false]{While Statement.}{The {\it while statement} has the
+following syntax: \\
+$
+\matrix{
+\hspace{1.1in}{\tt while} & ( \; {\it loop\;entry\;condition } \; ) \cr
+\hspace{1.1in}\;\;\;\;\;\;\; & {\it loop body } \;  ;          \cr
+}
+$}
+
+\noindent When the {\tt while} statement is executed, the loop entry condition
+is evaluated and if this evaluates to {\tt false}, execution continues
+at the statement immediately after the loop body.  If the loop entry condition
+evaluates to {\tt true}, the loop body is executed  and then the
+entry condition
+is evaluated again.  The loop body continues to be executed until the
+loop entry
+condition evaluates to {\tt false}.
+
+
+To have a {\tt while} statement accomplish a task, the variable or
+variables in the loop entry condition must be initialized correctly before the
+{\tt while} statement and these variables must be correctly updated at the
+end of the loop body.  We can refer to the initializer statement
+followed by a {\tt while} statement as a {\bf while structure}.
+We can restate the above guidelines as a design principle:
+
+\JavaTIP{EFFECTIVE DESIGN}{Loop Structure.}{A properly designed
+while structure must include an initializer, a loop entry condition,
+and an updater. The updater should guarantee that the loop entry
+condition eventually fails, thereby allowing the loop to terminate.}
+
+\noindent In pseudocode, the {\it while structure}\index{while structure} would
+take the following form:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+InitializerStatements;         // Initializer
+while (loop entry condition) { // Bound test
+     Statements;                // Loop body
+     UpdaterStatements;         // Updater
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As its form suggests, the while structure is designed
+so that on some conditions the loop body will never be
+executed. Because it tests for the loop entry condition before the loop
+body, it is possible that the loop body is never executed.  We might
+say that it is designed to perform 0 or more iterations.
+
+For example, if the method call {\tt sumSquares(-3)} is executed, the
+loop body will be skipped, because the loop entry condition {\tt num
+<= max} is false to begin with. No iterations will be performed, and
+the algorithm will simply return the value $0$.
+
+
+\begin{figure}[tb]
+\figaleft{chptr03/whileflow.eps}{Flowchart of the while statement and while
+%%%\figa{chptr03/whileflow.eps}{Flowchart of the while statement and while
+structure.
+\label{fig-whileflow}}
+\end{figure}
+
+
+Note also that in the while statement the bound test is preceded by
+initializer statements, and the loop body contains updater statements.
+The semantics of the while structure are shown in Figure~\ref{fig-whileflow}.
+
+\pagebreak
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  Modify the definition of the
+{\tt sumSquares()} method to define a method
+named {\tt sumCubes()} that sums the cubes of integers from a minimum
+value up to a maximum value and returns that sum.  {\tt sumCubes()}
+should have two parameters that will store the minimum and
+maximum values.  Thus the method call {\tt sumCubes(2,3)} should return
+$35$ since $2*2*2 + 3*3*3 = 8 + 27 = 35$.
+
+\end{SSTUDY}
+
+
+%%%\RHrightsec{3.7}{The Improved {\tt OneRowNim}}
+\section{Testing an Improved {\tt OneRowNim}}
+
+\noindent Let's use the control structures that we have discussed
+to improve the definition of the {\tt takeSticks()} method
+of {\tt OneRowNim}.  We noted earlier that our current definition
+allows $4$ or more sticks to be removed from {\tt nSticks} even though
+the rules of One Row Nim indicate that a player must take one, two, or
+three sticks on a turn.  We can use {\tt if-else} statements
+to make certain that no more than $3$ sticks get removed.
+
+What should happen if the method {\tt takeSticks()} is called with an
+argument that does not represent a legal number of sticks to remove?
+In this case, it would probably make sense to remove no sticks at all
+and to keep the value of {\tt player} the same so that the player whose turn
+it is does not change. In addition, it would be nice if the method could
+signal that an illegal move has been attempted.  This can  be accomplished if
+we redefine {\tt takeSticks()} to return a {\tt boolean} value. Let's have
+a return value of {\tt true} represent the case that a valid number of sticks
+have been removed and the player to play next has been changed. A return
+of {\tt false} will indicate that an illegal move has been attempted.  Making
+these changes to the {\tt takeSticks()} method will yield a method definition
+that looks like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean takeSticks(int num) 
+{   if (num < 1) {
+       return false; // Error
+    } else if ( num > 3) {
+       return false; // Error
+    } else {
+       nSticks = nSticks - num;
+       player = 3 - player;
+       return true;
+    } //else
+} //takeSticks
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Notice that the new definition of the {\tt takeSticks()} method
+has a boolean return type.  Also notice that the {\tt if/else} multiway
+structure is used to handle the three cases of the parameter {\tt num}
+being less than one, more than three, or a valid number.
+
+Let us add one more method to the {\tt OneRowNim} class.  Let's define
+a method called {\tt getWinner()}that will return the number of the
+winning player if the game is over. Recall that the player who takes
+the last stick loses, so after that last play, the player whose turn
+it is to play next is the winner. However, we should be concerned
+about what value to return if the game is not over when the method is
+called. A common strategy is to have a method return a special value
+to indicate that it is in a state in which it cannot return the value
+requested.  Returning a $0$ value is a good way to indicate that the
+game is not over so a winner cannot be identified.  With this
+information, the {if/else} statement can be used in the definition of
+{\tt getWinner()}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getWinner()
+{   if (nSticks < 1)
+        return player;
+    else 
+        return 0;
+} // getWinner()
+\end{lstlisting}
+\end{jjjlisting}
+
+We now have the final version (for this chapter) of the {\tt
+OneRowNim} class whose implementation is given in
+Figure~\ref{fig-ornclass}.  We have turned a very simple class into
+one that contains quite a few elements.  Compared to our first version
+(in Chapter~1), this Chapter's version of {\tt OneRowNim} presents an
+interface (to other objects) that is easy and convenient to use.  The
+constructor methods with parameters provide an easy way to create a
+{\tt OneRowNim} instance with any number of sticks.  The use of {\tt
+private} instance variables and a single, carefully designed mutator
+method, {\tt takeSticks()}, prevents other objects from tampering with
+the state of a {\tt OneRowNim} object's state.  The other methods
+provide a flexible way to find out the state of a {\tt OneRowNim}
+object.  The complete implementation of this {\tt OneRowNim} is shown
+in Figure~\ref{fig-ornclass}.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNim 
+{   private int nSticks = 7;
+    private int player = 1;
+
+    public OneRowNim() 
+    {
+    } // OneRowNim() constructor
+
+    public OneRowNim(int sticks) 
+    {   nSticks = sticks;
+    }  // OneRowNim() constructor2
+
+    public OneRowNim(int sticks, int starter) 
+    {   nSticks = sticks;
+        player = starter;
+    }  // OneRowNim() constructor3
+
+    public boolean takeSticks(int num) 
+    {   if (num < 1) return false;       // Error
+        else if ( num > 3) return false; // Error
+        else              // this is a valid move
+        {   nSticks = nSticks - num;
+            player = 3 - player;
+            return true;
+        } // else
+    } // takeSticks()
+
+    public int getSticks() 
+    {   return nSticks;
+    } // getSticks()
+
+    public int getPlayer() 
+    {   return player;
+    } // getPlayer()
+
+    public boolean gameOver()
+    {   return (nSticks <= 0);
+    } // gameOver()
+
+    public int getWinner()
+    {   if (nSticks < 1) return getPlayer();
+        else return 0;  //game is not over
+    } // getWinner()
+    
+    public void report()
+    {   System.out.println("Number of sticks left: " + 
+                                             getSticks());
+        System.out.println("Next turn by player " + 
+                                             getPlayer());
+    }   // report()
+} // OneRowNim class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt OneRowNim} class with improved methods.
+\label{fig-ornclass}}
+\end{figure}
+
+Let's use a while statement to test the new methods of the class.  A
+pseudocode description of how a game is played might look like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  Choose the initial number of sticks for the game
+  while the game is not over
+  {   Report the state of the game
+      Process the next move
+  }
+  Report the state of the game
+  Report who the winner is
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent  Translating this pseudocode into Java code in a {\tt main()}
+method in a separate class gives us the class shown in
+Figure~\ref{fig-tornclass}.  We will use the {\tt Scanner} class 
+\begin{figure}[hbt]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.util.Scanner;  
+  
+public class TestOneRowNim
+{
+  public static void main(String argv[])
+  { Scanner sc = Scanner.create(System.in);
+    OneRowNim game = new OneRowNim(11);
+    while(game.gameOver() == false) 
+    {   game.report();  // Prompt the user
+      System.out.print("Input 1, 2, or 3: ");
+      int sticks = sc.nextInt(); // Get move
+      game.takeSticks(sticks);   // Do move
+      System.out.println();
+    } // while
+    game.report();  // The game is now over
+    System.out.print("Game won by player ");
+    System.out.println(game.getWinner());
+ } // main()
+} // TestOneRowNim
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt TestOneRowNim} class with a while loop.
+\label{fig-tornclass}}
+\end{figure}
+introduced in the previous chapter to get moves from the keyboard
+for both players.  Before each move {\tt game.report()} describes 
+the state of the game before the user is prompted to input a move 
+for one of the players.  A reader interested in
+seeing the lengthy output to the console when the {TestOneRowNim}
+class is run is encouraged to actually run the program.
+
+Note that the return value of the {\tt takeSticks()} method is ignored
+in this test program.  We will make use of the return value in test
+programs in the next chapter when better user interfaces are developed
+for {\tt OneRowNim}.  Note, however, that taken together, the public
+methods for {\tt OneRowNim} provide other objects with an interface
+that they can use to communicate with individual {\tt OneRowNim}
+objects.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Interfaces.}{Well-designed objects provide a
+useful public interface and protect the object's private elements from
+other objects.}
+
+\noindent To reiterate a point made at the outset, object-oriented programming
+\marginnote{Object-oriented design}
+is a process of constructing objects that will interact with each
+other.  Object-oriented programs must ensure that the objects
+themselves are well designed in terms of their ability to carry out
+their designated functions.  Good design in this sense requires
+careful selection of instance variables and careful design of methods
+to ensure that the object can carry out its assigned tasks.  However,
+equal care must be taken to ensure that the interactions that take
+place among objects are constrained in ways that make sense for that
+particular program.  This aspect of designing objects comes into play
+in designing the methods---constructor, accessor, and mutator---that
+make up the object's interface.
+
+\section*{{\color{cyan}Special Topic:} Intelligent Agents}
+
+{\color{cyan}Wouldn't it be nice} if we had a computer program that
+could schedule appointments for us, remind us of meetings and
+commitments, find information for us on the WWW, and manage our e-mail
+messages for us?  Wouldn't it be nice to have a computerized personal
+assistant?
+
+Actually, such programs are called {\it intelligent agents}, which are
+programs that are capable of acting autonomously to carry out certain
+tasks.  Intelligent agent technology is becoming an important research
+area in computer science.  Most agent programs incorporate some kind
+of machine learning capability, so that their performance improves
+over time.
+
+As a typical agent activity, suppose I was able to tell my intelligent
+agent to buy me a copy of a certain book that I just heard about.
+Given a command like ``buy me a copy of X,'' the agent would perform a
+search of online book sellers and come up with the best deal.  Once it
+had found the best buy, the agent would communicate with a
+computer-based agent representing the book seller.  My agent would
+make the order and pay for it (assuming I gave it authority to do so),
+and the book seller's agent would process the order.
+
+As far-fetched as the capability may now seem, this is the direction
+that research in this area is headed.  Researchers are developing
+agent languages and describing protocols that agents can use to
+exchange information in a reliable and trustworthy environment.
+Obviously, you wouldn't want your agent to give your money to a
+fraudulent book seller, so there are significant problems to solve in
+this area that go well beyond the problem of simply exchanging
+information between two agents.
+
+The best way to learn more about this research area is to do a Web
+search using the search string ``Intelligent Agent.''  There are
+numerous research groups and companies that provide online
+descriptions and demos of their products.
+
+\section{{\bf From the Java Library} {\tt java.lang.Object}}
+\label{sec-tostring}
+\WWWjava
+
+%<sec_object:\thisAheadno><pg_sec_object:\thispageno>
+%%%%\tBOXseven{The most} general class in Java's class hierarchy is the
+The most general class in Java's class hierarchy is the {\tt
+java.lang.Object} class.  It is the superclass of all classes that
+occur in Java programs.  By default, it is the direct superclass of
+any class that does not explicitly specify a pedigree in its class
+definition.
+
+All subclasses of {\tt Object} {\bf inherit} the {\tt public} and {\tt
+protected} methods contained in {\tt Object},
+%\begin{marginalnote}\it Inheritance\end{marginalnote}
+so all such methods can be thought of as belonging to the subclasses.
+This means that all classes inherit the methods of the {\tt Object}
+class, because every class is a subclass of it.  In this section,
+let's look briefly at how we can use an inherited method and
+also at how we can {\bf override} it--that is, redefine the method--if
+it doesn't exactly suit our purposes.
+%¥¥¥for pagination\marginnote{Inheritance}
+
+One of the most useful methods in the {\tt Object} class is the
+{\tt toString()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Object
+{   
+    public String toString() ;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt toString()}\index{toString() method} method
+%\begin{figure}
+%\begin{graphic}
+%%%\marginfig{chptr03/p150f1.eps}{As a subclass of {\tt Object}, the {\tt OneRowNim} class
+%%%inherits the {\tt toString()} method.
+%%%\label{fig-tostring}
+%%%\label{pg-fig-tostring}}
+%\end{graphic}
+%\end{figure}
+returns a {\tt String} representation of its object. For
+example, {\tt o1.toString()} will return a {\tt String} that in some
+sense describes~{\tt o1}.
+
+Because {\tt OneRowNim} is a subclass of {\tt Object}, it inherits the
+{\tt toString()} method.  To illustrate the default behavior of {\tt
+toString()}, let's use it with a {\tt OneRowNim} instance:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  OneRowNim g1 = new OneRowNim(11);
+  OneRowNim g2 = new OneRowNim(13);
+  System.out.println(g1.toString());
+  System.out.println(g2.toString());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This code segment creates two {\tt OneRowNim} instances, one
+named {\tt g1} and the other named {\tt g2}. The inherited {\tt
+toString()} method is then invoked on each {\tt OneRowNim} instance, which
+produces the following output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  OneRowNim@1dc6077b
+  OneRowNim@1dc60776
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent What this experiment shows is that the default
+%\begin{marginalnote}\it Default {\tt toString()}\end{marginalnote}
+%¥¥¥for pagination\marginnote{\vspace{12pt}Default {\tt toString()}}
+definition of {\tt toString()} returns some kind of internal
+representation of its object.  It looks as if it returns the name of the
+object's class concatenated with its memory address.  This may be
+useful for some applications.   But for most objects we will want to
+override the default definition to make the {\tt toString()}
+method return a string that is more appropriate for {\tt OneRowNim}.
+
+What {\tt String} should the {\tt g1.toString()} method return?
+%\begin{marginalnote}\it Overriding a method\end{marginalnote}
+%¥¥¥for pagination\marginnote{Overriding a method}
+Let's have it return a {\tt String} that reports the {\tt OneRowNim}
+instances's current state, which are the values stored in the two
+instance variables.  To override a method, you simply define a method
+with the same signature in the subclass.  If you call {\tt toString()}
+with an instance of the subclass, its version of the method will be
+used. In this way, the subclass method overrides the superclass
+version.  Thus, {\tt OneRowNim.toString()} will have the following
+signature:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String toString();
+\end{lstlisting}
+\end{jjjlisting}
+
+%\begin{figure}
+%\begin{graphic}
+%%%\marginfig{chptr03/p151f1.eps}{The {\tt OneRowNim} class overrides the {\tt toString()}
+%%%method, which it inherits from the {\tt Object} class.
+%%%\label{fig-override}
+%%%\label{pg-fig-override}}
+%\end{graphic}
+%\end{figure}
+
+\noindent Let us describe the state of a {\tt oneRowNim} instance very briefly
+in the string returned by the {\tt toString()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String toString()
+{ return "nSticks = " + nSticks + ", player = " + player;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If we add the {\tt toString()} method to the {\tt OneRowNim} class
+and then run the program shown in Figure~\ref{fig-orntostring},
+we get the following output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  nSticks = 9, player = 2
+  nSticks = 13, player = 1
+\end{lstlisting}
+\end{jjjlisting}
+
+%%% \JavaTIP{EFFECTIVE DESIGN}{Method Abstraction.}{Instead of duplicating
+%%% code at several different places within a program, it is better to
+%%% encapsulate the code in a method and call the method wherever the code
+%%% is needed.  A single method is easier to maintain and extend, and the
+%%% resulting program will be shorter and better structured.}
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class TestToString
+{
+  public static void main(String argv[])
+  { OneRowNim g1 = new OneRowNim(11);
+    OneRowNim g2 = new OneRowNim(13);
+    g1.takeSticks(2);
+    System.out.println(g1.toString());
+    System.out.println(g2.toString());
+  } //main
+} //TestToString
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{An application to test the overridden {\tt toString()} method.
+\label{fig-orntostring}}
+\end{figure}
+
+\noindent While this new method may not play an important role in the
+{\tt OneRowNim} class, it does provide a very brief, understandable
+description of the state of the object.  This is the reason that the
+{\tt toString()} method was included in the {\tt Object} class.
+
+\section{Object-Oriented Design: Inheritance and Polymorphism}
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\,OOD: Inheritance and Polymorphism}
+
+\noindent This use of {\tt Object}'s {\tt toString()} method provides our first
+\marginnote{Inheritance}
+look at Java's inheritance mechanism and how it promotes the
+generality and extensibility of the object-oriented approach.  As a
+subclass of {\tt Object}, our {\tt OneRowNim} class automatically
+inherits {\tt toString()} and any other {\tt public} or {\tt
+protected} methods defined in {\tt Object}.  We can simply use these
+methods as is, insofar as they are useful to us.  As we saw in this
+case, the default version of {\tt toString()} wasn't very useful.  In
+that case, we can override the method by defining a method in our
+class with the exact same method signature.  The new version of {\tt
+toString()} can be customized to do exactly what is most appropriate
+for the subclass.
+
+One of the great benefits of the object-oriented approach is the
+ability to define a task, such as {\tt toString()}, at a very high
+level in the class hierarchy and let the inheritance mechanism spread
+that task throughout the rest of the hierarchy.  Because {\tt
+toString()} is defined in {\tt Object}, you can invoke this method for
+any Java object.  Moreover, if you override {\tt toString()} in the
+classes you define, you will be contributing to its usefulness.  Two
+important lessons from this example are
+
+\JavaTIP{EFFECTIVE DESIGN}{Inheritance.}{The higher up in the class hierarchy
+that a method is defined, the more widespread its use can be.}
+
+\JavaTIP{EFFECTIVE DESIGN}{Overriding {\tt
+toString()}.}{The {\tt toString()} method can be overridden in any
+user defined Java class.  It is a useful thing to do in any class
+where the state of an object can be defined briefly.}
+
+
+\noindent Obviously there is much more that needs to be explained
+about Java's inheritance mechanism.  Therefore, we will be revisiting
+this topic on numerous occasions in subsequent chapters.
+%\begin{figure}
+%\begin{graphic}
+%%%\marginfig{chptr03/p152f1.eps}{The {\tt toString()} method is polymorphic because its
+%%%behavior depends on the object ({\tt Student} or {\tt OneRowNim})
+%%%on which it is invoked.
+%%%\label{fig-polymorph}
+%%%\label{pg-fig-polymorph}}
+%\end{graphic}
+%\end{figure}
+
+%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%RAM We may need to sharpen this definition of polymorphism. Here are
+%%% some definitions that Ralph has gathered:
+
+%%% (2) Polymorphism - Selecting a method among several methods that
+%%% have the same name on the basis of the actual types of the
+%%% implicit parameters. Horstmann, Java Essentials ed 3, Glossary p. 830
+
+%%% (3) Polymorphism - A feature of object-oriented languages in which the
+%%% exact method to be invoked is determined at run time by the class
+%%% of the receiving object. Arnow et. al. Into to Programming Using
+%%% Java   ed 2 Glossary p. 665
+
+%%% (4) Polymorphism is a programming language behavior where the same code
+%%% expression can invoke different methods depending on the type of
+%%% objects using the code. Cohoon and Davidson Java Program Design p. 455
+
+%%%RAM The code segment shown here is an example of polymorphism, but the surrounding
+%%% text doesn't emphasize the point that it's the selection of different
+%%% methods that makes it so.
+%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Another important concept of object-oriented design is polymorphism.
+The {\tt toString()} method is an example of a polymorphic method. The
+term {\bf polymorphism} is from the Greek terms {\it poly}, which means
+``many,'' and {\it morph}, which means ``form.'' The {\tt toString()}
+method is polymorphic because it has different behavior when invoked
+on different objects.
+
+For example, suppose we design a class, {\tt Student}, as a subclass
+of {\tt Object} and define its {\tt toString()} method to return the
+student ID number.  Given this design, then {\tt obj.toString()} will
+return a student ID if {\tt obj} is an instance of {\tt Student}, but
+if it is an instance of {\tt OneRowNim}, it will return a the
+description of its state that we defined above. The following code
+segment illustrates this point:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Object obj;           // obj can refer to any Object
+obj = new Student("12345");// obj refers to a Student
+System.out.println(obj.toString()); // Prints "12345"
+obj = new OneRowNim(11); // obj refers to a OneRowNim
+System.out.println(obj.toString());
+
+// Prints: nSticks = 11, player = 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the variable {\tt obj} is used to refer to a
+{\tt Student} and then to a {\tt OneRowNim} instance. This is okay
+because both classes are subclasses of {\tt Object}. When {\tt
+toString()} is invoked on {\tt obj}, Java will figure out what
+subclass of {\tt Object} the instance belongs to and invoke the
+appropriate {\tt toString()} method.
+%\end{objectorienteddesign}
+
+\section{Drawing Lines and Defining Graphical Methods (Optional)}
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\,Drawing and Graphical Methods}
+
+We used a  {\tt Graphics} object in the previous chapter to draw
+rectangles and ovals in an applet window. The {\tt Graphics} class
+also possesses a method for drawing a line segment. 
+Problems involving drawing pictures in an applet window using a 
+series of line segments can be a source of examples of defining 
+useful methods and also of making good use of loops.
+
+The {\tt Graphics} class has a public instance method with
+the header:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public  void  drawLine(int x1, int y1, int x2, int y2)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The method call  {\tt g.drawLine(x1, y1, x2, y2)}
+draws a line from the point $(x1,y1)$ to $(x2,y2)$ where $(x,y)$
+refers to a point that is $x$ pixels from the left edge of
+the area that {\tt g} is drawing in and $y$ pixels from the
+top edge.  Thus {\tt g.drawLine(10, 10, 10, 60)} draws a
+vertical line segment that is 50 pixels long and is 10 pixels
+from the left edge of the drawing area, that is, a line
+segment from the point $(10,10)$ to the point $(10,60)$.
+
+Consider the problem of creating an applet program with a
+method called {\tt drawSticks()} to draw any specified 
+number of vertical line segments.
+This method might be useful for an applet user interface
+to the {\tt OneRowNim} game to draw the number of sticks 
+at a given point in a game.  Suppose that this method must have an
+{\tt int} parameter to specify the number of vertical lines to draw
+and two {\tt int} parameters to specify the location of
+the top endpoint of the left most line segment.  The  {\tt drawSticks()}
+method will need to use a {\tt Graphics} object connected to the
+applet window for drawing the line segment.  The only such 
+{\tt Graphics} object available is the parameter in  the {\tt paint()}
+method of an applet.  Thus the method must have a {\tt Graphics}
+parameter and it will be called in the {\tt paint()} method
+using the {\tt Graphics} object there
+as an argument. Thus the header of the method should look like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void drawSticks(Graphics g,int x,int y,int num)
+\end{lstlisting}
+\end{jjjlisting}
+
+The length of the line segments and and the distance between 
+them are not specified by parameters so we need to choose some 
+fixed values for these quantities. Let us assume that the line 
+segments are 10 pixels apart and 50 pixels long. We now have 
+enough information to complete the definition of an applet
+to solve this problem. Such a class definition is reproduced in 
+Figure~\ref{fig-drawsticksprog}.
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+/** DrawLineApplet   demonstrates some graphics commands.
+ *It draws a set of 12 vertical lines and a set of 7 lines.
+ */
+import java.awt.*;
+import java.applet.*;
+
+public class DrawSticksApplet extends Applet
+  /** drawSticks(g,x,y,num) will draw num vertical line
+   * segments.  The line segments are 10 pixels apart and
+   * 50 pixels long. The top endpoint of the left most
+   *line segment is at the point (x,y).
+   */
+  public void drawSticks(Graphics g, int x, int y, int num)
+  { int k = 0;
+      while (k < num)
+      {   g.drawLine(x, y, x, y + 50);
+          x = x + 10;
+          k = k + 1;
+      } // while
+  } // drawSticks()
+
+  public void paint(Graphics g)
+  {   drawSticks(g, 25, 25, 12);
+      g.setColor(Color.cyan);
+      drawSticks(g, 25, 125, 7);
+  } // paint()
+} // DrawSticksApplet
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{An applet program with a method for drawing a set of sticks.
+\label{fig-drawsticksprog}}
+\end{figure}
+
+Note that the body of {\tt drawSticks()} uses a while-loop to draw the lines
+and declares and initializes a local variable to zero to use for counting
+the number of lines drawn.  The statement {\tt g.drawLine(x, y, x, y + 50);}
+draws a vertical line which is $50$ pixels long.  Increasing the value of 
+$x$ by $10$ each time through the loop moves the next line $10$ pixels to the right.
+
+The first call to {\tt drawSticks()} in the {\tt paint()} method draws $12$
+lines with $(25,25)$ the top point of the left-most line.  The second call to
+{\tt drawSticks()} will draw $7$ cyan sticks $100$ pixels lower.  Note that 
+changing the color of {\tt g} before passing it as an argument to 
+{\tt drawSticks()} changes the drawing color.
+
+To run this applet, one needs the following HTML document, which specifies
+the applet code as {\tt  DrawSticksApplet.class}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<HTML>
+<HEAD>
+<TITLE> Draw Sticks Web Page</TITLE>
+</HEAD>
+<BODY>
+<H2> DrawSticksApplet will appear below.</H2>
+<APPLET CODE = "DrawSticksApplet.class" 
+              WIDTH = 400 HEIGHT = 200>
+</APPLET>
+</BODY>
+</HTML>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent An image of the {\tt DrawSticksApplet} as it appears in a browser window
+is shown in Figure~3.20.
+
+\begin{figure}[tbh]
+\figaleftscaled{chptr03/drawsticks.eps}{0.70}{The DrawSticksApplet as displayed in a
+%%\figa{chptr03/drawsticks.eps}{The DrawSticksApplet as displayed in a
+browser window.}
+\label{fig-drawstickseps}
+\end{figure}
+
+As we have seen in this example, defining methods with parameters to
+draw an object makes the code reusable and makes it possible to draw a
+complex scene by calling a collection of simpler methods.  It is a
+typical use of the divide-and-conquer principle.  The while-loop can
+be useful in drawing almost any geometrically symmetric object.
+
+
+\secSMHleft{Chapter Summary}
+\secKTH{Technical Terms}
+\begin{KT}
+accessor method
+
+class scope
+
+formal parameter
+
+if statement
+
+if/else statement
+
+inherit
+
+local scope
+
+loop structure
+
+method overloading
+
+method signature
+
+mutator method
+
+multiway selection
+
+override
+
+polymorphism
+
+repetition structure
+
+scope
+
+selection
+
+side effect 
+
+while statement
+
+while structure
+\end{KT}
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}
+\item  A {\it formal parameter\index{parameter}} is a variable in a method
+declaration. It always consists of a type followed by a variable
+identifier.  An {\it argument} is a value that is passed to a method
+via a formal parameter when the method is invoked.   A method's
+{\it parameters} constrain the type of information that can be passed to a
+method.
+
+\item  When an argument of primitive type is passed to a method, 
+it cannot be modified within the method.  When an argument of
+reference type is passed to a method, the object it refers to can be
+modified within the method.
+
+\item  Except for {\tt void} methods,
+a {\it method invocation} or {\it method call} is an expression which
+has a value of a certain type.  For example, {\tt nim.getSticks()}
+returns a {\tt int} value.
+
+\item  The {\it signature\index{signature}} of a method consists
+of its name, and the number, types, and order of its formal
+parameters.  A class may not contain more than one method with the same
+signature.
+
+\item  A {\it constructor\index{constructor}} is a method that is invoked
+when an object is created.  If a class does not contain a
+constructor method, the Java compiler supplies a {\it default
+constructor}.
+
+\item  Restricting access to certain portions of a class is a form of
+{\it information hiding\index{Information Hiding Principle}}.
+Generally, instance variables are hidden by declaring them
+{\tt private}.  The class's {\tt public} methods make up its interface.
+
+\item  The {\it if statement} executes a statement only if its boolean
+condition is true.  The {\it if-else statement} executes one
+or the other of its statements depending on the value of its boolean
+condition.   {\it Multiway selection} allows one and only one of
+several choices to be selected depending on the value of its boolean
+condition.
+
+\item  The {\tt while} statement is used for coding loop structures
+that repeatedly execute a block of code while a boolean condition
+is satisfied.
+
+\end{SMBL}
+
+\secANSH
+\begin{ANS}
+%{Exercise 3.1}
+\item  A {\it method declaration} defines the method by specifying
+its name, qualifiers, return type, formal parameters, and
+its algorithm, thereby associating a name with a segment
+of executable code.  A {\it method invocation} calls or
+uses a defined method.
+
+
+%{Exercise 3.2}
+\item  A {\it formal parameter} is a variable in the method declaration,
+whose purpose is to store a value while the method is running.  An
+{\it argument} is a value that is passed to a method in place of a
+formal parameter.
+
+
+%{Exercise 3.3}
+\item  The following code declares two instance variables for names
+of players  and defines a {\tt setName()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private String nameOne = "Player One";
+private String nameTwo = "Player Two";
+
+public void setNames(String name1, String name2)
+{    nameOne = name1;
+     nameTwo = name2;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Of course, there are many other appropriate names for
+the variables and parameters and other initial assignments.
+
+%{Exercise 3.4}
+\item A method call that sets the names of the players of {\tt game1} is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+game1.setNames("Xena","Yogi");
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 3.5}
+\item  A constructor cannot have a return type, such as void.
+
+%{Exercise 3.6}
+\item  One definition for the method is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim(int sticks)
+{    nSticks = sticks;
+     player = 2;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 3.7}
+\item  The following would be displayed on the screen:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+   1
+   20
+   false
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 3.8}
+\item  One definition for the method is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getMoves()
+{   return nMoves;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 3.9}
+\item  One definition for the method is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean playerOneIsNext()
+{   return (player == 1);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 3.10}
+\item  See Figure~3.21.
+
+%\begin{figure}
+\marginfiglarge{chptr03/isdone.eps}{Flowchart of the if-else version of the
+{\tt getStatus()} method. \label{fig-getstateifelse}} 
+%\end{figure}
+
+
+
+%{Exercise 3.11}
+\item  \verb| |
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isHeavy == true)
+     System.out.println("Heavy") ;
+else ;  // Error (remove this semicolon)
+     System.out.println("Light");
+
+if (isLong == true)
+     System.out.println("Long") 
+else   // Error (end line above with semicolon)
+     System.out.println("Short");
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 3.12}
+\item  \verb| |
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String getPlayerName()
+{    if (player == 1)
+         return "Ann";
+     else if (player == 2)
+         return "Bill";
+     else if (player == 3)
+         return "Cal";
+     else
+         return "Error";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 3.13}
+\item  When passing an argument for a primitive type, a copy
+of the argument's value is passed. The actual argument
+cannot be changed inside the method. When passing a
+reference to an object, the object can be changed within
+the method.
+
+%%{Exercise 3.14}
+\item  \verb| |
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int sumCubes(int min, int max)
+{
+    int num = min;
+    int sum = 0;
+    while (num <=  max) { // While num <= max
+        sum = sum + num*num*num; // Add cube of num to sum
+        num = num + 1;       // Add 1 to num
+    } //while
+    return sum;           // Return the sum
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\end{ANS}
+
+\secEXRHtwo{Exercises}
+\begin{EXRtwo}
+\item  Fill in the blanks in each of the following sentences:
+
+\begin{EXRtwoLL}
+\baselineskip=14pt\item  When two different methods have the same name, this is
+an example of \rule{30pt}{0.5pt}\,.
+\item  Methods with the same name are distinguished by their
+\rule{30pt}{0.5pt}\,.
+
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming
+exercises, {\bf first} draw a UML class diagram describing all classes
+and their inheritance relationships and/or associations.}
+
+\item  A method that is invoked when an object is created is
+known as a \rule{30pt}{0.5pt} method.
+\item  A method whose purpose is to provide access to an object's
+instance variables is known as an \rule{30pt}{0.5pt} method.
+\item  A {\tt boolean} value is an example of a \rule{30pt}{0.5pt} type.
+\item  A {\tt OneRowNim} variable is an example of a \rule{30pt}{0.5pt} type.
+\item  A method's parameters have \rule{30pt}{0.5pt} scope.
+\item  A class's instance variables have \rule{30pt}{0.5pt} scope.
+\item  Generally, a class's instance variables should have
+\rule{30pt}{0.5pt} access.
+\item  The methods that make up an object's interface should have
+\rule{30pt}{0.5pt} access.
+\item  A method that returns no value should be declared  \rule{30pt}{0.5pt}\,.
+\item  Java's if statement and if-else statement are both examples of
+\rule{30pt}{0.5pt}
+control structures.
+\item  An expression that evaluates to either {\tt true} or {\tt false} is
+known as a  \rule{30pt}{0.5pt}\,.
+\item  In an if-else statement, an else clause matches  \rule{30pt}{0.5pt}\,.
+\item  The ability to use a superclass method in a subclass is due to Java's
+  \rule{30pt}{0.5pt} mechanism.
+\item  The process of redefining a superclass method in a subclass is
+known as  \rule{30pt}{0.5pt} the method.
+\end{EXRtwoLL}
+
+\baselineskip=11pt\item  Explain the difference between the following pairs of
+concepts:
+
+\begin{EXRtwoLL}
+\item  {\it Parameter} and {\it argument}.
+\item  {\it Method definition} and {\it method invocation}.
+\item  {\it Local scope} and {\it class scope}.
+\item  {\it Primitive type} and {\it reference type}.
+\item  {\it Access method} and {\it constructor method}.
+\end{EXRtwoLL}
+
+
+\item  Translate each of the following into Java code:
+\begin{EXRtwoLL}
+\item %
+If b1 is true, then print ``one''; otherwise, print ``two''.
+%
+\item %
+If b1 is false and if b2 is true,  then print ``one''; otherwise, print ``two''.
+%
+\item %
+If b1 is false and if b2 is true,  then print ``one'';
+otherwise, print ``two'', or print ``three''.
+%
+\end{EXRtwoLL}
+
+\item  Identify and fix the syntax errors in each of the following:
+
+\begin{EXRtwoLL}
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking == true) ;
+    System.out.println("Walking");
+else
+    System.out.println("Not walking");
+\end{lstlisting}
+\end{jjjlisting}
+
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking)
+     System.out.println("Walking")
+else
+     System.out.println("Not walking");
+\end{lstlisting}
+\end{jjjlisting}
+
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking)
+     System.out.println("Walking");
+else
+     System.out.println("Not walking")
+\end{lstlisting}
+\end{jjjlisting}
+
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking = false)
+     System.out.println("Walking");
+else
+     System.out.println("Not walking");
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRtwoLL}
+
+\item  For each of the following, suppose that {\tt isWalking}
+is {\tt true} and {\tt isTalking} is {\tt false} (first
+draw a flowchart for each statement and then determine
+what would be printed by each statement):
+
+\begin{EXRtwoLL}
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking == false)
+     System.out.println("One");
+     System.out.println("Two");
+\end{lstlisting}
+\end{jjjlisting}
+
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking == true)
+     System.out.println("One");
+     System.out.println("Two");
+\end{lstlisting}
+\end{jjjlisting}
+
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking == false)
+{
+     System.out.println("One");
+     System.out.println("Two");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (isWalking == false)
+     if (isTalking == true)
+         System.out.println("One");
+     else
+         System.out.println("Two");
+else
+     System.out.println("Three");
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRtwoLL}
+
+\item  Show what the output would be if the following version of
+{\tt main()}  were executed:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String argv[])
+{
+     System.out.println("main() is starting");
+     OneRowNim game1;
+     game1  = new OneRowNim(21);
+     OneRowNim game2;
+     game2 = new OneRowNim(8);
+     game1.takeSticks(3);
+     game2.takeSticks(2);
+     game1.takeSticks(1);
+     game1.report();
+     game2.report();
+     System.out.println("main() is finished");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Determine the output of the following program:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Mystery
+{
+     public String myMethod(String s)
+     {
+         return("Hello" + s);
+     }
+     public static void main(String argv[])
+     {
+         Mystery mystery = new Mystery();
+         System.out.println( mystery.myMethod(" dolly");
+     }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write a {\tt boolean} method---a method that returns
+a {\tt boolean}---that takes an {\tt int} parameter and converts the
+integers 0 and 1 into {\tt false} and {\tt true}, respectively.
+
+\item  Define an {\tt int} method that takes a {\tt boolean}
+parameter.  If the parameter's value is {\tt false}, the method
+should return 0; otherwise, it should return~1.
+
+\item  Define a {\tt void} method named {\tt hello} that takes a
+single {\tt boolean} parameter.  The method should print ``Hello''
+if its parameter is true; otherwise, it should print ``Goodbye''.
+
+
+\item  Define a method named {\tt hello} that takes a
+single {\tt boolean} parameter.  The method should return ``Hello'' if
+its parameter is true; otherwise it should return ``Goodbye''.  Note the
+difference between this method and the one in the previous
+exercise.  This one returns a {\tt String}. That one was a {\tt void}
+method.
+
+\item  Write a  method named {\tt hello} that takes a
+single {\tt String} parameter.  The method should return a {\tt String}
+that consists of the word ``Hello'' concatenated with the value of its
+parameter.  For example, if you call this method with the expression
+{\tt hello("dolly")}, it should return ``hello dolly''. If you call it
+with {\tt hello("young lovers wherever you are")}, it should return
+``hello young lovers wherever you are''.
+
+\item  Define a void method named {\tt day1} that prints
+``a partridge in a pear tree''.
+
+\item  Write a Java application program called {\tt TwelveDays}
+that prints the Christmas carol ``Twelve Days of Christmas.'' For this
+version, write a void method named {\tt intro()} that takes a single
+{\tt String} parameter that gives the day of the verse and prints the
+intro to the song.  For example, {\tt intro("first")} should print, ``On
+the first day of Christmas my true love gave to me''. Then write
+methods {\tt day1()}, {\tt day2()}, and so on, each of which prints
+its version of the verse.  Then write a {\tt main()} method that calls
+the other methods to print the whole song.
+
+\item  Define a {\tt void} method named {\tt verse} that takes
+two {\tt String} parameters and returns a verse of the Christmas
+carol ``Twelve Days of Christmas.'' For example, if you call this
+method with {\tt verse("first", "a\break partridge in a pear tree")}, it
+should return, ``On the first day of Christmas my true love gave to
+me, a partridge in a pear tree''.
+
+\item  Define a {\tt void} method named {\tt permute},
+which takes three {\tt String} parameters and prints out all possible
+arrangements of the three strings.  For example, if you called
+{\tt permute("a", "b", "c")}, it would produce the following output: abc,
+acb, bac, bca, cab, cba, with each permutation on a separate line.
+
+\item  Design a method that can produce limericks given a
+bunch of rhyming words. That is, create a limerick template that will
+take any five words or phrases and produce a limerick.  For example,
+if you call
+
+\begin{jjjlisting}
+\begin{lstlisting}
+limerick("Jones","stones","rained","pained","bones");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent your method might print (something better than)
+
+\begin{jjjlisting}
+\begin{lstlisting}
+There once a person named Jones
+Who had a great liking for stones,
+But whenever it rained,
+Jones' expression was pained,
+Because stones weren't good for the bones.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For each of the following exercises, write a complete
+Java application program:
+
+\item  Define a class named {\tt Donor} that  has two
+instance variables, the donor's name and rating, both of which are
+{\tt String}s.  The name can be any string, but the rating should be
+one of the following values: ``high,'' ``medium,'' or ``none.''  Write
+the following methods for this class: a constructor, {\tt
+Donor(String,String)}, that allows you to set both the donor's name
+and rating; and access methods to set and get both the name and rating
+of a donor.
+
+\item  {\bf Challenge.} Define a {\tt CopyMonitor} class that solves the
+following problem.  A company needs a monitor program to keep track of
+when a particular copy machine needs service.   The device has two
+important (boolean) variables: its toner level (too low or not) and
+whether it has printed more than 100,000 pages since its last
+servicing (it either has or has not). The servicing rule that the
+company uses is that service is needed when either 100,000 pages have
+been printed or the toner is too low.  Your program should contain a
+method that reports either ``service needed'' or ``service not needed''
+based on the machine's state.  (Pretend that the machine has other
+methods that keep track of toner level and page count.)
+
+\item  {\bf Challenge.} Design and write an {\tt OldMacdonald} class that
+sings several verses of ``Old MacDonald Had a Farm.''  Use methods to
+generalize the verses.  For example, write a method named {\tt eieio()}
+to ``sing'' the \mbox{``E I E I O''} part of the verse.  Write another method
+with the signature {\tt hadAnX(String s)}, which sings the ``had a
+duck'' part of the verse, and a method {\tt withA(String sound)} to
+sing the ``with a quack quack here'' part of the verse.   Test your
+class by writing a {\tt main()} method.
+
+\secEXRHone{Additional Exercises}
+
+\item Suppose you have an {\tt Object A}, with public methods
+{\tt a()}, {\tt b()}, and private method {\tt c()}. And suppose
+you have a subclass of {\tt A} named {\tt B} with methods named
+{\tt b()}, {\tt c()} and {\tt d()}. Draw a UML diagram showing the
+relationship between these two classes. Explain the inheritance
+relationships between them and identify those methods that would
+be considered polymorphic.
+
+\item Consider the definition of the class {\tt C}.
+Define a subclass of {\tt C} named {\tt B} that overrides method {\tt
+m1()} so that it returns the difference between {\tt m} and {\tt n}
+instead of their sum.
+\begin{jjjlisting}
+\begin{lstlisting}
+     public class C {
+         private int m;
+         private int n;
+         public C(int mIn, int nIn) {
+             m = mIn;
+             n = nIn;
+         }
+         public int m1() {
+             return m+n;
+         }
+     }
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRtwo}
+
+
+%
+%%%REW  BOLDFACE DEFINITIONS
+%% accessor method
+%% class scope
+%% formal parameter
+%% if statement
+%% if/else statement
+%% inherit
+%% local scope
+%% loop structure
+%% method overloading
+%% method signature
+%% multiway selection
+%% mutator method
+%% override
+%% polymorphism
+%% repetition structure
+%% scope
+%% selection
+%% side effect
+%% while statement
+%% while structure
+
+
+% LocalWords:  CyberPet isEating isSleeping accessor BankAccount getVariable ch
+% LocalWords:  getAccountNumber getAccountPassword setAccountBalance setName vs
+% LocalWords:  setVariable getName proglist FormalParameterList str printStr
+% LocalWords:  identifier's HelloWorld TestCyberPet UML noname Guinevere nStr
+% LocalWords:  println setKind kStr ResultType MethodName int nonvoid myString
+% LocalWords:  Fido

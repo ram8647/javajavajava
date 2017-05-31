@@ -1,0 +1,2877 @@
+%%%  Chapter 11: Files and Streams: Input/Output Techniques
+%%%  3rd Edition
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{10}
+\chapter{Files and Streams: Input/Output Techniques}
+\label{chapter-files}
+\label{pg-chapter-files}
+
+\CObegin
+
+\secCOBH{Objectives}
+
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Be able to read and write text files.
+\item  Know how to read and write binary files.
+\item  Understand the  use of {\tt InputStream}s and {\tt OutputStream}s.
+\item  Be able to design methods for performing
+ input and output.
+\item  Know how to use the {\tt File} class.
+\item  Be able to use the {\tt JFileChooser} class.
+\end{COBL}
+
+\secCOLH{Outline}
+
+\begin{COL}
+\item {Introduction}
+\item {Streams and Files}
+\item {Case Study: Reading and Writing Text Files}
+\item {The {\tt File} Class}
+\item {Example: Reading and Writing Binary Files}
+\item {Object Serialization: Reading and Writing Objects}
+\item {From the Java Library: {\tt javax.swing.JFileChooser}}
+\item {Using File Data in Programs}    %%%REW new section
+\item[] {\color{cyan}Special Topic: Databases and Personal Privacy}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+\end{COL}
+\COend
+
+\section{Introduction}
+\noindent We have been using input and output in our programs 
+since the very first chapters of the book. In this chapter we
+will take a closer look at Java's input and output elements.
+
+{\bf Input} refers to information or data read from some external
+source into a running program. We introduced you to working with input
+in Chapter~4, when we developed the KeyboardReader class with methods
+for reading data from the keyboard into the console window. We also
+discussed reading data from the keyboard into a {\tt JTextField} in a
+GUI interface, as well as \marginnote{input and output} reading data
+from a text file using methods in the {\tt Scanner} class during that
+chapter.
+
+{\bf Output} refers to information or data written from the running
+program to some external destination.  Up to this point, whenever our
+programs have produced output, it has been sent to either the Java
+console, to a text area, or to some other GUI component.  These
+destinations are transitory, in the sense that they reside in the
+computer's primary memory and exist only so long as the program is
+running.
+
+A {\bf file} is a collection of data that's stored on a disk or on
+some other relatively permanent storage medium.  A file's existence
+does not depend on a running program.  In this chapter, we will learn
+how to create files and how to perform input and output operations on
+their data using the Java classes designed specifically for this
+purpose.  Methods from these classes allow us to write data to files
+and provide greater flexibility in the way we read data from files 
+than the {\tt Scanner} class offers.
+
+%\begin{figure}
+\begin{figure}[b]
+\figaleft{chptr11/sysinout.eps}{The {\tt System.out} output stream connects your program 
+ to the screen and the {\tt System.in} input stream connects it to the keyboard.
+\label{fig-systemout}
+\label{pg-fig-systemout}}
+\end{figure}
+%\end{figure}
+
+\section{Streams and Files}
+\noindent As was noted in Chapter~4, all input and output (I/O) in
+Java is accomplished through the use of input streams and output
+streams.  You are already familiar with input and output streams
+because we \marginnote{I/O streams} have routinely used the {\tt
+System.out} output stream and and the {\tt System.in} input stream
+(Fig.~\ref{fig-systemout}) in this text's examples. Recall that {\tt
+System.out} usually connects your program (source) to the screen
+(destination) and {\tt System.in} usually connects the keyboard
+(source) to the running program (destination). What you have learned
+about streams will also be a key for connecting files to a program.
+
+\subsection{The Data Hierarchy}
+\noindent Data, or information, are the contents that flow through
+Java streams or stored in files.  All data are comprised of binary
+digits or {\it bits}. A bit is simply a 0 or a 1, the electronic
+states that correspond to these values.  As we learned in Chapter~5, a
+bit is the smallest unit of data.
+
+However, it would be tedious if a program had to work with data in units
+as small as bits.  Therefore, most operations involve various-sized
+aggregates of data such as an 8-bit {\tt byte}, a 16-bit {\tt short},
+a 16-bit {\tt char}, a 32-bit {\tt int}, a 64-bit {\tt long}, a 32-bit
+{\tt float}, or a 64-bit {\tt double}. As we know, these are Java's
+primitive numeric types.   In addition to these aggregates, we can
+group together a sequence of {\tt char} to form a {\tt String}.
+
+It is also possible to group data of different types into objects.   A
+{\bf record}\index{record}, which corresponds closely to a Java object, can have
+{\bf fields}\index{fields} that contain different types of data.   For example, a
+student record might contain fields for the student's name and address
+%\begin{marginalnote}\it The data hierarchy\end{marginalnote}
+%%\marginnote{The data hierarchy}
+represented by ({\tt String}s), expected year of graduation ({\tt int}), and current
+grade point average represented by ({\tt double}).  Collections of these records are
+typically grouped into {\em files}. For example, your
+registrar's office may have a separate file for each of its graduating
+classes.  These are typically organized into a collection of related
+files, which is called a {\bf database}\index{database}.
+\marginfig{chptr11/datahier.eps}{The data hierarchy.
+\label{fig-datahier}\label{pg-fig-datahier}}
+
+Taken together, the different kinds of data that are processed by a
+computer or stored in a file can be organized into a {\bf data
+hierarchy}\index{data hierarchy} (Fig.~11\mbox{.}2).
+
+It's important to recognize that while we, the programmers, may group
+data into various types of abstract entities, the information flowing
+through an input or output stream is just a sequence of bits.  There
+are no natural boundaries that mark where one byte (or one {\tt int}
+or one record) ends and the next one begins.   Therefore, it will be up
+to us to provide the boundaries as we process the data.
+
+
+\subsection{Binary Files and Text Files}
+\noindent As we noted in chapter~4, there are two types of files in
+ Java: binary files and text
+files.  Both kinds store data as a sequence of bits---that is, a
+sequence of 0's and 1's.  Thus, the difference between the two types of
+files lies in the way they are interpreted by the programs that read
+and write them.   A {\em binary file} is processed 
+as a sequence of bytes, whereas a {\em text file} is 
+processed as a sequence of characters.
+
+
+
+Text editors and other programs that process text files interpret the
+file's sequence of bits as a sequence of characters---that is, as a
+string.   Your Java source programs ({\tt *.java}) are text
+files, and so are the HTML files that populate the World Wide Web.
+The big advantage of text files is their portability.  Because their data
+%\begin{marginalnote}\it Text files are portable\end{marginalnote}
+\marginnote{Text files are portable}
+are represented in the ASCII code \mbox{(Table~5.13),} they can
+be read and written by just about any text-processing program.  Thus, a
+text file created by a program on a Windows/Intel computer can be read
+by a Macintosh program.
+
+In non-Java environments, data in binary files are stored as bytes,
+and the representation used varies from computer to computer.  The
+manner in which a computer's memory stores binary data determines how
+it is represented in a file. Thus, binary data are not very portable.
+For example, a binary file of integers created on a Macintosh cannot
+be read by a Windows/Intel program.
+
+One reason for the lack of portability is that each type of computer
+uses its own definition for how an integer is defined.  On some systems
+%\begin{marginalnote}\it Binary files are platform dependent\end{marginalnote}
+\marginnote{Binary files are platform dependent} an integer might be
+16 bits, and on others it might be 32 bits, so even if you know that a
+Macintosh binary file contains integers, that still won't make it
+readable by Windows/Intel programs.  Another problem is that even if
+two computers use the same number of bits to represent an integer,
+they might use different representation schemes.  For example, some
+computers might use 10000101 as the 8-bit representation of the number
+133, whereas other computers might use the reverse, 10100001, to
+represent 133.
+
+The good news for us is that Java's designers have made its binary
+files {\em platform independent} by carefully defining the exact size
+and representation that must be used for integers and all other
+primitive types.  Thus, binary files created by Java programs can be
+interpreted by Java programs on any platform.
+
+\JavaRule{Platform Independence.}{Java binary files are
+platform independent.  They can be interpreted by any computer that
+supports Java.}
+
+\subsection{Input and Output Streams}
+\noindent Java has a wide variety of streams for performing I/O.~They
+are defined in the {\tt java.io} package, which must be imported by
+any program that does I/O.  They are generally organized into the
+hierarchy illustrated in Figure~\ref{fig-streamhier}.  We will cover
+only a small portion of the hierarchy in this text.  Generally
+speaking, binary files are processed by subclasses of {\tt
+InputStream} and {\tt OutputStream}.  \marginnote{I/O streams} Text
+files are processed by subclasses of {\tt Reader} and {\tt Writer},
+both of which are streams, despite their names.  
+
+\begin{figure}[t!]
+\figaright{chptr11/streamhier.eps}{Java's stream hierarchy.
+\label{fig-streamhier}\label{pg-fig-streamhier}}
+\end{figure}
+
+{\tt InputStream} and {\tt OutputStream} are abstract classes that
+serve as the root classes for reading and writing binary data.  Their
+most commonly used subclasses are {\tt DataInputStream} and
+{\tt DataOutputStream}, which are used for processing {\tt String} data and
+data of any of Java's primitive types---{\tt char},
+{\tt boolean}, {\tt int}, {\tt double}, and so on.  The analogues of these
+classes for processing text data are the {\tt Reader} and {\tt Writer}
+classes, which serve as the root classes for all text I/O.
+
+\JavaTIP{PROGRAMMING TIP}{Choosing a Stream.}{In choosing an appropriate
+stream for an I/O operation, {\tt DataInputStream}s and
+{\tt Data\-OutputStream}s normally are used for binary I/O.~{\tt Reader} and
+{\tt Writer} streams normally are used for text I/O.}
+
+\noindent The various subclasses of these root classes perform various
+specialized I/O operations.  For example, {\tt FileInputStream} and
+{\tt File\-Output\-Stream} are used for performing binary input and
+output on files.  The {\tt PrintStream} class contains methods for
+outputting various primitive data---integers, floats, and so
+forth---as text.  The {\tt System.out} stream, one of the most widely
+used output streams, is an object of this type.  The {\tt PrintWriter}
+class, which was introduced in JDK 1.1 contains the same methods as
+{\tt PrintStream} but the methods are designed to support platform
+independence and internationalized I/O---that is, I/O that works in
+different languages and alphabets.
+
+%%%However, the {\tt PrintStream}
+%%%class has been deprecated in JDK 1.2 and has been superseded by 
+%%% RAM NOTE 4/5/2005: I find no evidence that PrintStream is deprecated.
+
+\pagebreak
+The various methods defined in {\tt PrintWriter} are designed 
+\marginfig{chptr11/writer.eps}{{\tt PrintWriter}
+methods print data of various types.
+\label{fig-writer}\label{pg-fig-writer}}
+to output a particular type of primitive data (Fig.~11.4).
+As you would expect, there is both a {\tt print()} and
+{\tt println()} method for each kind of data that the programmer wants
+to output.
+
+Table~11.1 briefly describes Java's most commonly used input and
+output streams.  In addition to the ones we've already mentioned, you
+are already familiar with methods from the {\tt BufferedReader} and
+{\tt File} classes, which were used in Chapter~4.
+
+{\bf Filtering}\index{Filtering} refers to performing operations on
+data while the data are being input or output.  Methods in the {\tt
+FilterInputStream} and {\tt FilterReader} classes can be used to
+filter binary and text data during input.  Methods in the {\tt
+FilterOutputStream} and {\tt FilterWriter} can be used to filter
+output data. These classes serve as the root classes for various
+filtering subclasses.  They can also be subclassed to perform
+customized data filtering.
+
+\begin{table}[b!]
+%\hphantom{\caption{Description of some of Java's important stream classes.}}
+\TBT{-5pc}{Description of some of Java's important stream classes.}
+\hspace*{-5.5pc}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{32pc}{1pt}}\\[2pt]
+%%%REW\TBCH{\bf Class} & \TBCH{Description}
+{\bf Class} & {\bf Description}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{32pc}{0.5pt}}\\[2pt]
+{\tt InputStream}             & Abstract root class of all binary input streams \cr
+{\tt FileInputStream}         & Provides methods for reading bytes from a binary file \cr
+{\tt FilterInputStream}       & Provides methods required to filter data \cr
+{\tt BufferedInputStream}     & Provides input data buffering for reading large files \cr
+{\tt ByteArrayInputStream}    & Provides methods for reading an array as if it were a stream \cr
+{\tt DataInputStream}         & Provides methods for reading Java's primitive data types \cr
+{\tt PipedInputStream}        & Provides methods for reading piped data from another thread \cr
+
+{\tt OutputStream}            & Abstract root class of all binary output streams \cr
+{\tt FileOutputStream}        & Provides methods for writing bytes to a binary file \cr
+{\tt FilterOutputStream}      & Provides methods required to filter data \cr
+{\tt BufferedOutputStream}    & Provides output data buffering for writing large files \cr
+{\tt ByteArrayOutputStream}   & Provides methods for writing an array as if it were a stream \cr
+{\tt DataOutputStream}        & Provides methods for writing Java's primitive data types \cr
+{\tt PipedOutputStream}       & Provides methods for writing piped data to another thread \cr
+{\tt PrintStream}             & Provides methods for writing primitive data as text \cr
+
+{\tt Reader}                  & Abstract root class for all text input streams \cr
+{\tt BufferedReader}          & Provides buffering for character input streams  \cr
+{\tt CharArrayReader}         & Provides input operations on {\tt char} arrays  \cr
+{\tt FileReader}              & Provides methods for character input on files \cr
+{\tt FilterReader}            & Provides methods to filter character input \cr
+{\tt StringReader}            & Provides input operations on {\tt String}s  \cr
+
+{\tt Writer}                  & Abstract root class for all text output streams \cr
+{\tt BufferedWriter}          & Provides buffering for character output streams \cr
+{\tt CharArrayWriter}         & Provides output operations to {\tt char} arrays \cr
+{\tt FileWriter}              & Provides methods for output to text files \cr
+{\tt FilterWriter}            & Provides methods to filter character output \cr
+{\tt PrintWriter}             & Provides methods for printing binary data as characters \cr
+{\tt StringWriter}            & Provides output operations to {\tt String}s 
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{32pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+
+One type of filtering is {\bf buffering}\index{buffering}, which is
+provided by several buffered streams, including {\tt
+BufferedInputStream} and {\tt BufferedReader}, for performing binary
+and text input, and {\tt BufferedOutputStream} and {\tt
+Buffered\-Writer}, for buffered output operations.  As was discussed
+in chapter~4, a {\em buffer} is a relatively large region of memory
+used to temporarily store data while they are being input or
+output. When buffering is used, a program will transfer a large number
+of bytes into the buffer from the relatively slow input device and
+then transfer these to the program as each read operation is
+performed.  The transfer from the buffer to the program's memory is
+very fast.
+
+Similarly, when buffering is used during output, data are transferred
+directly to the buffer and then written to the disk when the buffer
+fills up or when the {\tt flush()} method is called.
+
+\JavaTIP{PROGRAMMING TIP}{Buffering.}{Buffered streams can 
+improve a program's overall efficiency by reducing the amount of time
+it spends accessing relatively slow input or output devices.}
+
+\noindent You can also define your own data filtering subclasses to perform
+%\begin{marginalnote}\it Buffering\end{marginalnote}
+\marginnote{Buffering}
+customized filtering.   For example, suppose you want to add line
+numbers to a text editor's printed output.  To perform this task, you
+could define a {\tt FilterWriter} subclass and override its
+%\begin{marginalnote}\it Filtering data\end{marginalnote}
+\marginnote{Filtering data}
+{\tt write()} methods to perform the desired filtering operation.
+Similarly, to remove the line numbers from such a file during input,
+you could define a {\tt FilterReader} subclass.  In that case, you would
+override its {\tt read()} methods to suit your goals for the program.
+
+There are several classes that provide I/O-like operations on various
+internal memory structures.  {\tt ByteArrayInputStream}, {\tt
+ByteArray\-Output\-Stream}, {\tt CharArrayReader}, and {\tt
+CharArrayWriter} are four classes that take input from or send output
+to arrays in the program's memory.  Methods in these classes can be
+useful for performing various operations on data during input or
+output.  For example, suppose a program reads an entire line of
+integer data from a binary file into a {\tt ByteArray}. It might then
+transform the data by, say, computing the remainder modulo {\tt N} of
+each value.  The program now can read these transformed data by
+treating the byte array as an input stream.  A similar example would
+apply for some kind of output transformation.
+
+The {\tt StringReader} and {\tt StringWriter} classes provide methods
+for treating {\tt String}s and {\tt StringBuffer}s as I/O
+streams.  These methods can be useful for performing certain
+data conversions.
+
+\JavaTIP{PROGRAMMING TIP}{Integer/String Conversion.}{An integer can
+be converted to a {\tt String} by writing it to a {\tt StringBuffer},
+which can then be output as an entire line of text.  {\tt
+StringReader} methods can be used to read integer data from an
+ordinary {\tt String} object.}
+
+
+%\section{CASE STUDY}\begin{casestudy}{Reading and Writing Text Files}
+%%%\secCSFHleft{CASE STUDY: Reading and Writing Text Files}
+\section{CASE STUDY: Reading and Writing Text Files}
+\noindent  Let's write a GUI application that will be able to 
+read and write data to and from a text file.  To do this, we will need
+to develop a set of methods to perform I/O on text files. 
+
+The GUI for this application will contain a {\tt JTextArea}, where text
+%\begin{marginalnote}\it GUI design\end{marginalnote}
+\marginnote{GUI design}
+file data can be input and displayed, and a {\tt JTextField}, where the
+user can enter the file's name.  It will also contain two
+{\tt JButton}s, one for reading a file into the {\tt JTextArea}, and the
+other for writing the data in the {\tt JTextArea} into a file
+(Fig.~\ref{fig-guitextio}). Note that even this simple interface
+will let the user create new files and rename existing files.
+%\begin{figure}
+\begin{figure}[h]
+\figaleft{chptr11/guitextio.eps}{The GUI design for a program that reads
+and writes text files.
+\label{fig-guitextio}\label{pg-fig-guitextio}}
+\end{figure}
+%\end{figure}
+
+
+\subsection{Text File Format}
+\noindent A text file consists of a sequence of characters divided into zero or
+more lines and ending with a special {\bf end-of-file character}\index{end-of-file character}.
+%\begin{marginalnote}\it The end-of-file character\end{marginalnote}
+\marginnote{The end-of-file character}
+When you open a new file in a text editor, it contains zero lines and
+zero characters.  After typing a single character, it would contain one
+character and one line.  The following would be an example of a file with
+four lines of text:
+
+%%%REW
+\begin{jjjlisting}
+\begin{lstlisting}
+one\ntwo\nthree\nfour\n\eof
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent Note the use of the end-of-line character,
+ \verb|\n|, to mark the
+end of each line, and the use of the end-of-file character,
+ \verb|\eof|,
+to mark the end of the file.   As we'll see, the I/O methods for
+text files use these special characters to control reading and writing
+loops.  Thus, when the file is read by appropriate Java methods, such
+as the {\tt BufferedReader.readLine()} and {\tt Buffered\-Reader.read()}
+methods, one or more characters will be read until either an
+end-of-line or end-of-file character is encountered.   When a line of
+characters is written using {\tt println()}, the end-of-line character
+is appended to the characters themselves.
+
+\subsection{Writing to a Text File}
+\noindent Let's see how to write to a text file.  In this program we write the
+entire contents of the {\tt JTextArea()} to the text file.  In general,
+writing data to a file requires three steps:
+
+%%%REW\clearpage
+
+%\begin{list}{}{}
+\begin{NL}
+\item  Connect an output stream to the file.
+\item  Write text data into the stream, possibly using a loop.
+\item  Close the stream.
+\end{NL}
+%\end{list}
+
+\noindent As Figure~\ref{fig-systemout} shows, connecting
+a stream to a file looks like doing a bit of plumbing.   The first step is
+to connect an output stream to the file.   The output stream serves as
+\marginnote{Output stream}
+a conduit between the program and a named file.  The output stream
+opens the file and gets it ready to accept data from the program.  If
+the file already exists, then opening the file will destroy any data
+it previously contained.  If the file doesn't yet exist, then it will
+be created from scratch.
+
+Once the file is open, the next step is to write the text to the
+stream, which passes the text on to the file.   This step might require a loop
+that outputs one line of data on each iteration.  Finally, once all
+the data have been written to the file, the stream should be closed.
+This also has the effect of closing the file itself.
+
+\JavaTIP{EFFECTIVE DESIGN}{Writing a File.}{Writing data to a file
+requires a three-step algorithm: (1) Connect an output stream to the
+file, (2) write the data, and (3) close the file.}
+
+\subsubsection*{Code Reuse: Designing an Output Method}
+\noindent Now let's see how these three steps are done in Java.  Suppose the text
+we want to write is contained in a {\tt JTextArea}. Thus, we want a
+method that will write the contents of a {\tt JTextArea} to a named
+file.
+
+What output stream should we use for the task of writing a {\tt String}
+%\begin{marginalnote}\it Choosing an output stream\end{marginalnote}
+\marginnote{\raggedright \it Choosing an output stream}
+to a named file? To decide this, we need to use the information in
+Figure~\ref{fig-streamhier} and Table~11.1. As we pointed
+out earlier, because we're writing a text file, we would use a {\tt
+Writer} subclass.  But which subclass should we use? The only way to
+decide this is to consult the Java API documentation, using links at
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/1.5.0/docs/api/
+\end{lstlisting}
+\end{jjjlisting}
+
+%%%REW http://java.sun.com/products/jdk/1.3/docs/api/
+%%% This old url no longer worked for me
+%%%http://java.sun.com/reference/api/index.html
+
+\noindent to see what methods are available in the various subclasses.
+For I/O operations you want to consult the classes in the {\tt
+java.io} package. Ideally, we would like to be able to create an
+output stream to a named file, and we would like to be able to write a
+{\tt String} to the file.
+
+One likely candidate is the {\tt FileWriter} class
+(Fig.~\ref{fig-filewriter}).  Its name and description
+(Table~11.1) suggest that it's designed for writing text
+files.  And indeed it contains the kind of constructor we need---that is, one 
+that takes the file name as a parameter.  Note that by
+taking a {\tt boolean} parameter, the second constructor allows us to
+append data to a file rather than rewrite the entire file, which is
+the default case.
+
+However, {\tt FileWriter} doesn't define a {\tt write()}
+method.  This doesn't necessarily mean that it doesn't contain such a
+method.  It might have inherited one from its superclasses, 
+%\begin{marginalnote}\it Inheritance\end{marginalnote}
+\marginnote{Inheritance}
+{\tt OutputStream\-Writer} and {\tt Writer}.  Indeed, the {\tt Writer}
+class contains a method, {\tt write()}, whose signature suggests that
+it is ideally suited for our task (Fig.~\ref{fig-filewriter}).
+
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{chptr11/filewriter.eps}{To find the right I/O method, it is sometimes
+necessary to search the Java class hierarchy. This is
+easy to do with the online documentation.
+\label{fig-filewriter}\label{pg-fig-filewriter}}
+\end{figure}
+%\end{figure}
+
+
+Having decided on a {\tt FileWriter} stream, the rest of the
+task of designing our method is simply a matter of using
+{\tt FileWriter} methods in an appropriate way:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void writeTextFile(JTextArea display,
+                                        String fileName) {
+    // Create stream & open file
+    FileWriter outStream = new FileWriter(fileName); 
+    //  Write the entire display text and close the stream
+    outStream.write(display.getText());              
+    outStream.close();   //  Close the output stream
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We use the {\tt FileWriter()} constructor to create an 
+output stream to the file whose name is stored in {\tt fileName}.
+In this case, the task of writing data to the file is handled by a
+single {\tt write()} statement, which writes the entire contents of
+the {\tt JTextArea} in one operation.
+
+Finally, once we have finished writing the data, we {\tt close()} the
+output stream.  This also has the effect of closing the file.  The
+overall effect of this method is that the text contained in
+{\tt display} has been output to a file, named {\tt fileName}, which is
+stored on the disk.
+
+\JavaTIP{PROGRAMMING TIP}{Closing a File.}{Even though Java will close
+any apen files and streams when a program terminates normally, it is
+good programming practice to close the file yourself with a {\tt
+close()} statement.  It also reduces the chances of damaging the file
+if the program terminates abnormally.}
+
+\noindent Because so many different things can go wrong during an I/O operation,
+most I/O operations generate some kind of {\it checked exception}.
+Therefore, it is necessary to embed the I/O operations within a {\tt try/catch}
+statement.  In this example, the {\tt FileWriter()} constructor, the
+{\tt write()} method, and the {\tt close()} method may each throw an
+{\tt IOException}. Therefore, the entire body of this method should be
+embedded within a {\tt try/catch} block that catches the
+{\tt IOException} (Fig.~\ref{fig-writetextmethod}).
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+private void writeTextFile(JTextArea display, 
+                                      String fileName) {
+  try {
+      FileWriter outStream =  new FileWriter (fileName);
+      outStream.write (display.getText());
+      outStream.close();
+  } catch (IOException e) {
+      display.setText("IOERROR: " + e.getMessage() + "\n");
+      e.printStackTrace();
+  }
+} // writeTextFile()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A method to write a text file.
+\label{fig-writetextmethod}\label{pg-fig-writetextmethod}}
+\end{figure}
+
+
+\subsection{Code Reuse: Designing Text File Output}
+\noindent The {\tt writeTextFile()} method provides a simple example of how to
+write data to a text file.   More importantly, its development
+illustrates the kinds of choices necessary to design effective
+I/O methods.  Two important design questions we asked and answered
+were
+
+\begin{BL}
+\item  What methods do we need to perform the desired task?
+\item  What streams contain the desired methods?
+\end{BL}
+
+\noindent As in so many other examples we've considered,
+\marginnote{Method design}
+designing a method to perform a task is often a matter of finding the
+appropriate methods in the Java class hierarchy.
+
+\JavaTIP{EFFECTIVE DESIGN}{Code Reuse.}{Developing effective I/O routines
+is primarily a matter of choosing the right library methods.  Start
+by asking yourself, ``What methods do I need?'' and then find a
+stream class that contains the appropriate methods.}
+
+\noindent As you might expect, there is more than one way to write data to a
+text file.  Suppose we decided that writing text to a file is like
+printing data to {\tt System.out}.  And suppose we chose to use a {\tt
+PrintWriter} object as our first candidate for an output stream
+(Fig.~\ref{fig-streamhier} and Table~11.1). This class
+(Fig.~11\mbox{.}4) contains a wide range of {\tt print()} methods
+for writing different types of data as text.  So it has exactly the
+kind of method we need: {\tt print(String)}.  However, this stream
+does not contain a constructor method that allows us to create a
+stream from the name of a file.  Its constructors require either a
+{\tt Writer} object or an {\tt OutputStream} object.
+
+This means that we can use a {\tt PrintWriter} to print to a file, but
+only if we can first construct either an {\tt OutputStream} or a {\tt
+Writer} object to the file.  So we must go back to searching
+Figure~\ref{fig-streamhier} and Table~11.1 for an
+appropriate candidate.  Fortunately, the {\tt FileOutputStream} class
+(Fig.~\ref{fig-fileoutput}) has just the constructors we want.
+We now have an alternative way of coding the {\tt writeTextFile()}
+method, this time using a combination of {\tt PrintWriter} and
+{\tt FileOutputStream}:
+%\begin{figure}
+\begin{figure}[t]
+\figaleft{chptr11/fileoutput.eps}{The {\tt File\-Output\-Stream} class.
+\label{fig-fileoutput}\label{pg-fig-fileoutput}}
+\end{figure}
+%\end{figure}
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+//  Create an output stream and open the file
+PrintWriter outStream = 
+    new PrintWriter(new FileOutputStream(fileName)); 
+//  Write the display's text and close the stream
+outStream.print ( display.getText() );       
+outStream.close(); 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how the output stream is created in this case.  First,
+we create a {\tt FileOutputStream} using the file name as its
+argument.  Then we create a {\tt PrintWriter} using the
+{\tt FileOutputStream} as its argument.  The reason we can do this is
+%\begin{marginalnote}\it Parameter agreement\end{marginalnote}
+\marginnote{Parameter agreement}
+because the {\tt PrintWriter()} constructor takes a
+{\tt FileOutputStream} parameter.  This is what makes the connection
+possible.
+
+%\begin{figure}
+%\begin{graphic}
+%\includegraphics{./art/11/p778f2.eps}
+%\caption{\bf Figure: MacDraft to two pipes connected.
+%\label{fig-p778f2}\label{pg-fig-p778f2}}
+%\end{graphic}
+%\end{figure}
+
+%(Figure~\ref{fig-p778f2}).  
+To use the plumbing analogy again, this is like connecting two
+sections of pipe between the program and the file.
+The data will flow from the program through {\tt PrintWriter}, through
+the {\tt OutputStream}, to the file.  Of course, you can't just
+arbitrarily connect one stream to another.  They have to ``fit
+together,'' which means that their parameters have to match.
+
+\JavaTIP{EFFECTIVE DESIGN}{Stream/Stream Connections.}{Two different kinds
+of streams can be connected if a constructor for one stream
+takes the second kind of stream as a parameter.  This is often an
+effective way to create the kind of object you need to perform an I/O
+task.}
+\WWWjava
+
+\noindent The important lesson here is that we found what we wanted by searching
+through the {\tt java.io.*} hierarchy.  This same approach can be used
+to help you to design I/O methods for other tasks.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  Is it possible to perform output to a text file using a
+{\tt PrintWriter} and a {\tt FileWriter} stream in combination? If so,
+write the Java code.
+\end{SSTUDY}
+
+\subsection{Reading from a Text File}
+\noindent Let's now look at the problem of inputting data from an
+existing text file, a common operation that occurs whenever your email
+program opens an email message or your word processor opens a
+document.  In general, there are three steps to reading data from a
+file:
+
+\begin{NL}
+\item  Connect an input stream to the file.
+
+\item  Read the text data using a loop.
+
+\item  Close the stream.
+\end{NL}
+%\end{list}
+
+\noindent As Figure~\ref{fig-readfromstream} shows, the
+input stream serves as a kind of pipe between the file and the
+\begin{figure}[h]
+\figa{chptr11/filestream.eps}{A stream serves as a pipe through which
+data flow.
+\label{fig-readfromstream}\label{pg-fig-readfromstream}}
+\end{figure}
+program.  The first step is to connect an input stream to the file.
+Of course, in order to read a file, the file must exist.  The input
+stream serves as a conduit between the program and the named file.  It
+opens the file and gets it ready for reading.  Once the file is open,
+the next step is to read the file's data.  This will usually require a
+loop that reads data until the end of the file is reached.  Finally,
+once all the data are read, the stream should be closed.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Reading Data}{Reading data from a file
+requires a three-step algorithm: (1) Connect an input stream to the
+file, (2) read the data, and (3) close the file.}
+
+\noindent Now let's see how these three steps are done in Java.  Suppose
+that we want to put the file's data into a {\tt JTextArea}. Thus, we
+want a method that will be given the name of a file and a
+reference to a {\tt JTextArea}, and it will read the data
+from the file into the {\tt JTextArea}.
+
+What input stream should we use for this task?  Here again we
+%\begin{marginalnote}\it Choosing an input stream\end{marginalnote}
+\marginnote{\raggedright \it Choosing an input stream}
+need to use the information in  Figure~\ref{fig-streamhier} and
+Table~11.1. Because we're reading a text file,
+we should use a {\tt Reader} subclass.  A good candidate is
+the {\tt File\-Reader}, whose name and description suggest
+that it might contain useful methods.
+
+What methods do we need? As in the previous example, we need a
+constructor method that connects an input stream to a file when the
+constructor is given the \marginnote{What methods should we use?}
+name of the file.  And, ideally, we'd like to have a method that will
+read one line at a time from the text file.  
+
+%\begin{figure}
+\begin{figure}[th]
+\figaleft{chptr11/filereader.eps}{{\tt FileReader}'s superclasses contain
+{\tt read()} methods but no {\tt readLine()} methods.
+\label{fig-filereader}\label{pg-fig-filereader}}
+\end{figure}
+%\end{figure}
+The {\tt FileReader} class (Fig.~\ref{fig-filereader}) has the right
+kind of constructor.  However, it contains no {\tt readLine()} methods
+itself, which would be necessary for our purposes.  Searching upward
+through its superclasses, we find that \mbox{\tt InputStreamReader},
+its immediate parent class, has a method that reads {\tt int}s:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int read() throws IOException();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As shown in Figure~\ref{fig-filereader}, this {\tt read()}
+method is an override of the {\tt read()} method defined in the {\tt
+Reader} class, the root class for text file input streams.  Thus,
+there are no {\tt readLine()} methods in the {\tt Reader} branch of
+the hierarchy. We have to look elsewhere for an appropriate class.
+
+
+One class that does contain a {\tt readLine()} method is {\tt
+BufferedReader} (Fig.~\ref{fig-filereader}). Can we somehow use it?
+Fortunately, the answer is yes.  {\tt BufferedReader}'s constructor
+takes a {\tt Reader} object as a parameter.  But a {\tt FileReader}
+{\it is} a {\tt Reader}---that is, it is a descendant of the {\tt
+Reader} class.  So, to use our plumbing analogy again, to build an
+input stream to the file, we can join a {\tt BufferedReader}
+and a {\tt FileReader} 
+%(Figure~\ref{fig-p780f2}):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+BufferedReader inStream
+    = new BufferedReader(new FileReader(fileName));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this sort of connection to the file, the
+program can use {\tt Buffered\-Reader.readLine()} to read one line at a
+time from the file.
+
+%\begin{figure}
+%\begin{graphic}
+%\includegraphics{./art/14/p780f2.eps}
+%\caption{\bf Another plumbing picture.
+%\label{fig-p780f2}\label{pg-fig-p780f2}}
+%\end{graphic}
+%\end{figure}
+
+So, we have found a method that reads one line at a time.  Now we need an
+algorithm that will read the entire file.  Of course, this will involve
+a loop, and the key will be to make sure we get the loop's termination
+condition correct.  
+
+An important fact about {\tt readLine()} 
+%\begin{marginalnote}\it Using the end-of-file character\end{marginalnote}
+\marginnote{\raggedright \it Using the end-of-file character}
+is that it
+will return {\tt null} as its value when it reaches the end of the
+file.   Recall that text files have a special end-of-file character.
+When {\tt readLine()} encounters this character, it will return
+{\tt null}. Therefore, we can specify the following {\tt while} loop:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String line = inStream.readLine();
+while (line != null) {
+    display.append(line + "\n");
+    line = inStream.readLine();
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We begin outside the loop by attempting to
+read a line from the file.  If the file happens to be empty (which it
+might be), then {\tt line} will be set to {\tt null}; otherwise it will
+contain the {\tt String} that was read.  In this case, we append the
+line to a {\tt JTextArea}. Note that {\tt readLine()} {\it does not}
+return the end-of-line character with its return value.  That's why we
+add a \verb|\n| before we append the line to the {\tt JTextArea}.
+
+
+\JavaTIP[false]{PROGRAMMING TIP}{End of Line.}{Remember that {\tt
+readLine()} does not return the end-of-line character as part of the
+text it returns.  If you want to print the text on separate lines, you
+must append $\backslash$n.}
+
+\noindent The last statement in the body of the loop attempts to read the next
+line from the input stream.  If the end of file has been reached, this
+attempt will return {\tt null} and the loop will terminate.  Otherwise,
+the loop will continue reading and displaying lines until the end of
+file is reached.  Taken together, these various design decisions lead to
+the definition for {\tt readTextFile()} shown in Figure~\ref{fig-readtextmethod}.
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+private void readTextFile(JTextArea display, 
+                                    String fileName) {
+ try {
+  BufferedReader inStream  // Create and open the stream
+      = new BufferedReader (new FileReader(fileName));
+  String line = inStream.readLine(); // Read one line
+  while (line != null) {            // While more text
+      display.append(line + "\n");  // Display a line
+      line = inStream.readLine();   // Read next line
+  }
+   inStream.close();                // Close the stream
+  } catch (FileNotFoundException e) {
+   display.setText("IOERROR: "+ fileName +" NOT found\n");
+   e.printStackTrace();
+  } catch ( IOException e ) {
+   display.setText("IOERROR: " + e.getMessage() + "\n");
+   e.printStackTrace();
+  }
+} // readTextFile()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A method for reading a text file.
+\label{fig-readtextmethod}\label{pg-fig-readtextmethod}}
+\end{figure}
+
+Note that we must catch both the {\tt IOException}, thrown by
+%\begin{marginalnote}\tt IOException\end{marginalnote}
+\marginnote{\tt IOException}
+{\tt readLine()} and {\tt close()}, and the {\tt
+FileNotFoundException}, thrown by the {\tt FileRead\-er()} constructor.
+It's important to see that the read loop has the following form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try to read one line of data 
+     and store it in line     // Loop initializer
+while ( line is not null ) { // Loop entry condition
+    process the data
+    try to read one line of data 
+        and store it in line  // Loop updater
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When it attempts to read the {\it end-of-file}
+character, {\tt readLine()} will return {\tt null}.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Reading Text.}{In reading text files, the
+{\tt readLine()} method will return {\tt null} when it tries to read the
+end-of-file character.   This provides a convenient way of testing for
+the end of file.}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Reading an Empty File.}{Loops for
+reading text files are designed to work even if the file is
+empty.  Therefore, the loop should attempt to read a line {\it before}
+testing the loop-entry condition.  If the initial read returns
+{\tt null}, that means the file is empty and the loop body will be skipped.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  What's wrong with the following loop for reading
+a text file and printing its output on the screen?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    String line = null;
+    do {
+        line = inStream.readLine();
+        System.out.println ( line );
+    } while (line != null);
+\end{lstlisting}
+\end{jjjlisting}
+\end{SSTUDY}
+
+\subsection{Code Reuse: Designing Text File Input}
+\noindent Our last example used {\tt BufferedReader.readLine()} to read an entire
+line from the file in one operation.  But this isn't the only way
+to do things.  For example, we could use the {\tt FileReader}
+stream directly if we were willing to do without the {\tt readLine()}
+method.  Let's design an algorithm that works in this case.
+
+As we saw earlier, if you use a {\tt FileReader} stream, then you must
+use the {\tt InputStreamReader.read()} method.  This method reads bytes
+from an input stream and translates them into Java Unicode characters.
+The {\tt read()} method, for example, returns a single Unicode character
+as an {\tt int}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int read() throws IOException();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Of course, we can always convert this to a {\tt char} and
+concatenate it to a {\tt JTextArea}, as the following algorithm
+illustrates:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int ch = inStream.read(); // Init: Try to read a character
+while (ch != -1) { // Entry-condition: while more chars
+    display.append((char)ch + ""); // Append the character
+    ch = inStream.read();   // Updater: try to read
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Although the details are different, the structure of this
+loop is the same as if we were reading one line at a time.
+
+The loop variable in this case is an {\tt int} because {\tt
+InputStreamReader.\-read()} returns the next character as an {\tt int},
+or it returns $-1$ if it encounters the {\tt end-of-file}
+%\begin{marginalnote}\it Data conversion\end{marginalnote}
+\marginnote{Data conversion}
+character.  Because {\tt ch} is an {\tt int}, we must convert it to a
+{\tt char} and then to a {\tt String} in order to {\tt append()} it to the
+display.
+
+A loop to read data from a file has the following basic form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try to read data into a variable // Initializer
+while ( read was successful ) {  // Entry condition
+    process the data
+    try to read data into a variable // Updater
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP{EFFECTIVE DESIGN}{Read Loop Structure.}{The {\tt read()} and
+{\tt readLine()} methods have different ways to indicate when a read
+attempt fails.  These differences affect how the loop-entry condition is
+specified, but the structure of the read loop is the same.}
+
+\JavaTIP{PROGRAMMING TIP}{Read Versus Readline.}{Unless it is necessary to
+manipulate each character in the text file, reading a line at a time
+is more efficient and, therefore, preferable.}
+
+\noindent It is worth noting again the point we made earlier: Designing
+effective I/O routines is largely a matter of searching the
+{\tt java.io} package for appropriate classes and methods.  The methods
+we've developed can serve as suitable models for a wide variety of text
+I/O tasks, but if you find that they aren't suitable for a particular
+task, you can design your own method.  Just think about what it
+is you want the program to accomplish, then find the stream classes that
+contain methods you can use to perform the desired task.  Basic
+\marginnote{Reusing existing code}
+reading and writing algorithms will be pretty much the same no matter
+which particular read or write method you use.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  What's wrong with the following loop for reading
+a text file and printing its output on the screen?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int ch;
+do {
+    ch = inStream.read();
+    System.out.print((char)ch);
+}  while (ch != -1) 
+\end{lstlisting}
+\end{jjjlisting}
+\end{SSTUDY}
+
+\subsection{The {\tt TextIO} Application}
+\noindent Given the text I/O methods we wrote in the previous sections, we can
+now specify the overall design of our {\tt TextIO} class
+(Fig.~\ref{fig-textiouml}).  In order to complete this application, we
+need only set up its GUI and write its {\tt action\-Performed()} method.
+
+\begin{figure}[h!]
+\figaleft{chptr11/textiouml.eps}{The {\tt TextIO} class.
+\label{fig-textiouml}\label{pg-fig-textiouml}}
+\end{figure}
+
+\noindent Setting up the GUI for this application is straightforward.
+Figure~11.13 shows how the finished product will look.  The code is
+given in Figure~11.14. Pay particular attention to the {\tt
+actionPerformed()} method, which uses the methods we defined in the
+previous section.
+
+\begin{figure}[h!]
+\figaleft{chptr11/textioapp.eps}{An application that performs simple text I/O.
+\label{fig-textioapp}\label{pg-fig-textioapp}}
+\end{figure}
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[30pc]
+\begin{lstlisting}
+import javax.swing.*;         // Swing components
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+
+public class TextIO extends JFrame implements ActionListener{
+ private JTextArea display = new JTextArea();
+ private JButton read = new JButton("Read From File"),
+                 write = new JButton("Write to File");
+ private JTextField nameField = new JTextField(20);
+ private JLabel prompt = new JLabel("Filename:",JLabel.RIGHT);
+ private JPanel commands = new JPanel();
+
+ public TextIO() {                     // Constructor
+  super("TextIO Demo");             // Set window title
+  read.addActionListener(this);
+  write.addActionListener(this);
+  commands.setLayout( new GridLayout(2,2,1,1));  // Control panel
+  commands.add(prompt);
+  commands.add(nameField);
+  commands.add(read);
+  commands.add(write);
+  display.setLineWrap(true);
+  this.getContentPane().setLayout(new BorderLayout());
+  this.getContentPane().add("North", commands);
+  this.getContentPane().add( new JScrollPane(display));
+  this.getContentPane().add("Center", display);
+ } // TextIO
+ private void writeTextFile(JTextArea display, String fileName) {
+   try {
+      FileWriter outStream =  new FileWriter (fileName);
+      outStream.write (display.getText());
+      outStream.close();
+  } catch (IOException e) {
+      display.setText("IOERROR: " + e.getMessage() + "\n");
+      e.printStackTrace();
+  }
+ } // writeTextFile()
+ private void readTextFile(JTextArea display, String fileName) {
+   try {
+      BufferedReader inStream  // Create and open the stream
+          = new BufferedReader (new FileReader(fileName));
+      String line = inStream.readLine(); // Read one line
+      while (line != null) {         // While more text
+        display.append(line + "\n"); // Display a line
+        line = inStream.readLine();      // Read next line
+      }
+        inStream.close();        // Close the stream
+      } catch (FileNotFoundException e) {
+        display.setText("IOERROR: "+ fileName +" NOT found\n");
+        e.printStackTrace();
+      } catch (IOException e) {
+        display.setText("IOERROR: " + e.getMessage() + "\n");
+        e.printStackTrace();
+      }
+ } // readTextFile
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Part I of the {\tt TextIO} class. 
+\label{fig-textioclass}\label{pg-fig-textioclass}}
+\end{figure}
+
+\begin{figure}[tb]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+  public void actionPerformed(ActionEvent evt) {
+    String fileName = nameField.getText();
+    if (evt.getSource()  == read) {
+        display.setText("");
+        readTextFile(display, fileName);
+    }
+    else writeTextFile(display, fileName);
+  } // actionPerformed()
+
+  public static void main(String args[]) {
+    TextIO tio = new TextIO();
+    tio.setSize(400, 200);
+    tio.setVisible(true);
+    tio.addWindowListener(new WindowAdapter() {      
+        public void windowClosing(WindowEvent e) {
+            System.exit(0); // Quit the application
+        }
+    });
+  } // main()
+}//TextIO
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{({\it continued}) The {\tt TextIO} class, Part II.}
+\end{figure}
+
+\pagebreak
+\section{The {\tt File} Class}
+\noindent As we've seen, an attempt to create a {\tt FileReader}
+stream may throw a {\tt FileNotFoundException}. The way this happens
+is if the user provides a name for a file that either doesn't exist or 
+isn't located where its name says it should be located.  The question that
+needs to be considered: Is there any
+way we can detect these kinds of errors before attempting to read the
+file?
+
+The {\tt java.io.File} class provides methods that we can use for this
+\marginfig{chptr11/hier.eps}{A simple hierarchy of directories and files.
+\label{fig-filehier}\label{pg-fig-filehier}}
+task.  The {\tt File} class provides a representation of the computer's
+file and directory information in a platform-independent manner.  As you
+know, a file is a collection of data, whereas a {\bf directory}\index{directory}
+is a collection of files.  (To be exact, a directory is a file that stores
+its files' names and attributes, not the files themselves.) In this section,
+we will provide details about the {\tt File} class and how to
+use the methods available in the class.
+
+\subsection{Names and Paths}
+\noindent In order to correctly specify a file's location, it is
+necessary to know a little about how files are stored on your
+computer's disk drive.  File systems are organized into a hierarchy.
+A {\bf path}\index{path} is a description of a file's location in the
+hierarchy.  For example, consider the hierarchy of files in
+Figure~11.15.  Assume that your Java program is named {\tt
+MyClass.class}. When a program is running, the program's directory is
+considered the {\it current directory}. Any files located in the
+current directory can be referred to by name alone---for example, {\tt
+MyClass.java}. To refer to a file located in a subdirectory of the
+\marginnote{The file hierarchy} 
+current directory, you need to provide the name of the subdirectory
+and the file: {\tt datafiles/data.txt}.  In this case, we are assuming
+a Unix file system, so we are using the \verb|/| as the separator
+between the name of the directory ({\tt datafiles}) and the name of
+the file ({\tt data.txt}).  This is an example of a {\bf relative path
+name}, because we are specifying a file in relation to the current
+directory.
+
+Alternatively, a file can be specified by its {\bf absolute path
+name}\index{absolute path name}. This would be a name whose path
+%\marginnote{File path names}
+starts at the root directory of the file system.  For example,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+/root/java/examples/datafiles/data.txt 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent would be the
+absolute path name for the file named {\tt data.txt} on a Unix system.
+When you supply the name of a file to one of the stream constructors,
+you are actually providing a {\it path} name.  If the path consists of
+just a name, such as {\tt data.txt}, Java assumes that the file is
+located in the same directory as the program itself.
+
+
+
+\subsection{Validating File Names}
+\noindent Before reading a file it is often necessary to determine
+that the file's name is a valid one and that the file can
+be read. The {\tt File} class (Fig.~11.16) provides
+platform-independent methods for dealing with files and directories.
+It contains methods that list the contents of directories, determine
+a file's attributes, and rename and delete files.
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr11/fileuml.eps}{The {\tt java.io.File} class.
+\label{fig-fileuml}\label{pg-fig-fileuml}}
+%\end{graphic}
+%\end{figure}
+Note the several {\tt static} constants provided.  These allow
+path names to be specified in a platform-independent way.  For example,
+on a Unix system, the {\tt File.separator} character will be the
+%%%REW\verb@/@ and on a Windows system it will be the \verb@\,backslash@. {\tt File.separator}
+\verb|/| and on a Windows system it will be the \verb|\,backslash|. {\tt File.separator}
+will be initialized to the appropriate separator for the particular
+system being used.
+
+\JavaTIP{PROGRAMMING TIP}{File Separators.}{To help make your programs platform
+independent, use the {\tt File.separator} constant instead of a
+literal value whenever you are specifying a path name.}
+
+\noindent As an example of how you might use some of {\tt File}'s methods, let's
+write a method that tests whether the file name entered by the user is
+the name of a valid, readable file.
+
+A file might be unreadable for a number of reasons.  It might be owned by
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+another user and readable only by that user.  Or it might be designated
+as not readable by its owner.   We'll pass the method the name of the
+file (a {\tt String}), and the method will return {\tt true} if a
+readable file with that name exists.   Otherwise, the method will throw
+an exception and return {\tt false}:
+
+\begin{jjjlistingleft}[27pc]{-1pc}
+\begin{lstlisting}
+private boolean isReadableFile(String fileName) {
+  try {
+    File file = new File(fileName);
+    if (!file.exists())
+        throw (new FileNotFoundException("No such File:" 
+                                     + fileName));
+    if (!file.canRead())
+        throw (new IOException("File not readable: " 
+                                     + fileName));
+    return true;                                    
+  } catch (FileNotFoundException e) {
+    System.out.println("IOERROR: File NOT Found: " 
+                             + fileName + "\n");
+    return false;
+  } catch (IOException e) {
+    System.out.println("IOERROR: " + e.getMessage() + "\n");
+    return false;
+  }
+} // isReadableFile
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent The method simply creates a {\tt File} instance and
+uses its {\tt exists()} and {\tt canRead()} methods to
+check whether its name is valid.  If either condition
+fails, an exception is thrown.  The method handles its
+own exceptions, printing an error message and returning false
+in each case.
+
+Before attempting to write data to a file, we might want to check that
+the file has been given an appropriate name.  For example, if the user
+leaves the file name blank, we should not write data to the file.
+Also, a file might be designated as unwriteable in order to protect it
+from being inadvertently overwritten.  We should check that the file is
+writeable before attempting to write to it:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private boolean isWriteableFile(String fileName) {
+  try {
+    File file = new File (fileName);
+    if (fileName.length() == 0)
+        throw (new IOException("Invalid file name: " 
+                                     + fileName));
+    if (file.exists() && !file.canWrite())
+         throw (new IOException(
+            "IOERROR: File not writeable: " + fileName));
+    return true;
+  } catch (IOException e) {
+    display.setText("IOERROR: " + e.getMessage() + "\n");
+    return false;
+  }
+} // isWriteableFile()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first check in this code tests that the user has
+not forgotten to provide a name for the output file.  It is unlikely
+that the user wants to name the file with the empty string.   We use
+the {\tt exists()} method to test whether the user is attempting to
+write to an existing file.  If so, we use the {\tt canWrite()} method
+to test whether the file is writeable.  Both kinds of errors result in
+{\tt IOException}s.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  The other methods of the {\tt File} class are 
+just as easy to use as the ones we have illustrated in this section.
+Write a method that takes the name of a file as its single parameter and
+prints the following information about the file: its absolute path,
+its length, and whether it is a directory or a file.
+\end{SSTUDY}
+
+\section{Example: Reading and Writing Binary Files}
+\noindent Although text files are extremely useful and often employed, they can't 
+and shouldn't be used for every data-processing application.
+For example, your college's administrative data system undoubtedly
+uses files to store student records.  Because your student record
+contains a variety of different types of data---{\tt String}s,
+{\tt int}s, {\tt double}s---it cannot be processed as text.   Similarly, a
+company's inventory files, which also include data of a wide variety of
+types, cannot be processed as text.  Files such as these must be
+processed as binary data.
+
+Suppose you are asked to write an application that involves the
+use of a company's employee records.  Recall that a record
+is a structure that combines different types of data into a
+single entity.  It's like an object with no methods, just instance
+variables.
+
+A binary file is a sequence of bytes.  Unlike a text file, which is
+terminated by a special end-of-file marker, a binary file consists of
+nothing but data.  A binary file doesn't have an end-of-file character
+because any such character would be indistinguishable from a binary
+datum.
+
+\JavaTIP{DEBUGGING TIP}{End of Binary File.}{Because a binary file does
+not have an end-of-file character, it would be an error to use the
+same loop-entry conditions we used in the loops we designed for
+reading text files.}
+
+\noindent Generally speaking, the steps involved in reading and writing binary
+files are the same as for text files:
+
+%\begin{list}{}{}
+\begin{NL}
+\item  Connect a stream to the file.
+\item  Read or write the data, possibly using a loop.
+\item  Close the stream.
+\end{NL}
+%\end{list}
+
+\noindent The difference between text and binary file I/O resides
+in the Java streams that we use.
+
+\subsection{Writing Binary Data}
+\noindent Let's begin by designing a method that will output employee data to a
+binary file.  As the developer of this program, one thing you'll have
+%\begin{marginalnote}\it Generating binary data\end{marginalnote}
+\marginnote{Generating binary data}
+to do is build some sample data files.  These can't easily be built
+by hand---remember you can't use a text editor to create them---so
+you'll want to develop a method that can generate some random data
+of the sort your application will have to process.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{I/O Design.}{When designing file I/O
+applications, it is good to design the input and the output methods
+together.   This is especially important for binary I/O.}
+
+\noindent The first thing we need to know is exactly what the data look
+like.  Let's assume that each record contains three individual pieces
+of data---the employee's name, age, and pay rate.  For example, the
+data in a file containing four records might look like this, once the
+data are interpreted:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Name0 24 15.06
+Name1 25 5.09
+Name2 40 11.45
+Name3 52 9.25
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As you can see, these data look as if they were randomly
+generated, but they resemble the real data in the important respects:
+They are of the right type---{\tt String}, {\tt int}, {\tt double}---and have 
+the right kind of values.   Of course, when these data are stored in the
+file, or in the program's memory, they just look like one long string
+of 0's and 1's.
+
+Our approach to designing this output method will be the same
+as the approach we used in designing methods for text I/O.~That is,
+we start with two questions:
+
+\begin{BL}
+\item  What stream classes should I use?
+\item  What methods can I use?
+\end{BL}
+
+\noindent And we find the answers to these by searching through
+the {\tt java.io} package (Fig.~\ref{fig-streamhier} and Table~11.1).
+
+%\begin{figure}
+\begin{figure}[b]
+\figaleft{chptr11/fostream.eps}{The {\tt File\-Output\-Stream} class.
+\label{fig-fostream}\label{pg-fig-fostream}}
+\end{figure}
+%\end{figure}
+
+Because we are performing binary output, we need to use some subclass
+%%\marginnote{\raggedright \it Choosing an output stream}
+of {\tt OutputStream}. Because we're outputting to a file, one likely
+candidate is {\tt FileOutputStream} (Fig.~\ref{fig-fostream}). This
+class has the right kind of constructors, but it only contains {\tt
+write()} methods for writing {\tt int}s and {\tt byte}s, and
+we need to be able to write {\tt String}s and {\tt double}s
+as well as {\tt int}s.  
+
+\pagebreak
+These kinds of methods are found in {\tt DataOutputStream}
+\marginfig{chptr11/dostream.eps}{The {\tt java.io.Data\-Output\-Stream} class contains methods
+for writing all types of data.
+\label{fig-dostream}\label{pg-fig-dostream}}
+(Fig.~11.18), which contains a {\tt write()} method for each
+different type of data. As you can see, there's one method for each
+primitive type.  However, note that the {\tt writeChar()} takes an
+{\tt int} parameter, which indicates that the character is written in
+binary format rather than as a ASCII or Unicode character.  Although
+you can't tell by just reading its method signature, the {\tt
+writeChars(String)} method also writes its data in binary format
+rather than as a sequence of characters.  This is the main difference
+between these {\tt write()} methods and the ones defined in the {\tt
+Writer} branch of Java's I/O hierarchy.
+
+
+Now that we've found the appropriate classes and methods,  we need to create
+a pipeline to write data to the file and develop an output algorithm.
+To construct a stream
+to use in writing employee records, we want to join together a
+%\begin{marginalnote}\it Connecting two streams\end{marginalnote}
+%´´´\marginnote{\vspace{12pt}Connecting two streams}
+{\tt DataOutputStream} and a {\tt FileOutputStream}. The
+{\tt DataOutputStream} gives us the output methods we need, and the
+{\tt FileOutputStream} lets us use the file's name to create the stream:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+DataOutputStream outStream
+  = new DataOutputStream(new FileOutputStream (fileName));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This enables the program to write data to the {\tt DataOutputStream},
+which will pass them through the {\tt FileOutputStream} to the
+file itself.  That settles the first question.
+
+To develop the output algorithm, we need some kind of loop that
+involves calls to the appropriate methods.  In this case, because we are
+generating random data, we can use a simple for loop to generate, say,
+five records of employee data.  We need one {\tt write()} statement for
+each of the elements in the employee record: The name ({\tt String}), age
+({\tt int}), and pay rate ({\tt double}):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 5; k++) {  // Output 5 data records
+ outStream.writeUTF("Name" + k);             // Name
+ outStream.writeInt((int)(20 + Math.random() * 25)); //Age
+ outStream.writeDouble(Math.random() * 500); // Payrate
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Within the loop body we have one output statement for
+each data element in the record.  The names of the methods reflect
+the type of data they write.  Thus, we use {\tt writeInt()}
+to write an {\tt int} and {\tt writeDouble()} to write a {\tt double}.
+But why do we use {\tt writeUTF} to write the employee's
+name, a {\tt String}?
+
+\subsubsection*{The Unicode Text Format (UTF)}
+\noindent There is no {\tt DataOutputStream.writeString()} method.  Instead,
+{\tt String}s are written using the {\tt writeUTF()} method.   {\bf UTF}\index{UTF}
+stands for {\bf Unicode Text Format}, a coding scheme for Java's
+Unicode character set.  Recall that Java uses the Unicode character set
+instead of the ASCII set.  As a 16-bit code, Unicode can represent
+\marginnote{ASCII vs.  Unicode}
+8-bit ASCII characters plus a wide variety of Asian and other
+international characters.  However, Unicode is not a very efficient
+%\begin{marginalnote}\it ASCII vs.  Unicode\end{marginalnote}
+coding scheme if you aren't writing an international program.   If your
+program just uses the standard ASCII characters, which can be stored
+in 1 byte, you would be wasting 1 byte per character if you stored
+them as straight Unicode characters.  Therefore, for efficiency
+purposes, Java uses the UTF format.  UTF encoding can
+still represent all of the Unicode characters, but it provides a more
+efficient way of representing the ASCII subset.
+
+It's now time to combine these separate elements into a single method
+(Fig.~\ref{fig-writerecordsmethod}).  The {\tt writeRecords()} method
+takes a single {\tt String} parameter that specifies the name of the
+file.  This is a {\tt void} method.  It will output data to a file,
+but it will not return anything to the calling method.  The method
+follows the standard output algorithm: Create an output stream, write
+the data, close the stream.  Note also that the method includes a {\tt
+try/catch} block to handle any {\tt IOException}s that might be thrown.
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlistingleft}[28.5pc]{-1.5pc}
+\begin{lstlisting}
+private void writeRecords( String fileName )  {
+ try {
+   DataOutputStream outStream   // Open stream
+      = new DataOutputStream(new FileOutputStream(fileName)); 
+   for (int k = 0; k < 5; k++) { // Output 5 data records
+      String name = "Name" + k;  // of name, age, payrate
+      outStream.writeUTF("Name" + k);          
+      outStream.writeInt((int)(20 + Math.random() * 25)); 
+      outStream.writeDouble(5.00 + Math.random() * 10);   
+   } // for
+   outStream.close();          // Close the stream
+ } catch (IOException e) {
+   display.setText("IOERROR: " + e.getMessage() + "\n");
+ }
+} // writeRecords()
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A method to write a binary file consisting of five
+randomly constructed records.
+\label{fig-writerecordsmethod}\label{pg-fig-writerecordsmethod}}
+\end{figure}
+
+
+\subsection{Reading Binary Data}
+\noindent The steps involved in reading data from a binary file are the
+same as for reading data from a text file: Create an input
+stream and open the file, read the data, close the file.  The main
+difference lies in the way you check for the end-of-file marker
+in a binary file.
+
+Let's design a method to read the binary data that were output by the
+{\tt writeRecords()} method.  We'll call this method
+{\tt readRecords()}. It, too, will consist of a single {\tt String}
+\marginfig{chptr11/fistream.eps}{The {\tt java.io.File\-InputStream} class.
+\label{fig-fistream}\label{pg-fig-fistream}}
+parameter that provides the name of the file  to be read, and
+it will be a void method.  It will just display the data on
+{\tt System.out}.
+
+The next questions we need to address are: What stream classes should
+we use, and what methods should we use?  For binary input, we need an
+{\tt InputStream} subclass (Fig.~\ref{fig-streamhier} and
+Table~11.1). As you've probably come to expect, the {\tt
+FileInputStream} class contains constructors that let us create a
+stream from a file name (Fig.~11\mbox{.}20). However, it does not
+contain useful {\tt read()} methods.  Fortunately, the {\tt
+DataInputStream} class contains the input counterparts of the methods
+we found in {\tt DataOutput\-Stream} (Fig.~11.21). Therefore, our
+input stream for this method will be a combination of {\tt
+DataInputStream} and {\tt FileInputStream}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+DataInputStream inStream
+   = new DataInputStream(new FileInputStream(file));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Now that we have identified the classes and methods we'll use 
+to read the data, the most important remaining issue is designing a
+read loop that will terminate correctly.  Unlike text files, binary
+files do not contain a special end-of-file marker.  Therefore, the read
+methods can't see anything in the file that tells them they're at the
+end of the file.  Instead, when a binary read method attempts to read
+past the
+%\begin{marginalnote}\it Designing the read loop\end{marginalnote}
+%\marginnote{Designing the read loop}
+end of the file, an end-of-file exception {\tt EOFException} is
+thrown.  Thus, the binary loop is coded as an infinite loop that's
+exited when the {\tt EOFException} is raised:
+%\begin{figure}
+%\begin{graphic}
+\marginfigvspace{-120pt}{chptr11/distream.eps}{The {\tt java.io.Data\-Input\-Stream} 
+class contains methods for reading all types of data.
+\label{fig-distream}\label{pg-fig-distream}}
+%\end{graphic}
+%\end{figure}
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try {
+  while (true) {  // Infinite loop
+    String name = inStream.readUTF();  // Read a record
+    int age = inStream.readInt();
+    double pay = inStream.readDouble();
+    display.append(name + " " + age + " " + pay + "\n");
+  } // while
+} catch (EOFException e) {} // Until EOF exception
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The read loop is embedded within a {\tt try/catch}
+statement.   Note that the {\tt catch} clause for the
+{\tt EOFException} does nothing.  Recall that when an exception is thrown in
+a {\tt try} block, the block is exited for good, which is precisely
+the action we want to take.  That's why we needn't do anything when we
+catch the {\tt EOFException}. We have to catch the exception or else
+Java will catch it and terminate the program.  This is an
+%\begin{marginalnote}\it An expected exception\end{marginalnote}
+\marginnote{An expected exception}
+example of an expected exception.
+
+\JavaTIP{EFFECTIVE DESIGN}{{\tt EOFException}.}{An attempt to read past
+the end of a binary file will cause an {\tt EOFException} to be
+thrown.  Catching this exception is the standard way of terminating a
+binary input loop.}
+
+\noindent Note also the {\tt read()} statements within the loop are mirror
+opposites of the {\tt write()} statements in the method that created
+the data.  This will generally be true for binary I/O routines: The
+statements that read data from a file should ``match'' those that
+wrote the data in the first place.
+
+\JavaTIP{EFFECTIVE DESIGN}{Matching Input to Output.}{The statements used
+to read binary data should match those that wrote the data.   If a
+{\tt writeX()} method were used to write the data, a {\tt readX()} should be
+used to read~it.}
+
+\noindent To complete the method, the only remaining task is to {\tt close()}
+the stream after the data are read.  The complete definition is shown
+in Figure~\ref{fig-readrecordsmethod}.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlistingleft}[29pc]{-3pc}
+\begin{lstlisting}
+private void readRecords( String fileName ) {
+ try {
+   DataInputStream inStream     // Open stream
+     = new DataInputStream(new FileInputStream(fileName)); 
+   display.setText("Name   Age Pay\n");
+   try {
+     while (true) {               // Infinite loop
+        String name = inStream.readUTF();  // Read a record
+        int age = inStream.readInt();
+        double pay = inStream.readDouble();
+        display.append(name + " " + age + " " + pay + "\n");
+     } // while
+   } catch (EOFException e) { // Until EOF exception
+   } finally {
+       inStream.close();             // Close the stream
+   }
+   } catch (FileNotFoundException e) {
+      display.setText("IOERROR: "+ fileName + " NOT Found: \n");
+   } catch (IOException e) {
+      display.setText("IOERROR: " + e.getMessage() + "\n");
+   }
+} // readRecords()
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A method for reading binary data.
+\label{fig-readrecordsmethod}\label{pg-fig-readrecordsmethod}}
+\end{figure}
+
+It's important that a {\tt close()} statement be placed after the
+{\tt catch EOF\-Exception} clause.  If it were placed in the {\tt try} block,
+it would never get executed.   Note also that the entire method is
+embedded in an outer {\tt try} block that catches the
+{\tt IOException}, thrown by the various {\tt read()} methods, and the
+{\tt FileNotFoundException}, thrown by the {\tt FileInputStream()}
+constructor.  These make the method a bit longer, but conceptually
+they belong in this method.
+
+\JavaTIP{PROGRAMMING TIP}{The {\tt finally} Block.}{In coding a binary
+read loop, the try block is exited as soon as the {\tt EOFException}
+is raised.   Therefore, the {\tt close()} statement must be placed in
+the {\tt finally} clause, which is executed after the {\tt catch}
+clause.}
+
+\JavaTIP{EFFECTIVE DESIGN}{Nested Try/Catch.}{Nested try blocks must be
+used to perform binary I/O correctly.  The outer block encapsulates
+statements that throw {\tt IOException}s.  The inner block encapsulates
+the read loop and catches the {\tt EOFException}. No particular action
+need be taken when the {\tt EOFException} is caught.}
+
+\pagebreak
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Identify the error in the following method, which is supposed to read
+a binary file of {\tt int}s from a {\tt DataInputStream}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void readIntegers(DataInputStream inStream) {
+    try {
+        while (true) {
+            int num = inStream.readInt();
+            System.out.println(num);
+        }
+        inStream.close();
+    } catch (EOFException e) {
+    } catch (IOException e) {
+    }
+} // readIntegers
+\end{lstlisting}
+\end{jjjlisting}
+\end{SSTUDY}
+
+
+%%%REW\subsection{The {\ttHtwo BinaryIO} Application}
+\subsection{The {\tt BinaryIO} Application}
+\noindent Given the methods we wrote in the previous section, we can now
+specify the overall design of the {\tt BinaryIO} class
+(Fig.~11.23).  The program sets up the same interface we used
+in the text file example (Fig.~11.24). It allows~the 
+user to specify the name of a data file to read or
+write.  One button allows the user to write random employee records to a binary
+file, and the other allows the user to display the contents of a file
+in a {\tt JTextArea}. The {\tt BinaryIO} program in Figure~11.25
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr11/biniouml.eps}{Design of the {\tt BinaryIO} class.
+\label{fig-biniouml}\label{pg-fig-biniouml}}
+%\end{graphic}
+%\end{figure}
+incorporates both {\tt readRecords()} and {\tt writeRecords()} into a
+complete Java program. 
+
+%\begin{figure}
+%\begin{figure}[p]
+\marginfigvspace{30pt}{chptr11/binioapp.eps}{A program to read and write binary files.
+\label{fig-binaryioscreen}\label{pg-fig-binaryioscreen}}
+%\end{figure}
+%\end{figure}
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[36pc]{-10pc}
+\begin{lstlisting}
+import javax.swing.*;         // Swing components
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+
+public class BinaryIO extends JFrame implements ActionListener{
+    private JTextArea display = new JTextArea();
+    private JButton read = new JButton("Read Records From File"),
+                    write = new JButton("Generate Random Records");
+    private JTextField nameField = new JTextField(10);
+    private JLabel prompt = new JLabel("Filename:", JLabel.RIGHT);
+    private JPanel commands = new JPanel();
+
+    public BinaryIO() {
+        super("BinaryIO Demo");                    // Set window title
+        read.addActionListener(this);
+        write.addActionListener(this);
+        commands.setLayout(new GridLayout(2,2,1,1)); // Control panel
+        commands.add(prompt);
+        commands.add(nameField);
+        commands.add(read);
+        commands.add(write);
+        display.setLineWrap(true);
+        this.getContentPane().setLayout(new BorderLayout () );
+        this.getContentPane().add("North", commands);
+        this.getContentPane().add( new JScrollPane(display));
+        this.getContentPane().add("Center", display);
+    } // BinaryIO()
+
+    private void readRecords( String fileName ) {
+        try {
+            DataInputStream inStream     // Open stream
+               = new DataInputStream(new FileInputStream(fileName)); 
+            display.setText("Name   Age Pay\n");
+            try {
+                while (true) {                // Infinite loop
+                    String name = inStream.readUTF(); // Read a record
+                    int age = inStream.readInt();
+                    double pay = inStream.readDouble();
+                    display.append(name + "   " + age + "   " + pay + "\n");
+                } // while
+            } catch (EOFException e) {  // Until EOF exception
+            } finally {
+                inStream.close();                  // Close the stream
+            }
+        } catch (FileNotFoundException e) {
+            display.setText("IOERROR: File NOT Found: " + fileName + "\n");
+        } catch (IOException e) {
+            display.setText("IOERROR: " + e.getMessage() + "\n");
+        }
+    } // readRecords()
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{Part I of the {\tt BinaryIO} class, which illustrates
+simple input and output from a binary file.
+\label{fig-binaryioclass}\label{pg-fig-binaryioclass}}
+\end{figure}
+
+
+\begin{figure}[tb]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+ private void writeRecords( String fileName )  {
+   try {
+     DataOutputStream outStream   // Open stream
+       = new DataOutputStream(new FileOutputStream(fileName)); 
+     for (int k = 0; k < 5; k++) { // Output 5 data records
+       String name = "Name" + k;   // of name, age, payrate
+       outStream.writeUTF("Name" + k);    
+       outStream.writeInt((int)(20 + Math.random() * 25));
+       outStream.writeDouble(5.00 + Math.random() * 10);  
+     } // for
+     outStream.close();             // Close the stream
+   } catch (IOException e) {
+      display.setText("IOERROR: " + e.getMessage() + "\n");
+   }
+ } // writeRecords()
+
+ public void actionPerformed(ActionEvent evt) {
+     String fileName = nameField.getText();
+     if (evt.getSource()  == read)
+         readRecords(fileName);
+      else
+         writeRecords(fileName);
+ } // actionPerformed()
+
+ public static void main(String args[]) {
+    BinaryIO bio = new BinaryIO();
+    bio.setSize(400, 200);
+    bio.setVisible(true);
+    bio.addWindowListener(new WindowAdapter() { // Quit
+       public void windowClosing(WindowEvent e) {
+            System.exit(0);
+       }
+    });
+ } // main()
+} // BinaryIO
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{({\it continued}) The {\tt BinaryIO} class, Part II.}
+\end{figure}
+
+\subsection{Abstracting Data from Files}
+\noindent It's important to recognize that the method to read a binary
+file must exactly match the order of the write and read statements of
+the method that wrote the binary file. For example, if the file contains
+records that consist of a {\tt String} followed by an {\tt int}
+followed by a {\tt double}, then they must be written by a sequence
+consisting of
+
+\begin{jjjlisting}
+\begin{lstlisting}
+writeUTF();
+writeInt():
+writeDouble();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent And they must thereafter be read by the sequence of
+
+\begin{jjjlisting}
+\begin{lstlisting}
+readUTF();
+readInt():
+readDouble();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Attempting to do otherwise would make it impossible to interpret
+the data in the file.
+
+This point should make it evident why (non-Java) binary files are not portable
+%\begin{marginalnote}\it Portability\end{marginalnote}
+\marginnote{Portability}
+whereas text files are.  With text files, each character consists of 8
+bits, and each 8-bit chunk can be interpreted as an ASCII character.
+So even though a text file consists of a long sequence of 0's and
+1's, we know how to find the boundaries between each character.  That's
+why any text editor can read a text file, no matter what program
+created it.
+
+On the other hand, binary files are also just a long sequence of 0's
+and 1's, but we can't tell where one data element begins and another
+one ends.  For example, the  64-bit sequence
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    010100110011001001010100110011000
+    010100110011001011010100110011000
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent could represent two 32-bit {\tt int}s or two 32-bit {\tt float}s or
+one 64-bit \mbox{\tt double} or four 16-bit {\tt char}s or a single
+{\tt String} of 8 ASCII characters.  We can't tell what data we have unless
+we know exactly how the data were written.
+
+\JavaTIP[false]{DEBUGGING TIP}{Interpreting Binary Data.}{The fact that you can
+read the data in a binary file is no guarantee that you are
+interpreting it correctly.  To interpret it correctly, you must read it
+the same way it was written.}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Data Abstraction.}{Binary data are ``raw.''
+They have no inherent structure.  It is only the programs that read and
+write the data that provide them with structure.  A string of 64 0's
+and 1's can be interpreted as two {\tt int}s or one {\tt long} or even
+as some kind of object, so an {\tt int}, {\tt long} or an object is an
+abstraction imposed upon the data by the program.}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Object Serialization}
+
+\section{Object Serialization: Reading and Writing Objects}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Object Serialization}
+
+\noindent The examples in the previous sections showed how to perform I/O operations
+on simple binary data or text.  The {\tt java.io} package also
+provides methods for reading and writing objects, a process known as
+{\bf object serialization}\index{object serialization}. Objects can be 
+converted into a sequence of bytes, or {\it serialized}, by  using the
+{\tt ObjectOutputStream} class, and they can be {\it deserialized}, or
+converted from bytes into a structured object, by 
+using the {\tt ObjectInputStream} class
+(Fig.~11.26). Despite the complexity of the
+serialization/deserialization processes, the methods in these classes
+make the task just as easy as reading and writing primitive data.
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr11/objiouml.eps}{Classes used for performing I/O on objects.
+\label{fig-objiouml}\label{pg-fig-objiouml}}
+%\end{graphic}
+%\end{figure}
+
+
+To illustrate object serialization, let's begin by defining a
+{\tt Student} class (Fig.~\ref{fig-student}).  In order to serialize an
+%\begin{marginalnote}\it Object serialization\end{marginalnote}
+object, it must be a member of a class that implements the
+{\tt Serializable} interface.  The {\tt Serializable} interface is a {\it
+marker interface}, an interface that doesn't define any methods or
+constants but just serves to designate whether an object can be
+serialized or not.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[31pc]
+\begin{lstlisting}
+import java.io.*;
+
+public class Student implements Serializable {
+  private String name;
+  private int year;
+  private double gpa;
+
+  public Student() {}
+
+  public Student (String nameIn, int yr, double gpaIn) {
+    name = nameIn;
+    year = yr;
+    gpa = gpaIn;
+  }
+
+  public void writeToFile(FileOutputStream outStream) 
+                                     throws IOException{
+    ObjectOutputStream ooStream = new ObjectOutputStream(outStream);
+    ooStream.writeObject(this);
+    ooStream.flush();
+  } // writeToFile()
+
+  public void readFromFile(FileInputStream inStream)  
+           throws IOException, ClassNotFoundException {
+    ObjectInputStream oiStream = new ObjectInputStream(inStream);
+    Student s = (Student)oiStream.readObject();
+    this.name = s.name;
+    this.year = s.year;
+    this.gpa = s.gpa;
+  } // readFromFile()
+
+  public String toString() {
+    return name + "\t" + year + "\t" + gpa;
+  }
+} // Student
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\it serializable} {\tt Student} class.
+\label{fig-student}\label{pg-fig-student}}
+\end{figure}
+
+The {\tt Student} class contains its own I/O methods,
+{\tt readFromFile()} and {\tt writeToFile()}. This is an appropriate
+object-oriented design.  The {\tt Student} class encapsulates
+all the relevant information needed to read and write
+its data.
+
+%%
+\JavaTIP{EFFECTIVE DESIGN}{I/O Design.}{If an object is going to be input
+and output to and from files, it should define its own I/O methods.
+An object contains all the relevant information needed to perform I/O
+correctly.}
+
+\noindent Note the definition of the {\tt writeToFile()} method, which performs
+the output task.  This method's {\tt FileOutputStream} parameter is
+used to create an {\tt ObjectOutputStream}, whose {\tt writeObject()}
+\marginnote{\vspace{24pt}Object serialization}
+method writes the object into the file.   To output a
+{\tt Student} object, we merely invoke the {\tt write\-Object()} method.  This
+method writes out the current values of all the object's public and
+private fields.  In this case, the method would write a {\tt String} for
+the object's {\tt name}, an {\tt int} for the object's {\tt year}, and
+a {\tt double} for the object's {\tt gpa}.
+
+Although our example doesn't require it, the {\tt writeObject()}
+method can also handle fields that refer to other objects.  For
+example, suppose our {\tt Student} object provided a field for
+{\tt courses} that contained a reference to an array of objects, each of
+which described a course the student has taken.  In that case, the
+{\tt writeObject()} method would serialize the array and all its
+objects (assuming they are serializable). Thus, when a complex
+object is serialized, the result would be a complex structure that
+contains all the data linked to that root object.
+
+Object deserialization, as shown in the {\tt readFromFile()} method,
+%\begin{marginalnote}\it Object deserialization\end{marginalnote}
+\marginnote{\vspace{-12pt}Object deserialization}
+is simply the reverse of the serialization process.   The
+{\tt readObject()} method reads one serialized object from the
+{\tt ObjectInputStream}. Its result type is {\tt Object}, so it is
+necessary to cast the result into the proper type.   In our example we
+use a local {\tt Student} variable to store the object as it is
+input.  We then copy each field of the local object to {\tt this}
+object.
+
+Note that the {\tt readFromFile()} method throws both the
+{\tt IOException} and {\tt ClassNotFoundException}.  An {\tt IOException}
+will be generated if the file you are attempting to read does not
+contain serialized objects of the correct type.  Objects that can be
+input by {\tt readObject()} are those that were output by
+{\tt writeObject()}. Thus, just as in the case of binary I/O, it is best to
+design an object's input and output routines together so that they are
+compatible.  The {\tt ClassNotFoundException} will be thrown if the
+{\tt Student} class cannot be found.  This is needed to determine how
+to deserialize the object.
+
+\JavaTIP{PROGRAMMING TIP}{Object Serialization.}{Java's serialization
+classes, {\tt ObjectOutputStream} and {\tt ObjectInputStream}, should
+be used whenever an object needs to be input or output from a stream.}
+
+\subsection{The {\tt ObjectIO} Class}
+\noindent Given the {\tt Student} class, let's now write a user interface that
+can read and write {\tt Student} objects.   We can use the same
+interface we used in the {\tt Binary\-IO} program.  The only things we
+need to change are the {\tt write\-Records()} and {\tt readRecords()}
+methods.  Everything else about this program will be exactly the same
+as in {\tt BinaryIO}.
+
+Figure~\ref{fig-objectioclass} provides the full implementation of the
+{\tt ObjectIO} class. Note that the {\tt writeRecords()} method will
+still write five random records to the data file.  The difference in
+this case is that we will call the {\tt Student.write\-To\-File()}
+method to take care of the actual output operations.  The revised
+algorithm will create a new {\tt Student} object, using randomly
+generated data for its name, year, and GPA and then invoke its {\tt
+writeToFile()} to output its data.  Note how a {\tt FileOutputStream}
+is created and passed to the {\tt Student.\-writeToFile()} method.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}
+import javax.swing.*;         // Swing components
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+
+public class ObjectIO extends JFrame implements ActionListener{
+  private JTextArea display = new JTextArea();
+  private JButton read = new JButton("Read From File"),
+                  write = new JButton("Write to File");
+  private JTextField nameField = new JTextField(10);
+  private JLabel prompt = new JLabel("Filename:",JLabel.RIGHT);
+  private JPanel commands = new JPanel();
+
+  public ObjectIO () {
+    super("ObjectIO Demo");                // Set window title
+    read.addActionListener(this);
+    write.addActionListener(this);
+    commands.setLayout(new GridLayout(2,2,1,1)); 
+    commands.add(prompt);                 // Control panel
+    commands.add(nameField);
+    commands.add(read);
+    commands.add(write);
+    display.setLineWrap(true);
+    this.getContentPane().setLayout(new BorderLayout () );
+    this.getContentPane().add("North",commands);
+    this.getContentPane().add( new JScrollPane(display));
+    this.getContentPane().add("Center", display);
+  } // ObjectIO
+
+  public void actionPerformed(ActionEvent evt) {
+    String fileName = nameField.getText();
+    if (evt.getSource() == read)
+        readRecords(fileName);
+    else
+        writeRecords(fileName);
+  } // actionPerformed()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Part I of the {\tt ObjectIO} class, which provides 
+an interface to reading and writing files of {\tt Student}s.
+\label{fig-objectioclass}\label{pg-fig-objectioclass}}
+\end{figure}
+
+
+\begin{figure}[p]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlistingleft}[37pc]{-11pc}
+\begin{lstlisting}
+   private void readRecords(String fileName) {
+     try {
+       FileInputStream inStream = new FileInputStream(fileName);  // Open a stream
+       display.setText("Name\tYear\tGPA\n");
+       try {
+         while (true) {                   // Infinite loop
+           Student student = new Student();    // Create a student instance
+           student.readFromFile(inStream);     //  and have it read an object
+           display.append(student.toString() +  "\n"); //  and display it
+         }
+       } catch (IOException e) {     // Until IOException
+       }
+       inStream.close();                           // Close the stream
+     } catch (FileNotFoundException e) {
+         display.append("IOERROR: File NOT Found: " + fileName + "\n");
+     } catch (IOException e) {
+         display.append("IOERROR: " + e.getMessage() + "\n");
+     } catch (ClassNotFoundException e) {
+         display.append("ERROR: Class NOT found " + e.getMessage() + "\n");
+     }
+  } // readRecords()
+
+  private void writeRecords(String fileName) {
+    try {
+      FileOutputStream outStream = new FileOutputStream( fileName );// Open stream
+      for (int k = 0; k < 5 ; k++) {               // Generate 5 random objects
+        String name = "name" + k;                     // Name
+        int year = (int)(2000 + Math.random() * 4);   // Class year
+        double gpa = Math.random() * 12;              // GPA
+        Student student = new Student(name, year, gpa); // Create the object
+        display.append("Output: "+ student.toString() +"\n"); // and display it
+        student.writeToFile(outStream) ;    //  and tell it to write data
+      } //for
+      outStream.close();
+    } catch (IOException e) {
+       display.append("IOERROR: " + e.getMessage() + "\n");
+    }
+  } // writeRecords()
+
+  public static void main(String args[]) {
+    ObjectIO io = new ObjectIO();
+    io.setSize( 400,200);
+    io.setVisible(true);
+    io.addWindowListener(new WindowAdapter() {  
+        public void windowClosing(WindowEvent e) {
+            System.exit(0);  // Quit the application
+            }
+    });
+  } // main()
+} // ObjectIO
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{({\it continued}) The {\tt ObjectIO} class, Part II.}
+\end{figure}
+
+
+The {\tt readRecords()} method (Fig.~\ref{fig-objectioclass}, Part
+II) will read data from a file containing serialized {\tt Student}
+objects.  To do so, it first creates a \mbox{\tt Student} object and
+then invokes its {\tt readFromFile()} method, passing it a {\tt
+FileInputStream}. Note how the {\tt FileInputStream} is created and,
+unlike in {\tt BinaryIO}, the inner try block is exited by an
+\mbox{\tt IOException} rather than an {\tt EOFException}.
+
+\pagebreak
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Given the following definition, would a binary file consisting of
+several {\tt SomeObject}s be readable by either the {\tt BinaryIO} or
+the {\tt ObjectIO} programs?   Explain.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class SomeObject {
+    private String str;
+    private short n1;
+    private short n2;
+    private long  n3;
+}
+\end{lstlisting}
+\end{jjjlisting}
+\end{SSTUDY}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Java Library : {\tt JFileChooser}}
+
+\section{From the Java Library \\ {\tt javax.swing.JFileChooser}}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Java Library : {\tt JFileChooser}}
+
+\WWWjava
+
+\tBOXseven{The} {\tt javax.swing.JFileChooser} class is useful for dealing
+with files and directories in a GUI environment.  You are probably
+already familiar with {\tt JFileChooser}s, although you may not have
+known them by that name.   A {\tt JFileChooser} provides a dialog box
+that enables the user to select a file and a directory when opening or
+saving a file.  Figure~\ref{fig-opendialog} shows an example.
+
+A {\tt JFileChooser} is designed primarily to be used in conjunction
+with menu-based programs.  The {\tt JFileChooser} class
+(Fig.~11.29) contains methods that support the {\it Open
+File} and {\it Save As} options which often appear in GUI applications 
+either in a menu or attached to buttons.  In this section we 
+\marginfig{chptr11/chooseruml.eps}{The {\tt javax.swing.J\-File\-Chooser} class.
+\label{fig-chooseruml}\label{pg-fig-chooseruml}}
+provide the basics for using a {\tt JFileChooser}.  Options for opening
+a file or saving a file can be added to the kind of GUI applications that
+we encountered earlier in the text by using buttons. 
+In  Chapter~13, we will discuss the use of {\tt JMenu}s which will
+provide a more natural means of using the {\tt JFileChooser} dialogs.
+
+
+A {\tt JFileChooser} is not itself the dialog window, but rather the
+object that manages the dialog.  After creating a {\tt JFileChooser}
+instance, its {\tt showOpenDialog()} or {\tt showSaveDialog()} methods
+are used to open a dialog window.  Note that these methods require a
+{\tt Component} parameter, usually a {\tt JFrame} or a
+{\tt JApplet}. Thus, {\tt JFileChooser}s can be used only in GUI
+applications and applets.
+
+To illustrate how to use a {\tt JFileChooser}, let's consider the case
+where the user has selected an {\it Open File} menu item or clicked a 
+button labeled {\it Open File}.  In this case, executing the 
+following code  will cause an ``Open File'' dialog to appear:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JFileChooser chooser = new JFileChooser();
+int result = chooser.showOpenDialog(this);
+
+if (result == JFileChooser.APPROVE_OPTION) {
+    File file = chooser.getSelectedFile();
+    // Insert code here to read data from file
+    String fileName = file.getName();
+    display.setText("You selected " + fileName);
+} else
+    display.setText("You cancelled the file dialog");
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent We begin by creating a {\tt JFileChooser} and then
+\marginnote{Opening a file}
+telling it to {\tt showOpen\-Dia\-log()}. If we were saving a file rather
+than opening one, we would tell it to {\tt showSaveDialog()}.  In
+either case, a dialog window will pop up on the screen.  The dialog
+assists the user in navigating through the file system and selecting a
+file (Fig.~\ref{fig-opendialog}).
+
+%\begin{figure}
+\begin{figure}[h!]
+\figaleft{chptr11/opendialog.eps}{The {\it Open File} dialog window.
+\label{fig-opendialog}\label{pg-fig-opendialog}}
+\end{figure}
+%\end{figure}
+
+The dialog contains two buttons, one labeled Open and
+%\begin{marginalnote}\it Opening a file\end{marginalnote}
+the other labeled Cancel.  If the user selects a file, that choice
+will correspond to {\tt APPROVE\_OPTION}. If the user cancels the
+dialog, that will correspond to {\tt CANCEL\_OPTION}. After
+opening a dialog, the code should check which option resulted.  In
+this case, if the user opened a file, the code gets a reference to the
+file and then simply uses that to print the file's path name to a
+text area named {\tt display}.  In an  actual application, code would be
+inserted at that spot which uses the file reference to read data from
+the file.
+
+\section{Using File Data in Programs} 
+
+This chapter's examples have provided explicit details for several
+ways of writing data to files and reading data from files.  In actual
+programs, deciding if and how files might be useful in the program are
+worked out as part of the design process.  Choosing between text
+files, binary files, and reading and writing objects is part of this
+process.
+
+To illustrate how we can apply what we've learned about file I/O,
+let's modify the {\tt WordGuess} class (which is listed in
+Fig.~8.27) so that it reads a list of possible words 
+for players to guess from a file.  The Chapter~8 
+\marginnote{modifying {\tt WordGuess}} 
+version of the class contains a method, {\tt getSecretWord()}, which
+uses a {\tt switch} statement to randomly choose and return a word
+from a fixed list of ten words.  Reading the words from a text file
+would allow a user to modify the list of possible words by adding
+or changing words without needing to recompile the
+program. 
+
+\noindent Let's modify the {\tt WordGuess} class in three ways:
+
+\begin{enumerate}
+
+\item adding two new instance variables, an array of type {\tt String}
+and a variable to store the size of the array;
+
+\item adding code at the beginning of the class's constructor to read
+words from the file and store them in the array;
+
+\item rewrite the {\tt getSecretWord()} method so that it randomly
+chooses a word from the array.
+\end{enumerate}
+
+\noindent Let us first choose descriptive names for
+\marginnote{New instance variables}
+declaring the two new instance variables:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    private String[] wordArray;
+    private int arraySize;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that it will be useful to store the number of
+words in the file in its first line so that this information can be 
+used to allocate memory for the array.  For example, let us assume
+the text file will be named {\tt secretwords.txt}, it will be located 
+in the same directory as the {\tt WordGuess} class, it will have
+the number of words in the file as its first line, and it will have
+\marginnote{Format for the text file}
+a single word per line after that.  Thus, a  small file 
+might look like:
+\begin{jjjlisting}
+\begin{lstlisting}
+    3
+    STREAMS
+    CONDUIT
+    DIALOGS
+\end{lstlisting}
+\end{jjjlisting}
+
+We can use the body of the {\tt readTextFile()} method of the {\tt TextIO} 
+class as a model for the Java code that needs to be added to the {\tt WordGuess} 
+\marginnote{Code to add to constructor}
+constructor. Pseudocode for this code will look like:
+\begin{jjjlisting}
+\begin{lstlisting}
+    Use file name to open a  BufferedReader stream
+    Read first line and convert to an integer
+    Store the integer as the size of the array 
+    Allocate memory for the array
+    Read second line of file
+    While a word is read
+       Store the word in the next array element
+       Read next line of file
+    Close the BufferedReader stream   
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When this pseudocode is translated into Java and inserted into a
+{\tt try-catch} statement we get the code fragment in Figure~\ref{fig-wordguessfile}.
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+    try{
+        FileReader fr = new FileReader("secretwords.txt");
+        BufferedReader inStream
+            = new BufferedReader(fr);
+        String line = inStream.readLine();
+        arraySize = Integer.parseInt(line);
+        wordArray = new String[arraySize];
+        line = inStream.readLine();
+        int k = 0;
+        while((line != null) && (k < arraySize)){
+            wordArray[k] = line;
+            line = inStream.readLine();
+            k++;
+        }//while
+        inStream.close();
+    } catch(FileNotFoundException e){
+        e.printStackTrace();
+    } catch(IOException e){
+        e.printStackTrace();
+    } //catch
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Code added at beginning of the {\tt WordGuess} constructor.
+\label{fig-wordguessfile}\label{pg-fig-wordguessfile}}
+\end{figure}
+
+The new {\tt getSecretWord()} method merely needs to generate a
+\marginnote{New code for {\tt getSecretWord}}
+random array index and return the corresponding array element:
+\begin{jjjlisting}
+\begin{lstlisting}
+    private String getSecretWord(){
+        int num = (int)(Math.random()*arraySize);
+        return wordArray[num];
+    } //getSecretWord()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The only other modification that is needed for to complete new
+{\tt WordGuess} class is to add an initial {\tt import java.io.*;} statement
+so that the file IO classes can be accessed. 
+
+The earlier examples in this chapter can be used as models
+to enhance numerous practical applications.  GUI applications that involve
+a user's choice to load data from a file or save data in a file should make 
+use of the {\tt JFileChooser} dialogs to initiate the file operations. 
+
+\section*{Special Topic: Databases and Personal Privacy}
+
+\noindent During a typical day we all come in contact with lots of electronic
+databases that store information about us.  If you use a supermarket
+discount card, every purchase you make is logged against your name in
+the supermarket's database.  When you use your bank card at the ATM
+machine, your financial transaction is logged against your account.
+When you charge gasoline or buy dinner, those transactions are logged
+against your credit card account.  If you visit the doctor or dentist,
+a detailed record of your visit is transmitted to your medical
+insurance company's database.   If you receive a college loan, detailed
+financial information about you is entered into several different
+credit service bureaus.   And so on. 
+
+Should we be worried about how this information is used? Many privacy
+advocates say yes.  With the computerization of medical records, phone
+records, financial transactions, driving records, and many other
+records, there is an enormous amount of personal information held in
+databases.  At the same time, there are pressures from a number of
+sources for access to this information.  Law-enforcement agencies want
+to use this information to monitor individuals.   Corporations want to
+use it to help them market their products.   Political organizations
+want to use it to help them market their candidates.
+
+Recently there has been pressure from government and industry in the
+United States to use the social security number (SSN) as a unique
+identifier.   Such an identifier would make it easy to match personal
+information across different databases.  Right now, the only thing your
+bank records, medical records, and supermarket records may have in
+common is your name, which is not a unique identifier.   If all online
+databases were based on your SSN, it would be much simpler to create a
+complete profile.  While this might improve services and reduce
+fraud and crime, it might also pose a significant threat to our
+privacy.
+
+The development of online databases serve many useful
+purposes.  They help fight crime and reduce the cost of doing
+business.  They help improve government and commercial services on which we
+have come to depend.  On the other hand, databases can be and
+have been misused.  They can be used by unauthorized individuals or
+agencies or in unauthorized ways.  When they contain inaccurate
+information, they can cause personal inconvenience or even harm.\\
+\hspace*{1pc}There are a number of organizations that have sprung up to address
+the privacy issues raised by online databases.  If you're interested
+in learning more about this issue, a good place to start would be the
+Web site maintained by the Electronic Privacy Information Center
+(EPIC) at
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.epic.org/
+\end{lstlisting}
+\end{jjjlisting}
+\rule[0pt]{26pc}{2pt}\\
+
+
+
+\secSMH{Chapter Summary}
+
+\secKTH{Technical Terms}
+
+%\parindent=0pt
+\begin{KT}
+absolute path name
+
+binary file
+
+%%%REW buffer
+
+buffering
+
+%%%REW command-line argument
+
+database
+
+data hierarchy
+
+directory
+
+end-of-file \nobreak{character}
+
+field
+
+file
+
+filtering
+
+%%%REW input stream   %%%was introduced in chapter 4
+
+input  %%new
+
+object serialization
+
+output %%new
+
+%%%REW output stream
+
+path
+
+%%REW platform independence
+
+record
+
+relative path name
+
+%%%REW stream
+
+%%%REW text file
+
+Unicode Text Format (UTF)
+
+\end{KT}
+
+%%%REW\clearpage
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBLlarge}
+\item  A {\it file} is a collection of data stored on a disk.
+A {\it stream} is an object that delivers data to and from other
+objects.  
+
+\item An {\tt InputStream} is a stream that delivers data to a
+program from an external source---such as the keyboard or a file.
+{\tt System.in} is an example of an {\tt InputStream}. An
+{\tt OutputStream} is a stream that delivers data from a program to an
+external destination---such as the screen or a file.   {\tt System.out} is
+an example of an {\tt OutputStream}.
+
+\item  Data can be viewed as a hierarchy.  From highest to
+lowest, a {\it database} is a collection of files.  A {\it file} is a
+collection of records.  A {\it record} is a collection of fields.   A
+{\it field} is a collection of bytes.  A {\it byte} is a collection of
+8 bits.   A {\it bit} is one binary digit, either 0 or 1.
+
+\item  A {\it binary file} is a sequence of 0s and 1s that
+is interpreted as a sequence of bytes.  A {\it text file} is a sequence
+of 0s and 1s that is interpreted as a sequence of characters.  A text
+file can be read by any text editor, but a binary file cannot.
+{\tt InputStream} and {\tt OutputStream} are abstract classes that
+serve as the root classes for reading and writing binary data.   {\tt Reader}
+and {\tt Writer} serve as root classes for text I/O.
+
+\item  {\it Buffering} is a technique in which a {\it buffer}, a temporary
+region of memory, is used to store data while they are being input or
+output.
+
+\item  A text file contains a sequence of characters divided into
+%%%REWlines by the \verb@\n@ character and ending with a special
+lines by the \verb|\n| character and ending with a special
+{\it end-of-file} character.
+
+\item  The standard algorithm for performing I/O on a file consists
+of three steps: (1) Open a stream to the file, (2) perform the
+I/O, and (3) close the stream.
+
+
+\item  Designing effective I/O routines answers
+two questions: (1) What streams should I use to perform
+the I/O? (2) What methods should I use to do the reading
+or writing?
+
+\item  To prevent damage to files when a program terminates
+abnormally, streams should be closed when they are no longer
+needed.
+
+\item  Most I/O operations generate an {\tt IOException} that
+should be caught in the I/O methods.
+
+\item  Text input uses a different technique to determine
+when the end of a file has been reached.  Text input methods return
+{\tt null} or {\tt -1} when they attempt to read the special
+end-of-file character.   Binary files don't contain an end-of-file
+character, so binary read methods throw an {\tt EOFException} when they
+attempt to read past the end of the file.
+
+\item  The {\tt java.io.File} class provides methods that
+enable a program to interact with a file system.  Its methods can be
+used to check a file's attributes, including its name, directory,
+and path.
+
+\item  Streams can be joined together to perform
+I/O.~For example, a {\tt DataOutputStream} and a {\tt FileOutputStream}
+can be joined to perform output to a binary file.
+
+\item  A binary file is ``raw'' in the sense that it contains
+no markers within it that allow you to tell where one data element
+ends and another begins.  The interpretation of binary data
+is up to the program that reads or writes the file.
+
+\item  Object serialization is the process of writing an
+object to an output stream.  Object deserialization is the reverse
+process of reading a serialized object from an input stream.   These
+processes use the {\tt java.io.\-ObjectOutputStream} and
+{\tt java.io.ObjectInputStream} classes.
+
+\item  The {\tt JFileChooser} class provides a dialog box that
+enables the user to select a file and directory when
+opening or saving a file.
+\end{SMBLlarge}
+
+%\section*{}{Answers to Self-Study Exercises}
+\secANSHleft
+%\addcontentsline{toc}{section}{\S~~~ Answers to Self-Study Exercises}
+\begin{ANS}
+\item 
+Because {\tt FileWriter} contains a constructor that takes a file name
+argument, {\tt FileWriter(String)}, it can be used with
+{\tt Print\-Writer} to perform output to a text file:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+PrintWriter outStream =     //  Create output stream
+    new PrintWriter(new FileWriter(fileName)); // Open file
+outStream.print (display.getText());// Display text
+outStream.close();                  // Close output stream
+\end{lstlisting}
+\end{jjjlisting}
+
+\item An empty file doesn't affect this loop.  If the file is empty,
+it will print a {\tt null} line.  The test {\tt line != null}, should
+come right after the {\tt readLine()}, as it does in the {\tt while}
+loop.
+
+
+\item  This loop won't work on an empty text file.  In that case, {\tt ch}
+would be set to $-1$, and the attempt to cast it into a {\tt char}
+would cause an error.
+
+\item  \mbox{ }
+\begin{jjjlisting}
+\begin{lstlisting}
+public void getFileAttributes(String fileName) {
+    File file = new File (fileName);
+    System.out.println(filename);
+    System.out.println("absolute path:" 
+           + file.getAbsolutePath());
+    System.out.println("length:" + file.length());
+    if (file.isDirectory())
+        System.out.println("Directory");
+    else
+        System.out.println("Not a Directory");
+} // getFileAttributes()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The {\tt inStream.close()} statement is misplaced in {\tt read\-Integers()}.
+By placing it inside the same {\tt try/catch} block as the read loop,
+it will get skipped and the stream will not be closed.  The {\tt EOFException}
+should be caught in a separate {\tt try/catch} block from other
+exceptions, and it should just cause the read loop to exit.
+
+\item  Yes, a binary file containing several {\tt SomeObjects} would be
+``readable'' by the {\tt BinaryIO} program because the program will
+read a {\tt String} followed by 64 bytes.  However, {\tt BinaryIO}
+would misinterpret the data, because it will assume that {\tt n1} and
+{\tt n2} together comprise a single {\tt int}, and {\tt n3} (64 bits)
+will be interpreted as a {\tt double}. A file of {\tt SomeObject}s
+could not be read by the {\tt ObjectIO} program, because
+{\tt SomeObject} does not implement the {\tt Serializable} interface.
+
+\end{ANS}
+
+
+%\section*{}{Exercises}
+%%\secEXRHtwoleft{Exercises}
+\secEXRHtwo{Exercises}
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+%%%REW\begin{EXRtwolarge}
+\begin{EXRtwo}
+
+\item  Explain the difference between each of the following pairs of terms:
+
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  {\tt System.in} and {\tt System.out}.
+\item  {\it File} and {\it directory}.
+\item  {\it Buffering} and {\it filtering}.
+\item  {\it Absolute} and {\it relative path name}.
+\item  {\it Input stream} and {\it output stream}.
+\item  {\it File} and {\it database}.
+\item  {\it Record} and {\it field}.
+\item  {\it Binary file} and {\it text file}.
+\item  {\it Directory} and {\it database}.
+\end{multicols}
+\end{EXRtwoLL}
+
+\item  Fill in the blanks.
+\begin{EXRtwoLL}\baselineskip=15pt
+\item  Unlike text files, binary files do not have a
+special \rule{60pt}{0.5pt} character.
+\item  In Java, the {\tt String} array parameter in the
+{\tt main()} method is used for \rule{60pt}{0.5pt}\,.
+\item  \rule{60pt}{0.5pt} files are portable and platform
+independent.
+\item  A  \rule{70pt}{0.5pt}  file  created on one
+computer can't be read by another \mbox{computer.}
+\end{EXRtwoLL}\baselineskip=11pt
+
+\item  Arrange the following kinds of data into their
+correct hierarchical relationships: {\tt bit},
+{\tt field}, {\tt byte}, {\tt record}, {\tt database},
+{\tt file}, {\tt String}, {\tt char}.
+
+\item  In what different ways can the following string
+of 32 bits be interpreted?
+\begin{jjjlisting}
+\begin{lstlisting}
+00010101111000110100000110011110
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  When reading a binary file, why is it necessary
+to use an infinite loop that's exited only when an
+exception occurs?
+
+\item  Is it possible to have a text file with 10 characters
+and 0 lines? Explain.
+
+\item  In reading a file, why is it necessary to attempt
+to read from the file before entering the read loop?
+
+\item  When designing binary I/O, why is it especially
+important to design the input and output routines
+together?
+
+\item  What's the difference between ASCII code and
+UTF code?
+
+\item  Could the following string of bits possibly be
+a Java object?  Explain.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+00010111000111101010101010000111001000100
+11010010010101010010101001000001000000111
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write a method that could be added to the {\tt TextIO}
+program to read a text file and print all lines containing a
+certain word.  This should be a {\tt void} method that takes two
+parameters: The name of the file and the word to search for.  Lines not
+containing the word should not be printed.
+
+\item  Write a program that reads a text file and reports the
+number of characters and lines contained in the file.
+
+\item  Modify the program in the previous exercise so that it
+also counts the number of words in the file.   ({\it Hint}: The
+{\tt StringTokenizer} class might be useful for this task.)
+
+\item  Modify the {\tt ObjectIO} program so that it allows the
+user to designate a file and then input {\tt Student} data with
+the help of a GUI.  As the user inputs data, each record should
+be written to the file.
+
+\item  Write a program that will read a file of {\tt int}s into
+memory, sort them in ascending order, and output the sorted
+data to a second file.
+
+\item  Write a program that will read two files of {\tt int}s,
+which are already sorted into ascending order, and merge their
+data.  For example, if one file contains 1, 3, 5, 7, 9, and the
+other contains 2, 4, 6, 8, 10, then the merged file should
+contain 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
+
+\item Suppose you have a file of data for a geological survey. Each
+record consists of a longitude, a latitude, and an amount of rainfall,
+all represented by {\tt double}s.  Write a method to read this file's
+data and print them on the screen, one record per line.  The method
+should be {\tt void} and it should take the name of the file as its
+only parameter.
+
+\item  Suppose you have the same data as in the previous exercise.
+Write a method that will generate 1,000 records of random data and
+write them to a file.  The method should be {\tt void} and should take the
+file's name as its parameter.  Assume that longitudes have values in
+the range $+/-$ 0 to 180 degrees, latitudes have values in the range $+/-$
+0 to 90 degrees, and rainfalls have values in the range 0 to 20 inches.
+
+\item  Design and write a file copy program that will work for either
+text files or binary files.  The program should prompt the user for the
+names of each file and copy the data from the source file into the
+destination file.  It should not overwrite an existing file,
+however.  ({\it Hint}: Read and write the file as a file of {\tt byte}.)
+
+\item  Design a class, similar to {\tt Student}, to represent an
+{\tt Address}. It should consist of street, city, state, and zip code
+and should contain its own {\tt readFromFile()} and
+{\tt writeToFile()} methods.
+
+\item  Using the class designed in the previous exercise, modify
+the {\tt Student} class so that it contains an {\tt Address}
+field.  Modify the {\tt ObjectIO} program to accommodate this
+new definition of {\tt Student} and test your program.
+
+\item  Write a program called {\tt Directory}, which provides
+a listing of any directory contained in the current directory.  
+This program should prompt the user for the name of the directory.
+It should then print a listing of that directory.  The
+listing should contain the following information: The full path name
+of the directory, and then include the file name, length, and
+last modified date, and a read/write code for each file.  The read/write code should
+be an {\it r} if the file is readable and a {\it w} if the file is writeable,
+in that order.  Use a ``-'' to indicate not readable or not
+writeable.  For example, a file that is readable but not writable will
+have the code {\it r}-.  Here's an example listing:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Listing for directory: myfiles
+  name          length modified   code
+  index.html    548    129098     rw
+  index.gif     78     129190     rw
+  me.html       682    128001     r-
+  private.txt   1001   129000     --
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent  Note that the {\tt File.lastModified()} returns a {\tt long},
+which gives the modification time of the file.  This number can't
+easily be converted into a date, so just report its value.
+
+\item  {\bf Challenge:} Modify the {\tt OneRowNimGUI} class 
+that is listed in Chapter~4's Figure~ 4-25 so that
+the user can save the position of the game to a file or open and 
+read a game position from a file.  You should add two new {\tt JButton}s
+to the GUI interface. Use the object serialization example as a model
+for your input and output streams.
+
+\item  {\bf Challenge:} In Unix systems, there's a program named
+{\tt grep} that can list the lines in a text file
+containing a certain string.  Write a Java version of this program
+that prompts the user for the name of the file and the string to search for.
+
+\item  {\bf Challenge:} Write a program in Java named {\tt Copy} 
+to copy one file into another.  The program should prompt the user
+for two file names, {\tt filename1} and {\tt filename2}. 
+Both {\tt filename1} and {\tt filename2} must exist or
+the program should throw a {\tt FileNotFoundException}.  Although
+{\tt filename1} must be the name of a file (not a directory),
+{\tt filename2} may be either a file or a directory.  If {\tt filename2} is
+a file, then the program should copy {\tt filename1} to
+{\tt filename2}.  If {\tt filename2} is a directory, then the program
+should simply copy {\tt filename1} into {\tt filename2}. That is, it
+should create a new file with the name {\tt filename1} inside the
+{\tt filename2} directory, copy the old file to the new file, and then
+delete the old file.
+%%%REW\end{EXRtwolarge}
+\end{EXRtwo}
+%

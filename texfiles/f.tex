@@ -1,0 +1,335 @@
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{\mbox{F.\arabic{table}}}%
+\renewcommand{\thefigure}{\mbox{F--\arabic{figure}}}%
+
+\chapter{Java Inner Classes}
+
+\markboth{{\color{cyan}APPENDIX\,F\,\,$\bullet$\,\,}Java Inner Classes}
+{{\color{cyan}APPENDIX\,F\,\,$\bullet$\,\,}Java Inner Classes}
+
+\noindent This appendix describes basic features of some advanced
+elements of the Java language.  As for many language features, there
+are details and subtleties involved in using these features that are
+not covered here.  For further details, you should consult Sun's online
+references or other references for a more comprehensive description.
+
+\section*{What Are Inner Classes?}
+\noindent {\it Inner classes} were introduced in Java 1.1. This features lets
+you define a class as part of another class, just as fields and
+methods are defined within classes.   Inner classes can be used to
+support the work of the class in which they are contained.
+
+Java defines four types of inner classes.   A {\it nested top-level}
+class or interface is a {\it static} member of an enclosing top-level
+class or interface.  Such classes are considered top-level classes
+by Java.
+
+A {\it member class} is a nonstatic inner class.  It is not a
+top-level class.  As a full-fledged member of its containing class, a
+member class can refer to the fields and methods of the containing
+class, even the {\tt private} fields and methods.  Just as you would
+expect for the other instance fields and methods of a class, all
+instances of a member class are associated with an instance of the
+enclosing class.
+
+A {\it local class} is an inner class that's defined within a block of
+Java code, such as within a method or within the body of a loop.  Local
+classes have local scope---they can only be used within the block in
+which they are defined.  Local classes can refer to the methods and
+variables of their enclosing classes.   They are used mostly to implement
+{\it adapters}, which are used to handle events.
+
+When Java compiles a file containing a named inner class, it creates
+separate class files for them with names that include the nesting
+class as a qualifier.  For example, if you define an inner class named
+{\tt Metric} inside a top-level class named {\tt Converter}, the
+compiler will create a class file named {\tt Converter\$Metric.class}
+for the inner class.   If you wanted to access the inner class from
+some other class (besides {\tt Converter}), you would use a qualified
+name: {\tt Converter.Metric}.
+
+
+An {\it anonymous class} is a local class whose definition and use are
+combined into a single expression.  Rather than defining the class in
+one statement and using it in another, both operations are combined
+into a single expression.  Anonymous classes are intended for one-time
+use.  Therefore, they don't contain constructors.  Their bytecode files
+are given names like {\tt ConverterFrame\$1.class}.
+
+\section*{Nested Top-Level Versus Member Classes}
+\noindent The {\tt Converter} class (Figure~F--1) shows the
+differences between a nested top-level class and a member class.   The
+program is a somewhat contrived example that performs various kinds of
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[33pc]{-7pc}
+\begin{lstlisting}
+public class Converter {
+  private static final double INCH_PER_METER = 39.37;
+  private final double LBS_PER_KG = 2.2;
+
+  public static class Distance { // Nested Top-level class
+    public double metersToInches(double meters) {
+      return meters * INCH_PER_METER;
+    }
+  } // Distance
+
+  public class Weight {          // Member class
+    public double kgsToPounds(double kg) {
+      return kg * LBS_PER_KG;
+    }
+  } //Weight
+} //Converter
+
+public class ConverterUser {
+  public static void main(String args[]) {
+    Converter.Distance distance = new Converter.Distance();
+    Converter converter = new Converter();
+    Converter.Weight weight = converter.new Weight();
+    System.out.println( "5 m = " + distance.metersToInches(5) + " in");
+    System.out.println( "5 kg = " + weight.kgsToPounds(5) + " lbs");
+  }
+} // ConverterUser
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A Java application containing a top-level nested class.
+\label{fig-converter}\label{pg-fig-converter}}
+\end{figure}
+metric conversions.  The outer {\tt Converter} class serves as a
+container for the inner classes, {\tt Distance} and {\tt Weight},
+which perform specific conversions.
+
+
+The {\tt Distance} class is declared {\tt static}, so it is a
+top-level class.  It is contained in the {\tt Converter} class
+itself.  Note the syntax used in {\tt ConverterUser.main()} to create
+an instance of the {\tt Distance} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Converter.Distance distance = new Converter.Distance();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A fully qualified name is used to refer to the {\tt static}
+inner class via its containing class.
+
+
+The {\tt Weight} class is not declared {\tt static}.  It is, therefore,
+associated with {\it instances} of the {\tt Converter} class.  Note
+the syntax used to create an instance of the {\tt Weight} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Converter converter = new Converter();
+Converter.Weight weight = converter.new Weight();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Before you can create an instance of {\tt Weight}, you
+have to declare an instance of {\tt Converter}. In this example, we
+have used two statements to create the {\tt weight} object,
+which requires using the temporary variable, {\tt converter},
+as a reference to the {\tt Converter} object.  We could also
+have done this with a single statement by using the following
+syntax:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Converter.Weight weight = new Converter().new Weight();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that in either case
+the qualified name {\tt Converter.Weight} must be used to access the
+inner class from the {\tt ConverterUser} class.
+
+There are a couple of other noteworthy features in this example.
+First, an inner top-level class is really just a programming
+convenience.   It behaves just like any other top-level class in Java.
+One restriction on top-level inner classes is that they can only be
+contained within other top-level classes, although they can be nested
+one within the other.  For example, we could nest additional converter
+classes within the {\tt Distance} class.   Java provides special syntax
+for referring to such nested classes.
+
+Unlike a top-level class, a member class is nested within an instance
+of its containing class.  Because of this, it can refer to instance
+variables (\verb|LBS_PER_KG|) and instance methods of its containing
+class, even to those declared {\tt private}. By contrast, a top-level
+inner class can only refer to class variables (\verb|INCH_PER_METER|)---that 
+is, to variables that are declared {\tt static}. So you would
+use a member class if it were necessary to refer to instances of the
+containing class.
+
+There are many other subtle points associated with member classes,
+including special language syntax that can be used to refer to
+nested member classes and rules that govern inheritance and scope
+of member classes.  For these details you should consult the
+{\it Java Language Specification}, which can be accessed online
+at
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/docs/books/jls/html/index.html
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\section*{Local and Anonymous Inner Classes}
+
+In this next example, {\tt ConverterFrame}, a local class is used to
+create an {\tt ActionEvent} handler for the application's two buttons
+(Fig.~F--2).
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[36.5pc]{-10.5pc}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ConverterFrame extends JFrame {
+  private Converter converter = new Converter();       // Reference to app
+  private JTextField inField = new JTextField(8);
+  private JTextField outField = new JTextField(8);
+  private JButton metersToInch;
+  private JButton kgsToLbs;
+
+  public ConverterFrame() {
+    metersToInch = createJButton("Meters To Inches");
+    kgsToLbs = createJButton("Kilos To Pounds");
+    getContentPane().setLayout( new FlowLayout() );
+    getContentPane().add(inField);
+    getContentPane().add(outField);
+    getContentPane().add(metersToInch);
+    getContentPane().add(kgsToLbs);
+  } // ConverterFram()
+
+  private JButton createJButton(String s) { // A method to create a JButton
+    JButton jbutton = new JButton(s);
+    class ButtonListener implements ActionListener { // Local class
+
+      public void actionPerformed(ActionEvent e) {
+        double inValue = Double.valueOf(inField.getText()).doubleValue();
+        JButton button = (JButton) e.getSource();
+        if (button.getText().equals("Meters To Inches"))
+          outField.setText(""+ converter.new Distance().metersToInches(inValue));
+        else
+          outField.setText(""+ converter.new Weight().kgsToPounds(inValue));
+      } // actionPerformed()
+    } // ButtonListener
+
+    ActionListener listener = new ButtonListener(); // Create a listener
+    jbutton.addActionListener(listener);      // Register buttons with listener
+    return jbutton;
+  } // createJButton()
+
+  public static void main(String args[]) {
+    ConverterFrame frame = new ConverterFrame();
+    frame.setSize(200,200);
+    frame.setVisible(true);
+  } // main()
+} // ConverterFrame
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The use of a local class as an {\tt ActionListener} adapter.
+\label{fig-converterframe}\label{pg-fig-converterframe}}\end{figure}
+
+\noindent As we have seen, Java's event-handling model uses predefined
+interfaces, such as the {\tt ActionListener} interface, to handle
+events.  When a separate class is defined to implement an interface, it
+is sometimes called an {\it adapter} class.  Rather than defining
+adapter classes as top-level classes, it is often more convenient to
+define them as local or anonymous classes.   
+
+
+The key feature of the {\tt ConverterFrame} program is the {\tt
+createJButton()} method.  This method is used instead of the {\tt
+JButton()} constructor to create buttons and to create action
+listeners for the buttons. It takes a single {\tt String} parameter
+for the button's label.  It begins by instantiating a new {\tt
+JButton}, a reference to which is passed back as the method's {\tt
+return} value.  After creating an instance button, a local inner class
+named {\tt ButtonListener} is defined.
+
+The local class merely implements the {\tt ActionListener} interface
+by defining the {\tt actionPerformed} method.  Note how {\tt
+actionPerformed()} uses the containing class's {\tt converter}
+variable to acquire access to the {\tt meters\-ToInches()} and {\tt
+kgsToPounds()} methods, which are inner class methods of the {\tt
+Converter} class (Fig.~F--1). A local class can use
+instance variables, such as {\tt converter}, that are defined in its
+containing class.
+
+After defining the local inner class, the {\tt createJButton()} method
+creates an instance of the class ({\tt listener}) and registers it as
+the button's action listener.  When a separate object is created to
+serve as listener in this way, it is called an {\it adapter}. It
+implements a listener interface and thereby serves as adapter between
+the event and the object that generated the event.  Any action events
+that occur on any buttons created with this method will be handled by
+this adapter.   In other words, for any buttons created by the {\tt
+createJButton()} method, a listener object is created and assigned as
+the button's event listener.   By using local classes, the code for
+doing this is much more compact and efficient.
+
+Local classes have some important restrictions.  Although an instance
+of a local class can use fields and methods defined within the class
+itself or inherited from its superclasses, it cannot use local
+variables and parameters defined within its scope unless these are
+declared {\tt final}. The reason for this restriction is that {\tt
+final} variables receive special handling by the Java
+compiler.  Because the compiler knows that the variable's value won't
+change, it can replace uses of the variable with their values at
+compile time.
+
+
+\pagebreak
+\subsection*{Anonymous Inner Classes}
+\noindent An anonymous inner class is just a local class without a name.  Instead
+of using two separate statements to define and instantiate the local
+class, Java provides syntax that let's you do it in one expression.
+The following code illustrates how this is done:
+
+\begin{jjjlistingleft}[36pc]{-10pc}
+\begin{lstlisting}
+private JButton createJButton(String s) { // A method to create a JButton
+  JButton jbutton = new JButton(s);
+
+  jbutton.addActionListener( new  ActionListener() {     // Anonymous class
+    public void actionPerformed(ActionEvent e) {
+      double inValue = Double.valueOf(inField.getText()).doubleValue();
+      JButton button = (JButton) e.getSource();
+      if (button.getLabel().equals("Meters To Inches"))
+        outField.setText("" + converter.new Distance().metersToInches(inValue));
+      else
+        outField.setText("" + converter.new Weight().kgsToPounds(inValue));
+      } // actionPerformed()
+  }); // ActionListener
+  return jbutton;
+} // createJButton()
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent Note that the body of the class definition is put right after
+the {\tt new} operator.  The result is that we still create an instance
+of the adapter object, but we define it on the fly.  If the name
+following {\tt new} is a class name, Java will define the anonymous
+class as a subclass of the named class.  If the name following {\tt
+new} is an interface, the anonymous class will implement the
+interface.  In this example, the anonymous class is an implementation
+of the {\tt ActionListener} interface.
+
+Local and anonymous classes provide an elegant and convenient way to
+implement adapter classes that are intended to be used once and have
+relatively short and simple implementations.  The choice of local
+versus anonymous should largely depend on whether you need more than
+one instance of the class.  If so, or if it's important that the class
+have a name for some other reason (readability), then you should use a
+local class.  Otherwise, use an anonymous class.  As in all design
+decisions of this nature, you should use whichever approach or style
+makes your code more readable and more understandable.
+%

@@ -1,0 +1,3940 @@
+%%%  Chapter 5: Java Data and Operators
+%%%  3rd Edition
+
+\setcounter{chapter}{4}
+\setcounter{SSTUDYcount}{1}
+\chapter{Java Data and Operators}
+\label{chapter-models}
+\label{pg-chapter-models}
+
+\CObegin
+\secCOBH{Objectives}
+
+\noindent After studying this chapter, you will
+\begin{COBL}
+\item  Understand the role that data play in effective program design.
+\item  Be able to use all of Java's primitive types and their operators.
+\item  Appreciate the importance of information hiding.
+\item  Be able to use class constants and class methods.
+\item  Know how to use Java's {\tt Math} and {\tt NumberFormat} classes.
+\item  Be able to perform various kinds of data conversions.
+\end{COBL}
+
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item Boolean Data and Operators
+\item[] {{\color{cyan}Special Topic:} Are We Computers?}
+\item Numeric Data and Operators
+\item From the Java Library: {\tt java.lang.Math}
+\item Numeric Processing Examples
+%%%%\item Object-Oriented Design: Information Hiding
+\item From the Java Library: {\tt java.text.NumberFormat}
+\item Character Data and Operators
+\item Example: Character Conversions
+\item Problem Solving  = Representation  + Action
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+\noindent This chapter has two primary goals.  One is to elaborate on Java's
+{\it primitive data types}, which were first introduced in Chapter~1.
+We will cover boolean, integer, character, and real number data types,
+including the various operations that you can perform on these types.
+We will provide examples, including several modifications of the {\tt
+OneRowNim} class, to show typical uses of the various data types.
+
+Our second goal is to illustrate the idea that programming is a matter
+of choosing an appropriate way to represent a problem as well as
+choosing an appropriate sequence of actions to solve the problem.
+Programming is a form of problem solving that can be viewed as a
+two-part process: {\it representation} and {\it action}.
+
+{\bf Representation} means finding a way to look at the problem.  This
+might involve seeing the problem as closely related to a known problem
+or seeing that parts of the problem can be broken up into smaller
+problems that you already know how to solve.  In terms of programming
+problems, representation often means choosing the right kinds of
+objects and structures.
+
+{\bf Action} is the process of taking well-defined steps to solve a
+problem.  Given a particular way of representing the problem, what
+steps must we take to arrive at its solution?
+
+Choosing an appropriate representation is often the key to solving a
+problem.  For example, consider this problem: Can a chess board, with
+its top-left and bottom-right squares removed, be completely tiled by
+dominoes that cover two squares at a time?
+
+One way to solve this problem might be to represent the chess board and
+dominoes as shown in Figure~\ref{fig-chessboard}. If we represent the
+board in this way, then the actions needed to arrive at a solution
+involve searching for a tiling that completely covers the board.  In
+other words, we can try one way of placing the dominoes on the board.
+If that doesn't work, we try another way.  And so on.  This process
+will be very time consuming, because there are millions of different
+ways of trying to tile the board.
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{chptr05/5f1.eps}{Can the chess board be tiled with dominoes?
+\label{fig-chessboard}\label{pg-fig-chessboard}}
+\end{figure}
+%\end{figure}
+
+An alternative way to represent this problem comes from seeing that
+the top-left and bottom-right squares of the board are both white.  If
+you remove them, you'll have a board with 62 squares, 32 black and 30
+white.  Because each domino must cover one white and one black square,
+it is impossible to tile a board with an unequal number of black and
+white squares.
+
+Thus, by representing the problem as the total number of black and
+white squares, the actions required to solve it involve a very simple
+reasoning process.  This representation makes it almost trivial to find
+the solution.  On the other hand, the {\it brute force} representation
+presented first---trying all possible combinations---made it almost
+impossible to solve the problem.
+
+
+\section{Boolean Data and Operators}
+\noindent As we learned in Chapter~1, the {\tt boolean} type is one 
+of Java's primitive types.  For this type, there are only
+two possible values, {\tt true} and {\tt false}.  The {\tt boolean}
+type is derived from the work of British mathematician George Boole\index{Boole, George}, 
+\marginnote{George Boole}
+who in the 1850s, developed an algebra to process
+logical expressions such as {\it p and q}. Such {\it boolean
+expressions} produce a value that is either {\it true} or {\it false}.
+Every modern programming language provides some means of representing
+boolean expressions.
+
+The {\tt boolean} type has several important uses.  As we 
+saw in Chapter~1, expressions of the form {\tt num == 7} and
+{\tt 5 < 7}  have {\tt boolean} values.  Similarly, as we saw in Chapter~3,
+\marginnote{Conditional statement}
+the {\tt boolean} type is also used to represent the condition in the
+if statement:
+
+%\begin{showoff}
+$$
+\matrix{
+\hbox{\tt if}
+& ( \hbox{\it boolean expression} )\hfill\cr
+& \hbox{\it statement} ;\hfill\cr
+}
+$$
+%\end{showoff}
+
+\noindent For this reason, boolean expressions are also
+called {\it conditions}.  Along these same lines, a {\tt boolean}
+variable can be used as a {\it flag} or a {\it signal} to ``remember''
+\marginnote{Boolean flag}
+whether or not a certain condition holds.  For example, in the
+following code fragment, we use {\tt isDone} to mark when a particular
+process is completed:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+boolean isDone = false; // Initialize the flag
+...                     // Do some processing task
+isDone = true;          // Set flag when the task done
+...                     // Do some other stuff
+if (isDone)             // Check if finished the task
+...                     //  If so, do something
+else
+...                     //  Or, do something else
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Boolean (or Logical) Operations}
+\noindent Like all the other simple data types, the {\tt boolean} type consists
+%\begin{marginalnote}\it Data and operations\end{marginalnote}
+\marginnote{Data and operations}
+of certain data---the values {\tt true} and {\tt false}---and certain
+actions or operations that can be performed on those data.  For the
+boolean type there are four basic operations: AND (signified by \&\&),
+OR (signified by $\mid\mid$), EXCLUSIVE-OR (signified by $\wedge$),
+and NOT (signified by !).  These are defined in the {\em truth table}
+shown in Table~5.1. A truth tables defines boolean operators by giving
+their values in all possible situations. The first two columns of the
+table give possible boolean values for two {\it operands}, {\tt o1}
+and {\tt o2}. An {\bf operand} is a value used in an operation. Note
+that each row gives a different value assignment to the two operands,
+so that all possible assignments are represented. The remaining
+columns give the values that result for the various operators given
+the assignment of values to {\tt o1} and {\tt o2}.
+
+\begin{table}[htb]
+%\hphantom{\caption{Definitions of the boolean operators:  AND (\&\&),
+%OR ($\mid\mid$), EXCLUSIVE-OR ($\wedge$), and  NOT (!)}}
+\TBT{3.0pc}{Truth-table definitions of the boolean operators: \hfill\break
+\hspace*{3.0pc}AND (\&\&), OR ($\mid\mid$), EXCLUSIVE-OR ($\wedge$), and  NOT (!)}
+\hspace*{2.5pc}\begin{tabular}{llllll} 
+\multicolumn{6}{l}{\color{cyan}\rule{21pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{o1}&\TBCH{o2}&\TBCH{o1 \&\& o2}&\TBCH{o1 $\mid\mid$ o2}&
+%%%RAM\TBCH{o1 $\wedge$ o2}&\TBCH{!o1}
+{o1}&{o2}&{o1 \&\& o2}&{o1 $\mid\mid$ o2}&{o1 $\wedge$ o2}&{!o1}
+\\[-4pt]\multicolumn{6}{l}{\color{cyan}\rule{21pc}{0.5pt}}\\[2pt]
+{\tt true}&{\tt true}&{\tt true}&{\tt true}&{\tt false}&{\tt false}\cr
+{\tt true}&{\tt false}&{\tt false}&{\tt true}&{\tt true}&{\tt false}\cr
+{\tt false}&{\tt true}&{\tt false}&{\tt true}&{\tt true}&{\tt true}\cr
+{\tt false}&{\tt false}&{\tt false}&{\tt false}&{\tt false}&{\tt true}
+\\[-4pt]\multicolumn{6}{l}{\color{cyan}\rule{21pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+To see how to read this table, let's look at the AND operation, which
+is defined in column 3. The AND operator is a {\bf binary
+operator}---that is, it requires two operands,
+%\begin{marginalnote}\it Binary operator\end{marginalnote}
+\marginnote{Binary operator}
+{\it o1} and {\it o2}. If both {\it o1} and {\it o2} are true, then
+({\it o1} \&\& {\it o2}) is true  (row1).  If either {\it o1} or {\it o2} or
+both {\it o1} and {\it o2} are false, then the expression ({\it o1}
+\&\& {\it o2}) is false  (rows 2 and 3).  The only case in which ({\it o1} \&\& {\it
+o2}) is true is when both {\it o1} and {\it o2} are true (row 4).
+
+The boolean OR operation (column 4 of Table~5.1) is also a binary
+operation.  If both {\it o1} and {\it o2} are false, then $ (o1
+\mid\mid o2)$ is false (row 4).  If either {\it o1} or {\it o2} or
+both {\it o1} and {\it o2} are true, then the expression $(o1 \mid\mid
+o2)$ is true (rows 1-3).  Thus, the only case in which $(o1 \mid\mid
+o2)$ is false is when both {\it o1} and {\it o2} are false.
+
+The boolean EXCLUSIVE-OR operation (column 5 of Table~5.1) is a binary
+operation, which differs from the OR operator in that it is true when
+either {\it o1} or {\it o2} is true (rows 2 and 3), but it is false
+when both {\it o1} and {\it o2} are true (row 1).
+
+The NOT operation (the last column of Table~5.1) is a
+%\begin{marginalnote}\it Unary operator\end{marginalnote}
+\marginnote{Unary operator}
+{\bf unary operator}---it takes only one operand---and it simply
+reverses the truth value of its operand.  Thus, if {\it o1} is true,
+!{\it o1} is false, and vice versa.
+
+
+%% \secEXRHone{Self-Study Exercises}
+%% \noindent Click on the links below to test your understanding of the
+%% boolean operators:
+
+%% \begin{itemize}
+%% \item http://localhost:8900/jjj/boolean-ops.html
+%% \end{itemize}
+
+
+
+\subsection{Precedence and Associativity}
+\noindent In order to evaluate complex boolean expressions, it is necessary 
+to understand the order in which boolean operations are carried out by
+the computer.  For example, what is the value of the following
+expression?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+true || true && false
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The value of this expression depends on whether we evaluate
+the $\mid\mid$ first or the \&\& first.  If we evaluate the $\mid\mid$
+first, the expression's value will be false; if we evaluate the \&\&
+first, the expression's value will be true.  In the following example,
+we use parentheses to force one operation to be done before the
+other:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+EXPRESSION                EVALUATION
+----------                ----------
+( true || true ) && false ==> true && false ==> false
+true || ( true && false ) ==> true || false ==> true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As these evaluations show, we can use parentheses to
+force one operator or the other to be evaluated first.  However, in
+\marginnote{Parentheses supersede}
+Java, the \&\& \mbox{operator} has higher precedence\index{precedence}
+than the $\mid\mid$ operator.  Therefore, the second alternative
+corresponds to the default interpretation that Java would apply to the
+expression that has no parentheses.  In other words, given the
+expression $true \; \mid\mid \; true \; \&\& \; false$, the AND
+operation would be evaluated before the OR operation even though the
+OR operator occurs first (i.e., to the left) in the unparenthesized
+expression.
+
+\begin{table}[htb]
+%\hphantom{\caption{Precedence order of the boolean operators}}
+\TBT{4pc}{Precedence order of the boolean operators}
+\hspace*{3.5pc}\begin{tabular}{cll} 
+\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Precedence Order}\hspace*{12pt}&\TBCH{Operator}\hspace*{12pt}&\TBCH{Operation}
+{Precedence Order}\hspace*{12pt}&{Operator}\hspace*{12pt}&{Operation}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{0.5pt}}\\[2pt]
+1&{\tt (  )}&Parentheses\\
+2&{\tt !}&NOT\\
+3&{\tt $\wedge$}&EXCLUSIVE-OR\\
+4&{\tt \&\&}&AND\\
+5&{\tt ||}&OR
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+As this example illustrates, the boolean operators have a built-in
+{\bf precedence order} which is used to determine how boolean
+expressions are to be evaluated (Table~5.2).  A simple method for
+evaluating an expression is to parenthesize the expression and then
+evaluate it.  For example, to evaluate the complex expression
+
+\begin{jjjlisting}
+\begin{lstlisting}
+true || !false ^ false && true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent we would first parenthesize it according to the
+precedence rules set out in Table~5.2,
+which gives the following expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+true || (((!false) ^ false) && true)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We can then evaluate this fully parenthesized
+expression, step by step, starting at the innermost
+parentheses:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Step 1. true || ((true ^ false) && true)
+Step 2. true || (true && true)
+Step 3. true || true
+Step 4. true
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP[false]{PROGRAMMING TIP}{Parentheses.}{Parentheses can (and should) 
+be used to clarify any expression that appears ambiguous or to
+override Java's default precedence rules.}
+
+In addition to operator precedence, it is necessary to know about
+an\break operator's {\it associativity} in order to evaluate boolean
+expressions of the form ${\tt (op1 \mid\mid op2
+\mid\mid op3)}$. Should this expression be evaluated as ${\tt ((op1
+\mid\mid op2) \mid\mid op3)}$ or as ${\tt (op1 \mid\mid (op2 \mid\mid
+op3))}$?  The binary boolean operators all associate from left to
+right.  Thus, the  expressions
+
+\begin{jjjlisting}
+\begin{lstlisting}
+true ^ true ^ true   // Same as: (true ^ true) ^ true
+true && true && true // Same as: (true && true) && true
+true || true || true // Same as: (true || true) || true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent would be evaluated as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+EXPRESSION               EVALUATION
+----------------         -----------------
+(true ^ true)  ^ true    ==> false ^ true  ==> true
+(true && true)  && true  ==> true  && true ==> true
+(true || true)  || true  ==> true  || true ==> true
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Short-Circuit Evaluation}
+
+\noindent Another important feature of the boolean operators
+is that they utilize a form of evaluation known as {\em short-circuit
+evaluation}. In {\bf short-circuit evaluation}, a boolean expression is
+evaluated from left to right, and the evaluation is discontinued as
+soon as the expression's value can be determined, regardless of
+whether it contains additional operators and operands. For example,
+in the expression
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  expr1 && expr2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent if {\tt expr1} is false, then the AND expression must be
+false, so {\tt expr2} need not evaluated.  Similarly, in the expression
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ expr1 || expr2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent if {\tt expr1} is true, then the OR expression must be true, so
+{\tt expr2} need not evaluated.
+
+In addition to being a more efficient form of evaluating boolean
+expressions, short-circuit evaluation has some practical uses. For
+example, we can use short-circuit evaluation to guard against null
+pointer exceptions.  Recall from Chapter~2 that a null pointer
+exception results when you try to use an uninstantiated reference
+variable---that is, a reference variable that has not been assigned an
+object. For example, if we declare a {\tt OneRowNim} variable without
+instantiating it and then try to use it, a null pointer exception will
+result:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game;        // Uninstantiated Reference
+if (!game.gameOver())  // Null pointer exception
+    game.takeSticks(num);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this code, a null pointer exception results when we
+use {\tt game} in the method call {\tt game.gameOver()}.  We can use
+short-circuit evaluation to prevent the exception from occurring:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if ((game != null) && (!game.gameOver())
+    game.takeSticks(num);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, because {\tt game != null} is false,
+neither method call involving {\tt game} is made, thus avoiding the
+exception.
+
+%% \secEXRHone{Self-Study Exercise}
+%% %%\begin{SSTUDY}
+%% \begin{SSTUDY}
+%% \item  Suppose the following variable declarations are made:
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% boolean A = true, B = true, C = true;
+%% boolean X = false, Y = false, Z = false;
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \noindent Given these declarations, evaluate each of the following
+%% expressions  (don't forget to take operator precedence and
+%% associativity into account):
+
+%% \begin{EXRLL}
+%% %%%\begin{jjjlisting}
+%% %%%\begin{lstlisting}
+%% \begin{multicols}{2}
+%% \item  \verb!A || B && Z!           
+%% \item  \verb!A ^ X && Z!            
+%% \item  \verb!A ^ X || C!            
+%% \item  \verb|!A && !B|             
+%% \item  \verb!A && B && X && Y!     
+%% \item  \verb|(!X ^ A) && (B ^ !Y)| 
+%% \end{multicols}
+%% %%%\end{lstlisting}\
+%% %%%\end{jjjlisting}
+%% \end{EXRLL}
+%% \end{SSTUDY}
+
+\section*{{\color{cyan}Special Topic:} Are We Computers?}
+
+{George Boole} published his seminal work, {\it An Investigation of the
+Laws of Thought}, in 1854. His achievement was in developing an
+algebra for logic---that is, a purely abstract and symbolic system
+for representing the laws of logic.  Boole's was not the first attempt
+to explore the relationship between the human mind and an abstract
+system of computation.  Back in 1655, Thomas Hobbes had already
+claimed that all thought was computation.\\
+\hspace*{1pc}It is estimated that the human brain contains ($10^{12}$ $=$
+$10{,}000{,}000{,}000{,}000$) {\it neurons}, and each neuron contains something
+like 10,000 {\it dendrites}, the fibers that connect one neuron to
+another.  Together, the neurons and dendrites make up a web of enormous
+complexity.  Since the 1840s it has been known that the brain is
+primarily electrical, and by the 1940s scientists had developed a
+pretty good model of the electrical interactions among
+neurons.  According to this model, neurons emit short bursts of
+electricity along their {\it axons}, which function like output
+wires.  The bursts leap over the gap separating axons and dendrites,
+which function like the neurons' input wires.\\
+\hspace*{1pc}In 1943, just before the first digital computers were developed,
+Warren McCulloch, a neurophysiologist, and Walter Pitts, a
+mathematician, published a paper titled, ``A Logical Calculus of the
+Ideas Imminent in Nervous Activity.'' In this paper, they showed that
+all of the boolean operators---AND, OR, NOT, and EXCLUSIVE-OR---could be represented 
+by the behavior of small sets of neurons.   For
+example, they showed that three neurons could be connected together in
+such a way that the third neuron fired if and only if both of the
+other two neurons fired.   This is exactly analogous to the definition
+of the boolean AND operator.\\
+\hspace*{1pc}A few years later, when the first computers were built, many
+scientists and philosophers were struck by the similarity between the
+logic elements that made up the computer's circuits and
+the neuronal models that McCulloch and Pitts had developed.\\
+\hspace*{1pc}The area of neural networks is a branch of artificial intelligence (one
+of the applied areas of computer science) and is based on this insight
+by McCulloch and Pitts.  Researchers in this exciting and rapidly
+advancing field develop neural network models of various kinds of
+human thinking and perception.
+%% Footnote: McCulloch, W.S. and Pitts, W. (1943) ``A logical calculus
+%% of the ideas immanent in nervous activity,'' Bulletin of Mathematical
+%% Biophysics, 5: 115-133.
+
+%\end{BOXfive}%
+
+\subsection{Using Booleans in OneRowNim}
+
+\noindent Now that we have introduced the {\tt boolean}
+data type, let's use it to improve the {\tt OneRowNim} class, the
+latest version of which, from Chapter~3, is given in
+Figure~\ref{fig-ornclass}.  Previously we used an {\tt int} variable,
+{\tt player}, to represent who's turn it is.  For a two-person game,
+such as One Row Nim, a {\tt boolean} variable is well suited for this
+purpose, because it can toggle between true and false. For example,
+let's declare a variable, {\tt onePlaysNext}, and initialize it to
+true, to represent the fact that player one will play first:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private boolean onePlaysNext = true;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When {\tt onePlaysNext} is true, it will be player one's
+turn. When it is false, it will be player two's turn. Note that we are
+deliberately remaining uncommitted as to whether one or the other
+player is the computer.  
+
+Given this new variable, it is necessary to redefine the methods that
+had previously used the {\tt player} variable. The first method that
+needs revision is the constructor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public OneRowNim(int sticks, int starter)
+{   nSticks = sticks;
+    onePlaysNext = (starter == 1);
+}  // OneRowNim() constructor3
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the constructor, the {\tt starter} parameter is used 
+with a value of 1 or 2 to set which player goes first. Note how we use
+an assignment statement to set {\tt onePlaysNext} to true if {\tt
+starter} equals 1; otherwise it is set to false.  The assignment
+statement first evaluates the expression on its right hand side ({\tt
+starter == 1}). Because this is a boolean expression, it will have a
+value of true or false, which will be assigned to {\tt
+onePlaysNext}. Thus, the assignment statement is equivalent to the
+following if/else statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (player == 1)
+   onePlaysNext = true;
+else
+   onePlaysNext = false;
+,\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The remaining changes are shown in Figure~\ref{fig-newonerow}.
+There are only two instance methods that need revision to accommodate
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNim
+{    private int nSticks = 7;
+     private boolean onePlaysNext = true;
+
+     public OneRowNim()
+     {
+     } //OneRowNim() constructor1
+     public OneRowNim(int sticks)
+     {   nSticks = sticks;
+     }  // OneRowNim() constructor2
+     public OneRowNim(int sticks, int starter)
+     {   nSticks = sticks;
+         onePlaysNext = (starter == 1);
+     }  // OneRowNim() constructor3
+     public boolean takeSticks(int num)
+     {   if (num < 1 || num > 3 || num > nSticks) 
+             return false;                // Error
+         else                             // Valid move
+         {   nSticks = nSticks - num;
+             onePlaysNext = !onePlaysNext;
+             return true;
+         } //else
+     } // takeSticks()
+     public int getSticks()
+     {   return nSticks;
+     } {\color{cyan} // getSticks()}
+     public int getPlayer()
+     {   if (onePlaysNext) return 1;
+         else return 2;
+     } // getPlayer()
+     public boolean gameOver()
+     {   return (nSticks <= 0);
+     } // gameOver()
+     public int getWinner()
+     {   if (nSticks < 1) return getPlayer();
+         else return 0;  // game is not over
+     } // getWinner()
+     public void report()
+     {   System.out.println("Number of sticks left: " 
+                             + getSticks());
+         System.out.println("Next turn by player " 
+                             + getPlayer());
+     }   // report()
+} // OneRowNim class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The revised {\tt One\-Row\-Nim} uses a {\tt boolean}
+variable to keep track of who's turn it is.
+\label{fig-newonerow}
+\label{pg-fig-newonerow}}
+\end{figure}
+the use of {\tt boolean} variables. The {\tt takeSticks()} method
+contains two revisions. The first uses the boolean OR operator to test
+whether a move is valid:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean takeSticks(int num)
+{   if (num < 1 || num > 3 || num > nSticks) 
+        return false;                // Error
+    else                             // Valid move
+    {   nSticks = nSticks - num;
+        onePlaysNext = !onePlaysNext;
+        return true;
+    } //else
+} // takeSticks()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It also uses the boolean NOT operator to toggle 
+the value of {\tt onePlaysNext}, to switch to the other player's turn:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+onePlaysNext = !onePlaysNext;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Finally, the {\tt getPlayer()} method now uses a
+if/else statement to return either 1 or 2 depending on who's
+turn it is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getPlayer()
+{   if (onePlaysNext) 
+        return 1;
+    else return 2;
+} // getPlayer()
+\end{lstlisting}
+\end{jjjlisting}
+
+
+
+
+\section{Numeric Data and Operators}
+\noindent Java has two kinds of numeric data: integers, which have no fractional
+part, and real numbers or {\em floating-point numbers}, which contain
+a fractional component.  Java recognizes four different kinds of
+integers: {\tt byte}, {\tt short}, {\tt int}, and {\tt long}, which
+are distinguished by the number of {\it bits} used to represent
+them. A {\bf binary digit}, or {\bf bit}, is a 0 or a 1. (Recall that
+computers read instructions as series of 0s and 1s.) Java has two
+different kinds of real numbers, {\tt float} and {\tt double}, which
+are also distinguished by the number of bits used to represent them.
+See Table~5.3.
+
+\begin{table}[h!]
+%\hphantom{\caption{Java's numeric types}}
+\TBT{0pc}{Java's numeric types}
+\hspace*{-6pt}\begin{tabular}{lcc}
+\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{{\bf  Type}&{\bf Bits}&{\bf Range of Values}} 
+{\bf  Type}&{\bf Bits}&{\bf Range of Values}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+{\it byte}&~8&$-128  \hbox{ to }  +127$\cr
+{\it short}&16&$-32768  \hbox{ to }   32767$\cr
+{\it int}&32&$-2147483648   \hbox{ to }   2147483647$\cr
+{\it long}&64&$-2^{63}  \hbox{ to }  2^{63}-1$
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+{\it float}&32&$-3.40292347E+38 \hbox{ to } +3.40292347E+38$\cr
+{\it double}&64&$-1.79769313486231570E+308  \hbox{ to } +1.79769313486231570E+308$
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+The more bits a data type has, the more values it can represent.  One
+bit can represent two possible values, 1 and 0, which can be used to
+stand for true and false, respectively.  Two bits can represent four
+possible values: 00, 01, 10, and 11; three bits can represent eight
+possible values: 000, 001, 010, 100, 101, 110, 011, 111.  And, in
+general, an {\it n}-bit quantity can represent $2^n$ different values.
+
+As illustrated in Table~5.3, the various integer types represent positive or
+negative whole numbers.  Perhaps the most commonly used integer type
+in Java is the {\tt int} type, which is represented in 32 bits.  This
+means that Java can represent $2^{32}$ different {\tt int} values,
+which range from $-2{,}147{,}483{,}648$ to
+$2{,}147{,}483{,}647$, that is, from $-2^{31}$ to $(2^{31} -1)$.
+Similarly, an 8-bit integer, a {\tt byte}, can represent $2^8$ or 256
+\marginnote{Integer data types}
+different values, ranging from $-128$ to $+127$.  A 16-bit integer, a
+{\tt short}, can represent $2^{16}$ different values, which range from
+$-32768$ to $32767$. And a 64-bit integer, a {\tt long}, can represent
+whole number values ranging from $-2^{63}$ to $2^{63}-1$.
+
+For floating-point numbers, a 32-bit {\tt float} type can represent
+$2^{32}$ different real numbers and a 64-bit {\tt double} value can
+represent $2^{64}$ different real numbers.
+
+\JavaTIP{EFFECTIVE DESIGN}{Platform Independence.}{In Java, a data type's
+size (number of bits) is part of its definition and, therefore, remains
+consistent across all platforms.   In C and C++, the size of a data type
+is dependent on the compiler.}
+
+It is worth noting that just as model airplanes are representations of
+real airplanes, Java's numeric types are representations or
+\marginnote{Data types are abstractions}
+models of the numbers we deal with in mathematics.  In designing
+Java's data types, various trade-offs have been made in order to come
+up with practical implementations.
+
+One trade-off is that the set of integers is infinite, but Java's
+{\tt int} type can only represent a finite number of values.   Similarly,
+%\begin{marginalnote}\it Representation trade-offs\end{marginalnote}
+\marginnote{Representation trade-offs}
+Java cannot \mbox{represent} the infinite number of values that occur
+between, say, 1.111 and 1.112. So, certain real numbers cannot be
+represented at all.  For example, because Java uses binary numbers to
+represent its numeric types, one number that cannot be represented
+exactly is $\frac{1}{10}$. This inability to exactly represent a value
+is known as {\bf round-off error}.  Being unable to represent certain
+values can cause problems in a program. For example, it might be
+\marginnote{Round-off error}
+difficult to represent dollars and cents accurately in a program.
+
+Another source of problems in dealing with numeric data is due to
+limits in their precision. For example, a decimal number represented
+as a \mbox{\tt double} value can have a maximum of 17 {\it significant
+digits}, and a {\tt float} can have a maximum 8. A significant digit
+is one that contributes to the number's value.  If you tried to store
+values such as 12345.6789 or 0.123456789 in a {\tt float} variable,
+they would be rounded off to 12345.679 and 0.12345679, respectively,
+causing a possible error.
+
+\JavaTIP{DEBUGGING TIP}{Significant Digits.}{In using numeric data, 
+be sure the data type you choose has enough precision to represent the
+values your program needs.}
+
+\secEXRHone{Self-Study Exercises}
+%% \begin{SSTUDY}
+%% \item  List all of the binary values 
+%% that can be represented in 4 bits---that is, all values in the range
+%% 0000 to 1111.
+
+%% \item  If a 6-bit representation were used for an integer type, how
+%% many different integers could be represented?
+
+%% \item  If you were writing a program to process scientific data that
+%% had to be accurate to at least 12 significant (decimal) digits,
+%% what type of data would you use?
+
+%% \end{SSTUDY}
+
+\subsection{Numeric Operations}
+\noindent The operations that can be done on numeric data include the standard
+%\begin{marginalnote}\it Numeric operators\end{marginalnote}
+algebraic operations: {\it addition} (+), {\it subtraction} ($-$), {\it
+multiplication} (*), {\it division} (/), as well as the {\it modulus}
+(\%) operator.  Note that in Java, the multiplication symbol is {\tt *}
+and not the $\times$.  The arithmetic operators are binary operators,
+\marginnote{Numeric operators}
+meaning that they each take two operands.  Table~5.4
+\begin{table}[htb]
+%\hphantom{\caption{The standard arithmetic operators in Java}}
+\TBT{2pc}{The standard arithmetic operators\index{arithmetic operators} in Java}
+\hspace*{1.5pc}\begin{tabular}{lcll}
+\multicolumn{4}{l}{\color{cyan}\rule{23pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{{\bf Operation} &  {\bf Operator} & {\bf Java} & {\bf Algebra}}
+{\bf Operation} &  {\bf Operator} & {\bf Java} & {\bf Algebra}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{23pc}{0.5pt}}\\[2pt]
+{\it Addition}&$+$&$x  +  2$&$     x  +  2$\cr
+{\it Subtraction}&$-$&$m  -  2$&$     m  -  2$\cr
+{\it Multiplication}&*&$m$   *   $2$&$     2m  \hbox{ \it or }  2 \times m$\cr
+{\it Division}&/&$x  /  y$&$     x  \div  y  \hbox{ \it or }  \frac{x}{y}$\cr
+{\it Modulus}&\%&$x  \%  y$&$   x  \hbox{ \it modulo }  y \hbox{ \it (for  integers  $x$ and $y$)}$
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{23pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+compares expressions involving the Java operators with their standard
+algebraic counterparts.
+
+Although these operations should seem familiar, there are some important
+differences between their use in algebra and their use in a Java
+program.   Consider the following list of expressions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+3 / 2     ==>  value 1     An integer result
+3.0 / 2.0 ==>  value 1.5   A floating-point result
+3 / 2.0   ==>  value 1.5   A floating-point result
+3.0 / 2   ==>  value 1.5   A floating-point result
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In each of these cases we are dividing the quantity 3 by
+the quantity~2. However, different results are obtained depending on
+the {\it type} of the operands involved.  When both operands are
+integers, as in (3/2), the result must also be an
+integer\index{integer division}. Hence, (3/2) has the value 1, an
+integer.   Because integers cannot have a fractional part, the 0.5 is
+simply discarded.   Integer division (/) always gives an integer
+%\begin{marginalnote}\it Integer division gives integer result\end{marginalnote}
+\marginnote{Integer division gives an integer\hfill\break result}
+result.  Thus, the value of (6/2) is 3 and the value of (7/2) is also
+3. Because 3.5 is not an integer, the result of dividing 7 by 2 cannot
+be 3.5.  
+
+\JavaTIP{DEBUGGING TIP}{Integer Division.}{A common source of error among
+beginning programmers is forgetting that integer division always gives
+an integer result.}
+
+\noindent On the other hand, when either operand is a real number, as in the
+last three cases, the result is a real number.  Thus, while the same
+symbol (/) is used for dividing integers and real numbers, there are
+really two different operations involved here: {\it integer division}
+and {\it floating-point division\index{floating-point
+division}}. Using the same symbol (/) for different operations
+(integer division and real division) is known as {\bf operator
+overloading}. It is similar to method overloading, which was discussed
+in Chapter~3.
+
+What if you want to keep the remainder of an integer division?  Java
+%\begin{marginalnote}\it Modular arithmetic\end{marginalnote}
+\marginnote{Modular arithmetic}
+provides the modulus operator (\%), which takes two 
+operands.  The expression (7 \% 5) gives the remainder after dividing 7
+by 5---2 in this case.   In general, the expression $(m \; \% \; n)$ (read {\it m}
+mod {\it n}) gives the remainder after {\it m} is divided by {\it n}. Here are
+several examples:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+7 % 5   ==> 7 mod 5 equals 2
+5 % 7   ==> 5 mod 7 equals 5
+-7 % 5  ==> -7 mod 5 equals -2
+7 % -5  ==> 7 mod -5 equals 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The best way to interpret these examples is to perform
+long division on the operands keeping both the quotient and the
+remainder.  For example, when you do long division on $-7 \div 5$, you
+get a quotient of -1 and a remainder of -2. The quotient is the value
+of $-7/5$ and the remainder is the value of $-7 \% 5$.  When you
+do long division on $7 \div -5$, you get a quotient of -1 and a
+remainder of 2. The quotient is the value of $7/-5$ and the
+remainder is the value of $7\%-5$.  
+
+We will encounter many practical uses for the modulus operator in our
+programs. For a simple example, we use it when we want to determine
+whether an integer is even or odd. Numbers that leave a 0 remainder
+when divided by 2 are even:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (N % 2 == 0)
+    System.out.println(N + " is even");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent More generally, we could use the mod operator to define
+divisibility by 3, 4, 10, or by any number.
+
+\subsubsection*{Numeric Promotion Rules}
+
+\noindent Java is considered a {\it strongly typed} language because all expressions 
+in Java, such as
+%\begin{marginalnote}\it Expressions have a type\end{marginalnote}
+\marginnote{Expressions have a type}
+(3/2), have a type associated with them.  In cases where one
+arithmetic operand is an integer and one is a floating-point number,
+Java {\it promotes} the integer into a floating-point value and
+performs a floating-point operation.
+
+{\bf Promotion} is a matter of converting one type to another type.
+For example, in the expression (5 + 4.0), the value 5 must be promoted
+to 5.0 before floating-point addition can be performed on (5.0 + 4.0).
+Generally speaking, automatic promotions such as these are allowed in
+Java whenever it is possible to perform the promotion {\it without
+loss of information}.  Because an integer (5) does not have a
+fractional component, no information will be lost in promoting it to a
+real number (5.0).  On the other hand, you cannot automatically
+convert a real number (5.4) to an integer (5) because that might lead
+to loss of information.  This leads to the following rule:
+
+\JavaRule{Integer Promotion.}{In an operation that contains an 
+integer and a floating-point operand, the integer is {\it promoted} to
+a floating-point value {\it before} the operation is performed.}
+
+\noindent This rule is actually an instance of a more general rule, for whenever
+an expression involves operands of different types, some operands must
+be converted before the expression can be evaluated.  Consider the
+following example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+byte n = 125;
+short m = 32000;
+n * m;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, {\it (n * m)} involves two
+different integer types, {\tt byte} and {\tt short}. Before evaluating
+this expression Java must first promote the {\tt byte} to a
+{\tt short} and carry out the operation as the multiplication of two
+{\tt short}s.  Conversion of {\tt short} to {\tt byte} would not be possible
+because there's no way to represent the value 32000 as a {\tt byte}.
+
+It is important to note that this conversion rule applies regardless
+of the actual values of the operands.   In applying the rule, Java looks
+at the operand's type, not its value.  So even if {\it m} were assigned a
+value that could be represented as a byte (for example, 100), the
+%\begin{marginalnote}\it Promotion is automatic\end{marginalnote}
+\marginnote{Promotion is automatic}
+promotion would still go from smaller to larger type.  This leads to following
+the general rule:
+
+
+\JavaRule{Type Promotion\index{promotion rule}.}{In
+general, when two different types are involved in an operation, the
+smaller type---the one with fewer bits---is converted to the larger
+type before the operation is performed.  To do otherwise would risk
+losing information.}
+
+\noindent Table~5.5 summarizes the actual promotion rules used by
+Java in evaluating expressions involving mixed operands.  Note that the
+last rule implies that integer expressions involving {\tt byte} or
+{\tt short} or {\tt int} are performed as {\tt int}. This explains why
+integer literals---such as $56$ or $-108$---are represented as
+{\tt int} types in Java.
+\begin{table}[h]
+%\hphantom{\caption{Java promotion rules for mixed arithmetic operators. If two
+%rules apply, choose the one that occurs first in this table.}}
+\TBT{2.5pc}{Java promotion rules for mixed arithmetic operators.\hfill\break
+\hspace*{2.5pc}If two rules apply, choose the one that occurs first in this table.}
+\hspace*{2pc}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{22pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{If either operand is}&&\TBCH{The other is promoted to}
+{If either operand is}&&{The other is promoted to}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{22pc}{0.5pt}}\\[2pt]
+{\tt double}&&{\tt double}\cr
+{\tt float}&\hspace*{36pt}&{\tt float}\cr
+{\tt long}&&{\tt long}\cr
+{\tt byte} {\it or\/} {\tt short}&&{\tt int}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{22pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+%% \secEXRHone{Self-Study Exercises}
+%% \begin{SSTUDY}
+%% \item  Evaluate each of the following integer expressions:
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!8 / 2!  
+%% \item  \verb!9 / 2!  
+%% \item  \verb!6 / 8!  
+%% \item  \verb!9 % 2!  
+%% \item  \verb!8 % 6!  
+%% \item  \verb!6 % 8!  
+%% \item  \verb!8 % 4!  
+%% \item  \verb!4 % 8!  
+%% \end{multicols}
+%% \end{EXRLL}
+
+
+%% \item  Evaluate each of the following expressions, paying special
+%% attention to the {\it type} of the result in each case:
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!8 / 2.0!  
+%% \item  \verb!9 / 2.0!  
+%% \item  \verb!6 / 8!  
+%% \item  \verb!0.0 / 2!  
+%% \item  \verb!8.0 / 6.0! 
+%% \end{multicols}
+%% \end{EXRLL}
+
+
+%% \item  Suppose that the following variable declarations are made:
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% byte m = 3; short n = 4; int p = 5; 
+%% long q = 6; double r = 7.0;
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \noindent Use type promotion rules to determine
+%% the type of  expression and then evaluate each of the following
+%% expressions:
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!m + n!      
+%% \item  \verb!p * q!      
+%% \item  \verb!m + n + r!  
+%% \item  \verb!p * q * m!  
+%% \item  \verb!r - m!      
+%% \end{multicols}
+%% \end{EXRLL}
+%% \end{SSTUDY}
+
+
+\subsection{Operator Precedence}
+\noindent The built-in precedence order for arithmetic\index{arithmetic
+%\begin{marginalnote}\it Arithmetic precedence order\end{marginalnote}
+\marginnote{Arithmetic precedence order}
+precedence} operators is shown in Table~5.6.  Parenthesized
+\begin{table}[h!]
+%\hphantom{\caption{Precedence order of the arithmetic operators}}
+%%%\vspace{-6pt}
+\TBT{3.5pc}{Precedence order of the arithmetic operators\index{arithmetic operators}}
+\hspace*{3pc}\begin{tabular}{cll}
+\multicolumn{3}{l}{\color{cyan}\rule{20pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Precedence} &                &                  \cr
+%%%RAM\TBCH{Order}      & \TBCH{Operator} & \TBCH{Operation}  
+{Precedence} &                &                  \cr
+{Order}      & {Operator} & {Operation}  
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{20pc}{0.5pt}}\\[2pt]
+1&$( \; )$&{\it Parentheses}\cr
+2&$\ast \;\; / \;\; \%$&{\it Multiplication, Division, Modulus}\cr
+3&$+ \;\; -$&{\it Addition, Subtraction}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{20pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+expressions have highest precedence\index{precedence} and are
+evaluated first.  Next come the multiplication, division, and modulus
+operators, followed by addition and subtraction.  When we have an
+unparenthesized expression that involves both multiplication and
+addition, the multiplication would be done first, even if it occurs to
+the right of the plus sign.  Operators at the same level in the
+precedence hierarchy are evaluated from left to right.  For example,
+consider the following expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+9 + 6 - 3 * 6 / 2
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent In this case, the first operation to be applied will be the
+multiplication (*), followed by division (/), followed by addition (+),
+and then finally the subtraction ($-$).  We can use parentheses to clarify
+the order of evaluation.  A parenthesized expression is evaluated
+outward from the innermost set of parentheses:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Step 1.  ( (9 + 6) - ((3 * 6) / 2 ) )
+Step 2.  ( (9 + 6) - (18 / 2 ) )
+Step 3.  ( (9 + 6) - 9 )
+Step 4.  ( 15 - 9 )
+Step 5.  6
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent Parentheses can (and should) always be used to clarify
+the order of operations in an expression.  For example, addition will
+be performed before multiplication in the following expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(a + b) * c
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Another reason to use parentheses is that Java's precedence 
+and promotion rules will
+sometimes lead to expressions that look fine but contain subtle 
+errors.  For example, consider the following expressions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(5/3/2.0);   // 0.5
+System.out.println(5/(3/2.0)); // 3.33
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first gives a result of 0.5, but the use of parentheses
+in the second gives a result of 3.33. If the second is the
+expected interpretation, then the parentheses here helped
+avoid a subtle semantic error.
+
+\JavaTIP{PROGRAMMING TIP}{Parenthesize!}{To avoid subtle bugs caused by
+Java's precedence and promotion rules, use parentheses to specify the order of
+evaluation in an expression.}
+
+\secEXRHone{Self-Study Exercise}
+%% \begin{SSTUDY}
+%% \item  Parenthesize and then evaluate each of the  expressions
+%% that follow, taking care to observe operator precedence rules.  Watch for subtle
+%% syntax errors.
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!4 + 5.0 * 6!    
+%% \item  \verb!(4 + 5) * 6!    
+%% \item  \verb!4 + 5 / 6!      
+%% \item  \verb!(4 + 5) / 6!    
+%% \item  \verb!4 + 5 % 3!      
+%% \item  \verb!(4 + 5) % 3!    
+%% \item  \verb!9 % 2 * 7 / 3!  
+%% \item  \verb!5.0 / 2 * 3!    
+%% \end{multicols}
+%% \end{EXRLL}
+
+%% \end{SSTUDY}
+
+
+\subsection{Increment and Decrement Operators}
+\noindent Java provides a number of unary operators that are used to increment
+or decrement an integer variable.   For example, the expression
+{\it k++} uses the {\it increment operator}\index{increment operator ++}
+{\it ++} to increment the value of the integer variable {\it k}.  The
+expression {\it k++} is equivalent to the following Java statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k;
+k = k + 1;// Add 1 to k and assign the result back to k
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The unary {\it ++} operator applies to
+a single integer operand, in this case to the variable {\it k}. It
+increments {\it k}'s value by 1 and assigns the result back to {\it k}. It may
+be used either as a {\it preincrement}\index{preincrement} or a 
+%\begin{marginalnote}\it Preincrement and postincrement\end{marginalnote}
+\marginnote{Preincrement and postincrement}
+{\it postincrement\index{postincrement}} operator.  In the expression
+{\it k++}, the operator {\it follows} the operand, indicating that it is
+being used as a {\it postincrement} operator.  This means that the
+increment operation is done {\it after} the operand's value is used.
+
+Contrast that with the expression {\it ++k} in which the {\it ++}
+operator {\it precedes} its operand.  In this case, it is used as a {\it
+preincrement} operator, which means that the increment operation is
+done {\it before} the operand's value is used.
+
+When used in isolation, there is no practical difference between
+{\it k++} and {\it ++k}.  Both are equivalent to {\it k = k + 1}. However,
+when used in conjunction with other operators, there is a significant
+difference between preincrement and postincrement.  For example, in the
+following code segment,
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int j = 0, k = 0;   // Initially both j and k are 0
+j = ++k;            // Final values of both j and k are 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the variable {\it k} is incremented {\it before}
+%\begin{marginalnote}\it Precedence order\end{marginalnote}
+\marginnote{Precedence order}
+its value is assigned to {\it j}. After execution of the assignment
+statement, {\it j} will equal 1 and {\it k} will equal 1. The 
+sequence is equivalent to
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int j = 0, k = 0;   // Initially both j and k are 0
+k = k + 1;
+j = k;              // Final values of both j and k are 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent However, in the following example,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int i = 0, k = 0; // Initially both i and k are 0
+i = k++;          // Final value of i is 0 and k is 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the variable {\it k} is incremented {\it after}
+its value is assigned to {\it i}. After execution of the assignment
+statement, {\it i} will have the value 0 and {\it k} will have the
+value 1. The preceding sequence is equivalent to
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int i = 0, k = 0;   // Initially both i and k are 0
+i = k;
+k = k + 1;          // Final value of i is 0 and k is 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In addition to the increment operator, Java also supplies the {\it
+%\begin{marginalnote}\it Predecrement and postdecrement\end{marginalnote}
+\marginnote{Predecrement and postdecrement}
+decrement\index{decrement operator --}} operator {\it $--$}, which can
+also be used in the predecrement\index{predecrement} and
+postdecrement\index{postdecrement} forms.   The expression {\it $--$ k}
+will first decrement {\it k}'s value by 1 and then use {\it k} in
+any expression in which it is embedded.  The expression {\it k$--$} will
+use the current value of {\it k} in the expression in which {\it k} is
+contained and then it will decrement {\it k}'s value by
+1. Table~5.7 summarizes the increment and decrement
+operators.  The unary increment and decrement operators have higher
+precedence than any of the binary arithmetic operators.
+
+\begin{table}[htb]
+%\hphantom{\caption{Java's increment and decrement operators}}
+\TBT{4pc}{Java's increment and decrement operators}
+\hspace*{3.5pc}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Expression}\hspace*{18pt}   & \TBCH{Operation}\hspace*{30pt} &  \TBCH{Interpretation} 
+{Expression}\hspace*{18pt}   & {Operation}\hspace*{30pt} &  {Interpretation} 
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{0.5pt}}\\[2pt]
+$j = ++k$&{\it Preincrement}&$k=k+1;j=k;$\cr
+$j = k++$&{\it Postincrement}&$j=k;k=k+1;$\cr
+$j = --k$&{\it Predecrement}&$k=k-1;j=k;$\cr
+$j = k--$&{\it Postdecrement}&$j=k;k=k-1;$
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\JavaRule{Pre- and Postincrement/Decrement.}{If an
+expression like {\it ++k} or {\it $--$k} occurs in an expression, {\it
+k} is incremented or decremented {\it before} its value is used in the
+rest of the expression.   If an expression like {\it k++} or {\it k$--$}
+occurs in an expression, {\it k} is incremented or decremented {\it
+after} its value is used in the rest of the expression.}
+
+\JavaTIP{PROGRAMMING TIP}{Increment and Decrement Operators.}{Because of
+their subtle behavior, be careful in how you use the unary increment
+and decrement operators.  They are most appropriate and useful for
+incrementing and decrementing loop variables, as we'll see later.}
+
+\secEXRHone{Self-Study Exercise}
+%% \begin{SSTUDY}
+%% \item  What value will {\it j} and {\it k} have after each of the
+%%  calculations that follow? Assume that {\it k} has the value 0 and {\it
+%% j} has the value 5 before each operation is performed.
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!k = j;!    
+%% \item  \verb!k = j++;!  
+%% \item  \verb!k = ++j;!  
+%% \item  \verb!k = j--;!  
+%% \item  \verb!k = --j;!   
+%% \end{multicols}
+%% \end{EXRLL}
+
+%% \end{SSTUDY}
+
+\subsection{Assignment Operators}
+\noindent In addition to the simple assignment\index{assignment operator =}
+operator (=), Java supplies a number of shortcut
+assignment operators that allow you to combine an arithmetic operation
+and an assignment in one operation.  These operations can be used with
+either integer or floating-point operands.  For example, the {\tt +=}
+operator allows you to combine addition and assignment into one
+expression.  The statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+k += 3;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent is equivalent to the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+k = k + 3;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+r += 3.5 + 2.0 * 9.3 ;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent is equivalent to
+
+\begin{jjjlisting}
+\begin{lstlisting}
+r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As these examples illustrate, when using the {\tt +=}
+operator, the expression on its right-hand side is first evaluated
+and then {\it added} to the current value of the variable on its left-hand side.
+
+Table~5.8 lists the other assignment operators that
+can be used in combination with the arithmetic operators.   For each of
+these operations, the interpretation is the same: Evaluate the
+\begin{table}[h]
+%\hphantom{\caption{Java's assignment operators}}
+\TBT{0pc}{Java's assignment operators\index{assignment operators}}
+\hspace*{-6pt}\begin{tabular}{llll}
+\multicolumn{4}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Operator}\hspace*{6pt}&\TBCH{Operation}&\TBCH{Example}\hspace*{6pt}&\TBCH{Interpretation}
+{Operator}\hspace*{6pt}&{Operation}&{Example}\hspace*{6pt}&{Interpretation}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+$=$&{\it Simple assignment}&$m = n;$&$m = n;$\cr
+$+\!=$&{\it Addition then assignment}&$m\ +\!=\ 3;$&$m = m + 3;$\cr
+$-\!=$&{\it Subtraction then assignment}&$m\ -\!=\ 3;$&$m = m - 3;$\cr
+$\ast \!=$&{\it Multiplication then assignment}\hspace*{12pt}&$m\ \ast \!=\ 3;$&$m = m\,\ast \,3;$\cr
+$/\!=$&{\it Division then assignment}&$m\ /\!=\ 3;$&$m = m / 3;$\cr
+$\%\!=$&{\it Remainder then assignment}&$m\ \%\!=\ 3;$\hspace*{6pt}&$m = m \% 3;$
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+expression on the right-hand side of the operator and then perform
+the arithmetic operation (such as addition or multiplication) to the
+current value of the variable on the left of the operator.
+
+
+\secEXRHone{Self-Study Exercises}
+%% \begin{SSTUDY}
+%% \item  What value will {\it j} and {\it k} have after each of the 
+%% calculations that follow? Assume that {\it k} has the value 10 and that {\it j}
+%% has the value 5 before each operation is performed.
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!k += j;!          
+%% \item  \verb!k -= j++;!        
+%% \item  \verb!k *= ++j * 2;!    
+%% \item  \verb!k /= 25 * j--;!   
+%% \item  \verb!k %= j - 3;!      
+%% \end{multicols}
+%% \end{EXRLL}
+
+
+%% \item  Write four different statements that add 1 to the {\tt int} {\it k}.
+
+%% \end{SSTUDY}
+
+\subsection{Relational Operators}
+\noindent There are several {\it relational} operations that can be performed on
+integers:  $<$, $>$, $< =$, $> =$, $= =$, and $!\!=$.  These correspond to
+the algebraic operators $<$, $>$, $\leq$, $\geq$, $=$, and
+$\neq$. Each of these operators takes two operands (integer or
+real) and returns a boolean result.  They are defined in
+Table~5.9.
+
+\begin{table}[htb]
+%\hphantom{\caption{Relational operators}}
+\TBT{4pc}{Relational operators\index{relational operators}}
+\hspace*{3.5pc}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Operator}\hspace*{6pt} & \TBCH{Operation}  &  \TBCH{Java Expression}
+{Operator}\hspace*{6pt} & {Operation}  &  {Java Expression}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{0.5pt}}\\[2pt]
+$< $&{\it Less than}&$5 <  10$\cr
+$> $&{\it Greater than}&$10  >  5$\cr
+$< =$&{\it Less than or equal to}&$5 < = 10$\cr
+$> =$&{\it Greater than or equal to}\hspace*{6pt}&$10 > =  5$\cr
+$= =$&{\it Equal  to}&$5 = = 5$\cr
+$!\!=$&{\it Not equal to}&$5\ !\!=\ 4$
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+Note that several of these relational operators require two symbols in
+Java.  Thus, the familiar equals sign (=) is replaced in Java by ==.
+%\begin{marginalnote}\it Equals vs.  assigns\end{marginalnote}
+\marginnote{Equals vs.  assigns}
+This is so  the equality operator can be distinguished from the
+assignment operator.   Also, less than or equal to ($<$=), greater than
+or equal to ($>$=), and not equal to (!=) require two symbols,
+instead of the familiar $\leq$, $\geq$, and $\neq$ from algebra.  In
+each case, the two symbols should be consecutive.  It is an error in
+Java for a space to appear between the $<$ and = in $< =$.
+
+
+\JavaTIP{DEBUGGING TIP}{Equality and Assignment.}{A common semantic error
+among beginning programmers is to use the assignment operator (=) when
+the equality operator (==) is intended.}
+
+Among the relational operators, the inequalities ($<$, $>$, $< =$, and $> =$)
+have higher precedence than the equality operators ($= =$ and $!\!=$). In an
+expression that involves both kinds of operators, the inequalities
+would be evaluated first.   Otherwise, the expression is evaluated from
+left to right.
+
+Taken as a group the relational operators have lower
+precedence\index{precedence} than the arithmetic operators.
+Therefore, in evaluating an expression that involves both arithmetic
+and relational operators, the arithmetic operations are done first.
+Table~5.10 includes all of the numeric operators
+introduced so~far.
+
+\begin{table}[htb]
+%\hphantom{\caption{Numeric operator precedence\index{precedence table} including relations}}
+\TBT{3pc}{Numeric operator precedence including relations}
+\hspace*{2.5pc}\begin{tabular}{cll}
+\multicolumn{3}{l}{\color{cyan}\rule{21pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Precedence} &                &                 \cr
+%%%RAM\TBCH{Order}      & \TBCH{Operator} & \TBCH{Operation}
+{Precedence} &                &                 \cr
+{Order}      & {Operator} & {Operation}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{21pc}{0.5pt}}\\[2pt]
+1 &$  (\,)$&{\it Parentheses}\cr
+2 &$  +\!+\ \ --$&{\it Increment,  decrement}\cr
+3 &$  \ast \ \ /\ \ \%$&{\it Multiplication,  division,  modulus}\cr
+4 &$  +\ \ -$&{\it Addition,  subtraction}\cr
+5 &$  <\,\,\,\,>\ \ < =\ \ > =$&{\it Relational  operators}\cr
+6 &$  = =\ \ !\!=$&{\it Equality  operators}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{21pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+To take an example, let us evaluate the following complex 
+\mbox{expression:}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+9 + 6 <= 25 * 4 + 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To clarify the implicit operator precedence, we
+first parenthesize the 
+\mbox{expression}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+( 9 + 6 ) <= ( (25 * 4 ) + 2 )
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent and then evaluate it step by step:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Step 1. ( 9 + 6 ) <= ( (25 * 4 ) + 2 )
+Step 2. ( 9 + 6 ) <= ( 100 + 2 )
+Step 3. 15 <= 102
+Step 4. true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The following expression is an example of an ill-formed expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+9 + 6 <= 25 * 4 == 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent That the expression is ill formed
+ becomes obvious if we parenthesize it and then attempt to evaluate
+it:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Step 1. ( ( 9 + 6 )  <= ( 25 * 4 ) ) == 2
+Step 2. ( 15  <= 100 ) == 2
+Step 3. true == 2      // Syntax error results here
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The problem here is that the expression
+{\tt true == 2} is an attempt to compare an {\tt int} and a
+{\tt boolean} value, which can't be done.  As with any other binary
+operator, the == operator requires that both
+%\begin{marginalnote}Strong typing\end{marginalnote}
+\marginnote{Strong typing}
+of its operands be of the
+same type.  This is another example of Java's strong type checking.
+
+
+\secEXRHone{Self-Study Exercises}
+%% \begin{SSTUDY}
+%% \item  For each of these questions, what is 
+%% the value of {\it m}? Assume that {\it k} equals 2, {\it j} equals 3,
+%% and {\it m} equals 10, before each question.  Don't forget about
+%% precedence.
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!m = j++ + k ;!     
+%% \item  \verb!m = ++j + k;!      
+%% \item  \verb!m += j + k;!       
+%% \item  \verb!m *= j++ + k++;!   
+%% \item  \verb!m *= ++j + ++k;!   
+%% \end{multicols}
+%% \end{EXRLL}
+
+
+%% \item  Evaluate each of the following expressions, taking care to observe
+%% operator precedence rules.  If an expression is illegal, mark it
+%% illegal and explain why.
+
+%% \begin{EXRLL}
+%% \begin{multicols}{2}
+%% \item  \verb!4 + 5 ==  6 * 2!                  
+%% \item  \verb!(4 + 5)! $< =$ \verb!6 / 3!       
+%% \item  \verb!4 + 5 / 6! $> =$ \verb!10 % 2!    
+%% \item  \verb!(4 = 5) / 6!                      
+%% \item  \verb|4 + 5 % 3 != 7 - 2|               
+%% \item  \verb!(4 + 5) % 3 = 10 -4!              
+%% \item  \verb!9 % 2 * 7 / 3 > 17!               
+%% \end{multicols}
+%% \end{EXRLL}
+
+%% \end{SSTUDY}
+
+\section{{\bf From the Java Library} {\tt java.lang.Math}}
+
+%\addcontentsline{toc}{section}{\S~~~ From the Java Library: The {\tt Math} Class}
+%<sec_mathclass:\thiseqno><pg_sec_mathclass:\thispageno>
+\tBOXseven{The} {\tt java.lang.Math} class provides many common
+\WWWjava 
+mathematical functions that will prove useful in performing numerical
+computations.  As an element of the {\tt java.lang} package, it is
+included implicitly in all Java programs. Table~5.11 lists some of the
+most commonly used {\tt Math} class \mbox{methods.}
+
+\begin{table}[htb]
+%\hphantom{\caption{A selection of {\tt Math} class methods}}
+\TBT{0pc}{A selection of {\tt Math} class methods}
+\hspace*{-6pt}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Method}&\TBCH{Description}&\TBCH{Examples}
+{Method}&{Description}&{Examples}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+{\it int abs(int  x)}&
+{\it Absolute  value  of x}&
+{\it if  x  $>$=  0  abs(x)  is  x}\cr
+{\it long abs(long  x)}&&
+{\it if  x  $<$  0  abs(x)  is  $-$x}\cr
+{\it float abs(float x)}&
+%{\it double abs(double x)}&
+&\cr
+&&\cr
+{\it int ceil(double  x)}&
+{\it Rounds  x  to  the  smallest}&
+{\it ceil(8.3)  is  9}\cr
+&{\it integer  not  less  than  x}&
+{\it ceil($-$8.3)  is  $-$8}\cr
+&&\cr
+{\it int floor(double  x)}&
+{\it Rounds  x  to  the  largest}&
+{\it floor (8.9)  is  8}\cr
+&{\it integer  not  greater  than  x}&
+{\it floor($-$8.9)  is  $-$9}\cr
+&&\cr
+{\it double log(double x)}&
+{\it Natural  logarithm  of x}&
+{\it log (2.718282)  is  1.0}\cr
+&&\cr
+{\it double pow(double x, double  y)}&
+{\it  x  raised  to  the  y power  ($x^y$)}&{\it pow(3, 4 )  is  81.0}\cr
+&&{\it pow(16.0, 0.5)  is  4.0}\cr
+&&\cr
+{\it double random()}&
+{\it Generates  a  random}&
+{\it random()  is  0.5551}\cr
+&{\it number in  the  interval   [0,1)}&
+{\it random() is 0.8712}\cr
+&&\cr
+{\it long round(double  x)}&
+{\it Rounds  x  to  an  integer}&
+{\it round(26.51)  is  27}\cr
+&&{\it round (26.499)  is  26}\cr
+&&\cr
+{\it double sqrt(double  x)}&
+{\it Square root of x}&
+{\it sqrt(4.0) is  2.0}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+All {\tt Math} methods are {\tt static} {\it class methods} and are,
+therefore, invoked through the class name. For example, we would
+calculate $2^4$ as \mbox{\tt Math.pow(2,4)}, which evaluates to
+16. Similarly, we compute the square root of 225.0 as
+{\tt Math.sqrt(225.0)}, which evaluates to 15.0.
+
+Indeed, Java's {\tt Math} class cannot be instantiated and cannot be
+subclassed. Its basic definition is
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public final class Math    // Final, can't subclass
+{   private Math() {}      // Private, can't invoke
+    ...
+    public static native double sqrt(double a)
+           throws ArithmeticException;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent By declaring the {\tt Math} class {\tt public final},
+we indicate that it can be accessed ({\tt public}) but it cannot be
+extended or subclassed ({\tt final}). By declaring its default
+constructor to be {\tt private}, we prevent this class from being
+instantiated.  The idea of a class that cannot be subclassed and
+cannot be instantiated may seem a little strange at first. The
+justification for it here is that it provides a convenient and
+efficient way to introduce helpful math functions into the Java
+language.
+
+%%%RAM\begin{textblock}{1}(-0.75,4)
+%%%RAM\noindent\epsfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:CommonArt:BX7_Texture/cyan.eps,%   height=51pc,width=3.25pc,clip=}
+%%%RAM\end{textblock}
+
+Defining the {\tt Math} class in this way makes it easy to use its
+methods, because you don't have to create an instance of it. It is
+also a very efficient design because its methods are static elements
+of the {\tt java.lang} package.  This means they are loaded into memory
+at the beginning of your program's execution, and they persist in
+memory throughout your program's lifetime.  Because {\tt Math} class
+methods do not have to be loaded into memory each time they are
+invoked, their execution time will improve dramatically.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Static Methods.}{A method should be declared
+{\tt static} if it is intended to be used whether or not there is an
+instance of its class.}
+
+\section{Numeric Processing Examples}
+
+In this section we consider several numeric programming examples.
+They are carefully chosen to illustrate different issues and concepts
+associated with processing numeric data. 
+
+\subsection{Example: Rounding to Two Decimal Places}
+\noindent As an example of how to use {\tt Math} class methods,
+let's consider the problem of rounding numbers. When dealing with
+applications that involve monetary values---dollars and cents---it is
+often necessary to round a calculated result to two decimal
+places. For example, suppose a program computes the value of a
+certificate of deposit (CD) to be 75.19999. Before we output this
+result, we would want to round it to two decimal places---to 75.20.
+\marginnote{Algorithm design}
+The following algorithm can be used to accomplish this:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+1. Multiply the number by 100, giving 7519.9999.
+2. Add 0.5 to the number giving 7520.4999.
+3. Drop the fractional part giving 7520
+4. Divide the result by 100, giving 75.20
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Step 3 of this algorithm can be done using the
+{\tt Math.floor(R)} method, which rounds its real argument, {\em R},
+to the largest integer not less than {\em R} (from Table~5.11). If the
+number to be rounded is stored in the {\tt double} variable {\it R},
+then the following expression will round {\tt R} to two decimal
+places:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+R = Math.floor(R * 100.0 + 0.5) / 100.0;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Alternatively, we could use the {\tt Math.round()} method
+(Table~5.11). This method rounds a floating-point
+value to the nearest integer. For example, {\tt Math.round(65.3333)}
+rounds to 65 and {\tt Math.round(65.6666)} rounds to 66. The
+following expression uses it to round to two decimal places:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+R = Math.round(100.0 * R) / 100.0;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that it is important here to divide by $100.0$ and
+not by $100$. Otherwise, the division will give an integer result and
+we'll lose the two decimal places.
+
+\JavaTIP[false]{DEBUGGING TIP}{Division.}{Using the correct type of literal 
+in division operations is necessary to ensure that you get the correct
+type of result.}
+
+\subsection{Example: Converting Fahrenheit to Celsius}
+\noindent To illustrate some of the issues that arise in using numeric
+data, let's design a program that performs temperature conversions
+from Fahrenheit to Celsius and vice versa.
+
+\subsubsection*{Problem Decomposition}
+\noindent This problem requires two classes, a {\tt Temperature} class and a
+\marginnote{What objects do we need?}
+{\tt TemperatureUI} class.  The {\tt Temperature} class will
+perform the temperature conversions, and {\tt TemperatureUI} will
+serve as the user interface (Fig.~\ref{fig-convapplobjs}).
+
+%\begin{figure}
+\begin{figure}[h]
+\figaleft{chptr05/f5-2.eps}{Interacting objects: The user interacts with the user 
+interface ({\tt Tem\-per\-a\-tureUI}), which interacts with the {\tt
+Temperature} object.
+\label{fig-convapplobjs}
+\label{pg-fig-convapplobjs}}
+\end{figure}
+%\end{figure}
+
+%%%RAM\subsection{Class Design: {\ttHtwo Temperature} }
+\subsubsection*{Class Design: {\tt Temperature} }
+\noindent The purpose of the {\tt Temperature} class is to perform the
+%\begin{marginalnote}\it What data do we need?\end{marginalnote}
+temperature conversions.  To convert a Celsius temperature to
+\marginnote{What data do we need?}
+Fahrenheit or vice versa, it is not necessary to store the temperature
+value.  Rather, a conversion method could take the Celsius (or
+Fahrenheit) temperature as a parameter, perform the conversion, and
+return the result. Therefore, the {\tt Temperature} class does not
+need any instance variables. Note that in this respect the {\tt
+Temperature} class resembles the {\tt Math} class. Unlike {\tt
+OneRowNim}, which stores the game's state---the number of sticks
+remaining and whose turn it is---the {\tt Math} and {\tt Temperature}
+classes are stateless.
+
+Thus, following the design of the {\tt Math} class, the {\tt
+\marginnote{What methods do we need?}
+Temperature} class will have two public static methods:
+%\begin{marginalnote}\it What methods do we need?\end{marginalnote}
+one to convert from Fahrenheit to Celsius and one to convert from
+Celsius to Fahrenheit.  Recall that static methods are associated with
+the class rather than with its instances. Therefore, we needn't
+instantiate a {\tt Temperature} object to use these methods. Instead,
+we can invoke the methods through the class itself.
+
+The methods will use the standard conversion formulas: $F =
+\frac{9}{5}C + 32$ and $C = \frac{5}{9}(F - 32)$. Each of these
+methods should have a single parameter to store the temperature value
+that is being converted.
+
+Because we want to be able to handle temperatures such as 98.6, 
+we should use real-number data for the methods' parameters.  Generally
+speaking, because Java represents real literals such as 98.6 as {\tt
+double}s, the {\tt double} type is more widely used than {\tt float}.
+Because {\tt double}s are more widely used in Java, using {\tt double}
+wherever a floating point value is needed will cut down on the number
+of implicit data conversions that a program would have to perform.
+Therefore, each of our conversion methods should take a {\tt double}
+parameter and return a {\tt double} result.  These considerations lead
+
+\JavaTIP{PROGRAMMING TIP}{Numeric Types.}{Java uses the {\tt int} type for
+integer literals and {\tt double} for real-number literals.  When
+possible, using {\tt int} and {\tt double} for numeric variables and
+parameters reduces the number of implicit conversions a program would
+have to perform.}
+
+\subsubsection*{Implementation: {\tt Temperature}}
+
+\noindent The implementation of the {\tt Temperature} class is shown in
+Figure~\ref{fig-temperature}.  Note that because {\tt celsToFahr()}
+uses the {\tt double} value {\tt temp} in its calculation, it uses
+floating-point literals (9.0, 5.0, and 32.0) in its conversion
+expression. This helps to reduce the reliance on Java's built-in
+promotion rules, which can lead to subtle errors.  For example,
+\marginfig{chptr05/p242f2.eps}{The {\tt Temperature} class. Note that static 
+elements are underlined in UML.  (NEEDS REVISION)
+\label{fig-p242f2}
+\label{pg-fig-p242f2}}
+to the design shown in Figure~5.4.
+suppose we had written what looks like an equivalent expression using
+integer literals:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+return(9 / 5 * temp + 32); // Error: equals (temp + 32)
+\end{lstlisting}
+\end{jjjlisting}
+
+%% proglist ch5/temperature/Temperature.java
+\begin{figure}[b!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Temperature
+{   
+    public Temperature() {}
+
+    public static double fahrToCels(double temp)
+    {   
+        return (5.0 * (temp - 32.0) / 9.0);
+    }
+    public static double celsToFahr(double temp)
+    {   
+        return (9.0 * temp / 5.0 + 32.0);
+    }
+} // Temperature
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Temperature} class.
+\label{fig-temperature}
+\label{pg-fig-temperature}}
+\end{figure}
+
+\noindent Because 9 divided by 5 gives the integer result 1, this
+expression is always equivalent to {\tt temp + 32}, which is not the
+correct conversion formula.  This kind of subtle semantic error
+%\begin{marginalnote}\it Semantic error\end{marginalnote}
+\marginnote{Semantic error}
+can be avoided if you avoid mixing types wherever possible.
+
+\JavaTIP[false]{PROGRAMMING TIP}{Don't Mix Types.}{You can reduce 
+the incidence of semantic errors caused by implicit type conversions
+if, whenever possible, you explicitly change all the literals in an
+expression to the same type.}
+
+\subsubsection*{Testing and Debugging}
+
+\noindent The next question to be addressed is how should 
+this program be tested? As always, you should test
+%\begin{marginalnote}\it Testing strategy\end{marginalnote}
+\marginnote{Testing strategy}
+the program in a stepwise fashion.  As each method is coded, you
+should test it both in isolation and in combination with the other
+methods, if \mbox{possible.}
+
+Also, you should develop appropriate {\it test data}.
+%\begin{marginalnote}\it Designing test data\end{marginalnote}
+\marginnote{Designing test data}
+It is not enough to just plug in any values.  The values you use should
+test for certain potential problems.  For this program, the following
+tests are appropriate:
+
+\begin{BL}
+\item  Test converting 0 degrees C to 32 degrees F.
+\item  Test converting 100 degrees C to 212 degrees F.
+\item  Test converting 212 degrees F to 100 degrees C.
+\item  Test converting 32 degrees F to 0 degrees C.
+\end{BL}
+
+\noindent The first two tests use the {\tt celsToFahr()} method
+to test the freezing point and boiling point temperatures, two
+boundary values for this problem. A {\bf boundary value} is a value at
+the beginning or end of the range of values that a variable or
+calculation is meant to represent.  The second pair of tests performs
+similar checks with the {\tt fahrToCels()} method.  One advantage of
+using these particular values is that we know what results the methods
+should return.
+
+\JavaTIP{EFFECTIVE DESIGN}{Test Data.}{Developing appropriate test data is
+an important part of program design.  One type of test data should
+check the boundaries of the particular calculations you are making.}
+
+\JavaTIP{DEBUGGING TIP}{Test, Test, Test!}{The fact that your 
+program runs correctly on some data is no guarantee of its
+correctness.  The more testing, and the more careful the testing you
+do, the better.}
+
+\subsubsection*{The {\tt TemperatureUI} Class}
+\noindent The purpose of the {\tt TemperatureUI} class is to serve as a 
+user interface---that is, as an interface between the user and a {\tt
+Temperature} object.  It will accept a Fahrenheit or Celsius
+temperature from the user, pass it to one of the public methods of the
+{\tt Temperature} object for conversion, and display the result that
+is returned. 
+
+As we discussed in Chapter~4, the user interface can take various
+forms, ranging from a command-line interface to a graphical
+interface. Figure~\ref{fig-tempcmdline} shows a design for the user
+interface based on the command-line interface developed in
+Chapter~4. The {\tt TemperatureUI} uses a {\tt KeyboardReader} to
+handle interaction with the user and uses {\tt static} methods in the
+{\tt Temperature} class to perform the temperature conversions.
+
+\begin{figure}[h!]
+\figa{chptr05/tempui.eps}{A command-line user interface.
+\label{fig-tempcmdline}
+\label{pg-fig-tempcmdline}}
+\end{figure}
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Following the design in Figure~\ref{fig-tempcmdline},
+implement the {\tt TemperatureUI} class and use it to test the methods
+in {\tt Temperature} class. The {\tt run()} method should use an {\bf
+input-process-output} algorithm: Prompt the user for input, perform
+the necessary processing, and output the result. Note that because
+{\tt Temperature}'s conversion methods are class methods, you do not
+need to instantiate a {\tt Temperature} object in this project. You
+can invoke the conversion methods directly through the {\tt
+Temperature} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double fahr = Temperature.celsToFahr(98.6);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Following the design for the GUI developed in Chapter~4,
+\marginfig{chptr05/5f5.eps}{Layout design of a GUI that
+performs temperature conversions.
+\label{fig-convapplgui}
+\label{pg-fig-convapplgui}}
+implement a GUI to use for testing the {\tt Temperature} class.
+The GUI should have the layout shown in Figure~5.7.
+\end{SSTUDY}
+
+\subsection{Example: Using Class Constants}
+
+\noindent As we noted in Chapter~0, in
+addition to instance variables, which are associated with instances
+(objects) of a class, Java also allows class variables, which are
+associated with the class itself.  One of the most common uses of such
+variables is to define named constants to replace literal values. A
+{\bf named constant} is a variable that cannot be changed once it has
+been given an initial value.  In this section, we use our running
+example, {\tt OneRowNim}, to illustrate using class constants.
+
+Recall that methods and variables that are associated with a class must
+be declared with the {\tt static} modifier.  If a variable is declared
+{\tt static}, there is exactly one copy of that variable created no
+matter how many times its class is instantiated.  To turn a variable
+into a constant, it must be declared with the {\tt final} modifier.
+Thus, the following would be examples of a {\bf class constants},
+constant values that are associated with the class rather than with
+its instances:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static final int PLAYER_ONE = 1;
+public static final int PLAYER_TWO = 2;
+public static final int MAX_PICKUP = 3;
+public static final int MAX_STICKS = 7;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt final} modifier indicates that the value of
+a variable cannot be changed. When {\tt final} is used in a variable
+declaration, the variable must be assigned an initial value. After a
+{\tt final} variable is properly declared, it is a syntax error to
+attempt to try to change its value. For example, given the
+preceding declarations, the following assignment statement would
+cause a compiler error:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+PLAYER_ONE = 5;// Syntax error; PLAYER_ONE is a constant
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how we use uppercase letters and underscore
+characters (\_) in the names of constants. This is a convention
+that professional Java programmers follow, and its purpose is
+to make it easy to distinguish the constants from the variables
+in a program. This makes the program easier to read and understand.
+
+\JavaTIP{PROGRAMMING TIP}{Readability.}{To make your programs more
+readable, use uppercase font for constant identifiers.}
+
+Another way that named constants improve the readability of a program
+is by replacing the reliance on literal values.  For example, for the
+{\tt OneRowNim} class, compare the following two {\tt if} conditions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (num < 1 || num > 3 || num > nSticks) ...
+if (num < 1 || num > MAX_PICKUP || num > nSticks) ...
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Clearly, the second condition is easier to read
+and understand. In the first condition, we have no good idea what the
+literal value 3 represents. In the second, we know that MAX\_PICKUP
+represents the most sticks a player can pick up. 
+
+Thus, to make {\tt OneRowNim} more readable, we should replace all
+occurrences of the literal value 3 with the constant MAX\_PICKUP.
+This same principle would apply to some of the other literal values in
+the program.  Thus,
+\marginnote{Readability}
+instead of using 1 and 2 to represent the two players, we could use
+PLAYER\_ONE and PLAYER\_TWO to make methods such as the following
+easier to read and understand:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getPlayer()
+{   if (onePlaysNext) 
+         return PLAYER_ONE;
+    else return PLAYER_TWO;
+} // getPlayer()
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP[false]{PROGRAMMING TIP}{Readability.}{To make your programs more
+readable, use named constants instead of literal values.}
+
+\noindent Another advantage of named constants (over literals) is that 
+their use makes the program easier to modify and maintain. For
+example, suppose that we decide to change {\tt OneRowNim} so that the
+\marginnote{Maintainability}
+maximum number of sticks that can be picked up is 4 instead of 3.  If
+we used literal values, we would have to change all occurrences of 4
+that were used to represent the maximum pick up. If we used a named
+constant, we need only change its declaration to:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static final int MAX_PICKUP = 4;
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP{EFFECTIVE DESIGN}{Maintainability.}{Constants should be
+used instead of literal values in a program.  This will make the
+program easier to modify and maintain\index{Maintainability
+Principle}.}
+
+So far, all of the examples we have presented show why named constants
+(but not necessarily class constants) are useful. Not all constants
+are class constants. That is, not all constants are declared {\tt
+static}.  However, the idea of associating constants with a class
+makes good sense.  In addition to saving memory resources, by creating
+just a single copy of the constant, constants such as MAX\_STICKS and
+PLAYER\_ONE make more conceptual sense to associate with the class
+itself rather than with any particular {\tt OneRowNim} instance.
+
+Class constants are used extensively in the Java class library.  For
+example, as we saw in Chapter~2, Java's various built-in colors are
+represented as constants of the {\tt java.awt.Color} class---{\tt
+Color.blue} and {\tt Color.red}. Similarly, {\tt java.awt.Label}
+uses {\tt int} constants to specify how a label's text should be
+aligned: {\tt Label.CENTER}.
+
+Another advantage of class constants is that they can be used {\em
+before} instances of the class exist.  For example, a class constant
+(as opposed to an instance constant) may be used during object
+instantiation:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+OneRowNim game = new OneRowNim(OneRowNim.MAX_STICKS);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how we use the name of the class to refer to
+the class constant. Of course, MAX\_STICKS has to be a public variable
+in order to be accessible outside the class. To use MAX\_STICKS as a
+constructor argument it has to be a class constant because at this
+point in the program there are no instances of {\tt OneRowNim}.
+A new version of {\tt OneRowNim} that uses class constants is
+shown in Figure~\ref{fig-constnim}.
+
+It is important to note that Java also allows class constants to be
+referenced through an instance of the class. Thus, once we
+have instantiated {\tt game}, we can refer to MAX\_STICKS with
+either {\tt OneRowNim.MAX\_STICKS} or {\tt game.MAX\_STICKS}. 
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNim
+{   public static final int PLAYER_ONE = 1;
+    public static final int PLAYER_TWO = 2;
+    public static final int MAX_PICKUP = 3;
+    public static final int MAX_STICKS = 11;
+    public static final boolean GAME_OVER = false;
+
+     private int nSticks = MAX_STICKS;
+     private boolean onePlaysNext = true;
+
+     public OneRowNim()
+     {
+     } //OneRowNim() constructor1
+     public OneRowNim(int sticks)
+     {   nSticks = sticks;
+     }  // OneRowNim() constructor2
+     public OneRowNim(int sticks, int starter)
+     {   nSticks = sticks;
+         onePlaysNext = (starter == PLAYER_ONE);
+     }  // OneRowNim() constructor3
+     public boolean takeSticks(int num)
+     {   if (num < 1 || num > MAX_PICKUP || num > nSticks) 
+             return false;                // Error
+         else                             // Valid move
+         {   nSticks = nSticks - num;
+             onePlaysNext = !onePlaysNext;
+             return true;
+         } //else
+     }//takeSticks()
+     public int getSticks()
+     {   return nSticks;
+     } //getSticks()
+     public int getPlayer()
+     {   if (onePlaysNext) 
+             return PLAYER_ONE;
+         else return PLAYER_TWO;
+     } //getPlayer()
+     public boolean gameOver()
+     {   return (nSticks <= 0);
+     } // gameOver()
+     public int getWinner()
+     {   if (nSticks < 1) 
+             return getPlayer();
+         else return 0;         // Game is not over
+     } // getWinner()
+     public String report()
+     {   return ("Number of sticks left: " + getSticks()
+          + "\nNext turn by player " + getPlayer() + "\n");
+     }   // report()
+} // OneRowNim class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{This version of {\tt One\-Row\-Nim} uses named constants.
+\label{fig-constnim}
+\label{pg-fig-constnim}}
+\end{figure}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Implement a command-line interface class named
+{\tt KBTestOneRowNim}, that uses our new version of {\tt OneRowNim}.
+Make use of the {\tt MAX\_STICKS} and {\tt MAX\_PICKUP} in the user
+interface.  
+
+\end{SSTUDY}
+
+\subsection{OBJECT-ORIENTED DESIGN: \\ Information Hiding}
+%%\secHfourleft{\mbox{OBJECT-ORIENTED} DESIGN: \\Information Hiding}
+
+\noindent The fact that our new versions of {\tt OneRowNim}---we've developed
+two new versions in this chapter---are {\it backward compatible} with
+the previous version is due in large part to
+\marginnote{Preserving the public interface}
+the way we have divided up its public and private elements.  Because
+the new versions still present the same public interface, programs
+that use the {\tt OneRowNim} class, such as the {\tt OneRowNimApp}
+from Chapter~4 (Fig.~4.24), can continue to use the class without
+changing a single line of their own code. To confirm this, see the
+Self-Study Exercise at the end of this section.
+
+Although we have made significant changes to the underlying
+\marginnote{Information hiding}
+representation of {\tt OneRowNim}, the implementation details---its
+data and algorithms---are hidden from other objects.  As long as {\tt
+OneRowNim}'s public interface remains compatible with the old version,
+changes to its private elements won't cause any inconvenience to those
+objects that were dependent on the old version.  This ability to
+change the underlying implementation without affecting the outward
+functionality of a class is one of the great benefits of the
+information hiding principle.
+
+\JavaTIP{EFFECTIVE DESIGN}{Information Hiding.}{In designing a class, other
+objects should be given access just to the information they need and
+nothing more.}
+
+The lesson to be learned here is that the public parts of a class
+should be restricted to just those parts that must be accessible to
+other objects.  Everything else should be private.  Things work better,
+in Java programming and in the real world, when objects are designed
+with the principle of information hiding in mind.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  To confirm that our new version of {\tt OneRowNim} still works
+correctly with the user interfaces we developed in Chapter~4, compile
+and run it with {\tt OneRowNimApp} (Fig.~4.24).
+
+\end{SSTUDY}
+
+%\end{objectorienteddesign}
+
+
+\subsection{Example: A Winning Algorithm for One Row Nim}
+
+Now that we have access to numeric data types and operators, lets
+develop an algorithm that can win the One Row Nim game. Recall that in
+Chapter~4 we left things such that when the computer moves, it always
+takes 1 stick. Let's replace that strategy with a more sophisticated
+approach.
+
+If you have played One Row Nim, you have probably noticed that in a
+game with 21 sticks, you can always win the game if you leave your
+opponent with 1, 5, 9, 13, 17, or 21 sticks.  This is obvious for the
+case of 1 stick. For the case where you leave your opponent 5 sticks,
+no matter what the opponent does, you can make a move that leaves the
+other player with 1 stick. For example, if your opponent takes 1
+stick, you can take 3; if your opponent takes 2, you can take 2; and,
+if your opponent takes 3, you can take 1. In any case, you can win the
+game by making the right move, if you have left your opponent with 5
+sticks. The same arguments apply for the other values: 9, 13, 17, and
+21.
+
+What relationship is common to the numbers in this set? Notice
+that if you take the remainder after dividing each of these numbers
+by 4 you always get 1:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+   1 % 4  == 1
+   5 % 4  == 1
+   9 % 4  == 1
+  13 % 4  == 1
+  17 % 4  == 1
+  21 % 4  == 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, we can base our winning strategy on the goal of
+leaving the opponent with a number of sticks, {\it N}, such that {\it
+N \% 4} equals 1.  
+
+To determine how many sticks to take in order to leave the opponent
+with {\it N}, we need to use a little algebra.  Let's suppose that
+{\tt sticksLeft} represents the number of sticks left before our
+turn. The first thing we have to acknowledge is that if {\it sticksLeft \%
+4 == 1}, then we have been left with 1, 5, 9, 13, and so on, sticks,
+so we cannot force a win.  In that case, it doesn't matter how many
+sticks we pick up. Our opponent should win the game.
+
+So, let's suppose that {\it sticksLeft \% 4 != 1}, and let {\tt M} be
+the number of sticks to pickup in order to leave our opponent with
+{\tt N}, such that {\it N \% 4 == 1}. Then we have the following two
+equations:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+sticksLeft - M == N    
+N % 4 == 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We can combine these into a single equation, which can
+be simplified as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(sticksLeft - M)  % 4 == 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If {\it sticksLeft - M} leaves a remainder of 1 when divided by
+4, that means that {\it sticksLeft - M} is equal some integer quotient, {\it Q}
+times 4 plus 1:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(sticksLeft - M)   ==  (Q * 4) + 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent By adding {\tt M} to both sides and subtracting 1 from both sides of
+this equation, we get:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  (sticksLeft - 1)   ==  (Q * 4) + M
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This equation is saying that {\it (sticksLeft - 1) \% 4 == M}. That is,
+that when you divide {\it sticksLeft-1} by 4, you will get a remainder of {\tt M},
+which is the number of sticks you should pick up.  Thus, to decide how  many 
+sticks to take, we want to compute:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+M == (sticksLeft -1) % 4
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To verify this, let's look at some examples:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  sticksLeft     (sticksLeft -1) % 4     sticksLeft 
+   Before                                  After
+  ----------------------------------------------------
+    9            (9-1) % 4 == 0         Illegal Move
+    8            (8-1) % 4 == 3         5
+    7            (7-1) % 4 == 2         5
+    6            (6-1) % 4 == 1         5
+    5            (5-1) % 4 == 0         Illegal Move
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The examples in this table show that when we use {\it (sticksLeft-1 \% 4)}
+to calculate our move, we always leave our opponent with a losing
+situation.  Note that when {\tt sticksLeft} equals 9 or 5, we can't
+apply this strategy because it would lead to an illegal move.
+
+Let's now convert this algorithm into Java code. In addition to incorporating
+our winning strategy, this {\tt move()} method makes use of two important
+{\tt Math} class methods:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int move() 
+{ int sticksLeft = nim.getSticks();// Get number of sticks
+  if (sticksLeft % (nim.MAX_PICKUP + 1) != 1)// If winnable
+    return (sticksLeft - 1) % (nim.MAX_PICKUP +1);
+  else {                         // Else pick random
+    int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
+    return 1 + (int)(Math.random() * maxPickup);
+  }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt move()} method will return an {\tt int} representing the
+best move possible. It begins by getting the number of sticks left
+from the {\tt OneRowNim} object, which is referred to as {\tt nim} in
+this case.  It then checks whether it can win by computing {\it
+(sticksLeft-1) \% 4}. However, note that rather than use the literal
+value 4, we use the named constant {\tt MAX\_PICKUP}, which is
+accessible through the {\tt nim} object.  This is an especially good
+use for the class constant because it makes our algorithm completely
+general -- that is, our winning strategy will continue to work even if
+the game is changed so that the maximum pickup is 5 or 6. The {\tt
+then} clause computes and returns {\it (sticksLeft-1) \%
+nim.MAX\_PICKUP+1}, but here again it uses the class constant.
+
+The else clause would be used when it is not possible to make a winning
+move.  In this case we want to choose a random number of sticks between 1
+and some maximum number. The maximum number depends on how many sticks
+are left. If there are more than 3 sticks left, then the most we can
+pick up is 3, so we want a random number between 1 and 3. However, if
+there are 2 sticks left, then the most we can pick up is 2 and we
+want a random number between 1 and 2. Note how we use the {\tt Math.min()}
+method to decide the maximum number of sticks that can be picked up:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt min()} method returns the minimum value between its
+two arguments. 
+
+Finally, note how we use the {\tt Math.random()} method to calculate a
+random number between 1 and the maximum:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ 1 + (int)(Math.random() * maxPickup);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt random()} method returns a real number between 0 and 0.999999 --
+that is, a real number between 0 and 1 but not including 1:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ 0 <= Math.random() < 1.0
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If we multiply {\tt Math.random()} times 2, the result would be a value
+between 0 and 1.9999999.  Similarly, if we multiplied it by 3, the result would
+be a value between 0 and 2.9999999.  In order to use the random value, we have
+to convert it into an integer, which is done by using the {\tt (int)} cast operator:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  (int)(Math.random() * maxPickup);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Recall that when a {\tt double} is cast into an {\tt int}, Java just
+throws away the fractional part. Therefore, this expression will give
+us a value between 0 and {\tt maxPickup-1}. If {\tt maxPickup} is 3, this will
+give a value between 0 and 2, whereas we want a random value between 1 and 3.
+To achieve this desired value, we merely add 1 to the result. Thus, using the
+expression
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  1 + (int)(Math.random() * maxPickup)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent gives us a random number between 1 and {\tt maxPickup}, where 
+{\tt maxPickup} is either 1, 2, or 3, depending on the situation of
+the game at that point.
+
+\secEXRHone{Self-Study Exercise}
+\marginfig{chptr05/nimplayer.eps}{The {\tt NimPlayer} class.
+\label{fig-nimplayer}
+\label{pg-fig-nimplayer}}
+\begin{SSTUDY}
+
+\item  Implement a class named {\tt NimPlayer} that
+incorporates the {\tt move()} method designed in this section.  The
+class should implement the design shown in Figure~5.9.
+That is, in addition to the {\tt move()} method, it should have an
+instance variable, {\tt nim}, which will serve as a reference to 
+the {\tt OneRowNim} game. Its constructor method should take
+a {\tt OneRowNim} parameter, allowing the {\tt NimPlayer} to be 
+given a reference when it is instantiated.
+
+\item Modify {\tt OneRowNim}'s command-line interface
+to play One Row Nim between the user and the computer, where the {\tt
+NimPlayer} implemented in the previous exercise represents the
+computer.
+
+\end{SSTUDY}
+
+
+\WWWjava 
+\section{{\bf From the Java Library} \\{\tt java.text.NumberFormat}}
+%\addcontentsline{toc}{section}{\S~~~ From the Java Library: The {\tt NumberFormat} Class}
+\tBOXseven{Although} the {\tt Math.round()} method is useful for rounding
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr05/p267f1.eps}{The {\tt java.text.NumberFormat} class.
+\label{fig-p267f1}
+\label{pg-fig-p267f1}}
+numbers, it is not suitable for business applications. Even
+for rounded values, Java will drop trailing zeroes. So a value
+such as \$10,000.00 would be output as \$10000.0. This wouldn't
+be acceptable for a business report.
+
+Fortunately, Java supplies the {\tt java.text.NumberFormat}
+class precisely for the task of representing numbers as dollar
+amounts, percentages, and other formats (Fig.~5.10).
+
+The {\tt NumberFormat} class is an {\tt abstract} class, which means
+that it cannot be directly instantiated. Instead, you would use its
+static {\tt getInstance()} methods to create an instance that can then
+be used for the desired formatting tasks.
+
+Once a {\tt NumberFormat} instance has been created, its {\tt
+format()} method can be used to put a number into a particular
+format. The {\tt setMaximumFractionDigits()} and {\tt
+setMaximumIntegerDigits()} methods can be used to control the number
+of digits before and after the decimal point.
+
+For example, the following statements can be used to format a
+decimal number as a currency string in dollars and cents:
+%\end{graphic}
+%\end{figure}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+NumberFormat dollars = NumberFormat.getCurrencyInstance();
+System.out.println(dollars.format(10962.555));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent These statements would cause the value 10962.555 to
+be shown as \$10,962.56. Similarly, the  statements,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+NumberFormat percent = NumberFormat.getPercentInstance();
+percent.setMaximumFractionDigits(2);
+System.out.println(percent.format(6.55));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent would display the value 6.55 as 6.55\%. The 
+utility of the {\tt Math} and {\tt NumberFormat} classes illustrates
+the following principle:
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Code Reuse.}{Often the best way to
+solve a programming task is to find the appropriate methods in the
+Java class library.}
+
+%%%RAM\end{javalibrary}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item A Certificate of Deposit (CD) is an investment instrument
+that accumulates interest at a given rate for an initial principal
+\marginfig{chptr05/bankcd.eps}{The {\tt BankCD} class.
+\label{fig-bankcd}
+\label{pg-fig-bankcd}}
+over a fixed number of years.  The formula for compounding interest is
+shown in Table~5.12. It assumes that interest is compounded
+annually. For daily compounding, the annual rate must be divided by
+365, and the compounding period must be multiplied by 365, giving: $a
+= p(1 + r/365)^{365n}$.  Implement a {\tt BankCD} class that
+calculates the maturity value of a CD. Figure~5.11 gives the design
+of the class. It should have three instance variables for the CD's
+principal, rate, and years. Its constructor method sets the initial
+values of these variables when a {\tt BankCD} is instantiated. Its two
+public methods calculate the maturity value using yearly and daily
+compounding interest, respectively.  Use the {\tt Math.pow()} method
+to calculate maturity values. For example, the following expression
+calculates maturity value with annual compounding:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+principal * Math.pow(1 + rate, years)
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{table}[htb]
+%\hphantom{\caption{Formula for calculating a CD's maturity value.}}
+\TBT{3.5pc}{Formula for calculating compound interest}
+\hspace*{3pc}\begin{tabular}{l}
+\multicolumn{1}{l}{\color{cyan}\rule{20pc}{1pt}}\\[2pt]
+           \multicolumn{1}{l}{$a = p(1 + r)^n$ where}\\[6pt]
+$\bullet$\hspace*{5pt}{\it a} is the CD's value at the end of the {\it n}th year\\
+$\bullet$\hspace*{5pt}{\it p} is the principal or original investment amount\\
+$\bullet$\hspace*{5pt}{\it r} is the annual interest rate\\
+$\bullet$\hspace*{5pt}{\it n} is the number of years or the compounding period
+\\[-4pt]\multicolumn{1}{l}{\color{cyan}\rule{20pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\item Design a command-line user interface to the {\tt BankCD} class
+that lets the user input principal, interest rate, and years, and reports
+the CD's maturity value with both yearly and daily compounding. Use 
+{\tt NumberFormat} objects to display percentages and dollar figures in
+an appropriate format.  The program's output should look something like
+the following (user's inputs are in {\color{cyan}cyan}):
+
+\vspace*{10pt plus5pt minus2pt}
+\small
+\begin{alltt}
+************************ OUTPUT ********************
+Compare daily and annual compounding for a Bank CD.
+ Input CD initial principal, e.g.  1000.55 > {\color{cyan}2500}
+ Input CD interest rate, e.g.  6.5 > {\color{cyan}7.8}
+ Input the number of years to maturity, e.g., 10.5 > {\color{cyan}5 }
+For Principal = $2,500.00 Rate= 7.8% Years= 5.0
+ The maturity value compounded yearly is $3,639.43
+ The maturity value compounded daily is: $3,692.30
+************************ OUTPUT ********************
+\end{alltt}
+\normalsize
+
+\end{SSTUDY}
+
+
+\section{Character Data and Operators}
+
+\noindent Another primitive data type in Java is the character type,
+{\tt char}\index{char}. A character in Java is represented by a 16-bit
+{\em unsigned} integer.  This means that a total of $2^{16}$ or 65536
+%\begin{marginalnote}\it Unicode\end{marginalnote}
+\marginnote{Unicode}
+different Unicode characters can be represented, corresponding to the
+integer values 0 to 65535. The {\bf Unicode} character set is an
+international standard that has been developed to enable computer
+languages to represent characters in a wide variety of languages, not
+just English.  Detailed information about this encoding can be
+obtained at
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.unicode.org/
+\end{lstlisting}
+\end{jjjlisting}
+
+It is customary in programming languages to use unsigned integers to
+represent characters.  This means that all the digits ($0, \dots,9$),
+alphabetic letters ($a,\dots,z, A,\dots, Z$), punctuation symbols
+(such as . ; , `` `' ! \_ -), and nonprinting control characters
+(LINE\_FEED, ESCAPE, CARRIAGE\_RETURN, $\dots$) that make up the
+computer's character set are represented in the computer's memory by
+integers.  A more traditional set of characters is the {\it ASCII
+(American Standard
+%\begin{marginalnote}\it ASCII code\end{marginalnote}
+\marginnote{ASCII code}
+Code for Information Interchange)} character set.  ASCII is based on a
+7-bit code and, therefore, defines $2^7$ or 128 different characters,
+corresponding to the integer values 0 to 127. In order to make Unicode
+backward compatible with ASCII\index{ASCII character set} systems, the
+first 128 Unicode characters are identical to the ASCII
+characters.  Thus, in both the ASCII and Unicode encoding, the printable
+characters have the integer values shown in Table~5.13.
+
+\begin{table}[htb]
+%\hphantom{\caption{ASCII codes for selected characters}}
+\TBT{0pc}{ASCII\index{ASCII} codes for selected characters}
+%%%\vspace{-6pt}
+\begin{jjjlisting}
+\begin{lstlisting}[stringstyle=\color{black}]
+ Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
+ Char   SP !  "  #  $  %  &  '  (  )   *  +  ,  -  .  /
+
+ Code   48 49 50 51 52 53 54 55 56 57
+ Char   0  1  2  3  4  5  6  7  8  9
+
+ Code   58 59 60 61 62 63 64
+ Char   :  ;  <  =  >  ?  @
+
+ Code   65 66 67 68 69 70 71 72 73 74 75 76 77
+ Char   A  B  C  D  E  F  G  H  I  J  K  L  M
+
+ Code   78 79 80 81 82 83 84 85 86 87 88 89 90
+ Char   N  O  P  Q  R  S  T  U  V  W  X  Y  Z
+
+ Code   91 92 93 94 95 96
+ Char   [  \  ]  ^  _  `
+
+ Code   97 98 99 100 101 102 103 104 105 106 107 108 109
+ Char   a  b  c  d   e   f   g   h   i   j   k   l   m
+
+ Code   110 111 112 113 114 115 116 117 118 119 120 121 122
+ Char   n   o   p   q   r   s   t   u   v   w   x   y   z
+
+ Code   123 124 125 126
+ Char   {   |   }   ~
+\end{lstlisting}
+\end{jjjlisting}
+\end{table}
+
+\subsection{Character to Integer Conversions}
+
+\noindent Is `A' a character or an integer?  The fact that character data are
+stored as integers in the computer's memory can cause some confusion
+about whether a given piece of data is a character or an integer.  In
+other words, when is a character, for example `A', treated as the integer (65)
+instead of as the character `A'?  The rule in Java is that a character
+literal---`a' or `A' or `0' or `?'---is always treated as a
+character, unless we explicitly tell Java to treat it as an
+integer. So if we display a literal's value
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println('a');
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the letter `a' will be displayed. Similarly, if we assign `a' to a
+{\tt char} variable and then display the variable's value,
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char ch = 'a';
+System.out.println(ch);         // Displays 'a'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the letter `a' will be shown. If, on the other hand, we wish to output a
+character's integer value, we must use an explicit cast operator
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println((int)'a') ;   // Displays 97
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A {\bf cast operation}, such as {\tt (int)}, 
+converts one type of data ('a') into another (97). This is known as a
+{\bf type conversion}. Similarly, if we wish to store a character's
+integer value in a variable, we can {\it cast} the {\tt char} into an
+{\tt int} as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = (int)'a';       // Converts 'a' to 97
+System.out.println(k);  // Displays 97
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As these examples show, a {\it cast} is a type conversion operator.
+%\begin{marginalnote}\it The cast operator\end{marginalnote}
+\marginnote{The cast operator}
+Java allows a wide variety of both explicit and implicit type
+conversions.  Certain conversions (for example, promotions) take place
+when methods are invoked, when assignment statements are executed,
+when expressions are evaluated, and so on.
+
+Type conversion in Java is governed by several rules
+and exceptions. In some cases Java allows the programmer to make
+implicit cast conversions. For example, in the following assignment
+a {\tt char} is converted to an {\tt int} even though no
+explicit cast operator is used:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char ch;
+int k;
+k = ch; // convert a char into an int
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Java permits this conversion because no information will be lost.  A
+%\begin{marginalnote}\it Implicit type conversion\end{marginalnote}
+\marginnote{Implicit type conversion}
+character {\tt char} is represented in 16 bits whereas an {\tt int} is
+represented in 32 bits.  This is like trying to put a small object
+into a large box. Space will be left over, but the object will fit
+inside without being damaged. Similarly, storing a 16-bit {\tt char}
+in a 32-bit {\tt int} will leave the extra 16 bits unused. This {\it
+widening primitive conversion} changes one primitive type ({\tt char})
+into a wider one ({\tt int}), where a type's {\it
+%\begin{marginalnote}\it Widening conversion\end{marginalnote}
+\marginnote{Widening conversion}
+width} is the number of bits used in its representation.
+
+On the other hand, trying to assign an {\tt int} value
+to a {\tt char} variable leads to a syntax error:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char ch;
+int k;
+ch = k;    // Syntax error: can't assign int to char
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Trying to assign a 32-bit {\tt int} to
+16-bit {\tt char} is like trying to fit a big object into an
+undersized box.  The object won't fit unless we shrink it in some way.
+Java will allow us to assign an {\tt int} value to a {\tt char}
+variable, but only if we perform an explicit cast on it:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ch = (char)k; // Explicit cast of int k into char ch
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt (char)} cast operation performs a careful ``shrinking''
+of the {\tt int} by lopping off the last 16 bits of the {\tt int}.
+This can be done without loss of information provided that {\it k}'s value
+is in the range 0 to 65535---that is, in the range of values that fit into
+%\begin{marginalnote}\it Narrowing conversion\end{marginalnote}
+\marginnote{Narrowing conversion}
+a {\tt char} variable.  This {\it narrowing primitive conversion}
+changes a wider type (32-bit {\tt int}) to a narrower type (16\mbox{-}bit
+{\tt char}).  Because of the potential here for information loss, it is up
+to the programmer to determine that the cast can be performed safely.
+
+\JavaRule{Type Conversion.}{Java permits {\it implicit}
+type conversions\index{type conversion rule} from a narrower type to a
+wider type. A {\it cast} operator must be used when converting a wider
+type into a narrower type.}
+
+\noindent The cast operator can be used with any primitive type. It applies to
+the variable or expression that immediately follows it. Thus,
+parentheses must be used to cast the expression {\it m + n} into a
+{\tt char}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char ch = (char)(m + n);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The following statement would cause a syntax error because
+the cast operator would only be applied to {\tt m}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char ch = (char)m + n; // Error: right side is an int
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the expression on the right-hand side, the
+character produced by {\tt (char)m} will be promoted to an {\tt int}
+because it is part of an integer operation whose result will still be
+an {\tt int}.  Therefore, it cannot be assigned to a {\tt char} without
+an explicit cast.
+
+\secEXRHone{Self-Study Exercise}
+%% \begin{SSTUDY}
+%% \item  Suppose that {\it m} and {\it n} are integer variables of type
+%% {\tt int} and that {\it ch1} and {\it ch2} are character variables of type
+%% {\tt char}.  Determine in each of the  cases that follow whether the
+%% assignment statements are valid. If not, modify the statement to make
+%% it valid.
+
+%% \begin{EXRLL}
+%% \begin{multicols}{3}
+%% \item  \verb!m = n;!         
+%% \item  \verb!m = ch1;!       
+%% \item  \verb!ch2 = n;!       
+%% \item  \verb!ch1 = ch2;!     
+%% \item  \verb!ch1 = m - n;!   
+%% \end{multicols}
+%% \end{EXRLL}
+
+%% \end{SSTUDY}
+
+
+\subsection{Lexical Ordering}
+\noindent The order in which the characters of a character set 
+are arranged, their {\bf lexical order}, is an important feature
+of the character set. It especially comes into play for such
+tasks as arranging strings in alphabetical order. 
+
+Although the actual integer values assigned to the individual
+characters by ASCII and UNICODE encoding seem somewhat arbitrary, the
+characters are, in fact, arranged in a particular order.  For example,
+note that various sequences of digits, {\tt '0'$\ldots$'9'}, and
+letters, {\tt 'a'$\ldots$'z'} and {\tt 'A'$\ldots$'Z'}, are
+represented by sequences of integers (Table 5.11). This makes it
+possible to represent the lexical order of the characters in terms of
+the {\it less than} relationship among integers.  The fact that `a'
+comes before `f' in alphabetical order is represented by the fact that
+97 (the integer code for `a') is less than 102 (the integer code for
+`f'). Similarly, the digit `5' comes before the digit `9' in an
+alphabetical sequence because 53 (the integer code for `5') is less
+than 57 (the integer code for `9').
+
+This ordering relationship extends throughout the character set. Thus,
+it is also the case that `A' comes before `a' in the lexical ordering
+because 65 (the integer code for `A') is less than 97 (the integer
+code for `a').  Similarly, the character `[' comes before `\verb|}|' because
+its integer code (91) is less than 125, the integer code for `\verb|}|'.
+
+\subsection{Relational Operators}
+\noindent Given the lexical ordering of the {\tt char} type, the following
+relational operators can be defined: $<$, $>$, $<$=, $>$=, ==, !=.
+Given any two characters, {\it ch1} and {\it ch2}, the expression
+{\it ch1 $<$ ch2} is true if and only if the integer value of {\it ch1} is
+%\begin{marginalnote}{\tt char} {\it relations}\end{marginalnote}
+\marginnote{{\tt\color{cyan}char} {\it\color{cyan}relations}}
+less than the integer value of {\it ch2}.  In this case we say that
+{\it ch1} {\it precedes} {\it ch2} in lexical order. Similarly, the
+expression {\it ch1 $>$ ch2} is true if and only if the integer value of
+{\it ch1} is greater than the integer value of {\it ch2}.  In this
+case we say that {\it ch1} {\it follows} {\it ch2}.  And so on for the
+other relational operators.  This means that we can perform comparison
+operations on any two character operands (Table~5.14).
+
+\begin{table}[htb]
+%\hphantom{\caption{Relational operations on characters}}
+%%%\vspace{-6pt}
+\TBT{2.5pc}{Relational operations\index{relational operators} on characters}
+\hspace*{2pc}\begin{tabular}{llll}
+\multicolumn{4}{l}{\color{cyan}\rule{22pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Operation}&\TBCH{Operator}&\TBCH{Java}&\TBCH{True Expression}
+{Operation}&{Operator}&{Java}&{True Expression}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{22pc}{0.5pt}}\\[2pt]
+{\it Precedes}&$<$ &$ch1\ <\ ch2$&$'a'\ <\ 'b'$\cr
+{\it Follows}&$>$ &$ch1\ >\ ch2$&$'c'\ >\ 'a'$\cr
+{\it Precedes or equals}&$<=$&$ch1\ <=\ ch2$&$'a'\ <=\ 'a'$\cr
+{\it Follows or equals}&$>=$&$ch2\ >=\ ch1$&$'a'\ >=\ 'a'$\cr
+{\it Equal to}&$= =$&$ch1\ ==\ ch2$&$'a'\ ==\ 'a'$\cr
+{\it Not equal to}&$!\!=$&$ch1\ !\!=\ ch2$&$'a'\ !\!=\ 'b'$
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{22pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+\section{Example: Character Conversions }
+\noindent Another interesting implication of representing the
+characters\index{character conversion} as integers is that we can
+represent various character operations in terms of integer
+operations. For example, suppose we want to capitalize a lowercase
+%\begin{marginalnote}\it Lowercase to uppercase\end{marginalnote}
+\marginnote{Lowercase to uppercase}
+letter. Table~5.13 shows that the entire sequence of lowercase
+letters {\tt ('a'~\dots~'z')} is displaced by 32 from the sequence of
+uppercase letters {\tt ('A'~\dots~'Z')}, so we can convert any lowercase
+letter into its corresponding uppercase letter by subtracting 32 from
+its integer value, provided we perform an explicit cast on the
+result. When we perform the cast {\tt (char) ('a'~-~32 )}, the
+resulting value is {\tt 'A'}, as the following example shows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(char)('a' - 32)              ==>  'A'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Recall that in evaluating  {\tt 'a' - 32}
+Java will promote `a' to an {\tt int} and then perform the
+subtraction.  Thus, a step-by-step evaluation of the expression
+would go as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Step 1. (char)((int)'a' - 32)// Promote 'a' to int
+Step 2. (char)(97 - 32)      // Subtract
+Step 3. (char) (65)          // Cast result to a char
+Step 4. 'A'                  // Results in 'A'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, we can convert an uppercase letter into the corresponding
+%\begin{marginalnote}\it Uppercase to lowercase\end{marginalnote}
+\marginnote{Uppercase to lowercase}
+lowercase letter by simply adding 32 to its integer code and casting
+the result back to a char:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(char)('J' + 32)              ==>  'j'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We can group these ideas into a method that performs
+conversion from lowercase to uppercase:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char toUpperCase(char ch) {
+  if ((ch >= 'a') && (ch <= 'z'))
+    return ch - 32 ;  // Error: can't return an int
+  return ch;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method\index{toUpperCase() method}
+takes a single {\tt char} parameter and returns a {\tt char} value. It
+begins by checking if {\it ch} is a lowercase letter---that is, if
+{\it ch} falls between `a' and `z' inclusive.  If so, it returns the result
+of subtracting 32 from {\it ch}.  If not, it returns {\it ch}
+unchanged. However, the method contains a syntax error that becomes
+%\begin{marginalnote}\it Type error\end{marginalnote}
+\marginnote{Type error}
+apparent if we trace through its steps. If we invoke it with the
+expression {\tt toUpperCase('b')}, then since {\it `b'} is between {\it `a'}
+and {\it `z'}, the method will return {\it `b' $-$ 32}.  Because the integer
+value of {\it `b'} is 98, it will return {\it 98 $-$ 32} or 66, which is the integer
+code for the character {\it `B'}.  However, the method is supposed to return
+a {\tt char}, so this last statement will generate the following syntax
+error:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Incompatible type for return. An explicit cast needed 
+to convert int to char.
+>>    return ch - 32 ;
+>>    ^
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In order to avoid this error, the result must be
+converted back to {\tt char} before it can be returned:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+char toUpperCase (char ch) {
+  if ((ch >= 'a') && (ch <= 'z'))
+    return (char)(ch - 32);  // Explicit cast
+  return ch;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Another common type of conversion is to convert a
+digit\index{digitToInteger() method} to its corresponding integer
+value.  For example, we convert the character `9' to the integer 9 by
+%\begin{marginalnote}\it Digit to integer\end{marginalnote}
+\marginnote{Digit to integer}
+making use of the fact that the digit `9' is 9 characters beyond the
+digit `0' in the lexical order.  Therefore, subtracting `0' from `9'
+gives integer 9 as a result:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+('9' - '0')  ==> (57 - 48) ==>   9
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent More generally, the expression {\it $ch -$ `0'} will convert
+any digit, {\it ch}, to its integer value. We can encapsulate these
+ideas into a method that converts any digit into its corresponding
+integer value:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int digitToInteger(char ch) {
+  if ((ch >= '0') && (ch <= '9'))
+    return ch - '0';
+  return -1 ;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method takes a single {\tt char} parameter and returns an
+{\tt int}. It first checks that {\it ch} is a valid digit, and if
+so, it subtracts the character `0' from it. If not, the method just
+returns $-1$, which indicates that the method received an invalid input
+parameter.  Obviously, when an object invokes this method, it should
+first make sure that the value it passes is in fact a digit.
+
+The Java application program shown in Figure~\ref{fig-testapplet}
+illustrates several of the ideas discussed in this section. Note that
+both the {\tt digitToInteger()} and {\tt toUpperCase()} are declared
+static. This allows us to call them directly from the (static) {\tt
+main()} method, as useful and justifiable shortcut if, as in this case,
+we are just testing the methods. 
+
+%% proglist ch5/charconvert/Test.java
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Test {
+    public static void main(String argv[]) {
+        char ch = 'a';          // Local variables
+        int k = (int)'b';
+        System.out.println(ch);
+        System.out.println(k);  
+        ch = (char)k;           // Cast needed here
+        System.out.println(ch);
+        System.out.println(toUpperCase('a'));
+        System.out.println(toUpperCase(ch));
+        System.out.println(digitToInteger('7'));
+    }
+    public static char toUpperCase(char ch) {
+        if ((ch >= 'a') && (ch <= 'z'))
+            return (char)(ch - 32);
+        return ch;
+    }
+    public static int digitToInteger(char ch) {
+        if ((ch >= '0') && (ch <= '9'))
+            return ch - '0';
+        return -1 ;
+    }
+} // Test
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A Java program illustrating character\index{character
+conversion example} conversions. When run, the program will generate
+the following outputs, one per line: a, 98, b, A, B, 7.
+\label{fig-testapplet}\label{pg-fig-testapplet}}
+\end{figure}
+
+\section{Problem Solving = Representation + Action}
+\noindent As you have seen in this chapter, designing classes involves 
+a careful interplay between representation (data) and action
+(methods).  Our several modifications to the {\tt OneRowNim} class
+illustrate that the data used to represent an object's state can
+either complicate or simplify the design of the methods needed to
+solve a problem.
+
+We hope that it is becoming clear to you that in writing
+object-oriented programs, choosing an appropriate data representation
+is just as important as choosing the correct algorithm. The concept of
+an object allows us to encapsulate representation and action into a
+single entity. It is a very natural way to approach problem solving.
+
+If you look closely enough at any problem, you will find this close
+relationship between representation and action.  For example, compare
+the task of performing multiplication using Arabic numerals---65 *
+%\epage
+12 = 380---and the same task using Roman numerals---LXV * XII =
+DCCLXXX.~It's doubtful that our science and technology would be where
+they are today if our civilization had to rely forever on the Roman way
+of representing numbers!
+
+\JavaTIP{EFFECTIVE DESIGN}{Representation and Action.}{Representation
+(data) and action (methods) are equally important parts of the
+problem-solving process.}
+
+\secSMHleft{Chapter Summary}
+%\addcontentsline{toc}{section}{\S~~~ Chapter Summary}\
+\secKTH{Technical Terms}
+
+\begin{KT}
+action
+
+binary operator
+
+binary digit (bit) 
+
+boundary value 
+
+cast operation
+
+class constant
+
+input-process-output
+
+named constant
+
+operand
+
+operator overloading
+
+precedence order
+
+promotion
+
+round off error
+
+short-circuit evaluation
+
+type conversion
+
+unary operator
+
+Unicode
+
+representation
+
+\end{KT}
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}
+\item  The way we approach a problem can often help
+or hinder us in our ability to solve it. Choosing an appropriate {\it
+representation} for a problem is often the key to solving it.
+
+\item  In order to evaluate complex expressions, it is necessary to
+understand the {\it precedence order} and {\it associativity} of the
+operators involved. Parentheses can always be used to override an
+operator's built-in precedence.
+
+\item  Java provides several types of integer data, including the
+8-bit {\tt byte}, 16-bit {\tt short}, 32-bit {\tt int}, and 64-bit
+{\tt long} types. Unless otherwise specified, integer literals are
+represented as {\tt int} data in a Java program.
+
+\item  Java provides two types of floating-point data, the 32-bit
+{\tt float} type and the 64-bit {\tt double} type. Unless otherwise
+specified, floating-point literals are represented as {\tt double}
+data.
+
+\item  In general, if a data type uses {\it n} bits in its representation,
+then it can represent $2^n$ different values.
+
+\item  The fact that Java's primitive types are defined in terms
+of a specific number of bits is one way that Java promotes {\it
+platform independence}.
+
+\item  It is necessary to distinguish integer operations from
+floating-point operations even though the same symbols are used.
+For example, (7/2) is 3, while (7.0/2) is 3.0.
+
+\item  In revising a class
+that is used by other classes it is important to preserve as much of
+the class's {\it interface} as possible.
+
+\item  In Java, character data are based on the Unicode character set,
+which provides $2^{16}$ = 65,536 different character codes. To provide
+backward compatibility with the ASCII code, the first 128 characters
+are the ASCII coded characters.
+
+\item Java operators are evaluated according to the precedence hierarchy
+shown in Table~5.15. The lower the precedence
+number, the earlier an operator is evaluated. So the operators at the
+top of the table are evaluated before operators that occur below them
+in the table.  Operators at the same precedence level are evaluated
+according to their {\it association}, either left to right (L to R)
+or right to left (R to L).
+
+\begin{table}[htb]
+%\hphantom{\caption{Java operator precedence and associativity table}}
+\TBT{0pc}{Java operator precedence and associativity table\index{precedence table}}
+\hspace*{-6pt}\begin{tabular}{clll}
+\multicolumn{4}{r}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Order}&\TBCH{Operator}&\TBCH{Operation}&\TBCH{Association}
+{Order}&{Operator}&{Operation}&{Association}
+\\[-4pt]\multicolumn{4}{r}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+0&{\tt (  )}&{\it Parentheses}&\cr
+1&{\tt ++   --  . }&{\it Postincrement, postdecrement,} \\
+&&\quad {\it dotOperator}&{\it L to R}\cr
+2&{\tt ++   --  +  -  !}&{\it Preincrement, predecrement}&{\it R to L}\cr
+&{\tt }&\quad {\it Unary plus, unary minus,} \\
+&&\quad {\it boolean NOT}&{\it }\cr
+3&{\tt $(type)\; new$}&{\it Type cast, object instantiation}&{\it R to L}\cr
+4&{\tt *  /  \%}&{\it Multiplication, division, modulus}&{\it L to R}\cr
+5&{\tt + -  +}&{\it Addition, subtraction, string} \\
+&&\quad {\it concatenation}&{\it L to R}\cr
+6&\verb!<  >  <=  >=!&{\it Relational operators}&{\it L to R}\cr
+7&{\tt ==   !=}&{\it Equality operators}&{\it L to R}\cr
+8&{\tt $\wedge$}&{\it Boolean XOR}&{\it L to R}\cr
+9&{\tt \&\&}&{\it Boolean AND}&{\it L to R}\cr
+10&{\tt $\mid\mid$}&{\it Boolean OR}&{\it L to R}\cr
+11&{\tt = += -= *= /= \%=}&{\it Assignment operators}&{\it R to L}
+\\[-4pt]\multicolumn{4}{r}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\end{SMBL}
+
+%\section*{Answers to Self-Study Exercises}
+%% \secANSH
+%% \begin{ANS}
+%% \begin{multicols}{4}
+%% \item \mbox{ }
+
+
+%% \begin{enumerate}
+%% \item[a.]  true 
+%% \item[b.]  false
+%% \item[c.]  true
+%% \item[d.]  false
+%% \item[e.]  false
+%% \item[f.]  false
+%% \end{enumerate}
+%% \end{multicols}
+
+%% \item  \mbox{ }
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% 0000, 0001, 0010, 0011, 0100, 0101, 0110, 0111,
+%% 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item  In 6 bits, you can represent $2^6 = 64$ different values.
+
+%% \item  If you have to represent up to 12 significant digits, you should use
+%% {\tt double}, which goes up to 17 digits.
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+
+%% \mbox{ }
+
+
+%% \begin{enumerate}
+%% \item[a.]  4
+%% \item[b.]  4
+%% \item[c.]  0
+%% \item[d.]  1
+%% \item[e.]  2
+%% \item[f.]  6
+%% \item[g.]  0
+%% \item[h.]  4
+%% \end{enumerate}
+%% \end{multicols}
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+
+%% \begin{enumerate}
+%% \item[a.]  4.0
+%% \item[b.]  4.5
+%% \item[c.]  0
+%% \item[d.]  0.0
+%% \item[e.]  1.33
+%% \end{enumerate}
+%% \end{multicols}
+
+
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+
+%% \begin{enumerate}
+%% \item[a.]  7 {\tt int}
+%% \item[b.]  30 {\tt long}
+%% \item[c.]  14.0 {\tt double}
+%% \item[d.]  90 {\tt long}
+%% \item[e.]  4.0 {\tt double}
+%% \end{enumerate}
+%% \end{multicols}
+
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+
+%% \mbox{ }
+%% \begin{enumerate}
+%% \item[a.]  34.0   
+%% \item[b.]  54     
+%% \item[c.]  4      
+%% \item[d.]  1      
+%% \item[e.]  6      
+%% \item[f.]  0      
+%% \item[g.]  2      
+%% \item[h.]  7.5    
+%% \end{enumerate}
+%% \end{multicols}
+
+
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+
+%% %\mbox{ }
+
+%% \begin{enumerate}
+%% \item[a.]  k==5, j==5 
+%% \item[b.]  k==5, j==6 
+%% \item[c.]  k==6, j==6 
+%% \item[d.]  k==5, j==4 
+%% \item[e.]  k==4, j==4 
+%% \end{enumerate}
+%% \end{multicols}
+
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+
+%% \begin{enumerate}
+%% \item[a.]  k==15, j==5   
+%% \item[b.]  k==5, j==6    
+%% \item[c.]  k==120, j==6  
+%% \item[d.]  k==0, j==4    
+%% \item[e.]  k==0, j==5    
+%% \end{enumerate}
+%% \end{multicols}
+
+
+
+%% \item  \quad{\tt k = k + 1;}
+%% \qquad{\tt k += 1;}
+%% \qquad{\tt k++; }
+%% \qquad{\tt ++k; }
+
+%% \begin{multicols}{4}
+%% \item  \mbox{ }
+%% \begin{enumerate}
+%% \item[a.]  m = 5
+%% \item[b.]  m = 6
+%% \item[c.]  m = 15
+%% \item[d.]  m = 50
+%% \item[e.]  m = 70
+%% \end{enumerate}
+%% \end{multicols}
+
+%% \begin{multicols}{4}
+%% \item \mbox{ }
+
+%% \mbox{ }
+%% \begin{enumerate}
+%% \item[a.]  false
+%% \item[b.]  false
+%% \item[c.]  true
+%% \item[d.]  illegal
+%% \item[e.]  true
+%% \item[f.]  illegal
+%% \item[g.]  false
+%% \end{enumerate}
+%% \end{multicols}
+
+%% \item \verb| |
+
+%% \begin{jjjlisting}[27pc]
+%% \begin{lstlisting}
+%% public class TemperatureUI
+%% { private KeyboardReader reader; // Handles command line I/O
+%%   public TemperatureUI() 
+%%   { reader = new KeyboardReader(); // Create reader object
+%%   }
+%%   // Input-process-output algorithm to convert temperatures.
+%%   public void run() 
+%%   { reader.prompt("Converts Fahrenheit and Celsius.\n");
+%%     reader.prompt("Input a temperature in Fahrenheit > ");  
+%%     double tempIn = reader.getKeyboardDouble();
+%%     double tempResult = Temperature.fahrToCels(tempIn);
+%%     reader.display(tempIn + " F = " + tempResult + " C\n"); 
+%%     reader.prompt("Input a temperature in Celsius > ");  
+%%     tempIn = reader.getKeyboardDouble();
+%%     tempResult = Temperature.celsToFahr(tempIn);
+%%     reader.display(tempIn + " C = " + tempResult + " F\n "); 
+%%  } // run()
+%%  public static void main(String args[])
+%%  { TemperatureUI ui = new TemperatureUI();  // Create and
+%%    ui.run();                  //  run the user interface.
+%%  } // main()
+%% } // TemperatureUI
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item \verb| |
+
+%% \begin{jjjlisting}[35pc]
+%% \begin{lstlisting}
+%% import javax.swing.*;
+%% import java.awt.*;
+%% import java.awt.event.*;
+%%  // Use this panel with a JApplet top-level window (as per Chapter 4)
+
+%% public class TemperatureJPanel extends JPanel implements ActionListener
+%% { private JTextField inField = new JTextField(15);   // GUI components
+%%   private JTextField resultField = new JTextField(15);
+%%   private JLabel prompt1 = new JLabel("Input Temperature >>");
+%%   private JLabel prompt2 = new JLabel("Conversion Result:");
+%%   private JButton celsToFahr = new JButton("C to F");
+%%   private JButton fahrToCels = new JButton("F to C");
+%%   private JPanel panelN = new JPanel(); // Panels 
+%%   private JPanel panelC = new JPanel();  
+%%   private JPanel panelS = new JPanel();
+%%   private Temperature temperature = new Temperature(); // Temperature object
+
+%%   public TemperatureJPanel()       // Set up  user interface
+%%   { setLayout(new BorderLayout());  // Use BorderLayout
+%%     panelN.setLayout(new BorderLayout());
+%%     panelC.setLayout(new BorderLayout());
+%%     panelS.setLayout(new BorderLayout());
+%%     panelN.add("North", prompt1);     // Input elements
+%%     panelN.add("South", inField);
+%%     panelC.add("West", celsToFahr);   // Control buttons
+%%     panelC.add("East", fahrToCels);
+%%     panelS.add("North", prompt2);     // Output elements
+%%     panelS.add("South", resultField);
+%%     add("North", panelN);   // Input at the top
+%%     add("Center", panelC);  // Buttons in the center
+%%     add("South", panelS);   // Result at the bottom
+%%     celsToFahr.addActionListener(this); // Register with listeners
+%%     fahrToCels.addActionListener(this);
+%%     setSize(175,200);
+%%   } // TemperatureJPanel()
+
+%%   public void actionPerformed(ActionEvent e)
+%%   { String inputStr = inField.getText();             // User's input
+%%     double userInput = Double.parseDouble(inputStr); // Convert to double
+%%     double result = 0;
+%%     if (e.getSource() == celsToFahr) {          // Process and report 
+%%       result = temperature.celsToFahr(userInput);       
+%%       resultField.setText(inputStr + " C = " + result  + " F");
+%%     } else {
+%%       result = temperature.fahrToCels(userInput);
+%%       resultField.setText(inputStr + " F = " +  result  + " C");
+%%     }
+%%   } // actionPerformed
+%% } // TemperatureJPanel
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item \verb| |
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% public class KBTestOneRowNim
+%% { public static void main(String argv[])
+%%   { KeyboardReader kb = new KeyboardReader();
+%%     OneRowNim game = new OneRowNim(11);
+%%     while(game.gameOver() == false)
+%%     {   game.report();  // Prompt the user
+%%       System.out.print("Input 1, 2, or 3: ");
+%%       int sticks = kb.getKeyboardInteger(); // Get move
+%%       game.takeSticks(sticks);  {\color{cyan} // Do move}
+%%       System.out.println();
+%%     } // while
+%%     game.report();  // The game is now over
+%%     System.out.print("Game won by player ");
+%%     System.out.println(game.getWinner());
+%%   } // main()
+%% } // TestOneRowNim
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+
+%% \item The new version of {\tt OneRowNim} should run properly
+%% with the user interface from Chapter 4. This shows that our new
+%% definition for {\tt OneRowNim} is backwards compatible with 
+%% the old user interface. This is a good thing.
+
+%% \item \verb| |
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% public class NimPlayer
+%% { private OneRowNim nim;
+%%   public NimPlayer (OneRowNim game)
+%%   { nim = game;
+%%   } // NimPlayer()
+%%   public int move() 
+%%   { int sticksLeft = nim.getSticks();
+%%     if (sticksLeft % (nim.MAX_PICKUP + 1) != 1)
+%%       return (sticksLeft - 1) % (nim.MAX_PICKUP +1);
+%%     else 
+%%     { int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
+%%       return 1 + (int)(Math.random() * maxPickup);
+%%     } // else
+%%   } // move()
+%% } // NimPlayer
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item \verb| |
+%% \begin{jjjlisting}[27pc]
+%% \begin{lstlisting}
+%% public class KBComputerNim
+%% { public static void main(String argv[])
+%%   {   KeyboardReader kb = new KeyboardReader();
+%%     OneRowNim game = new OneRowNim(OneRowNim.MAX_STICKS);
+%%     NimPlayer computer = new NimPlayer(game);
+%%     System.out.println("Let's play One Row Nim");
+%%     while(game.gameOver() == false)  {   
+%%       if (game.getPlayer() == game.PLAYER_ONE) 
+%%       { kb.prompt("Sticks left = " + game.getSticks() + 
+%%                                  " Your move. "); //Prompt
+%%         kb.prompt("You can pick up between 1 and " + 
+%%           Math.min(game.MAX_PICKUP,game.getSticks()) +" :");
+%%         int sticks = kb.getKeyboardInteger(); // Get move
+%%         game.takeSticks(sticks);              // Do move
+%%       } else 
+%%       { kb.prompt("Sticks left = " + game.getSticks() + 
+%%                                  " My move. "); 
+%%         int sticks = computer.move();
+%%         game.takeSticks(sticks);
+%%         System.out.println("I take " + sticks);
+%%       } // else
+%%     } // while
+%%                                  // The game is now over
+%%     kb.display("Sticks left = " + game.getSticks());  
+%%     if (game.getWinner() == game.PLAYER_ONE)
+%%       System.out.println(" You win. Nice game!");
+%%     else
+%%       System.out.println(" I win. Nice game!");
+%%   } // main()
+%% } // KBComputerNim
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item \verb| |
+%% \begin{jjjlisting}[27pc]
+%% \begin{lstlisting}
+%% public class BankCD 
+%% { private double principal;   // The CD's initial principal
+%%   private double rate;        // CD's interest rate
+%%   private double years;       // Number of years to maturity
+%%   public BankCD(double p, double r, double y) 
+%%   {   principal = p;
+%%     rate = r;
+%%     years = y;
+%%   } // BandCD()
+%%   public double calcYearly() 
+%%   {   return principal * Math.pow(1 + rate, years);
+%%   } // calcYearly()
+%%   public double calcDaily() 
+%%   {   return principal * Math.pow(1 + rate/365, years*365);
+%%   } // calcDaily()
+%% } // BankCD
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item \verb| |
+
+%% \begin{jjjlistingleft}[34pc]{-8pc}
+%% \begin{lstlisting}
+%% import java.text.NumberFormat;   // For formatting \$nn.dd or n\%
+
+%% public class TestBankCD 
+%% { private KeyboardReader reader = new KeyboardReader();   
+%%   private NumberFormat dollars = NumberFormat.getCurrencyInstance(); 
+%%   private NumberFormat percent = NumberFormat.getPercentInstance();
+%%   private BankCD cd;
+
+%%   public void run()
+%%   { reader.display("Compares daily and annual compounding for a CD.\n");
+%%     reader.prompt("  Input the CD's initial principal, e.g.  1000.55 > ");
+%%     double principal = reader.getKeyboardDouble();
+%%     reader.prompt("  Input the CD's interest rate, e.g.  6.5 > ");
+%%     double rate = reader.getKeyboardDouble() / 100.0;
+%%     reader.prompt("  Input the number of years to maturity, e.g., 10.5 > ");
+%%     double years = reader.getKeyboardDouble();
+%%     cd = new BankCD(principal, rate, years);
+%%     percent.setMaximumFractionDigits(2);
+%%     System.out.println("For Principal = " + dollars.format(principal) +
+%%                        " Rate= " + percent.format(rate) +
+%%                        " Years= " + years);
+%%     double cdAnnual = cd.calcYearly();  // Compounded yearly
+%%     double cdDaily =  cd.calcDaily();   // Compounded annually
+%%     System.out.println(" The maturity value compounded yearly is " +
+%%                    dollars.format(cdAnnual));
+%%     System.out.println(" The maturity value compounded daily is: " +
+%%                    dollars.format(cdDaily));
+%%   } // run()
+
+%%   public static void main( String args[] ) 
+%%   { TestBankCD cd = new TestBankCD();
+%%     cd.run();
+%%   } // main()
+%% }// TestBankCD
+%% \end{lstlisting}
+%% \end{jjjlistingleft}
+%% \begin{multicols}{3}
+%% \item \mbox{ }
+
+%% \mbox{ }
+
+%% \begin{enumerate}
+%% \item[a.]  valid
+%% \item[b.]  valid
+%% \item[c.]  ch2 = (char)n;
+%% \item[d.]  valid
+%% \item[e.]  ch1 = (char)(m-n);
+%% \end{enumerate}
+%% \end{multicols}
+%% \end{ANS}
+
+
+\secEXRHtwoleft{Exercises}
+\marginnote{\vspace{12pt}\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+
+%% \begin{EXRtwo}{}{}
+
+%% \item  Explain the difference between the following pairs of terms:
+%% %\begin{list}{}{}
+%% \begin{EXRtwoLL}
+%% \item  {\it Representation} and {\it action}.
+%% \item  {\it Binary operator} and {\it unary operation}.
+%% \item  {\it Class constant} and {\it class variable}.
+%% \item  {\it Helper method} and {\it class method}.
+%% \item  {\it Operator overloading} and {\it method overloading}.
+%% \item  {\it Method call} and {\it method composition}.
+%% \item  {\it Type conversion} and {\it type promotion}.
+%% %\end{list}
+%% \end{EXRtwoLL}
+
+%% \item  For each of the following data types, list
+%% how many bits are used in its representation and how many values can
+%% be represented:
+
+%% \begin{EXRtwoLL}
+%% \begin{multicols}{5}
+
+%% \item  \verb!int!
+%% \item  \verb!char!
+%% \item  \verb!byte!
+
+%% \item  \verb!long!
+%% \item  \verb!double!
+%% \end{multicols}
+%% \end{EXRtwoLL}
+
+%% \item  Fill in the blanks.
+%% %\begin{list}{}{}
+%% \begin{EXRtwoLL}\baselineskip=12pt
+%% \item  Methods and variables that are associated with
+%% a class rather than with its instances must be declared \rule{40pt}{0.5pt}\,.
+%% \item  When an operation involves values of two different types,
+%% one value must be \rule{40pt}{0.5pt} before the expression can be evaluated.
+%% \item  Constants should be declared \rule{40pt}{0.5pt}\,.
+%% \item  Variables that take {\tt true} and {\tt false} as their
+%% possible values are known as \rule{40pt}{0.5pt}\,.
+%% %\end{list}
+%% \end{EXRtwoLL}\baselineskip=11pt
+
+%% \item  Arrange the following data types into a {\it promotion}
+%% hierarchy: {\tt double}, {\tt float}, {\tt int}, {\tt short}, {\tt long}.
+
+%% \item  Assuming that {\it o1} is true, {\it o2} is false,
+%% and {\it o3} is false, evaluate each of the following expressions:
+
+%% \begin{EXRtwoLL}
+%% \begin{multicols}{3}
+
+%% \item  \verb!o1 || o2 && o3!
+
+%% \item  \verb!o1 ^ o2!
+
+%% \item  \verb|!o1 && !o2|
+%% \end{multicols}
+
+%% \end{EXRtwoLL}
+
+%% \item  Arrange the following operators in precedence order:
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% + - () * / % < ==
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item  Arrange the following operators into a precedence hierarchy:
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% *,++, %, ==
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item  Parenthesize and evaluate each of the following expressions
+%% (if an expression is invalid, mark it as such):
+
+%% \begin{EXRtwoLL}
+%% \begin{multicols}{3}
+
+%% \item  \verb!11 / 3 % 2 == 1!
+%% \item  \verb!11 / 2 % 2 > 0!
+%% \item  \verb!15 % 3 >= 21 %!
+
+%% \item  \verb!12.0 / 4.0 >= 12 / 3!
+%% \item  \verb!15 / 3 == true!
+%% \end{multicols}
+
+%% \end{EXRtwoLL}
+
+
+%% \item  What value would {\it m} have after each of the 
+%% statements that follow is executed?  Assume that {\it m, k, j} are
+%% reinitialized before each statement.
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%%    int m = 5, k = 0, j = 1;
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \begin{EXRtwoLL}
+%% \begin{multicols}{3}
+
+%% \item  \verb!m = ++k + j;!
+%% \item  \verb!m += ++k * j;!
+%% \item  \verb!m %= ++k + ++j;!
+
+%% \item  \verb!m = m - k - j;!
+%% \item  \verb!m = ++m;!
+%% \end{multicols}
+
+%% \end{EXRtwoLL}
+
+%% \item  What value would {\it b} have after each of the 
+%% statements that follow is executed? Assume that {\it m, k, j} are reinitialized
+%% before each statement. It may help to parenthesize the right-hand side
+%% of the statements before evaluating them.
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%%    boolean b;
+%%    int m = 5, k = 0, j = 1;
+%% \end{lstlisting}
+%% \end{jjjlisting}
+%% \begin{EXRtwoLL}
+%% \begin{multicols}{2}
+
+%% \item  \verb!b = m > k + j;!
+%% \item  \verb±b = m * m != m * j;±
+%% \item  \verb!b = m <= 5 && m % 2 == 1;!
+%% \item  \verb!b = m < k  || k < j;!
+%% \item  \verb!b = --m == 2 * ++j;!
+%% \end{multicols}
+
+%% \end{EXRtwoLL}
+
+%% \item  For each of the following expressions, if it is valid,
+%% determine the value of the variable on the left-hand side
+%% (if not, change it to a valid \mbox{expression):}
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%%     char c = 'a' ;
+%%     int  m = 95;
+%% \end{lstlisting}
+%% \end{jjjlisting}
+%% \begin{EXRtwoLL}
+%% \begin{multicols}{3}
+
+%% \item  \verb!c = c + 5;!
+%% \item  \verb!c = 'A' + 'B';!
+%% \item  \verb!m = c + 5;!
+
+%% \item  \verb!c = (char) m + 1;!
+%% \item  \verb!m = 'a' - 32;!
+%% \end{multicols}
+
+%% \end{EXRtwoLL}
+
+%% \item  Translate each of the following expressions into Java:
+
+%% \begin{EXRtwoLL}
+%% \item  Area equals {\it pi} times the radius squared.
+%% \item  Area is assigned {\it pi} times the radius squared.
+%% \item  Volume is assigned {\it pi} times radius cubed divide by {\it h.}
+%% \item  If {\it m} and {\it n} are equal, then {\it m} is incremented by one; otherwise {\it n} 
+%% is incremented.
+%% \item  If {\it m} is greater than {\it n}
+%% times 5, then square {\it m} and double {\it n};
+%% otherwise square {\it n} and double {\it m.}
+%% \end{EXRtwoLL}
+
+%% \item  What would be output by the following code segment?
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% int m = 0, n = 0, j = 0, k = 0;
+%% m = 2 * n++;
+%% System.out.println("m= " + m + " n= " + n);
+%% j += ( --k * 2 );
+%% System.out.println("j= " + j + " k= " + k);
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% Each of the  problems that follow asks you to write a method.
+%% Of course, as you are developing the method in a stepwise
+%% fashion, you should test it. Here's a simple application
+%% program that you can use for this purpose:
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% public class MethodTester {
+%%     public static int square(int n) {
+%%         return n * n;
+%%     }
+
+%%     public static void main(String args[]) {
+%%         System.out.println("5 squared = " + square(5));
+%%     }
+%% }
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \noindent Just replace
+%% the {\tt square()} method with your method. Note that
+%% you must declare your method {\tt static} if you want
+%% to call it directly from {\tt main()} as we do here.
+
+%% \item  Write a method to calculate the sales tax for
+%% a sale item. The method should take two {\tt double} parameters, one
+%% for the sales price and the other for the tax rate. It should return a
+%% {\tt double}.  For example, {\tt calcTax(20.0, 0.05)} should return
+%% 1.0.
+
+
+%% \item  {\bf Challenge:} Suppose you're writing a program that tells what
+%% day of the week someone's birthday falls on this year. Write a method
+%% that takes an {\tt int} parameter, representing what day of the year
+%% it is, and returns a {\tt String} like ``Monday.'' For example, for
+%% 2004, a leap year, the first day of the year was on Thursday. The
+%% thirty-second day of the year (February 1, 2004) was a Sunday, so {\tt
+%% getDayOfWeek(1)} should return ``Thursday'' and {\tt getDayOfWeek(32)}
+%% should return ``Sunday.'' ({\it Hint}: If you divide the day of the
+%% year by 7, the remainder will always be a number between 0 and 6,
+%% which can be made to correspond to days of the week.)
+
+
+%% \item  {\bf Challenge:} As part of the birthday program, you'll want a method that
+%% takes the month and the day as parameters and returns what day of the
+%% year it is. For example, {\tt getDay(1,1)} should return 1;
+%% {\tt getDay(2,1)} should return 32; and {\tt getDay(12,31)} should return
+%% 365. ({\it Hint}: If the month is 3, and the day is 5, you have to add the
+%% number of days in January plus the number of days in February to 5 to
+%% get the result: 31 + 28 + 5 = 64.)
+
+%% \item  Write a Java method that converts a {\tt char}
+%% to lowercase. For example, {\tt toLowerCase('A')}
+%% should return `a'. Make sure you guard against
+%% method calls like {\tt toLowerCase('a')}.
+
+%% \item  {\bf Challenge:} Write a Java method that shifts a
+%% {\tt char} by {\it n} places in the alphabet, wrapping around to the
+%% start of the alphabet, if necessary. For example, {\tt shift('a',2)}
+%% should return `c'; {\tt shift('y',2)} should return `a'. This method
+%% can be used to create a Caesar cipher, in which every letter in a
+%% message is shifted by {\it n} places---hfu ju? (Refer to Chapter~1
+%% exercises for a refresher on Caesar cipher.)
+
+%% \item  Write a method that converts its {\tt boolean} parameter
+%% to a {\tt String}. For example, {\tt boolToString(true)}
+%% should return ``true.''
+
+%% \item  Write a Java application that first prompts the user for
+%% three numbers, which represent the sides of a rectangular cube, and
+%% then computes and outputs the volume and the surface area of the cube.
+
+%% \item  Write a Java application that prompts the user for three
+%% numbers and then outputs the three numbers in increasing order.
+
+%% \item  Write a Java application that inputs two integers and
+%% then determines whether the first is divisible by the second.
+%% ({\it Hint}: Use the modulus operator.)
+
+%% \item  Write a Java application that prints the following table:
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% N   SQUARE   CUBE
+%% 1   1        1
+%% 2   4        8
+%% 3   9        27
+%% 4   16       64
+%% 5   25       125
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \item  Design and write a Java GUI that converts kilometers to miles
+%% and vice versa. Use a {\tt JTextField} for I/O and {\tt JButton}s for
+%% the various conversion actions.
+
+%% \item  Design and write a GUI that allows a user to calculate
+%% the maturity value of a CD. The user should enter the principal,
+%% interest rate, and years, and the applet should then display the
+%% maturity value. Make use of the {\tt BankCD} class covered in this
+%% chapter.  Use separate {\tt JTextField}s for the user's inputs and a
+%% separate {\tt JTextField} for the result.
+
+%% \item  Design and write a GUI that lets the user
+%% input a birth date (month and day) and reports what day of the week
+%% it falls on. Use the {\tt getDayOfWeek()} and {\tt getDay()} methods
+%% that you developed in previous exercises.
+
+%% \item  Design and write a GUI that allows the users
+%% to input their exam grades for a course and computes
+%% their average and probable letter grade. The applet should
+%% contain a single {\tt JTextField} for inputting a grade
+%% and a single {\tt JTextField} for displaying the average
+%% and letter grade. The program should keep track internally
+%% of how many grades the student has entered. Each time a
+%% new grade is entered, it should display the current average
+%% and probable letter grade.
+
+%% \item One of the reviewers of this text has
+%% suggested an alternative design for the {\tt Temperature} class
+%% (Fig.~\ref{fig-temperature}). According to this design, the class
+%% would contain an instance variable, say, {\tt temperature}, and access
+%% methods that operate on it. The access methods would be: {\tt
+%% setFahrenheit(double)}, \break{\tt getFahrenheit():double}, {\tt
+%% setCelsius(double)}, and {\tt getCelsius():} {\tt double}. One way to
+%% implement this design is to store the temperature in the Kelvin scale
+%% and then convert from and to Kelvin in the access methods.  The
+%% formula for converting Kelvin to Celsius is
+
+%% \begin{jjjlisting}
+%% \begin{lstlisting}
+%% K = C + 273.15
+%% \end{lstlisting}
+%% \end{jjjlisting}
+
+%% \noindent Draw a UML class diagram representing this design
+%% of the {\tt Temperature} class. Which design is more object oriented,
+%% this one or the one used in Figure~\ref{fig-temperature}?
+
+%% \item Write an implementation of the {\tt Temperature}
+%% class using the design described in the previous exercise. 
+
+%% \end{EXRtwo}
+

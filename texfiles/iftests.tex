@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{pstricks}
+\usepackage{ifthen}
+
+\newlength{\ylen}
+\pagestyle{empty}
+
+\begin{document}
+
+\typeout{Default value:\the\ylen}
+
+\setlength{\ylen}{-1pt}
+\ifdim\ylen>0pt\else\typeout{Point 1}\pssetlength{\ylen}{-\ylen}\fi
+
+\setlength{\ylen}{-1pt}
+\ifdim\ylen<0pt\typeout{Point 2}\pssetlength{\ylen}{-\ylen}\fi
+
+
+
+%-----------------------------------------
+% (1) a simple test to get started.
+%-----------------------------------------
+\newcommand{\printTrueOrFalse}[1]
+{
+  \ifthenelse{\equal{#1}{true}}{\typeout{TRUE}}{}
+  \ifthenelse{\equal{#1}{false}}{\typeout{FALSE}}{}
+}
+
+\printTrueOrFalse{true}
+
+
+%-----------------------------------------
+% (2) print the day of the week
+%-----------------------------------------
+\newcommand{\dayOfWeek}[1]
+{
+  \ifthenelse{\equal{#1}{0}}{\typeout{Sunday}}{}
+  \ifthenelse{\equal{#1}{1}}{\typeout{Monday}}{}
+  \ifthenelse{\equal{#1}{2}}{\typeout{Tuesday}}{}
+  \ifthenelse{\equal{#1}{3}}{\typeout{Wednesday}}{}
+  \ifthenelse{\equal{#1}{4}}{\typeout{Thursday}}{}
+  \ifthenelse{\equal{#1}{5}}{\typeout{Friday}}{}
+  \ifthenelse{\equal{#1}{6}}{\typeout{Saturday}}{}
+}
+
+\dayOfWeek{0}
+\dayOfWeek{1}
+\dayOfWeek{2}
+\dayOfWeek{3}
+\dayOfWeek{4}
+\dayOfWeek{5}
+\dayOfWeek{6}
+
+\newcommand{\oddpage}
+{
+   \ifodd \thepage \typeout{Odd Page} \else \typeout{Even Page} \fi
+}
+
+\typeout{The page is \thepage .}
+\oddpage
+\setcounter{page}{2}
+\typeout{The page is \thepage .}
+\oddpage
+
+
+\end{document}

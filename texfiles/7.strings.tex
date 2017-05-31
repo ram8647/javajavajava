@@ -1,0 +1,2905 @@
+%%%  Chapter 7: Strings and String Processing
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{6}
+\chapter{Strings and String  Processing}
+\label{chapter-strings}
+\label{pg-chapter-strings}
+
+\CObegin
+\secCOBH{Objectives}
+
+\noindent After studying this chapter, you will
+\begin{COBL}
+\item  Be more familiar with Java {\tt String}s.
+\item  Know how to solve problems that involve manipulating strings.
+\item  Be able to use loops in designing string-processing algorithms.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item {\tt String} Basics
+\item Finding Things Within a {\tt String}
+\item Example: Keyword Search
+\item From the Java Library: {\tt StringBuffer}
+\item Retrieving Parts of Strings
+\item Example: Processing Names and Passwords
+\item Processing Each Character in a {\tt String}
+\item Comparing {\tt String}s
+\item From the Java Library: {\tt StringTokenizer}
+\item Handling Text in a Graphics Context (Optional)
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+
+You have already had an introduction to {\tt String}s in the early
+chapters of this text.  In Chapter~2, we introduced the {\tt String}
+data type and showed how to create {\tt String} objects and use {\tt
+String} methods, such as {\tt length()}, {\tt concat()}, and {\tt
+equals()}.
+
+We have seen {\tt String}s used for GUI I/O operations when used {\tt
+String}s as the contents of {\tt JTextField}s and other text
+components, as the values of {\tt JLabel}s, as the labels for {\tt
+JButton}s, and so on. {\tt String}s are also used extensively in
+command-line interfaces.
+
+Another important task that {\tt String}s are used for are as a
+standard way of presenting or displaying information about objects.
+As we saw in Chapter~2, one of the key conventions of the Java class
+hierarchy is that every class inherits the {\tt Object.toString()}
+method, which can be used to provide a string representation of any
+object.  For example, \mbox{\tt Integer.toString()} converts an {\tt
+int} to a {\tt String}, so that it can be used in {\tt JTextField}s or
+{\tt JLabel}s.
+
+Programmers often have to work with strings.   Think of some of the
+tasks performed by a typical word processor, such as cut, paste, copy,
+and insert.  When you cut and paste text from one part of the document
+to another, the program has to move one string of text, the cut, from
+one location in the document and insert it in another.
+
+Strings are also important because they are our first look at a {\em
+data structure}.  A {\bf data structure}\index{data structure} is a
+collection of data that is organized (structured) in some way.  A {\bf
+string} is a collection of character ({\tt char}) data.  Strings are
+important data structures in a programming language, and they are used
+to represent a wide variety of data.
+
+The main purpose of this chapter is to provide a detailed discussion
+of Java's string-related classes, including the {\tt String}, {\tt
+StringBuffer}, and {\tt StringTokenizer} classes.  These are the
+important classes for writing string-processing applications.  Our
+goal is to introduce the
+%\begin{figure}
+%\begin{graphic}
+%\begin{figure}[tb]
+\marginfig{chptr07/stringclass.eps}{The {\tt java.lang.String} class.
+\label{fig-p349f1}
+\label{pg-fig-p349f1}}
+%\end{figure}
+%\end{graphic}
+%\end{figure}
+important {\tt String} methods and illustrate common string-processing
+algorithms.  We will review how to create strings from scratch and from
+other data types. We will learn how to find characters and substrings
+inside bigger strings.  We will learn how to take strings apart and
+how to rearrange their parts.   Finally, we will learn how to apply these
+string-processing skills in a program that plays the game of Hang Man.
+
+\section{String Basics}
+%%%\RHright{{\tt String} Basics}
+\label{sec-strconstr}
+\label{pg-sec-strconstr}
+\noindent Before we cover the new material on {\tt String}s, let's
+first review what we know about this topic.  In Java, {\tt String}s
+are considered full-fledged objects.  A {\tt String} object is a
+sequence of the characters that make up the string, plus the methods
+that are used to manipulate the string.  The {\tt java.lang.String}
+class (Fig.~\ref{fig-p349f1}) \marginnote{Are strings objects?}  is a
+direct subclass of {\tt Object}, and it contains many public methods
+that can be used to perform useful operations on strings (such as
+concatenation).  We will discuss a selection of the more commonly used
+methods, but for a full listing and description of the {\tt String}
+methods~see 
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/1.5.0/docs/api/
+\end{lstlisting}
+\end{jjjlisting}
+\WWW
+
+
+\noindent Like other object variables, {\tt String} variables serve as
+{\it references} to their respective objects.  However, unlike other
+Java objects, {\tt String}s have certain characteristics in common
+with the primitive data types.  For example, as we have already seen,
+Java allows for literal strings.  A {\bf string literal}
+is a sequence of zero or more characters contained in double quotes,
+such as ``Socrates'' and ``'' (the {\bf empty string}).  Java allows
+us to perform operations on literal strings, such as concatenation. As
+we have already seen, the expression {\tt "Hello" + "world"} results
+in the string {\tt "Helloworld"}.  Java also allows us to use string
+literals to initialize {\tt String} variables with an assignment
+statement.  These exceptional features greatly simplify the use of
+{\tt String}s in our programs. Given how much we use {\tt String}s,
+incorporating these features into Java seems like a good design
+decision.
+
+\subsection{Constructing Strings}
+\noindent To create {\tt String} objects, the {\tt String} class provides
+many constructors, including the following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String();        // Creates an empty string
+   // Copy constructor: Creates a copy of a string
+public String(String initial_value); 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When we create an object using the first constructor, as in
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String name = new String();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Java will create a {\tt String} object and make {\tt name}
+\marginfig{chptr07/p349f2.eps}{An empty string is a {\tt String} object
+with value ``'' and count 0.\break
+\label{fig-emptystring}\label{pg-fig-emptystring}}
+the reference to it.  Figure~7.2 shows a hypothetical representation
+of a {\tt String} object. In addition to storing the sequence of
+characters that make up the string, Java also stores an integer value
+representing the number of characters in the string.  We have chosen
+to represent these two elements as the private instance variables,
+{\tt value}, for the sequence of characters, and {\tt count} for the
+number of characters. In fact, we don't know exactly how Java stores
+the sequence of characters. That information is hidden. As Figure~7.2
+illustrates, when we use the default constructor, the value of the is
+the empty string and its count is 0.
+
+
+The second constructor is the {\em copy constructor} for the {\tt
+String} class.  A {\bf copy constructor} is a constructor that makes a
+duplicate, sometimes called a clone, of an object. Many Java classes
+have copy constructors.  Consider the following statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = new String("Hello"););
+String s2 = new String(s1);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent These two statements would result in two distinct {\tt
+String} objects, both storing the word ``Hello''.
+
+Note that in the first of the preceding statements, we used the
+literal string ``Hello'' in the constructor.  When Java encounters a
+\marginfig{chptr07/p349f3.eps}{The literal {\tt String} ``Socrates.''\break
+\label{fig-literalstr}\label{pg-fig-literalstr}}
+new literal string in a program, it constructs an object for it.  For
+example, if your program contained the literal ``Socrates,'' Java
+would create an object for it and treat the literal itself as a
+reference to the object (Fig.~7.3).
+
+We often use a string literal to assign a value to a {\tt String}
+variable: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s;      // The value of s is initially null
+s = "Socrates";// s now refers to "Socrates" object
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the reference variable {\it s} is initially
+{\tt null}---that is, it has no referent, no object, to refer to.
+However, after the assignment statement, {\it s} would refer to the
+literal object ``Socrates,'' which is depicted in Figure~7.3. Given
+these two statements, we still have only one object, the {\tt String}
+object containing the word ``Socrates.''.  But now we have two
+references to it: the literal string ``Socrates,'' and the reference
+variable {\it s}.
+
+Assignment statements can also be used as initializers when declaring
+a {\tt String} variable:
+\marginfig{chptr07/p350f1.eps}{The variables {\tt name1}, {\tt name2},
+and {\tt name3} serve as references to the literal {\tt String}
+objects ``Socrates'' and ``''.
+\label{fig-literalrefs}
+\label{pg-fig-literalrefs}}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String name1 = "";  // Reference to the empty string
+String name2 = "Socrates";// References to "Socrates"
+String name3 = "Socrates";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, Java does not construct new {\tt String}
+objects.  Instead, as Figure~7.4 shows, it simply makes the variables
+{\tt name1}, {\tt name2}, and {\tt name3} serve as references to the
+same objects that are referred to by the literal strings ``'' and
+``Socrates.'' This is a direct consequence of Java's policy of
+creating only one object to serve as the referent of a literal string,
+no matter how many occurrences there are of that literal in the
+program.  Thus, these declarations result in no new objects, just new
+references to existing objects.  The justification for this policy is
+that it saves lots of memory in our programs. Instead of creating a
+{\tt String} object for each occurrence of the literal ``Socrates,''
+Java creates one object and lets all occurrences of ``Socrates'' refer
+to that object.
+
+Finally, consider the following declarations, which do invoke the
+{\tt String} constructors:
+\marginfig{chptr07/p351f1.eps}{Together with the objects in Figure~7.4, there
+are now four different {\tt String} objects with
+eight different references to them, including the literals ``Socrates''
+\break and ``''.
+\label{fig-strobjects}
+\label{pg-fig-strobjects}}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String name4 = new String();    // Creates an object
+String name5 = new String("Socrates");
+String name6 = name4;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, as shown in Figure~7.5,  Java creates 
+two new objects and sets {\tt name4} to refer to the first and {\tt
+name5} to refer to the second.  It gives {\tt name4} the empty string
+as its value, and it gives {\tt name5} ``Socrates'' as its value.  But
+these two objects must be distinguished from the objects corresponding
+to the literals (``''~and ``Socrates'') themselves.  The
+declaration of {\tt name6} just creates a second reference to the
+object referred to by {\tt name4}.
+
+\JavaRule[false]{Strings.}{Java {\tt String}s are
+full-fledged objects, but they have some properties in common with
+primitive types.  They can have literal values and they can be used in
+assignment statements.}
+
+\JavaRule[false]{String Declaration and Instantiation.}{Unless
+a {\tt String()} constructor is called explicitly, no new {\tt String}
+object is created when declaring a {\tt String} variable and
+assigning it an initial value.}
+
+
+\subsection{Concatenating Strings }
+\noindent Another way to build a {\tt String} object is to concatenate
+two other strings. Recall from Chapter~2 that there are two ways to
+perform string concatenation in Java: We can use the {\tt concat()}
+method or the concatenation operator, $+$.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String lastName = "Onassis";
+String jackie = 
+   new String("Jacqueline " + "Kennedy " + lastName);
+System.out.println("Jacqueline".concat(lastName));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The second of these statements uses the {\it concatenation
+%\begin{marginalnote}\it String concatenation\end{marginalnote}
+\marginnote{String concatenation}
+operator}, $+$, to create the {\tt String} ``Jacqueline Kennedy Onassis.''
+The third statement uses the {\tt String} method, {\tt concat()},
+to print ``JacquelineOnassis.''
+
+\noindent Using the + symbol as the string concatenation operator is
+\marginnote{Operator overloading} another example of {\it operator
+overloading}---using the same operator for two or more different
+operations---which we encountered in Chapter~5.
+
+\JavaRule{String Concatenation.}{When surrounded on
+either side by a {\tt String}, the + symbol is used as a binary {\bf
+concatenation} operator.  It has the effect of joining two strings
+together to form a single string.}
+
+\noindent Note that primitive types are automatically promoted to {\tt
+String}s when they are mixed with concatenation operators.  Thus, the
+statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println("The sum of 5 and 5 = "+ (5 + 5));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will print the string ``The sum of 5 and 5 = 10.''  Note
+that the integer addition---(5 + 5)---is performed first, before the
+integer result is converted into a String.  If we had left off the
+parentheses around the addition operation, the second plus sign would
+also be interpreted as a concatenation operator. Thus,
+
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent would print ``The concatenation of 5 and 5 = 55.''
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  What will be printed by each of the following segments of code?
+\begin{EXRLL}
+\item  \verb|String s1 = "silly"; System.out.println(s1);|
+\item  \verb|String s2 = s1; System.out.println(s2);|
+\item  \verb|String s3 = new String (s1 + " stuff");|
+       \\ \verb|    System.out.println(s3);|
+\end{EXRLL}
+
+\item  Write a {\tt String} declaration that satisfies each
+of the following descriptions:
+\begin{EXRLL}
+\item  Initialize a {\tt String} variable, {\it str1}, to the empty
+        string.
+\item  Instantiate a {\tt String} object, {\it str2}, and initialize
+        it to the word {\it stop}.
+\item  Initialize a {\tt String} variable, {\it str}, to the concatenation of
+{\it str1} and {\it str2}.
+\end{EXRLL}
+
+\item  Evaluate the following expressions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int M = 5, N = 10;
+String s1 = "51", s2 = "75";
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{EXRLL}
+\begin{multicols}{3}
+\item \verb|M + N|
+\item \verb|M + s1|
+\item \verb|s1 + s2|     
+\end{multicols}
+\end{EXRLL}
+
+
+\item  Draw a picture, similar to Figure~7.5, showing the
+objects and references that are created by the following declarations:
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1, s2 = "Hello", s3 = "Hello";
+String s4 = "hello";
+String s5 = new String("Hello");
+String s6 = s5;
+String s7 = s3;
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+\subsection{Indexing {\tt String}s }
+
+\noindent Programmers often need to take strings apart or put them
+together or rearrange them. Just think of the many word-processing
+tasks, such as cut and paste, that involve such operations.  To help
+simplify such operations, it is useful to know how many characters a
+string contains and to number, or {\em index}, the characters that
+make up the string.
+
+The number of characters in a string is called its {\it length}.  The
+%\begin{marginalnote}\it String length\end{marginalnote}
+\marginnote{String length}
+{\tt String} instance method, {\tt length()}, returns an integer that
+gives the {\tt String}'s length.  For example, consider the following
+{\tt String} declarations and the corresponding values of the
+{\tt length()} method for each case:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String string1 = "";           string1.length()  ==> 0
+String string2 = "Hello";      string2.length()  ==> 5
+String string3 = "World";      string3.length()  ==> 5
+String string4 = string2 + " " 
+    + string3;                 string4.length()  ==> 11
+\end{lstlisting}
+\end{jjjlisting}
+%-3.5pc
+
+The position of a particular character in a string is called its {\bf
+\marginfig{chptr07/7f5.eps}{The string ``Socrates''
+has eight characters, indexed from 0 to 7. This is an example
+of {\it zero indexing}.
+\label{fig-zeroindex}
+\label{pg-fig-zeroindex}}
+string index}. All {\tt String}s in Java are {\bf zero
+indexed}\index{zero indexed}---that is, the index of the first
+character is zero.  (Remember, zero indexing is contrasted with {\bf
+unit indexing}, in which we start counting at 1.)  For example, in
+``Socrates,'' the letter {\it S} occurs at index 0, the letter {\it o}
+occurs at index 1, {\it r} occurs at index 3, and so on.  Thus, the
+{\tt String} ``Socrates'' contains eight characters indexed from 0 to
+7 (Fig.~7\mbox{.}6).  Zero indexing is customary in programming
+languages.  We will see other examples of this when we talk about
+arrays and vectors.
+
+\JavaRule{String Indexing.}{Strings are indexed
+starting at 0. The first character in a string is at position 0.}
+
+\JavaTIP{DEBUGGING TIP}{Zero Versus Unit Indexing.}
+{Syntax and semantic errors will result if you forget that strings are
+zero indexed.  In a string of {\it N} characters, the first character
+occurs at index 0 and the last at index $N-1$. This is
+different from the {\tt String.length()} method, which gives the
+number of characters in the string, counting from 1.}
+
+\subsection{Converting Data to Strings}
+\noindent The {\tt String.valueOf()} method is a {\it class method}
+that is used to convert a value of some primitive type into a {\tt
+String} object.  For example, the expression, {\tt
+String.valueOf(128)} converts its {\tt int} argument to the~{\tt
+String} ``128.''
+
+There are different versions of  {\tt valueOf()}, each of which
+has the following type of signature:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+static public String valueOf(Type);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent where {\tt Type} stands for any primitive data type,
+including {\tt boolean}, {\tt char}, {\tt int}, {\tt double}, and so
+on.
+
+The {\tt valueOf()} method is most useful for initializing
+{\tt String}s.  Because {\tt valueOf()} is a class method, it can be used as
+follows to instantiate new {\tt String} objects:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String number = String.valueOf(128); // Creates "128"
+String truth = String.valueOf(true); // Creates "true"
+String bee = String.valueOf('B');    // Creates "B"
+String pi = String.valueOf(Math.PI);  // Creates "3.14159"
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We have already seen that Java automatically promotes
+primitive type values to {\tt String} where necessary, so why do we
+need the {\tt valueOf()} methods?  For example, we can initialize a
+{\tt String} to ``3.14159'' as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String pi = new String(""+Math.PI);// Creates "3.14"
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, because it is part of a concatenation
+expression, the value of {\tt Math.PI} will automatically be promoted
+to a {\tt String} value. The point of the {\tt valueOf()} method is
+twofold. First, it may be the method that the Java compiler relies on
+to perform string promotions such as this one. Second, using it in a
+program---even when it is not completely necessary---makes the
+promotion operation explicit rather than leaving it implicit. This
+\marginnote{Readability}
+helps to make the code more readable. (Also, see Exercise 7.9.)
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Evaluate each of the following expressions:
+
+\begin{EXRLL}
+\begin{multicols}{2}
+\item  \verb|String.valueOf (45)|     
+\item  \verb|String.valueOf (128 - 7)|
+\item  \verb|String.valueOf ('X')|    
+\end{multicols}
+\end{EXRLL}
+
+
+\item  Write an expression to satisfy each of the following \mbox{descriptions:}
+
+\begin{EXRLL}
+\item  Convert the integer value 100 to the string "100". 
+\item  Convert the character 'V' to the string "V".       
+\item  Initialize a new String object to  X times Y.      
+\end{EXRLL}
+
+\end{SSTUDY}
+
+
+%%%RAN\RHrightsec{7.3}{Finding Things Within a String}
+\section{Finding Things Within a String}
+
+\noindent Programmers often have to find the location of a particular
+character or substring in a string. For example, user names and
+passwords are sometimes stored in a single string in which the name
+and password are separated from each other by a special character,
+such as a colon ({\tt username:password}). In order to get the name or
+password from such a string, it is convenient to have methods that
+will search the string and report the index of the colon character.
+
+The {\tt indexOf()} and {\tt lastIndexOf()}
+methods\index{lastIndexOf() method} are instance methods that can be
+used to find the index position of a character or a substring within a
+{\tt String}. There are several versions of each:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int indexOf(int character);
+public int indexOf(int character, int startingIndex);
+public int indexOf(String string);
+public int indexOf(String string, int startingIndex);
+
+public int lastIndexOf(int character);
+public int lastIndexOf(int character, int startingIndex);
+public int lastIndexOf(String string);
+public int lastIndexOf(String string, int startingIndex);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt indexOf()} method searches from left to right within
+a {\tt String} for either a character or a substring.  The
+{\tt lastIndexOf()} method searches from right to left for a character or
+substring.  To illustrate, suppose we have declared the following
+{\tt String}s:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String string1 = "";
+String string2 = "Hello";
+String string3 = "World";
+String string4 = string2 + " " + string3;
+\end{lstlisting}
+\end{jjjlisting}
+
+
+
+\noindent Recalling that {\tt String}s are indexed starting at 0,
+searching for {\it o} in the various strings gives the following results:
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+string1.indexOf('o') ==> -1  string1.lastIndexOf('o') ==> -1
+string2.indexOf('o') ==>  4  string2.lastIndexOf('o') ==>  4
+string3.indexOf('o') ==>  1  string3.lastIndexOf('o') ==>  1
+string4.indexOf('o') ==>  4  string4.lastIndexOf('o') ==>  7
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent Because {\tt string1} is the empty string, ``'', it does not
+%\begin{marginalnote}\it Sentinel return value\end{marginalnote}
+\marginnote{Sentinel return value}
+contain the letter {\it o}. Therefore, {\tt indexOf()} returns $-1$, a
+value that cannot be a valid index for a {\tt String}. This convention
+is followed in {\tt indexOf()} and {\tt lastIndexOf()}.  Because
+{\tt string2} and {\tt string3} each contain only one occurrence of the
+letter {\it o}, both {\tt indexOf()} and {\tt lastIndexOf()} return the
+same value when used on these {\tt String}s.  Because {\tt string4}
+contains two occurrences of {\it o}, {\tt indexOf()} and
+{\tt lastIndexOf()} return different values in this case.
+%\begin{figure}
+%\begin{graphic}
+%\begin{figure}[tb]
+\marginfig{chptr07/7f6.eps}{The indexing of the ``Hello World'' string.
+\label{fig-helloindex}
+\label{pg-fig-helloindex}}
+%\end{figure}
+%\end{graphic}
+%\end{figure}
+As Figure~7.7 shows, the first {\it o} in ``Hello World''
+occurs at index 4, the value returned by {\tt indexOf()}. The second
+{\it o} occurs at index 7, which is the value returned by
+{\tt lastIndexOf()}.
+
+By default, the single-parameter versions of {\tt indexOf()} and
+{\tt last\-IndexOf()} start their searches at their respective (left or
+right) ends of the string.   The two-parameter versions of these
+methods allow you to specify both the direction and starting point of
+the search.   The second parameter specifies the starting
+index.  Consider these examples:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+string4.indexOf('o', 5)     ==> 7
+string4.lastIndexOf('o', 5) ==> 4
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If we start searching in both cases at index 5, then
+{\tt indexOf()} will miss the {\it o} that occurs at index 4. The first
+{\it o} it finds will be the one at index 7. Similarly,
+{\tt lastIndexOf()} will miss the {\it o} that occurs at index 7 and will find
+the {\it o} that occurs at index 4.
+
+The {\tt indexOf()} and {\tt lastIndexOf()} methods can also be used
+to find substrings:
+
+
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+string1.indexOf("or") ==> -1  string1.lastIndexOf("or") ==> -1
+string2.indexOf("or") ==> -1  string2.lastIndexOf("or") ==> -1
+string3.indexOf("or") ==>  1  string3.lastIndexOf("or") ==>  1
+string4.indexOf("or") ==>  7  string4.lastIndexOf("or") ==>  7
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent The substring ``or'' does not occur in either
+{\tt string1} or {\tt string2}. It does occur beginning at location 1
+in {\tt string3} and beginning at location 7 in {\tt string4}. For
+this collection of examples, it doesn't matter whether we search from
+left to right or right to left.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Suppose the {\tt String} variable {\tt s} has been
+initialized to ``mom.'' Evaluate each of the following
+expressions:
+
+\begin{EXRLL}
+
+\begin{multicols}{3}
+\item  \verb|s.indexOf("m");|  
+\item  \verb|s.indexOf("o");|  
+\item  \verb|s.indexOf("M");|  
+\end{multicols}
+
+\end{EXRLL}
+
+\item  Evaluate the  expressions given the {\tt String} declaration
+\verb|String s1 = "Java, Java, Java";|
+
+\begin{EXRLL}\columnsep=0pt
+\scriptsize
+\begin{multicols}{2}
+\item  \verb|s1.length()|                      
+\item  \verb|String.valueOf(s1.length())|      
+\item  \verb|s1.indexOf('a')|                  
+\item  \verb|s1.lastIndexOf('a')|              
+\item  \verb|s1.indexOf("av")|                 
+\item  \verb|s1.lastIndexOf("av")|           
+\item  \verb|s1.indexOf('a', 5)|               
+\item  \verb|s1.lastIndexOf('a', 5)|           
+\item \verb|s1.indexOf("av", s1.length() - 10)|      
+\item \verb|s1.lastIndexOf("av",| \\\verb|s1.length() - 4)|   
+\item \verb|s1.indexOf("a", s1.indexOf("va"))|       
+\end{multicols}
+\normalsize
+\end{EXRLL}
+
+\item  Evaluate the following expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  String tricky = "abcdefg01234567";
+  tricky.indexOf(String.valueOf( tricky.indexOf("c")));
+\end{lstlisting}
+\end{jjjlisting}
+\end{SSTUDY}
+
+\section{Example: Keyword Search}
+\noindent One of the most widely used Web browser functions is the search
+utility.   You probably know how it works.  You type in a keyword and
+click on a button, and it returns with a list of Web pages that
+contain the keyword.
+
+Suppose you were writing a browser in Java.  How would you implement
+this function? Of course, we don't know yet how to read files or Web
+pages, and we won't cover that until Chapter~11.
+But, for now, we can write a method that will search a string for all
+occurrences of a given keyword.  That's at least part of the task that
+the browser's search engine would have to do.
+
+So we want a method, {\tt keywordSearch()}, that takes two
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+{\tt String} parameters, one for the string that's being searched, and the
+other representing the keyword.  Let's have the method return a
+{\tt String} that lists the number of keyword occurrences, followed
+by the index of each occurrence.  For example, if we asked this method
+to find all occurrences of {\it is} in ``This is a test,'' it should return
+the string ``2: 2 5'' because there are two occurrences of
+{\it is}, one starting at index 2 and the other at index 5 in the string.
+
+The algorithm for this method will require a loop, because we want to
+%\begin{marginalnote}\it Algorithm design\end{marginalnote}
+know the location of every occurrence of the keyword in the string.
+One way to do this would be to use the {\tt indexOf()} method to
+search for the location of substrings in the string.   If it finds the
+\marginnote{\vspace{-24pt}Algorithm design}
+keyword at index {\it N}, it should record that location and then continue
+searching for more occurrences starting at index $N+1$ in the string.  It
+should continue in this way until there are no more occurrences.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Suppose S is our string and K is the keyword.
+Initialize a counter variable and result string.
+Set Ptr to the indexOf() the first occurrence of K in S.
+While (Ptr != -1)
+    Increment the counter
+    Insert Ptr into the result string
+    Set Ptr to the next location of the keyword in S
+Insert the count into the result string
+Return the result string as a String
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As this pseudocode shows, the algorithm uses a while loop
+%\begin{marginalnote}\it Implementation\end{marginalnote}
+\marginnote{Implementation}
+with a {\it sentinel bound}.  The algorithm terminates when the
+{\tt indexOf()} method returns a $-1$, indicating that there are no more
+occurrences of the keyword in the string.
+
+Translating the pseudocode into Java gives us the method shown in
+Figure~\ref{fig-keywordsearch}.  Note how string concatenation is used
+to build the \mbox{\tt resultStr}. Each time an occurrence is found, its
+location ({\tt ptr}) is concatenated to the right-hand side of the
+{\tt resultStr}.  When the loop terminates, the number of occurrences
+({\tt count}) is concatenated to the left-hand side of the
+{\tt resultStr}.
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+/**
+ * Pre:  s and keyword are any Strings
+ * Post: keywordSearch() returns a String containing the
+ *  number of occurrences of keyword in s, followed
+ *  by the starting location of each occurrence
+ */
+public String keywordSearch(String s, String keyword) {
+  String resultStr = "";
+  int count = 0;
+  int ptr = s.indexOf(keyword);
+  while (ptr != -1) {
+    ++count;
+    resultStr = resultStr + ptr + " ";
+    ptr = s.indexOf(keyword, ptr + 1);// Next occurrence
+  }
+  resultStr = count + ": " + resultStr;// Insert the count
+  return resultStr;                  // Return as a String
+} // keywordSearch()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt key\-word\-Search()} method.
+\label{fig-keywordsearch}
+\label{pg-fig-keywordsearch}}
+\end{figure}
+
+\subsection*{Testing and Debugging}
+\noindent What test data should we use for the {\tt keywordSearch()} method?
+%\begin{marginalnote}\it What test data do we need?\end{marginalnote}
+\marginnote{What test data do we need?}  One important consideration
+in this case is to test that the method works for all possible
+locations of the keyword within the string.  Thus, the method should
+be tested on strings that contain keyword occurrences at the
+beginning, middle, and end of the string.  We should also test the
+method with a string that doesn't contain the keyword.  Such tests
+will help verify that the loop will terminate properly in all cases.
+Given these considerations, Table~7.1 shows the tests that were made.
+As you can see from these results, the method did produce the expected
+outcomes.  While these tests do not guarantee its correctness, they
+provide considerable evidence that the algorithm works correctly.
+
+
+\begin{table}[htb]
+%\hphantom{\caption{Testing the {\tt keywordSearch()} method.}
+%\label{tab-tests}
+%\label{pg-tab-tests}}
+\TBT{0pc}{Testing the {\tt keywordSearch()} method.}
+\hspace*{-6pt}\begin{tabular}{ll} 
+\multicolumn{2}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%\TBCH{Test Performed}         & \TBCH{Expected Result}
+{Test Performed}         & {Expected Result}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+\verb|keywordSearch("this is a test","is")|           & 2: 2 5        \cr
+\verb|keywordSearch("able was i ere i saw elba","a")|\hspace*{5pt} & 4: 0 6 18 24  \cr
+\verb|keywordSearch("this is a test","taste")|        & 0:            
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Test Data.}{In designing test data to
+check the correctness of a string searching algorithm, it's
+important to use data that test all possible outcomes.}
+
+
+%%%RAM\begin{javalibrary}{{\fontBXsevenCDT java.lang.StringBuffer}}
+\section{From the Java Library: java.lang.StringBuffer}
+\WWWjava
+
+\tBOXseven{One problem} with the {\tt keywordSearch()} method is that
+it is not very efficient because a {\tt String} in Java is a {\bf
+read-only} object.  This means that once it has been instantiated, a
+{\tt String} cannot be changed.  You cannot insert new characters or
+delete existing characters from it.
+
+\JavaRule{Strings Are Immutable.}{Once instantiated,
+a Java {\tt String} cannot be altered in any way.}
+
+\noindent Given this fact, how is it possible that the {\tt
+resultStr} in the {\tt keyword\-Search()} ends up with the
+correct value?
+he answer is that every time we assign a new value to {\tt
+resultStr}, Java has to create a new {\tt String} object.  
+Figure~7.9 illustrates the process. Thus, given the statement
+\begin{jjjlisting}
+\begin{lstlisting}
+resultStr = resultStr + ptr + " ";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Java will evaluate the right-hand side, which creates a new
+{\tt String} object whose value would be the concatenation of the
+right-hand-side elements, \verb|resultStr + ptr + " "|
+(Fig.~7\mbox{.}9a). It would then assign the new object as the new
+referent of {\tt resultStr} (Fig.~7.9b).  This turns the previous
+referent of {\tt resultStr} into an {\bf orphan object}---that is,
+into an object that no longer has any references to~it.  Java will
+eventually dispose of these orphaned objects, removing them from
+memory in a process known as {\bf garbage collection}.  However,
+creating and disposing of objects is a task that consumes the
+computer's time.
+
+The fact that this assignment statement occurs within a loop means
+that several new objects are created and later garbage collected.
+Because object creation is a relatively time-consuming and
+memory-consuming operation, this algorithm is somewhat wasteful of
+Java's resources.  
+\marginfig{chptr07/p359f1.eps}{\small Evaluating {\tt resultStr =
+resultStr + ptr + " "} creates an orphan object that must be garbage
+collected.
+\label{fig-orphan}
+\label{pg-fig-orphan}}
+
+Of course, except for the inefficiency of doing it this way, no real
+harm is done by this algorithm used in the {\tt keywordSearch()}
+method.  Java's garbage collector will automatically reclaim the
+memory used by the orphaned object. However, this algorithm does
+consume more of Java's resources than other algorithms we might use.
+
+\JavaRule{Automatic Garbage Collection.}{An object that
+has no reference to it can no longer be used in a program.  Therefore,
+Java will automatically get rid of it.  This is known as
+{\it garbage collection}.}
+
+\noindent A more efficient way to write the {\tt keywordSearch()}
+method would make use of a {\tt StringBuffer} to store and construct
+the {\tt resultStr}.  Like the {\tt String} class, the {\tt
+java.lang.StringBuffer} class also represents a string of characters.
+However, unlike the {\tt String} class, a {\tt StringBuffer} can be
+modified, and it can grow and shrink in length as
+%\begin{marginalnote}\it Choosing the appropriate data structure\end{marginalnote}
+\marginnote{\vspace{36pt}\raggedright Choosing the appropriate data structure}
+necessary.  As Figure~7.10 shows, the {\tt StringBuffer}
+class contains several of the same kind of methods as the {\tt String}
+class, for example, {\tt charAt()} and {\tt length()}. But it also
+contains methods that allow characters and other types of data to be
+inserted into a string, such as {\tt append()}, {\tt insert()}, and
+{\tt setCharAt()}.  Most string-processing algorithms use {\tt
+StringBuffer}s instead of {\tt String}s as their preferred data
+structure.
+
+\JavaTIP{PROGRAMMING TIP}{StringBuffer.}{A {\tt StringBuffer} should
+be used instead of a {\tt String} for any task that involves modifying
+a string.}
+
+\noindent The {\tt StringBuffer} class provides several methods that are useful
+for string processing. The constructor method, {\tt
+StringBuffer(String)}, makes it easy to convert a {\tt String} into a
+{\tt StringBuffer}. Similarly, once you are done processing the
+buffer, the {\tt toString()} method makes it easy to convert a {\tt
+StringBuffer} back into a {\tt String}.
+
+The typical way to use a {\tt StringBuffer} is shown in the following
+revised version of the {\tt keywordSearch()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String keywordSearch(String s, String keyword) {
+                                   // Create StringBuffer
+  StringBuffer resultStr = new StringBuffer(); 
+  int count = 0;
+  int ptr = s.indexOf(keyword);
+  while (ptr != -1) {
+    ++count;
+    resultStr.append(ptr + " ");  // Append to buffer
+    ptr = s.indexOf(keyword, ptr + 1);
+  }
+  resultStr.insert(0, count + ": ");
+  return resultStr.toString(); // Convert buffer to String
+} // keywordSearch()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We declare {\tt resultStr} as a {\tt StringBuffer}
+\marginfig{chptr07/p360f1.eps}{The {\tt java.lang.StringBuffer} class.
+\label{fig-p360f1}
+\label{pg-fig-p360f1}}
+instead of a {\tt String}. Then, instead of concatenating the {\tt
+ptr} and reassigning the {\tt resultStr}, we {\tt append()} the {\tt
+ptr} to the {\tt resultStr} for each occurrence of a
+keyword. Similarly, after the loop exits, we {\tt insert()} the {\tt
+count} at the front (index 0) of the {\tt resultStr}. Finally, we
+convert {\tt resultStr} into a {\tt String} by using the {\tt
+toString()} method before returning the method's result.
+
+One advantage of the {\tt StringBuffer} class is that there are several
+versions of its {\tt insert()} and {\tt append()} methods.  These make
+it possible to insert any type of data---{\tt int}, {\tt double},
+{\tt Object}, and so on---into a {\tt StringBuffer}. The method itself
+takes care of converting the data into a string for~us.
+
+
+To summarize, {\tt String} objects in Java are {\it immutable}. So
+\marginnote{Strings are immutable}
+when a {\tt String} is ``modified,'' this really means that a new {\tt String}
+object is created and the old {\tt String} object must be garbage collected.
+This is somewhat inefficient, especially if done repeatedly within a loop.
+To avoid these inefficiencies, use a {\tt StringBuffer} instead of a {\tt String}
+in such contexts.
+
+\section{Retrieving Parts of Strings}
+\noindent Programmers often need to retrieve an individual character or
+a part of a string from a string, as, for example, in a word
+processing program when a part of a string is copied or deleted. In
+this section we look at methods that help us with these kinds of tasks.
+
+The {\tt charAt(int index)} method is a {\tt String} instance method
+that can be used to retrieve the character stored at a certain
+index.  The several varieties of the {\tt substring()} method can be
+used to retrieve a substring of characters from a {\tt String}. These
+methods are defined as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public char charAt(int index)
+public String substring(int startIndex)
+public String substring(int startIndex, int endIndex)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt charAt()} method\index{charAt() method}
+returns the character located at the index supplied as its parameter.
+Thus, {\tt str.charAt(0)} retrieves the first character in {\tt str},
+while {\tt str.charAt(str.length()-1)} retrieves the last character.
+
+The {\tt substring()} methods\index{substring() method} work in a
+similar way, except that you need to specify both the starting and the
+ending index of the substring you wish to retrieve.  The first version
+of {\tt substring(int startIndex)} takes a single parameter and
+returns a {\tt String} consisting of all the characters beginning with
+{\tt startIndex} and continuing up to the end of the {\tt String}. For
+example, if the {\tt str} is ``HelloWorld'', then {\tt str.substring(5)}
+would return ``World'' and {\tt str.substring(3)} would return
+``loWorld'':
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String str = "HelloWorld";
+str.substring(5)            ==> "World"
+str.substring(3)            ==> "loWorld"
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt substring(int, int)} version requires that you specify both
+the starting and ending index of the substring.   The second
+index always points to the character that is one beyond the last
+character in the {\tt String} you want to retrieve.  For example,
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\small]
+ //   INDEX:   0123456789
+ String str = "HelloWorld";
+ str.substring(5,7)               ==> "Wo"
+ str.substring(0,5)               ==> "Hello"
+ str.substring(5, str.length())   ==> "World"
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent Note here that when we want to retrieve ``Wo''
+from {\tt str}, we specify its substring as indexes 5 and 7; the 7
+points to the character just beyond ``Wo.'' Similarly,
+{\tt substring(0,5)}, picks out the first five characters (``Hello'').  
+In the third example, the {\tt length()} method specifies
+the substring beginning at index 5 and extending to the end of the
+string.  This is equivalent to {\tt str.substring(5)}:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\small]
+ //   INDEX:   0123456789
+ String str = "HelloWorld";
+ str.substring(5, str.length())   ==> "World"
+ str.substring(5)                 ==> "World"
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent The fact that the second parameter in {\tt substring()}
+refers to the character one beyond the desired substring may seem a
+bit confusing at first, but it is actually a very useful way to
+%\begin{marginalnote}\it Delimited strings\end{marginalnote}
+designate a substring.  For example, many string-processing problems
+have to do with retrieving substrings from a {\bf delimited string},
+which is a string that contains special characters that separate
+the string into certain substrings.
+\marginnote{Delimited strings}
+For example, consider the string ``substring1:substring2,''
+in which the {\it delimiter} is the colon, {\tt ':'}. The following code
+retrieves the substring preceding the delimiter:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String str = "substring1:substring2";
+int n = str.indexOf(':');
+str.substring(0,n)               ==> "substring1"
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, by making the second index of {\tt
+substring()} refer to the character one beyond the last character in
+the desired substring, we can use {\tt indexOf()} and {\tt
+substring()} together to process delimited strings.  Note that it is
+not necessary to use a temporary variable {\it n} to store the index
+of the delimiter, because the two method calls can be nested:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String str = "substring1:substring2";
+str.substring(0,str.indexOf(':'))  ==> "substring1"
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP{DEBUGGING TIP}{{\tt substring(int p1, int
+p2)}.}{Don't forget that the second parameter in the {\tt substring()}
+methods refers to the character just past the last character in the
+substring.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Given the {\tt String} declaration 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s = "abcdefghijklmnopqrstuvwxyz";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent evaluate each of the following expressions:
+
+\begin{EXRLL}
+\begin{multicols}{2}
+\item  \verb|s.substring(20)|       
+\item  \verb|s.substring(1, 5)|     
+\item  \verb|s.substring(23)|       
+\item  \verb|s.substring(23, 25)|   
+\item  \verb|s.substring(s.indexOf('x'))|
+\end{multicols}
+\end{EXRLL}
+
+
+\item  Given the preceding declaration of {\tt s}, evaluate each
+of the following expressions:
+
+\begin{EXRLL}
+\item  \verb|s.substring(20, s.length())|                  
+\item  \verb|s.substring(s.indexOf('b'), s.indexOf('f'))|  
+\item  \verb|s.substring(s.indexOf("xy"))|                 
+\item  \verb|s.substring(s.indexOf(s.charAt(23)))|         
+\item  \verb|s.substring(s.length() - 3)|                  
+\end{EXRLL}
+
+\end{SSTUDY}
+
+
+\section{Example: Processing Names and Passwords}
+\noindent Many computer systems store user names and passwords as delimited
+strings, such as
+
+\begin{jjjlisting}
+\begin{lstlisting}
+smith:bg1s5xxx
+mccarthy:2ffo900ssi
+cho:biff4534ddee4w
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent Obviously, if the system is going to process passwords,
+it needs some way to take apart these name-password pairs.
+
+Let's write methods to help perform this task.  The first method will
+%\begin{marginalnote}\it Algorithm design\end{marginalnote}
+be passed a name-password pair and will return the name.  The second
+method will be passed a name-password pair and will return the
+password.  In both cases, the method takes a single {\tt String}
+parameter and returns a {\tt String} result:
+\marginnote{\vspace{-36pt}Algorithm design}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String getName(String str);
+String getPassword(String str);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To solve this problem we can make use of two {\tt String} methods.  We
+use the {\tt indexOf()} method to find the location of the {\it
+delimiter}---which is the colon,  ``{\tt :}''---in the name-password pair
+and then we use {\tt substring()} to take the substring occurring
+before or after the delimiter.  It may be easier to see this if we
+take a particular example:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ INDEX:           1         2
+ INDEX: 012345678901234567890
+        jones:b34rdffg12    // (1)
+        cho:rtf546          // (2)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the first case, the delimiter occurs at index position 5 in
+the string.  Therefore, to take the name substring, we would use
+{\tt substring(0,5)}. To take the password substring, we would
+use {\tt substring(6)}.  Of course, in the general case, we would
+use variables to indicate the position of the delimiter, as in the
+following methods:
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public static String getName(String str) {
+  int posColon = str.indexOf(':');  // Find the delimiter
+  String result = str.substring(0, posColon); // Get name
+  return result;
+}
+
+public static String getPassword(String str) {
+  int posColon = str.indexOf(':');  // Find the delimiter
+  String result = str.substring(posColon + 1); // Get passwd
+  return result;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent Note in both of these cases we have used
+local variables, {\tt posColon} and \mbox{\tt result}, to store the
+intermediate results of the computation---that is, the index of the
+``{\tt :}'' and the name or password substring.
+
+An alternative way to code these operations would be to use nested
+method calls to reduce the code to a single line:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+return str.substring(0, str.indexOf(':'));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this line, the result of {\tt str.indexOf(\verb!'!:\verb!'!)} is
+passed immediately as the second argument to {\tt str.substring()}.
+This version dispenses with the need for additional variables.
+And the result in this case is not unreasonably complicated.
+But whenever you are faced with a trade-off of this sort---nesting
+versus additional variables---you should opt for the style that
+will be easier to read and understand.
+
+\JavaTIP{EFFECTIVE DESIGN}{Nested Method Calls.}{Nested method calls are
+fine as long as there are not too many levels of nesting.  The goal
+should be to produce code that is easy to read and understand.}
+
+%%%RAM\RHrightsec{7.7}{Processing Each Character in a String}
+
+\section{Processing Each Character in a {\tt String}}
+%%%RAM\RHright{Processing Each Character in a {\tt String}}
+\noindent Many string-processing applications require you to process each
+character in a string.  For example, to encrypt the string ``hello'' into
+``jgnnq'', we have to go through each letter of the string and change
+each character to its substitute.
+
+These types of algorithms usually involve a counting loop bounded by
+\marginnote{Counting loop algorithm} the length of the string. Recall
+that the {\tt length()} method determines the number of characters in
+a {\tt String} and that strings are zero indexed.  This means that the
+first character is at index 0, and the last character is at index {\tt
+length()-1}.  For example, to print each character in a string on a
+separate line, we would step through the string from its first to its
+last character and print each character::
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+// Precondition:  str is not null
+// Postcondition: the letters in str will have been printed
+public void printLetters(String str) {
+  for (int k = 0; k < str.length(); k++)// For each char
+    System.out.println(str.charAt(k));  //  Print it
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that our loop bound is \verb|k < str.length()|, since
+%\begin{marginalnote}\it Counting bound\end{marginalnote}
+\marginnote{Counting bound}
+the index of the last character of any {\tt String} is
+{\tt length()-1}. Note also the use of {\tt str.charAt(k)} to retrieve the
+{\it k}th character in {\tt str} on each iteration of the loop.
+
+Note the use of pre- and postconditions in the method's comment block.
+The precondition states that {\tt str} has been properly
+initialized---that is, it is not {\tt null}. The postcondition merely
+states the expected behavior of the method.
+
+\subsection{Off-by-One Error}
+\noindent A frequent error in coding counter-controlled loops is known as the
+{\bf off-by-one error}\index{off-by-one error}, which can occur in many different ways.  For
+example, if we had coded the loop boundary condition as
+\verb|k <= str.length()|, this would cause an
+off-by-one error, because the last
+%\begin{marginalnote}\it Off-by-one error\end{marginalnote}
+\marginnote{Off-by-one error}
+character in {\tt str} is at location {\tt length()-1}.  This would
+lead to a Java {\tt IndexOutOfBoundsException}, which would be reported
+as soon as the program executed this statement.
+
+The only way to avoid off-by-one errors is to check your loop bounds
+whenever you code a loop.  Always make sure you have the loop counter's
+initial and final values correct.
+
+\JavaTIP{DEBUGGING TIP}{Off-by-One Errors.}{Loops should be carefully
+checked to make sure they don't commit an off-by-one error.  During
+program testing, develop data that tests the loop variable's initial
+and final values.}
+
+\subsection{Example: Counting Characters}
+\noindent As another example of an algorithm that processes
+each character in a string, consider the problem of computing the
+frequency of the letters in a given document.  Certain text analysis
+programs, such as programs that analyze encrypted data and spam
+filters, perform this type of function. 
+
+
+The {\tt countChar()} method will count the number of occurrences of
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+any particular character in a {\tt String}
+(Fig.~\ref{fig-countchar}).  This method takes two parameters: a
+{\tt String} parameter that stores the string being searched and a
+{\tt char} parameter that stores the character being counted.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+// Precondition: Neither str nor ch are null
+// Postcondition: countchar() == the number of ch in str
+public int countChar(String str, char ch) {
+  int counter = 0;              // Initialize a counter
+  for (int k = 0; k < str.length(); k++)// For each char
+    if (str.charAt(k) == ch)           //  If it's a ch
+      counter++;                          //   count it
+  return counter;                  // Return the result
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A method to count the occurrence of a particular
+character in a string.
+\label{fig-countchar}
+\label{pg-fig-countchar}}
+\end{figure}
+
+Begin by initializing the local variable, {\tt counter}, to
+\marginnote{Algorithm design}
+0. As in the previous example, the {\tt for} loop here will iterate through
+each character of the {\tt String}---from 0 to {\tt length()-1}.  On
+each iteration a check is made to see if the character in the {\it k}th
+position ({\tt str.charAt(k)}) is the character being counted.  If so,
+{\tt counter} is incremented.  The method ends by returning
+{\tt counter}, which, when the method completes, will store an integer
+representing the number of {\it ch}'s in {\tt str}.
+
+
+\subsection{Example: Reversing a String}
+\noindent Another interesting method that processes each character in
+a string is the {\tt reverse()} method. This is a method that reverses
+the letters in a string. For example, the reverse of {\tt "java"} is
+{\tt "avaj"}.  
+
+The algorithm for the {\tt reverse()} method should use a simple
+\marginnote{Algorithm design} counting loop to reverse the letters in
+its {\tt String} parameter.  In this case, however, we can process the
+string from right to left, beginning at its last character and ending
+with its first character.  That way we can just append each character,
+left to right, in the result string:   
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /*
+  * Pre:  s is any non null string
+  * Post: s is returned in reverse order
+  */
+public String reverse(String s) {
+    StringBuffer result = new StringBuffer();
+    for (int k = s.length()-1; k >= 0; k--) {
+        result.append(s.charAt(k));
+    } //for
+    return result.toString();
+} // reverse()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that as in the other string-manipulation
+algorithms---for example, {\tt keywordSearch()}---we should us a {\tt
+StringBuffer} to store the method's result.  Thus we declare the {\tt
+result} {\tt StringBuffer} at the beginning of the method and convert
+it back into a {\tt String} at the end of the method.
+
+\JavaTIP{PROGRAMMING TIP}{Changing Each Character in a String.}{Algorithms that require 
+you to alter a string should use a
+{\tt StringBuffer} to store the result.}
+
+\subsection{Example: Capitalizing the First Letter }
+\noindent Another string manipulation method is
+the {\tt capitalize()} method, which returns a {\tt String} whose
+\marginnote{\it Algorithm design}
+initial letter is capitalized but whose other letters are lowercase --
+for example, ``Hello''.  We use the {\tt static} {\tt toUpperCase()}
+and {\tt toLowerCase()} methods from the {\tt Character} class to
+convert individual letters.  We could also have used the methods of
+the same name that we wrote in Section~5.8.  The algorithm converts
+the first letter to upper case and then loops through the remaining
+letters converting each to lowercase:
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+/*
+ * Pre:  s is any non null string
+ * Post: s is returned with only its first letter capitalized
+ */
+public String capitalize(String s) {
+  if (s.length() == 0)    // Special case: empty string
+    return s;
+  StringBuffer result = new StringBuffer();
+  result.append(Character.toUpperCase(s.charAt(0))); 
+                          // Convert the first letter
+  for (int k = 1; k < s.length(); k++) { // And the rest 
+    result.append(Character.toLowerCase(s.charAt(k)));
+  } //for
+  return result.toString();
+} // capitalize()
+\end{lstlisting}
+\end{jjjlisting}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Write a Java program to test the methods described in this
+section.  Organize the methods themselves into a single class, named
+{\tt StringProcessor}, and design a second class to serve as the user
+interface. Because these methods are similar to the utility methods of
+the {\tt Math} class, it would be useful to declare them static.  The
+user interface should prompt the user to input a string and should
+then print out the result of passing that string to each of the
+methods we developed.
+
+\item Add a method to the {\tt StringProcessor} class that will remove
+all blanks from a string.  It should take a {\tt String} parameter and
+should return a {\tt String} result.
+
+\end{SSTUDY}
+
+
+\subsection{Miscellaneous {\tt String} Methods}
+\noindent In addition to the several {\tt String} class methods we have
+discussed---{\tt valueOf()}, {\tt equals()}, {\tt indexOf()},
+{\tt lastIndexOf()}, {\tt charAt()}, {\tt substring()}---Table~7.2 
+shows some of the other useful methods
+in the {\tt String} class.  Note that because of what we said about
+the read-only nature of {\tt String}s, methods such as {\tt toUpperCase()},
+{\tt toLowerCase()}, and {\tt trim()} do not  change their string.  Instead
+they produce a new string.  If you want to use one of these methods to convert
+a string, you must reassign its result back to the original string:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s = new String("hello world");
+s = s.toUpperCase(); // s now equals "HELLO WORLD"
+\end{lstlisting}
+\end{jjjlisting}
+%%%RAM\endcasestudy
+
+\begin{table}[tb]
+\TBT{-12.5pc}{Some useful {\tt String} methods applied to the literal string "Perfection."}
+\hspace*{-6pt}\hspace*{-12.5pc}
+\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{40.5pc}{1pt}}\\[2pt]
+%%%RAM\TBCH{Method Signature}                                 &\TBCH{Example}
+{Method Signature}                                 &{Example}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{40.5pc}{0.5pt}}\\[2pt]
+{\tt boolean endsWith(String suffix)}                &\verb|"Perfection".endsWith("tion")|     $\Rightarrow$ true \cr
+{\tt boolean startsWith(String prefix)}              &\verb|"Perfection".startsWith("Per")|    $\Rightarrow$ true \cr
+{\tt boolean startsWith(String prefix, int offset)}\hspace*{5pt}  &\verb|"Perfection".startsWith("fect",3)| $\Rightarrow$ true \cr
+{\tt String toUpperCase()}                             &\verb|"Perfection".toUpperCase()|        $\Rightarrow$ \verb|"PERFECTION"|\cr
+{\tt String toLowerCase()}                             &\verb|"Perfection".toLowerCase()|        $\Rightarrow$ \verb|"perfection"|\cr
+{\tt String trim()}                                    &\verb|"Perfection".trim()|               $\Rightarrow$ \verb|"Perfection"|
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{40.5pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\section{Comparing Strings}
+
+\noindent Comparing strings is another important task. For example,
+when a word processor performs a search and replace operation, it
+needs to identify strings in the text that match the target string.
+
+Strings are compared according to their {\em lexicographic
+order}---that is, the order of their characters.  For the letters of
+the alphabet, lexicographic order just means alphabetical order.
+Thus, {\it a} comes before {\it b} and {\it d} comes after {\it
+c}. The string ``hello'' comes before ``jello'' because {\it h} comes
+before {\it j} in the alphabet.
+
+For Java and other programming languages, the definition of
+lexicographic order is extended to cover all the characters that make
+up the character set.  We know, for example, that in Java's Unicode
+character set the uppercase letters come before the lowercase letters
+(Table~5.13).  So, the letter {\it H} comes before the letter
+{\it h} and the letter {\it Z} comes before the letter {\it a}.
+
+
+Lexicographic order\index{lexicographic order} can be extended to
+%\begin{marginalnote}\it H precedes h\end{marginalnote}
+\marginnote{H precedes h}
+include strings of characters.  Thus, ``Hello'' precedes ``hello'' in
+lexicographic order because its first letter, {\it H}, precedes the first
+letter, {\it h}, in ``hello.'' Similarly, the string ``Zero'' comes before
+``aardvark,'' because {\it Z} comes before {\it a}.  To determine
+lexicographic order for strings, we must perform a
+character-by-character comparison, starting at the first character and
+proceeding left to right.  As an example, the following strings are
+arranged in lexicographic order:
+
+\begin{jjjlistingleft}[30.5pc]{-4.5pc}
+\begin{lstlisting}[stringstyle=\color{black}]
+"" "!" "0" "A" "Andy" "Z" "Zero" "a" "an" "and" "andy" "candy" "zero"
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent We can define {\bf lexicographic order}\index{lexicographic order} for strings as follows:
+
+\JavaRule[false]{Lexicographic Order.}{For strings {\it s1}
+and {\it s2}, {\it s1} precedes {\it s2} in lexicographic order if its
+first character precedes the first character of {\it s2}. If their
+first characters are equal, then {\it s1} precedes {\it s2} if its
+second character precedes the second character of {\it s2}; and so
+on.  An empty string is handled as a special case, preceding
+all other strings.}
+
+
+\noindent Perhaps a more precise way to define lexicographic
+order is to define a Java method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean precedes(String s1, String s2) {
+                           // Pick shorter length
+  int minlen = Math.min(s1.length(), s2.length()); 
+               // For each char in shorter string}
+  for (int k=0; k < minlen; k++) { 
+    if (s1.charAt(k) != s2.charAt(k))// If chars unequal
+       //  return true if s1's char precedes s2's
+      return s1.charAt(k) < s2.charAt(k); 
+  }
+            // If all characters so far are equal
+        //  then s1 < s2 if it is shorter than s2
+  return s1.length() < s2.length();  
+} // precedes()}  
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method does a character-by-character comparison of
+%\begin{marginalnote}\it Algorithm: Loop bound\end{marginalnote}
+\marginnote{Algorithm: Loop bound} the two strings, proceeding left to
+right, starting at the first character in both strings.  Its {\tt for}
+loop uses a counting bound, which starts at {\it k} equal to zero and
+counts up to the length of the shorter string.  This is an important
+point in designing this algorithm.  If you don't stop iterating when
+you get past the last character in a string, your program will
+generate a {\tt StringIndexOutOfBounds} exception.  To prevent this
+error, we need to use the shorter length as the loop bound.
+
+Note that the loop will terminate early if it finds that the
+respective characters from {\it s1} and {\it s2} are unequal.  In that
+case, {\it s1} precedes {\it s2} if {\it s1}'s {\it k}th character
+precedes {\it s2}'s.  If the loop terminates normally, that means that
+all the characters compared were equal.  In that case, the shorter
+string precedes the longer.  For example, if the two strings were
+``alpha'' and ``alphabet,'' then the method would return true, because
+``alpha'' is shorter than ``alphabet.''
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Arrange the following strings in lexicographic order:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+zero bath bin alpha Alpha Zero Zeroes a A z Z
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Modify the {\tt precedes()} method so that it will also return true
+when {\it s1} and {\it s2} are equal---for example, when
+{\it s1} and {\it s2} are both ``hello''.
+
+\end{SSTUDY}
+
+
+\subsection{Object Identity Versus Object Equality}
+\noindent Java provides several methods for comparing {\tt String}s:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean equals(Object anObject); // Overrides Object.equals()
+public boolean equalsIgnoreCase(String  anotherString);
+public int compareTo(String  anotherString);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first comparison method, {\tt
+equals()}\index{String.equals()}, overrides the {\tt Object.equals()}
+method.  Two {\tt String}s are equal if they have the exact same
+letters in the exact same \marginnote{Equality vs.  identity} order.
+Thus, for the following declarations,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = "hello";
+String s2 = "Hello";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent {\tt s1.equals(s2)} is {\tt false}, but \verb|s1.equals("hello")|
+is {\tt true}.
+
+You have to be careful when using Java's {\tt equals()}
+%\begin{marginalnote}\it Equality vs.  identity\end{marginalnote}
+method.  According to the default definition of {\tt equals()}, defined
+in the {\tt Object} class, ``equals'' means ``identical.''  Two
+{\tt Object}s are equal only if their names are references to the same
+object.
+\marginfig{chptr07/7f11.eps}{Venus is the morning star, so ``Venus''
+and ``the morning star'' are two references to the same object.
+\label{fig-venus}\label{pg-fig-venus}}
+
+This is like the old story of the morning star and the evening star,
+which were thought to be different objects before it was discovered
+that both were just the planet Venus.  After the discovery, it was
+clear that ``the morning star'' and ``the evening star'' and ``Venus'' were
+just three different references to one and the same object
+(Fig.~7.12).
+
+We can create an analogous situation in Java by using the following
+{\tt JButton} definitions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JButton b1 = new Button("a");
+JButton b2 = new Button("a");
+JButton b3 = b2;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given these three declarations, {\tt b1.equals(b2)}
+and {\tt b1.equals(b3)} would be {\tt false}, but {\tt b2.equals(b3)}
+would be {\tt true} because {\it b2} and {\it b3} are just two
+names for the same object (Fig.~7.13). So, in this case,
+\marginfig{chptr07/7f12.eps}{For most objects, equality means identity.
+JButtons {\tt b2} and {\tt b3} are identical (and, hence, equal), but
+JButtons {\tt b1} and {\tt b2} are not identical (and, hence, unequal).
+\label{fig-buttons}
+\label{pg-fig-buttons}}
+``equals'' really means ``identical.''
+
+Moreover, in Java, when it is used to compare two objects, the equality operator
+(==) is interpreted in the same way as the default {\tt Object.equals()}
+method.   So, it really means object identity.   Thus, {\tt b1 == b2} 
+would be {\tt false}, because {\tt b1} and {\tt b2}
+are different objects, but {\tt b2 == b3} would be {\tt true} because
+{\tt b2} and {\tt b3} refer to the same object.
+
+
+These points are illustrated in the program shown in
+Figure~\ref{fig-equals}. This program uses methods {\tt isEquals()}
+%% proglist ch7/equals/TestEquals.java
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[32pc]
+\begin{lstlisting}
+import java.awt.*;
+
+public class TestEquals {
+  static Button b1 = new Button ("a");
+  static Button b2 = new Button ("b");
+  static Button b3 = b2;
+
+  private static void isEqual(Object o1, Object o2) {
+    if (o1.equals(o2))
+      System.out.println(o1.toString() + " equals " + o2.toString());
+    else
+      System.out.println(o1.toString() + " does NOT equal " + 
+                                                      o2.toString());
+  } // isEqual()
+
+  private static void isIdentical(Object o1, Object o2) {
+    if (o1 == o2)
+      System.out.println(o1.toString() + " is identical to " + 
+                                                      o2.toString());
+    else
+      System.out.println(o1.toString() + " is NOT identical to " + 
+                                                      o2.toString());
+  } // isIdentical()
+
+  public static void main(String argv[]) {
+    isEqual(b1, b2);         // not equal
+    isEqual(b1, b3);         // not equal
+    isEqual(b2, b3);         // equal
+
+    isIdentical(b1, b2);     // not identical
+    isIdentical(b1, b3);     // not identical
+    isIdentical(b2, b3);     // identical
+  } // main()
+} // TestEquals
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt TestEquals} program tests Java's default
+{\tt equals()} method, which is defined in the {\tt Object} class.
+\label{fig-equals}
+\label{pg-fig-equals}}
+\end{figure}
+and {\tt isIdentical()} to perform the comparisons and print the
+results. This program will produce the following output:
+
+\begin{jjjlisting}[32pc]
+\begin{lstlisting}
+java.awt.Button[button0,0,0,0x0,invalid,label=a]
+   does NOT equal java.awt.Button[button1,0,0,0x0,invalid,label=b]
+java.awt.Button[button0,0,0,0x0,invalid,label=a]
+   does NOT equal java.awt.Button[button1,0,0,0x0,invalid,label=b]
+java.awt.Button[button1,0,0,0x0,invalid,label=b]
+   equals java.awt.Button[button1,0,0,0x0,invalid,label=b]
+java.awt.Button[button0,0,0,0x0,invalid,label=a]
+   is NOT identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
+java.awt.Button[button0,0,0,0x0,invalid,label=a]
+   is NOT identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
+java.awt.Button[button1,0,0,0x0,invalid,label=b]
+   is identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
+\end{lstlisting}
+\end{jjjlisting}
+
+
+
+\subsection{String Identity Versus String Equality}
+
+
+\noindent In comparing Java {\tt String}s, we must be careful to distinguish
+between object identity and string equality.   Thus, consider the
+following declarations, which create the situation shown 
+in Figure~\ref{fig-strings}.
+
+%\begin{figure}
+\begin{figure}[h!]
+\figaleft{chptr07/p375f1.eps}{For {\tt String} objects, equality\index{String equality}
+and identity\index{String identity} are different.   Two distinct
+(nonidentical) String objects are equal if they store the same string
+value.  So {\tt s1, s2, s4, s5,} and {\tt s6} are equal.   Strings
+{\tt s1} and {\tt s4} are identical, and so are strings {\tt s5} and
+{\tt s6}.
+\label{fig-strings}
+\label{pg-fig-strings}}
+\end{figure}
+%\end{figure}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = new String("hello");
+String s2 = new String("hello");
+String s3 = new String("Hello");
+String s4 = s1;            // s1 and s4 are now identical
+String s5 = "hello";
+String s6 = "hello";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given these declarations, we would get the
+\marginnote{\vspace{-24pt}Equality vs.  identity}
+following results if we compare the equality of the {\tt String}s:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+s1.equals(s2) ==> true  s1.equalsIgnoreCase(s3)  ==> true
+s1.equals(s3) ==> false s1.equals(s5)            ==> true
+s1.equals(s4) ==> true  s1.equals(s6)            ==> true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent and the following results if we compare their identity:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+s1 == s2  ==> false            s1 == s3  ==> false
+s1 == s4  ==> true             s1 == s5  ==> false
+s5 == s6  ==> true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The only true identities among these {\tt String}s are {\it s1} and {\it s4},
+and {\it s5} and {\it s6}.  In the case of {\it s5} and {\it s6}, both
+are just references to the literal string, ``hello'', as we described
+in Section~\ref{sec-strconstr}.  The program in Figure~\ref{fig-equals2}
+illustrates these points. 
+
+%% proglist ch7/equals/TestStringEquals.java
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[35pc]
+\begin{lstlisting}
+import java.awt.*;
+
+public class TestStringEquals {
+  static String s1 = new String("hello"); // s1 and s2 are equal, not identical
+  static String s2 = new String("hello");
+  static String s3 = new String("Hello"); // s1 and s3 are not equal
+  static String s4 = s1;                  // s1 and s4 are identical
+  static String s5 = "hello";             // s1 and s5 are not identical
+  static String s6 = "hello";             // s5 and s6 are identical
+
+  private static void testEqual(String str1, String str2) {
+    if (str1.equals(str2))
+      System.out.println(str1 + " equals " + str2);
+    else
+      System.out.println(str1 + " does not equal " + str2);
+  } // testEqual()
+
+  private static void testIdentical(String str1, String str2) {
+    if (str1 == str2)
+      System.out.println(str1 + " is identical to " + str2);
+    else
+      System.out.println(str1 + " is not identical to " + str2);
+  } // testIdentical()
+
+  public static void main(String argv[]) {
+    testEqual(s1, s2);        // equal
+    testEqual(s1, s3);        // not equal
+    testEqual(s1, s4);        // equal
+    testEqual(s1, s5);        // equal
+    testEqual(s5, s6);        // equal
+
+    testIdentical(s1, s2);    // not identical
+    testIdentical(s1, s3);    // not identical
+    testIdentical(s1, s4);    // identical
+    testIdentical(s1, s5);    // not identical
+    testIdentical(s5, s6);    // identical
+  } // main()
+}// TestStringEquals
+           ------Program Output-----
+           hello equals hello
+           hello does not equal Hello
+           hello equals hello
+           hello equals hello
+           hello equals hello
+           hello is not identical to hello
+           hello is not identical to Hello
+           hello is identical to hello
+           hello is not identical to hello
+           hello is identical to hello
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Program illustrating the difference between
+string equality and identity.
+\label{fig-equals2}
+\label{pg-fig-equals2}}
+\end{figure}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Given the  {\tt String} declarations,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = "java", s2 = "java", s3 = "Java";
+String s4 = new String(s2);
+String s5 = new String("java");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent evaluate the following expressions:
+
+\begin{EXRLL}
+\begin{multicols}{3}
+\item  \verb|s1 == s2|       
+\item  \verb|s1.equals(s2)|  
+\item  \verb|s1 == s3|       
+\item  \verb|s1.equals(s3)|  
+\item  \verb|s2 == s3|       
+\item  \verb|s2.equals(s4)|  
+\item  \verb|s2 == s4|       
+\item  \verb|s1 == s5|       
+\item  \verb|s4 == s5|       
+\end{multicols}
+\end{EXRLL}
+
+
+\item  Why are the variables in {\tt TestStringEquals} declared {\tt static}?
+
+\item  Given the following declarations,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = "abcdefghijklmnopqrstuvwxyz";
+String s2 = "hello world";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent write Java expressions to carry out each of the following
+operations:
+
+\begin{EXRLL}
+\item  Swap the front and back half of {\tt s1} giving a new string.
+\item  Swap "world" and "hello" in {\tt s2} giving a new string.
+\item  Combine parts of {\tt s1} and {\tt s2} to create a new string "hello abc".
+\end{EXRLL}
+
+\end{SSTUDY}
+
+
+\section{From the Java Library: \\java.util.StringTokenizer}
+
+\tBOXseven{One of the} most widespread string-processing tasks is that
+of breaking \WWWjava up a string into its components, or {\bf tokens}.
+For example, when processing a sentence, you may need to break the
+sentence into its constituent words, which are considered the sentence
+tokens.  When processing a name-password string, such as
+``boyd:14irXp'', you may need to break it into a name and a password.
+Tokens are separated from each other by one or more characters which
+is known as {\bf delimiters}. Thus, for a sentence, {\em white space},
+including blank spaces, tabs, and line feeds, serve as the delimiters.
+For the password example, the colon character serves as a delimiter.
+
+Java's {\tt java.util.StringTokenizer}\index{StringTokenizer class} class
+\marginfig{chptr07/p377f1.eps}{The {\tt java.util.StringTokenizer} class.
+\label{fig-p377f1}
+\label{pg-fig-p377f1}}
+is specially designed for breaking strings into their tokens
+(Fig.~7.17). When instantiated with a {\tt String} parameter, a {\tt
+StringTokenizer} breaks the string into tokens, using white space as
+delimiters.  For example, if we instantiated a {\tt StringTokenizer}
+as in the code
+
+\begin{jjjlisting}
+\begin{lstlisting}
+StringTokenizer sTokenizer
+  = new StringTokenizer("This is an English sentence.");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent it would break the string into the following
+tokens, which would be stored internally in the {\tt StringTokenizer}
+in the  order shown:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+This
+is
+an
+English
+sentence.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the period is part of the last token
+(``sentence.''). This is because punctuation marks are not
+considered delimiters by default.  
+
+If you wanted to include punctuation symbols as delimiters, you could
+use the second {\tt StringTokenizer()} constructor, which takes a
+second {\tt String} parameter (Fig.~7.17).  The second
+parameter specifies a string of those characters that should be used
+as delimiters.  For example, in the  instantiation,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+StringTokenizer sTokenizer
+    = new StringTokenizer("This is an English sentence.",
+                          "\b\t\n,;.!");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent various punctuation symbols (periods, commas, and so on)
+are included among the delimiters. Note that escape sequences 
+(\verb|\b\t\n|) are used to specify blanks, tabs, and newlines. 
+
+The {\tt hasMoreTokens()} and {\tt nextToken()} methods can be used to
+process a delimited string, one token at a time.   The first method
+returns {\tt true} as long as more tokens remain; the second gets the
+next token in the list.  For example, here's a code segment that will
+break a standard URL string into its constituent parts:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String url = "http://java.trincoll.edu/~jjj/index.html";
+StringTokenizer sTokenizer = new StringTokenizer(url,":/");
+while (sTokenizer.hasMoreTokens()) {
+    System.out.println(sTokenizer.nextToken());
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This code segment will produce the following output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+http
+java.trincoll.edu
+~jjj
+index.html
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The only delimiters used in this case were the ``{\tt :}'' and ``{\tt /}''
+symbols.  And note that {\tt nextToken()} does not return the empty string
+between ``{\tt :}'' and ``{\tt /}'' as a token.
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Handling Text in a Graphics Context}
+
+\section{Handling Text in a Graphics Context \\(Optional)}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Handling Text in a Graphics Context}
+
+\noindent In order to create attractive GUIs, it is often necessary to
+be able to select and control the font that is used.  Even a simple
+drawing task, such as being able to center a message in a panel,
+requires that we know the font's dimensions and be able to manipulate
+\marginfig{chptr07/fontmethods.eps}{Methods to access the {\tt Font} and
+{\tt FontMetrics} objects associated with each {\tt Graphics} context.
+\label{fig-fontmethods}
+\label{pg-fig-fontmethods}}
+them.  In this section, we learn how to work with Java's fonts and
+font control methods.
+
+Each graphics context has an associated {\tt Font} and {\tt
+FontMetrics} object, and the {\tt Graphics} class
+(Fig.~7.18) provides several methods to access them.
+A {\tt FontMetrics} is an object that encapsulates important data
+about a font, such as its height and width.  Java assigns a default
+font to each {\tt Graphics} object.  For example, this is the font
+used by the {\tt drawString()} method, which we used in our very first
+Java programs back in Chapter~1.  The particular font used is system
+dependent, but to override the default one can simply invoke the {\tt
+setFont()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the {\tt Font()} constructor is used
+to specify a 12-point, italicized, {\it TimesRoman} font.  Once the
+font is set, it will be used in all subsequent drawings.
+
+\subsection{The {\tt Font} and {\tt FontMetrics} Classes}
+\noindent The {\tt Font} class (Fig.~7.19) provides a
+platform-independent representation of an individual font.  A font is
+distinguished by its name, size, and style, and the {\tt Font} class
+includes {\tt protected} instance variables for these properties, as
+well as a constructor method that allows these three characteristics
+to be specified. 
+
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr07/font.eps}{The {\tt Font} class.
+\label{fig-font}
+\label{pg-fig-font}}
+%\end{graphic}
+%\end{figure}
+
+In order to understand how fonts work, it is necessary to distinguish
+between a {\em character}, which is a symbol that represents a certain
+letter or digit, and a {\bf glyph}, which is a shape used to display
+the character.  When you display a string, such as ``Hello'', Java
+maps each individual character into a corresponding shape, as defined
+by the particular font that is selected. 
+
+Java distinguishes between {\em physical} and {\em logical} fonts.  A
+{\bf physical font} is an actual font library that contains the data
+and tables needed to associate the correct glyph with a given
+character.  Generally speaking, a given platform (host computer plus
+operating system) will have a collection of such fonts available on
+it.
+
+A {\bf logical font} is one of five font families that are supported
+by the Java runtime environment. These include Serif, SansSerif,
+Monospaced, Dialog, and DialogInput.  Java also supports the following
+font styles: {\tt PLAIN}, {\tt BOLD}, {\tt ITALIC}, and {\tt
+BOLD+ITALIC}.  Whereas the physical fonts are platform dependent, the
+logical fonts and styles are platform independent. When used in a
+program, they are mapped to real fonts available on the host system.
+If the host system does not have an exact match for the specified
+font, it will supply a substitute.  For example, if you specify a
+48-point, italic, Monospaced font,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Font myFont = new Font("Monospaced", Font.ITALIC, 48);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the system may map this to a 24-point, italic
+Courier font, if that is the largest fixed-spaced font available.
+
+The {\tt Font()} constructor is designed to work with any set of
+arguments.  Thus, if you supply the name of a font that is not
+available, the system will supply a default font as a substitute.  For
+example, on my system, specifying a nonexistent font named Random,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.setFont(new Font("Random", Font.ITALIC, 12) );
+g.drawString("Hello World! (random, italic, 12)", 30, 45);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent produces the same font used as the mapping for a
+font named {\em Dialog}.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Font Portability.}{The fact that {\tt Font()}
+will produce a font for virtually any set of arguments is important in
+ensuring that a Java program will run on any platform.  This is another
+example of how Java has been designed for portability.}
+
+The {\tt Component.setFont()} method can be used to assign a specific
+font to a button or window or other graphics component.  All AWT and
+JFC components have an associated font, which can be accessed using
+the {\tt Component.setFont()} and {\tt Component.getFont()} methods.
+For example, the following code could be used to override a {\tt
+Button}'s font:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Button b = new Button("Label");
+b.setFont(new Font("Times", Font.ITALIC, 14));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If 14-point, italic, Times font is not available on the
+host system, a substitute will be supplied.
+
+\subsection{Font Metrics}
+\noindent To illustrate how to use the {\tt FontMetrics} class, let's write a
+%\begin{marginalnote}\it Problem statement\end{marginalnote}
+\marginnote{Problem statement}
+``Hello World'' application that centers its message both horizontally and
+vertically in its window.  The message should be centered
+regardless of the size of the application window.  Thus, we will have to
+position the text relative to the window size, which is something we
+learned in positioning geometric shapes.   The message
+should also be centered no matter what font is used.  This will require
+us to know certain characteristics of the font itself, such as the
+height and width of its characters, whether the characters have a
+fixed or variable width, and so on.  In order to get access to
+these properties, we will use the {\tt FontMetrics} class.
+
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr07/fontmetrics.eps}{An illustration of the various font
+measurements.
+\label{fig-fontmetrics}\label{pg-fig-fontmetrics}}
+%\end{figure}
+%\end{figure}
+
+Figure~7.20 illustrates the various properties that
+are associated with a font.   The {\bf baseline}\index{baseline} of a font refers to
+the line on which the bottom of most characters occurs.  When drawing a
+string, the {\it x-} and {\it y-}coordinates determine the baseline of
+the string's first character.  Thus, in
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.drawString("Hello World", 10, 40);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the bottom left of the {\it H} in ``Hello World'' would be
+located at (10, 40).
+
+All characters ascend some distance above the baseline.  This is known
+as the character's {\bf ascent}\index{ascent}.  Some characters, such as {\it y},
+may extend below the baseline, into what's known as the {\it
+descent}. Each font has a {\it maximum descent}.  Similarly, some
+characters, such as accent characters, may extend above the {\it
+maximum ascent} into a space known as the {\it leading}.
+
+The {\it height} of a font is defined as the sum (in pixels) of the
+ascent, descent, and leading values.  The height is a property of the
+font itself rather than of any individual character.   Except for
+fixed-width fonts, in which the width of all characters is the same,
+the characters that make up a font have varying widths.  The width of
+an individual character is known as its {\it advance}.
+
+
+
+The {\tt FontMetrics} class (Fig.~7.21) provides methods
+\marginfig{chptr07/fontmetrics2.eps}{The {\tt FontMetrics} class.
+\label{pg-fig-fontmetrics2}}
+for accessing a font's properties.  These can be useful to control the
+layout of text on a GUI.  For example, when drawing multiple lines of
+text, the {\tt getHeight()} method is useful for determining how much
+space should be left between lines.  When drawing character by
+character, the {\tt charWidth()} method can be used to determine how
+much space must be left between characters.  Alternatively, the {\tt
+stringWidth()} method can be used to determine the number of pixels
+required to draw the entire string.
+
+\subsection{Example: Centering a Line of Text}
+\noindent Given this background, let's take on the task of centering a message
+in an application window.  In order for this application to work for any font, we
+must take care not to base its design on characteristics of the
+%\begin{marginalnote}\it Algorithm design: Generality\end{marginalnote}
+\marginnote{Algorithm design: Generality}
+particular font that we happen to be using.   To underscore this point,
+let's design it to work for a font named Random, which, as we noted
+earlier, will be mapped to some font by the system on which the application
+is run.  In other words, we will let the system pick a font for this
+application's message.  An interesting experiment would be to run the application
+on different platforms to see what fonts are chosen.
+
+The only method we need for this application is the {\tt paint()} method.
+Let's begin by setting the font used by the graphics context to a random
+font.  To get the characteristics of this font, we create a {\tt FontMetrics}
+object and get the font metrics for the font we just created:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.setFont(new Font("Random", Font.BOLD, 24));
+FontMetrics metrics = g.getFontMetrics();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The next step is to determine the {\tt JFrame}'s dimensions
+using the {\tt getSize()} method. This method returns an object of
+type {\tt Dimension}.  The {\tt java.awt.Dimension} class (Fig.~7.22)
+represents the size (width and height) of a GUI component.  A {\tt
+Dimension} makes it possible to manipulate an object's width and
+height as a single entity.  Note that the {\tt height} and {\tt width}
+variables are defined as {\tt public}, which is an exception from the
+usual convention of defining instances variables as {\tt private} or
+{\tt protected}. The justification for this exception is probably
+to simplify the syntax of referring to an object's width and height.
+For example, the following syntax can be used to refer to a component's
+dimensions:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Dimension d = new Dimension(100, 50);
+System.out.println("width = " + d.width + 
+                   " height = " + d.height);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note the redundancy built into the {\tt Dimension} class.  
+For example, in addition to being able to set a {\tt Dimension}'s
+\marginfig{chptr07/dimension.eps}{The {\tt Dimension} class.
+\label{fig-dimension}
+\label{pg-fig-dimension}}
+instance variables directly, public access methods are provided.
+Also, by defining more than one version of some access methods, the
+class achieves a higher level of flexibility.  The same can be said
+for providing several different constructors, including a copy
+constructor.  Finally, note how it overrides the {\tt equals()} and
+{\tt toString()} methods.  These are all examples of good
+object-oriented design.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Redundancy.}{Redundancy is often a desirable
+characteristic of object design.  It makes the object easier to use and
+more widely applicable.}
+
+The {\tt Dimension} object is used to calculate the {\it x-} and {\it
+y-}coordinates for the string. In order to center the string
+horizontally, we need to know its width, which is supplied by the {\tt
+metrics} object.  If the {\tt JFrame} is {\tt
+%\begin{marginalnote}\it Centering text\end{marginalnote}
+\marginnote{Centering text}
+d.width} pixels wide, then the following expression subtracts the
+width of the string from the width of the {\tt JFrame} and then divides the
+leftover space in half:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+                            // Calculate coordinates
+int x = (d.width - metrics.stringWidth(str)) / 2; 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, the following expression adds the height
+of the string to the height of the {\tt JFrame} and divides the leftover
+space in half:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int y = (d.height + metrics.getHeight()) / 2;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Taken together, these calculations give the coordinates for the
+lower left pixel of the first character in ``Hello World!''  The only
+remaining task is to draw the string (Fig.~\ref{fig-centertext}).
+Because the {\tt paint()} method is called automatically whenever
+the {\tt JFrame} is resized, this application, whose output is shown in
+Figure~\ref{fig-centertextscreen}, will re-center its message whenever
+it is resized by the user.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+import java.awt.*;
+import javax.swing.*;
+
+public class CenterText extends JFrame {
+                // Print hello world! in center of frame
+public void paint(Graphics g) {
+  String str = "Hello World!";
+  g.setFont(new Font("Random", Font.PLAIN, 24)); // Random font
+  FontMetrics metrics = g.getFontMetrics(); //  And its metrics
+
+  Dimension d = getSize();       // Get the frame's size
+             // Clear the frame
+  g.setColor(getBackground());
+  g.fillRect(0,0,d.width,d.height);
+  g.setColor(Color.black);
+                                // Calculate coordinates
+  int x = (d.width - metrics.stringWidth(str)) / 2; 
+  int y = (d.height + metrics.getHeight()) / 2;
+
+  g.drawString( str, x, y );          // Draw the string
+} // paint()
+
+public static void main(String args[]) {
+  CenterText ct = new CenterText();
+  ct.setSize(400,400);
+  ct.setVisible(true);
+}
+} // CenterText
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt CenterText} application.
+\label{fig-centertext}\label{pg-fig-centertext}}
+\end{figure}
+
+\JavaTIP{PROGRAMMING TIP}{Generality.}{By using a component's size and
+font as the determining factors, you can center text on virtually any
+component.  These values are available via the component's {\tt
+getFont()} and {\tt getSize()} methods.}
+
+
+\begin{figure}[bt]
+\figaleft{chptr07/centertextscreen.eps}{The {\tt CenterText} application keeps its
+message centered no matter how its window is resized.
+\label{fig-centertextscreen}
+\label{pg-fig-centertextscreen}}
+\end{figure}
+
+\secSMH{Chapter Summary}
+\secKTH{Technical Terms}
+
+\begin{KT}
+ascent
+
+baseline
+
+concatenation
+
+copy constructor 
+
+data structure
+
+delimited string
+
+delimiter
+
+empty string
+
+garbage collection 
+
+glyph
+
+lexicographic order
+
+logical font
+
+off-by-one error
+
+orphan object
+
+physical font
+
+read only
+
+string
+
+string index
+
+string literal
+
+token
+
+unit indexed
+
+zero indexed
+
+\end{KT}
+
+
+\pagebreak
+\secKTH{Summary of Important Points}
+\begin{SMBL}
+\item  A {\tt String\index{String}} literal is a sequence of 0 or more characters
+enclosed within double quotation marks.   A {\tt String} object is a
+sequence of 0 or more characters, plus a variety of class and instance
+methods and variables.
+
+\item A {\tt String} object is created automatically by Java the first
+time it encounters a {\it literal string}, such as ``Socrates,'' in a
+program.  Subsequent occurrences of the literal do not cause
+additional objects to be instantiated.  Instead, every occurrence of
+the literal ``Socrates'' refers to the initial object.
+
+\item A {\tt String} object is created whenever the {\tt new}
+operator is used in conjunction with a {\tt String()}
+constructor---for example, {\tt new String("hello")}.
+
+\item  The {\tt String} concatenation operator is the overloaded
+$+$ symbol; it is used to combine two {\tt String}s into a single
+{\tt String}: ``hello'' + ``world'' \verb|==>| ``helloworld''.
+
+\item {\tt String}s are indexed starting at 0.  The {\tt indexOf()}
+and {\tt last\-Index\-Of()} methods\index{String methods} are used for
+finding the first or last occurrence of a character or substring
+within a {\tt String}. The {\tt valueOf()} methods convert a nonstring
+into a {\tt String}. The {\tt length()} method determines the number
+of characters in a {\tt String}.  The {\tt charAt()} method returns
+the single character at a particular index position.  The various {\tt
+substring()} methods return the substring at particular index
+positions in a {\tt String}.
+
+\item The overloaded {\tt equals()} method returns {\tt true} if two
+{\tt String}s contain the same exact sequence of characters.  The {\tt
+==} operator, when used on {\tt String}s, returns true if two
+references designate the same {\tt String} object.
+
+\item {\tt String} objects are {\it immutable}. They cannot be 
+modified.
+
+\item  A {\tt StringBuffer} is a string object that can be 
+modified using methods such as {\tt insert()} and {\tt append()}.
+
+\item  A {\tt StringTokenizer} is an object that can be used to
+break a {\tt String} into a collection of {\it tokens} separated by
+{\it delimiters}. The whitespace characters---tabs, blanks, and
+newlines---are the default delimiters.
+
+\item  The {\tt FontMetrics} class is used to obtain the
+specific dimensions of the the various {\tt Font}s.  It
+is useful when you wish to center text.  {\tt Font}s are
+inherently platform dependent.  For maximum portability,
+it is best to use default fonts.
+
+\end{SMBL}
+
+\secANSH
+\begin{ANS}
+%{Exercise 7.1}
+\columnsep = 0pt\begin{multicols}{4}
+\item \mbox{ }
+\begin{enumerate}
+\item[a.]  silly       
+\item[b.]  silly       
+\item[c.]  silly stuff 
+\end{enumerate}
+\end{multicols}
+
+%{Exercise 7.2}
+\item  \mbox{ }
+\begin{enumerate}
+\item[a.]  \verb|String str1 = "";|              
+\item[b.]  \verb|String str2 = new String("stop");|
+\item[c.]  \verb|String str3 = str1 + str2;|
+\end{enumerate}
+
+
+
+%{Exercise 7.3}
+\columnsep = 0pt\begin{multicols}{4}
+\item \mbox{ }
+\begin{enumerate}
+\item[a.]  15        
+\item[b.]  \verb|"551"|
+\item[c.]  \verb|"5175"| 
+\end{enumerate}
+\end{multicols}
+
+%{Exercise 7.4} 
+\item  See Figure~\ref{fig-strobjects3}.
+\label{ans-strobjects2}
+\label{pg-ans-strobjects2}
+
+%\begin{figure}
+\begin{figure}[h]
+\figa{chptr07/p392f1.eps}{Answer to Exercise 7.4.
+Note that {\it s1} is {\tt null} because it has not been instantiated
+and has not been assigned a literal value.
+\label{fig-strobjects3}
+\label{pg-fig-strobjects3}}
+\end{figure}
+%\end{figure}
+
+
+%{Exercise 7.5}
+\begin{multicols}{4}
+\item \mbox{ }
+\begin{enumerate}
+\item[a.]  \verb|"45"|
+\item[b.]  \verb|"121"|
+\item[c.]  \verb|"X"|
+\end{enumerate}
+\end{multicols}
+
+
+%{Exercise 7.6}
+\item  \mbox{ }
+\begin{enumerate}
+\item[a.]  \verb|String.valueOf(100)|   
+\item[b.]  \verb|String.valueOf('V');|  
+\item[c.]  \verb|String s = new String(String.valueOf(X * Y));|  
+\end{enumerate}
+
+
+%{Exercise 7.7}
+\begin{multicols}{4}
+\item \mbox{ }
+\begin{enumerate}
+\item[a.]  0      
+\item[b.]  1      
+\item[c.]  $-1$   
+\end{enumerate}
+\end{multicols}
+
+
+%{Exercise 7.8}
+\begin{multicols}{4}
+\item\mbox{ }
+
+\mbox{ }
+
+\mbox{ }
+\begin{enumerate}
+\item[a.]  16      
+\item[b.]  \verb|"16"|
+\item[c.]  1       
+\item[d.]  15      
+\item[e.]  1       
+\item[f.]  13      
+\item[g.]  7       
+\item[h.]  3       
+\item[i.]  7       
+\item[j.]  7       
+\item[k.]  3       
+\end{enumerate}
+\end{multicols}
+
+
+
+%{Exercise 7.9}
+\item  Evaluate the following expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String tricky = "abcdefg01234567";
+tricky.indexOf(String.valueOf(tricky.indexOf("c")));
+tricky.indexOf(String.valueOf(2));
+tricky.indexOf("2");
+Answer: 9
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 7.10}
+\begin{multicols}{4}
+\item\mbox{ }
+
+\begin{enumerate}
+\item[a.]  \verb|"uvwxyz"|
+\item[b.]  \verb|"bcde"|    
+\item[c.]  \verb|"xyz"| 
+\item[d.]  \verb|"xy"|
+\item[e.]  \verb|"xyz"|
+\end{enumerate}
+\end{multicols}
+
+
+
+%{Exercise 7.11}
+\begin{multicols}{4}
+\item\mbox{ }
+
+\begin{enumerate}
+\item[a.]  \verb|"uvwxyz"|
+\item[b.]  \verb|"bcde"|
+\item[c.]  \verb|"xyz"|
+\item[d.]  \verb|"xyz"|
+\item[e.]  \verb|"xyz"|
+\end{enumerate}
+\end{multicols}
+
+
+%{Exercise 7.12}
+
+\item  A class to test the string methods.
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class StringProcessorTest {
+  public static void main(String[] args) {
+    KeyboardReader kb = new KeyboardReader();
+    kb.prompt("Input a String or - stop - to quit: ");
+    String str = kb.getKeyboardInput();
+    while (!str.equals("stop")){
+      kb.display("Testing printLetters()\n");
+      StringProcessor.printLetters(str);
+      kb.display("testing countChars()\n");
+      kb.display("Total occurences of e = ");
+      kb.display(StringProcessor.countChar(str,'e') + "\n");
+      kb.display("Testing reverse()\n");
+      kb.display(StringProcessor.reverse(str)+ "\n");
+      kb.display("Testing capitalize()\n");
+      kb.display(StringProcessor.capitalize(str) + "\n\n");
+      kb.prompt("Input a String or - stop - to quit: ");
+      str = kb.getKeyboardInput();
+    } // while
+  } //main()
+} // StringProcessorTest class
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 7.13}
+
+\item  Method to remove all blanks from a string:
+\verb| |
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ // Pre: s is a non null string
+ // Post: s is returned with all its blanks removed
+ public String removeBlanks(String s) {
+   StringBuffer result = new StringBuffer();
+   for (int k = 0; k < s.length();  k++)
+     if (s.charAt(k) != ' ')      // If this is not a blank
+       result.append(s.charAt(k));  //  append it to result
+   return result.toString();
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 7.14}
+\item  A Alpha Z Zero Zeroes a alpha bath bin z zero
+
+
+%{Exercise 7.15}
+
+\item  To modify {\tt precedes} so that it also
+returns true when its two string arguments are equal, just
+change the operator in the final return statement to \verb|<=|:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    if (s1.charAt(k) <= s2.charAt(k) )
+      return true;
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 7.16}
+\begin{multicols}{4}
+\item\mbox{ }
+
+\mbox{ }
+
+\mbox{ }
+
+\begin{enumerate}
+\item[a.]  true  
+\item[b.]  true  
+\item[c.]  false 
+\item[d.]  false 
+\item[e.]  false 
+\item[f.]  true  
+\item[g.]  false 
+\item[h.]  false 
+\item[i.]  false 
+\end{enumerate}
+\end{multicols}
+
+%{Exercise 7.17}
+\item  The variables in {\tt TestStringEquals} are declared {\tt static}
+because they are used in {\tt static} methods.  Whenever you call a
+method directly from {\tt main()}, it must be {\tt static} because
+{\tt main()} is static.  Remember that {\tt static} elements are associated
+with the class, not with its instances.  So {\tt main()} can only
+use static elements because they don't depend on the existence
+of instances.
+
+
+
+%{Exercise 7.18}
+\item\mbox{ }
+\begin{enumerate}
+\item[a.]  \verb|String s3 = s1.substring(s1.indexOf('n'))| \\             
+       \verb|+ s1.substring(0,s1.indexOf('n'));|  
+\item[b.]  \verb|String s4 = s2.substring(6) + " " + s2.substring(0,5);| 
+\item[c.]  \verb|String s5 = s2.substring(0,6) + s1.substring(0,3);|     
+\end{enumerate}
+
+\end{ANS}
+
+\secEXRHtwo{Exercises}
+\marginnote{\vspace{12pt}\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+\begin{EXRtwo}
+
+\item  Explain the difference between the following pairs of terms:
+\begin{EXRtwoLL}
+\item  {\it Unit indexing} and {\it zero indexing}.
+\item  {\it Data structure} and {\it data type}.
+\item  {\tt StringBuffer} and {\tt String}.
+\item  {\tt String} and {\tt StringTokenizer}.
+\item  {\it Declaring a variable} and {\it instantiating a} {\tt String}.
+\item  A {\tt Font} and a {\tt FontMetrics} object.
+\end{EXRtwoLL}
+
+\item  Fill in the blanks.
+
+\begin{EXRtwoLL}\baselineskip=14pt
+\item  When the first character in a string has index 0, this is known as \rule{40pt}{0.5pt}\,.
+\item  A sequence of characters enclosed within quotes is known as a \rule{40pt}{0.5pt}\,.
+\end{EXRtwoLL}\baselineskip=11pt
+
+\item Given the {\tt String} {\it str} with the value ``to be or not
+to be that is the question,'' write Java expressions to extract each
+of the substrings shown below.  For each substring, provide two sets
+of answers.  One that uses the actual index numbers of the
+substrings---for example, the first ``to'' goes from 0 to 2---and a
+second more general solution that will also retrieve the 
+substring from the following string ``it is easy to become what you
+want to become.''  ({\it Hint}: In the second case, use {\tt length()}
+and {\tt indexOf()} along with {\tt substring()} in your expressions.
+If necessary, you may use local variables to store intermediate
+results.  The answer to (a) is provided as an example.)
+
+\begin{EXRtwoLL}
+\item  the first ``to'' in the string
+\begin{jjjlisting}
+\begin{lstlisting}
+str.substring(0, 2)                            // Answer 1
+str.substring(
+     str.indexOf("to"), str.indexOf("to") + 2) // Answer 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{multicols}{2}
+\item  the last ``to'' in the string
+\item  the first ``be'' in the string
+\item  the last ``be'' in the string
+\item  the first four characters in the string
+\item  the last four characters in the string
+\end{multicols}
+\end{EXRtwoLL}
+
+
+\begin{minipage}{27pc}
+\item Identify the syntax errors in each of the following, assuming
+that {\tt s} is the literal string ``exercise'':
+
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  \verb|s.charAt("hello")|
+\item  \verb|s.indexOf(10)|
+\item  \verb|s.substring("er")|
+\item  \verb|s.lastIndexOf(er)|
+\item  \verb|s.length|
+\end{multicols}
+
+\end{EXRtwoLL}
+\end{minipage}
+
+\item  Evaluate each of the following expressions, assuming that
+{\tt s} is the literal string ``exercise'':
+
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  \verb|s.charAt(5)|
+\item  \verb|s.indexOf("er")|
+\item  \verb|s.substring(5)|
+\item  \verb|s.lastIndexOf('e')|
+\item  \verb|s.length()|
+\end{multicols}
+\end{EXRtwoLL}
+
+\item  Write your own {\tt equalsIgnoreCase()} method using
+only other {\tt String} methods.
+
+\item  Write your own {\tt String} equality method without
+using {\tt String.} \mbox{\tt equals()}. ({\it Hint}: Modify the {\tt precedes()}
+method.)
+
+\item Even though Java's {\tt String} class has a built-in {\tt
+toLowerCase()} method, write your own implementation of this method.
+It should take a {\tt String} parameter and return a {\tt String}
+with all its letters written in lowercase.
+
+\item Write a method that converts its {\tt String} parameter so that
+letters are written in blocks five characters long.  For example,
+consider the following two versions of the same sentence:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Plain :   This is how we would ordinarily write a sentence.
+Blocked : Thisi showw ewoul dordi naril ywrit easen tence.
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Design and implement an applet that lets the user type a document
+into a {\tt TextArea} and then provides the following analysis of the
+document: the number of words in the document, the number of
+characters in the document,~and the percentage of words that have more
+than six letters.
+
+\item  Design and write an applet that searches for single-digit numbers
+in a text and changes them to their corresponding words.  For example,
+the string ``4 score and 7 years ago'' would be converted into ``four
+score and seven years ago''.
+
+\item  A palindrome is a string that is spelled the same way backward
+and forward.  For example, {\it mom, dad, radar, 727} and
+{\it able was i ere i saw elba} are all examples of palindromes.
+Write a Java applet that lets the user type in a word or phrase
+and then determines whether the string is a palindrome.
+
+\item Write a maze program that uses a string to store a
+representation of the maze.  Write a method that accepts a {\tt
+String} parameter and prints a two-dimensional representation of a
+maze. For example, the maze shown here, where {\tt O} marks the
+entrance and exit can be generated from the following string:
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+String: XX_XXXXXXXX__XXX_XXXX_XX____XXX_XX_XX_XXX____X____XXXXXXXX_X
+  O
+XX XXXXXXX
+X  XXX XXX
+X XX    XX
+X XX XX XX
+X    X    O
+XXXXXXXX X
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Write a method that takes a delimited string to
+store a name and address, from which you can print a mailing label.  For example, if
+the string contains ``Sam Penn:14 Bridge St.:Hoboken, NJ 01881,''
+the method should print the label shown in the margin.
+\marginnote{\tt
+\rule{8pc}{1pt}\\
+Sam Penn\\
+14 Bridge St.\\
+Hoboken, NJ 01881\\[-4pt]
+\rule{8pc}{1pt}\\
+}
+
+\item  Design and implement an applet that plays Time Bomb with the user.
+Here's how the game works.  The computer picks a secret word and then
+prints one asterisk for each letter in the word: * * * * *.  The user
+guesses at the letters in the word.   For every correct guess, an
+asterisk is replaced by a letter:\break * e * * *.  For every incorrect
+guess, the time bomb's fuse grows shorter.  When the fuse disappears,
+after say, six incorrect guesses, the bomb explodes.  Store the secret
+words in a delimited string and invent your own representation for
+the time bomb.
+
+\item {\bf Challenge: } The global replace function is a
+string-processing algorithm found in every word processor.  Write a
+method that takes three {\tt String} arguments: a document, a target
+string, and a replacement string.  The method should replace every
+occurrence of the target string in the document with the replacement
+string.  For example, if the document is ``To be or not to be, that is
+the question,'' and the target string is ``be,'', and the replacement
+string is ``see,'' the result should be, ``To see or not to see, that
+is the question.''
+
+\item  {\bf Challenge: } Design and implement an applet that plays
+the following game with the user.  Let the user pick a letter between
+{\it A} and {\it Z}. Then let the computer guess, the secret letter.  For
+every guess the player has to tell the computer whether it's too
+high or too low.  The computer should be able to guess the letter
+within five guesses.  Do you see why?
+
+\item  {\bf Challenge:} A {\it list} is a sequential
+data structure.  Design a {\tt List} class that uses a comma-delimited
+{\tt String}---such as, ``a,b,c,d,12,dog''---to implement a list.
+Implement the following methods for this class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+void addItem( Object o );      // Use Object.toString()
+String getItem(int position);
+String toString();
+void deleteItem(int position);
+void deleteItem(String item);
+int getPosition(String item);
+String getHead();              // First element
+List getTail();                // All but the first element
+int length();                  // Number of items
+\end{lstlisting}
+\end{jjjlisting}
+
+\item {\bf Challenge:} Use a delimited string to create a {\tt
+PhoneList} class with an instance method to insert names and phone
+numbers, and a method to look up a phone number when a user provides a
+person's name.  Since your class will take care of looking things up,
+you don't have to worry about keeping the list in alphabetical order.
+For example, the following string could be used as such a directory:
+
+\begin{jjjlistingleft}[30pc]{-4pc}
+\begin{lstlisting}
+mom:860-192-9876::bill g:654-0987-1234::mary lancelot:123-842-1100
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\item  Design and implement an applet or application that
+displays a multi-line message in various fonts and sizes input by the
+user.   Let the user choose from among a fixed selection of fonts,
+sizes, and styles.
+
+
+
+
+\end{EXRtwo}
+
+%\end{objectorienteddesign}

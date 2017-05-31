@@ -1,0 +1,3721 @@
+%%%  Chapter 6: Control Structures
+%%%  3rd Edition
+
+\setcounter{chapter}{5}
+\setcounter{SSTUDYcount}{1}
+\chapter{Control Structures}
+\label{chapter-loops}
+\label{pg-chapter-loops}
+
+\CObegin
+\secCOBH{Objectives}
+
+\noindent After studying this chapter, you will
+\begin{COBL}
+\item  Be able to solve problems involving repetition.
+\item  Understand the differences among various loop structures.
+\item  Know the principles used to design effective loops.
+\item  Improve your algorithm design skills.
+\item  Understand the goals and principles of structured programming.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item Flow of Control: Repetition Structures
+\item Counting Loops
+\item Example: Car Loan
+\item Graphics Example: Drawing a Checkerboard
+\item Conditional Loops
+\item Example: Computing Averages
+\item Example: Data Validation
+\item Principles of Loop Design
+\item The {\tt switch} Multiway Selection Structure
+\item Object-Oriented Design: Structured Programming
+\item[] {{\color{cyan}Special Topic:} What Can Be Computed?}
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+\noindent As we learned in Chapter~3, a control structure is a language 
+element that changes the flow of control of a program. Thus far, we
+have used the {\tt if} and {\tt if/else} statements to select between
+two or more alternate paths in a program.  We have used the {\tt
+while}-loop structure to repeat statements. And we have used
+method-call-and-return to invoke methods that carry out certain
+well-defined tasks in a program.
+
+In this chapter we will extend our repertoire of control structures.
+We will introduce the {\it for} and {\it do-while} statements, both of
+which are used in programs that require calculations to be repeated.
+We will also introduce the {\tt switch} statement, which will give us
+another way, in addition to {\tt if/else}, to select from among
+several alternate paths in a program.
+
+We begin by introducing the idea of a {\it counting loop}, which is
+used for repetitive tasks when you know beforehand exactly how many
+repetitions are necessary.  This type of loop is most often
+implemented using a {\tt for} statement.
+
+We then distinguish two kinds of {\it conditional loops}, which are
+used for performing repetitive tasks where the number of repetitions
+depends on some kind of non-counting condition. These kinds of loops
+are usually implemented using Java's {\tt while} and {\tt do-while}
+statements.  We give examples of several kinds of {\em loop bounds}
+and use them to identify several useful principles of loop design.
+Finally, we introduce some of the key principles of the {\it
+structured programming} approach, a disciplined design approach that
+preceded the object-oriented approach.
+
+\section{Flow of Control: Repetition Structures}
+\noindent As we saw in Chapter~3, a {\bf repetition structure} is a control
+structure that repeats a statement or sequence of statements.  Many
+programming tasks require a repetition structure.  Consider some
+examples.
+
+\begin{BL}
+\item  You're working for the National Security Agency trying
+to decipher secret messages intercepted from foreign spies, and you
+want to count the number of times a certain letter, ``a,'' occurs in
+a document containing {\it N} characters.  In this case, you would want to
+employ something like the following (pseudocode) algorithm:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+initialize totalAs to 0
+for each character in the document
+    if the character is an 'a'
+        add 1 to totalAs
+return totalAs as the result
+\end{lstlisting}
+\end{jjjlisting}
+
+\item You're working for a caterer who wants to number the invitations
+to a client's wedding, so you need to print the numbers between 1 and
+5000 on the invitation cards (it's a big wedding)! In this case, you
+want to go through each number, 1 to 5000, and simply print it out:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for each number, N, from 1 to 5000
+    print N on the invitation card
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  You are helping the forest service in Alaska to track  the
+number of black bear sightings, and you want to compute the average
+number of~sightings per month.   Suppose the user enters each month's
+count at the keyboard, and uses a special number, say, 9999, to signify
+the end of the sequence. However, 9999 should not be figured into the average.
+This example differs a bit from the preceding ones, because here you
+don't know exactly how many numbers the user will input:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+initialize sumOfBears to 0
+initialize numOfMonths to 0
+repeat the following steps
+    read a number from the keyboard
+    if the number is NOT 9999
+        add it to the sumOfBears
+        add 1 to numOfMonths
+until the number read is 9999
+divide sumOfBears by numOfMonths giving average
+return average as the result
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We repeat the process of reading numbers and
+adding them to a running total ``until the number read is 9999.''
+
+\item  Student records are stored in a file and you want to
+calculate Erika Wilson's current GPA.~Here we need to perform a
+repetitive process---searching through the file for Erika Wilson's
+record---but again we don't know exactly how many times to repeat
+the process:
+
+\begin{jjjlisting}
+\begin{lstlisting}[stringstyle=\color{black}]
+repeat the following steps
+    read a record from the file
+until Erika Wilson's record is read
+compute Erika Wilson's GPA
+return gpa as the result
+\end{lstlisting}
+\end{jjjlisting}
+\end{BL}
+
+\noindent As these examples suggest, two types of loops are used:
+counting loops and non-counting loops.  Counting loops are used
+whenever you know in advance exactly how many times an action must be
+performed.  Non-counting loops are used when the number of repetitions
+depends on some condition---for example, the number of data items
+input from the keyboard or the input of a particular record from a
+file.
+
+\section{Counting Loops}
+\noindent A {\bf counting loop}, or {\it counter-controlled loop}, is
+a loop in which you know beforehand how many times it will be
+repeated. Among the preceding examples, the first two are counting
+loops.
+
+Because you know the exact number of times the loop repeats 
+ beforehand, a counting loop can be made dependent on the value of a
+counter. For example, if you want to print the word ``Hello'' 100
+times, you can use the following {\tt while}  structure:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 0;
+while (k < 100) {
+    System.out.println("Hello");
+    k++;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the counter is the variable {\it k}, which counts
+from 0 through 99---that is, it counts 100 times.  Note that we start
+counting from 0 instead of 1. Counting from 0 is known as {\bf zero
+indexing} and it is a common programming convention for counting
+loops.  Although it doesn't really make any practical difference in
+this case, later on we will use loops to process
+%\begin{marginalnote}\it Zero indexing\end{marginalnote}
+\marginnote{Zero indexing}
+structures, such as strings and arrays, which use zero indexing. It
+will be easier to process these structures if our loop counter also
+starts at~0.
+
+The variable {\it k} in this example is called a
+%\begin{marginalnote}\it Loop counter\end{marginalnote}
+\marginnote{Loop counter}
+{\it counter variable} or {\it loop counter}.  Although it is
+certainly possible to name the counter variable anything we like, it
+is customary to use single letters like {\it i, j}, and {\it k} as
+loop counters.  The fundamental feature of a counting loop is that we
+must know beforehand exactly how many iterations the loop will take.
+
+\JavaTIP{EFFECTIVE DESIGN}{Loop Design.}{A {\it counting loop} can be
+used whenever you know exactly how many times a process must be
+repeated.}
+
+\noindent Although we can use a {\tt while}-structure to
+code a counting loop, Java's {\tt for} statement is ideally suited for
+this purpose.  For example, the following {\tt for} statement will also
+print the word ``Hello'' 100 times:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ for (int k = 0; k < 100; k++)
+     System.out.println("Hello");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In fact, this {\tt for} statement is equivalent
+to the preceding {\tt while} structure. 
+
+The {\tt for} statement has the following syntax:
+
+\JavaRule{For Statement.}{The {\it for statement} has the
+following syntax: \\
+$
+\matrix{
+\hspace{1.1in}{\tt for} & ( \;{\it initializer}\;;\; {\it loop\;entry\;condition} \;;\; {\it updater}\;  ) \cr
+\hspace{1.1in}\;\;\;\; & {\it for\;loop\;body } \;  ;          \cr
+}
+$}
+
+\noindent The for statement begins with the keyword {\tt for}, which
+is followed by a parenthesized list of three expressions separated by
+semicolons: an {\bf initializer}, a {\bf loop entry condition}, and an
+{\bf updater}.  Following the parenthesized list is the for {\bf loop
+body}, which is either a single statement or a sequence of statements
+contained in curly brackets, \verb|{|\dots\verb|}|.
+
+\subsection{The For Structure}
+%\begin{figure}
+\begin{figure}[tb]
+\figaright{chptr06/6f1.eps}{Flowchart of the {\tt for} statement.
+\label{fig-forloop}
+\label{pg-fig-forloop}}
+\end{figure}
+%\end{figure}
+
+Figure~\ref{fig-forloop} shows how the {\tt for} statement works.  It
+might be useful to compare this flowchart with the flowchart for the the
+{\tt while} structure (Fig.~\ref{fig-whileflow6}), which was
+introduced in Chapter~3.  You see that it has exactly the same
+structure.  First, the initializer is evaluated.  Thus, the initializer
+sets the integer variable {\it k} to 0.  Then the loop entry
+condition, which must be a boolean expression, is evaluated.  If it is
+true, the body of the loop is executed; if it is false, the body of
+the loop is skipped and control passes to the next statement following
+the {\tt for} statement.  The updater is evaluated after the loop body is
+executed.  After completion of the updater, the loop entry condition
+is reevaluated and the loop body is either executed again or not,
+depending on the truth value of the loop entry condition.  This
+process is repeated until the loop entry condition becomes false.
+
+\begin{figure}[h!]
+\figa{chptr03/whileflow.eps}{Flowchart of the {\tt while} statement and {\tt while}
+structure.
+\label{fig-whileflow6}}
+\end{figure}
+
+Tracing the order in which the {\tt for} loop components are
+evaluated gives this sequence:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ evaluate initializer
+ evaluate loop entry condition ==> True
+ execute for loop body;
+ evaluate updater
+ evaluate loop entry condition ==> True
+ execute for loop body;
+ evaluate updater
+ evaluate loop entry condition ==> True
+ execute for loop body;
+ evaluate updater
+ .
+ .
+ .
+ evaluate loop entry condition ==> False
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As this trace shows, the loop entry condition controls
+entry to the body of the loop and will, therefore, be the last thing
+done before the loop terminates.
+
+We have followed the standard convention of declaring the counter
+variable in the header of the {\tt for} statement.  This restricts the
+%\begin{marginalnote}\it Loop variable scope\end{marginalnote}
+\marginnote{Loop variable scope} variable's {\it scope} to the {\tt
+for} statement itself.  It would be a syntax error to use {\it k}
+outside the scope of the {\tt for} loop, as in this example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 100; k++)
+  System.out.println("Hello");
+        // Syntax error, k undeclared
+System.out.println("k = " + k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For some problems, it might be necessary to use the loop
+variable outside the scope of the {\tt for} statement, in which case
+the variable should be declared before the {\tt for} statement. For
+example, if we want to print the value of the loop variable,
+{\tt k}, after the loop completes, we have to declare it before
+the loop:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 0;         // Declare the loop variable here
+for (k = 0; k < 100; k++)
+    System.out.println("Hello");
+System.out.println("k = " + k); // To use it here
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, the loop will exit when {\tt k} becomes
+100, so ``k = 100'' will be printed.
+
+\subsection{Loop Bounds}
+\noindent A counting loop starts at some initial value and counts 0 or more
+%\begin{marginalnote}\it Loop bound\end{marginalnote}
+iterations.  A {\bf loop bound} is a value that controls how many times
+a loop is repeated. A loop will repeat until its loop bound is reached.
+\marginnote{Loop bound}
+In a counting loop, the {\it loop entry condition} should be a boolean
+expression that tests whether the loop's bound has been reached.
+Similarly, in a counting loop, the {\it updater} should modify the loop
+counter so that it makes progress toward reaching its bound.  Counting
+loops often increment or decrement their counter by 1, depending on
+whether the loop is counting forward or backward.  The following
+method contains a countdown loop, which prints {\tt 10 9 8 7 6 5 4 3
+2 1 BLASTOFF}.  In this case, progress toward the loop bound is made by
+decrementing the loop counter:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void countdown() {
+    for (int k = 10; k > 0; k--)
+        System.out.print(k + " ");
+    System.out.println("BLASTOFF");
+} // countdown()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note in this case that we are using {\bf unit indexing}
+%\begin{marginalnote}\it Unit indexing\end{marginalnote}
+\marginnote{Unit indexing}
+instead of zero indexing, because countdowns repeat, or {\it iterate},
+from 10 down to 1, not from 10 down to 0.
+
+\subsection{Infinite Loops}
+\noindent If the loop bound is never reached, the loop entry condition will
+never become false and the loop will repeat forever.  This is known as
+an {\bf infinite loop}.  Can you see why each of the following
+%\begin{marginalnote}\it Infinite loop\end{marginalnote}
+\marginnote{Infinite loop}
+{\tt for} statements will result in an infinite loop?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 100; k--)       // Infinite loop
+    System.out.println("Hello");
+
+for (int k = 1; k != 100; k+=2)     // Infinite loop
+    System.out.println("Hello");
+
+for (int k = 98; k < 100; k = k / 2)// Infinite loop
+    System.out.println("Hello");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the first example, {\it k} starts out at 0 and is decremented
+on each iteration, taking on values $-1, -2, -3$, and so on, so
+{\it k} will never reach its loop bound.
+
+In the second example, {\it k} starts out at 1 and is incremented by 2 on
+each iteration, taking on the values 3, 5, 7, and so on.  Because all
+these values are odd, {\it k} will never equal 100. A much safer loop
+bound in this case would be {\it k $<$= 100}.
+
+In the third example, {\it k} starts out at 98 and is halved on each
+iteration, taking on the values 49, 24, 12, 6, 3, 1, 0, 0, and so on,
+forever.   Thus, it too will be stuck in an infinite loop.
+
+Encountering an unintended infinite loop when developing a program can
+be very frustrating.   If the program is stuck in a loop 
+\marginnote{Stuck in a loop}
+that generates output, it will be obvious that it is looping, but if
+no output is being generated, the computer will appear to ``freeze,''
+no longer responding to your keyboard or mouse commands.  Some
+programming environments allow you to break out of a looping program
+by typing a special keyboard command such as {\tt CONTROL-C} or {\tt
+CTRL-ALT-DELETE} or {\tt CONTROL-APPLE-ESCAPE}, but if that doesn't
+work you will have to reboot the computer, possibly causing a loss of
+data.  The best way to avoid infinite loops is to determine that the
+loop's updater expression will cause the loop to eventually reach its
+bound.
+
+\JavaTIP{EFFECTIVE DESIGN}{Loop Design.}{To guard against infinite
+loops, make sure that the loop bound will eventually be reached.}
+
+\subsection{Loop Indentation}
+\noindent Note how indentation is used to distinguish the loop body
+from both the heading and from the statement that follows the loop:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 10; k > 0; k--)     // Loop heading
+    System.out.print (k + " ");  //  Indent the body
+System.out.println( "BLASTOFF" ) // After the loop
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Indenting the loop body is a stylistic convention intended
+to make the code more readable.  However, the indentation itself has no
+effect on how the code is interpreted by Java.  Each of the following
+code segments would still produce the same countdown:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 10; k > 0; k--)
+System.out.print (k + " ");
+System.out.println("BLASTOFF");
+
+for (int k = 10; k > 0; k--) System.out.print(k +" ");
+System.out.println("BLASTOFF");
+
+for
+(int k = 10; k > 0; k--)
+System.out.print (k + " ");
+System.out.println("BLASTOFF");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In each case the statement, \verb|System.out.println("BLASTOFF")|,
+is not part of the {\tt for} loop body and is executed only once when the
+loop terminates.
+
+\JavaTIP{PROGRAMMING TIP}{Loop Indentation.}{To
+make loops more readable, indent the loop body to set it off from the
+heading and to highlight which statement(s) will be repeated.}
+
+\JavaTIP{DEBUGGING TIP}{Loop Indentation.}{Loop indentation 
+has no effect on how Java interprets the loop.  The loop body is
+determined entirely by the syntax of the {\tt for} statement.}
+
+\noindent Note that up to this point the loop body has consisted of a
+single statement, such as a {\tt println()} statement. But the loop
+body may consist of any Java statement, including an {\tt if} or {\tt
+if-else} statement or a compound statement, which contains a sequence
+of statements enclosed within braces.  Consider the following
+examples.  The first example prints the sequence 0, 5, 10, 15, $\dots$
+95. Its loop body consists of a single {\tt if} statement:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 100; k++)// Print 0 5 10...95
+  if (k % 5 == 0) // Loop body: single if statement
+     System.out.println("k= " + k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The next example prints the lowercase letters of the
+alphabet.  In this case, the loop counter is of type {\tt char},
+and it counts the letters of the alphabet.  The loop body
+consists of a single {\tt print()} statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (char k = 'a'; k <= 'z'; k++)// Print 'a' 'b'...'z'
+  System.out.print (k + " ");  // Loop body: single print()
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent The next example prints the sequence  5, 10, 15, $\dots$ 50,
+but it uses several statements within the loop body:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 1; k <= 10; k++) {// Print 5 10 15...50
+   int m = k * 5;                  // Begin body
+   System.out.print (m + " ");
+}                                  // End body
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, the scope of the local variable {\it m},
+declared within the loop body, is limited to the loop body and
+cannot be used outside of that scope.
+
+\JavaRule{Loop Body.}{The body of a
+{\tt for} statement consists of the statement that immediately follows
+the {\tt for} loop heading.  This statement can be either a simple
+statement or a compound statement---a sequence of statements enclosed
+within braces, \{\dots \}.}
+
+\noindent Although braces are not required when the body of a {\tt
+for} loop consists of a single statement, some coding styles recommend
+that braces should always be used for the body of a loop statement.
+For example, it is always correct to code the {\tt for} loop as
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 1; k <= 10; k++) {// Print 1 2 ... 10
+  System.out.print (k + " ");     // Begin body
+}                                // End body
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Another advantage of this coding style is that you
+can easily place additional statements in the loop body by placing
+them within the braces.
+
+\JavaTIP[false]{DEBUGGING TIP}{Missing Braces.}{A common programming error for
+novices is to forget to use braces to group the statements they intend
+to put in the loop body.  When braces are not used only the first
+statement after the loop heading will be iterated.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Identify the syntax error in the following {\tt for} loop \mbox{statements.}
+\begin{EXRLL}
+\item 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ for (int k = 5, k < 100, k++)
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ for (int k = 0; k < 12 ; k--;)
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRLL}
+
+\item  Identify those statements that result in infinite loops.
+\begin{EXRLL}
+\item 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ for (int k = 0; k < 100; k = k )
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ for (int k = 1; k == 100; k = k + 2 )
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ for (int k = 1; k >= 100; k = k - 2 )
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRLL}
+
+\item  Suppose you're helping your little sister learn to count by
+fours.  Write a {\tt for} loop that prints the following sequence of numbers:
+1, 5, 9, 13, 17, 21, 25.
+
+\item  What value will {\it j} have when the following loop \mbox{terminates?}
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int i = 0; i < 10; i++) {
+    int j;
+    j = j + 1;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+\subsection{Nested Loops}
+\noindent A {\bf nested loop} is a structure in which one loop is contained
+inside the body of another loop, such as when a {\tt for} loop body
+contains a {\tt for} loop.  For example, suppose you are working for
+Giant Auto Industries, and your boss wants you to print a table 
+for buyers to figure the cost of buying multiple quantities
+of a certain part.  The cost of individual parts ranges from
+\$1 to \$9.  The cost of {\it N} items is simply the unit price times the
+quantity.  Thus, you'll want to print something like the following
+table of numbers, where the prices per unit are listed in the top row,
+and the prices for 2, 3 and 4 units are listed in subsequent rows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ 1  2  3  4  5  6  7  8  9
+ 2  4  6  8  10 12 14 16 18
+ 3  6  9  12 15 18 21 24 27
+ 4  8  12 16 20 24 28 32 36
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To produce this multiplication table, we could use the following
+nested {\tt for} loops:
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}[numberstyle=\small, numbers=left]
+for (int row = 1; row <= 4 ; row++) { // For each of 4 rows      
+  for (int col = 1; col <= 9; col++) // For each of 9 columns   
+    System.out.print(col * row + "\t" );      // Print number
+  System.out.println();              // Start a new row         
+} // for row
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how indenting is used here to distinguish the
+levels of nesting and to make the code more readable. In this example,
+the {\it outer loop}
+%\begin{marginalnote}\it Inner and outer loop\end{marginalnote}
+\marginnote{Inner and outer loop}
+controls the number of rows in the table, hence, our choice of {\tt
+row} as its loop counter.  The {\tt println()} statement is executed
+after the {\it inner loop} is done iterating, which allows us to print
+a new row on each iteration of the outer loop.  The inner loop prints
+the nine values in each row by printing the expression {\it
+col\hbox{\tt *}row}. Obviously, the value of this expression depends
+on both loop variables.
+
+Let's dissect this example a bit.  How many times is the {\tt for}
+statement in line 2 executed? The inner loop is executed once for each
+iteration of the outer loop.  Thus, it is executed four times, which
+is the same number of times that line 4 is executed.  How many times
+is the statement on line 3 executed? The body of the inner loop is
+executed 36 times---9 times for each execution of line 2.
+
+Sometimes it is useful to use the loop variable of the outer loop as
+%\begin{marginalnote}\it Algorithm design\end{marginalnote}
+\marginnote{Algorithm design}
+the bound for the inner loop.  For example, consider the following
+pattern:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ # # # # #
+ # # # #
+ # # #
+ # #
+ #
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the number of \# symbols in each row
+varies inversely with the row number.  In row 1, we have five symbols;
+in row 2 we have four; and so on down to row 5, where we have one \#.
+
+To produce this kind of two-dimensional pattern, we need two counters:
+one to count the row number, and one to count the number of \# symbols
+in each row.  Because we have to print each row's symbols before moving on
+to the next row, the outer loop will count row numbers, and the inner
+loop will count the symbols in each row.  But note that the inner loop's
+bound will depend on the row number.  Thus, in row 1 we want five symbols;
+in row 2 we want four symbols; and so on.  If we let {\tt row} be the row
+number, then in each row we want to print 6 $-$ {\it row} symbols.  The
+following table shows the relationship we want:
+
+\begin{table}[h!]
+\hspace*{3.5pc}
+\begin{tabular}{cll} 
+\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}\\
+[2pt] {Row}\hspace*{12pt}&{Bound (6-row)}\hspace*{12pt}&{Number of Symbols} \\
+[-6pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{0.5pt}}\\ [2pt]
+1 & 6-1 & 5   \\
+2 & 6-2 & 4 \\
+3 & 6-3 & 3 \\
+4 & 6-4 & 2 \\
+5 & 6-5 & 1 
+\\[-8pt]\multicolumn{3}{l}{\color{cyan}\rule{19pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+%%%RAM\begin{jjjlisting}
+%%%RAM\begin{lstlisting}
+%%%RAMRow   Bound (6-row)    Number of # Symbols
+%%%RAM---   -------------    -------------------
+%%%RAM 1         6-1               5
+%%%RAM 2         6-2               4
+%%%RAM 3         6-3               3
+%%%RAM 4         6-4               2
+%%%RAM 5         6-5               1\
+%%%RAMend{lstlisting}
+%%%RAM\end{jjjlisting}
+
+\noindent If we let {\it j} be the counter for the inner loop,
+then {\it j} will be bound by the expression 6 $-$ {\it row}.
+This leads to the following nested loop structure:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int row = 1; row <= 5; row++) { // For each row
+  for (int j = 1; j <= 6 - row; j++)// Print the row
+    System.out.print('#');
+  System.out.println();    // Start a new line
+} // for row
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the bound of the inner loop varies according
+to the value of {\it row}, the loop counter for the outer loop.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  As the engineer hired to design ski jumps, 
+write a nested {\tt for} loop to print the following pattern:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+#
+# #
+# # #
+# # # #
+# # # # #
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+\section{Example: Car Loan}
+\noindent Recall the self-study exercise from Chapter~5 that
+calculated the value of a bank CD ({\it a}) given its initial
+principle ({\it p}), interest rate ({\it r}), and number of years
+({\it n}), using the formula $a = p(1 + r)^n$.  This section explains
+how to use the same formula to calculate the cost of a car loan for
+different interest rates over various time periods.
+
+\subsection*{Problem Description}
+\noindent For example, suppose you are planning on buying a car that costs
+\$20,000. You find that you can get a car loan ranging anywhere from
+8 to 11 percent, and you can have the loan for periods as short as two
+years and as long as eight years.  Let's use our loop constructs to
+create a table to show what the car will actually cost you, including
+financing.  In this case, {\it a} will represent the total cost of the
+car, including the financing, and {\it p} will represent the price
+tag on the car (\$20,000):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+            8%          9%          10%         11%
+Year 2  $23,469.81  $23,943.82  $24,427.39  $24,920.71
+Year 3  $25,424.31  $26,198.42  $26,996.07  $27,817.98
+Year 4  $27,541.59  $28,665.32  $29,834.86  $31,052.09
+Year 5  $29,835.19  $31,364.50  $32,972.17  $34,662.19
+Year 6  $32,319.79  $34,317.85  $36,439.38  $38,692.00
+Year 7  $35,011.30  $37,549.30  $40,271.19  $43,190.31
+Year 8  $37,926.96  $41,085.02  $44,505.94  $48,211.60
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection*{Algorithm Design}
+\noindent The key element in this program is the nested {\tt for} loop 
+that generates the table.  Because the table contains seven rows, the
+outer loop should 
+%\begin{marginalnote}\it Nested loop design\end{marginalnote}
+\marginnote{Nested loop design}
+iterate seven times, through the values $2, 3, \dots 8$:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int years = 2; years <= 8; years++) 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The inner loop should iterate through each of the interest rates,
+8 through 11:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int years = 2; years <= 8; years++) { 
+   for (int rate = 8; rate <= 11; rate++) {
+   } // for rate
+} // for years
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The financing calculation should be placed in the body of
+the inner loop together with a statement to print one cell (not row)
+of the table.  Suppose the variable we use for {\it a} in the formula
+is {\tt carPriceWithLoan}, and the variable we use for the actual
+price of the car is {\tt carPrice}. Then our inner loop body is
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+carPriceWithLoan = carPrice * 
+     Math.pow(1 + rate/100.0/365.0, years * 365.0);
+System.out.print(dollars.format(carPriceWithLoan) +"\t");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the rate is divided by both 100.0 (to make it
+a percentage) and by 365.0 (for daily compounding), and the year
+is multiplied by 365.0 before these values are passed to the
+{\tt Math.pow()} method.   It is important here to use 100.0 and
+not 100 so that the resulting value is a {\tt double} and not
+the {\tt int} 0.
+
+\subsection*{Implementation}
+\noindent The program must also contain statements to print the row and column
+headings.  Printing the row headings should be done within the outer
+loop, because it must be done for each row.  Printing the column
+headings should be done before the outer loop is entered.  Finally, our
+%\begin{marginalnote}\it Formatting output\end{marginalnote}
+\marginnote{Formatting output}
+program should contain code to format the dollar and cents values
+properly.  For this we use the {\tt java.text.NumberFormat} class that
+was described in Chapter~5. The complete program is shown in
+Figure~\ref{fig-carloan}.
+%% proglist ch6/carloan/CarLoan.java
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlistingleft}[33pc]{-7pc}
+\begin{lstlisting}
+import java.text.NumberFormat;   // For formatting $nn.dd or n%
+
+public class CarLoan {
+  public static void main(String args[]) {
+    double carPrice = 20000;  // Car's actual price
+    double carPriceWithLoan;  // Total cost of the car plus financing
+                                              // Number formatting code
+    NumberFormat dollars = NumberFormat.getCurrencyInstance(); 
+    NumberFormat percent = NumberFormat.getPercentInstance();
+    percent.setMaximumFractionDigits(2);
+                                            // Print the table
+    for (int rate = 8; rate <= 11; rate++)  // Print the column heading
+      System.out.print("\t" + percent.format(rate/100.0) + "\t" );
+    System.out.println();
+
+    for (int years = 2; years <= 8; years++) {  // For years 2 through 8
+      System.out.print("Year " + years + "\t"); // Print row heading
+      for (int rate = 8; rate <= 11; rate++) {  // Calc and print CD value
+        carPriceWithLoan = carPrice * 
+                       Math.pow(1 + rate / 100.0 / 365.0, years * 365.0);
+        System.out.print( dollars.format(carPriceWithLoan)  + "\t");
+      } // for rate
+      System.out.println();                     // Start a new row
+    } // for years
+  } // main()
+} // CarLoan
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The {\tt CarLoan} application.
+\label{fig-carloan}
+\label{pg-fig-carloan}}
+\end{figure}
+
+\newpage
+\section{Graphics Example: Drawing a Checkerboard}
+
+In this section we will combine some of the graphics methods we have
+learned with the nested for-loop structure to draw a checkerboard with
+checkers on it (Fig.~6.4). For this example, we will just
+concentrate on drawing the checkerboard.  We will not worry about
+providing a full checkerboard representation, of the sort we would
+need if we were writing a program to play the game of checkers. So,
+our design will not involve instance
+\marginfig{chptr06/checkerboard.eps}{A checkerboard with checkers.
+\label{fig-checkerboard}
+\label{pg-fig-checkerboard}}
+variables for whose turn it is, how many checkers each player has,
+where the checkers are located on the board, and other elements of the
+game's state. Still, our visible representation of the board should
+be designed so that it will eventually be useful when we do develop a
+checkers game in Chapter~8.
+
+\subsection*{Problem Description and Specification}
+
+The specification for this problem is to develop a program that will
+draw a checkerboard and place upon it the checkers in their
+appropriate starting positions.  As with many of our programs, our
+design will involve two classes, one which defines the user interface
+and the other which represents the computational object.  For this
+problem, the computational object will be defined in the {\tt
+CheckerBoard} class. The details of its design are described in the
+next section.
+
+Because the purpose of this example is to focus on how we use loops
+and drawing methods, we will employ a very simple applet interface,
+whose implementation is given in Figure~\ref{fig-checkerapplet}.  As
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import java.applet.*;
+import javax.swing.*;
+
+public class CheckerBoardApplet extends JApplet {
+   private CheckerBoard theBoard;
+
+   public void init() {
+       theBoard = new CheckerBoard();
+   }
+   public  void paint(Graphics g) {
+       theBoard.draw(g);
+   } // paint()
+} // CheckerBoardApplet
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Chek\-er\-Board\-Applet} class.
+\label{fig-checkerapplet}
+\label{pg-fig-checkerapplet}}
+\end{figure}
+shown there, the applet simply creates a {\tt CheckerBoard} instance
+in its {\tt init()} method, and then invokes the {\tt CheckerBoard}'s
+{\tt draw} method in its {\tt paint()} method. The reason we invoke
+the {\tt draw()} method in {\tt paint()} is because we need to have
+access to the applet's {\tt Graphics} context, which is passed as an
+argument to the {\tt draw()} method. Recall that the {\tt init()} and
+then the {\tt paint()} methods are invoked automatically by the
+browser or appletviewer when an applet is started.  Thus, the action
+taken by this applet is simply to draw a visual representation of the
+checkerboard.
+
+
+\subsection*{Class Design: {\tt CheckerBoard}}
+\marginfig{chptr06/checkeruml.eps}{Design of the {\tt CheckerBoard}
+class.
+\label{fig-checkeruml}
+\label{pg-fig-checkeruml}}
+\noindent Because the applet will invoke its {\tt draw()} method, this
+method must be part of the {\tt CheckerBoard}'s interface.  Hence, it
+must be declared {\tt public}.  The task of drawing a checkerboard
+involves two distinct subtasks: (1) drawing the board itself, which
+will involve drawing a square with smaller squares of alternating
+colors; and, (2) drawing the checkers on the checkerboard.  A good
+design for the {\tt draw()} method would be simply to invoke helper
+methods that encapsulate these two subtasks. This is good method
+design because it results in relatively small methods, each of which
+performs a very well-defined task.  Let's call these methods {\tt
+drawBoard()} and {\tt drawCheckers()}, respectively.  Their signatures
+are shown in Figure~6.6, which summarizes the design of the {\tt
+CheckerBoard} class.
+
+Before gettinginto the details of the {\tt drawBoard} and {\tt
+drawCheckers()} methods, we must first discuss {\tt CheckerBoard}'s
+several instance variables.  The first two variables {\tt LEFT\_X} and
+{\tt UPPER\_Y}, give the absolute position of the upper left corner of
+the checkerboard on the applet's drawing panel. The {\tt SQ\_SIDE}
+variable gives the size of the checkerboard's individual squares.
+{\tt N\_ROWS} and {\tt N\_COLS} give the number of rows and columns in
+the checkerboard (typically, 8 by 8). All of these variables are
+integers.  The final four variables, {\tt SQ\_COLOR1}, {\tt SQ\_COLOR2},
+{\tt CHECKER\_COLOR1}, and {\tt CHECKER\_COLOR2}, specify the colors
+of the checkerboard and the checkers. 
+
+Note that the names of all the instance variables are written in
+uppercase letters. This is to identify them as symbolic
+constants---that is, as final variables whose values do not chage once
+they are initialized. Because their actual values are not important,
+we do not show them in the UML diagram and we won't discuss them here.
+Recall that the advantage of defining class constants, rather than
+sprinkling literal values throughout the program, is that they make it
+easy to modify the program if we decide to change the size, location,
+or color of the checkerboard.
+%%\marginnote{Symbolic constants} 
+
+\subsection*{Method Design}
+Returning now to the design of {\tt CheckerBoard}'s instance methods,
+the complete definition of the {\tt CheckerBoard} class is given in
+Figure~\ref{fig-checkerclass}. Note how simple its {\tt draw()} method
+is.  As we noted earlier, in order to using Java's drawing commands,
+it is necessary to have a reference to a {\tt Graphics} object. This
+is passed to the {\tt draw()} method when the {\tt draw()} method is
+invoked in the applet.  Because the {\tt draw()} method delegates the
+details of the drawing algorithm to its helper methods, {\tt
+drawBoard()} and {\tt drawCheckers()}, it has to pass them a reference
+to the {\tt Graphics} object.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+import java.awt.*;
+
+public class CheckerBoard {
+             // Default values for a standard checkerboard
+  private final int LEFT_X = 10;        // Position of left
+  private final int UPPER_Y = 10;           // upper corner
+  private final int SQ_SIDE = 40;     //Size of each square
+  private final int N_ROWS = 8;        // Checkerboard rows
+  private final int N_COLS = 8;     // Checkerboard columns
+  private final Color SQ_COLOR1 = Color.lightGray; //Colors
+  private final Color SQ_COLOR2 = Color.gray;  //of squares
+  private final Color CHECKER_COLOR1 = Color.white;  // and
+  private final Color CHECKER_COLOR2 = Color.black; //checkers
+
+  private void drawBoard(Graphics g) {
+    for(int row = 0; row < N_ROWS; row++)        // For each row
+      for(int col = 0; col < N_COLS; col++) { // For each square
+        if ((row + col) % 2 == 0)            // Alternate colors
+          g.setColor(SQ_COLOR1);                        // Light
+        else
+          g.setColor(SQ_COLOR2);                      // or dark
+        g.fillRect(LEFT_X+col*SQ_SIDE,
+              UPPER_Y+row*SQ_SIDE,SQ_SIDE,SQ_SIDE);
+      } //for
+  } //drawBoard()
+  private void drawCheckers(Graphics g) {   // Place checkers
+    for(int row = 0; row < N_ROWS; row++)   // For each row
+      for(int col = 0; col < N_COLS; col++)// For each square
+        if ((row + col)%2 == 1) {// One player has top 3 rows
+          if (row < 3) {
+              g.setColor(CHECKER_COLOR1);
+              g.fillOval(LEFT_X+col*SQ_SIDE,
+                  UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+          }//if
+          if (row >= N_ROWS - 3) { // Other has bottom 3 rows
+              g.setColor(CHECKER_COLOR2);
+              g.fillOval(LEFT_X+col*SQ_SIDE,
+                   UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+          }//if
+        }//if
+  }//drawCheckers()
+  public void draw(Graphics g) { // Draw board and checkers
+      drawBoard(g);
+      drawCheckers(g);
+  }//draw()
+} //CheckerBoard
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt CheckerBoard} class.
+\label{fig-checkerclass}
+\label{pg-fig-checkerclass}}
+\end{figure}
+
+The {\tt drawBoard()} method uses a nested {\tt for} loop to draw an
+$8 \times 8$ array of rectangles of alternating colors. The loop
+variables, {\tt row} and {\tt col}, both range from 0 to 7.  The
+expression used to determine alternating colors tests whether the sum
+of the row and column subscripts is even: $((row + col) \% 2 == 0)$.
+If their sum is even, we use one color; if odd, we use the other
+color. 
+
+
+As the table in the margin shows for a $4 \times 4$ board, the sum of
+a board's row and column subscripts alternates between even and odd
+values. Thus, in row 2 column 3, the sum of the subscripts is 5.
+
+\marginpar{
+\small
+\tt
+  \hspace*{1em}| 0  1  2  3\\
+  -----------------\\
+   0 | 0  1  2  3\\
+   1 | 1  2  3  4\\
+   2 | 2  3  4  5\\
+   3 | 3  4  5  6\\
+}
+
+To switch from one color to the other, we use the {\tt
+Graphics} {\tt setColor()} method to alternate between the two colors
+designated for the checkerboard, {\tt SQ\_COLOR1} and {\tt
+SQ\_COLOR2}.  We then use the following method call to draw the
+colored squares:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.fillRect(LEFT_X+col*SQ_SIDE,UPPER_Y+row*SQ_SIDE,
+                                        SQ_SIDE,SQ_SIDE);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how we use the loop variables, {\tt row} {\tt col},
+together with the constants specifying the top left corner of the
+board ({\tt UPPER\_Y} and {\tt LEFT\_X}) and the size of the squares
+({\tt SQ\_SIDE}) to calculate the location and size of each square.
+The calculation here is illustrated in Figure~\ref{fig-checkerlayout}.
+The first two parameters in {\tt fillRect(left,top,width,height)}
+specify the coordinates for the rectangle's top-left corner. These
+are calculated as a function of the rectangle's row and column
+position within the checkerboard and the rectangle's width and
+height, which are equal for the squares of a checkerboard.
+
+%\begin{figure}
+\begin{figure}[hbt]
+\figaleft{chptr06/checkerlayout.eps}{Calculating the
+locations of the checkerboard squares.
+\label{fig-checkerlayout}
+\label{pg-fig-checkerlayout}}
+\end{figure}
+%\end{figure}
+
+The {\tt drawCheckers()} method also uses a nested {\tt for} loop to
+trace through the checkerboard's rows and columns. In this case,
+however, we draw checkers on just the dark-colored squares---that is,
+those that satisfy the expression $(row+col) \% 2 == 1)$---on the
+first three rows of each player's side of the board. So, each player's
+checkers initially are located in the first three rows and last three
+rows of the checker board:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if ((row + col)%2 == 1) {// One player has top 3 rows
+    if (row < 3){
+        g.setColor(CHECKER_COLOR1);
+        g.fillOval(LEFT_X+col*SQ_SIDE,
+           UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+    }//if
+    if (row >= N_ROWS - 3) { // Other has bottom 3 rows
+        g.setColor(CHECKER_COLOR2);
+        g.fillOval(LEFT_X+col*SQ_SIDE,
+           UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+    }//if
+}//if
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Because the checkers are circles, we use the {\tt
+fillOval()} method to draw them. Note that the parameters for {\tt
+fillOval(left, top, width, height)} are identical to those for {\tt
+fillRect()}. The parameters specify an enclosing rectangle in which
+the oval is inscribed.  In this case, of course, the enclosing
+rectangle is a square, which causes {\tt fillOval()} to draw a
+circle.
+
+Our design of the {\tt CheckerBoard} class illustrates an important
+principle of method design. First, rather than placing all of the
+commands for drawing the checkerboard and the checkers into one
+method, we broke up this larger task into distinct subtasks. This
+resulted in small methods, each of which has a well defined purpose.
+
+\JavaTIP{EFFECTIVE DESIGN}{Method Decomposition.}{Methods should be
+designed to have a clear focus. If you find a method becoming too
+long, you should break its algorithm into subtasks and define a
+separate method for each subtask.}
+
+\section{Conditional Loops}
+\noindent Unlike the problems in the previous sections, not all loops can be
+coded as counting loops. Here's a problem that can't be solved by a
+counting loop.
+
+Mathematicians, especially number theorists, have found that certain
+operations on numbers lead to interesting sequences.  For example, the
+{\it 3N+1 problem} is a conjecture in number theory, which says that
+if {\it N} is any positive integer, then the sequence generated by the
+following rules will always terminate at 1.
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Case          Operation
+----          ---------
+N is odd      N = 3 * N + 1
+N is even     N = N / 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, start with any positive integer, {\it N}. If {\it N} 
+is odd, multiply it by 3 and add 1.  If {\it N} is even, divide it by
+2. In either case, assign the result back to {\it N}. The conjecture
+states that {\it N} will eventually equal 1. For example, if {\it N}
+is initially 26, then the sequence generated is 26, 13, 40, 20, 10, 5,
+16, 8, 4, 2, 1.
+
+The 3{\it N}+1 problem is an example of a noncounting loop. Because for any
+\marginnote{Sentinel bound}
+given {\it N} we don't know how long the 3{\it N}+1 sequence will be,
+we need a loop that terminates when the loop variable reaches a
+certain value, called a {\it sentinel} value---when {\it N} equals
+1. This is an example of a loop that is terminated by a {\bf sentinel
+bound}.  With the exception of infinite loops, all loops are bounded
+by some condition, which is why they are sometimes referred to as {\bf
+conditional loop} structures.  The count and sentinel bounds are just
+special cases of the conditional loop structure.
+
+\subsection{The While Structure, Revisited}
+\noindent Consider the following pseudocode algorithm for the 3{\it N}+1 problem:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Algorithm for computing the 3N+1 sequence
+    While N is not equal to 1, do: {
+        Print N.
+        If N is even, divide it by 2.
+        If N is odd, multiply N by 3 and add 1.
+    }
+    Print N
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this structure, the body of the loop prints {\it N} and
+then updates {\it N}'s value, using the 3{\it N}+1 rules.  Suppose
+{\it N} equals 5 when this code segment begins.  It will print the
+following sequence: 5, 16, 8, 4, 2, 1. Note that the loop body is
+entered as long as {\it N} is not equal to 1. So the loop entry
+condition in this case is {\it N != 1}. Conversely, the loop will
+terminate when {\it N} equals 1. Also note that in this code
+segment the loop bound is tested {\it before} the body of the loop
+is executed.
+
+We can implement this algorithm using Java's {\bf {\tt while} statement},
+whose flowchart is shown in Figure~\ref{fig-whileflow6}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+while (N != 1) {         // While N not equal to 1
+  System.out.print(N + " ");// Print N
+  if (N % 2 == 0)         // If N is even
+      N = N / 2;          //  divide it by 2
+  else                    // If N is odd
+      N = 3 * N + 1;      //  multiply by 3 and add 1
+}
+System.out.println(N);    // Print N
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Recall that unlike the {\tt for} statement, the {\tt while} 
+statement does not contain syntax for the initializer and the
+updater. These must be coded separately. As we pointed out in
+Chapter~3, the {\tt while} structure (as opposed to the {\tt while}
+statement) is a segment of code built by the programmer that 
+satisfies the following design principle:
+
+\JavaTIP{EFFECTIVE DESIGN}{Loop Structure.}{A properly designed
+{\it loop structure} must include an {\it initializer}, a {\it
+loop-entry condition}, and an {\it updater}. The updater should
+guarantee that the loop-entry condition will eventually become false,
+thereby causing the loop to terminate.}
+
+\noindent The {\tt while} structure has the following form:
+\begin{jjjlisting}
+\begin{lstlisting}
+InitializerStatements;         // Initializer
+while (loop entry condition) { // Bound test
+    Statements;                // Loop body
+    UpdaterStatements;         // Updater
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As its form suggests, the {\tt while} structure is designed
+so that on some conditions the loop body will never be
+executed. Because it tests for the loop bound {\it before} the loop
+body, it is possible that the loop body is never executed.  We might
+say that it is designed to perform 0 or more iterations.
+
+For example, going back to the 3{\it N}+1 problem, what if {\it N}
+equals 1 initially? In that case, the loop body will be skipped,
+because the loop entry condition is false to begin with. No iterations
+will be performed, and the algorithm will simply print the value 1.
+
+The {\tt while} structure would be an appropriate control structure
+for the following type of problem:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+write the problems on the assignment sheet // Initializer
+while there are problems on the sheet      // Bound test
+    do a problem                            // Loop body
+    cross it off the assignment sheet         // Updater
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It is possible that the assignment sheet contains
+no homework problems to begin with. In that case, there's no work for
+the body of the loop to do and it should be skipped.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Identify the syntax error in the following while structures:
+\begin{EXRLL}
+\item
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 5;
+while (k < 100) {
+    System.out.println(k);
+    k++
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 0;
+while (k < 12 ;) {
+   System.out.println(k);
+   k++;
+}
+\end{lstlisting}
+\end{jjjlisting}
+\end{EXRLL}
+
+
+\item  Determine the output and/or identify the error in each of the following
+while structures:
+\begin{EXRLL}
+\item
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 0;
+while (k < 100)
+    System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item
+
+\begin{jjjlisting}
+\begin{lstlisting}
+while (k < 100) {
+    System.out.println(k);
+    k++;
+}
+\end{lstlisting}
+\end{jjjlisting}
+\end{EXRLL}
+
+
+\item  Your younger sister is now learning how to count by sixes. Write a
+while loop that prints the following sequence of numbers: 0, 6, 12,
+18, 24, 30, 36.
+
+\item  Here's another number theory 
+problem. Start with any positive integer, {\it N}.  If {\it N} is
+even, divide it by 2. If {\it N} is odd, subtract 1 and then divide it
+by 2. This will generate a sequence that is guaranteed to terminate at
+0.  For example, if {\it N} is initially 15, then you get the
+sequence: 15, 7, 3, 1, 0. Write a method that implements this
+sequence using a while statement.
+
+\end{SSTUDY}
+
+\subsection{The \mbox{Do-While} Structure}
+\noindent Here's another problem that can't be solved with a counting loop. Your
+%\begin{marginalnote}\it Problem description\end{marginalnote}
+\marginnote{Problem description}
+father has been fretting about the bare spots on the front lawn and is
+considering hiring the ChemSure Lawn Service to fertilize.  However,
+your scientifically minded younger sister wants to reassure him that
+at the rate the grass is dying, there will be enough to last through
+the summer. Using techniques she learned in biology, your sister
+estimates that the grass is dying at the rate of 2 percent per day. How
+many weeks will it take for half the lawn to disappear?
+
+One way to solve this problem would be to keep subtracting 2 percent from the
+%\begin{marginalnote}\it Algorithm design\end{marginalnote}
+\marginnote{Algorithm design}
+current amount of grass until the amount dipped below 50 percent, all
+the while counting the number of iterations required. Consider
+the following pseudocode algorithm:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Algorithm for calculating grass loss
+    Initialize amtGrass to 100.0
+    Initialize nDays to 0
+    Repeat the following statements
+        amtGrass -= amtGrass * 0.02;
+        ++nDays;
+    As long as amtGrass > 50.0
+    Print nDays / 7
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We begin by initializing {\tt amtGrass} to
+100.0, representing 100 percent. And we initialize our counter, {\tt
+nDays} to 0. Then we repeatedly subtract 2 percent of the amount and
+increment the counter until the amount drops below 50 percent. In
+other words, in this case, we repeat the loop body as long as the
+amount of grass remains above 50 percent of the original. When the
+loop finishes, we report the number of weeks it took by dividing the
+number of days by 7.
+
+The loop bound in this case is known as a {\bf limit bound}. The loop
+%\begin{marginalnote}\it Limit bound\end{marginalnote}
+\marginnote{Limit bound}
+will terminate when a certain limit has been reached---in this case,
+when the amount of grass dips below 50 percent of the original amount.
+Note that in this case the loop bound is tested {\it after} the loop
+body. This is appropriate for this problem, because we know in advance
+that the loop will iterate at least once. We can implement this
+algorithm using Java's {\it do-while statement}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int losingGrass(double perCentGrass) {
+  double amtGrass = 100.0; // Initialize amount grass
+  int nDays = 0;            // Initialize day counter
+  do {                               // Repeat
+    amtGrass -= amtGrass * LOSSRATE; // Update amount
+    ++nDays;               //   Increment the counter
+  } while (amtGrass > perCentGrass);   
+                   // As long as enough grass remains
+  return nDays / 7;     // Return the number of weeks
+} // losingGrass()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\bf do-while statement} is a loop statement in which the loop
+entry condition occurs after the loop body. It has the following
+general form:
+
+\JavaRule{Do-while Statement.}{The {\it do-while statement} has the
+following syntax: \\
+$
+\matrix{
+\hspace{1.1in}{\tt do} & & \cr
+\hspace{1.1in}         & {\it loop\;body } & \cr
+\hspace{1.1in}{\tt while \;( } &  {\it loop\;entry\;condition} & {\tt ) \; ; } \cr
+}
+$}
+
+\noindent Note, again, that unlike the {\tt for} statement, the {\tt do-while}
+statement does not contain syntax for the initializer and the updater.
+These must be coded separately.
+
+To further highlight the difference between a loop statement and a
+loop structure, the {\tt do-while} structure takes the following
+form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+InitializerStatements1;     // Initializer
+do {                        // Beginning of loop body
+  InitializerStatements2;   //   Another initializer
+  Statements;               //   Loop body
+  UpdaterStatements         //   Updater
+} while (loop entry condition); // Bound test
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that initializer statements may be placed
+before the loop body, at the beginning of the loop body, or in
+both places, depending on the particular problem. Like the other loop
+structures, updater statements occur within the body of the loop.  A
+flowchart of the {\tt do-while} structure is shown in
+Figure~\ref{fig-dowhileflow}.
+
+%\begin{figure}
+\begin{figure}[t]
+\figaleft{chptr06/6f4.eps}{Flowchart of the {\tt do-while} statement
+and {\tt do-while} structure.
+\label{fig-dowhileflow}
+\label{pg-fig-dowhileflow}}
+\end{figure}
+%\end{figure}
+
+The {\tt do-while} structure would be an appropriate control structure
+for the following type of problem:
+
+\begin{jjjlisting}
+\begin{lstlisting}[stringstyle=\color{black}]
+do
+  dial the desired telephone number  // Initializer
+  if you get a busy signal
+    hang up                          // Updater
+while there is a busy signal         // Bound test
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, you want to perform the actions in
+the body of the loop at least once and possibly more than
+once (if you continue to receive a busy signal).
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Do-While Loops.}{The  {\tt do-while} loop is designed
+for solving problems in which at least one iteration must
+occur.\index{loop design}}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{While versus Do-While Structures.}{For problems where
+a noncounting loop is required, the {\tt while} loop structure is more
+general and, therefore, preferable to the {\tt do-while} structure.
+Use {\tt do-while} only when at least one iteration must occur.}
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item Identify the syntax error in the
+following {\tt do-while} \mbox{structures:}
+\begin{EXRLL}
+\item
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 0;
+do while (k < 100)
+{    System.out.println(k);
+     k++
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int k = 0;
+do {
+    System.out.println(k);
+    k++;
+} while (k < 12)
+\end{lstlisting}
+\end{jjjlisting}
+\end{EXRLL}
+
+
+\item Your sister has moved on to counting by sevens. Write a {\tt
+do-while} loop that prints the following sequence of numbers: 1, 8,
+15, 22, 29, 36, 43.
+
+
+\item  As the owner of Pizza Heaven, every night at the close of business you
+quickly enter the price of every pizza ordered that day. You take the
+data from the servers' receipts. Pizzas cost \$8, \$10, or (the
+Heavenly Special) \$15. You enter the data without dollar signs, and
+use 99 to indicate you're finished for the day.  Write a Java method to
+input and validate a single pizza data item. If an incorrect price is
+entered, the program should print an error message and prompt for
+corrected input.  Correct input is used to compute a daily total.
+
+\item  Because the pizza prices in the previous exercise are fixed, change
+the method so you can save time on keyboarding. Instead of entering
+the price, you'll enter codes of 1, 2, or 3 (corresponding to the
+\$8, \$10, and \$15 pizzas), and 0 to indicate that you're finished. Validate that the
+data value entered is correct and then convert it to the
+corresponding price before returning it.
+
+\end{SSTUDY}
+
+
+\section{Example: Computing Averages}
+\index{Compute Average Example}
+\noindent Suppose you want to compute the average of your exam grades in a
+%\begin{marginalnote}\it Algorithm design: what kind of loop?\end{marginalnote}
+\marginnote{Algorithm design: what kind of loop?}  course.  Grades,
+represented as real numbers, will be input from the keyboard using our
+{\tt KeyboardReader} class. To signify the end of the list, we will
+use a sentinel value---9999 or $-1$ or some other value that won't be
+confused with a legitimate grade. Because we do not know exactly how
+many grades will be entered, we will use a noncounting loop in this
+algorithm. Because there could be no grades to average, we will use a
+{\tt while} structure so it is possible to skip the loop entirely in
+the case that there are no grades to average.
+
+The algorithm should add each grade to a running total, keeping track
+%\begin{marginalnote}Algorithm design\end{marginalnote}
+\marginnote{Algorithm design}
+of the number of grades entered. Thus, this algorithm requires two
+variables: one to keep track of the running total and the other to
+keep track of the count. Both should be initialized to 0.  After the
+last grade has been entered, the total should be divided by the count
+to give the average.  In pseudocode, the algorithm for this problem is
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+initialize runningTotal to 0         // Initialize
+initialize count to 0
+prompt and read the first grade      // Priming read
+while the grade entered is not 9999 {// Sentinel test
+    add it to the runningTotal
+    add 1 to the count
+    prompt and read the next grade   // Update
+}
+if (count > 0)           // Guard against divide by 0
+    divide runningTotal by count
+output the average as the result
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that in this problem our loop variable, {\tt grade},
+%\begin{marginalnote}\it Priming read\end{marginalnote}
+\marginnote{Priming read} is read before the loop test is made. This
+is known as a {\bf priming read}. It is necessary in this case,
+because the loop test depends on the value that is read.  Within the
+loop's body, the updater reads the next value for grade. This is a
+standard convention for coding {\tt while} structures that involve
+input, as this problem does. Note also that we must make sure that
+{\tt count} is not 0 before we attempt to compute the
+average because dividing by 0 would cause a divide-by-zero error.
+
+Translating the pseudocode algorithm into Java raises several issues.
+Suppose we store each grade that is input in a {\tt double} variable
+named {\tt grade}.  The loop will terminate when {\tt grade} equals
+9999, so its entry condition will be {\tt (grade != 9999)}. Because
+this condition uses {\tt grade}, it is crucial that the {\tt grade}
+variable be initialized before the bound test is made.  This requires
+a priming read. By reading the first value of {\tt grade} before the
+loop entry condition is tested, ensures that the loop will be skipped
+if the user happens to enter the sentinel (9999) on the very first
+prompt. In addition to reading the first exam score, we must
+initialize the variables used for the running total and the
+counter. Thus, for our initialization step, we get the following code:
+\marginnote{Initialization step}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double runningTotal = 0;
+int count = 0;
+reader.prompt("Input a grade (e.g., 85.3) " +
+      "or 9999 to indicate the end of the list >> ");
+double grade = 
+     reader.getKeyboardDouble(); // Priming input
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Within the body of the loop we must add the grade to the
+running total and increment the counter. Since these variables are not
+tested in the loop entry condition, they will not affect the loop
+control.  Our loop updater in this case must read the next
+grade. Placing the updater statement at the end of the
+%\begin{marginalnote}\it Updater step\end{marginalnote}
+\marginnote{Updater step}
+loop body will ensure that the loop terminates immediately after the
+user enters the sentinel value:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+while (grade != 9999) {    // Loop test: sentinel
+  runningTotal += grade;                            
+  count++;                                          
+  reader.prompt("Input a grade (e.g., 85.3) " +
+      "or 9999 to indicate the end of the list >> ");
+  grade = reader.getKeyboardDouble(); // Update:input
+} // while
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent You can see that it is somewhat redundant to repeat the same 
+statements needed to do the initializating and the updating of
+the {\tt grade} variable. A better design would be to encapsulate
+%\begin{marginalnote}\it Modularity\end{marginalnote}
+\marginnote{Modularity}
+these into a method and then call the method both before and within
+the loop.  The method should take care of prompting the user, reading
+the input, converting it to {\tt double}, and returning the input
+value. The method doesn't require a parameter:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private double promptAndRead() {
+  reader.prompt("Input a grade (e.g., 85.3) " +
+     "or 9999 to indicate the end of the list >> ");
+  double grade = reader.getKeyboardDouble();
+                          // Confirm input
+  System.out.println("You input " + grade + "\n"); 
+  return grade;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that we have declared this as a {\tt private}
+method. It will be used to help us perform our task but won't be
+available to other objects. Such private methods are frequently called
+{\em helper methods}.
+
+This is a much more modular design. In addition to cutting down on
+redundancy in our code, it makes the program easier to maintain. For
+example, there is only one statement to change if we decide to change
+the prompt message.  It also makes the program easier to debug. Input
+errors are now localized to the {\tt promptAndRead()} method.
+
+\JavaTIP{EFFECTIVE DESIGN}{Modularity.}{Encapsulating code
+in a method is a good way to avoid redundancy in a program.}
+
+\JavaTIP{DEBUGGING TIP}{Localization.}{Encapsulating code in a method
+removes the need to have the same code at several locations in a
+program. By localizing the code in this way, you make it easier to
+modify and debug.}
+
+\noindent Another advantage of encapsulating the input task in a
+separate method is that it simplifies the task of calculating the
+average. This task should also be organized into a separate method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public double inputAndAverageGrades() {
+  double runningTotal = 0;
+  int count = 0;
+  double grade = promptAndRead();// Priming initializer
+  while (grade != 9999) {      // Loop test: sentinel
+    runningTotal += grade;                           
+    count++;                                          
+    grade = promptAndRead();// Update: get next grade
+  } // while
+  if (count > 0)      // Guard against divide-by-zero
+    return runningTotal / count;// Return the average
+  else
+    return 0;         // Special (error) return value
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that we have declared this as a {\tt public}
+method. This will be the method you call to calculate your course
+average. 
+
+Because we have decomposed the problem into its subtasks, each subtask
+\marginnote{Method decomposition}
+is short and simple, making it easier to read and understand. As we saw
+in the checkerboard example, the use of small, clearly-focused methods
+is a desireable aspect of designing a program.
+
+The complete {\tt Average.java} application is shown in
+Figure~\ref{fig-avg}. Its overall design is similar to application
+programs we designed in previous chapters. The only instance variable
+it uses is the {\tt KeyboardReader} variable. The other variables are
+declared locally, within the methods. In this case, declaring them
+locally makes the algorithms easier to read.
+
+%% proglist ch6/average/Average.java
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[30pc]{-4pc}
+\begin{lstlisting}
+import java.io.*;
+public class Average {                            // Console I/O
+  private KeyboardReader reader = new KeyboardReader();  
+
+  private double promptAndRead() {
+    reader.prompt("Input a grade (e.g., 85.3) " +
+           "or 9999 to indicate the end of the list >> ");
+    double grade = reader.getKeyboardDouble();
+    System.out.println("You input " + grade + "\n");// Confirm input
+    return grade;
+  }
+  public double inputAndAverageGrades() {
+    double runningTotal = 0;
+    int count = 0;
+    double grade = promptAndRead();  // Initialize: priming input
+    while (grade != 9999) {          // Loop test: sentinel
+      runningTotal += grade;                            
+      count++;                                          
+      grade = promptAndRead();       // Update: get next grade
+    } // while
+
+    if (count > 0)         // Guard against divide-by-zero
+      return runningTotal / count;   // Return the average
+    else
+      return 0;            // Special (error) return value
+ }
+ public static void main(String argv[]) {
+   System.out.println("This program calculates average grade."); 
+   Average avg = new Average();
+   double average = avg.inputAndAverageGrades();
+   if (average == 0)                             // Error check
+      System.out.println("You didn't enter any grades.");
+   else
+      System.out.println("Your average is " + average);        
+ } // main()
+} // Average
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A program to compute average grade using a {\tt while}
+structure.
+\label{fig-avg}
+\label{pg-fig-avg}}
+\end{figure}
+
+One final point about this program is to note the care taken in the
+design of the user interface to explain the program to the user, to
+prompt the user before a value is input, and to confirm the user's
+input after the program has read it.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{User Interface.}{Whenever you ask a user
+for input, the user should know {\it why} you are asking and {\it
+what} you are asking for. Prompts should be used for this purpose. It
+is also a good idea to confirm that the program has received the
+correct input.}
+
+\section{Example: Data Validation}
+\index{Data Validation Example}
+\noindent One frequent programming task is {\it data validation}. This
+task can take different forms depending on the nature of the
+program. One use for data validation occurs when accepting input from
+the user.
+
+In the program in the preceding section, suppose the user types $-10$
+by mistake when asked to input an exam grade. Obviously this is not a
+valid exam grade and should not be added to the running total. How
+should a program handle this task?
+
+Because it is possible that the user may take one or more attempts
+\marginnote{Algorithm design} 
+to correct an input problem, we should use a do-while structure for
+this problem.  The program should first input a number from the
+user. The number should then be checked for validity. If it is valid,
+the loop should exit and the program should continue computing the
+before getting the input average grade. If it is not valid, the
+program should print an error message and input the number again. A
+flowchart for this algorithm is shown in Figure~6.11.
+
+For example, suppose only numbers between 0 and 100 are considered
+valid. The data validation algorithm would be as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+do
+ Get the next grade // Initialize: priming input
+ if the grade < 0 or grade > 100 and grade != 9999
+   print an error message // Error case
+            // Sentinel test
+while the grade < 0 or grade > 100 and grade != 9999 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note here that initialization and updating of the loop
+\marginfig{chptr06/6f6.eps}{Do-while is a good structure for 
+the data validation algorithm.
+\label{fig-datavalid}
+\label{pg-fig-datavalid}}
+variable are performed by the same statement. This is acceptable
+because we must update the value of {\tt grade} on each iteration {\it
+before} checking its validity. Note also that for this problem the
+loop-entry condition is also used in the if statement to check for an
+error.  This allows us to print an appropriate error message if the
+user makes an input error.
+
+Let's incorporate this data validation algorithm into the {\tt
+prompt\-And\-Read()} method that we designed in the previous section
+(Fig.~\ref{fig-avg}). The revised method will handle and validate all
+input and return a number between 0 and 100 to the calling method. To
+reflect its expanded purpose, we will change the method's name to {\tt
+getAndValidateGrade()}, and incorporate it into a revised application,
+which we name {\tt Validate} (Fig.~\ref{fig-validate}).
+
+%% proglist ch6/validate/Validate.java
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[34pc]{-8pc}
+\begin{lstlisting}
+import java.io.*;
+public class Validate {                            // Console input
+  private KeyboardReader reader = new KeyboardReader();  
+
+  private double getAndValidateGrade() {
+    double grade = 0;
+    do {
+       reader.prompt("Input a grade (e.g., 85.3) " +
+                     "or 9999 to indicate the end of the list >> ");
+       grade = reader.getKeyboardDouble();
+       if ((grade != 9999) && ((grade < 0) || (grade > 100))) // If error
+          System.out.println("Error: grade must be between 0 and 100 \n");  
+       else
+          System.out.println("You input " + grade + "\n");  // Confirm input
+    }  while ((grade != 9999) && ((grade < 0) || (grade > 100)));
+    return grade;
+  }
+  public double inputAndAverageGrades() {
+    double runningTotal = 0;
+    int count = 0;
+    double grade = getAndValidateGrade();  // Initialize: priming input
+    while (grade != 9999) {                // Loop test: sentinel
+       runningTotal += grade;                            
+       count++;                                          
+       grade = getAndValidateGrade();     // Update: get next grade
+    } // while
+
+    if (count > 0)                        // Guard against divide-by-zero
+       return runningTotal / count;       // Return the average
+    else
+       return 0;                          // Special (error) return value
+  }
+  public static void main(String argv[]) {
+    System.out.println("This program calculates average grade."); // Explain
+    Average avg = new Average();
+    double average = avg.inputAndAverageGrades();
+    if (average == 0)                           // Error check
+       System.out.println("You didn't enter any grades.");
+    else
+       System.out.println("Your average is " + average);        
+  } // main()
+} // Validate
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A program to compute average grade using a {\tt while}
+structure. This version validates the user's input.
+\label{fig-validate}
+\label{pg-fig-validate}}
+\end{figure}
+
+\section{Principles of Loop Design}
+\noindent Before moving on, it will be useful to summarize the main
+principles\index{loop design principles} involved in correctly
+constructing a loop.
+
+\begin{BL}
+\item  A {\it counting\index{counting loop} loop} can
+be used whenever you know in advance exactly how many iterations are
+needed.  Java's {\it for statement} is an appropriate structure for
+coding a counting loop.
+
+\item  A {\it while structure}\index{while structure} should
+be used when the problem suggests that the loop body may be skipped
+entirely. Java's {\it while statement} is specially designed for the
+while structure.
+
+\item  A {\it do-while structure}\index{do-while structure} should
+be used only when a loop requires one or more iterations. Java's
+{\it do-while statement} is specially designed for the do-while structure.
+
+\item  The {\it loop variable} is used to specify the
+{\it loop-entry condition}. It must be initialized to an appropriate
+initial value, and it must be updated on each iteration of the loop.
+
+\item  A loop's {\it bound\index{bound}} may be a {\it count}, a
+{\it sentinel}, or, more generally, a {\it conditional bound}.  It
+must be correctly specified in the loop-entry expression, and progress
+toward the bound must be made in the {\it updater}.
+
+\item  An {\it infinite\index{infinite loop} loop} may result if the
+initializer, loop-entry expression, or updater expression is not
+correctly specified.
+\end{BL}
+
+
+\noindent The loop types are also summarized in Table~6.1.
+
+\begin{table}[h]
+%\hphantom{\caption{A summary of the design decisions required when coding a loop}}
+\TBT{0pc}{A summary of the design decisions required when coding a loop}
+\hspace*{-6pt}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%\TBCH{Use}                 &\TBCH{If}  &\TBCH{Java Statement}
+\bf{Use}                 &\bf{If}  &\bf{Java Statement}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+{\it Counting loop}       &{\it Number of iterations known in advance}\hspace*{6pt} &{\it for}      
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+{\it While structure}     &{\it Number of iterations not known}        &{\it while}    \cr
+                          &{\it Loop may not be entered at all}        &               
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+{\it Do-while structure}\hspace*{6pt}  &{\it Number of iterations not known}        &{\it do-while} \cr
+                          &{\it Loop must be entered at least once}    &               
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\vspace*{-12pt}
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  For each of the following problems, decide whether a counting loop
+structure, a {\tt while} structure, or a {\tt do-while} structure
+should be used, and write a pseudocode algorithm.
+
+
+\begin{itemize}
+\vspace*{-4pt}
+\item  Print the names of all visitors to your Web site.
+\vspace*{-4pt}
+\item  Validate that a number input by the user
+is positive.
+\vspace*{-4pt}
+\item  Change all the backslashes ($\backslash$) in a
+Windows Web page address to the slashes (/) used in
+a Unix Web page address.
+\vspace*{-4pt}
+\item Find the car with the best miles-per-gallon ratio among the cars
+in the {\it Consumer Reports} database.
+\end{itemize}
+
+\end{SSTUDY}
+
+
+\section{The {\tt switch} Multiway Selection Structure}
+
+\noindent Another selection structure to add to our repertoire is the {\bf
+switch/break structure}.  It is meant
+to provide a
+shorthand way of coding the following type of multiway selection
+structure:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (integralVar == integralValue1)
+     // some statements
+else if (integralVar == integralValue2)
+     // some statements
+else if (integralVar == integralValue3)
+     // some statements
+else // some statements
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that each of the conditions in this case involves the
+equality of an integral variable and an integral value.  This type of
+structure occurs so frequently in programs that most languages contain
+statements specially designed to handle it.  In Java, we use a
+combination of the {\tt switch} and {\tt break} statements to
+implement multiway selection.
+
+The {\tt switch} is designed to select one of several actions
+depending on the value of some integral expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+switch (integralExpression)
+{  case integralValue1:
+       // some statements
+   case integralValue2:
+       // some statements
+   case integralValue3:
+       // some statements
+   default:
+       some statements
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\it integralExpression} must evaluate to a primitive integral
+value of type {\tt byte}, {\tt short}, {\tt int}, {\tt char},
+\marginnote{\it\color{cyan}Integral expression}
+or {\tt boolean}. It may not be a {\tt long}, {\tt float}, {\tt
+double}, or a class type.  The {\it integralValues} must be literals
+or {\tt final} variables.  They serve as labels in the one or more
+case clauses that make up the {\tt switch} statement body.  The {\tt
+default} clause is optional, but it is a good idea to include it.
+
+A {\tt switch} statement\index{switch statement} is executed according
+to the following rules:
+
+\begin{NL}
+\item[Rule 1.]  The {\it integralExpression} is evaluated.
+\vspace*{6pt}
+\item[Rule 2.]  Control passes to the statements following the {\tt case}
+label whose value equals the {\it integralExpression} or,
+if no cases apply, to the {\tt default} clause.
+\vspace*{6pt}
+
+\item[Rule 3.]  Beginning at the selected label or at the default, all
+of the statements up to the end of the {\tt switch} are executed.
+\end{NL}
+
+\noindent Consider the following example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int m = 2;
+switch (m)
+{  case 1:
+      System.out.print(" m = 1");
+   case 2:
+      System.out.print(" m = 2");
+   case 3:
+      System.out.print(" m = 3");
+   default:
+      System.out.print(" default case");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, because {\it m} equals 2, the following output
+would be produced:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ m = 2 m = 3 default case
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Obviously, this output does not match
+the following if-else multiway selection
+structure\index{multiway-selection structure}, which would output,
+simply, {\tt m = 2}:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int m = 2;
+if (m == 1)
+     System.out.print(" m = 1");
+else if (m == 2)
+     System.out.print(" m = 2");
+else if (m == 3)
+     System.out.print(" m = 3");
+else
+     System.out.print(" default case");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The reason for this disparity is that the {\tt switch}
+executes {\it all} statements following the label that matches the
+value of the {\it integralExpression} (see again Rule 3 on the
+previous page).
+
+In order to use the switch as a multiway selection, you must force it
+to {\tt break\index{break}} out of the case clause after executing
+that clause's statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int m = 2;
+switch (m)
+{  case 1:
+       System.out.print(" m = 1");
+       break;
+   case 2:
+       System.out.print(" m = 2");
+       break;
+   case 3:
+       System.out.print(" m = 3");
+       break;
+   default:
+       System.out.print(" default case");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent In this example, the {\tt break} statement causes control to
+pass to the end of the {\tt switch}, with the effect being that one
+and only one case will be executed within the {\tt switch}. Thus, the
+output of this code segment will be simply \mbox{\tt m = 2}, matching
+exactly the behavior of the multiway if-else selection structure
+(Fig.~\ref{fig-multiwayswitch}).
+
+\begin{figure}[hbt]
+\figa{chptr03/switchfl.eps}{Flowchart of the multiway switch structure.
+Note that because of the {\tt break} statement, one and only one case is
+executed.
+\label{fig-multiwayswitch}
+\label{pg-fig-multiwayswitch}}
+\end{figure}
+
+
+\JavaTIP{PROGRAMMING TIP}{Multiway Selection.}{A typical use for the
+{\tt switch} statement is to use it together with {\tt break} to code a
+multiway selection structure.}
+
+\JavaRule{{\tt break}.}{The {\tt break} statement transfers
+control out of its enclosing {\it block}, where a block is any
+sequence of statements contained within curly brackets \{ and \}.}
+
+
+\JavaTIP{DEBUGGING TIP}{Switch without {\tt break}.}{A
+common error in coding the switch-based multiway selection is
+forgetting to put a {\tt break} statement at the end of each clause.
+This may cause more than one case to be executed.}
+
+\newpage
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Identify any errors in the
+following switch structures (if
+there is no error, specify the output):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(a) int k = 0;
+    switch (k)
+    case 0:
+        System.out.println("zero");
+        break;
+    case 1:
+        System.out.println("one");
+        break;
+    default:
+        System.out.println("default");
+        break;
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(b) int k = 0;
+    switch (k + 1)
+    {   case 0:
+            System.out.println("zero");
+            break;
+        case 1:
+            System.out.println("one");
+            break;
+        default:
+            System.out.println("default");
+            break;
+    }
+\end{lstlisting}
+\end{jjjlisting}
+\begin{jjjlisting}
+\begin{lstlisting}
+(c) int k = 6;
+    switch (k / 3.0)
+    {   case 2:
+            System.out.println("zero");
+            break;
+        case 3:
+            System.out.println("one");
+            break;
+        default:
+            System.out.println("default");
+            break;
+    }
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Flavors of ice cream are represented as integers where 0 is
+vanilla, 1 is chocolate, and 2 is strawberry.  Write a {\tt switch}
+statement that checks an integer variable {\tt flavor} and prints
+out the name of the ice cream flavor or prints ``Error'' in the
+default case.
+
+\item  Modify your solution to the previous exercise to use
+constants (final variables) to represent the ice cream flavors.
+\end{SSTUDY}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, OOD: Structured Programming}
+
+\section{OBJECT-ORIENTED DESIGN: \\Structured Programming}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, OOD: Structured Programming}
+
+
+%%\secHfourleft{\mbox{OBJECT-ORIENTED} DESIGN: \\Structured Programming}
+\index{structured programming}
+\noindent {\it Structured programming} is the practice of writing programs that
+are built up from a small set of predefined control structures. As an
+overall approach to programming, structured programming has largely
+been superseded by the object-oriented approach. Nevertheless, its
+design principles are still relevant to the design of the
+algorithms and methods that make up a program's objects.
+
+The principles of structured programming seem so obvious today that it
+may be difficult to appreciate their importance. In the 1960s and 1970s,
+one of the main controls used in programs was the infamous
+{\it go to\index{goto statement}} statement, which could be used to transfer
+control of a program to any arbitrary location within it, and
+from there to any other arbitrary location, and so on. This led to
+incredibly complex and ill-formed programs---so called ``spaghetti
+\marginnote{Spaghetti code}
+code''---that were almost impossible to understand and modify.
+
+Structured programming evolved in reaction to the unstructured
+software development practices of the 1960s, which were fraught with
+budget overruns, costly delays, and failed products. One of the classic
+research results of that era was a 1966 paper by Boehm\index{Boehm} and
+Jacopini\index{Jacopini} that showed that any program using go to's
+could be represented by an equivalent program that used a sequence of
+two types of controls: if/else and while structures. Another
+influential paper by Edgar Dikjstra\index{Dikjstra} (``GoTo Statement
+Considered Harmful'') pointed out the various ways in which the go to statement
+could lead to impossibly complex programs.
+
+The Pascal language, introduced by Nicklaus Wirth\index{Wirth} in 1971, was
+designed to promote structured programming techniques and became the
+language of choice within academic institutions because of its
+suitability as a teaching language. In Pascal, the go to was replaced
+with the four structures that control the flow of execution
+in a program (Fig.~\ref{fig-controlstructs}):
+
+
+\begin{figure}[hbt]
+\figa{chptr06/6f10.eps}{Flowcharts of the four types of
+control structures. Each small rectangle represents a single executable
+statement.\index{control structures}
+\label{fig-controlstructs}
+\label{pg-fig-controlstructs}}
+\end{figure}
+
+\begin{BL}
+\item  {\it Sequence}---The statements in a program are executed in
+sequential order unless their flow is interrupted by one of the
+following control structures.
+
+\item  {\it Selection}---The {\tt if}, {\tt if/else}, and {\tt switch}
+statements are {\it branching} statements that allow choice through
+the forking of the control path into two or more alternatives.
+
+\item  {\it Repetition}---The {\tt for}, {\tt while}, and {\tt do-while}
+statements are {\it looping} statements that allow the program to
+repeat a sequence of statements.
+
+\item  {\it Method Call}---Invoking a method transfers control temporarily
+to a named method. Control returns to the point of invocation when the
+method is completed.
+
+\end{BL}
+
+\noindent No matter how large or small a program you write, its flow of
+control can be constructed as a combination of these four basic types
+of structures.
+
+
+%% Footnote: Boehm, C. and Jacopini, G. (1966) ``Flow Diagrams,
+%% Turing Machines, and Languages with Only Two Formation Rules,''
+%% Communications of the ACM.
+
+%% Footnote: Dijkstra, E. (1968) ``GoTo Statement Considered Harmful,''
+%% Communications of the ACM, 11,3,1968:147-148.
+
+%% Footnote: Wirth, N. (1971) ``The Programming Language Pascal,''
+%% Acta Informatica, 1,1,1971:35-63.
+
+
+\subsection*{Preconditions and Postconditions}
+%<sec_prepost:\thiseqno>
+%<pg_sec_prepost:\thispageno>
+\noindent The Java language supplies us with a good collection of control
+structures, and Java's syntax constrains the way we can use them. One of
+the features of the four control structures is that each has a single
+entry point and exit (Fig.~\ref{fig-controlstructs}). This is an
+extremely important property. To grasp its importance, consider the
+following debugging problem:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+k = 0;                        // 1. Unstructured code
+System.out.println("k= " + k);// 2. k should equal 0 here
+goto label1;                  // 3.
+label2:
+System.out.println("k= " + k);// 4. k should equal 1 here
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent 
+In this example a {\it goto} statement is used to jump to {\tt
+label1}, a label that marks a section of code somewhere else in the
+program. Suppose we're trying to determine how {\it k} has acquired an
+erroneous value and that its value is correct in line 2 of this
+sequence. Given the go to statement on line 3, there's no guarantee
+that control will ever return to the {\tt println()} statement on line
+4. Thus, in unstructured code it is very difficult to narrow the scope
+of an error to a fixed segment of code. Because the go to statement
+can transfer control anywhere in the program, with no guarantee of
+return, any segment of code can have multiple entry points and
+multiple exits.
+
+Now contrast the unstructured code with the following well-structured code:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+k = 0;                         // 1. Structured code
+System.out.println("k= " + k); // 2. k should equal 0 here
+someMethod();                  // 3.
+System.out.println("k= " + k); // 4. k should equal 1 here
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, we can be certain that control will eventually
+return to line 4. If {\it k}'s value is erroneous on line 4, we can trace
+\marginnote{Debugging with {\tt println()}}
+through {\tt someMethod()} to find the error. Because any segment
+of a structured program has a single entry and exit, we can use
+a pair of {\tt println()} statements in this way to converge
+on the location of the program bug.
+
+An important implication of the single-entry/single-exit property is
+that we can use {\bf preconditions} and {\bf postconditions} to help
+us design and debug our code. The previous example provided a simple
+example: The precondition is that {\it k} should equal 0 on line 2,
+and the postcondition is that {\it k} should equal 1 on line
+4. Figure~\ref{fig-preposts} shows some additional examples.
+
+\begin{figure}[htb]
+\jjjprogstart
+\mbox{$\bullet$} \vspace{-18pt}
+\begin{jjjlisting}
+\begin{lstlisting}
+  int k = 0;   // Precondition: k == 0
+  k = 5;       // Assignment to k
+ // Postcondition: k == 5
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\mbox{$\bullet$} \vspace{-18pt}
+\begin{jjjlisting}
+\begin{lstlisting}
+  int k = 0;           // Precondition: k == 0
+  while (k < 100) {    // While loop
+      k = 2 * k + 2;
+  }
+  // Postcondition: k >= 100
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\mbox{$\bullet$} \vspace{-18pt}
+\begin{jjjlisting}
+\begin{lstlisting}
+  /*
+   * factorial(n):
+   *   factorial(n) is 1 if n is 0
+   *   factorial(n) is n * n-1 * n-2 * ... * 1 if n > 0
+   * Precondition:  n >= 0
+   * Postcondition: 
+   *  factorial(n) = 1 if n = 0
+   *               = n * n-1 * n-2 * ... * 1 if n > 0
+   */
+  public int factorial(int n) {
+      if (n == 0)
+          return 1;
+      else {
+          int f = 1;         // Init a temporary variable
+          for (int k = n; k >= 1; k--) // For n down to 1
+              f = f * k;      //   Accumulate the product
+          return f;               // Return the factorial
+      } // else
+  } // factorial()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Using pre- and postconditions to document code.
+\label{fig-preposts}
+\label{pg-fig-preposts}}
+\end{figure}
+
+In the first example, we use pre- and postconditions to define
+the semantics of an assignment statement. No matter what value {\it k} has
+before the assignment, the execution of the assignment ({\tt k = 5}) will make
+the postcondition ({\tt k == 5}) true.
+
+In the second example, the postcondition follows from the semantics of
+the while loop. Because the loop-entry condition is \verb|k < 100|,
+when the loop exits the postcondition (\verb|k >= 100|) must be true.
+
+The third example shows how pre- and postconditions can be used
+to design and document methods. The {\it factorial(n)} is defined
+for $ n \geq 0 $ as follows:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+factorial(n) is 1, if n == 0
+factorial(n) is n * n-1 * n-2 * ... * 1, if n > 0
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, the factorial of {\it N} is defined as
+the cumulative product of multiplying 1 times 2, times 3, and so on up
+to {\it N}.  For example, if {\it N} is 5, then {\tt factorial(5)} is 1 * 2 * 3 *
+4 * 5 = 120.
+
+
+Note how the factorial computation is done in the method.  The
+variable {\it f}, which is used to accumulate the product, is
+initialized to 1. Then on each iteration of the {\tt for} loop, {\it f} is
+multiplied by {\it k} and the product is assigned back to {\it f}.
+This is similar to the way we accumulate a sum, except in this case we
+are accumulating a product.
+
+
+
+
+The precondition on the {\tt factorial()} method represents the
+condition that must be true in order for the method to work
+correctly. Factorial is undefined for $n < 0$, so it is important that
+{\it n} be greater than or equal to 0 whenever this method is called. Given
+that the precondition holds, the postcondition gives a precise
+specification of what must be true when the~method is finished.
+
+\subsection*{Design: Defensive Programming}
+\noindent The pre- and postconditions for a method can be used to design
+defensive code---that is, code that guards against errors. For
+example, what action should {\tt factorial()} take if its precondition
+fails to hold?  In Java, the best way to handle this situation is to
+{\em throw} an {\tt IllegalArgumentException}, as the following example
+illustrates:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int factorial(int n) {
+  if (n < 0)                  // Precondition failure
+   throw new IllegalArgumentException("Factorial:"+ n);
+  if (n == 0)
+    return 1;
+  else {
+    int f = 1;           // Init a temporary variable
+    for (int k = n; k >= 1; k--)   // For n down to 1
+      f = f * k;        //     Accumulate the product
+    return f;                 // Return the factorial
+  }
+} // factorial()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent An {\bf exception} is an erroneous condition (an error) that
+arises during the running of a program. An {\tt Exception} is an
+object that encapsulates information about the erroneous condition.  A
+program can {\em throw} an {\tt Exception}, thereby stopping the
+program, when an erroneous condition is detected. In this example, we
+create a new {\tt IllegalArgumentException} that would report the
+illegal value of {\em n} with something like the following error
+message:
+
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+Exception in thread "main" java.lang.IllegalArgumentException: 
+          Factorial: -1
+   at Test.factorial(Param.java:5)
+   at Test.main(Param.java:18)
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent You have undoubtedly already encountered thrown exceptions
+during program development.  Java has an extensive hierarchy of {\tt
+Exception}s, which we will cover in some depth in Chapter~11.  For
+now, however, we just note how to use the {\tt
+IllegalArgumentException}. As its name implies, an {\tt
+IllegalArgumentException} is used when an argument in a method call is
+not legal.
+
+Rather than continuing the program with an erroreous data value,
+throwing an exception causes the program to stop and print an error
+message.  Determining whether an argument is legal or illegal is an
+important use of the method's preconditions.  The failure of the
+precondition in {\tt factorial()} points to a problem elsewhere in the
+program, because it is doubtful that the program deliberately passed a
+negative value to {\tt factorial()}. The discovery of this error
+should lead to modifications in that part of the program where {\tt
+factorial()} was invoked---perhaps to some validation of the user's
+input:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int num = Integer.parseInt(textIn.getText());
+if (num >= 0)    // If factorial() precondition valid
+    factNum = factorial(num);   // Compute factorial
+else
+    System.out.println("Error");// Report input error}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This would be the traditional way to handle this kind
+of error. 
+
+\subsection*{Using \mbox{Pre-} and Postconditions}
+\noindent The use of preconditions and postconditions in the ways we've
+described can help improve a program's design at several distinct
+stages of its \mbox{development:}
+
+\begin{BL}
+\item  Design stage: Using pre- and postconditions in design helps
+to clarify the design and provides a precise measure of correctness.
+
+\item  Implementation and testing stage: Test data can be designed
+to demonstrate that the preconditions and postconditions hold for
+any method or code segment.
+
+\item  Documentation stage: Using pre- and postconditions to document
+the program makes the program more readable and easier to modify and
+maintain.
+
+\item  Debugging stage: Using the pre- and postconditions provides
+precise criteria that can be used to isolate and locate bugs. A
+method is incorrect if its precondition is true and its postcondition
+is false. A method is improperly invoked if its precondition is false.
+\end{BL}
+
+\noindent Like other programming skills and techniques, learning how
+to use pre- and postconditions effectively requires practice. One way
+to develop these skills is to incorporate pre- and postconditions into
+the documentation of the methods you write for laboratories and
+programming exercises.  Appendix~A provides guidelines on how to
+incorporate pre- and postconditions into your program's documentation.
+However, it would be a mistake to get in the habit of leaving the
+identification of pre- and postconditions to the documentation
+stage. The method's documentation, including its pre- and
+postconditions, should be developed during the design stage and
+should play a role in all aspects of program development.
+
+
+\subsection*{Effective Program Design}
+\noindent What we're really saying here is that using pre- and postconditions
+forces you to analyze your program's logic.  It is not enough to know
+that a single isolated statement within a program works correctly at
+the present time. You have to ask yourself: Will it continue to work
+if you change some other part of the program? Will other parts of the
+program continue to work if you revise it? No matter how clever you
+are, it is not possible to keep an entire model of a good-sized
+program in your head at one time. It is always necessary to focus on a
+few essential details and leave aside certain others. Ideally, what
+you hope is that the details you've left aside for the moment
+aren't the cause of the current bug you're trying to fix.  Using pre-
+and postconditions can help you determine the correctness of the
+details you choose to set aside.
+
+\JavaTIP{EFFECTIVE DESIGN}{Pre- and Postconditions.}{Pre- and postconditions
+are an effective way of analyzing the logic of your
+program's loops and methods. They should be identified at the earliest
+stages of design and development. They should play a role in the
+testing and debugging of the program. Finally, they should be
+included, in a systematic way, in the program's documentation.}
+
+\JavaTIP{PROGRAMMING TIP}{}{Develop your program's documentation at
+the same time that you develop its code and include the pre- and
+postconditions in the documentation.}
+
+\noindent As the programs you write become longer and more complex,
+the chances that they contain serious errors increase dramatically.
+There's no real way to avoid this complexity. The only hope is to try
+to manage it. In addition to analyzing your program's structure,
+another important aspect of program design is the attempt to reduce
+its complexity.
+
+\JavaTIP{EFFECTIVE DESIGN}{Reducing Complexity.}{Design your programs
+with an aim toward reducing their complexity.}
+
+\noindent Perhaps the best way to reduce complexity is to build your programs
+using a small collection of standard structures and techniques.  The
+basic control structures (Fig.~\ref{fig-controlstructs}) help reduce
+the potential complexity of a program by constraining the kinds of
+branching and looping structures that can be built. The control
+structures help to manage the complexity of your program's algorithms.
+In the same way, the following practices can help reduce and manage
+the complexity in a program.
+
+\JavaTIP[false]{PROGRAMMING TIP}{Standard Techniques.}{Acquire and use standard
+programming techniques for standard programming problems. For example,
+using a temporary variable to swap the values of two variables is
+a standard technique.}
+
+\JavaTIP[false]{PROGRAMMING TIP}{Encapsulation.}{Use methods wherever
+appropriate in your own code to encapsulate important sections of code
+and thereby reduce complexity.}
+
+\JavaTIP[false]{PROGRAMMING TIP}{Code Reuse.}{Instead of reinventing the wheel,
+use library classes and methods whenever possible. These have been
+carefully designed by experienced programmers. Library code has been
+subjected to extensive testing.}
+
+%\bigskip\begin{minipage}{\hsize}\section*{What Can Be Computed?}{./art/2/2b1.eps}
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Identify the pre- and postconditions on {\it j} and {\it k}
+where indicated in the following code segment:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int j = 0; k = 5;
+do {
+    if (k % 5 == 0)  {
+                       // Precondition
+        j += k;
+        k--;
+    }
+    else k *= k;
+} while (j <= k);     
+                      // Postcondition
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Identify the pre- and postconditions for the following method, which
+computes $x^n$ for  $n \geq 0$:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public double power(double x, int n) {
+    double pow = 1;
+    for (int k = 1; k <= n; k++)
+        pow = pow * x;
+    return pow;
+} // power()
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+
+\pagebreak
+\section*{{\color{cyan}Special Topic:} What Can Be Computed?}
+%% Footnote: Turing, A.M. (1936) ``On computable numbers...'',
+%% Proceedings of the London Mathematical Society, 42: 230-265.
+{Did you} ever wonder whether there are problems that cannot be solved
+by a computer, no matter what kind of control structures are used?
+Well, back in 1939, in his seminal paper titled ``On Computable
+Numbers,'' Alan Turing proved that indeed there are an infinite number
+of unsolvable problems. Prior to this, mathematicians and logicians
+thought all problems could be solved. So Turing's proof was quite
+a blow!
+
+To help him prove this point, Turing defined an abstract computer,
+which has come to be known as a Turing machine. A Turing machine has
+an alphabet of symbols; a read/write head; an infinitely long tape on
+which the read/write head can write symbols, and from which it can also
+read symbols; and a control unit, which controls the movement and
+action of the read/write head. Note that the Turing machine
+elements correspond to key components of a real computer---although
+Turing invented this concept a decade before the first computers were
+developed.  The read/write head corresponds to a computer's central
+processing unit (CPU).  The tape corresponds to the computer's
+memory. And the control unit corresponds to the computer program.
+
+A Turing machine represents a purely abstract concept of computation.
+It represents the pure idea of an algorithmic solution to a problem.
+Equipped with this concept, Turing was able to prove that there are
+unsolvable problems---that is, problems for which no algorithm can
+arrive at a solution.
+
+One such problem is the {\it halting problem}. This problem asks
+whether an algorithm can be devised to determine whether an arbitrary
+program will eventually halt. If there were such an algorithm, it
+could be used to detect programs that contain infinite loops, a
+service that might be really helpful in an introductory computing lab,
+among other places!  But, alas, there can be no such algorithm.
+
+Here's an outline of a proof that shows that the halting
+problem is unsolvable. (This particular version of the proof was
+suggested by J.~Glenn Brookshear in {\it Computer Science: An
+Overview}, Benjamin-Cummings, 1985.)
+
+Suppose you had a program, {\it P}, that solves the halting problem.
+That is, whenever {\it P} is given a self-halting program, it
+sets a variable {\it isTerminating} to true, and otherwise it
+sets {\it isTerminating} to false. Now let's create a new version of
+{\it P}, named $P\prime$, which is identical to {\it P} except that
+right after where {\it P} sets {\it isTerminating} to true or false,
+$P\prime$ contains the following loop:
+
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}
+while (isTerminating == true);  // Infinite if isTerminating true
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, if the input to $P\prime$  is a self-terminating
+program, then $P\prime$ will enter an infinite loop and it won't
+terminate.  Otherwise, if a non-self-terminating program is input to
+$P\prime$, $P\prime$ will skip the loop and will terminate.
+
+Now what if we give a representation of $P\prime$ to itself. Will it halt?
+The answer generates a contradiction: If $P\prime$  is a self-terminating
+program, then when it is input to itself, it will not terminate.  And
+if $P\prime$ is not self-terminating, when it is input to itself, it will
+terminate. Because our assumption that {\it P} solves the halting problem
+has led to a contradiction, we have to conclude that it wasn't a very
+good assumption in the first place. Therefore, there is no program
+that can solve the halting problem.
+
+The topic of computability is a fundamental part of the computer
+science curriculum, usually taught in a sophomore- or junior-level
+theory of computation course.
+
+\secSMHleft{Chapter Summary}
+\secKTH{Technical Terms}
+
+\begin{KT}
+conditional loop
+
+counting loop
+
+do-while statement
+
+infinite loop
+
+initializer
+
+limit bound
+
+loop body
+
+loop bound
+
+loop entry condition
+
+nested loop
+
+postcondition
+
+precondition 
+
+priming read
+
+repetition structure
+
+sentinel bound
+
+unit indexing
+
+updater
+
+while statement
+
+zero indexing
+
+\end{KT}
+
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}
+\item  A {\it repetition structure} is a control structure\index{repetition structure}
+that allows a statement or sequence of statements to be repeated.
+
+\item  All loop structures involve three elements---an {\it initializer}, 
+a {\it loop entry condition} or a {\it loop boundary condition}, and
+an {\it updater}.
+
+\item When designing a loop, it is important to analyze the loop structure
+to make sure that the loop bound will eventually be satisfied.
+
+\item The {\tt for} statement\index{for statement} has the following syntax:
+
+\begin{alltt}
+for ( {\it initializer} ; {\it loop entry condition} ; {\it updater} )
+    {\it for loop body} ; 
+\end{alltt} 
+
+\marginpar{
+\TBT{0.5pc}{A summary \hfill\break\hspace*{0.5pc}of various loop bounds}
+\hspace*{0pc}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{10pc}{1pt}}\\[2pt]
+%%%\TBCH{Bound}\hspace*{20pt}        &\TBCH{Example}
+\bf{Bound}\hspace*{20pt}        &\bf{Example}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{10pc}{0.5pt}}\\[2pt]
+{\it Counting}     &{\it k $<$ $100$}\cr
+{\it Sentinel}     &{\it input} != 9999\cr
+{\it Flag}         &{\it done} != {\it true}\cr
+{\it Limit}        &{\it amount $<$ $0.5$}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{10pc}{1pt}}
+\end{tabular}
+\endTB
+}
+
+\item The {\tt while} statement takes the following form:
+
+\begin{jjjlisting}
+\begin{alltt}
+{\tt while (} {\it loop entry condition} {\tt)}   
+    {\it loop body} ;
+\end{alltt}
+\end{jjjlisting}
+
+\item The {\tt do-while} statement has the following general form:
+
+\begin{jjjlisting}
+\begin{alltt}
+{\tt do} 
+    {\it loop body} ;
+{\tt while (} {\it loop entry condition} {\tt )} ;
+\end{alltt}
+\end{jjjlisting}
+
+\item When designing a loop, it is important to analyze the loop
+structure to make sure that the loop bound will eventually be
+satisified. Table~6.2 summarizes the types of loop bounds that
+we have identified.
+
+\item  {\it Structured programming\index{structured programming}}
+is the practice of writing programs that are built up from a small set
+of predefined control structures---the {\it sequence},
+{\it selection}, {\it repetition}, and {\it method-call} structures. An
+important feature of these structures is that each has a single entry
+and exit.
+
+\item A {\it precondition} is a condition that must be true before a
+certain code segment executes. A {\it postcondition} is a condition
+that must be true when a certain code segment is
+finished. Preconditions and postconditions should be used in the
+design, coding, documentation, and debugging of algorithms and
+methods.
+
+\end{SMBL}
+
+\pagebreak
+\secANSH
+\begin{ANS}
+\item  Identify the syntax error in the following {\tt for} loop statements:
+\begin{enumerate}
+
+\item[a.]
+
+Commas are used instead of semicolons in the header.
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+ for (int k = 5; k < 100; k++)
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item[b.]
+
+There shouldn't be 3 semicolons in the header
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+ for (int k = 0; k < 12 ; k--)
+     System.out.println(k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{enumerate}
+
+
+\item  Identify those statements that result in infinite loops:
+\begin{enumerate}
+
+\item[a.]
+
+Infinite loop because k is never incremented.
+
+
+\item[b.]
+
+Infinite loop because k is always odd and thus never equal to 100.
+
+\end{enumerate}
+
+\item  Your sister is learning to count by fours. Write
+a {\tt for} loop that prints the following sequence of numbers: 1, 5, 9, 13,
+17, 21, 25.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+for (int k = 1; k <= 25; k = k+4)
+    System.out.print(k + " ");
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  What value will {\it j} have when the following loop terminates?
+{\it Answer}: {\it j} will be undefined when the loop terminates. It
+is a local variable whose scope is limited to the loop body.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+for (int i = 0; i < 10; i++)
+{
+   int j;
+   j = j + 1;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Write a nested {\tt for} loop to print the following geometric pattern:
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+#
+# #
+# # #
+# # # #
+# # # # #
+
+for (int row = 1; row <= 5; row++)  {    // For each row
+  for (int col = 1; col <= row; col++) // Columns per row
+    System.out.print('#');
+  System.out.println();                // New line
+} // row
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Identify the syntax error in the following {\tt while} structures:
+\begin{enumerate}\baselineskip=10.5pt
+
+\item[a.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+int k = 5;
+while (k < 100) {
+    System.out.println(k);
+    k++                     << Missing semicolon
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item[b.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+int k = 0;
+while (k < 12;) {           << Extra semicolon
+    System.out.println(k);
+    k++;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{enumerate}
+%%\baselineskip=11pt
+
+
+\item  Determine the output and/or identify the error in each of the following
+{\tt while} structures.
+\begin{enumerate}
+
+\item[a.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+int k = 0;
+while (k < 100)
+  System.out.println(k);  << Missing updater in loop body
+\end{lstlisting}
+\end{jjjlisting}
+Output: infinite loop prints 0 0 0 0 0...
+
+
+\item[b.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+while (k < 100) {           << Missing initializer
+  System.out.println(k);
+  k++;
+}
+\end{lstlisting}
+\end{jjjlisting}
+Output: unpredictable since k's initial value is not known
+
+\end{enumerate}
+
+
+\item  Your younger sister is now learning how to count by sixes.
+Write a {\tt while} loop that prints the following sequence of numbers: 0,
+6, 12, 18, 24, 30, 36.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+   int k = 0;                 // Initializer
+   while (k <= 36) {          // Loop-entry condition
+       System.out.println(k);
+       k += 6;                  // Updater
+   }
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  If {\it N} is even, divide it by 2. If {\it N} is odd, subtract 1 and
+then divide it by 2. This will generate a sequence that is guaranteed
+to terminate at 0.  For example, if {\it N} is initially 15, then you
+get the sequence 15, 7, 3, 1, 0. Write a method that implements this
+sequence using a {\tt while} statement.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+public static void sub1Div2(int N) {
+    while(N != 0) {
+        System.out.print(N + " ");
+        if (N % 2 == 0)
+            N = N / 2;
+        else
+            N = (N - 1) / 2;
+    }
+    System.out.println( N );
+} // sub1Div2()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Identify the syntax error in the following {\tt do-while} structures:
+\begin{enumerate}
+
+\item[a.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+int k = 0;
+do while (k < 100) << Misplaced condition
+{
+     System.out.println(k);
+     k++;
+}                    << Belongs here
+\end{lstlisting}
+\end{jjjlisting}
+
+\item[b.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+int k = 0;
+do {
+    System.out.println(k);
+    k++;
+} while (k < 12) << Missing semicolon
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{enumerate}
+
+
+\item  Your sister has moved on to counting by sevens. Write a {\tt do-while}
+loop that prints the following sequence of numbers: 1, 8, 15, 22, 29,
+36, 43.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+n = 1;                           // Initializer
+do {
+    System.out.print(n + " ");
+    n += 7;                      // Updater
+} while (n <= 43);                // Loop entry condition
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write a method to input and validate pizza sales.
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+public int getAndValidatePizzaPrice() {// Uses KeyboardReader
+  int pizza = 0;
+  do {
+    reader.prompt("Input a pizza price (8, 10, or 15) ");
+    reader.prompt("or 99 to end the list >> ");
+    pizza = reader.getKeyboardInteger();
+    if ((pizza != 99) && (pizza != 8) && (pizza != 10) && 
+                       (pizza != 15))
+      System.out.println("Error: you've entered an "
+       + "invalid pizza price\n");    // Error input
+    else                               // OK input
+        System.out.println("You input " + pizza + "\n");                 
+  } while ((pizza != 99) && (pizza != 8) && 
+                   (pizza != 10) && (pizza != 15));
+  return pizza;
+} // getAndValidatePizzaPrice()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write a method to input and validate pizza sales using the numbers
+1, 2, and 3 to represent pizzas at different price levels.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+public int getAndValidatePizzaPrice() { // Uses KeyboardReader
+  int pizza = 0;
+  do {
+    reader.prompt("Input a 1,2 or 3 to indicate pizza" 
+              + "price ( 1($8), 2($10), or 3($15) ) ");
+    reader.prompt("or 0 to end the list >> ");
+    pizza = reader.getKeyboardInteger();
+    if ((pizza < 0) || (pizza > 3))  // Error check
+        System.out.println("Error: you've entered an " 
+                                + "invalid value\n");  
+    else                                // OK input
+        System.out.println("You input " + pizza + "\n"); 
+  } while ( (pizza < 0) || (pizza > 3) );
+  if (pizza == 1)
+    return 8;
+  else if (pizza == 2)
+    return 10;
+  else if (pizza == 3)
+    return 15;
+  else
+    return 0;
+} // getAndValidatePizzaPrice()
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  For each of the following problems, decide whether
+a counting loop structure, a {\tt while} structure, or a
+{\tt do-while} structure should be used, and write a
+pseudocode algorithm.
+
+\begin{ANSBL}
+\item  Printing the names of all the visitors to
+a Web site could use a counting loop because the
+exact number of visitors is known.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+for each name in the visitor's log
+    print the name
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Validating that a user has entered a positive
+number requires a {\tt do-while} structure in which
+you repeatedly read a number and validate it.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+do
+    read a number
+    if number is invalid, print error message
+while number is invalid
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Changing all the backslashes ($\backslash$) in a
+Windows Web page address, to the slashes (/) used in
+a Unix Web page address.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+for each character in the Web page address
+    if it is a backslash replace it with slash
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Finding the largest in a list of  numbers
+requires a {\tt while} loop to guard against
+an empty list.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+initialize maxMPG to smallest possible number
+while there are more cars in the database
+    if current car's MPG is greater than maxMPG
+        replace maxMPG with it
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\end{ANSBL}
+
+\item  Identify any errors in the following switch structures (if
+there is no error, specify the output):
+
+\begin{enumerate}
+\item[a.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+   int k = 0;
+   switch (k)  // Syntax error: missing braces
+   case 0:
+       System.out.println("zero");
+       break;
+   case 1:
+       System.out.println("one");
+       break;
+   default:
+       System.out.println("default");
+       break;
+\end{lstlisting}
+\end{jjjlisting}
+
+\item[b.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+   int k = 0;
+   switch (k + 1) 
+   {   
+       case 0:
+           System.out.println("zero");
+           break;
+       case 1:
+           System.out.println("one"); // Output "one"
+           break;
+       default:
+           System.out.println("default");
+           break;
+   }
+\end{lstlisting}
+\end{jjjlisting}
+
+\item[c.]
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+   int k = 6;
+   switch (k / 3.0) // Syntax error: not an integral value
+   {   
+       case 2:
+           System.out.println("zero");
+           break;
+       case 3:
+           System.out.println("one");
+           break;
+       default:
+           System.out.println("default");
+           break;
+   }
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{enumerate}
+
+\item  A {\tt switch} statement to print ice cream flavors:
+\verb| |
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+switch (flavor) 
+{   
+    case 1:
+        System.out.println("Vanilla");
+        break;
+    case 2:
+        System.out.println("Chocolate");
+        break;
+    case 3:
+        System.out.println("Strawberry");
+        break;
+    default:
+        System.out.println("Error");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  \verb| |
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+public final int VANILLA = 0,
+                 CHOCOLATE = 1,
+                 STRAWBERRY = 2;
+switch (flavor) 
+{   
+    case VANILLA:
+        System.out.println("Vanilla");
+        break;
+    case CHOCOLATE:
+        System.out.println("Chocolate");
+        break;
+    case STRAWBERRY:
+        System.out.println("Strawberry");
+        break;
+    default:
+        System.out.println("Error");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Identify the pre- and postconditions on {\it j} and {\it k} where indicated in
+the following code segment:
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+int j = 0; k = 5;
+do {
+    if (k % 5 == 0) {
+                      // Precondition: j <= k
+        j += k;
+        k--;
+    }
+    else k *= k;
+} while (j <= k);
+                      // Postcondition: j > k
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Identify the pre- and postconditions for the following method, which
+computes $x^n$ for $n >= 0$.
+
+\mbox{ }
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+ // Precondition: N >= 0
+ // Postcondition: power(x,n) == x to the n
+ public double power(double x, int n ) {
+     double pow = 1;
+     for (int k = 1; k <= n; k++)
+         pow = pow * x;
+     return pow;
+ } // power()
+\end{lstlisting}
+\end{jjjlisting}
+\end{ANS}
+
+\secEXRHtwoleft{Exercises}
+
+\begin{EXRtwo}
+
+\item  Explain the difference between the following pairs of terms:
+\marginnote{\vspace{12pt}\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+\begin{EXRtwoLL}
+\item  {\it Counting loop} and {\it conditional loop}.
+\item  {\it For statement} and {\it while statement}.
+\item  {\it While statement} and {\it do-while statement}.
+\item  {\it Zero indexing} and {\it unit indexing}.
+\item  {\it Sentinel bound} and {\it limit bound}.
+\item  {\it Counting bound} and {\it flag bound}.
+\item  {\it Loop initializer} and {\it updater}.
+\item  {\it Named constant} and {\it literal}.
+\item  {\it Compound statement} and {\it null statement}.
+\end{EXRtwoLL}
+
+\item  Fill in the blank.
+\begin{EXRtwoLL}\baselineskip=14pt
+\item  The process of reading a data item before entering a loop is
+known as a  \rule{30pt}{0.5pt}\,.
+\item  A loop that does nothing except iterate is an example of \rule{40pt}{0.5pt}\,.
+\item  A loop that contains no body is an example of a \rule{40pt}{0.5pt} statement.
+\item  A loop whose entry condition is stated as $( k < 100\; ||\; k >= 0)$
+would be an example of an \rule{40pt}{0.5pt} loop.
+\item  A loop that should iterate until the user types in a special value
+should use a  \rule{40pt}{0.5pt} bound.
+\item  A loop that should iterate until its variable goes from 5 to 100
+should use a  \rule{40pt}{0.5pt} bound.
+\item  A loop that should iterate until the difference between two
+values is less than 0.005 is an example of a \rule{40pt}{0.5pt} bound.
+\end{EXRtwoLL}\baselineskip=11pt
+
+
+\item  Identify the syntax errors in each of the following:
+\begin{EXRtwoLL}
+\item
+
+for (int k = 0; k < 100; k++)
+    System.out.println(k)
+
+
+\item
+
+for (int k = 0; k < 100; k++);
+    System.out.println(k);
+
+
+\item
+
+int k = 0
+while  k < 100
+{
+   System.out.println(k);  k++;
+}
+
+
+\item
+
+int k = 0;
+do
+{
+   System.out.println(k);  k++;
+}
+while  k < 100 ;
+
+\end{EXRtwoLL}
+
+\item  Determine the output and/or identify the error in
+each of the following code segments:
+\begin{EXRtwoLL}
+\item
+
+for (int k = 1; k == 100; k += 2)
+    System.out.println(k);
+
+
+\item
+
+int k = 0;
+while (k < 100)
+    System.out.println(k);
+    k++;
+
+
+\item
+
+for (int k = 0; k < 100; k++) ;
+    System.out.println(k);
+
+\end{EXRtwoLL}
+
+\item  Write pseudocode algorithms for the following activities,
+paying particular attention to the {\it initializer},
+{\it updater}, and {\it boundary condition} in each case.
+\begin{EXRtwoLL}
+\item  {\tt a softball game}
+\item  {\tt a five-question quiz}
+\item  {\tt looking up a name in the phone book}
+\end{EXRtwoLL}
+
+\item  Identify the pre- and postconditions for each of the
+ statements that follow. Assume that all variables are {\tt int}
+and have been properly declared.
+\begin{EXRtwoLL}
+\item
+
+ int result = x / y;
+
+
+\item
+
+ int result = x % y;
+
+
+\item
+
+ int x = 95;
+do
+    x /= 2;
+while(x >= 0);
+
+\end{EXRtwoLL}
+
+
+\item  Write three different loops---a {\tt for} loop, a {\tt while} loop, and a {\tt do-while}
+loop---to print all the multiples of 10, including 0, up to and
+including 1,000.
+
+\item  Write three different loops---a {\tt for} loop, a {\tt while} loop, and a {\tt do-while}
+loop---to print the following sequence of numbers: 45, 36, 27, 18, 9, 0,
+$-9$, $-18$, $-27$, $-36$, $-45$.
+
+
+\item  Write three different loops---a {\tt for} loop, a while {\tt loop}, and a {\tt do-while}
+loop---to print the following ski-jump design:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+#
+# #
+# # #
+# # # #
+# # # # #
+# # # # # #
+# # # # # # #
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  The Straight Downhill Ski Lodge in Gravel Crest, Vermont, gets
+lots of college students on breaks. The lodge likes to keep track of
+repeat visitors. Straight Downhill's database includes an integer
+variable, {\it visit}, which gives the number of times a guest has
+stayed at the lodge (1 or more). Write the pseudocode to catch those
+visitors who have stayed at the lodge at least twice and to send them
+a special promotional package (pseudocode = send promo).  ({\it Note:}
+The largest number of stays recorded is eight. The number nine is used
+as an end-of-data flag.)
+
+\item  Modify your pseudocode in the previous exercise. In addition to
+every guest who has stayed at least twice at the lodge receiving a
+promotional package, any guest with three or more stays should also get a
+\$40 coupon good for lodging, lifts, or food.
+
+\item  Write a method that is passed a single parameter, {\it N}, and displays
+all the even numbers from 1 to {\it N}.
+
+\item  Write a method that is passed a single parameter, {\it N}, that prints
+all the odd numbers from 1 to {\it N}.
+
+\item  Write a method that is passed a single parameter, {\it N}, that prints
+all the numbers divisible by 10 from {\it N} down to 1.
+
+\item  Write a method that is passed two parameters---a {\tt char} {\it Ch} and
+an {\tt int} {\it N}---and prints a string of {\it N Chs}.
+
+\item  Write a method that uses a nested {\tt for} loop to print the
+following multiplication table:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+   1  2  3  4  5  6  7  8  9
+1  1
+2  2  4
+3  3  6  9
+4  4  8 12 16
+5  5 10 15 20 25
+6  6 12 18 24 30 36
+7  7 14 21 28 35 42 48
+8  8 16 24 32 40 48 56 64
+9  9 18 27 36 45 54 63 72 81
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Write a method that uses nested {\tt for} loops to print the 
+patterns that follow. Your method should use the following statement
+to print the patterns: \verb|System.out.print('#')|.
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+# # # # # # # #     # # # # # # # #   # # # # # # # #   # # # # # # # #
+  # # # # # # #     # # # # # # #       #         #                 #
+    # # # # # #     # # # # # #           #     #                 #
+      # # # # #     # # # # #               # #                 #
+        # # # #     # # # #                 # #               #
+          # # #     # # #                 #     #           #
+            # #     # #                 #         #       #
+              #     #                 # # # # # # # #   # # # # # # # #
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write a program that asks the user for the number
+of rows and the number of columns in a box of asterisks. Then
+use nested loops to generate the box.
+
+\item  Write a Java application that lets the user input a sequence
+of consecutive numbers. In other words, the program should let the
+user keep entering numbers as long as the current number is one
+greater than the previous number.
+
+\item  Write a Java application that lets the user input
+a sequence of integers terminated by any negative value. The
+program should then report the largest and smallest values
+that were entered.
+
+\item How many guesses does it take to guess a secret number between 1
+and {\it N}? For example, I'm thinking of a number between 1 and
+100. I'll tell you whether your guess is too high or too
+low. Obviously, an intelligent first guess would be 50. If that's too
+low, an intelligent second guess would be 75.  And so on. If we
+continue to divide the range in half, we'll eventually get down to one
+number. Because you can divide 100 seven times (50, 25, 12, 6, 3, 1,
+0), it will take at most seven guesses to guess a number between 1 and
+100. Write a Java applet that lets the user input a positive integer,
+{\it N}, and then reports how many guesses it would take to guess a
+number between 1 and {\it N}.
+
+\item  Suppose you determine that the fire extinguisher in your
+kitchen loses {\it X} percent of its foam every day. How long before
+it drops below a certain threshold ({\it Y} percent), at which point
+it is no longer serviceable?  Write a Java applet that lets the user
+input the values {\it X} and {\it Y} and then reports how many weeks
+the fire extinguisher will last.
+
+\item  Leibnitz's method for computing $\pi$ is based on the following
+convergent series:
+
+\begin{displaymath}
+  \frac{\pi}{4} \; = 1 \; - \; \frac{1}{3} \; + \; \frac{1}{5} \; - \; \frac{1}{7} + \; \cdots
+\end{displaymath}
+
+\noindent How many iterations does it take to compute $\pi$ to 
+a value between 3.141 and 3.142 using this series? Write a Java
+program to find out.
+
+\item  Newton's method for calculating the square root of {\it N} starts
+by making a (nonzero) guess at the square root. It then
+uses the original guess to calculate a new guess, according to
+the following formula:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+guess = (( N / guess) + guess) / 2;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent No matter how wild the original guess is, if we repeat
+this calculation, the algorithm will eventually find the square
+root.  Write a square root method based on this algorithm. Then write
+a program to determine how many guesses are required to find the
+square roots of different numbers. Uses {\tt Math.sqrt()} to determine
+when to terminate the guessing.
+
+\item  Your employer is developing encryption software and wants you
+to develop a Java applet that will display all of the primes less than
+{\it N}, where {\it N} is a number to be entered by the user. In
+addition to displaying the primes themselves, provide a count of how
+many there are. 
+
+\item  Your little sister asks you to help her with her
+multiplication and you decide to write a Java application that tests
+her skills. The program will let her input a starting number, such as
+5. It will generate multiplication problems ranging from from $5
+\times 1$ to $5 \times 12$. For each problem she will be prompted to
+enter the correct answer. The program should check her answer and
+should not let her advance to the next question until the correct
+answer is given to the current question.
+
+\item  Write an application that prompts the user for
+four values and draws corresponding bar graphs using an
+ASCII character. For example, if the user entered
+15, 12, 9, and 4, the program would draw
+
+\begin{jjjlisting}
+\begin{lstlisting}
+******************
+************
+*********
+****
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Revise the application in the previous problem so that
+the bar charts are displayed vertically. For example, if the
+user inputs 5, 2, 3, and 4, the program should display
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ **
+ **       **
+ **    ** **
+ ** ** ** **
+ ** ** ** **
+-------------
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The Fibonacci\index{Fibonacci sequence} sequence
+(named after the Italian mathematician Leo\-nardo of Pisa, ca. 1200)
+consists of the numbers $0,1,1,2,3,5,8,13,\dots$ in which each number
+(except for the first two) is the sum of the two preceding
+numbers. Write a method {\tt fibonacci(N)} that prints the first {\it N}
+Fibonacci numbers.
+
+\item  The Nuclear Regulatory Agency wants you to write a
+program that will help determine how long certain radioactive
+substances will take to decay. The program should let the user input
+two values: a string giving the substance's name and its half-life in
+years. (A substance's half-life is the number of years required for the
+disintegration of half of its atoms.) The program should report how
+many years it will take before there is less than 2 percent of the
+original number of atoms remaining.
+
+\item  Modify the {\tt CarLoan} program so that it calculates a
+user's car payments for loans of different interest rates and
+different loan periods. Let the user input the amount of the loan.
+Have the program output a table of monthly payment schedules.
+
+\end{EXRtwo}
+
+\vspace*{6pt}
+\noindent{\it\normalsize The next chapter also contains a number of loop exercises.}

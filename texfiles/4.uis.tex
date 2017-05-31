@@ -1,0 +1,2846 @@
+%%%  Chapter 4: Input/Output: Designing the User Interface}
+%%%  3rd Edition
+
+\setcounter{chapter}{3}
+\setcounter{SSTUDYcount}{1}
+\chapter{Input/Output: Designing the User Interface}
+\label{chapter-io}
+\label{pg-chapter-io}
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Understand the importance of the user interface.
+\item  Know how to use a simple command-line interface.
+\item  Be able to program and use a simple Graphical User Interface (GUI).
+\item  Understand the concept of event-driven programming.
+\item  Know how to program and use a Java applet.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item The User Interface
+\item A Command-line Interface
+\item A Graphical User Interface (GUI)
+\item Case Study: The One Row Nim Game
+\item {From the Java Library: java.io.File and file input (Optional)}
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+\noindent One of the most important parts of learning a programming
+language is learning how to program an application to accept input and
+produce outputs (I/O). Computers wouldn't be very useful if we could
+not give them data to manipulate and compute, and if we were not able
+to read or understand the results that they produce. In general, a
+computer program's input and output capabilities are known
+collectively as its user interface.
+
+An {\bf input operation} is any action that transfers data from the
+user to the computer's main memory via one of the computer's input
+devices. An {\bf output operation} is any action that transfers data
+from the computer's main memory to one of the computer's output
+devices. 
+
+In this chapter, we will introduce three simple user interfaces: a {\bf
+command-line interface} and two {\bf graphical user interfaces}
+(GUIs).  These interfaces can be used interchangeably with the
+material in most of the subsequent chapters. Indeed, one of the most
+important design principles that we emphasize in this chapter is that
+the user interface should be designed to function independently of the
+computational task. In other words, it should be possible to take an
+application, such as a computer game, and design it so that it can be
+used with a variety of different user interfaces.  
+
+\section{The User Interface}
+
+The user interface is that part of the program that handles the
+\marginnote{User interface}
+input and output interactions between the user and the program.  As an
+interface, it limits or constrains the manner in which the user can
+interact with the program.
+
+Computer programs are just one of the many things that require a user
+interface.  Virtually every device we use has one. For example,
+consider again the difference between the user interface of a digital
+versus an analog watch. On a digital watch, you have a display that
+tells you the time to the exact hour, minute, and second. On an analog
+watch, one with a sweep second hand, the time can never be displayed
+to the exact second. Similarly, on a digital watch there are buttons
+that let you set the time to the exact hour, minute, and second. On an
+analog watch, there is a small wheel that allows you to set the time
+only approximately.  Thus, the user interface constrains the kinds of
+interactions that are possible between the user and the device.
+
+With regard to our Java programs, one way to divide up the labor is to
+\marginnote{Division of labor}
+distinguish between the user interface and the computational
+functions. The role of the user interface is to transmit data back and
+forth between the user and the program.  The role of the computational
+part of the program is to perform some kind of computation, in the
+broad sense of that term. The computation might be to play a game, or
+calculate a square root, or monitor a hospital patient.
+Figure~\ref{fig-ui} provides a generic picture of the relationship
+between the user interface and the computational object.
+
+\begin{figure}[h]
+\figaright{chptr04/userinter.eps}
+{The user interface transmits data back and forth between the user
+and the program's computational objects.
+\label{fig-ui}
+\label{pg-fig-ui}}
+\end{figure}
+
+In this chapter we focus our attention on the user interface side of
+the relationship shown in Figure~\ref{fig-ui}. In subsequent chapters
+we will focus more on the computational side of the relationship. What
+we desire is an approach that lets us combine a computational object
+with any one of the three different kinds of user interfaces.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{The User Interface Module}{Separating the user
+interface from the computational object is a good way to divide up 
+the labor in programs that perform I/O.}
+
+\section{A Command-Line Interface}
+
+A command-line interface is perhaps the simplest, and most
+old-fashioned, way to design the interaction between a user and a
+program. According to this approach, user input is taken from the
+keyboard, and the program's output is displayed on some kind of
+console (Fig.~\ref{fig-command-line}).
+
+\begin{figure}[h]
+\figa{chptr04/cmdline.eps}
+{A command-line user interface.
+\label{fig-command-line}
+\label{pg-fig-command-line}}
+\end{figure}
+
+The command-line approach might also be called {\em console
+interface}. In the early days of computers, before we had
+graphics-based computer monitors capable of displaying multiple
+windows, the console was the entire computer display. For today's
+computers the console might be a window provided by your programming
+environment, as in Figure~\ref{fig-console}.
+
+\begin{figure}[h]
+\figaleft{chptr04/console.eps}
+{The Java console window.
+\label{fig-console}
+\label{pg-fig-console}}
+\end{figure}
+
+In Chapter~3 we described how to use the {\tt System.out.print()} and
+{\tt System.out.println()} methods to output strings to the console.
+That takes care of the output side of command-line interface. The more
+challenging task is managing the input-side of the interface.
+
+In Java, input and output is handled by objects that are called
+{\bf streams}.  You can think of a stream as a kind of pipe through
+which data flow (Fig.~\ref{fig-streams}).  An {\bf input stream}
+\marginnote{Streams}
+carries data from some kind of input device, such as a keyboard or
+network connection or a file, to the program's main memory. An {\bf
+output stream} carries data from the program's memory to some kind of
+output device, such as a printer or a file.
+
+\begin{figure}[h]
+\figaleft{chptr04/streams.eps}
+{Input and output streams.
+\label{fig-streams}
+\label{pg-fig-streams}}
+\end{figure}
+
+Each Java program has three standard streams available to it at
+startup: {\tt System.in}, {\tt System.out}, and {\tt System.err}.
+{\tt System.in} is a predefined input stream that is typically
+associated with the keyboard (Fig.~\ref{fig-streams}). That is, it
+carries data from the keyboard to the program. {\tt System.out} and
+{\tt System.err} are both output streams typically associated with the
+console.  They both carry data from the program to the console.  The
+difference is simply that {\tt System.out} is used for normal program
+output and {\tt System.err} is used to output error messages.
+
+\subsection{Using a {\tt BufferedReader} to Input Strings from the Keyboard}
+
+We will use a {\tt BufferedReader} object to handle data input from
+the keyboard. As its name implies, the {\tt BufferedReader} class
+performs buffered input. A {\bf buffer} is a portion of main memory
+where input is held until it is needed by the program. Using a
+\marginnote{Buffered input} buffer between the keyboard and the
+program allows you to use the Backspace key to delete a
+character. When you hit the Enter key, any characters that you deleted
+will be ignored when the program retrieves characters from the input
+buffer. If the user's input were not buffered in this way, it would
+contain every keystroke, including the Backspaces, and then it would
+be up to the program to eliminate the characters that were
+supposed to be deleted.
+
+\begin{figure}[h]
+\figaright{chptr04/buffrdr.eps}
+{The {\tt Buf\-fer\-ed\-Read\-er} class.
+\label{fig-buffrdr}
+\label{pg-fig-buffrdr}}
+\end{figure}
+
+Figure~\ref{fig-buffrdr} provides a UML diagram of the {\tt
+BufferedReader} class and shows its relationship to other the classes
+that will be used for keyboard input .  Note that along with {\tt
+InputStreamReader}, {\tt BufferedReader} is one of several subclasses
+of the {\tt Reader} class. As the diagram shows, {\tt BufferedReader}
+has two important methods.  Its constructor method takes a {\tt Reader}
+parameter, which means that when we create a {\tt BufferedReader} we
+must provide it with a reference to some kind of {\tt Reader} object.
+To perform keyboard input, we want to provide a reference to an
+object that can read {\tt System.in}, the standard input stream. 
+As the figure shows, {\tt InputStreamReader} has a constructor
+that allows it to read an {\tt InputStream}. Therefore, to
+construct a {\tt BufferedReader} that will read {\tt System.in}
+we use the following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+BufferedReader input = new BufferedReader
+   (new InputStreamReader (System.in));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this statement we are actually creating two objects. 
+We first create an {\tt InputStreamReader}, giving it a reference to
+{\tt System.in}. We then pass that object to a {\tt BufferedReader}.
+The result is a cooperation between two objects that enables us to do
+buffered reading of the keyboard.
+
+By creating a {\tt BufferedReader} in this way, whenever we use its
+{\tt readLine()} method, it will read a line of characters from the
+keyboard. For example, having created a {\tt BufferedReader} named
+{\tt input}, the following code segment will read one line of input
+and assign it to the {\tt String} variable named {\tt inputString}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String inputString = input.readLine();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When the program encounters the {\tt readLine()} expression,
+\marginnote{Keyboard input}
+it will wait for the user to hit the Enter key. It will then input
+whatever the user typed, minus any characters that were Backspaced
+over, into the {\tt String} variable.
+
+\JavaRule[false]{Keyboard Input.}{The {\tt Buf\-fered\-Read\-er.read\-Line()} method
+allows the user to backspace over errors during keyboard input.}
+
+\subsection{Inputting Numbers from the Keyboard}
+
+As the previous section showed, we can use a {\tt BufferedReader}
+object to input {\tt String}s from the keyboard. In Java, all keyboard
+input is represented as {\tt String}s. However, what if we want to
+input numbers?  The answer is that we have to extract numbers from the
+input strings.  To do this, Java provides us two special classes,
+known as wrapper classes: {\tt Integer} and {\tt Double}.
+
+A {\bf wrapper class} contains methods for converting primitive
+\marginnote{Wrapper classes}
+data into objects and for converting data from one type to another.
+The {\tt Integer} class contains the {\tt parseInt()}
+method, which extracts an {\tt int} from its {\tt String} argument.
+For example, in the following usage, the string "55" is converted
+into the number 55:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int m = Integer.parseInt("55");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, the {\tt Double} class contains the
+{\tt parseDouble()} method, which extracts a {\tt double} value from
+its parameter. In this example, the number 55.2 is extracted from the
+string "55.2":
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double num = Double.parseDouble("55.2");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If we are writing a program that requires us to input numbers 
+from the keyboard, then assuming we have created a {\tt
+BufferedReader} object named {\tt input}, we can use these methods in
+combination with the {\tt readLine()} method, to input and process
+numbers. For example, this code segment calculates a runner's race
+pace:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String inputString = new String();  
+System.out.println("How many total miles did you run? ");  
+inputString = input.readLine();   // Input a String}
+double miles = Double.parseDouble(inputString); // Convert
+System.out.println("How many minutes did it take you? ");  
+inputString = input.readLine();   // Input another String
+double minutes = Double.parseDouble(inString);  // Convert
+System.out.println("Your average pace was " + 
+                   minutes/miles + " minutes per mile");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Notice how we included prompts in this example 
+so that the user knows what type of input is expected. Designing
+appropriate prompts is an important aspect of designing a good user
+interface.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Prompting.}{In a well-designed user interface,
+prompts should be used to guide the user through the input process.}
+
+
+\subsection{Designing a Keyboard Reader Class}
+
+Now that we have introduced the library classes and methods that we
+will use for command-line input, lets design a class to encapsulate
+these functions. We want a class that will use a {\tt BufferedReader}
+to read any kind of data---strings, integers, or real numbers---from
+keyboard.  We also want this class to hide some of the messy details
+involved in performing keyboard input.
+
+\begin{figure}[h]
+\figa{chptr04/keybrdrdr.eps}
+{Design of the {\tt KeyboardReader} class.
+\label{fig-keybrdrdr}
+\label{pg-fig-keybrdrdr}}
+\end{figure}
+
+Figure~\ref{fig-keybrdrdr} presents the design of {\tt KeyboardReader}
+class.  Note that instances of this class will use a {\tt
+BufferedReader} object to perform the actual keyboard input. That's
+why we need a private instance variable of type {\tt
+BufferedReader}. The constructor method will create a {\tt
+BufferedReader}, which will then be used whenever a read operation is
+requested.  Note that the {\tt KeyboardReader()} has five public
+methods. The {\tt getKeyboardInput()} method returns a {\tt
+String}. This is the method we will call when we just want to get the
+string that the user typed from the keyboard.  The {\tt
+getKeyboardInteger()} method returns an {\tt int} value. This is the
+method we will call when we want an integer from the
+keyboard. Similarly, the {\tt getKeyboardDouble()} method returns a
+{\tt double}. This is the method we will call when we want to input a
+floating point value from the keyboard. Finally, the {\tt prompt()}
+and {\tt display()} methods will be used to perform two other
+important tasks of a user interface: that of prompting the user and
+that of displaying the program's output.
+
+The following code segment illustrates how we will use a {\tt
+Key\-board\-Read\-er} object to input an integer:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+KeyboardReader cmdline = new KeyboardReader(); 
+int m = cmdline.getKeyboardInteger();        
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent All we need to do is create an instance of
+the {\tt KeyboardReader} and ask it to get an integer for us. This
+greatly simplifies the work we would have to do when we want to
+perform keyboard input.
+
+Note that Figure~\ref{fig-keybrdrdr} lists a private method named {\tt
+readKeyboard()} in the {\tt KeyboardReader} class. This is the method
+that does the actual work of reading data from the keyboard.  Because
+it is private, it can only be called by the other methods in {\tt
+KeyboardReader}. It cannot be called by other classes. The reason we
+\marginnote{Private helper method}
+make it private is to hide it, and the messy details of performing
+keyboard input, from other classes.
+
+One of those messy details is the fact that whenever I/O is performed,
+it is possible for things to go wrong. The possibility of errors
+occurring applies to all forms of I/O, not just keyboard I/O.  For
+example, when a program is trying to read a file, the file might be
+missing. Or when trying to download a web page, the Internet
+connection might malfunction.  
+
+Because these types of external errors are possible, Java requires
+that whenever a program performs certain types of I/O, it must watch
+out for certain kinds of error conditions, known as {\em exceptions}.
+Exceptions are covered in Chapter~11, so we will not attempt to cover
+\marginnote{I/O exceptions} them here.  Instead, we will design the
+{\tt readKeyboard()} method to take care of this detail for us.
+
+\JavaRule{Exceptions.}{Java I/O methods require that programs 
+check for certain error conditions during input.}
+
+Figure~\ref{fig-keybrdrdrclass} gives the full implementation (for
+now) of the {\tt Key\-board\-Read\-er} class. Lets go through it line by
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.io.*;
+
+public class KeyboardReader 
+{   private BufferedReader reader;
+
+    public KeyboardReader() {
+        reader = new BufferedReader
+           (new InputStreamReader(System.in));
+    }
+    public String getKeyboardInput() 
+    {   return readKeyboard();
+    }
+    public int getKeyboardInteger() 
+    {   return Integer.parseInt(readKeyboard());
+    }
+    public double getKeyboardDouble() 
+    {   return Double.parseDouble(readKeyboard());
+    }
+    public void prompt(String s) 
+    {   System.out.print(s);
+    }
+    public void display(String s) 
+    {   System.out.print(s);
+    }
+    private String readKeyboard() 
+    {   String line = "";
+        try 
+        {  line = reader.readLine();
+        } catch (IOException e) 
+        {  e.printStackTrace();
+        }
+        return line;
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt Keyboard\-Reader} class.
+\label{fig-keybrdrdrclass}
+\label{pg-fig-keybrdrdrclass}}
+\end{figure}
+line. The first thing to notice is the use of the {\tt import}
+statement. Recall that importing a Java package enables us to refer to
+elements in the package by their short names ({\tt BufferedReader}),
+rather than by their fully qualified names ({\tt
+java.io.BufferedReader}).
+
+
+Next notice how we create a {\tt BufferedReader} object in
+the {\tt KeyboardReader()} constructor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+reader = new BufferedReader 
+    (new InputStreamReader (System.in)); 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The resulting {\tt reader} object will persist as long
+as our {\tt KeyboardReader} object exists and can be used for
+all subsequent input operations.
+
+Next notice the definition of the {\tt readKeyboard()} method.  It
+calls the inherited {\tt readLine()} method to input a line from the
+keyboard and then it returns the line. Note, however, how the call to
+the {\tt readLine()} method is embedded in a {\tt try...catch} block.
+This is one way to handle the possibility that an exception might
+occur during the input operation. Java requires that our program do
+something to address the possibility of an I/O exception, and as we
+will learn in Chapter~11, there are other designs that we might have
+used here.  The primary advantage of doing it this way is that we can
+hide this language detail from the rest of the program.  The rest of
+the program---and any other programs that use the {\tt KeyboardReader}
+class---will not have to worry about this exception issue. They can
+just ask the {\tt KeyboardReader} to get them a string or an integer
+and it will deliver the goods.
+
+Next, notice how the public input methods are defined. The {\tt
+getKeyboardInput()} method just returns the line that it gets by
+calling {\tt readKeyboard()}.  The {\tt getKeyboardInteger()} method
+also calls {\tt readKeyboard()}, but instead of just returning the
+line, it extracts an integer from it and returns the integer. The {\tt
+getKeyboardDouble()} method works the same way.
+
+Finally, notice how the public output methods are defined. Both the
+{\tt prompt()} and {\tt display()} methods take a single {\tt String}
+parameter and do exactly the same thing--they merely print their
+string. So why do we have two methods when one will suffice?  The
+answer is that these methods encapsulate important and distinct
+user-interface functions---prompting the user and displaying
+output---that just happen to be implemented in exactly the same way in
+this case. As we will see when we design our GUI interface, we will
+use completely different objects to prompt the user and display
+output. So, despite their similarities, it is important that we
+distinguish the task of prompting the user from the more general task
+of displaying output.
+
+\subsection{Designing a Command-Line Interface}
+
+Now that we have defined a special class for performing keyboard
+input, we now show how it can be used as a user interface in
+cooperation with the other objects that make up a program.  As
+described in Figure~\ref{fig-ui}, the user interface will serve as an
+intermediary between the user and some type of computational object.
+Although our command-line interface should work with any application,
+no matter how complex, we begin with a very simple computational
+problem.  This will allow us to focus on the user interface.  
+
+Let's design a program that prompts the user for his or her name and
+then says hello. Thus, the program's I/O should look like this:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  Hi, please input your name here > Kim
+  Hi Kim, nice to meet you.
+\end{lstlisting}
+\end{jjjlisting}
+
+In the design we use there will be two primary objects involved. One
+will serve as the user interface. This will be our {\tt
+KeyboardReader}. A second object will serve as the computational
+object.  In this case it will ``compute'' an appropriate greeting.  It
+will serve contain the {\tt main()} method and will encapsulate the
+algorithm for this application. It will use a {\tt KeyboardReader} to
+handle its I/O needs.
+
+The main advantage of this division of labor is that it enables us to
+use the {\tt KeyboardReader}, as is, with virtually any Java
+application. Moreover, despite its simplicity,  our computational
+object in this example can serve as a template for future 
+programs.
+
+\JavaTIP{EFFECTIVE DESIGN}{Modularity.}{By designing the user interface
+as a self-contained module, we can use it with just about any application.}
+
+
+ 
+Figure~\ref{fig-greeter} provides the details the design we wish to
+implement. Note that {\tt GreeterApp} contains an instance variable
+for a {\tt KeyboardReader}.  This will enable it to use the {\tt
+KeyboardReader} whenever it needs to perform keyboard input. By giving
+{\tt GreeterApp} a {\tt main()} method, we allow it to be the main
+class for our application.  Its {\tt run()} method will contain the
+algorithm that controls the application, and its {\tt greet()} method
+will handle the task of greeting the user.
+
+\begin{figure}[h]
+\figascaled{chptr04/greeter.eps}{0.9}
+{Using {\tt Key\-board\-Read\-er} as the user interface.
+\label{fig-greeter}
+\label{pg-fig-greeter}}
+\end{figure}
+
+The full implementation of the {\tt GreeterApp} class is shown in
+Figure~\ref{fig-greeterapp}.  It begins by declaring an instance
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class GreeterApp 
+{   private KeyboardReader reader;
+
+    public GreeterApp() 
+    {   reader = new KeyboardReader();
+    } // GreeterApp()
+    public void run() 
+    {   String name = "";
+        reader.prompt("Please input your name here > ");
+        name = reader.getKeyboardInput();
+        reader.display(greet(name) + "\n");
+    } // run()
+    public String greet(String name) 
+    {   return "Hi " + name + " nice to meet you.";
+    } // greet()
+    public static void main(String args[]) 
+    {   GreeterApp app = new GreeterApp();
+        app.run();
+    }
+} // GreaterApp
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt GreeterApp} class.
+\label{fig-greeterapp}
+\label{pg-fig-greeterapp}}
+\end{figure}
+variable for the {\tt KeyboardReader}, which is instantiated in the
+constructor method. This gives {\tt GreeterApp} a way to refer
+directly to the user interface whenever it needs keyboard input.  The
+{\tt run()} method encapsulates the application's algorithm. Notice
+how it uses the {\tt KeyboardReader} to prompt the user, to input the
+user's name, and then to display the greeting.  Finally, the {\tt
+main()} method serves to create an instance of the computational
+object and calls its {\tt run()} method.
+
+
+To re-cap, we have designed a simple command-line interface that can be
+used, with minor changes, for virtually any programming task in
+subsequent chapters.  Before moving on, it may be helpful to touch on
+some of the important object-oriented principles that went into our
+design.
+
+\begin{itemize}
+\item Divide-and-conquer: We see the usefulness of dividing a program
+into separate objects, one to handle the computations required by the
+application, and one to handle the user interface.
+
+\item Encapsulation: The classes we designed encapsulate just the
+information and behavior that is necessary to perform their specific
+roles.
+
+\item Information hiding: We use a private method to hide certain
+messy implementation details from other parts of the program. 
+
+\item Generality and Extensibility: We have developed a design that
+is general enough that it can be extended to other applications. 
+\end{itemize}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  Java's {\tt Math} class has a static method that will
+generate a random number between 0 and 0.99999999---that is, 
+between 0 and 1, not including 1. By using simple arithmetic,
+we can generate random numbers between any two values. For example,
+the following statement assigns a random integer between 1 and 100
+to the variable:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ secretNumber = 1 + (int)(Math.random() * 100);
+\end{lstlisting}
+\end{jjjlisting}
+
+\indent Given this statement, design and implement an application that will 
+play the following guessing game with the user. The computer generates
+a random number between 1 and 100 and then lets the user guess the
+number, telling the user when the guess is too high or too low. Note
+that for this problem, the user will have to input integers at the
+keyboard.
+
+\end{SSTUDY}
+
+\section{A Graphical User Interface (GUI)}
+
+While command-line interfaces are useful, one of the great advantages
+of the Java language is that its extensive class library makes it
+relatively easy to develop applications that employ Graphical User
+Interfaces (GUIs).  GUIs have been around now for many years, since
+the production of the Macintosh in the early 1980s. Today nearly all
+the personal computing applications are GUI-based.  Therefore, it is
+important that beginning programmers be able design and write programs
+that resemble, albeit on a simpler scale, those programs that they use
+every day. Among other benefits, developing the ability to write GUI
+programs, like the ones everyone uses today, will make it easier for
+you to show off your work to others, which might help motivate further
+interest in learning to program.
+
+In this and subsequent sections, we will develop an extensible GUI
+model that can be used with either a Java application or applet.  By
+{\em extensible} we mean a model that can be easily adapted and used
+in a wide variety of programs.  GUI programming involves a
+computational model known as {\bf event-driven programming}, which
+means that GUI programs react to events that are generated mostly by
+\marginnote{Event-driven programming}
+the user's interactions with elements in the GUI. Therefore, we will
+have to learn how to use Java's {\em event model} to handle simple
+events.
+
+Given that this is our first look at some complex topics, we will keep
+the discussion as simple as possible. This means we will delay
+discussion of certain issues, which we take up in more depth in
+Chapter~13.
+
+\subsection{Java's GUI Components}
+
+The Java library comes with two separate but interrelated packages of
+GUI components, the older {\tt java.awt} package and the newer {\tt
+javax.swing} package.  For the most part, the {\bf Swing} classes
+supersede the {\bf AWT} classes. For example, the {\tt
+java.awt.Button} class is superseded by the {\tt javax.swing.JButton}
+class, and the {\tt java.awt.TextField} class is superseded by the
+{\tt javax.swing.JTextField} class.  As these examples show, the newer
+Swing components add an initial 'J' to the names of their
+corresponding AWT counterparts.
+
+Figure~\ref{fig-guiscreen} illustrates how some of the main components
+appear in a GUI interface. As shown there, a {\tt JLabel} is simply a
+string of text displayed on the GUI, used here as a prompt. A {\tt
+JTextField} is an input element that can hold a single line of text.
+In this case, the user has input his name. A {\tt JTextArea} is an
+output component that can display multiple lines of text. In this
+example, it displays a simple greeting.  A {\tt JButton} is a labeled
+{\bf control element}, which is an element that allows the user to
+control the interaction with the program. In this example, the user
+will be greeted by the name input into the {\tt JTextField}, whenever
+the {\tt JButton} is clicked. As we will learn, clicking on the {\tt
+JButton} causes an event to occur, which leads the program to take the
+action of displaying the greeting.  Finally, all of these components
+are contained in a {\tt JFrame}, which is a top-level container. A
+{\bf container} is a GUI component that can contain other GUI
+components.
+
+\begin{figure}[tb]
+\figa{chptr04/guicapture.eps}
+%%%\figaleft{chptr04/guicapture.eps}
+{Various GUI components from the {\tt javax.swing} package. {\bf [Artwork: We
+need to label the components.]}
+\label{fig-guiscreen}
+\label{pg-fig-guiscreen}}
+\end{figure}
+
+The Swing classes are generally considered to be superior to their AWT
+\marginnote{Model-view-controller (MVC) architecture}
+counterparts. For one thing, Swing components use a sophisticated
+object-oriented design known as the {\bf model-view-controller (MVC)}
+architecture, which gives them much greater functionality than their
+AWT counterparts. For example, whereas an AWT {\tt Button} can only
+have a string as its label, a Swing {\tt JButton} can use an image as
+a label. (See Chapter~13 for a detailed discussion of the MVC
+architecture.)
+
+Second, Swing components are written entirely in Java which makes them
+more portable and enables them to behave the same way regardless of
+the operating system on which they are run. Because of their
+portability, Swing components are considered {\em lightweight}.  By
+contrast, AWT classes use routines that are implemented in the
+\marginnote{Swing portability} 
+underlying operating system and are
+therefore not easily portable. Hence, they are considered {\em
+heavyweight} components.  Whereas a Swing {\tt JButton} should look
+and act the same way regardless of platform, an AWT {\tt Button} would
+have a different implementation, and hence a different look and feel,
+on a Macintosh and on a Windows system.  In this book, we will use the
+new Swing classes in our programs.
+
+\subsection{Class Inheritance: Extending a Superclass}
+
+As you recall from Chapter 0, class inheritance is the mechanism by
+which a class of objects can 
+\marginnote{Inheritance} 
+acquire ({\em inherit}) the methods and variables of its superclasses.
+Just as a horse, by membership in the class of horses, inherits those
+attributes and behaviors of a mammal, and, more generally, those of an
+animal, a Java subclass inherits the variables and methods of its
+superclasses. We sometimes lump together an object's attributes and
+\marginnote{Functionality} behaviors and refer to them collectively as
+its {\em functionality}. So we say that an object of a subclass
+inherits the functionality of all of its superclasses.
+
+By the same token, just as a horse and a cow extend their mammalian
+attributes and behaviors in their own special ways, a Java subclass
+extends the functionality of its superclasses in its own special
+way. Thus, a subclass {\em specializes} its superclass.
+
+In Chapter~3, we showed how all classes in the Java
+hierarchy inherit the {\tt toString()} method from the {\tt Object}
+class.  The lesson there was that an object in a subclass can either
+use or override any {\tt public} method defined in any of its
+superclasses.  In order to implement GUI programs, we need to look at
+another way to employ inheritance.  In particular, we need to learn
+how to define a new class by {\it extending} an existing class.
+
+We noted in Chapter~2 that unless a class is explicitly defined as a
+subclass of some other class it is considered implicitly to be a
+direct subclass of {\tt Object}.  Thus, the {\tt GreeterApp} class
+that we defined earlier in this chapter is a subclass of {\tt
+Object}. We can make the relationship between {\tt GreeterApp} and
+{\tt Object} explicit by using the {\tt extends} keyword when we
+define the {\tt GreeterApp} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class GreeterApp extends Object { ... }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, the {\tt extends} keyword is used to specify the
+\marginnote{The isa relationship}
+subclass/superclass relationships that hold in the Java class
+hierarchy.  We sometimes refer to the subclass/superclass relationship
+as the {\em isa} relationship, in the sense that a horse {\em isa}
+mammal, and a mammal {\em isa} animal. Thus, the {\tt extends} keyword
+is used to define the {\em isa} relationship among the objects in the
+Java class hierarchy.
+
+\begin{figure}[tb]
+%%\figa{chptr04/swing1.eps}
+\figaright{chptr04/swing1.eps}
+%%%%\figaleft{chptr04/swing1.eps}
+{Top-level Swing and AWT classes. [NOTE: REDRAW JWindow
+is a subclass of Window.]
+\label{fig-swing1}
+\label{pg-fig-swing1}}
+\end{figure}
+
+A {\bf top-level container} is a GUI container that cannot be added to
+\marginnote{Top-level container}
+another container; it can only have components added to it.
+Figure~\ref{fig-swing1} is a class hierarchy that shows the
+relationships among some of the top-level Swing and AWT classes.  For
+example, the {\tt javax.swing.JFrame} class, which represents a
+top-level window, is a subclass of {\tt java.awt.Frame}, and the {\tt
+javax.swing.JApplet} is a subclass of {\tt java.applet.Applet}.  We
+can see from this figure that a {\tt JApplet} {\it isa} {\tt Applet}
+and an {\tt Applet} {\it isa} {\tt Panel} and a {\tt Panel} {\it isa}
+{\tt Container}.  These subclass/superclass relationships are created
+in their respective class definitions by using the {\tt extends}
+keyword as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class JApplet extends Applet { ... }
+ public class Applet extends Panel { ... }
+ public class Panel extends Container { ... }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As we will see in the next section, extending a class in this way
+\marginnote{Specialization}
+enables us to create a new class by specializing an existing class.
+
+\subsection{Top-level Windows}
+
+Referring again to Figure~\ref{fig-swing1}, notice that all of the
+Swing components are subclasses of the AWT {\tt Container} class.
+This means that Swing components are {\tt Container}s. They inherit
+the functionality of the {\tt Container} class. So Swing components
+can contain other GUI components. That is why a {\tt JButton} can
+contain an image.
+
+All GUI programs must be contained inside some kind of top-level
+container.  Swing provides three top-level container classes: {\tt
+JFrame}, {\tt JApplet} and {\tt JDialog}.  For our basic GUI, we will
+use a {\tt JFrame} as the top-level window for stand alone
+applications.  We will use a {\tt JApplet} as the top-level window for
+Java applets.
+
+A {\tt JFrame} encapsulates the basic functionality of a top-level
+\marginnote{Content pane}
+window. It has what is called a {\em content pane}, to which
+other Swing components, such as buttons and text fields, can be
+added. Also, it comes with enough built-in functionality to respond to
+certain basic commands, such as when the user adjusts its
+size or closes it.
+
+\begin{figure}[tb]
+%%%\figa{chptr04/framecapture.eps}
+\figaleft{chptr04/framecapture.eps}
+{A simple window.
+\label{fig-framecapture}
+\label{pg-fig-framecapture}}
+\end{figure}
+
+Figure~\ref{fig-framecapture} shows a simple top-level window as it
+would be displayed on the console. This window has a title ("My
+GUI"). It is 200 pixels wide, 150 pixels high, and its top-left corner
+is located at coordinates (100,150) on the console screen.  Like in
+other graphical systems, points on the Java console always given as an
+ordered pair, {\it (X, Y)}, with the horizontal coordinate, {\it X},
+listed first, followed by the vertical coordinate, {\it Y}.  
+The horizontal x-axis extends positively from left to right,
+and the vertical y-axis extends positively from top to bottom.
+
+The class that created and displayed this window is shown in
+Figure~\ref{fig-simpleframe}.  Note the use of the {\tt extends}
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+
+public class SimpleGUI extends JFrame 
+{
+    public SimpleGUI(String title) 
+    {   setSize(200,150);
+        setLocation(100, 150);
+        setTitle(title);
+        setVisible(true); // Displays the JFrame
+    } // SimpleGUI()
+
+    public static void main(String args[]) 
+    {   new SimpleGUI("My GUI");
+    } // main()
+} // SimpleGUI class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A top-level window with a title.
+\label{fig-simpleframe}}
+\end{figure}
+keyword to define {\tt SimpleGUI} as a subclass of {\tt JFrame}.  As a
+subclass, {\tt SimpleGUI} inherits all of the functionality of a {\tt
+JFrame} (Fig.~\ref{fig-framesubclass}) . That is, it can contain
+other GUI components. It knows how to resize and close itself, and so
+on. The reason we want to define a subclass of {\tt JFrame}, rather
+than just use a {\tt JFrame} instance, is because we want eventually
+to give our subclass additional functionality that is specialized for
+our application.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Specialization.}{By creating a subclass
+of {\tt JFrame} we can specialize its functionality for our
+application.}
+
+
+Note how {\tt SimpleGUI}'s {\tt main()} program  creates an
+instance of {\tt SimpleGUI} by invoking its constructor. There is no
+need to use a variable here because there are no further references
+to this object in this class.  However, simply
+constructing a {\tt SimpleGUI} will not cause it to
+appear on the Java console. For that to happen, it is necessary
+to give it a size and to call its {\tt setVisible()} method. This is
+done in the constructor method.
+
+\begin{figure}[h!]
+\figa{chptr04/framesubclass.eps}
+%%%\figaleft{chptr04/framesubclass.eps}
+{{\tt SimpleGUI} is a subclass of {\tt JFrame}.
+\label{fig-framesubclass}
+\label{pg-fig-framesubclass}}
+\end{figure}
+
+The constructor method illustrates how to use some of the methods
+inherited from {\tt JFrame}.  Figure~\ref{fig-framesubclass} shows
+some of the methods that {\tt SimpleGUI} inherits from {\tt
+JFrame}. We use the {\tt setSize()} and {\tt setLocation()} methods to
+set {\tt SimpleGUI}'s size and location. We use the {\tt setTitle()}
+method to set its title. And we use the {\tt setVisible()} method to cause
+it to appear on the console.
+
+\subsection{GUI Components for Input, Output, and Control}
+
+To enable our top-level window to serve as a user interface, it will
+be necessary to give it some components. Figure~\ref{fig-swing2}
+provides an overview of some of the main Swing components. Generally,
+there are three types of components, which correspond to the three
+main functions of a user interface: {\em input}, {\em output}, and
+{\em control}. A {\tt JTextField} would be an example of an input
+component. The user can type text into the text field, which can then
+be transmitted into the program. A {\tt JTextArea} is an example of an
+output component. The program can display text in the text
+area. Control components enable the user to control the actions of the
+program. A {\tt JButton} would be an example of a control
+component. It can be associated with an action that can be initiated
+whenever the user clicks it. We might also consider a {\tt JLabel}
+to be an output component, because we can use it to prompt the user as
+to what type of actions to take.
+
+\begin{figure}[tb]
+%%%\figa{chptr04/swing2.eps}
+\figaleft{chptr04/swing2.eps}
+{Swing components.
+\label{fig-swing2}
+\label{pg-fig-swing2}}
+\end{figure}
+
+Let's begin by creating a simple user interface, one that enables us
+to perform basic input, output, and control operations with a minimum
+of Swing components. This will allow us to demonstrate the basic
+principles and techniques of user-interface design and will result in
+a GUI that can be extended for more sophisticated applications. For
+this example, we will limit our application to that of simply greeting
+the user, just as we did in designing our command-line interface.
+That means that the user will be prompted to input his or her name and
+the program will respond by displaying a greeting
+(Fig.~\ref{fig-guiscreen}).  We will call our GUI {\tt GreeterGUI},
+to suggest its interdependence with the same {\tt Greeter}
+computational object that we used with the command-line interface.
+
+For this simple application, our GUI will make use of the following
+components:
+
+\begin{itemize}
+\item A {\tt JTextField} will be used to accept user input.
+\item A {\tt JTextArea} will serve to display the program's output.
+\item A {\tt JButton} will allow the user to request the greeting.
+\item A {\tt JLabel} will serve as a prompt for the {\tt JTextField}.
+\end{itemize}
+
+\begin{figure}[tb]
+\figaright{chptr04/swingmeth.eps}
+{Public methods and constructors for basic Swing components.
+\label{fig-constructors}
+\label{pg-fig-constructors}}
+\end{figure}
+
+Figure~\ref{fig-constructors} shows some of the constructors and
+public methods for the {\tt JTextArea}, {\tt JTextField}, {\tt
+JButton}, and {\tt JLabel} components. The following code segments
+illustrate how to use these constructors to create instances of these
+components:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+   // Declare instance variables for the components
+private JLabel prompt;
+private JTextField inField;
+private JTextArea display;
+private JButton goButton;
+   // Instantiate the components
+prompt = new JLabel("Please type your name here: ");
+inField = new JTextField(10);   // 10 chars wide
+display = new JTextArea(10, 30);// 10 rows x 30 columns
+goButton = new JButton("Click here for a greeting!");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent
+For this example, we use some of the simpler constructors. Thus, we
+create a {\tt JTextField} with a size of 10. That means it can display
+10 characters of input.  We create a {\tt JTextArea} with 10 rows of
+text, each 30 characters wide. We create a {\tt JButton} with a simple
+text prompt meant to inform the user of how to use the button.
+
+\subsection{Adding GUI Components to a Top-Level Window}
+
+Now that we know how to create GUI components, the next task is to add
+them to the top-level window.  A {\tt JFrame} is a top-level {\tt
+Container} (Fig.~\ref{fig-swing1}), but instead of adding the
+components directly to the {\tt JFrame} we have to add them to the
+{\tt JFrame}'s content pane, which is also a {\tt Container}.
+
+\JavaRule{Content Pane.}{GUI Components cannot be added directly
+to a {\tt JFrame}. They must be added to its content pane.}
+
+\noindent Java's {\tt Container} class has several {\tt add()} methods that 
+can be used to insert components into the container:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+add(Component comp)// add comp to end of  container
+add(Component comp, int index)// add comp at index
+add(String region, Component comp) add comp at region
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The particular {\tt add()} method to use depends on how we
+want to arrange the components in the container. The layout of a
+container is controlled by its default {\bf layout manager}, an object
+\marginnote{Layout manager}
+associated with the container that determines the sizing and the
+arrangement of its contained components. For a content pane, the
+default layout manager is a {\tt BorderLayout}. This is an arrangement
+whereby components may be placed in the center of the pane and along
+its north, south, east, and west borders
+(Fig.~\ref{fig-borderlayout}).
+\begin{figure}[h!]
+%%%\figa{chptr04/border.eps}   %%%RAM See figure 9-22, p 465 in 2E
+\figaleft{chptr04/border.eps}
+{Arrangement of components in a border layout.
+\label{fig-borderlayout}
+\label{pg-fig-borderlayout}}
+\end{figure}
+
+
+Components are added to a border layout by using the {\tt add(String
+region, Component comp)} method, where the {\tt String} parameter
+specifies either "North," "South," "East," "West," or "Center."  For
+example, to add the {\tt JTextArea} to the center of the {\tt JFrame}
+we first create a reference to its content pane and we then add the component at
+its center:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Container contentPane = getContentPane(); // Get pane
+contentPane.add("Center",display); // Add JTextArea
+\end{lstlisting}
+\end{jjjlisting}
+
+One limitation of the border layout is that only one component can be
+added to each area. This is a problem for our example because we want
+our prompt {\tt JLabel} to be located right before the {\tt
+JTextField}.  To get around this problem, we will create another
+container, a {\tt JPanel}, and add the prompt, the text field, and the
+{\tt goButton} to it. That way, all of the components involved in
+getting the user's input will be organized into one panel.  We then
+add the entire panel to one of the areas on the content pane.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JPanel inputPanel = new JPanel();
+inputPanel.add(prompt);   // Add JLabel to panel
+inputPanel.add(inField);  // Add JTextField to panel
+inputPanel.add(goButton); // Add JButton to  panel
+contentPane.add("South", inputPanel); // Add to JFrame
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The default layout for a {\tt JPanel} is {\tt FlowLayout},
+which means that components are added left to right with the last
+addition going at the end of the sequence.  This is an appropriate
+layout for this JPanel because it will place the prompt just to the
+left of the input {\tt JTextField}.
+
+\JavaTIP{EFFECTIVE DESIGN}{Encapsulation.}{{\tt JPanel}s can be used to
+group related components in a GUI.}
+
+
+
+\subsection{Controlling the GUI's Action}
+
+Now that we know how to place all the components on the GUI, we need
+to design the GUI's controls.  As mentioned earlier, GUIs use a form
+of event-driven programming. Anything that happens when you are using
+a computer---every keystroke and mouse movement---is classified as an
+event. As Figure~\ref{fig-eventmodel} illustrates, events are
+generated by the computer's hardware and filtered up through the
+operating system and the application programs. Events are handled by
+special objects called listeners. A {\bf listener} is a specialist
+\marginnote{Event listener}
+that monitors constantly for a certain type of event.  Some events,
+such as inserting a CD in the CD-ROM drive, are handled by listeners in
+the operating system. Others, such as typing input into a Web page or a
+Word document, are handled by listeners in a piece of application
+software, such as a browser or a word processor.
+
+\begin{figure}[tb]
+\figa{chptr04/eventmodel.eps}   %%%RAM See figure 4-15, p 185 in 2E
+%%%\figaleft{chptr04/eventmodel.eps}
+{Java's event model.
+\label{fig-eventmodel}
+\label{pg-fig-eventmodel}}
+\end{figure}
+
+In an event-driven programming model, the program is controlled by
+an {\bf event loop}. That is, the program repeatedly listens
+for events, taking some kind of action whenever an event is generated.
+In effect, we might portray this event loop as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Repeat forever or until the program is stopped
+    Listen for events
+    If event-A occurs, handle it with event-A-handler
+    If event-B occurs, handle it with event-B-handler
+     ...
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The event loop listens constantly for the occurrence
+of events and then calls the appropriate object to handle each event.
+
+Figure~\ref{fig-eventhier} shows some of the main types of events in
+the {\tt java.awt.event} package.  In most cases, the names of the
+event classes are suggestive of their roles.  Thus, a {\tt MouseEvent}
+occurs when the mouse is moved. A {\tt KeyEvent} occurs when the
+keyboard is used. The only event that our program needs to listen for
+is an {\tt ActionEvent}, the type of event that occurs when the user
+clicks  the {\tt JButton}.
+
+\begin{figure}[tb]
+%%%\figa{chptr04/eventhier.eps}   %%%RAM See figure 4-17, p 185 in 2E
+\figaleft{chptr04/eventhier.eps}   %%%RAM See figure 4-17, p 185 in 2E
+{Java's event hierarchy.
+\label{fig-eventhier}
+\label{pg-fig-eventhier}}
+\end{figure}
+
+When the user clicks the {\tt JButton}, Java will create an {\tt
+ActionEvent} object.  This object contains important information about
+the event, such as the time that the event occurred and the object,
+such as a {\tt JButton}, that was the locus of the event.  For our
+application, when the user clicks the {\tt JButton}, the program
+should input the user's name from the {\tt JTextField} and display a
+greeting, such as ``Hi John nice to meet you'' in the {\tt JTextArea}.
+That is, we want the program to execute the following code segment:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  String name = inField.getText();
+  display.append(greeter.greet(name) + "\n");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first line uses the {\tt JTextField.getText()} method
+to get the text that the user typed into the {\tt JTextField} and
+stores it in a local variable, {\tt name}. The second line passes the
+{\tt name} to the {\tt greeter.greet()} method and passes the result it
+gets back to the {\tt JTextArea.append()} method. This will have the
+effect of displaying the text at the end of the {\tt JTextArea}. 
+
+In this example, we have used a couple of the standard public methods
+of the {\tt JTextField} and {\tt JTextArea} classes.  
+For our simple GUI, the methods described in Figure~\ref{fig-constructors}
+\WWWjava
+will be sufficient for our needs. However, if you would like to see the 
+other methods available for these and other Swing components, you should
+check Java's online API documentation.
+
+\subsection{The ActionListener Interface}
+
+Given that the code segment just described will do the task of
+greeting the user, where should we put that code segment in our
+program? We want that code segment to be invoked whenever the user
+clicks on the {\tt goButton}.  You know enough Java to understand that
+we should put that code in a Java method. However, we need a special
+method in this case, one that will be called automatically by Java
+whenever the user clicks that button. In other words, we need a
+special method that the button's listener knows how to call whenever
+the button is clicked.
+
+Java solves this problem by letting us define a pre-selected method
+\marginnote{Java interface}
+that can be associated with the {\tt goButton}.  The name of the
+method is {\tt actionPerformed()} and it is part of the {\tt
+ActionListener} interface.  In this case, an {\bf interface} is a
+special Java class that contains only methods and constants (final
+variables).  It cannot contain instance variables. (Be careful to
+distinguish this kind of interface, a particular type of Java class,
+form the more general kind of interface, whereby we say that a class's
+public methods make up its interface to other objects.) Here's the
+definition of the {\tt ActionListener} interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract interface ActionListener 
+                                extends EventListener 
+{    public abstract void actionPerformed(ActionEvent e);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This resembles a class definition, but the keyword {\tt interface}
+replaces the keyword {\tt class} in the definition. Note also that we
+are declaring this interface to be {\tt abstract}. An {\bf abstract
+interface} or {\bf abstract class} is one that contains one or more
+abstract methods. An {\bf abstract method} is one that consists
+entirely of its signature; it lacks an implementation---that is, it
+does not have a method body.  Note that the {\tt actionPerformed()}
+method in {\tt ActionListener} places a semicolon where its body is
+supposed to be.
+
+\JavaRule[false]{Java Interface.}{A Java interface is like a Java class
+except that it cannot contain instance variables.}
+
+\JavaRule[false]{Abstract Methods and Classes.}{An abstract method is
+a method that lacks an implementation. It has no method body.}
+
+Declaring a method {\tt abstract} means that we are leaving its
+\marginnote{Abstract method}
+implementation up to the class that implements it.  This way, its
+implementation can be tailored to a particular context, with its
+signature specifying generally what the method should do. Thus, {\tt
+actionPerformed()} should take an {\tt ActionEvent} object as a
+parameter and perform some kind of action.
+
+What this means, in effect, is that any class that implements the {\tt
+actionPerformed()} method can serve as a listener for {\tt
+ActionEvent}s.  Thus, to create a listener for our {\tt JButton}, all
+we need to do is give an implementation of the {\tt actionPerformed()}
+method.  For our program, the action we want to take when the {\tt
+goButton} is clicked, is to greet the user by name. Thus, we want to
+set things up so that the following {\tt actionPerformed()} method is
+called whenever the {\tt goButton} is clicked:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public void actionPerformed(ActionEvent e) 
+{  if (e.getSource() == goButton) 
+   {   String name = inField.getText();
+         display.append(greeter.greet(name) + "\n");
+   }
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, we place the code that we want executed
+when the button is clicked in the body of the {\tt actionPerformed()}
+method. Note that in the if-statement we get the source of the action
+from the {\tt ActionEvent} object and check that it was the {\tt
+goButton}.  
+
+That explains what gets done when the button is clicked---namely, the
+code in {\tt actionPerformed()} will get executed. But it doesn't
+explain how Java knows that it should call this method in the first
+place. To set that up we must do two further things. We must place the
+{\tt actionPerformed()} method in our {\tt GreeterGUI} class, and we
+must tell Java that {\tt GreeterGUI} will be the {\tt ActionListener}
+for the {\tt goButton}.
+
+The following stripped-down version of the GreeterGUI class illustrates
+how we put it all together:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class GreeterGUI extends Frame 
+                               implements ActionListener 
+{ ...
+  public void buildGUI() 
+  {  ...
+     goButton = new JButton("Click here for a greeting!");
+     goButton.addActionListener(this);
+     ...
+  }
+  ...
+  public void actionPerformed(ActionEvent e) 
+  {   if (e.getSource() == goButton) 
+      {   String name = inField.getText();
+          display.append(greeter.greet(name) + "\n");
+      }
+  }
+  ...
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent First, we declare that {\tt GreeterGUI} implements the {\tt
+ActionListener} interface in the class header. This means that the
+class must provide a definition of the {\tt actionPerformed()} method,
+which it does.  It also means that {\tt GreeterGUI} {\em isa} {\tt
+ActionListener}.  So {\tt SimpleGUI} is both a {\tt JFrame} and an
+{\tt ActionListener}.
+
+Second, note how we use the {\tt addActionListener()} method to
+associate the listener with the {\tt goButton}: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+goButton.addActionListener(this)
+\end{lstlisting}
+\end{jjjlisting}
+
+The {\tt this} keyword is a self-reference---that is, it always refers
+to the object in which it is used. It's like a person referring to
+himself by saying ``I''.  When used here, the {\tt this} keyword
+refers to this {\tt GreeterGUI}.  In other words, we are setting
+things up so that the {\tt GreeterGUI} will serve as the listener for
+action events on the {\tt goButton}.
+
+\JavaRule{This Object.}{The {\tt this} keyword always refers to
+the object that uses it. It is like saying ``I'' or ``me.''}
+
+\pagebreak
+\subsection{Connecting the GUI to the Computational Object}
+
+Figure~\ref{fig-simplegui} gives the complete source code
+for our {\tt GreeterGUI} interface. Because there is a lot going
+on here, it might be helpful to go through the program carefully
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GreeterGUI extends JFrame 
+                            implements ActionListener 
+{ private JTextArea display;
+  private JTextField inField;
+  private JButton goButton;
+  private Greeter greeter;
+	    
+  public GreeterGUI(String title) 
+  { greeter = new Greeter();  
+    buildGUI();
+    setTitle(title);
+    pack();
+    setVisible(true);
+  } // GreeterGUI()
+  private void buildGUI() 
+  { Container contentPane = getContentPane();
+    contentPane.setLayout(new BorderLayout());
+    display = new JTextArea(10,30);
+    inField = new JTextField(10);
+    goButton = new JButton("Click here for a greeting!");
+    goButton.addActionListener(this);
+    JPanel inputPanel = new JPanel();
+    inputPanel.add(new JLabel("Input your name here: "));
+    inputPanel.add(inField);
+    inputPanel.add(goButton);
+    contentPane.add("Center", display);
+    contentPane.add("South", inputPanel);
+  } // buildGUI()
+  public void actionPerformed(ActionEvent e) 
+  { if (e.getSource() == goButton) 
+    { String name = inField.getText();
+      display.append(greeter.greet(name) + "\n");
+    }
+  } // actionPerformed()
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt GreeterGUI} class.
+\label{fig-simplegui}
+\label{pg-simplegui}}
+\end{figure}
+even though we have introduced most of its elements already. That
+will help us put  together all of the various concepts that
+we have introduced.
+
+To begin with, note the several Java packages that must be included in
+this program. The {\tt javax.swing} package includes definitions for
+all of the Swing components. The {\tt java.awt.event} package includes
+the {\tt ActionEvent} class and the {\tt ActionListener} interface,
+and the {\tt java.awt} packages contain the {\tt Container} class.
+
+Next note how the {\tt GreeterGUI} class is defined as a subclass of
+\marginnote{Extending a class}
+{\tt JFrame} and as implementing the {\tt ActionListener} interface.
+{\tt GreeterGUI} thereby inherits all of the functionality of a {\tt
+JFrame}.  Plus, we are giving it additional functionality. One of its
+functions is to serve as an {\tt ActionListener} for its {\tt
+goButton}.  The {\tt ActionListener} interface consists entirely of
+\marginnote{Implementing an interface}
+the {\tt actionPerformed()} method, which is defined in the program.
+This method encapsulates the actions that will be taken whenever the
+user clicks the {\tt goButton}.
+
+The next elements of the program are its four instance variables, the
+most important of which is the {\tt Greeter} variable. This is the
+variable that sets up the relationship between the GUI and the
+\marginnote{The computational object}
+computational object. In this case, because the variable is declared
+in the GUI, we say that the GUI uses the computation object, as
+illustrated in Figure~\ref{fig-greeter}.  This is slightly different
+from the relationship we set up in the command-line interface, in
+which the computational object uses the interface
+(Fig.~\ref{fig-command-line}).
+
+The other instance variables are for those GUI components that must be
+referred to throughout the class. For example, note that the {\tt
+goButton}, {\tt inField}, and {\tt display} are instantiated in the
+{\tt buildGUI()} method and referenced again in the {\tt
+actionPerformed()} method.
+
+The next element in the program is its constructor. It begins by
+creating an instance of the {\tt Greeter} computational object. It is
+important to do this first in case we need information from the
+computational object in order to build the GUI. In this case we don't
+need anything from {\tt Greeter}, but we will need such information in
+other programs.
+
+We've already discussed the fact that the constructor's role is to
+coordinate the initialization of the {\tt GreeterGUI} object. Thus, it
+invokes the {\tt buildGUI()} method, which takes care of the details
+of laying out the GUI components. And, finally, it displays itself by
+calling the {\tt pack()} and {\tt setVisible()} methods, which are inherited
+from {\tt JFrame}. The {\tt pack()} method sizes the frame according
+to the sizes and layout of the components it contains. The {\tt
+setVisible()} method is what actually causes the GUI to appear on the Java
+console.
+
+Finally, note the details of the {\tt buildGUI()} method. We have
+discussed each of the individual statements already. Here we see the
+order in which they are combined.  Note that we can declare the {\tt
+contentPane} and {\tt inputPanel} variables locally, because they are
+not used elsewhere in the class.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item There is a simple modification that we can make to {\tt GreeterGUI}. 
+The {\tt JTextField} can serve both as an input element and as a control 
+element for action events. An {\tt ActionEvent}
+is generated whenever the user presses the Return or Enter key in a
+{\tt JTextField} so that the {\tt JButton} can be removed.  Of course, it 
+will be necessary to designate the {\tt inField} as an {\tt ActionListener} 
+in order to take advantage of this
+feature.  Make the appropriate changes to the {\tt buildGUI()} and
+{\tt actionPerformed()} methods so that the {\tt inField} can function
+as both a control and input element.  Call the new class {\tt GreeterGUI2}.
+
+\end{SSTUDY}
+
+
+\subsection{Using the GUI in a Java Application}
+
+As you know, a Java application is a stand alone program, one that can
+be run on its own.  We have designed our GUI so that it can easily be
+used with a Java application. We saw in the previous section that the
+GUI has a reference to the {\tt Greeter} object, which is the
+computational object. Therefore, all we need to get the program to run
+as an application is a {\tt main()} method.
+
+One way to use the GUI in an application is simply to create an instance
+in a {\tt main()} method. The {\tt main()} method can be placed in the
+{\tt GreeterGUI} class itself or in a separate class. Here's an example
+with the main in a separate class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class GreeterApplication 
+{  public static void main(String args[]) 
+   {  
+      new GreeterGUI("Greeter");	
+   }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt main()} method creates an instance of 
+{\tt GreeterGUI}, passing it a string to use as its title.  If you
+prefer, this same {\tt main()} method can be incorporated directly
+into the {\tt GreeterGUI} class.
+
+\subsection{Using the GUI in a Java Applet}
+
+Using our GUI with a Java applet is just as easy as using it
+with an application. The only difference is that we instantiate
+{\tt GreeterGUI} in the applet's {\tt init()} method rather than
+in a {\tt main()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+
+public class GreeterApplet extends JApplet 
+{
+    public void init() 
+    {
+        new GreeterGUI("Greeter");
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When this applet is run from a browser, it will open a
+separate top-level window that is identical to the window opened by
+the application. Unlike the other applets we've seen, the GUI will not
+be embedded directly in the Web page, because it is not possible to
+add a {\tt JFrame}, which our {\tt GreeterGUI} is, to a {\tt
+JApplet}. The rule is you cannot add one top-level window to another
+top-level window.
+
+\JavaRule{Top-level Windows.}{Top-level Java windows cannot contain
+other top-level windows as components. }
+
+It is a relatively simple matter to modify {\tt GreeterGUI} so that it
+can be embedded directly in the applet window. The main change we have
+to make is to define the GUI as a subclass of {\tt JPanel} rather than
+as a subclass of {\tt JFrame}.  Figure~\ref{fig-guipanel} presents a full
+implementation of the revised class, which we name {\tt GreeterGUIPanel}.
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GreeterGUIPanel extends JPanel 
+                     implements ActionListener 
+{ private JTextArea display;
+  private JTextField inField;
+  private JButton goButton;
+  private Greeter greeter;
+	    
+  public GreeterGUIPanel() 
+  {   greeter = new Greeter();  
+      buildGUI();
+  } // GUIPanel()
+  private void buildGUI() 
+  { display = new JTextArea(10,30);
+    inField = new JTextField(10);
+    goButton = new JButton("Click here for a greeting!");
+    goButton.addActionListener(this);
+    JPanel inputPanel = new JPanel();
+    inputPanel.add(new JLabel("Input your name here: "));
+    inputPanel.add(inField);
+    inputPanel.add(goButton);
+    add("Center", display);
+    add("South", inputPanel);
+  } //buildGUI()
+  public void actionPerformed(ActionEvent e) 
+  {   if (e.getSource() == goButton) 
+      {   String name = inField.getText();
+          display.append(greeter.greet(name) + "\n");
+      } // if
+  } // actionPeformed()
+} // GreeterGUIPanel
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt GreeterGUIPanel} class.
+\label{fig-guipanel}
+\label{pg-guipanel}}
+\end{figure}
+
+The revised {\tt GreeterGUIPanel} class requires the following two
+changes:
+
+\begin{itemize}
+\item Unlike {\tt JFrame}s, {\tt JPanel}s do not have titles and does not have 
+a {\tt pack()}  method. Therefore we modify the constructor
+method to the simpler form shown here.
+
+\item Unlike {\tt JFrame}s, {\tt JPanel}s do not use a content pane. Swing
+components are added directly to the {\tt JPanel}. This simplifies the
+{\tt buildGUI()} method. 
+
+\end{itemize}
+
+Given these changes, we would then change the applet's {\tt init()} method
+to the following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+
+public class GreeterPanelApplet extends JApplet 
+{   public void init() 
+    {    getContentPane().add(new GreeterGUIPanel());
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that because a {\tt JApplet} has a content pane,
+we add the {\tt GreeterGUIPanel} to the content pane rather than
+to the applet itself.  The result would be the applet 
+shown in Figure~\ref{fig-greeterapplet}.
+
+\begin{figure}[tb]
+%%%\figaleft{chptr04/greeterapplet.eps}  
+\figaleftscaled{chptr04/greeterapplet.eps}{0.75}  
+{The Greeter applet. This version is embedded directly in the 
+Web page.
+\label{fig-greeterapplet}
+\label{pg-fig-greeterapplet}}
+\end{figure}
+
+\section{Case Study: The One Row Nim Game }
+
+In this section, we show how to develop alternative interfaces for our
+case study game of One Row Nim that was developed in the two previous
+chapters. As you recall, the One Row Nim game starts with, say, 21
+sticks on a table. Players take turns picking up 1, 2 or 3 sticks,
+and the player to pick up the last stick loses.  We wish to 
+develop an application program so that the user of the program
+can play this game against the computer, that is, against the program. 
+
+As in our other examples in this chapter, our design will divide this
+problem into two primary objects: a computational object, in this case
+{\tt OneRowNim}, and a user interface object, for which we will
+use either a {\tt KeyboardReader} or a {\tt OneRowNimGUI}. One goal of
+our design was to develop the {\tt OneRowNim} class so that it can be
+used, without changes, with either a command-line interface or a GUI.
+\marginfig{chptr04/ornuml.eps}{A UML diagram of the {\tt OneRowNim} class.
+\label{fig-ch4ornuml}}
+
+Recall that we designed the {\tt OneRowNim} class to maintain the state of
+the game and to provide methods that enforce the rules of the
+game. Thus, we know that after each legal move, the number of sticks will
+decline, until it is 0 or less, which indicates that the game is over. 
+Also, an instance of {\tt OneRowNim} keeps track of whose turn it is and 
+can determine if the game is over and who the winner is when the
+game is over.  Finally, the game ensures that players cannot cheat, either 
+by taking too few or too many sticks on one turn. 
+Figure~4.23 shows the UML diagram of the {\tt OneRowNim}
+class as described at the end of the previous chapter. 
+
+
+
+\subsection{A Command-line Interface to {\tt OneRowNim}}
+
+Let's now focus on connecting a {\tt OneRowNim} instance with a {\tt
+Key\-board\-Read\-er} instance, the command-line interface we developed at the
+beginning of this chapter. To do so requires no changes to {\tt
+KeyboardReader} (Fig.~\ref{fig-keybrdrdr}). Unlike in the greeter
+example, we will use a third object to serve as the main program. As
+shown in Figure~\ref{fig-ornapp}, the {\tt OneRowNimApp} class
+will contain the {\tt run()} method that controls the game's progress.
+{\tt OneRowNimApp} will use the {\tt KeyboardReader} object to prompt
+the user, to display the program's output, and to perform input from
+the keyboard. It will use the {\tt OneRowNim} object to keep track of
+the game.
+
+In fact, the main challenge for this part of our problem is designing
+\marginnote{Loop algorithm}
+the {\tt run()} method, which will use a loop algorithm to play the
+game. The user and the computer will repeatedly take turns picking up
+sticks until the game is over. The game is over when there are no more
+sticks to pick up. Thus, we can use the game's state---the number of
+sticks left---as our loop's entry condition.  We will repeat the loop
+while there are more than 0 sticks remaining.
+
+The following pseudocode describes the remaining details of our
+algorithm. We refer to the {\tt OneRowNim} instance as the {\tt game} object,
+and we refer to the {\tt KeyboardReader} instance as the {\tt reader}
+object. We use the notation {\tt game:get the number of sticks left} to
+indicate that we are sending a message to the {\tt game} object.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Create a game object with 21 sticks
+ Create a reader object
+ sticksLeft = game:get the number of sticks left
+ reader:display the rules of the game 
+ while (game: the game is not over)       
+     whoseMove = game: find out whose turn it is
+     if (whoseMove == user)
+         game: user chooses number of sticks to take
+     else
+         game: computer chooses number of sticks to take 
+     sticksLeft = game: get the number of sticks left
+     reader: report the number of sticks left
+ // At this point the game is over.
+ if game: the user is the winner
+        reader: report that the user wins
+ else 
+       reader: report that the computer wins
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this algorithm, the initializations we perform consist
+of creating the game and reader objects and initializing {\tt
+sticksLeft}. We use a while loop structure to control the game.  The
+loop's entry condition is that the 'the game is not over'.  This is a
+piece of information that comes directly from the game object.  As
+long as the game is not over, the body of the loop will be
+executed. Note that in the loop's body, either the player or the
+computer makes a move. Again, it is up to the game object to determine
+whose move it is.  Following the move we ask the game how many sticks
+are left and we use the reader object to report this.
+
+Note that the loop structure has the three necessary elements. The
+\marginnote{Loop structure: Initializer, entry condition, updater}
+initializer in this case is the creation of a {\tt OneRowNim}
+object. We know that this will cause the game to have 21 sticks and
+it will be the user's move. The loop-entry condition is that the
+game is not over, which is based on the fact that there are still
+sticks remaining to be picked up. But again, this knowledge is kept by
+the game object. Finally, we have an updater that consists of either
+the computer or the user picking up some sticks. This in turn changes
+the value of {\tt sticksLeft} on each iteration, moving us ever closer
+to the condition that there are no sticks left, at which point
+the game will be over. 
+
+Note that we have left out of this algorithm the details of the user's
+moves and computer's moves. These are the kinds of actions that are
+good to put into separate methods, where we can worry about checking
+whether the user made a legal move and other such details.
+
+Figure~\ref{fig-ornapp} provides the implementation of the {\tt
+OneRowNimApp} application.  It uses a {\tt KeyboardReader} as a
+command-line interface and a {\tt OneRowNim} instance as it computational
+object. Thus, it has private instance variables for each of these
+objects, which are instantiated in the constructor method.
+The algorithm we just described has been placed in the {\tt run()}
+method, which is called from {\tt main()} after the application is
+instantiated. The use of the boolean method {\tt gameOver()} to control
+the loop makes this code segment easier to understand. Also, it
+leaves it up to the game object to determine when the game is over.
+From an object-oriented design perspective, this is an appropriate
+\marginnote{Division of labor}
+division of responsibility.  If you doubt this, imagine what could go
+wrong if this determination was left up to the user interface. A
+user-interface programmer might end up, mistakenly, implementing the
+wrong rule for the game being over. A similar point applies to the
+{\tt getWinner()} method. This determination rests with the game, not
+the user interface. If left up to the user interface, it is possible
+that a programming mistake could lead to the loss of the game's
+integrity.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[31pc]
+\begin{lstlisting}
+public class OneRowNimApp 
+{ private KeyboardReader reader;
+  private OneRowNim game;
+
+  public OneRowNimApp() 
+  { reader = new KeyboardReader();
+    game = new OneRowNim(21);
+  } //OneRowNim()
+    
+  public void run() 
+  { int sticksLeft = game.getSticks();
+    reader.display("Let's play One Row Nim. You go first.\n");
+    reader.display("There are " + sticksLeft + 
+                                       " sticks left.\n");
+    reader.display("You can pick up 1, 2, or 3 at a time\n.");
+    while (game.gameOver() == false)       
+    { if (game.getPlayer() == 1)  userMove();
+      else computerMove();
+      sticksLeft = game.getSticks();
+      reader.display("There are " + sticksLeft + 
+                                      " sticks left.\n");
+    } // while
+    if (game.getWinner() == 1) 
+      reader.display("Game over. You win. Nice game.\n");
+    else  reader.display("Game over. I win. Nice game.\n");
+  } //run()
+    
+  private void userMove() 
+  { reader.prompt("Do you take 1, 2, or 3 sticks?: ");
+    int userTakes = reader.getKeyboardInteger();
+    if (game.takeSticks(userTakes)) 
+    { reader.display("You take " + userTakes + ".\n");
+    } else 
+    { reader.display("You can't take " + userTakes + 
+                                          ". Try again\n");
+    } // else
+  } //userMove()
+    
+  private void computerMove() 
+  { game.takeAway(1);  // Temporary strategy.
+    reader.display("I take 1 stick. ");
+  } //computerMove()
+    
+  public static void main(String args[]) 
+  { OneRowNimApp app = new OneRowNimApp();
+    app.run();
+  } //main()
+} // OneRowNimApp
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of {\tt OneRowNimApp}, a command-line interface
+to the {\tt OneRowNim}.
+\label{fig-ornapp}}
+\end{figure}
+
+
+The {\tt run()} method calls {\tt userMove()} and {\tt computerMove()}
+to perform the specific set of actions associated with each type of
+move.  The {\tt userMove()} method uses the {\tt KeyboardReader()} to
+prompt the user and input his or her move. It then passes the user's
+choice to {\tt game.takeSticks()}. Note how it checks the return value
+to determine whether the move was legal or not and provides an
+appropriate response through the interface.
+
+Finally, note how we use private methods to implement the actions
+associated with the user's and computer's moves. Because these private
+methods are not part of the object's interface and because they can
+only be used within the object themselves, they are in a sense
+secondary to the object's public instance methods. We sometimes refer
+to them as {\bf helper methods}.  This division of labor allows us to
+organize all of the details associated with the moves into a single
+module. The {\tt computerMove()} method uses a temporary strategy
+of taking a single stick and passes the
+number $1$ to {\tt game.takeSticks()}.  Finally, {\tt computerMove()}
+reports its choice through the interface.  After we have covered
+operators of the {\tt int} data type in the next chapter, we will be able
+to describe better strategies for the computer to make a move.
+
+This example shows how simple and straightforward it is to use our
+{\tt KeyboardReader} user interface. In fact, for this problem, our
+interface didn't require any changes. Although there might be occasions
+where we will want to extend the functionality of {\tt
+KeyboardReader}, it can be used without changes for a wide variety of
+problems in subsequent chapters.
+
+\JavaTIP{EFFECTIVE DESIGN}{Code Reuse.}{A well-designed user interface
+can be used with many computational objects.}
+
+
+\subsection{A GUI for {\tt OneRowNim}}
+
+The first task is designing a GUI for the {\tt OneRowNim} is to
+decide how to use input, output, and control components to interact
+with the user. Following the design we used in the GUI for our greeter
+application, we can use a {\tt JTextField} for the user's input and a
+{\tt JTextArea} for the game's output. Thus, we will use the {\tt
+JTextArea} to report on the progress of the game and to display any
+error messages that arise.  As in the greeter example, we can use both
+the {\tt JTextField} and {\tt JButton} as control elements and a {\tt
+JLabel} as a prompt for the input text field.  For the most part then,
+the use of GUI components will remain the same as in our previous
+example. This is as we would expect. The relationship between the user
+and the interface are pretty similar in both this and the previous
+application.
+
+In contrast, the relationship between the interface and the game are
+quite different from what we saw in the greeter application.  As in
+the previous application, the GUI will still need a reference to its
+associated computational object, in this case the game:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    private OneRowNim game;
+    ...
+    game = new OneRowNim();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The biggest difference between this GUI and the one we used 
+with the greeter application occurs in the details of the interaction
+between the GUI and the game.  These details are the responsibility of
+the {\tt actionPerformed()} method, whose actions depend on the actual
+progress of the individual game.
+
+Unlike in the command-line version, there is no need to use a loop
+construct in the {\tt actionPerformed()} method. Instead, because we
+\marginnote{Java's event loop}
+are using event-driven programming here, we will rely on Java's event
+loop to move the game from one turn to another.
+
+As in the greeter example, the {\tt actionPerformed()} method will be
+called automatically whenever the {\tt JButton} is clicked. 
+It is the responsibility
+of the GUI to ensure that it is the user's turn whenever this action
+occurs. Therefore, we design {\tt actionPerformed()} so that each time
+it is called, it first performs the user's move and then, assuming the
+game is not over and an error did not occur on the user's move, it
+performs the computer's move.  Thus, the basic algorithm is as
+follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    Let the user move.
+    If game:game is not over and computer turn
+       let the computer move.
+    Game: how many sticks are left.
+    display: report how many sticks are left
+    If game:game is over
+        Stop accepting moves.
+        Report the winner.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent After the user's move, it is possible that the user
+picked up the last stick, which means that the game would be over. In
+that case, the computer would not get a move.  Or, the user could have
+made an error. In that case it would still be the user's move. These
+possibilities have to be considered in the algorithm before the
+computer gets to move. As the pseudocode shows, it is the {\tt
+OneRowNim} object's responsibility to keep track of whether the
+game is over and whose turn it is.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class OneRowNimGUI extends JFrame implements ActionListener
+{ private JTextArea display;
+  private JTextField inField;
+  private JButton goButton;
+  private OneRowNim game;
+	    
+  public OneRowNimGUI(String title) 
+  { game = new OneRowNim(21);  
+    buildGUI();
+    setTitle(title);
+    pack();
+    setVisible(true);
+  } // OneRowNimGUI()
+  private void buildGUI() 
+  { Container contentPane = getContentPane();
+    contentPane.setLayout(new BorderLayout());
+    display = new JTextArea(20,30);
+    display.setText("Let's play Take Away. There are " + game.getSticks() + 
+      " sticks.\n" + "Pick up 1,2, or 3 at a time.\n" + "You go first.\n");
+    inField = new JTextField(10);
+    goButton = new JButton("Take Sticks");
+    goButton.addActionListener(this);
+    JPanel inputPanel = new JPanel();
+    inputPanel.add(new JLabel("How many sticks do you take: "));
+    inputPanel.add(inField);
+    inputPanel.add(goButton);
+    contentPane.add("Center", display);
+    contentPane.add("South", inputPanel);
+  } // buildGUI
+  private void userMove()
+  { int userTakes = Integer.parseInt(inField.getText());
+    if (game.takeSticks(userTakes)) 
+      display.append("You take " + userTakes + ".\n");
+    else display.append("You can't take " + userTakes + ". Try again\n");
+  }// userMove()
+  private void computerMove() 
+  { if (game.gameOver()) return;
+    if (game.getPlayer() == 2) 
+    {   game.takeSticks(1); // Temporary strategy
+      display.append("I take one stick. ");
+    } // if
+  } // computerMove()
+  private void endGame()
+  { goButton.setEnabled(false);  // Disable button and textfield
+    inField.setEnabled(false);
+    if (game.getWinner() == 1)
+      display.append("Game over. You win. Nice game.\n");
+    else  display.append("Game over. I win. Nice game.\n");
+  } // endGame()
+  public void actionPerformed(ActionEvent e) 
+  { if (e.getSource() == goButton) 
+    { userMove();
+      computerMove();
+      int sticksLeft = game.getSticks();
+      display.append("There are " + sticksLeft + " sticks left.\n");
+      if (game.gameOver()) endGame();
+    } // if
+  } // actionPerformed()
+} // OneRowNimGUI
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt OneRowNimGUI} class.
+\label{fig-orngui}}
+\end{figure}
+
+Figure~\ref{fig-orngui} shows the complete implementation of the
+{\tt OneRowNimGUI} class. In terms of its instance variables,
+constructor, and its {\tt buildGUI()} method, there are only a few
+minor differences between this GUI and the {\tt GreeterGUI}
+(Fig.~\ref{fig-simplegui}). This GUI has instance variables
+for its {\tt JTextField}, {\tt JTextArea}, and {\tt JButton}, as
+well as one for {\tt OneRowNim} instance, its computational object. It
+needs to be able to refer to these objects throughout the class. 
+Hence we give them class scope. 
+
+The constructor method plays the same role here as in the previous
+GUI: It creates an instance of the computational object, builds the
+GUI's layout, and then displays the interface on the console.
+
+All of the changes in the {\tt buildGUI()} method have to do with
+application-specific details, such as the text we use as the prompt
+and the {\tt goButton}'s label.  One new method we use here is the
+{\tt setText()} method. Unlike the {\tt append()} method, which is
+used to add text to the existing text in a {\tt JTextArea}, the {\tt
+setText()} method replaces the text in a {\tt JTextArea} or a {\tt
+JTextField}.
+
+Next let's consider the private {\tt userMove()} and {\tt
+computerMove()} methods.  Their roles are very similar to the
+corresponding methods in the command-line interface: They encapsulate
+the details involved in performing the players' moves. The primary
+difference here is that for the user move we input the user's choice
+from a {\tt JTextField} rather than from the keyboard. We use {\tt
+getText()} to retrieve the user's input from the {\tt JTextField} and
+we use {\tt Integer.parseInt()} to convert to an {\tt int} value:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int userTakes = Integer.parseInt(inField.getText());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Another difference is that we use a {\tt JTextField} to display
+the program's messages to the user.
+
+As we have noted, the main differences between this and the {\tt
+GreeterGUI} occur in the {\tt actionPerformed()} method.  Note there
+how we use {\tt OneRowNim}'s public methods, {\tt getPlayer(),
+gameOver()} and {\tt getWinner()} to control the interaction with the
+user. 
+
+One issue that differs substantially from the command-line interface is:
+How do we handle the end of the game?  Because we are using Java's
+built-in event loop, the GUI will continue to respond to user's events,
+unless we stop it from doing so. One way to do this is to disable the
+{\tt JButton} and the {\tt JTextField}. By disabling a control element,
+we render it unable to respond to events. To do this we use the
+{\tt setEnabled()} method, passing it the value {\tt false} to, in
+effect, ``turn off'' that component:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (game.gameOver()) 
+{  goButton.setEnabled(false);  // End the game
+   inField.setEnabled(false);
+   ...
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Although it doesn't apply in this situation, the {\tt setEnabled()}
+method can be used repeatedly in a GUI to turn components on and off
+as the context of the interaction dictates.
+
+This example shows how simple and straightforward it can be to build a
+GUI for just about any application. One main design issue is
+\marginnote{GUI input, output, and control}
+deciding what kinds of input, output, and control elements to use. For
+most applications, we can use {\tt JTextField}, {\tt JTextArea}, {\tt
+JLabel}, and {\tt JButton} as the GUI's basic elements.  A second
+design issue concerns the development of the {\tt actionPerformed()}
+method, which must be designed in an application-specific way.  Here
+we apply what we've learned regarding Java's event-programming model:
+We designate one or more of our elements to serve as an {\tt
+ActionListener} and we design algorithms to handle the action events
+that occur on that element.
+
+Of course, for some applications we may need two {\tt JTextField}s to
+handle input. At some point, we also might want to introduce {\tt
+JMenu}s and other advanced GUI elements. Some of these options will be
+introduced in upcoming chapters. Others will be covered in Chapter~13,
+which provides a more comprehensive view of Java's GUI capabilities.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{GUI Design}{A well-designed GUI makes appropriate
+use of input, output, and control elements.}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, File Input}
+
+\section{From the Java Library: {\tt java.io.File} \\ and File Input (Optional)}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, File Input}
+\label{pg-sec-fileclass}
+
+In addition to command-line and GUI user interfaces, there is one more
+standard user interface, files. In this section we show how the {\tt Scanner} 
+class, that was used in Chapter~2 for keyboard input, can also 
+read input from files.  Reading input from
+a file is relevant to only certain types of programming problems.  
+It is hard to imagine how a file would be used in playing the One Row Nim 
+game but a file might very well be useful to store a collection of riddles
+that could be read and displayed by a Java program.  We will develop such a 
+program later in this section.
+
+Java has two types of files, {\it text files} and {\it binary files}.  
+A {\bf text file} stores a sequence of characters and is the type of
+file created by standard text editors like {\it NotePad} and {\it WordPad}
+on a Windows computer or {\it SimpleText} on a Macintosh. A {\bf binary file}
+has a more general format that can store numbers and other data the way they are
+\marginfig{chptr04/fileuml.eps} {A UML class diagram of the {\tt File}
+ class with a partial list of public methods 
+ \label{fig-fileuml}}
+stored in the computer.  In this section we will consider only text files. Binary
+files are considered in Chapter~11.
+
+
+\subsection{File Input with the {\tt File} and {\tt Scanner} Classes} 
+
+An instance of the {\tt java.io.File} class stores information that
+a {\tt Scanner} object needs to create an input stream that is connected
+to the sequence of characters in a text file. A partial list of the
+public methods of the {\tt File} class is given in the UML class diagram 
+in Figure~4.26.  We will need to use only the {\tt File()}
+constructor in this section.  The {\tt File} instance created with the 
+statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ File theFile = new File("riddles.txt");
+\end{lstlisting}
+\end{jjjlisting}
+
+\marginfig{chptr04/scanner2uml.eps}
+{A UML class diagram of the {\tt Scanner} class with an
+expanded list of public methods
+\label{fig-scanner2uml}}
+
+\noindent will obtain and store information about the "riddles.txt" file in
+the same directory as the java code being executed, if such a file
+exists.  If no such file exists, the {\tt File} object stores
+information needed to create such a file but does not create it.  In
+Chapter~11, we will describe how other objects can use a file object
+to create a file in which to write data.  If we wish to create a {\tt
+File} object that describes a file in a directory other than the one
+containing the Java program, we must call the constructor with a
+string argument that specifies the file's complete path name---that is,
+one that lists the sequence of directories containing the file.  In
+any case, while we will not use it at this time, the {\tt exists()}
+method of a {\tt File} instance can be used to determine whether or
+not a file has been found with the specified name.
+
+In order to read data from a file with a {\tt Scanner} object we will
+need to use methods that were not discussed in Chapter~2.  An expanded
+list of methods of the {\tt Scanner} class is given in
+Figure~4.27. Note the there is a {\tt Scanner()} constructor with a
+{\tt File} object as an argument.  Unlike the other {\tt create()}
+method that was used in Chapter~2, this {\tt create()} throws an
+exception that must be handled.  The following code will create a {\tt
+Scanner} object that will be connected to an input stream that can
+read from a file:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try
+{   File theFile = new File("riddles.txt");
+    fileScan = new Scanner(theFile);
+    fileScan = fileScan.useDelimiter("\r\n");
+} catch (IOException e)
+{    e.printStackTrace();
+} //catch()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We will discuss the {\tt try-catch} commands when exceptions 
+are covered in Chapter~10.  Until then, the {\tt try-catch} structures
+can be copied exactly as above, if you wish to use a {\tt Scanner}
+object for file input.  In the code above, the {\tt useDelimiter()}
+method has been used to set the {\tt Scanner} object so that spaces
+can occur in strings that are read by the {\tt Scanner} object. For
+the definition of a class to read riddles from a file, the above code
+belongs in a constructor method.
+
+After we create a {\tt Scanner} object connected to a file, we can
+make a call to {\tt nextInt()}, {\tt nextDouble()}, or {\tt next()}
+method to read, respectively, an integer, real number, or string from
+the file.  Unlike the strategy for using a {\tt Scanner} object to get
+keyboard input, it is suggested that you test to see if there is more
+data in a file before reading it.  This can be done with the {\tt
+hasNext()}, {\tt hasNextInt()}, and {\tt hasNextDouble()} methods.
+These methods return the value {\tt true} if there are more data in the
+file.
+
+The program in Figure~\ref{fig-fileprog}
+is the complete listing of a class that reads riddles from a file
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+import java.io.*;
+import java.util.Scanner;
+public class RiddleFileReader
+{  private Scanner fileScan; // For file input
+   private Scanner kbScan;   // For keyboard input
+
+   public RiddleFileReader(String fName)
+   {   kbScan = new Scanner(System.in);
+       try
+       {   File theFile = new File(fName);
+           fileScan = new Scanner(theFile);
+           fileScan = fileScan.useDelimiter("\r\n");
+       } catch (IOException e)
+       {    e.printStackTrace();
+       } //catch()
+   } //RiddleFileReader() constructor
+   public Riddle readRiddle()
+   {   String ques = null;
+       String ans = null;
+       Riddle theRiddle = null;
+       if (fileScan.hasNext())
+           ques = fileScan.next();
+       if (fileScan.hasNext())
+       {   ans =  fileScan.next();
+           theRiddle = new Riddle(ques, ans);
+       } // if
+       return theRiddle;
+   } // readRiddle()
+   public void displayRiddle(Riddle aRiddle)
+   {   System.out.println(aRiddle.getQuestion());
+       System.out.print("Input any letter to see answer:");
+       String str = kbScan .next();  //Ignore KB input
+       System.out.println(aRiddle.getAnswer());
+       System.out.println();
+   } // displayRiddle()
+   public static void main(String[] args)
+   {   RiddleFileReader rfr =
+           new RiddleFileReader("riddles.txt");
+       Riddle riddle = rfr.readRiddle();
+       while (riddle != null)
+       {   rfr.displayRiddle(riddle);
+           riddle = rfr.readRiddle();
+       } // while
+   } //main()
+}  //RiddleFileReader class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A program which reads riddles from a file and displays them.
+\label{fig-fileprog}}
+\end{figure}
+and displays them.  Note that, in the body of the method {\tt readRiddles()},
+the statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String ques = null;
+String ans = null;
+Riddle theRiddle = null; 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent make explicit the fact that variables that refer to objects
+are assigned {\tt null} as a value when they are declared.  The statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (fileScan.hasNext())
+    ques = fileScan.next();
+if (fileScan.hasNext())
+{   ans =  fileScan.next();
+    theRiddle = new Riddle(ques, ans);
+} 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will read {\tt String}s into the variables {\tt ques} and {\tt ans}
+only if the file contains lines of data for them.  Otherwise the 
+{\tt readRiddle()} method will return a {\tt null} value.  The {\tt main()}
+method uses this fact to terminate a {\tt while} loop when it runs out
+of string data to assign to {\tt Riddle} questions and answers. There is
+a separate method,  {\tt displayRiddle()} using a separate instance of
+{\tt Scanner} attached to the keyboard to display the question 
+of a riddle before the answer. 
+
+The contents of the "riddles.txt" file should be a list of riddles
+with each question and answer on a separate line.
+For example The following three riddles  saved in a text file would form
+a good example to test the {\tt RiddleFileReader} class.
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+  What is black and white and red all over?
+  An embarrassed zebra
+  What is black and white and read all over?
+  A newspaper
+  What other word can be made with the letters of ALGORITHM?
+  LOGARITHM
+\end{lstlisting}
+\end{jjjlisting}
+
+When the {\tt main()} method is executed, the user will see output
+in the console window that looks like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  What is black and white and red all over?
+  Input any letter to see answer: X
+  An embarrassed zebra
+  
+  What is black and white and read all over?
+  Input any letter to see answer:
+\end{lstlisting}
+\end{jjjlisting}
+
+Files are covered in depth in Chapter~11. Information on writing data to a file 
+and reading data from a file without using the {\tt Scanner} class can be found in
+that chapter.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Modify the {\tt RiddleFileReader} class to create a program 
+{\tt NumberFileReader}that opens
+a file named "numbers.txt" and reports the sum of the squares of the integers 
+in the file.  Assume that the file "numbers.txt" contains a list of integers 
+in which each integer is on a separate line. The program should print the
+sum of the squares in the {\tt System.out} console window. In this case, 
+there is no need to have a method to display the data being read or
+a {\tt Scanner} object connected to the keyboard.  You will want a constructor
+method and a method that reads the numbers and computes the sum of squares.
+
+\end{SSTUDY}
+
+\secSMH{Chapter Summary}
+\secKTH{Technical Terms}
+\begin{KT}
+
+abstract class
+
+abstract interface
+
+abstract method
+
+AWT
+
+binary file
+
+buffer
+
+command-line interface
+
+container
+
+control element
+
+event-driven programming
+
+event loop 
+
+graphical user interface (GUI)
+
+helper method
+
+inheritance
+
+input operation
+
+input stream
+
+interface
+
+layout manager
+
+listener
+
+model-view-controller (MVC) architecture
+
+output operation
+
+output stream
+
+stream
+
+Swing
+
+text file
+
+top-level container
+
+user interface
+
+wrapper class
+\end{KT}
+
+\secSMHtwo{Summary of Important Points}
+
+\begin{SMBL}
+
+\vspace*{6pt}
+\item An input operation is any action that transfers data from the
+user to the computer's main memory via one of the computer's input
+devices. An output operation is any action that transfers data
+from the computer's main memory to one of the computer's output
+devices. 
+
+\vspace*{6pt}
+\item The user interface is that part of the program that handles the
+input and output interactions between the user and the program.  As an
+interface, it limits or constrains the manner in which the user can
+interact with the program.
+
+\vspace*{6pt}
+\item In a command-line interface, user input is taken from the
+keyboard, and the program's output is displayed on some kind of
+console. 
+
+\vspace*{6pt}
+\item A buffer is a portion of main memory where input is held until
+it is needed by the program. Using a buffer between the keyboard and
+the program allows you to use the Backspace key to delete a
+character. 
+
+\vspace*{6pt}
+\item A wrapper class contains methods for converting primitive
+data into objects and for converting data from one type to another.
+
+\vspace*{6pt}
+\item Designing appropriate prompts is an important aspect of
+designing a good user interface.
+
+\vspace*{6pt}
+\item I/O operations must watch out for certain types of I/O
+exceptions.
+
+\vspace*{6pt}
+\item GUI programming involves a computational model known as 
+event-driven programming, which means that GUI programs react to
+events that are generated mostly by the user's interactions with
+elements in the GUI.
+
+\vspace*{6pt}
+\item Java has two packages of GUIs, the older {\tt java.awt}
+and the newer {\tt javax.swing}. 
+
+\vspace*{6pt}
+\item Swing components are based on the object-oriented
+model-view-controller (MVC) architecture.
+
+\vspace*{6pt}
+\item The {\tt extends} keyword is used to specify subclass/superclass
+relationships in the Java class hierarchy. 
+
+\vspace*{6pt}
+\item A top-level container is a GUI container that cannot be
+added to another container; it can only have components added to it.
+All GUI programs must be contained in a top-level container.
+
+\vspace*{6pt}
+\item There are generally three kinds of GUI components, corresponding
+to the three main functions of a user interface: input, output, and
+control.
+
+\vspace*{6pt}
+\item Events are handled by special objects called listeners. A
+listener is a specialist that listens constantly for a certain type of
+event.
+
+\vspace*{6pt}
+\item An interface is a special Java class that contains only
+methods and constants (final variables).
+\end{SMBL}
+
+\pagebreak
+\secANSH
+\begin{ANS}
+%% Answer to Exercise 4.1
+\item The following modification of the {\tt GreeterApp} class
+is an implementation of the High Low Game:
+
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}%%%[basicstyle=\scriptsize]
+public class HighLowApp 
+{ private KeyboardReader reader;
+  private int secretNumber;
+
+  public HighLowApp() 
+  { reader = new KeyboardReader();
+    secretNumber = 1 + (int)(Math.random() * 100);
+  } // HighLowApp() constructor
+    
+  public void run() 
+  { int userGuess = -1;
+    reader.display("Guess my secret number between 1 and 100.");
+    while (userGuess != secretNumber)
+    {   reader.prompt("Please input your guess here > ");
+      userGuess = reader.getKeyboardInteger();
+      if (userGuess > secretNumber)
+        reader.display("Your guess was too high.");
+      if (userGuess < secretNumber)
+        reader.display("Your guess was too low.");
+    } // while
+    reader.display("Congratulations. Your guess was correct.");
+  } // run()
+     
+  public static void main(String args[]) 
+  { HighLowApp app = new HighLowApp();
+    app.run();
+  } // main()
+}// HighLowApp
+\end{lstlisting}
+\end{jjjlisting}
+
+%% Answer to Exercise 4.2
+\item The following modification of {\tt GreeterGUI} eliminates the {\tt JButton}.
+
+\begin{jjjlisting}
+\begin{lstlisting}%%%[basicstyle=\scriptsize]
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GreeterGUI2 extends JFrame 
+                         implements ActionListener 
+{ private JTextArea display;
+  private JTextField inField;
+  private Greeter greeter;
+	    
+  public GreeterGUI2(String title) 
+  {   greeter = new Greeter();  
+      buildGUI();
+      setTitle(title);
+      pack();
+      setVisible(true);
+  } // GreeterGUI2()
+  private void buildGUI() 
+  {   Container contentPane = getContentPane();
+      contentPane.setLayout(new BorderLayout());
+      display = new JTextArea(10,30);
+      inField = new JTextField(10);
+      inField.addActionListener(this);
+      JPanel inputPanel = new JPanel();
+      inputPanel.add(new 
+              JLabel("Input your name and type enter: "));
+      inputPanel.add(inField);
+      contentPane.add("Center", display);
+      contentPane.add("South", inputPanel);
+  } // buildGUI()
+  public void actionPerformed(ActionEvent e) 
+  {   if (e.getSource() == inField) 
+      {   String name = inField.getText();
+          display.append(greeter.greet(name) + "\n");
+      }
+  } // actionPerformed()
+} // GreeterGUI2
+\end{lstlisting}
+\end{jjjlisting}
+
+\pagebreak
+%% Answer to Exercise 4.3
+\item
+Java code that prints out the sum of the
+squares of a set of integers read from a file named "numbers.txt":
+
+\begin{jjjlisting}
+\begin{lstlisting}%%%[basicstyle=\scriptsize]
+import java.io.*;
+import java.util.Scanner;
+
+public class NumberFileReader
+{   private Scanner fileScan; // For file input
+   
+    public NumberFileReader(String fName)
+    {   try
+        {   File theFile = new File(fName);
+            fileScan = new Scanner(theFile);
+        } catch (IOException e)
+        {    e.printStackTrace();
+        } //catch()
+    } //NumberFileReader() 
+
+    public void readNumbers()
+    {   int num = 0;      // To store integers read
+        int sum = 0:      // To store sum of squares
+        while (fileScan.hasNextInt()) 
+        {   num = fileScan.nextInt();
+            sum = sum + num * num;
+        } // while
+        System.out.println("The sum of squares = " + sum);
+    } // readNumbers()
+
+    public static void main(String[] args)
+    {   NumberFileReader nfr =
+            new NumberFileReader("numbers.txt");
+        nfr.readNumbers()
+    } //main()
+}  //NumberFileReader 
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{ANS}
+
+\secEXRHtwo{Exercises}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+
+\begin{EXRtwo}
+
+\item  Fill in the blanks in each of the following sentences:
+
+\begin{EXRtwoLL}
+\baselineskip=13pt\item  An  \rule{40pt}{0.5pt} is a Java program that can be embedded in a Web page.
+\item  A method that lacks a body is an \rule{40pt}{0.5pt} method.
+\item  An \rule{40pt}{0.5pt} is like a class except that it contains
+only instance methods, no instance variables.
+\item  In a Java class definition a class can \rule{40pt}{0.5pt}
+a class and \rule{40pt}{0.5pt}  an interface.
+\item  Classes and methods not defined in a program must be \rule{40pt}{0.5pt}
+ from the Java class library.
+\item  A subclass of a class inherits that class's \rule{40pt}{0.5pt} instance variables and instance methods.
+\item  An object can refer to itself by using the \rule{40pt}{0.5pt} keyword.
+\item  The {\tt JButton}, {\tt JTextField}, and {\tt JComponent} classes
+are defined in the  \rule{40pt}{0.5pt} package.
+\item  Java applets utilize a form of control known as \rule{40pt}{0.5pt}  programming.
+\item  When the user clicks on an applet's {\tt JButton}, an
+  \rule{40pt}{0.5pt} will automatically be generated.
+\item  Two kinds of objects that generate {\tt ActionEvent}s are \rule{40pt}{0.5pt} and
+\rule{40pt}{0.5pt}\,.
+\item  {\tt JButton}s, {\tt JTextField}s, and
+{\tt JLabel}s are all subclasses of \rule{40pt}{0.5pt}\,.
+\item  The {\tt JApplet} class is a subclass of  \rule{40pt}{0.5pt}\,.
+\item  If an applet intends to handle {\tt ActionEvent}s, it must
+implement the \rule{40pt}{0.5pt} interface.
+\item  When an applet is started, its  \rule{40pt}{0.5pt} method is called
+automatically.
+\end{EXRtwoLL}
+
+\baselineskip=11pt\item  Explain the difference between the following pairs of
+concepts:
+
+\begin{EXRtwoLL}
+\item  {\it Class} and {\it interface}.
+\item  {\it Extending a class} and {\it instantiating an object}.
+\item  {\it Defining a method} and {\it implementing a method}.
+\item  A {\tt protected} method and a {\tt public} method.
+\item  A {\tt protected} method and a {\tt private} method.
+\item  An {\tt ActionEvent} and an {\tt ActionListener()} method.
+\end{EXRtwoLL}
+
+
+\item  Draw a hierarchy chart to represent the following situation.
+There are lots of languages in the world.  English, French, Chinese,
+and Korean are examples of natural languages.  Java, C, and C++ are
+examples of formal languages.  French and Italian are considered
+romance languages, while Greek and Latin are considered classical
+languages.
+
+\item  Arrange the Java library classes mentioned in the
+Chapter Summary into their proper hierarchy, using the
+{\tt Object} class as the root of the hierarchy.
+
+\item  Look up the documentation for the {\tt JButton} class
+on Sun's Web site:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/1.5.0/docs/api/
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent List the signatures of all its constructors.
+
+\item  Suppose we want to set the text in our applet's {\tt JTextField}.
+What method should we use and where is this method defined? ({\it Hint}:
+Look up the documentation for {\tt JTextField}. If no appropriate
+method is defined there, see if it is inherited from a superclass.)
+
+\item  Does a {\tt JApplet} have an {\tt init()} method? Explain.
+
+\item  Does a {\tt JApplet} have an {\tt add()} method? Explain.
+
+\item  Does a {\tt JButton} have an {\tt init()} method? Explain.
+
+\item  Does a {\tt JButton} have an {\tt add()} method? Explain.
+
+\item  Suppose you type the URL for a ``Hello World'' applet
+into your browser.  Describe what happens---that is, describe the
+processing that takes place in order for the applet to display ``Hello
+World'' in your browser.
+
+\item  Suppose you have an applet containing a {\tt JButton}
+named {\tt button}. Describe what happens, in terms of
+Java's event handling model, when the user clicks  the
+button.
+
+\item  Java's {\tt Object} class contains a public method, {\tt toString()},
+which returns a string that represents this object.  Because every class
+is a subclass of {\tt Object}, the {\tt toString()} method can be used
+by any object.   Show how you would invoke this method for a {\tt JButton}
+object named {\tt button}.
+
+\item  The  applet that follows contains a semantic error in
+its {\tt init()} method.  The error will cause the
+{\tt actionPerformed()} method never to display ``Clicked''
+even though the user clicks the button in the
+applet.  Why?  ({\it Hint}: Think scope!)
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class SomeApplet extends JApplet 
+                        implements ActionListener
+{
+     // Declare instance variables
+    private JButton button;
+
+    public void init()
+    {   
+       // Instantiate the instance variable
+        JButton button = new JButton("Click me");
+        add(button);
+        button.addActionListener(this);
+    } // init()
+
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == button)
+           System.out.println("Clicked");
+    } // actionPerformed()
+} // SomeApplet
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  What would be output by the following applet?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class SomeApplet extends JApplet
+{
+  // Declare instance variables
+  private JButton button;
+  private JTextField field;
+
+  public void init()
+  { 
+    // Instantiate instance variables
+    button = new JButton("Click me");
+    add(button);
+    field = new JTextField("Field me");
+    add(field);
+    System.out.println(field.getText() + button.getText());
+  } // init()
+} // SomeApplet
+}
+\end{lstlisting}
+\end{jjjlisting}
+\item  Design and implement a GUI that has a {\tt JButton}, a 
+{\tt JTextField}, and a {\tt JLabel} and then uses the {\tt
+toString()} method to display each object's string representation.
+
+\item  The {\tt JButton} class inherits a {\tt setText(String s)} 
+from its {\tt AbstractButton()} superclass. Using that method, design
+and implement a GUI that has a single button labeled initially, ``The
+Doctor is out.''  Each time the button is clicked, it should toggle
+its label to, ``The Doctor is in'' and vice versa.
+
+\item  Design and implement a GUI that contains
+two {\tt JButton}s, initially labeled, ``Me first!'' and ``Me next!''
+Each time the user clicks either button, the labels on both buttons
+should be exchanged.  ({\it Hint}: You don't need an if-else statement
+for this problem.)
+
+\item  Modify the GUI in the previous exercise so that it contains
+three {\tt JButton}s, initially labeled ``First,'' ``Second,'' and
+``Third.'' Each time the user clicks one of the buttons, the labels
+on the buttons should be rotated.  Second should get first's label,
+third should get second's, and first should get third's label.
+
+\item  Design and implement a GUI that contains a
+{\tt JTextField} and two {\tt JButton}s, initially labeled ``Left''
+and ``Right.'' Each time the user clicks a button, display its
+label in the {\tt JTextField}. A {\tt JButton()}'s label can be gotten
+with the {\tt getText()} method.
+
+\item  You can change the size of a {\tt JFrame} by using the
+{\tt setSize(int h, int v)} method, where {\it h} and {\it v} give its horizontal and vertical
+dimensions pixels.  Write a GUI application that 
+contains two {\tt JButton}s, labeled ``Big'' and ``Small.'' Whenever
+the user clicks on small, set the {\tt JFrame's} dimensions to
+200 $\times$ 100, and whenever the user clicks on big, set the dimensions
+to 300 $\times$ 200.
+
+\item  Rewrite your solution to the previous exercise
+so that it uses a single button whose label is toggled appropriately
+each time it is clicked.  Obviously, when the {\tt JButton} is
+labeled ``Big,'' clicking it should give the {\tt JFrame} its big
+dimensions.
+
+
+\item  {\bf Challenge:} Design and write a Java GUI application that allows 
+the user to change the {\tt JFrame}'s background color to one of three choices,
+indicated by buttons.  Like all other Java {\tt Component}s, {\tt JFrame}'s
+have an associated background color, which can be set by the following
+commands:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+setBackground(Color.red);
+setBackground(Color.yellow);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt setBackground()} method is defined in the
+{\tt Component} class, and 13 primary colors---{\tt black}, {\tt blue},
+{\tt cyan}, {\tt darkGray}, {\tt gray}, {\tt green}, {\tt lightGray}, 
+\mbox{\tt magenta}, {\tt orange}, {\tt pink}, {\tt red}, {\tt white}, {\tt yellow}---are 
+defined in the {\tt java.awt.Color} class.
+
+\secEXRHone{Additional Exercises}
+
+\item Given the classes with the following headers
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Animal ...
+public class DomesticAnimal extends Animal ...
+public class FarmAnimal extends DomesticAnimal...
+public class HousePet extends DomesticAnimal...
+public class Cow extends FarmAnimal ...
+public class Goat extends FarmAnimal ...
+public class DairyCow extends Cow ...
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent draw a UML class diagram representing the hierarchy
+created by these \mbox{declarations.}
+
+\item Given the preceding hierarchy of classes, which of the following
+are legal assignment statements?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+DairyCow dc = new FarmAnimal();
+FarmAnimal fa = new Goat();
+Cow c1 = new DomesticAnimal();
+Cow c2 = new DairyCow();
+DomesticAnimal dom = new HousePet();
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRtwo}
+%\end{enumerate}
+%
+% LocalWords:  PreTeX PreProcessor applet
+
+
+
+
+
+
+
+
+
+
+
+
+
+

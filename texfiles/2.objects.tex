@@ -1,0 +1,2638 @@
+%%%  Chapter 2: Objects: Using, Creating, and Defining
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{1}
+\chapter{Objects: Using, Creating, and Defining}
+\label{chapter-objects}
+\label{pg-chapter-objects}
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+\begin{COBL}
+\item Be familiar with using variables to store and manipulate simple data.
+\item Be familiar with creating and using objects.
+\item Understand the relationship between classes and objects.
+\item Understand the difference between objects and data of primitive type.
+\item Understand the difference between static and and instance 
+elements of a class.
+\item Be able to understand and design a simple class in Java.
+\item Understand some of the basic principles of object-oriented programming.
+
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item Using {\tt String} Objects
+\item Drawing Shapes with the {\tt Graphics} Object (Optional)
+\item Class Definition
+\item Case Study: Simulating a Two-Person Game
+\item {From the Java Library: {\tt java.util.Scanner}}
+\item[]{{\color{cyan}Special Topic:} Alan Kay and the Smalltalk Language}
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+\noindent This chapter introduces some more of the basic principles of
+object-oriented programming\index{object-oriented metaphor}.  We begin
+by looking at some examples of creating and using objects of 
+type {\tt String} and {\tt Graphics}.
+Then, we examine how user defined classes are used by doing a detailed
+walk-through of the {\tt Riddle} class we saw in Chapter~1.
+We focus on the basic Java language elements involved.  By the end of 
+these sections,
+you should know how to identify the key elements that make up a Java program.
+
+We then present a detailed example of the programming development
+process by designing a class that models a certain two person game
+and implements the class.
+The design is represented using UML notation.
+
+\section{Using {\tt String} Objects}
+
+\noindent As we know, a Java program is a collection of interacting
+objects, where each object is a module that encapsulates a portion of
+the program's attributes and actions. Objects belong to classes, which
+serve as templates or blueprints for creating objects. Think again of
+the cookie cutter analogy. A class is like a cookie cutter. Just as a
+cookie cutter is used to shape and create individual cookies, a class
+definition is used to shape and create individual objects.
+
+Programming in Java is primarily a matter of designing and defining
+class definitions, which are then used to construct objects. The
+objects perform the program's desired actions. To push the cookie
+cutter analogy a little further, designing and defining a class is
+like building the cookie cutter.  Obviously, very few of us would bake
+cookies if we first had to design and build the cookie cutters. We'd
+be better off using a pre-built cookie cutter. By the same token,
+rather than designing our own classes, it will be easier to get into
+``baking'' programs if we begin by using some predefined Java classes.
+
+The Java library contains many pre-defined classes that we will use in
+our programs. So let's begin our study of programming by using two of
+these classes, the {\tt String} and {\tt Graphics} classes.
+
+\subsection{Creating and Combining Strings}
+
+Strings are very useful objects in Java and in all computer programs.
+%%\marginfig{chptr02/strclass.eps}{The {\tt String} class.
+\marginfig{chptr02/stringuml.eps}{A partial representation of the 
+{\tt String} class.
+\label{fig-strclass}
+\label{pg-fig-strclass}}
+They are used for inputting and outputting all types of
+data. Therefore, it essential that we learn how to create and use
+String objects.
+
+Figure~2.1 provides an overview of a very small part of Java's {\tt
+String} class. In addition to the two {\tt String()} constructor
+methods, which are used to create strings, it lists several useful
+instance methods that can be used to manipulate strings. The {\tt
+String} class also has two instance variables. One stores the {\tt
+String}'s {\it value}, which is a string of characters such as
+``Hello98'', and the other stores the {\tt String}'s {\it count},
+which is the number of characters in its string value.
+
+Recall from Chapter~0 that in order to get things done in a program we
+send messages to objects. The messages must correspond to the object's
+instance methods. Sending a message to an object is a matter of
+calling one of its instance methods.  In effect, we use an object's
+methods to get the object to perform certain actions for us. For
+example, if we have a {\tt String}, named {\tt str} and we want to
+find out how many characters it contains, we can call its {\tt
+length()} method, using the expression {\tt str.length()}. If we
+want to print {\tt str}'s length, we can embed this expression in
+a print statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(str.length()); // Print str's length
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In general, to use an object's instance method, we refer 
+\marginnote{Dot notation}
+to the method in dot notation by first naming the object and then the
+method:
+
+\begin{extract}
+{\it objectName.methodName()} ;
+\end{extract}
+
+\noindent The {\it objectName} refers to a particular object,
+and the {\tt methodName()} refers to one of its instance methods.
+
+As this example makes clear, instance methods belong to objects, and
+in order to use a method, you must first have an object that has that
+method. So, to use one of the {\tt String} methods in a program, we must
+first create a {\tt String} object. 
+
+To create a {\tt String} object in a program, we first declare a {\tt
+String} variable.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String str; // Declare a String variable named str
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We then create a {\tt String} object by using
+\marginfig{chptr02/hello.eps}{A {\tt String}
+object stores a sequence of characters and
+a {\tt count} giving the number of characters.
+\label{fig-str1}
+\label{pg-fig-str1}}
+the {\tt new} keyword in conjunction with one of the {\tt String()}
+constructors. We assign the new object to the variable we declared:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+str = new String("Hello");// Create a String object
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This example will create a {\tt String} that
+contains, as its value, the word "Hello" that is passed in by the
+constructor.  The {\tt String} object that this creates is shown in
+%% Figure~\ref{fig-str1}.
+Figure~2.2.
+
+
+We can also use a constructor with an empty parameter list.
+Note that in this case we combine the {\it variable declaration}
+and the {\it object creation} into one statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String str2 = new String(); // Create a String
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This example will create a {\tt String} object
+that contains the empty string as its value.  The {\bf empty string}
+has the literal value "" -- that is, a pair of double quotes that
+contain no characters. Because the empty string has no characters,
+the {\tt count} variable stores a zero (Fig.~2.3).
+\marginfig{chptr02/emptystr.eps}{The empty string has a value of "" and a 
+%% its length is 0 (Fig.~\ref{fig-emptystr}).
+its length is 0.
+\label{fig-emptystr}
+\label{pg-fig-emptystr}}
+
+Note that we use a constructor to assign an initial value to a
+variable of type {\tt String} (or of a type equal to any other
+class). This differs from how we assign an initial value to variables
+of primitive type, for which we use a simple assignment operator.
+This difference is related to an important difference in the way Java
+treats these two types of variables.  Variables of primitive type are
+names for memory locations where values of primitive type are stored.
+As soon as they are declared they are assigned a {\bf default value}
+of that primitive type.  The default value for {\tt int} is $0$ and
+the default value for {\tt boolean} is {\tt false}.  On the other
+hand, variables that are declared to be of a type equal to a class
+name are designed to store a {\bf reference} to an object of that
+type. (A reference is also called a {\bf pointer} because it points to
+the memory address where the object itself is stored.) A constructor
+creates an object somewhere in memory and supplies a reference to it
+that is stored in the variable.  For that reason, variables that are
+declared as a type equal to a class name are said to be variables of
+reference type or {\bf reference variables}.  Reference variables have
+a special default value called {\tt null} after they are declared and
+before they are assigned a reference.  It is possible to check whether
+or not a reference variable contains a reference to an actual object
+by checking whether or not it contains this {\bf null pointer}.
+
+Once you have constructed a {\tt String} object, you can use any of
+%%%the methods shown in Figure~\ref{fig-strclass} on it. As we already
+the methods shown in Figure~2.1 on it. As we already
+saw, we use dot notation to call one of the methods. Thus, we first
+mention the name of the object followed by a period (dot), followed by
+the name of the method. For example, the following statements print
+the lengths of our two strings:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(str.length());
+System.out.println(str2.length());
+\end{lstlisting}
+\end{jjjlisting}
+
+Another useful {\tt String} method is the {\tt concat(String)} method,
+which can be used to {\it concatenate} two strings. This method takes
+a {\tt String} argument. It returns a {\tt String} that combines the
+{\tt String} argument to the {\tt String} that the method is called on.
+Consider this example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = new String("George ");
+String s2 = new String("Washington");
+System.out.println(s1.concat(s2));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the {\tt concat()} method adds 
+the {\tt String} {\it s2} to the end of the {\tt String} {\it s1}. The
+result, which gets printed, will be the {\tt String} "George
+Washington".
+
+Because strings are so important, Java allows a number of
+shortcuts to be used when creating and concatenating strings.
+For example, you don't have to use {\tt new String()} when
+creating a new string object. The following code will also work:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = "George ";
+String s2 = "Washington";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, an easier way to concatenate two {\tt String}
+objects is to use the plus sign (+), which serves as a {\em concatenation
+operator} in Java:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(s1 + s2);
+\end{lstlisting}
+\end{jjjlisting}
+
+Another useful {\tt String} method is the {\tt equals()}
+method. This is a {\tt boolean} method, which is used to compare two
+{\tt String}s. If both {\tt String}s have the same characters, in the
+same order, it will return true. Otherwise it will return false. For
+example, consider the following code segment:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1 = "Hello";
+String s2 = "Hello";
+String s3 = "hello";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the expression {\tt s1.equals(s2)} will be
+true, but {\tt s1.equals(s3)} will be false. 
+
+It is important to note that the empty string is not the same as a
+{\tt String} variable that contains {\tt null}. 
+Executing the statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s1;
+String s2 = "";
+System.out.println(s1.equals(s2));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will not only not print out {\tt true}; it will cause the
+the program to terminate abnormally.  It is an error to use the
+method of a {\tt String} variable, or any other variable whose type is a class,
+before it has been assigned an object.  
+When the above code is executed, it will report a 
+{\bf null pointer exception}, one of the most common runtime errors.
+When you see that error message, it means that some  method was executed 
+on a variable that does not refer to an object.  On the other hand, the
+empty string is a perfectly good {\tt String} object which just happens 
+to contain zero characters.
+
+Figure~\ref{fig-sillystr} shows a program that uses string
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class StringPuns 
+{
+  public static void main(String args[]) 
+  { String s = new String("string");
+    String s1 = s.concat(" puns.");
+    System.out.println("Here are the top 5 " + s1);
+    String s2 = "5. Hey baby, wanna ";
+    String s3 = s + " along with me.";
+    System.out.println(s2 + s3);
+    System.out.println("4. I've got the world on a " + 
+                                                 s + ".");
+    String s4 = new String("two");
+    String s5 = ". You have more class than a ";
+    System.out.print(s4.length());
+    System.out.println(s5 + s + " of pearls.");
+    System.out.print("2. It is ");
+    System.out.print(s.equals("string"));
+    System.out.println(" that I am no " + s + " bean.");
+    String s6 = " quintet.";
+    System.out.println("1. These puns form a " + s + s6);        
+  } // main()
+} //  StringPuns class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A program that prints silly string puns. 
+\label{fig-sillystr}
+\label{pg-fig-sillystr}}
+\end{figure}
+concatenation to create some silly sentences.  The programs declares a
+number of string variables, named {\tt s}, {\tt s1}, and so on, and
+it instantiates a {\tt String} object for each variable to refer to.
+It then prints out a top-five list using the concatenation operator to
+combine strings. Can you figure out what it prints without running it?
+
+
+%%%\clearpage
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item
+What is the output to the console window when the following
+Java code fragment is executed:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String s = "ing";
+System.out.println("The s" + s + s + " k" + s + ".");
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+
+\section{Drawing Shapes with a {\tt Graphics} Object (Optional)}
+
+All of the instance methods of the {\tt String} class that we examined
+return values. The {\tt length()} method return an {\tt int} value,
+and the {\tt concat()} method returned a {\tt String}.  It is also
+very common for classes to define instance methods that perform
+actions but do not return a value. The {\tt Graphics} object, {\tt g},
+that appears in Chapter~1's {\tt HelloWorldApplet} is one
+example. The program is reproduced in Figure~\ref{fig-helloworld2}
+%% proglist ch1/helloapplet/HelloWorld.java
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+  /*
+   * HelloWorldApplet program
+   */
+import java.applet.Applet;    // Import the Applet class
+import java.awt.Graphics;     //  and the Graphics class
+
+public class HelloWorldApplet extends Applet //Class header
+{                                 // Start of body
+   public void paint(Graphics g)  // The paint method
+   {
+     g.drawString("Hello World",10,10);
+   }  // End of paint
+}  // End of HelloWorld
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{{\tt HelloWorldApplet} program.
+\label{fig-helloworld2}
+\label{pg-fig-helloworld2}}
+\end{figure}
+
+At this point we will not worry about the language features that
+enable the {\tt paint()} method to draw on the applet window when the
+applet is executed by a Web browser.  We will focus instead on the
+information needed to make good use of the {\tt g.drawString()}
+method.  The first thing you should know is that, when the {\tt
+paint()} method is executed, its parameter, {\tt g}, refers to an
+instance of the {\tt Graphics} class. Unlike our other examples
+involving variables that refer to objects, in this case there is no need to use a
+constructor to create an object of type {\tt Graphics}. We can assume
+{\tt g} already refers to such an object.
+
+We already know that the statement
+
+\begin{jjjlisting}
+\begin{lstlisting} 
+g.drawString("Hello World",10,10);   
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent displays the {\tt String} ``Hello World'' in the applet window.  More
+generally, if {\tt str} is a literal {\tt String} value or a reference
+to a {\tt String} object and {\tt x} and {\tt y} are literal {\tt int}
+values or {\tt int} variables then
+
+\begin{jjjlisting}
+\begin{lstlisting}  
+g.drawString(str,x,y) 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent displays the {\tt String str} from left to right in the applet window
+beginning at a point which is {\tt x} pixels from the left edge of the
+window and {\tt y} pixels down from the top edge of the window. In an
+applet window, the point with coordinates (0,0) is at the top-left
+corner. The horizontal axis grows positively from left to right. The
+vertical axis grows positively from top to bottom (Fig.~2.6). 
+\marginfig{chptr02/drawxy.eps}{Coordinate system of a Java window.
+\label{fig-drawxy}
+\label{pg-fig-drawxy}}
+(A {\em pixel} is a dot on the console window that can be set to a
+certain color.)  Notice that increasing the value of {\tt y} will
+cause {\tt str} to be displayed lower. This is the opposite of the
+usual $x$ and $y$ coordinate system used in mathematics where
+increasing the $y$ value designates a higher point.  
+
+With this information about {\tt g.drawString()}, we can calculate
+where to display any message in the applet window.  For example, if we
+wish to display the message ``Welcome to Java'' 25 pixels below where
+``Hello World'' is displayed we could use the statements
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.drawString("Hello World",10,10);
+g.drawString("Welcome to Java",10,35);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent in the body of {\tt HelloWorldApplet}'s {\tt paint()} method.  
+The result of these statements would appear as shown in
+Figure~\ref{fig-drawstr}.
+
+\begin{figure}[h]
+\figascaled{chptr02/drawstr.eps}{0.75}{``Hello World'' is drawn
+%%\figaleft{chptr02/drawstr.eps}{``Hello World'' is drawn
+at coordinate (10, 10) and ``Welcome to Java'' at
+(10, 35) on the applet window.
+\label{fig-drawstr}
+\label{pg-fig-drawstr}}
+\end{figure}
+
+\subsection{Graphics Drawing Methods}
+
+The {\tt Graphics} class discussed in the previous section also has
+methods that can be used to draw geometric shapes in different
+colors. These methods can be used to create graphical user interfaces
+that are more interesting or to give a visual representation of data,
+such as a pie chart or a bar graph.
+
+There are two {\tt Graphics} methods for drawing rectangles, 
+{\tt fillRect()} and {\tt drawRect()} (Fig.~2.8). The
+first draws a rectangle and fills it with the current drawing color
+and the second just draws the outline of the rectangle.  Using the
+{\tt Graphics} object, {\tt g}, each of these is called in the same
+way as the {\tt drawString()} method from the previous example.  
+Each of these methods takes four {\tt int} arguments, which specify 
+\marginfig{chptr02/graphics.eps}{Some of the drawing methods in
+the {\tt Graphics} class.
+\label{fig-graphics}
+\label{pg-fig-graphics}}
+the rectangle's location and size. Thus, a call to {\tt fillRect()}
+would take the form
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.fillRect(x,y,width,height);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent where {\tt x} and {\tt y} arguments specify the location of 
+the upper left corner of the rectangle as being {\tt x} pixels from
+the left edge of the window and {\tt y} pixels down from the top edge
+of the window. The {\tt width} and {\tt height} arguments specify the
+width and height of the rectangle in pixels.  The {\tt drawRect()}
+method also takes the same four arguments. 
+
+A {\tt Graphics} object stores a single color for use in drawing
+shapes or displaying strings with {\tt drawString()}.  If we wish to
+draw an interesting scene in the applet window, we need to understand
+how to use colors.
+
+For a given {\tt Graphics} object, such as {\tt g}, the {\tt
+setColor()} method will set its color for all subsequent drawing
+commands.  The {\tt setColor()} method takes, as an argument, an
+object of type {\tt Color}.  All we need to know about the {\tt Color}
+class is that it is contained in the {\tt java.awt} package and that
+it contains 13 constant {\tt Color} objects corresponding to 13 common
+colors.  Table~\ref{table-colors} lists the 13 {\tt Color}
+constants. Each name corresponds to the color it will represent in the
+program.
+
+\begin{center}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|} \hline
+  Color.black & Color.green  & Color.red \\
+  Color.blue & Color.lightGreen  & Color.white \\
+  Color.cyan & Color.magenta  & Color.yellow \\
+  Color.darkGray & Color.orange  &  \\
+  Color.gray & Color.pink  &  \\ \hline
+\end{tabular}
+\caption{Predefined color constants in the {\tt Color} class.}
+\label{table-colors}
+\end{table}
+\end{center}
+
+To demonstrate how the new {\tt Graphics} methods can be used for
+creating more interesting applets, let's develop a plan for displaying
+the two messages, ``Hello World'' and ``Welcome to Java'', on an
+applet, but this time we will draw the first inside a colored
+rectangle and the second inside a colored oval. For the rectangle,
+let's use the {\tt drawRect()} method to create its border.  We can
+choose some arbitrary colors, say, cyan for filling the rectangle,
+blue for its border, and black for the string itself. In order to have the
+message visible we should fill a rectangle with the color cyan first,
+then draw the border of the rectangle in blue and, finally, display
+the message in black.
+
+Drawing and filling a {\tt Graphics} oval is very similar to drawing
+and filling a rectangle. Notice in Figure~2.8 that the
+{\tt fillOval()} and {\tt drawOval()} methods take the same four
+arguments as the corresponding rectangle methods.  An oval is
+inscribed within an enclosing rectangle. The {\tt x} and {\tt y}
+arguments give the coordinates of the enclosing rectangle's top left
+point. And the {\tt width} and {\tt height} arguments give the
+enclosing rectangles dimensions.
+
+All that remains is to choose the location and dimensions of the
+rectangles.  We could specify one rectangle as having its upper left
+corner 25 pixels to the right of the left edge of the applet window
+and 25 pixels down from the top edge.  A medium sized rectangle could
+have a width of 140 pixels and a height of 40 pixels.  The statement
+\begin{jjjlisting}
+\begin{lstlisting}
+g.fillRect(25, 25, 140, 40);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will fill this rectangle with whatever color happens to
+be {\tt g}'s current color.  A location 25 pixels to the right of the
+left edge of the rectangle and 25 pixels down from the top 
+edge of the rectangle would have coordinates \mbox{\tt x = 50} and
+\mbox{\tt y = 50}.  Thus, the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.drawString("Hello World", 50, 50);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will display ``Hello World'' inside the rectangle. We can
+use similar planning to locate the oval and its enclosed message.
+
+Thus, we now have sufficient information to finish the {\tt paint()}
+method for accomplishing our plan.  The completed program is displayed
+in Figure~\ref{fig-hw2appletclass}. Note how we repeatedly use the {\tt
+\begin{figure}[!htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import java.applet.*;
+
+public class HelloWorldGraphic  extends Applet 
+{ public void paint(Graphics g) 
+  { g.setColor(Color.cyan);      // Set color
+    g.fillRect(25, 25, 140, 40); // Fill rectangle
+    g.setColor(Color.blue);      // Set color
+    g.drawRect(25, 25, 140, 40); // Outline rectangle
+    g.setColor(Color.black);     // Set color
+    g.drawString("Hello World", 50, 50); // Display string
+    g.setColor(Color.yellow);          
+    g.fillOval(25, 75, 140, 40); // Fill oval
+    g.setColor(Color.red);
+    g.drawOval(25, 75, 140, 40); // Outline oval
+    g.setColor(Color.black);
+    g.drawString("Welcome to Java", 50, 100);
+  }//paint()
+} //HelloWorldGraphic
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Hello\-World\-Graphic} class is an
+applet that shows how to use color and drawing methods.
+\label{fig-hw2appletclass}
+\label{pg-fig-hw2appletclass}}
+\end{figure}
+g.setColor()} method to change {\tt g}'s current color before drawing
+each element of our picture. 
+
+Figure~\ref{fig-drawrect} shows what this applet looks like when run
+in a browser.  To experiment with this applet, download its sourcecode
+and its corresponding HTML file from the book's Web site and compile
+and run it on your computer. If you've forgotten how to run an applet,
+review Section~\ref{sec-applet}. Additional drawing capabilities will
+be explored throughout the text in sections that can either be covered
+or skipped.
+
+\begin{figure}[!bht]
+\figaleftscaled{chptr02/drawrect.eps}{0.8}{This is how the {\tt HelloWorldGraphic}
+%%\figa{chptr02/drawrect.eps}{This is how the {\tt HelloWorldGraphic}
+applet will look when run in a browser.
+\label{fig-drawrect}
+\label{pg-fig-drawrect}}
+\end{figure}
+
+\section{Class Definition}
+\label{sec-classdef}
+\label{pg-sec-classdef}
+\noindent To program in Java the main thing you do is write class definitions
+\marginnote{The class as template}
+for the various objects that will make up the program.  A class
+definition {\it encapsulates} its objects' data and behavior.  Once a
+class has been defined, it serves as a {\it template}, or blueprint,
+for creating individual {\it objects} or instances of the class.
+
+A class definition contains two types of elements: variables and
+methods.  {\it Variables} are used to store the
+%\begin{marginalnote}\it Variables and methods\end{marginalnote}
+\marginnote{Variables and methods}
+object's information.  {\it Methods} are used to process the
+information.  To design an object you need to answer five basic
+questions:
+
+\begin{minipage}[t]{26pc}
+\begin{NL}
+\item  What role will the object perform in the program?
+\item  What data or information will it need?
+\item  What actions will it take?
+\item  What interface will it present to other objects?
+\item  What information will it hide from other objects?
+\end{NL}
+\end{minipage}
+
+\marginfig{chptr02/riddle.eps}{The {\tt Riddle} class.
+\label{fig-riddle}
+\label{pg-fig-riddle}}
+\subsection{The {\tt Riddle} Class}
+
+\noindent Recall our definition of the {\tt Riddle} class from
+Chapter~1, which is summarized in the UML diagram in Figure~2.11. A
+{\tt Riddle} has two attributes, {\tt question} and {\tt answer}. Each
+of these variables stores a string of characters, which Java treats as
+data of type {\tt String}.  The {\tt Riddle} class contains three
+methods.  The {\tt Riddle()} constructor method assigns initial values
+({\tt q} and {\tt a}) to its {\tt question} and {\tt answer}
+variables.  The {\tt getQuestion()} and {\tt getAnswer()} methods
+return the data stored in {\tt question} ands {\tt answer}
+respectively.
+
+The instance variables {\tt question} and {\tt answer} are designated
+as {\tt private} ($-$), but the {\tt Riddle()}, {\tt getQuestion()}
+and {\tt getAnswer()} methods are designated as {\tt public}
+($+$). These designations follow two important object-oriented design
+conventions, whose justification will become apparent as we
+discuss the {\tt Riddle} class: 
+
+\JavaTIP{EFFECTIVE DESIGN}{Private Variables.}{Instance variables are
+usually declared {\tt private} so that they cannot be directly
+accessed by other \mbox{objects.}}
+
+%%\marginnote{Instance variables}
+%%\marginnote{Private vs.  public access}
+
+\JavaTIP{EFFECTIVE DESIGN}{Public Methods.}{An object's {\tt public}
+methods can be used by other objects to interact with the object.  The
+{\tt public} methods and variables of an object make up its {\bf
+interface}.}
+
+Figure~\ref{fig-riddleclass2} shows the Java class definition that
+corresponds to the design given in the UML diagram.  It contains the
+%%%REW Riddle class copied from chapter 1
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Riddle
+{ private String question; //Instance variables
+  private String answer;
+
+  public Riddle(String q, String a) // Constructor
+  { question = q;
+    answer = a;
+  } // Riddle constructor
+
+  public String getQuestion() // Instance method
+  { return question;
+  } // getQuestion()
+
+  public String getAnswer() // Instance method
+  { return answer;
+  } //getAnswer()
+} //Riddle class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt Riddle} class.
+\label{fig-riddleclass2}
+\label{pg-fig-riddleclass2}}
+\end{figure}
+two {\tt private} instance variables and defines the three {\tt
+public} methods listed in the UML diagram. In a Java class definition,
+access to a class element, such as a variable or a method, is
+controlled by labeling it with either the {\tt private}, or {\tt
+public} access modifier. An {\bf access modifier} is a declaration
+\marginnote{Access modifier}
+that controls access to a class or one of its elements.  Note also
+that the {\tt Riddle} class itself is declared {\tt public}.  This
+lets other classes have access to the class and to its public
+variables and methods.
+
+
+Recall that a class is like a blueprint or a cookie cutter. The {\tt
+Riddle} class defines the type of information (attributes) that each
+individual {\tt Riddle} has, but it doesn't contain any actual values.
+It defines the methods (operations) that each {\tt Riddle} can
+perform, but it doesn't actually perform the methods.  In short, a
+class serves as a template, providing a detailed blueprint of the
+\marginnote{Class as blueprint}
+objects (or instances) of that class.
+
+\subsection{The {\tt RiddleUser} Class}
+
+\noindent Now that we have defined the {\tt Riddle} class, we can
+test that it works correctly by creating {\tt Riddle} objects
+and ``asking'' them to tell us their riddles.  To do this we need
+to define a {\tt main()} method, which can be defined either within
+the {\tt Riddle} class itself or in a second class named something
+like {\tt RiddleUser}.  
+
+One advantage of using a second class is that it gets us in the
+\marginnote{User interface}
+habit of thinking about the need for a separate class to serve as a
+user interface, with a separate set of tasks from the {\tt Riddle}
+class. A {\bf user interface} is an object or class that handles the
+interaction between a program's user and the rest of the program's
+computational tasks. This concept is illustrated in Figure~2.13. Note
+that we use the general term {\it computational object} to distinguish
+the rest of the program's computations from the user interface.
+Obviously, the exact nature of the computation will vary from program
+to program, just as will the details of the user interface.  The
+computation done by our {\tt Riddle} class is just the storing and
+displaying of a riddle's question and answer.
+\marginfig{chptr02/ui.eps}{The user interfaces handles interaction
+between the user and the rest of the program.
+\label{fig-userint}
+\label{pg-fig-userint}}
+
+By separating user interface tasks from riddle tasks this design
+employs the divide-and-conquer principle: the {\tt RiddleUser} class
+will create {\tt Riddle} objects and handle interactions with the
+user, and the {\tt Riddle} class will handle the storing and
+transmission of riddle information.  Thus, as shown in
+Figure~\ref{fig-p63f2}, this particular Java program will involve
+interaction between two types of objects: a {\tt RiddleUser} and one
+%\begin{figure}
+\begin{figure}[h!]
+\figaleft{chptr02/riddleuser.eps}{This UML class diagram represents an {\em association}
+%%\figa{chptr02/riddleuser.eps}{This UML class diagram represents an {\em association}
+between the {\tt RiddleUser} and {\tt Riddle} classes.  The {\tt
+Riddle\-User} class will {\em use} one or more objects of the {\tt
+Riddle} class.
+\label{fig-p63f2}
+\label{pg-fig-p63f2}}
+\end{figure}
+%\end{figure}
+or more {\tt Riddles}. Note that we characterize the relationship
+between {\tt Riddle} and {\tt RiddleUser} with a one-way arrow labeled
+``Uses.''  This is because the {\tt RiddleUser} will create an
+instance of {\tt Riddle} and use its methods to display (for the user)
+a riddle.
+
+Because almost all of our programs will involve some form of a user
+interface, we can generalize this design approach and follow it
+throughout the book. One way to think about this approach is as a
+division of labor between a user interface class and a second {\em
+computational} class, which performs whatever computations are needed
+by the particular program. In this case the computations are the simple
+{\tt Riddle} methods that we have defined. In subsequent programs the
+computations will become more complex, which will make all the more
+clear that they should be separated from the user interface.
+ 
+
+\subsection{Object Instantiation: Creating {\tt Riddle} Instances}
+
+\noindent Figure~\ref{fig-riddleuser} shows the complete definition of the
+{\tt RiddleUser} class, which serves as a very simple user
+interface. It creates two {\tt Riddle} objects, named {\tt riddle1}
+and {\tt riddle2}. It then asks each object to request each riddle's
+question and answer and displays them on the console.
+
+\begin{figure}[bh]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class RiddleUser
+{
+  public static void main(String argv[])
+  { Riddle riddle1 = new Riddle(
+      "What is black and white and red all over?",
+      "An embarrassed zebra.");
+    Riddle riddle2 = new Riddle(
+      "What is black and white and read all over?",
+      "A newspaper.");
+    System.out.println("Here are two riddles:");
+    System.out.println(riddle1.getQuestion());
+    System.out.println(riddle2.getQuestion());
+    System.out.println("The answer to the first riddle is:");
+    System.out.println(riddle1.getAnswer());
+    System.out.println("The answer to the second is:");
+    System.out.println(riddle2.getAnswer());
+  } // main()
+} // RiddleUser
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt RiddleUser} class.
+\label{fig-riddleuser}
+\label{pg-fig-riddleuser}}
+\end{figure}
+
+\noindent Let's now discuss the statements that make up {\tt RiddleUser}'s 
+{\tt main()} method.  The following statements use the {\tt Riddle()}
+constructor to create, or {\it instantiate}, two instances of the {\tt
+Riddle} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Riddle riddle1 = new Riddle(
+     "What is black and white and red all over?",
+     "An embarrassed zebra.");
+Riddle riddle2 = new Riddle(
+    "What is black and white and read all over?",
+     "A newspaper.");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how the constructor gives each object a pair
+of {\tt String}s that serve as the values of their two instance
+variables. Each object has its own {\tt question} and its own {\tt
+answer}, and each object has its own unique name, {\tt riddle1} and
+{\tt riddle2}.
+
+\subsection{Interacting with {\tt Riddle}s }
+\noindent Once we have created {\tt Riddle} instances with values
+assigned to their {\tt question} and {\tt answer} instance variables,
+we can ask each riddle to tell us either of its values.  The following
+expression is an example of a {\it method call}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+riddle1.getQuestion()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Calling (or invoking) a method is a means of executing its code.  
+\marginnote{Method call}
+The above method call just gets the {\tt String} value that is stored
+in the {\tt question} instance variable of {\tt riddle1}.
+
+\JavaTIP{PROGRAMMING TIP}{Method Call versus Method Definition.} {Don't
+confuse method calls with method definitions.  The definition specifies
+the method's actions.  The method call takes those actions.}
+
+\noindent If we want to display the value of {\tt riddle1}'s {\tt question}, 
+we can embed this method call within a {\tt println()} statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(riddle1.getQuestion());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This tells the {\tt System.out} object to execute its
+{\tt println()} method, which displays the string given to it by {\tt riddle1}
+on the console. Thus, the output produced by this statement will be
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    What is black and white and red all over?
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Define, Create, Use}
+\label{sect-mantra}
+\noindent As our Riddle example illustrates, writing a Java program is a 
+matter of three basic steps:
+
+\begin{BL}
+\item  Define one or more classes (class definition).
+\item  Create objects as instances of the classes (object instantiation).
+\item  Use the objects to do tasks (object use).
+\end{BL}
+
+\noindent The Java class definition determines what
+information will be stored in each object and what methods each object
+can perform.  Instantiation creates an instance and associates a name
+with it in the program.  The object's methods can then be called as a
+way of getting the object to perform certain tasks.
+
+\pagebreak
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item
+Identify the following elements in the {\tt Riddle} class
+(Fig.~\ref{fig-riddleclass2}):
+
+%%%RAM\begin{EXRBL}
+\begin{itemize}
+\item  The name of the class.
+\item  The names of two instance variables.
+\item  The names of three methods.
+\end{itemize}
+%%%RAM\end{EXRBL}
+
+
+\item
+Identify the following elements in the {\tt RiddleUser} class
+(Fig.~\ref{fig-riddleuser}):
+
+%%%RAM\begin{EXRBL}
+\begin{itemize}
+\item  The names of two {\tt Riddle} instances.
+\item  All six method calls of the {\tt Riddle} objects in the program.
+\item  Two examples of qualified names.
+\end{itemize}
+%%%RAM\end{EXRBL}
+
+\end{SSTUDY}
+
+
+\section{CASE STUDY: Simulating a Two-Person Game}
+\noindent In this section, we will design and write the definition
+for a class that keeps track of the details of a well known, two-person
+game. We will focus on details of designing the definition of a class
+in the Java language.  Our objective is to understand what the program
+is doing and how it works without necessarily understanding why it
+works the way it does.  We will get to ``why'' later in the book.
+
+The game we will consider is played by two persons with a row of
+sticks or coins or other objects. The players alternate turns.  A
+player must remove one, two, or three sticks from the row on his or
+her turn.  The player who removes the last stick from the row loses.
+The game can be played with any number of sticks but starting with
+twenty one sticks is quite common.  This game is sometimes referred to
+as the game of "Nim", but there is a similar game involving multiple
+rows of sticks that is more frequently given that name.  Thus we will
+refer to this game as "One Row Nim".
+
+\subsection{Designing a OneRowNim class}
+\subsubsection*{Problem Specification}
+
+\noindent  Let's design a class named {\tt OneRowNim} that simulates
+the game of One Row Nim with a row of sticks.  An object constructed
+with this class should manage data that corresponds to having some
+specified number of sticks when the game begins.  It should keep track
+of whose turn it is and it should allow a player to diminish the
+number of sticks remaining by one, two, or three.  Finally, a {\tt
+OneRowNim} object should be able to decide when the game is over and
+which player has won.
+
+\subsubsection*{Problem Decomposition}
+\noindent Let's design {\tt OneRowNim} so that it can be used in 
+with different kinds of user interfaces. One user interface could
+manage a game played by two persons who alternately designate their
+moves to the computer. Another user interface could let a human player
+play against moves made by the computer.  In either of these cases we
+could have a human player designate a move by typing from the keyboard
+after being prompted in a console window or, alternatively, by
+inputting a number into a text field or selecting a radio button on a
+window.  In this chapter, we will be concerned only with designing an
+object for managing the game. We will design user interfaces for the
+game in subsequent chapters.
+
+\subsubsection*{Class Design: {\tt OneRowNim}}
+
+\noindent As we saw in the {\tt Riddle} example, class definitions can
+usually be broken down into two parts: (1) the information or
+attributes that the object needs which must be stored in variables,
+and (2) the behavior or actions the object can take which are defined
+in methods.  In this chapter, we will focus on choosing appropriate
+instance variables and on designing methods as blocks of reusable
+code.  Recall that a parameter is a variable that temporarily stores
+data values that are being passed to a method when that method is
+called.  In this chapter, we will restrict our design to methods that
+do not have parameters and do not return values.  We will return to
+the problem of designing changes to this class in the next chapter
+after an in-depth discussion of method parameters and return values.
+
+The  {\tt OneRowNim} object should manage two pieces of information
+\marginnote{What data do we need?}
+that vary as the game is played.  One is the number of sticks
+remaining in the row and the other is which player has the next turn.
+Clearly, the number of sticks remaining corresponds to a positive
+integer that can be stored in a variable of type {\tt int}.  One
+suitable name for such a variable is {\tt nSticks}. For this chapter,
+let us assume that the game starts with 7 sticks, rather than 21, to
+simplify discussion of the program.
+
+Data designating which player takes the next turn could be stored in
+different ways.  One way to do this is to think of the players as
+player one and player two and store a 1 or 2 in an {\tt int} variable.
+Let's use {\tt player} as the name for such a variable and assume that
+player one has the first turn.
+
+The values of these two variable for a particular {\tt OneRowNim}
+object at a particular time describes the object's state. An object's
+state at the beginning of a game is a 7 stored in {\tt nSticks} and 1
+stored in {\tt player}.  After player one removes, say, two sticks on
+the first turn, the values 5 and 2 will be stored in the two
+variables.
+
+\subsubsection*{Method Decomposition}
+
+\noindent Now that we have decided what information the {\tt OneRowNim}
+object should manage, we need to decide what actions it should be able
+to perform.  We should think of methods that would be needed to
+communicate with a user interface that is both prompting some human
+players as well as receiving moves from them.
+\marginnote{What methods do we need?}
+Clearly, methods are needed for taking a turn in the game.  If a
+message to a {\tt OneRowNim} object has no argument to indicate the
+number of sticks taken, there will need to be three methods
+corresponding to taking one, two, or three sticks.  The method names
+{\tt takeOne()}, {\tt takeTwo()}, and {\tt takeThree()} are
+descriptive of this action.  Each of these methods will be responsible
+for reducing the value of {\tt nSticks} as well as changing the value
+of {\tt player}.
+
+We should also have a method that gives the information that a user
+needs when considering a move. Reporting the number of sticks
+remaining and whose turn it is to the console window would be an
+appropriate action.  We can use {\tt report()} as a name for this
+action.
+
+%%%Figure~2.14 is a UML class diagram that summarizes this
+Figure~2.16 is a UML class diagram that summarizes this
+\marginfig{chptr02/onerow3.eps}{A UML class diagram for  {\tt OneRowNim}.
+\label{fig-ornuml}
+\label{pg-fig-ornuml}}
+design of the {\tt OneRowNim} class.  Note that the methods are
+declared public ($+$) and will thereby form the interface for a {\tt
+OneRowNim} object. These will be the methods that other objects will
+use to interact with it.  Similarly, we have followed the convention
+of designating an object's instance variables---the \mbox{\tt
+OneRowNim}'s instance variables---be kept hidden from other objects,
+and so we have designated them as private($-$).
+
+\subsection{Defining the {\tt OneRowNim} Class}
+
+\noindent Given our design of the {\tt OneRowNim} class
+as described in Figure~2.16, the next step in building our
+simulation is to begin writing the Java class definition.
+
+\subsubsection*{The Class Header}
+
+\noindent We need a {\it class header}, which will give the class a name
+and will specify its relationship to other classes.  Like all classes
+that are designed to create objects that could be used by other
+objects or classes, the class {\tt OneRowNim} should be preceded by
+the {\tt public} modifier.  Because the class {\tt OneRowNim} has not
+been described as having any relationship to any other Java class, its
+header can omit the {\tt extends} clause so it will be a direct
+subclass of {\tt Object} (Figure~2.17).
+\marginfig{chptr02/onerow1.eps}{By default, {\tt OneRowNim} is a 
+subclass of {\tt Object}.
+\label{fig-pedigree}
+\label{pg-fig-pedigree}}
+Thus, the class header for {\tt OneRowNim} will look like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNim  // Class header
+{                       // Beginning of class body
+
+}                       // End of class body
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsubsection*{The Class's Instance Variables}
+
+\noindent The body of a class definition consists of
+\marginnote{Variables and methods}
+two parts: the class-level variables and the method definitions.  A
+{\bf class-level variable} is a variable whose definition applies
+to the entire class in which it is defined. Instance variables,
+which were introduced in Chapter~1, are one kind of class-level
+variable.
+
+In general, a class definition will take the form shown in
+Figure~\ref{fig-form}.
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class ClassName
+{  // Instance and class variables
+     VariableDeclaration1
+     VariableDeclaration2
+     ...
+    // Instance and class methods
+     MethodDefinition1
+     MethodDefinition2
+     ...
+} // End of class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A template for constructing a Java class definition.
+\label{fig-form}
+\label{pg-fig-form}}
+\end{figure}
+
+
+Although Java does not impose any particular order on variable and
+method declarations, in this book we'll define the class's class-level
+variables at the beginning of the class definition, followed by method
+definitions. Class-level variables are distinguished from
+\marginnote{Class-level vs. local variables}
+local variables. A {\bf local variable} is a variable that is defined
+within a method.  Examples would be the variables {\tt q} and {\tt a}
+that were defined in the {\tt Riddle(String q, String a)} constructor
+(Fig.~\ref{fig-riddleclass2}).  As we will see better in Chapter 3,
+Java handles each type of variable differently.
+
+A declaration for a variable at class level must follow the rules for
+declaring variables that were described in Section~\ref{sec-vardecl}
+with the added restriction that they should be modified by one of the
+access modifiers {\tt public}, {\tt private}, or {\tt protected}.  The
+rules associated with these access modifiers are:
+
+\begin{itemize}
+
+\item A {\tt private} class-level variable cannot be accessed outside 
+the class in which it is declared.
+
+\item A {\tt public} class-level variable can be referenced and, hence, 
+modified by any other class.
+
+\item A {\tt protected} class-level variable can only be accessed 
+by subclasses of the class in which it is declared or by other classes
+that belong to the same package.
+
+\end{itemize}
+
+\noindent When a class, instance variable, or method is defined, you 
+can declare it {\tt public}, {\tt protected}, or {\tt private}. Or you
+can leave its access unspecified, in which case Java's default
+accessibility will apply.
+
+Java determines accessibility in a top-down manner. Instance variables
+and methods are contained in classes, which are contained in packages.
+To determine whether a instance variable or method is accessible, Java
+starts by determining whether its containing package is accessible,
+and then whether its containing class is accessible. Access to
+classes, instance variables, and methods is defined according to the
+rules shown in Table~2.2.
+
+\begin{table}[htb]
+\vspace{6pt}\TBT{0pc}{Java's accessibility rules.}
+\hspace*{-0.5pc}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+{Element}                   & {Modifier}        & {Rule}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+Class                       & {\tt public}      & Accessible if its package is accessible. \\
+                            & by default        & Accessible only within its package.
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+Instance variable           & {\tt public}      & Accessible to all other objects.          \\
+\quad or                    & {\tt protected}   & Accessible to its subclasses and to       \\
+\quad instance method       &                   & \quad  other classes in its package.      \\
+                            & {\tt private}     & Accessible only within the class.         \\
+                            & by default        & Accessible only within the package.
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\vspace{-6pt}\end{table}
+
+Recall the distinction we made in Chapter 0 between class variables
+and instance variables. A class variable is associated with the class
+itself, whereas an instance variable is associated with each of the
+class's instances.  In other words, each object contains its own copy
+of the class's instance variables, but only the class itself contains
+the single copy of a class variable.  To designate a variable as a
+class variable it must be declared {\tt static}.
+
+%%%Here are some examples of valid declarations of class level variables
+%%%that we have encountered earlier in this chapter:
+The {\tt Riddle} class that we considered earlier has the following
+two examples of valid declarations of instance variables:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private String question;
+private String answer;
+\end{lstlisting}
+\end{jjjlisting}
+
+%%%REW public static final int DAYS_IN_LEAP_YEAR = 366;
+%%% \noindent The first two declare instance variables for the {\tt Riddle}
+%%% class and the third is an example of a class variable that is a
+%%% constant.  A {\bf constant} is a variable whose value cannot be
+%%% changed, once it has been given an initial value. Variables that
+%%% define constants are modified by the {\bf final modifier}, indicating that they
+%%% have been assigned their final value.
+
+\subsubsection*{Class Level Variables for {\tt OneRowNim}}
+
+\noindent Let's now consider how to declare the class
+level variables for the {\tt OneRowNim} class.  The UML class diagram
+%% for {\tt OneRowNim} in Figure~\ref{fig-ornuml} contains all the
+for {\tt OneRowNim} in Figure~2.16 contains all the
+information we need.  The variables {\tt nSticks} and {\tt player}
+will store data for playing one game of One Row Nim, so they should
+clearly be private instance variables.  They both will store integer
+values, so they should be declared as variables of type {\tt int}.
+Because we wish to start a game of One Row Nim using 7 sticks with
+player one making the first move, we will assign 7 as the initial
+value for {\tt nSticks} and 1 as the initial value for {\tt player}.
+If we add the declarations for our instance variable declarations to
+the class header for the {\tt OneRowNim} class, we get the following:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNim
+{
+  private int nSticks = 7;
+  private int player = 1;
+
+  //Method definitions go here
+} // OneRowNim
+\end{lstlisting}
+\end{jjjlisting}
+
+To summarize, despite its apparent simplicity, a class level variable
+declaration actually accomplishes five tasks:
+
+\begin{NL}
+\item  Sets aside a portion of the object's memory that can be used
+to store a certain type of data.
+
+\item  Specifies the type of data that can be stored in that location.
+
+\item  Associates an identifier (or name) with that location.
+
+\item  Determines which objects have access to the variable's name.
+
+\item  Assigns an initial value to the location.
+\end{NL}
+
+
+\subsubsection*{{\tt\bf OneRowNim}'s Methods}
+
+\noindent Designing and defining methods is a form of abstraction.
+By defining a certain sequence of actions as a method, you encapsulate
+those actions under a single name that can be invoked whenever needed.
+Instead of having to list the entire sequence again each time you want
+it performed, you simply call it by name.  As you recall from Chapter
+1, a method definition consists of two parts, the method header and
+the method body. The method header declares the name of the method and
+other general information about the method. The method body contains
+the executable statements that the method performs.
+\begin{jjjlisting}
+\begin{lstlisting}
+public void methodName()  // Method header
+{                  // Beginning of method body
+}                  // End of method body
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsubsection*{The Method Header}
+\noindent The method header follows a general format that consists
+of one or more {\it MethodModifiers}, the method's {\it ResultType},
+the {\it MethodName}, and the method's {\it FormalParameterList},
+which is enclosed in parentheses. The following table illustrates the
+method header form, and includes several examples of method headers
+that we have already encountered. The method body follows the method
+header.
+
+\begin{table}[h]
+\UNTB\hspace*{-6pt}
+\begin{tabular}{llll}
+\multicolumn{4}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%RAM\UNTBCH{MethodModifiers}$_{opt}$ & \UNTBCH{ResultType} & 
+%%RAM\UNTBCH{MethodName} &
+%%%RAM\UNTBCH{(FormalParameterList)}
+{MethodModifiers}$_{opt}$ & {ResultType} & {MethodName} &
+{(FormalParameterList)}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+    {\tt public} {\tt static} & {\tt void} & {\tt main}  & {\tt 
+(String argv[])}\cr
+    {\tt public}              & {\tt void} & {\tt paint} & {\tt (Graphics g)}\cr
+    {\tt public}              &   & {\tt Riddle} & {\tt (String q, String a)}\cr
+    {\tt public}              & {\tt String} & {\tt getQuestion} & {\tt ()}\cr
+    {\tt public}              & {\tt String}  & {\tt getAnswer} & {\tt ()}\cr
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{27pc}{1pt}}
+\endUNTB\end{tabular}\end{table}
+
+The rules on method access are the same as the rules on instance
+variable access: {\tt private} methods are accessible only within the
+class itself, {\tt protected} methods are accessible only to
+subclasses of the class in which the method is defined and to other
+classes in the same package, and {\tt public} methods are accessible
+to all other classes.
+
+\JavaTIP{EFFECTIVE DESIGN}{Public versus Private Methods.}{If a method is
+used to communicate with an object, or if it passes information to or
+from an object, it should be declared {\tt public}. If a method is
+intended to be used solely for internal operations within the object,
+it should be declared {\tt private}.  These methods are sometimes
+called {\it utility methods} or {\it helper methods}.}
+
+Recall the distinction from Chapter 0 between instance methods and
+class methods. Methods declared at the class level are assumed to be
+instance methods unless they are also declared {\tt static}.  The {\bf
+static modifier} is used to declare that a class method or variable is
+associated with the class itself, rather than with its instances. 
+Just as for {\tt static} variables, methods that are declared {\tt
+static} are associated with the class and are therefore called {\it
+class methods}.  As its name implies, an instance method can only be
+used in association with an object (or instance) of a class. Most of
+the class-level methods we declare will be instance methods. Class
+methods are used only rarely in Java and mainly in situations where it
+is necessary to perform some kind calculation before objects of the
+class are created. We will see examples of class methods when we
+discuss the {\tt Math} class, which has such methods as {\tt sqrt(N)}
+to calculate the square root of {\it N}.
+
+\JavaTIP{PROGRAMMING TIP}{Class versus Instance Methods.} {If a method is
+designed to be used by an object, it is referred to as an instance
+method. No modifier is needed to designate an instance method. Class
+methods, which are used infrequently compared to instance methods,
+must be declared {\tt static}.}
+
+\noindent All four of the methods in the {\tt OneRowNim} class are
+%%%instance methods (Fig.~\ref{fig-ornuml}). They all perform actions
+instance methods (Fig.~2.19). They all perform actions
+\begin{figure}[hbt]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNim 
+{ private int nSticks = 7; // Start with 7 sticks.
+  private int player = 1;  // Player 1 plays first.
+
+  public void takeOne(){ } // Method bodies need
+  public void takeTwo(){ } //  to be defined.
+  public void takeThree(){ }
+  public void report(){ }
+} //OneRowNim class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The Instance variables and method headers for the {\tt 
+OneRowNim} class.
+\label{fig-ornmheaders}
+\label{pg-fig-ornmheaders}}
+\end{figure}
+associated with a particular instance of {\tt OneRowNim}. That is,
+they are all used to manage a particular One Row Nim game.  Moreover,
+all four methods should be declared {\tt public}, because they are
+designed for communicating with other objects rather than for
+performing internal calculations. Three of the methods are described
+as changing the values of the instance variables {\tt nSticks} and
+{\tt player} and the fourth, {\tt report()}, writes information to the
+console.  All four methods will receive no data when being called and
+will not return any values.  Thus they should all have {\tt void} as a
+return type and should all have empty parameter lists. 
+
+Given these design decisions, we now can add method headers to our
+class definition of {\tt OneRowNim}, in Figure~\ref{fig-ornmheaders}.
+The figure displays the class header, instance variable declarations,
+and method headers.
+
+\subsubsection*{The Method Body}
+
+\noindent The body of a method definition is a block of Java
+\marginnote{Designing a method is an application of the
+encapsulation principle.}  statements enclosed by braces,
+{}, which are executed in sequence when the method
+is called.  The description of the action required of the {\tt
+takeOne()} method is typical of many methods that change the state of
+an object.  The body of the {\tt takeOne()} method should use a series
+of assignment statements to reduce the value stored in {\tt nSticks}
+by one and change the value in {\tt player} from 2 to 1 or from 1 to
+2. The first change is accomplished in a straightforward way by the
+assignment:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+nSticks = nSticks - 1;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This statement says subtract 1 from the value stored in {\tt nSticks}
+and assign the new value back to {\tt nSticks}.
+
+Deciding how to change the value in {\tt player} is more difficult
+because we do not know whether its current value is 1 or 2.  If its
+current value is 1, its new value should be 2; if its current value is
+2, its new value should be 1. Notice, however, that in both cases the
+current value plus the desired new value are equal to 3.  Therefore,
+the new value of {\tt player} is equal to 3 minus its current value.
+Writing this as an assignment we have:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+player = 3 - player;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent One can easily verify that this clever assignment 
+assigns 2 to {\tt player} if its current value is 1 and assigns 1 to
+it if its current value is 2.  In effect, this assignment will toggle
+the value off {\tt player} between 1 and 2 each time it is executed.
+In the next chapter we will introduce the {\tt if-else} control
+structure that would allow us to accomplish this same toggling action
+in a more straightforward manner.  The complete definition of {\tt
+takeOne()} method becomes:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void takeOne()
+{
+   nSticks = nSticks - 1;  // Take one stick
+   player = 3 - player;    // Change to other player
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt takeTwo()} and {\tt takeThree()} methods are completely
+analogous to the {\tt takeOne()} method with the only difference being
+the amount subtracted from {\tt nSticks}.
+
+The body of the {\tt report()} method must merely print the current
+values of the instance variables to the console window with {\tt
+System.out.println()}.  To be understandable to someone using a {\tt
+OneRowNim} object, the values should be clearly labeled.  Thus the body
+of {\tt report()} could contain:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println("Number of sticks left: " + nSticks);
+System.out.println("Next turn by player " + player);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This completes the method bodies of the {\tt OneRowNim} class.
+The completed class definition is shown in Figure~\ref{fig-orndef}.
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class OneRowNim 
+{ private int nSticks = 7; // Start with 7 sticks.
+  private int player = 1;  //Player 1 plays first.
+
+  public void takeOne()
+  { nSticks = nSticks - 1;
+    player = 3 - player;
+  } // takeOne()
+
+  public void takeTwo()
+  { nSticks = nSticks - 2;
+    player = 3 - player;
+  } // takeTwo()
+
+  public void takeThree()
+  { nSticks = nSticks - 3;
+    player = 3 - player;
+  }  // takeThree()
+
+  public void report()
+  { System.out.println("Number of sticks left: " + nSticks);
+    System.out.println("Next turn by player " + player);
+  }   // report()
+} // OneRowNim1 class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt OneRowNim} class definition.
+\label{fig-orndef}
+\label{pg-fig-orndef}}
+\end{figure}
+We will discuss alternative methods for this class in the next chapter.
+In Chapter 4, we will develop several One Row Nim user interface classes
+that will facilitate a user indicating certain moves to make.
+
+
+\subsection{Testing the {\tt OneRowNim} Class}
+
+\noindent Recall our {\em define, create, and use} mantra from
+Section~\ref{sect-mantra}.  Now that we have defined the {\tt
+OneRowNim} class, we can test whether it works correctly by creating
+{\tt OneRowNim} objects and using them to perform the actions
+associated with the game.  At this point, we can test {\tt OneRowNim}
+by defining a {\tt main()} method. Following the design we used in the
+riddle example, we will locate the {\tt main()} method in separate,
+user interface class, named {\tt OneRowNimTester}.
+
+The body of {\tt main()} should declare a variable of type {\tt
+OneRowNim} and create an object for it to refer to.  The variable can
+have any name, but a name like {\tt game} would be consistent with it
+recording moves in a single game.  To test the {\tt OneRowNim} class,
+we should make a typical series of moves. For example, three moves
+taking 3, 3, and 1 sticks respectively would be one way that the 7
+sticks could be removed.  Also, executing the {\tt report()} method
+before the first move and after each move should display the current
+state of the game in the console window so that we can determine
+whether it is working correctly.
+
+The following pseudocode outlines an appropriate sequence of
+statements in a {\tt main()} method:
+
+\begin{minipage}[t]{26pc}
+\begin{NL}
+\item  Declare a variable of type {\tt OneRowNim} named {\tt game}.
+\item  Instantiate a {\tt OneRowNim} object to which {\tt game} refers.
+\item  Command {\tt game} to report.
+\item  Command {\tt game} to remove three sticks.
+\item  Command {\tt game} to report.
+\item  Command {\tt game} to remove three sticks.
+\item  Command {\tt game} to report.
+\item  Command {\tt game} to remove one stick.
+\item  Command {\tt game} to report.
+\end{NL}
+\end{minipage}
+\vspace*{10pt plus5pt minus2pt}
+
+\noindent It is now an easy task to convert the steps in the pseudocode
+outline into Java statements.  The resulting {\tt main()} method is shown
+with the complete definition of the {\tt OneRowNimTester} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class OneRowNimTester 
+{ public static void main(String args[])
+  {   OneRowNim1 game = new OneRowNim();
+      game.report();
+      game.takeThree();
+      game.report();
+      game.takeThree();
+      game.report();
+      game.takeOne();
+      game.report();
+  } //main()
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When it is run, {\tt OneRowNimTester} produces the following output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    Number of sticks left: 7
+    Next turn by player 1
+    Number of sticks left: 4
+    Next turn by player 2
+    Number of sticks left: 1
+    Next turn by player 1
+    Number of sticks left: 0
+    Next turn by player 2
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This output indicates that player 1 removed the final stick
+and so player 2 is the winner of this game.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\addtocounter{EXRcount}{2}\item
+Add a new declaration to the {\tt Riddle} class for a {\tt private String}
+instance variable named {\tt hint}. Assign the variable an initial value
+of {\tt "This riddle is too easy for a hint"}.
+
+
+\item
+Write a header for a new method definition for {\tt Riddle} named {\tt
+getHint()}. Assume that this method requires no parameters and that it
+simply returns the {\tt String} value stored in the {\tt hint}
+instance variable. Should this method be declared {\tt public} or {\tt
+private}?
+
+
+\item
+Write a header for the definition of a new {\tt public} method for
+{\tt Riddle} named {\tt setHint()} which sets the value of the {\tt
+hint} instance variable to whatever {\tt String} value it receives as
+a parameter.  What should the result type be for this method?
+
+\item
+Create a partial definition of a {\tt Student} class.  Create instance
+variables for the first name, last name, and an integer student
+identification number.  Write the headers for three methods.  One
+method uses three parameters to set values for the three instance
+variables. One method returns the student identification number.  The
+last method returns a {\tt String} containing the student's first name
+and last name.  Write only the headers for these methods.
+
+\end{SSTUDY}
+
+
+
+%%%RAM\subsection{Tracing the {\ttHtwo TestOneRowNim} Program} % 
+%%%PROMOTED TO SUBSECTION
+%%%REWIt is assumed tracing will be moved to chapter 3 after more on methods
+
+%\subsubsection{Flow of Control: Method Call and Return} PROMOTED TO SUBSECTION
+\subsection{Flow of Control: Method Call and Return}
+\label{sec-methodcall}
+\label{pg-sec-methodcall}
+
+\noindent A program's {\bf flow of control} is the order
+in which its statements are executed. In an object-oriented program,
+control passes from one object to another during the program's
+execution. It's important to have a clear understanding of this
+process.
+
+In order to understand a Java program, it is necessary to understand
+the {\bf method call and return} mechanism. We will encounter it
+repeatedly.  A method call causes a program to transfer control to a
+statement located in another method. Figure~\ref{fig-methodcall} shows
+the method call and return structure.
+\begin{figure}[h!]
+\figa{chptr02/2f16.eps}{The method call and return control structure. 
+It's important to realize that {\tt method1()} and {\tt method2()} may
+be contained in different classes.
+\label{fig-methodcall}
+\label{pg-fig-methodcall}}
+\end{figure}
+
+In this example, we have two methods. We make no assumptions about
+where these methods are in relation to each other. They could be
+defined in the same class or in different classes. The {\tt method1()}
+method executes sequentially until it calls {\tt method2()}.  This
+transfers control to the first statement in {\tt method2()}. Execution
+continues sequentially through the statements in {\tt method2()} until
+the {\tt return} statement is executed.
+
+\JavaRule{Return Statement.}{The {\tt return}
+statement causes a method to return control to the {\it calling
+statement}---that is, to the statement that called the method in the
+first place.}
+
+\noindent Recall that if a {\tt void}\index{void}
+method does not contain a {\tt return} statement, then control will
+%\begin{marginalnote}\it Default returns\end{marginalnote}
+\marginnote{Default returns}
+automatically return to the calling statement after the invoked method
+executes its last statement.
+
+
+%%%RAM\subsection{Tracing the {\ttHtwo OneRowNim} Program} % PROMOTED TO SUBSECTION
+\subsection{Tracing the {\tt OneRowNim} Program}
+\label{subsect-trace}
+
+\noindent To help us understand the flow of control in {\tt OneRowNim}, 
+we will perform a trace of its execution. Figure~\ref{fig-trace} shows
+all of the Java code involved in the program. In order to simplify our
+trace, we have moved the {\tt main()} method from {\tt
+OneRowNimTester} to the {\tt OneRowNim} class. This does not affect
+the program's order of execution in any way. But keep in mind that the
+code in the {\tt main()} method could just as well appear
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlistingleft}[31pc]{-5pc}
+\begin{lstlisting}
+  public class OneRowNim 
+2 {  private int nSticks = 7; // Start with 7 sticks.
+3    private int player = 1;  //Player 1 plays first.
+
+      public void takeOne()
+20    {  nSticks = nSticks - 1;
+21       player = 3 - player;  
+      } // takeOne()
+      public void takeTwo()
+      {  nSticks = nSticks - 2;
+         player = 3 - player; 
+      } // takeTwo()
+
+      public void takeThree()
+8,14  {  nSticks = nSticks - 3;
+9,15     player = 3 - player; 
+      }  // takeThree()
+      public void report()
+5,11,17,23 { System.out.println("Number of sticks left: " + nSticks);
+6,12,18,24   System.out.println("Next turn by player " + player);
+      }   // report()
+
+      public static void main(String args[])
+1     {  OneRowNim1 game = new OneRowNim1();
+4        game.report();
+7        game.takeThree();
+10       game.report();
+13       game.takeThree();
+16       game.report();
+19       game.takeOne();
+22       game.report();
+23     } //main()
+   } //OneRowNim1 class
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A trace of the {\tt OneRowNim} program.
+\label{fig-trace}}
+\end{figure}
+in the {\tt OneRowNimTester} class.  The listing in
+Figure~\ref{fig-trace} also adds line numbers to the program to show
+the order in which its statements are executed.
+
+Execution of the {\tt OneRowNim} program begins with the first
+statement in the {\tt main()} method, labeled with line number 1.
+This statement declares a variable of type {\tt OneRowNim} named {\tt
+game} and calls a constructor {\tt OneRowNim()} to create and
+initialize it.  The constructor, which in this case is a default
+\marginfig{chptr02/gstate1.eps}{The initial state
+  of {\tt game}, a {\tt OneRowNim} object.
+\label{fig-gstate1}\label{pg-fig-gstate1}}
+constructor, causes control to shift to the declaration of the
+instance variables {\tt nSticks} and {\tt player} in statements 2 and
+3, and assigns them initial values of 7 and 1 respectively.  Control
+then shifts back to the second statement in {\tt main()}, which has
+the label 4.  At this point, {\tt game} refers to an instance of the
+{\tt OneRowNim} class with an initial state shown in
+Figure~2.23.  Executing statement 4 causes control to
+shift to the {\tt report()} method where statements 5 and 6 use {\tt
+System.out.println()} to write the following statements to the
+console.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    Number of sticks left: 7
+    Next turn by player 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Control shifts back to statement 7 in the {\tt main()} method, 
+which calls the {\tt takeThree()} method, sending control to the first
+statement of that method.  Executing statement 8 causes $3$ to be
+subtracted from the {\tt int} value stored in the instance variable
+{\tt nSticks} of {\tt game}, leaving the value of $4$.\ Executing
+statement 9 subtracts the value stored in the {\tt player} variable,
+which is $1$, from $3$ and assigns the result (the value $2$) back to
+{\tt player}.  The state of the object {\tt game}, at this point, is
+shown in Figure~2.24.
+\marginfig{chptr02/gstate2.eps}{The state of {\tt game} after line 9 
+is executed.
+\label{fig-gstate2}\label{pg-fig-gstate2}}
+Tracing the remainder of the program follows in a similar manner.
+Notice that the {\tt main()} method calls {\tt game.report()} four
+different times so that the two statements in the {\tt report()}
+method are both executed on four different occasions.  Note also that
+there is no call of {\tt game.takeTwo()} in {\tt main()}. As a result,
+the two statements in that method are never executed.
+
+%%%RAM\endcasestudy
+\subsection{Object-Oriented Design: Basic Principles}
+
+\noindent We complete our discussion of the
+design and this first implementation of the {\tt OneRowNim} class with
+a brief review of some of the object-oriented design principles that
+were employed in this example.
+
+\begin{BL}
+
+\item  {\bf Encapsulation\index{Encapsulation Principle}.}
+The {\tt OneRowNim} class was designed to encapsulate a certain state
+and a certain set of actions. It was designed to simulate playing the
+One Row Nim game. In addition, {\tt OneRowNim}'s methods were designed
+to encapsulate the actions that make up their particular tasks.
+
+\item  {\bf Information Hiding.}
+{\tt OneRowNim}'s instance variables, {\tt nSticks} and {\tt player}
+are declared {\tt private} so other objects can only change the values
+of these variables with the public methods of a {\tt OneRowNim}
+instance.  The bodies of the public methods are also hidden from users
+of {\tt OneRowNim} instances.  An instance and its methods can be used
+without any knowledge of method definitions.
+
+\item  {\bf Clearly Designed Interface.}
+{\tt OneRowNim}'s interface is defined in terms of the public methods.
+These methods constrain the way users can interact with {\tt
+OneRowNim} objects and ensures that {\tt OneRowNim} instances remain
+in a valid state.  Those are the main purposes of a good interface.
+
+\item  {\bf Generality and Extensibility.} There is little in our
+design of \mbox{\tt OneRowNim} that limits its use and its
+extensibility. Moreover, as we will see later, we can create several
+different kinds of user interfaces which interact with {\tt OneRowNim}
+objects.
+\end{BL}
+
+The {\tt OneRowNim} class has some obvious shortcomings that are a
+result of our decision to limit methods to those without parameters or
+return values.  These shortcomings include:
+\begin{BL}
+\item   A {\tt OneRowNim} object cannot communicate to another object 
+the number of remaining sticks, which player makes the next turn, or
+whether the game is over.  It can only communicate by writing a report
+to the console window.
+
+\item  The {\tt takeOne()}, {\tt takeTwo()} and {\tt takeThree()} methods
+all have similar definitions.  It would be a better design if a single
+method could take away a specified number of sticks.
+
+\item  There is no way to play a {\tt OneRowNim} game starting with 
+a different number of sticks than 7.  It would be nice to have a way
+of playing a game that starts with any number of sticks.
+
+\item  In order to for a user to play a {\tt OneRowNim} game, a user interface
+class would need to be developed that would allow the user to receive
+information about the state of the game and to input moves to make.
+\end{BL}
+
+\noindent As we study other features of Java in the next two chapters, 
+we will modify the {\tt OneRowNim} class to address these identified
+shortcomings.
+
+\section*{{\color{cyan}Special Topic:} Alan Kay and \\
+\hspace*{20pt} the Smalltalk Language}
+
+{\color{cyan}Although {\it Simula}} was the first programming language
+to use the concept of an object, the first pure object-oriented
+language was {\it Smalltalk}.  Smalltalk was first started by Alan Kay
+in the late 1960s.  Kay is an innovative thinker who has had a hand in
+the development of several advances, including windowing interfaces,
+laser printing, and the client/server model, all of which are now
+commonplace today.
+
+One of the abiding themes throughout Kay's career has been the idea
+that computers should be easy enough for kids to use.  In the late
+1960s, while still in graduate school, Kay designed a computer model
+that consisted of a notebook-sized portable computer with a keyboard,
+screen, mouse, and high-quality graphics interface. He had become
+convinced that graphics and icons were a far better way to communicate
+with a computer than the command-line interfaces that were prevalent
+at the time.
+
+In the early 1970s Kay went to work at the Xerox Palo Alto Research
+Center (PARC), where he developed a prototype of his system known as
+the {\it Dynabook}.  Smalltalk was the computer language Kay developed
+for this project. Smalltalk was designed along a biological model, in
+which individual entities or ``objects'' communicate with each other
+by passing messages back and forth. Another goal of Smalltalk was to
+enable children to invent their own concepts and build programs with
+them---hence, the name {\it Smalltalk}.
+
+Xerox's management was unable to see the potential in Kay's
+innovations. However, during a visit to Xerox in 1979, Steve Jobs, the
+founder of Apple Computer, was so impressed by Kay's work that he made
+it the inspiration of the Macintosh computer, which was first released
+in 1984.
+
+Kay left Xerox in 1983 and became an Apple Fellow in 1984.  In
+addition to working for Apple, Kay spent considerable time teaching
+kids how to use computers at his Open School in West Hollywood.  In
+1996 Kay became a Fellow (an ``Imagineer'') at the Walt Disney
+Imagineering's Research and Development Organization, where he continues
+to explore innovative ways to enhance the educational and
+entertainment value of computers.
+
+\section{From the Java Library: {\tt java.util.Scanner}.}
+\label{pg-sec-scannerclass}
+
+If we wish to write useful interactive programs, we must be able to receive
+information from the user as well as send information to him or her.  
+We saw, in the previous chapter, that output from a program can
+be sent to the console window by simply using the {\tt System.out.print()}
+and {\tt System.out.println()} statements. In this section we describe two 
+simple ways that Java can handle keyboard input. Receiving input from the keyboard,
+together with sending output to the console window, creates one of the standard
+user interfaces for programs.
+
+Recall, that in Java, any source or destination for I/O is considered a 
+stream of bytes or characters.  To perform keyboard input, we will extract
+characters from {\tt System.in}, the input stream connected to the keyboard. 
+Getting keyboard input from  {\tt System.in} involves two complications
+that are not present in dealing with {\tt System.out.println()}.
+First, normal keyboard input data requested of a user consists of a sequence
+of characters or digits which represent a word, phrase, integer, or real 
+number.  Normally, an entire sequence of characters typed by the user 
+will represent data to be stored in a single variable with the user hitting 
+the return or enter key to signal the end of a piece of requested data. Java has a
+special class, {\tt BufferedReader}, that uses an input stream 
+and has a method that collects characters until it reads the character or
+characters that correspond to hitting the return or enter key. A second 
+\marginfig{chptr02/scanneruml.eps}
+{The {\tt Scanner} class, with a
+partial list of its public methods.
+\label{fig-scanneruml}}
+complication for reading input involves the problem of how to handle 
+receiving data that is not in the same format as expected.  The 
+{\tt BufferedReader} class handles this problem by using certain {\it exceptions},
+a special kind of error message, that must be handled by the programmer.
+Chapter 11 is devoted to exceptions and we will avoid their use, as far as
+possible, until that time.
+
+There is an alternate way to handle keyboard input in the Java 2
+Platform Standard Edition 5.0 (J2SE 5.0). A {\tt Scanner} class has
+been added to the {\tt java.util} package which permits keyboard input
+without forcing the programmer to handle exceptions.  We introduce the
+{\tt Scanner} class in the next subsection and then describe how a
+user defined class introduced in Chapter~4 can function in an
+equivalent fashion to permit simple keyboard input.
+
+\subsection{Keyboard Input with the {\tt Scanner} Class} 
+
+A partial definition of {\tt Scanner} is shown in Figure~2.25. Note
+that the {\tt Scanner} methods listed are but a small subset of the 
+public methods of this class.  The Scanner class is in the {\tt java.util}
+package so classes that use it should import it with the following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.util.Scanner;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt Scanner} class is designed to be a very flexible way to
+recognize chunks of data that fit specified patterns from any input
+stream.  To use the {\tt Scanner} class for keyboard input, we must
+create a {\tt Scanner} instance and associate it with {\tt System.in}.
+The class has a constructor for this purpose, so the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Scanner sc = new Scanner(System.in);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent declares and instantiates an  object that can be used for keyboard input.
+After we create a {\tt Scanner} object, we can make a call to {\tt nextInt()},
+{\tt nextDouble()}, or {\tt next()} to read, respectively, an integer, real 
+number, or string from the keyboard.  The program in Figure~\ref{fig-scannerprog}
+demonstrates how an integer would be read and used. When the {\tt nextInt()}
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.util.Scanner;
+
+public class TestScanner 
+{
+  public static void main(String[] args) 
+  {               // Create Scanner object
+    Scanner sc = new Scanner(System.in); 
+    System.out.print("Input an integer:"); // Prompt
+    int num = sc.nextInt();         // Read an integer
+    System.out.println(num + " squared = " + num*num);
+  } //main()
+} // TestScanner class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A very brief program with a Scanner object used for keyboard input
+\label{fig-scannerprog}}
+\end{figure}
+method is executed, no further statements are executed until an {\tt int} value
+is returned by the method.  Normally this does not happen until the
+user has typed in the digits of an integer and hit the return or enter key.
+Thus executing the {\tt main()} method of the {\tt TestScanner}  class will 
+result in the output 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Input an integer:
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent to the console window and the program will wait for the user to type in an 
+integer and hit the return or enter key.  After this has been done the output
+will look something like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Input an integer:123
+123 squared = 15129
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Keyboard input of real numbers and strings are handled in a similar manner.
+
+Keyboard input will allow us to create examples of command line interfaces
+for interactive programs.  For example, the code
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Scanner sc = new Scanner(System.in); 
+Riddle riddle = new Riddle(
+  "What is black and white and red all over?",
+  "An embarrassed zebra.");
+System.out.println("Here is a riddle:");
+System.out.println(riddle.getQuestion());
+System.out.print("To see the answer, ");  // Prompt
+System.out.println("type a letter and enter.");
+String str = sc.next();         // Wait for input
+System.out.println(riddle.getAnswer());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will display a riddle question and prompt the user to type a letter and
+to hit the enter key to see the answer.  In the next chapter, we will 
+develop new methods for the {\tt OneRowNim} class that will be able to
+use {\tt int} values input from the keyboard for the next move.
+
+We must mention that, since the {\tt Scanner} class is designed
+as a flexible tool for recognizing chunks of data from any
+input stream, it has some properties that may be unexpected and
+not totally compatible with simple keyboard input.  A {\tt Scanner}
+object has a set of character strings that separate or {\bf delimit} the
+chunks of data that it is looking for.  By default, this set of
+delimiters consists of any non-empty sequence of {\it white space} characters, 
+that is, the space, tab, return, and newline characters. This will allow
+a user to input several integers separated by spaces before hitting
+the enter key.  This might be handled by code like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.print("Input two integers and an enter:");  
+int num1 = sc.nextInt();
+int num2 = sc.nextInt();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent White space as delimiters also means that the {\tt next()} method
+cannot return an empty string nor can it return a string that contains 
+any spaces.  For example, consider the code:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.print("Input the first president of the USA:");  
+String str = sc.next();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If one types "George Washington" and hits the enter key, the string
+{\tt str} will store only "George".  In order to get a {\tt Scanner}
+object to read strings that contain spaces, we must use
+the {\tt useDelimiter()} method to define the set of delimiters as 
+just that character string generated by hitting the enter key.  For
+example, for some Windows operating systems, the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+sc = sc.useDelimiter("\r\n"); 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will result in the {\tt next()} method returning the entire string of
+characters input from the keyboard up to but not including those
+generated by hitting the enter key.
+
+You should also be aware that just because we can use a {\tt Scanner}
+object to write Java code that ignores exceptions does not mean that
+exceptions will not be generated by keyboard input.  If the user
+enters letters rather than digits for the {\tt nextInt()} method to
+process, the program will be terminated with an error message.
+
+It must be stressed that the strategy for handling keyboard input
+outlined above is a temporary strategy until the topic of exceptions
+is covered in Chapter~11.  Real software applications that use
+keyboard input should carefully handle the possibility that a user
+will enter something unexpected.  In Java, this can only be done by
+handling exceptions.
+
+\subsection{Keyboard Input with the {\tt KeyboardReader} Class} 
+
+\marginfig{chptr02/kbreaderuml.eps}
+{A UML class diagram of the {\tt KeyboardReader} class.
+\label{fig-kbreaderuml}}
+If you are using an older version of Java that does not have the {\tt
+Scanner} class, a user-defined class can be used instead.  A {\tt
+KeyboardReader} class that uses the {\tt BufferedReader} class will be
+developed in Chapter~4.  It has methods that read data from the
+keyboard in a manner very similar to those of the {\tt Scanner} class.
+A partial list of its public methods is given in the UML class diagram
+shown in Figure~2.27.  To use the {\tt KeyboardReader} class for
+keyboard input, copy the source code {\tt KeyboardReader.java} from
+Chapter~4 into the same directory as the source code of your current
+Java class (and add it to your current project if you are using a
+integrated development environment).
+
+To use a {\tt KeyboardReader} object, we need to create an instance 
+of the class with a constructor. Then calling one of the three methods 
+will return an {\tt int}, {\tt double}, or {\tt String} when data
+is input from the keyboard.  Any of the three methods of a {\tt
+KeyboardReader} object will attempt to process the entire string input
+from the keyboard up to the point that the enter key is hit. That is,
+the character or characters generated by hitting the return or enter
+key is the delimiter used by {\tt KeyboardReader}.  The {\tt
+TestKeyboardReader} class definition in Figure~\ref{fig-kbreaderprog}
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class TestKeyboardReader 
+{
+  public static void main(String[] args) 
+  {             // Create KeyboardReader object
+    KeyboardReader kb = new KeyboardReader(); 
+    System.out.print("Input an integer:"); // Prompt
+    int num = kb.getKeyboardInteger(); // Read an integer
+    System.out.println(num + " squared = " + num*num);
+  } //main()
+} // TestKeyboardReader class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A very brief program with a KeyboardReader object used for keyboard input.
+\label{fig-kbreaderprog}}
+\end{figure}
+reads an integer from the keyboard and squares it just like the {\tt
+TestScanner} class.  In the remainder of the text, any time the {\tt
+Scanner} class is used for keyboard input, the same program can be run
+using the {\tt KeyboardReader} class after making the obvious
+substitutions.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Modify the {\tt main()} method of the {\tt TestScanner} class
+  so that it reads a real number from the keyboard rather than an integer.
+  
+\end{SSTUDY}
+
+%%% REW \rule[0pt]{21.1pc}{1pt}\\[-12pt]
+%%% what rule to use for using rulers?
+
+%%%\secEXRHone{Self-Study Exercises}
+%%%\begin{SSTUDY}
+%%%\addtocounter{EXRcount}{9}\item
+%%%Identify the data type of each of the following literal \mbox{expressions:}
+
+%%%\begin{EXRLL}
+%%%\begin{multicols}{3}
+%%%\item {\tt 44}
+%%%\item {\tt "42"}
+%%%\item {\tt "true"}
+%%%\item {\tt true}
+%%%\item {\tt "\$65.98"}
+%%%\item {\tt -42}
+%%%\end{multicols}
+%%%\end{EXRLL}
+%%%\end{SSTUDY}
+
+\secSMH{Chapter Summary}
+\secKTH{Technical Terms}
+\begin{KT}
+
+access modifier
+
+class-level variable
+
+default value
+
+delimiter
+
+empty string
+
+flow of control
+
+interface
+
+local variable
+
+method call and return
+
+null pointer
+
+null pointer exception
+
+pointer 
+
+reference
+
+reference variable
+
+static modifier
+
+user interface
+\end{KT}
+
+\secSMHtwo{Summary of Important Points}
+
+
+\begin{SMBL}
+
+\item Dot notation is used to refer to an object's public elements. 
+
+\item Designing a class is a matter of deciding what role it
+will play and what information and actions it will have. 
+
+\item  Writing a Java program is a matter of defining one or
+more classes. A class definition serves as a template for creating
+instance of the class.  
+
+\item Classes typically contain two kinds of elements, variables and
+methods. An object's state is defined by its instance variables.
+
+\item Class elements that are declared {\tt public} can be
+accessed by other objects. Elements that are declared {\tt private}
+are hidden from other objects.
+
+\item A class's instance variables are usually declared {\tt private}
+so they cannot be accessed directly by other objects.
+
+\item An object's public instance methods can be called by other objects.
+Thus, they make up the object's interface with other objects.
+
+\item Object instantiation is the process of creating an object,
+using the {\tt new} operator in conjunction with a constructor method.
+
+\item A class definition consists of a header and a body. The
+header gives the class a name, specifies its accessibility ({\tt
+public}), and its place in the Java class hierarchy ({\tt extends
+Object}). The class body contains declarations of the class's
+variables and definitions of its methods.
+
+\item By default, a newly defined class is consider a subclass of {\tt Object}.
+
+\item Class elements that are declared {\tt static}, such as the
+{\tt main()} method, are associated with the class (not with its
+instances).
+
+%%% \item A variable that is declared {\tt final} is a constant. It must
+%%% be given an initial value when it is declared, and its value cannot
+%%% be changed in the program.
+
+\item A Java application program must contain a {\tt main()} method,
+which is where it begins execution. 
+
+\item Methods that are used solely for the internal operations of
+the class should be declared {\tt private}.
+
+\item  An instance variable declaration reserves memory 
+for the instance variable within the object, associates a name and
+a type with the location, and specifies its accessibility.
+
+\item  A  method definition consists of two parts: a header, 
+which names the method and provides other general information about
+it, and a body, which  contains its executable statements.
+
+\item  Declaring a variable creates a name for an object 
+but does not create the object itself. An object is created by using
+the {\tt new} operator and a constructor method.
+
+\end{SMBL}
+
+\secANSHleft
+\begin{ANS}
+%{Exercise 2.1}
+\item 
+The Java code  fragment prints out the following:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+The singing king.
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 2.2}
+\item
+For the {\tt Riddle} class (Fig.~\ref{fig-riddleclass2}),
+
+\begin{ANSBL}
+\item  The name of the class: {\tt Riddle}
+\item  The names of two instance variables: {\tt question}, {\tt answer}
+\item  The names of three methods: {\tt Riddle()}, {\tt getQuestion()},
+     {\tt getAnswer()}
+\end{ANSBL}
+
+
+%{Exercise 2.3}
+\item
+For {\tt RiddleUser} class (Fig.~\ref{fig-riddleuser}),
+
+\begin{ANSBL}
+\item  The names of two {\tt Riddle} instances: {\tt riddle1},
+     {\tt riddle2}
+\item  All six method calls of the {\tt Riddle} objects in the program:
+\begin{jjjlisting}
+\begin{lstlisting}
+Riddle("What is black and white and red all over?", 
+                            "An embarrassed zebra.")
+Riddle("What is black and white and read all over?", 
+                                     "A newspaper.")
+riddle1.getQuestion()
+riddle1.getAnswer()
+riddle2.getQuestion()
+riddle2.getAnswer()
+\end{lstlisting}
+\end{jjjlisting}
+\item  Qualified names: {\tt riddle1.getQuestion()} and  {\tt riddle1.getAnswer()}
+\end{ANSBL}
+
+%{Exercise 2.4}
+\item
+Definition of new instance variable in the {\tt Riddle} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private String hint = "This riddle is to easy for a hint";
+\end{lstlisting}
+\end{jjjlisting}
+
+%{Exercise 2.5}
+\item
+The header for a {\tt getHint()} method of the {\tt Riddle} class,
+which should be a {\tt public} method, is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String getHint();
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 2.6}
+\item
+The header for a {\tt setHint()} method of the {\tt Riddle} class is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  public void setHint(String aHint);
+\end{lstlisting}
+\end{jjjlisting}
+
+The result type is {\tt void}.  Although the identifier used for the
+parameter is arbitrary, it is a good practice to make it descriptive,
+by referring in some way to the {\tt hint} instance variable.
+
+%{Exercise 2.7}
+\item
+The partial definition of the {\tt Student} class is given below.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Student
+{  private String firstName;
+   private String lastName;
+   private int studentID;
+
+   public void setStudent(String fName, String lName, 
+                                              int anID);
+   public int getStudentID();
+   public String getStudentName();
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item
+A main method that reads and squares a real number is given below.
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public static void main(String[] args) 
+{               // Create Scanner object
+  Scanner sc = Scanner.create(System.in); 
+  System.out.print("Input a real number:");    // Prompt
+  double realNum= sc.nextDouble();      // Read a double
+  System.out.println(num + " squared = " + realNum*realNum);
+} //main()
+\end{lstlisting}
+\end{jjjlisting}
+
+%%%REW Solution to Exercise 2.9 moved with chapter 2- From the Java Library
+\end{ANS}
+
+\secEXRHtwo{Exercises}
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming 
+exercises, {\bf first} draw a UML class diagram describing all classes
+and their inheritance relationships and/or associations.}
+\begin{EXRtwo}
+\item  Consider the transaction of asking your professor for
+your grade in your computer science course.  Identify the objects in
+this transaction and the types of messages that would be passed among them.
+
+\item  Now suppose the professor in the previous exercise decides
+to automate the transaction of looking up a student's grade and has
+asked you to design a program to perform this task. The program should
+let a student type in his or her name and ID number and the program
+then should display his or her grades for the semester, with a final
+average. Suppose there are five quiz grades, three exams, and two
+programming exercise grades.  Identify the objects in this program and the type of
+messages that would be passed among them. ({\it Hint}: The grades
+themselves are just data values, not objects.)
+
+\item  In the {\tt RiddleUser} class (Fig.~\ref{fig-riddleuser}),
+give two examples of object instantiation and explain what is being
+done.
+
+\item  Explain the difference between a method definition and
+a method call. Give an example of each from the {\tt Riddle} and {\tt
+RiddleUser} examples discussed in this chapter.
+
+\item  In the {\tt RiddleUser} class (Fig.~\ref{fig-riddleuser}),
+identify three examples of method calls and explain what is being
+done.
+
+\item  Describe how the slogan ``define, create, manipulate'' applies
+to the {\tt Riddle}  example.
+
+\item  An identifier is the name for a \rule{30pt}{0.5pt}\,, 
+\rule{30pt}{0.5pt}\,,
+or a \rule{30pt}{0.5pt}\,.
+
+\item  Which of the following would be valid identifiers?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int  74ElmStreet  Big_N     L$&%#   boolean  Boolean  _number
+Int  public       Private   Joe     j1       2*K      big numb
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Explain the difference between a {\tt class variable} and
+an {\tt instance variable}.
+
+\item  Identify the syntax error (if any) in each declaration.
+Remember that some parts of an instance variable declaration are optional.
+
+\begin{EXRtwoLL}
+\item  {\tt public boolean isEven ;}
+\item  {\tt Private boolean isEven ;}
+\item  {\tt private boolean isOdd}
+\item  {\tt public boolean is Odd ;}
+\item  {\tt string S ;}
+\item  {\tt public String boolean ;}
+\item  {\tt private boolean even = 0;}
+\item  {\tt private String s = helloWorld ;}
+\end{EXRtwoLL}
+
+\item  Write declarations for each of the following
+instance variables.
+
+\begin{EXRtwoLL}
+\item  A {\tt private boolean} variable named {\tt bool} that has
+an initial value of {\tt true}.
+\item  A {\tt public String} variable named {\tt str} that has an initial
+value of "hello".
+\item  A {\tt private int} variable named {\tt nEmployees} that is
+not assigned an initial value.
+\end{EXRtwoLL}
+
+%%%REW Exercise below removed since default values no longer covered
+%%%\item  For each of the following data types--{\tt boolean},
+%%%{\tt int}, {\tt String}, {\tt OneRowNim}--identify what default value
+%%%Java will give an instance variable of that type if no initializer
+%%%expression is used when it is declared.
+
+\item  Identify the syntax error (if any) in each method header:
+
+\begin{EXRtwoLL}
+\item  {\tt public String boolean()}
+\item  {\tt private void String ()}
+\item  {\tt private void myMethod}
+\item  {\tt private myMethod()}
+\item  {\tt public static void Main (String argv[])}
+\end{EXRtwoLL}
+
+\item  Identify the syntax error (if any) in each assignment statement.
+Assume that the following variables have been declared:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int m;
+public boolean b;
+public String s;
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  {\tt m = "86" ;}
+\item  {\tt m = 86 ;}
+\item  {\tt m = true ;}
+\item  {\tt s = 1295 ;}
+\item  {\tt s = "1295" ;}
+\item  {\tt b = "true" ;}
+\item  {\tt b = false}
+\end{multicols}
+\end{EXRtwoLL}
+
+\item  Given the following definition of the {\tt NumberAdder} class,
+add statements to its {\tt main()} method to create two instances of
+this class, named {\tt adder1} and {\tt adder2}.  Then add statements
+to set {\tt adder1}'s numbers to 10 and 15, and {\tt adder2}'s numbers
+to 100 and 200. Then add statements to print their respective sums.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class NumberAdder
+{
+    private int num1;
+    private int num2;
+
+    public void setNums(int n1, int n2)
+    {
+      num1 = n1;
+      num2 = n2;
+    }
+    public int getSum()
+    {
+      return num1 + num2 ;
+    }
+
+    public static void main(String args[])
+    {
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  For the {\tt NumberAdder} class in the previous
+exercise, what are the names of its instance variables and instance
+methods? Identify three expressions that occur in the program and
+explain what they do.  Identify two assignment statements and explain
+what they do.
+
+\item  Explain the difference between each of the following pairs of
+concepts.
+
+\begin{EXRtwoLL}
+\item  A method definition and a method call.
+\item  Declaring a variable of reference type and creating an instance.
+\item  A variable of reference type and a variable of primitive type.
+\end{EXRtwoLL}
+
+\item  Define a Java class named {\tt NumberCruncher} that has
+a single {\tt int} variable as its only instance variable.   Then
+define methods that perform the following operations on its number:
+get, double, triple, square, and cube.  Set the initial value of the
+number with a constructor as was done with the
+instance variables in the {\tt Riddle} class.
+
+\item  Write a {\tt main()} method and add it to the
+{\tt NumberCruncher} class defined in the previous problem.   Use it to
+create a {\tt NumberCruncher} instance, with a certain initial value,
+and then get it to report its double, triple, square, and cube.
+
+
+\item  Write a Java class definition for a {\tt Cube}
+object, that has an integer attribute for the length of its side.  The
+object should be capable of reporting its surface area and volume.
+The surface area of a cube is six times the area of any side.  The
+volume is calculated by cubing the side.
+
+\item  Write a Java class definition for a {\tt CubeUser}
+object that will use the {\tt Cube} object defined in the previous
+exercise.  This class should create three {\tt Cube} instances, each
+with a different side, and then report their respective surface areas
+and volumes.
+
+\item  {\bf Challenge:} Modify your solution to the previous
+exercise so that it lets the user input the side of the
+cube.  Follow the example shown in this chapter's ``From the Java
+Library'' section.
+
+\item  {\bf Challenge:} Define a Java class that represents an address
+book entry, {\tt Entry}, which consists of a name, address, and phone
+number, all represented as {\tt String}s.  For the class's interface,
+define methods to set and get the values of each of its instance
+variables.  Thus, for the {\tt name} variable, it should have
+a {\tt setName()} and a {\tt getName()} method.
+
+\secEXRHone{UML Exercises}
+
+\item Draw a UML class diagram to represent the following
+class hierarchy: There are two types of languages, natural
+languages and programming languages. The natural languages
+include Chinese, English, French, and German. The programming
+languages include Java, Smalltalk and C++, which are object-oriented
+languages, FORTRAN, COBOL, Pascal, and C, which are imperative
+languages, Lisp and ML, which are functional languages, and
+Prolog, which is a logic language.
+
+\item Draw a UML class diagram to represent different kinds of
+automobiles, including trucks, sedans, wagons, SUVs, and the names
+and manufacturers of some popular models in each category.
+
+\item Draw a UML object diagram of a triangle with attributes for
+three sides, containing the values 3, 4, and 5.
+
+\item Suppose you are writing a Java program to implement an electronic
+address book. Your design is to have two classes, one to represent the
+user interface and one to represent the address book.  Draw a UML
+diagram to depict this relationship. See Figure~\ref{fig-p63f2}.
+
+\item Draw an UML object diagram to depict the relationship between
+an applet, which serves as a user interface, and three {\tt Triangle}s,
+named {\tt t1}, {\tt t2}, and {\tt t3}.
+
+
+\end{EXRtwo}
+%
+% LocalWords:  java
+
+%%%REW  BOLDFACE DEFINITIONS IN THE CHAPTER
+%% 
+%% access modifier
+%% class-level variable
+%% default value
+%% empty string
+%% local variable
+%% constant
+%% interface
+%% flow of control
+%% method call and return
+%% null pointer
+%% null pointer exception
+%% reference
+%% reference variable
+%% static modifier
+%% user interface

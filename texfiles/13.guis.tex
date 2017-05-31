@@ -1,0 +1,3280 @@
+%%%  Chapter 13: Graphical User Interfaces
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{12}
+\chapter{Graphical User Interfaces}
+\label{chapter-guis}
+\label{pg-chapter-guis}
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Gain more experience with the Swing component set.
+\item  Understand the relationship between the AWT and Swing.
+\item  Learn more about Java's event model.
+\item  Be able to design and build useful Graphical User Interfaces (GUIs).
+\item  Appreciate how object-oriented design principles were used to
+ extend Java's GUI capabilities.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item {Introduction}
+\item {Java GUIs: From AWT to Swing}
+\item {The Swing Component Set}
+\item {Object-Oriented Design: Model-View-Controller Architecture}
+\item {The Java Event Model}
+\item {Case Study: Designing a Basic GUI}
+\item {Containers and Layout Managers}
+\item {Checkboxes, Radio Buttons, and Borders}
+\item {Menus and Scroll Panes}
+\item[] {{\color{cyan}Special Topic:} Are Computers Intelligent?}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+\end{COL}
+\COend
+
+
+\section{Introduction}
+\noindent As we have seen, a {\it Graphical User Interface (GUI)}
+creates a certain way of interacting with a program.  It is what gives
+a program its {\it look and feel}. In preceding chapters, we have
+already used the basic components from which GUIs are created,
+including buttons, text fields, labels, and text areas.  Throughout
+this chapter, we will focus on designing and building GUIs that are
+easy for users to navigate.  However, Java's GUI libraries are so
+large that we will concentrate on only a handful of additional
+components, including containers, check boxes, radio buttons, and
+menus.
+
+We will try to identify design principles that can be applied to the
+design of more advanced interfaces.  Also, because Java's GUI classes
+provide an excellent example of object-oriented design, we will
+highlight some of the important design decisions and principles that
+have influenced the development of Java's GUI classes in both the AWT
+and Swing.  Let's begin with a brief history Java's GUI libraries.
+
+\section{Java GUIs: From AWT to Swing}
+\WWWjava
+%\addcontentsline{toc}{section}{\S~~~ From the Java Library: AWT to Swing}
+\tBOXseven{Ever since the release} of version 1.2 of the Java
+Development Kit (JDK) in 2000, Java has contained two distinct
+libraries of GUI components.  The {\it Abstract Windowing Toolkit
+(AWT)} has been part of Java since the original 1.0 version of the JDK
+1.0.  The more advanced {\em Swing component set} was first introduced
+in JDK 1.1 and was extensively revised in JDK 1.2.
+
+Although the original version of the AWT was suitable for developing
+Java applets, it wasn't powerful enough to support full-fledged
+applications. Commonly used programs, such as word processors and
+spreadsheets, have GUI requirements that were just too much for the
+original AWT.  The main problem was that the AWT was dependent on the
+underlying operating system. That meant that Java GUI programs were
+forced to rely on GUI elements that were part of the underlying
+operating system. A Java GUI program running on a Windows platform had
+to depend on Windows code for implementations of its buttons and text
+fields.  A Java program running on Unix depended upon underlying Unix
+code for its GUI components. Such dependence on the underlying
+operating system made the AWT less portable and less efficient.
+
+In contrast, the Swing GUI components are part of the {\it Java
+Foundation Classes (JFC)}, a collection of classes that do not depend
+as much on the underlying platform. The Swing library makes it
+possible to write GUI programs entirely in Java. Because they are
+rendered entirely by Java code, Swing components make it possible to
+design GUIs that are truly platform independent.  Such programs are
+much more portable than those which rely on AWT components and the
+underlying platform.  A program that uses Swing components will have
+the same look and feel on a Mac, Windows, or Unix platform.
+
+\subsection{Heavyweight Versus Lightweight Components}
+\noindent AWT components are based on the {\bf peer model}, a design
+in which every AWT component has a corresponding class (a {\em peer})
+written in the underlying \marginnote{The AWT peer model} system's
+code.  For example, the {\tt java.awt.Button} class has a peer named
+{\tt java.awt.peer.Button}. The peer class serves as the interface
+between the Java code and the computer's underlying  windowing system.
+The methods in the peer class are written in so-called {\em native}
+code--that is, the non-Java code of the underlying operating
+system. Therefore, AWT components are inherently platform dependent.
+
+AWT components are called {\it heavyweight} because they depend on the
+native (peer) system for their drawing and rendering.  Since every
+AWT component has an associated peer component, a Java AWT component
+would look just like the peer component. This is why an AWT button on
+a Windows platform looks just like a Windows button.  In effect, the
+AWT button, via its peer, creates and uses a Windows button.  When you
+change the Java button's label, it must call a method in the peer
+class that changes the label of the peer button.  This interaction
+between Java and the native windowing system requires a good deal of
+overhead, thereby affecting the overall efficiency of the system.
+
+By contrast, a {\bf lightweight component} is one that is written entirely 
+\marginnote{Lightweight components} 
+in Java. Instead of depending on a native component for its rendering, a
+lightweight component is drawn and rendered entirely by Java code.
+Because they do not depend on underlying system code, Swing components are 
+more efficient and more portable than corresponding AWT components.
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{chptr13/p472f1.eps}{Swing classes, part 1: Relationship between
+the AWT and the top-level Swing windows. REVISION: {\tt JWindow}
+extends {\tt Window}.
+\label{fig-swing1}
+\label{pg-fig-swing1}}
+\end{figure}
+%\end{figure}
+
+Figures~\ref{fig-swing1} and \ref{fig-swing2} show the relationship
+between AWT and Swing classes. The top-level Swing classes---the {\tt
+JApplet}, {\tt JDialog}, {\tt JFrame}, and {\tt JWindow}---are direct
+subclasses of their corresponding AWT counterparts. These are the
+top-level GUI windows. The remaining Swing components
+(Fig.~\ref{fig-swing2}) are subclasses of {\tt java.awt.Component}
+and {\tt java.awt.Container}.  As you can see, the names of Swing and
+AWT components are very similar. Swing components that have
+corresponding AWT components have names that begin with ``J.''
+
+One might think that because Swing components are superior
+to their AWT counterparts, the AWT package will eventually be dropped.
+However, this is not likely. Even if a Java program uses Swing
+components exclusively, that will still not break the dependence on
+the AWT.
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{chptr13/p473f1.eps}{Swing classes, part 2: Swing GUI components are
+derived from the {\tt JComponent} class.
+\label{fig-swing2}
+\label{pg-fig-swing2}}
+\end{figure}
+%\end{figure}
+
+There are several reasons for this dependence. First, Swing's
+top-level window classes---{\tt JApplet}, {\tt JDialog}, {\tt JFrame},
+and {\tt JWindow}---are defined as extensions to their AWT
+counterparts.  This means that Swing-based GUIs are still dependent on
+the AWT. Java programs need to have some way to map their windows to
+the windowing system used on the native (Windows, Unix, or Macintosh)
+platform.  The AWT's top-level windows---{\tt Window}, {\tt Frame},
+{\tt Dialog}, and {\tt Panel}---provide that mapping.
+
+Second, the {\tt JComponent} class, which is the basis for all Swing
+components, is derived from {\tt java.awt.Container}. There are many
+more such dependencies.  Fundamentally, Swing components are based on
+the AWT.
+
+Finally, all GUI applications and applets use layout managers ({\tt
+java.\-awt.FlowLayout}), fonts ({\tt java.awt.Font}), colors ( {\tt
+java.awt.Color}), and other non-component classes that are defined in
+the AWT. There is just no way to design a GUI without using AWT classes.
+Therefore, the programs presented in this and subsequent chapters will
+use Swing components instead of corresponding AWT components, but
+they also will use layouts and other elements from the AWT.
+
+\JavaTIP{PROGRAMMING TIP}{Swing Documentation.}{Complete documentation of
+the Swing classes is available for downloading or browsing on Sun's
+Web site at
+{\tt http://java.sun.com/reference/api/index.html}}
+
+
+\section{The Swing Component Set}
+
+\noindent Java's Swing components are defined in a
+collection of packages named {\tt javax.swing.*}, which is imported by
+the code shown in this and subsequent chapters.  Swing packages
+include the following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+javax.swing.event.*
+javax.swing.text.*
+javax.swing.plaf.*
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt javax.swing.event} package defines the
+various Swing events and their listeners, such as the {\tt MenuEvent}
+and the {\tt MenuListener}.  (In the AWT, the AWT events and
+listeners were defined in {\tt java.awt.event}.)
+
+The {\tt javax.swing.text} package contains the classes for {\tt
+JTextField} and {\tt JTextComponent}.  The Swing text components are
+more complex than their AWT counterparts.  For example, one of their
+important features is the ability to undo changes made to the text
+they contain.  This feature is crucial for building sophisticated
+word-processing applications.
+
+The {\tt javax.swing.plaf} package contains Swing's look-and-feel
+\marginnote{Look and feel}
+classes.  The term {\it plaf} is an acronym for {\bf pluggable
+look and feel}. It refers to the fact that changing an application's
+look and feel is a simple matter of ``plugging in'' a different plaf
+model.  Changing how a program looks does not change what it does.
+
+Swing's platform-independent look and feel is achieved by placing all
+the code responsible for drawing a component in a class that is
+separate from the component itself.  For example, in addition to {\tt
+JButton}, the class that defines the button control, there will be a
+separate class responsible for drawing the button on the screen.  The
+drawing class will control the button's color, shape, and other
+characteristics of its appearance.
+
+There are several look-and-feel packages built into Swing.  For
+example, the {\tt javax.swing.plaf.motif} package contains the classes
+that implement the Motif interface, a common Unix-based interface.
+The {\tt javax.swing.plaf.windows} packages contains classes that
+support a Windows look and feel, and the {\tt javax.swing.plaf.metal}
+package provides classes that support the Metal interface, a Java look
+and feel. These classes know how to draw each component and how to
+react to mouse, keyboard, and other events associated with these
+components.  
+
+
+\section{OBJECT-ORIENTED DESIGN:  \\Model-View-Controller Architecture}
+%\addcontentsline{toc}{section}{\S~~~ Object-Oriented Design: Model-View-Controller Architecture}
+
+\noindent Java's Swing components have been implemented using an
+object-oriented design known as the {\bf model-view-controller (MVC)}
+model.  Any Swing component can be considered in terms of three
+independent aspects: what state it's in (its model), how it looks (its
+view), and what it does (its controller).
+
+For example, a button's role is to appear on the interface waiting to
+be clicked.   When it is clicked, the button's appearance changes.  It
+looks pushed in or it changes color briefly, and then it changes back
+to its original (unclicked) appearance.   In the MVC model, this aspect
+of the button is its {\bf view}\index{view}. If you were designing an interface
+\marginnote{View}
+for a button, you would need visual representations for both the
+clicked and the unclicked button (as well as other possible states).
+
+When you click a button, its internal state changes from pressed to
+unpressed.  You've also probably seen buttons that were
+disabled---that is, in a state where they just ignore your clicks.
+Whether a button is enabled or disabled and whether it is pressed or
+\marginnote{Model}
+not are properties of its internal state.  Taken together, such properties
+constitute the button's {\bf model}\index{model}.  Of
+course, a button's view---how it looks---depends on its model.  When a
+button is pressed, it has one appearance, and when it is disabled, it
+has another.
+
+Because a button's state will change when it is clicked or when it is
+enabled by the program, some object needs to keep track of these
+changes.  That part of the component is its {\bf
+controller}\index{controller}.  
+\marginnote{Controller}
+
+Figure~\ref{fig-mvc} shows how the button's model, view, and
+controller interact with each other.  Suppose the user clicks the
+button.  This action is detected by the controller.  Whenever the mouse
+button is pressed, the controller tells the model to change into the
+pressed state.  The model, in turn, generates an event that is passed
+to the view.  The event tells the view that the button needs to be
+redrawn to reflect its change in state.
+
+%\begin{figure}
+\begin{figure}[t]
+\figa{chptr13/9f3.eps}{The model-view- controller architecture.
+\label{fig-mvc}
+\label{pg-fig-mvc}}
+\end{figure}
+%\end{figure}
+
+When the mouse button is released, a similar sequence of events occurs.
+The model is told to change to the unpressed state.  It in turn
+generates an event, handled by the view, which changes the button's
+appearance.
+
+A change in the button's appearance does not necessarily depend on
+direct action by the user.  For example, the program itself could call a
+method that disables the button.  In this case, the program issues a
+\mbox{command} \mbox{directly} to the model, which in turn generates an event that
+causes the view to change the object's appearance.
+
+For some Swing components, such as the text components, this
+three-part model is implemented almost exactly as we just
+described.  For others, such as {\tt JButton}, one class is used to
+implement both the view and the controller.  The {\tt JButton} model is
+defined in the {\tt DefaultButtonModel} class, and its view and
+controller are defined in the {\tt BasicButtonUI} class (The {\tt UI}
+acronym stands for User Interface).  The point is that for some
+components, Swing has organized the view and control---the look and
+the feel---into a single class.
+
+\subsection{Pluggable Look and Feel}
+%\addcontentsline{toc}{subsection}{~~~\S~~~ Pluggable Look and Feel}
+\noindent The MVC model uses a clear division of labor to implement a GUI
+component.   The main advantage of this design is the independence
+between the model, the view, and the controller.  If you want to give a
+button a different look and feel, you can redefine its view and its
+controller.
+
+By combining the view and controller into a single class, Swing makes
+it even easier to change a component's look and feel.  For example, to
+design your own look and feel for a {\tt JButton}, you would define a
+class that implemented all of the methods in the
+{\tt BasicButtonUI}. Of course, this is a job for an experienced software
+developer.
+
+However, if you just want to set your program to use one of the
+pre-defined look and feel models, you can simply use the {\tt
+UIManager.set\-LookAndFeel()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main (String args[]){
+  try{
+     UIManager.setLookAndFeel(
+        "javax.swing.plaf.metal.MetalLookAndFeel");
+  }catch (Exception e) {
+     System.out.err("Exception: " + e.getMessage());
+  }
+}//main()
+\end{lstlisting}
+\end{jjjlisting}
+
+Java's default, the {\it Metal} look and feel, has been designed
+specifically for Java applications.  For a Windows look, you can use
+the following argument:
+\verb|com.sun.java.swing.plaf.windows.WindowsLookAndFeel|.\break
+
+\noindent Figure~13.4
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr13/9f4.eps}{The same Java application using the
+Motif, Windows, and Metal look and feel.
+\label{fig-lafs}\label{pg-fig-lafs}}
+%\end{figure}
+%\end{figure}
+shows how the simple application would appear under the
+three different look-and-feel styles.
+
+%\end{objectorienteddesign}
+
+
+%%
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  The MVC architecture is a model of object-oriented design.  But if a
+{\tt JButton} is really composed of three separate parts, how can we
+still call it a component? Isn't it really three things?
+
+\end{SSTUDY}
+
+\section{The Java Event Model}
+
+\noindent As we saw in Chapter 4, whatever happens while the computer
+is running is classified as an event.  Every keystroke and mouse
+click, every time a disk is inserted into a disk drive, an event is
+generated.  The handling of events are an important element of GUI
+programming. Therefore, before we begin discussing how to design GUIs,
+it will be useful to review the main concepts of Java's {\bf event
+model}\index{event model}.
+
+When a Java program is running, events generated by the hardware are
+passed up through the operating system (and through the browser, for
+applets) to the program.  Those events that belong to the program must
+be handled by the program (refer to Fig.~4.18 in
+Chapter~4). For example, if you click your browser's menu bar, that
+event will be handled by the browser itself.  If you click a button
+contained in the Java program, that event should be handled by the
+program.
+
+In Java, whenever something happens within a GUI component, an event
+object is generated and passed to the {\it event listener} that has
+been registered to handle that component's events.  You've seen
+numerous examples of this process in earlier chapters, but we've
+included a simple example to serve as a reminder.
+
+Suppose you create a {\tt JButton} in a GUI as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private JButton clickme = new JButton("ClickMe");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Whenever the user clicks the {\tt JButton}, an {\tt
+ActionEvent} is generated.  In order to handle these events, the GUI
+must register the {\tt JButton} with a listener object that listens
+for action events.  This can be done in an applet's {\tt init()}
+method or in an application's constructor method, as in this example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public MyGUI() {
+  // Add clickme to the GUI and assign it a listener
+  add(clickme);  
+  clickme.addActionListener(this); 
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, we have designated the GUI itself ({\tt this})
+as an {\tt ActionListener} for {\tt clickme} (Fig.~13.5).
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr13/p478f1.eps}{The GUI listens for action events on the {\tt JButton}.
+\label{fig-p478f1}
+\label{pg-fig-p478f1}}
+%\end{graphic}
+%\end{figure}
+A {\bf listener}\index{listener} is any object that implements a {\it listener
+interface}, which is one of the interfaces derived from {\tt
+java.util.Event\-Listener}.  An {\tt ActionListener} is an object that
+listens for and receives {\tt ActionEvent}s.
+
+\pagebreak
+In order to complete the event-handling code, the GUI must implement
+the {\tt ActionListener} interface.  As Figure~\ref{fig-clickme}
+shows, implementing an interface is a matter of declaring the
+interface in the class heading and implementing the methods contained
+in the interface, in this case the {\tt actionPerformed()} method.
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.event.*;
+
+public class MyGUI extends JFrame 
+                              implements ActionListener {
+    private JButton clickme = new JButton("ClickMe");
+
+    public MyGUI() {
+     // Add clickme to the GUI and assign it a listener
+        getContentPane().add(clickme);   
+        clickme.addActionListener(this);
+        setSize(200,200);
+        setVisible(true);
+    } // init()
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == clickme) {
+	    clickme.setText(clickme.getText()+"*");
+        }
+    } // actionPerformed()
+    public static void main(String args[]) {
+        MyGUI gui = new MyGUI();
+    }
+} // MyGUI
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A simple GUI application that handles action events
+on a {\tt JButton}.
+\label{fig-clickme}\label{pg-fig-clickme}}
+\end{figure}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{chptr13/p479f1.eps}{A UML depiction of the sequence of actions
+and events that take place when a button is clicked. The vertical
+lines represent time lines, with time running from top to bottom. The
+arrows between lines represent messages passing between objects.
+\label{fig-p479f1}
+\label{pg-fig-p479f1}}
+\end{figure}
+%\end{figure}
+
+Now that we have implemented the code in Figure~\ref{fig-clickme},
+whenever the user clicks {\tt clickme}, that action is encapsulated
+within an {\tt ActionEvent} object and passed to the {\tt
+actionPerformed()} method.  This method contains Java code that will
+handle the user's action in an appropriate way.  For this example, it
+modifies the button's label by appending an asterisk to it each time
+it is clicked.  Figure~\ref{fig-p479f1} depicts the
+sequence of actions and events that occur when the the user 
+clicks a button.
+
+\pagebreak
+The methods used to handle the {\tt ActionEvent} are derived from the
+\marginfig{chptr13/p479f2.eps}{An {\tt EventObject}. The {\tt getSource()} method is used to
+get the object that caused the event.
+\label{fig-p479f2}
+\label{pg-fig-p479f2}}
+{\tt java.util.EventObject} class, the root class for all events
+(Fig.~13.8).  Our example (Fig.~\ref{fig-clickme}) uses
+the {\tt getSource()} method to get a reference to the object that
+generated the event.  To see what information is contained in an
+event object, we can use the {\tt toString()} method to print
+a string representation of the event that was generated.  Here's what
+it displays:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+java.awt.event.ActionEvent[ACTION_PERFORMED,cmd=ClickMe]
+  on javax.swing.JButton[,58,5,83x27,
+  layout=javax.swing.OverlayLayout]
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As you can see, the event generated was an {\tt ACTION\_PERFORMED}
+event, in response to the {\tt ClickMe} command.  The source of the event
+was the {\tt JButton}.
+
+\subsection{Event Classes}
+
+\noindent Although the event model is the same for both AWT and Swing
+classes, the Swing package introduces many additional events.
+Table~13.1 lists the events that are generated by both AWT and Swing
+components.  You already have worked with some of these. We have
+written GUIs that handled {\tt ActionEvent}s for {\tt JButton}s and
+{\tt JTextField}s in preceding chapters.
+
+\begin{table}[hbt]
+\TBTvar{0pc}{Java's {\tt AWTEvent}s\index{AWTEvent} for each {\tt Component} type
+%%%\TBTvar{-10pc}{Java's {\tt AWTEvent}s\index{AWTEvent} for each {\tt Component} type
+(Original source: David Flanagan, \\
+%%%\hspace*{-5pc}{\it Java in a Nutshell}, 2d ed., O'Reilly Associates, 1997. Modified for Swing components.)}
+\hspace*{3pc}{\it Java in a Nutshell}, 2d ed., O'Reilly Associates, 1997. Modified for Swing components.)}
+\hspace*{0pc}\begin{tabular}{lll}
+%%%\hspace*{-10pc}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{40.5pc}{1pt}}\\[2pt]
+%%%\TBCH{Components}&\TBCH{Events}&\TBCH{Description}
+{Components}&{Events}&{Description}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{40.5pc}{0.5pt}}\\[2pt]
+{\tt Button, JButton}                      &  {\tt ActionEvent}    & User clicked button\cr
+{\tt CheckBox, JCheckBox}                  &  {\tt ItemEvent}      & User toggled a checkbox\cr
+{\tt CheckboxMenuItem, JCheckboxMenuItem}  &  {\tt ItemEvent}      & User toggled a checkbox\cr
+{\tt Choice, JPopupMenu}                   &  {\tt ItemEvent}      & User selected a choice\cr
+{\tt Component, JComponent}                &  {\tt ComponentEvent} & Component was moved or resized\cr
+                                           &  {\tt FocusEvent}     & Component acquired or lost focus\cr
+                                           &  {\tt KeyEvent}       & User typed a key\cr
+                                           &  {\tt MouseEvent}     & User manipulated the mouse\cr
+{\tt Container, JContainer}                &  {\tt ContainerEvent} & Component added/removed from container\cr
+{\tt List, JList}                          &  {\tt ActionEvent}    & User double-clicked a list item\cr
+                                           &  {\tt ItemEvent}      & User clicked a list item\cr
+{\tt Menu, JMenu}                          &  {\tt ActionEvent}    & User selected menu item\cr
+{\tt Scrollbar, JScrollbar}                &  {\tt AdjustmentEvent}& User moved scrollbar\cr
+{\tt TextComponent, JTextComponent}        &  {\tt TextEvent}      & User edited text\cr
+{\tt TextField, JTextField}                &  {\tt ActionEvent}    & User typed Enter key\cr
+{\tt Window, JWindow}                      &  {\tt WindowEvent}    & User manipulated window
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{40.5pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+In viewing Table~13.1, it's important to remember that the
+classes listed there are arranged in a hierarchy.  This will affect the
+events that a particular object can generate.  For example, a
+{\tt JButton} is a {\tt JComponent} (Fig.~\ref{fig-swing2}), so in addition
+to generating {\tt ActionEvent}s when the user clicks on it, it can
+also generate {\tt MouseEvent}s when the user moves the mouse over
+it.   Similarly, because a {\tt JTextField} is also a {\tt JComponent},
+it can generate {\tt KeyEvent}s as well as {\tt ActionEvent}s.
+
+Note that the more generic events, such as those that involve moving,
+focusing, or resizing a component, are associated with the more
+generic components.  For example, the {\tt JComponent} class contains
+methods that are used to manage {\tt ComponentEvent}s.  Because they
+are subclasses of {\tt JComponent}, {\tt JButton}s and {\tt
+JTextField}s can also use these methods.  Defining the more generic
+methods in the {\tt JComponent} superclass is another example of the
+effective use of inheritance.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Inheritance.}{The higher a method is defined
+in the inheritance hierarchy, the broader is its use.}
+
+Table~13.2 lists events that are new with the Swing
+classes.  Some of the events apply to new components.  For example,
+{\tt JTable} and {\tt JTree} do not have AWT counterparts.  Other events
+provide Swing components with capabilities that are not available in
+their AWT counterparts.   For example, a {\tt CaretEvent} allows the
+programmer to have control over mouse clicks that occur within a
+text component.
+
+\begin{table}[h!]
+%\hphantom{\caption{Some of the events that are newly defined in the Swing library.}}
+%%%\TBT{0pc}{Some of the events that are defined in the Swing library.}
+\TBT{-5.5pc}{Some of the events that are defined in the Swing library.}
+\hspace*{-5.5pc}
+%%%\hspace*{0pc}
+\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{32pc}{1pt}}\\[2pt]
+%%\TBCH{Component}&\TBCH{Events}&\TBCH{Description}
+{Component}&{Events}&{Description}
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{32pc}{0.5pt}}\\[2pt]
+{\tt JPopupMenu}&{\tt PopupMenuEvent}&User selected a choice\cr
+{\tt JComponent}&{\tt AncestorEvent}&An event occurred in an ancestor\cr
+{\tt JList}&{\tt ListSelectionEvent}&User double-clicked a list item\cr
+&{\tt ListDataEvent}&List's contents were changed\cr
+{\tt JMenu}&{\tt MenuEvent}&User selected menu item\cr
+{\tt JTextComponent}&{\tt CaretEvent}&Mouse clicked in text\cr
+&{\tt UndoableEditEvent}&An undoable edit has occurred\cr
+{\tt JTable}&{\tt TableModelEvent}&Items added/removed from table\cr
+&{\tt TableColumnModelEvent}&A table column was moved\cr
+{\tt JTree}&{\tt TreeModelEvent}&Items added/removed from tree\cr
+&{\tt TreeSelectionEvent}&User selected a tree node\cr
+&{\tt TreeExpansionEvent}&User expanded or collapsed a tree node\cr
+{\tt JWindow}&{\tt WindowEvent}&User manipulated window
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{32pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+Tables~13.1 and 13.2 provide only a brief summary of these classes and
+Swing components. For further details you should consult the JDK
+online documentation at
+
+\WWW
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/1.5.0/docs/api/
+\end{lstlisting}
+\end{jjjlisting}
+
+%%\pagebreak
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Is it possible to register a component with more than one
+listener?
+
+\item  Is it possible for a component to have two different kinds
+of listeners?
+
+\end{SSTUDY}
+
+
+\section{CASE STUDY: Designing a Basic GUI}
+%\begin{casestudy}
+\noindent What elements make up a basic user interface?  If you think about all
+of the various interfaces you've encountered---and don't just limit
+yourself to computers---they all have the following elements:
+
+\begin{BL}
+\item  Some way to provide help/guidance to the user.
+\item  Some way to allow input of information.
+\item  Some way to allow output of information.
+\item  Some way to control the interaction between the user and the device.
+\end{BL}
+
+\noindent Think about the interface on a beverage machine.
+Printed text on the machine will tell you what choices you have, where
+to put your money, and what to do if something goes wrong.   The coin
+slot is used to input money.  There's often some kind of display to
+tell you how much money you've inserted.  And there's usually a bunch
+of buttons and levers that let you control the interaction with the
+machine.
+
+These same kinds of elements make up the basic computer interface.
+Designing a Graphical User Interface is primarily a process of
+choosing components that can effectively perform the tasks of input,
+output, control, and guidance.
+
+\JavaTIP{EFFECTIVE DESIGN}{User Interface.}{A user interface must
+effectively perform the tasks of input, output, control, and guidance.}
+
+In the programs we designed in the earlier chapters, we used two
+different kinds of interfaces.  In the {\it command-line} interface, we
+used printed prompts to inform the user, typed commands for data
+entry and user control, and printed output to report results.  Our
+GUI interfaces used {\tt JLabel}s to guide and prompt the user,
+{\tt JTextField}s and {\tt JTextArea}s as basic input and output devices, and
+either {\tt JButton}s or {\tt JTextField}s for user control.
+
+Let's begin by building a basic GUI in the form of a Java application.
+To keep the example as close as possible to the GUIs we've already
+used, we will build it out of the following Swing components: {\tt
+JLabel}, {\tt JTextField}, {\tt JTextArea}, and {\tt JButton}.
+
+\subsection{The Metric Converter Application}
+\noindent Suppose the coach of the cross-country team asks you to write a Java
+application that can be used to convert miles to kilometers.  The
+program should let the user input a distance in miles, and the program should
+report the equivalent distance in kilometers.
+\marginfig{chptr13/p483f1.eps}{The {\tt MetricConverter} class has a single method to convert
+miles to kilometers.
+\label{fig-p483f1}
+\label{pg-fig-p483f1}}
+
+Before we design the interface for this, let's first define a {\tt
+Metric\-Converter} class that can be used to perform the
+conversions (Fig.~13.9).  For now at least, this class's
+only task will be to convert miles to kilometers, for which it will
+use the formula that 1 kilometer equals 0.62 miles:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class MetricConverter {
+    public static double milesToKm(double miles) {
+        return miles / 0.62;
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the method takes a {\tt double} as input
+and returns a {\tt double}. Also, by declaring the method {\tt static},
+we make it a class method, so it can be invoked simply by
+
+\begin{jjjlisting}
+\begin{lstlisting}
+MetricConverter.milesToKm(10);
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsubsection*{Choosing the Components}
+\noindent Let's now design a GUI to handle the interaction with the user.
+First, let's choose Swing components for each of the four interface
+%\begin{marginalnote}\it Which components do we need?\end{marginalnote}
+\marginnote{Which components do we need?}
+tasks of input, output, control, and guidance.  For each component, it
+might be useful to refer back to Figure~\ref{fig-swing2} to note its
+location in the Swing hierarchy.
+
+\begin{BL}
+
+\item  A {\tt JLabel} is a display area for a short string of text,  an
+image, or both.  Its AWT counterpart, the {\tt Label}, cannot display
+images.  A \mbox{\tt JLabel} does not react to input.  Therefore, it is used
+primarily to display a graphic or small amounts of static text.  It is
+perfectly suited to serve as a prompt, which is what we will use it
+for in this interface.
+
+\item  A {\tt JTextField} is a component that allows the user to edit
+a single line of text.  It is identical to its AWT counterpart,
+the {\tt TextField}. By using its {\tt getText()} and {\tt setText()}
+methods, a {\tt JTextField} can be used for either input or output, or
+both.  For this problem, we'll use it to perform the interface's input
+task.
+
+\item A {\tt JTextArea} is a multiline text area that can be used for
+either input or output.  It is almost identical to the AWT {\tt
+TextArea} component.  One difference, however, is that a {\tt
+JTextArea} does not contain scrollbars by default.  For this program,
+we'll use the {\tt JTextArea} for displaying the results of
+conversions.  Because it is used solely for output in this program,
+we'll make it {\it uneditable} to prevent the user from typing in it.
+
+\item  Let's use a {\tt JButton} as our main
+control for this interface.  By implementing the {\tt ActionListener}
+interface we will handle the user's action events.
+
+\end{BL}
+
+\subsubsection*{Choosing the Top-Level Window}
+\noindent The next issue we must decide is what kind of top-level
+%\begin{marginalnote}\it What top-level window should we use?\end{marginalnote}
+\marginnote{What top-level window to use?}
+window to use for this interface.  For applet interfaces, the top-level
+component would be a {\tt JApplet}.  For Java applications, you would
+typically use a {\tt JFrame} as the top-level window.  Both of these
+classes are subclasses of {\tt Container}, so they are suitable for
+holding the components that make up the interface
+(Fig.~\ref{fig-swing1}).
+
+
+Also, as noted earlier, {\tt JApplet}s and {\tt JFrame}s are both
+examples of heavyweight components, so they both have windows
+associated with them.  To display a {\tt JFrame} we just have to give
+it a size and make it visible.  Because a frame runs as a stand-alone
+window, not within a browser context, it should also be able to exit
+the application when the user closes the frame.
+
+\subsubsection*{Designing a Layout}
+\noindent The next step in designing the interface is deciding how to arrange the
+%\begin{marginalnote}\it How should the components be arranged?\end{marginalnote}
+\marginnote{\raggedright How should the components be arranged?}
+components so that they will be visually appealing and comprehensible,
+as well as easy to use.
+%\begin{figure}
+\begin{figure}[b]
+\figaleft{chptr13/9f6.eps}{A design and layout for the Metric
+Converter GUI.~The {\it containment hierarchy} (also called a {\it widget
+hierarchy}) shows the containment relationships among the components.
+\label{fig-metricgui}
+\label{pg-fig-metricgui}}
+\end{figure}
+%\end{figure}
+
+Figure~\ref{fig-metricgui} shows a design for the layout. The largest
+component is the output text area, which occupies the center of the
+{\tt JFrame}. The prompt, input text field, and control button are
+arranged in a row above the text area.  This is a simple and
+straightforward layout.
+
+Figure~\ref{fig-metricgui} also provides a {\bf containment
+hierarchy}\index{containment hierarchy}, also called a {\bf widget
+hierarchy}\index{widget hierarchy}, which shows the containment
+relationships among the various components.  Although it might not
+seem so for this simple layout, the containment hierarchy plays an
+important role in showing how the various components are grouped
+in the interface.  For this design, we have a relatively
+simple hierarchy, with only one level of containment.  All of the
+components are contained directly in the {\tt JFrame}.
+
+\pagebreak
+Figure~13.11 shows the design of the {\tt Converter} class, which
+extends the {\tt JFrame} class and implements the {\tt ActionListener}
+interface.  As a {\tt JFrame} subclass, a {\tt Converter} can contain
+GUI components.  As an implementor of the {\tt ActionListener}
+interface, it also will be able to handle action events through the {\tt
+actionPerformed()} method.
+
+\marginfig{chptr13/p484f1.eps}{The {\tt Converter} class is a subclass
+of {\tt JFrame} and implements the {\tt ActionListener} interface.
+\label{fig-p484f1}
+\label{pg-fig-p484f1}}
+
+Figure~\ref{fig-converterclass} gives the implementation of the {\tt
+Converter} class. Note the three packages that are imported.  The
+first contains definitions of the Swing classes, and the other two
+contain definitions of AWT events and layout managers that are used in
+the program.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;             // Packages used
+import java.awt.*;
+import java.awt.event.*;
+
+public class Converter extends JFrame 
+                            implements ActionListener{
+  private JLabel prompt = 
+                  new JLabel("Distance in miles: ");
+  private JTextField input = new JTextField(6);
+  private JTextArea display = new JTextArea(10,20);
+  private JButton convert = new JButton("Convert!");
+
+  public Converter() {
+    getContentPane().setLayout(new FlowLayout());
+    getContentPane().add(prompt);
+    getContentPane().add(input);
+    getContentPane().add(convert);
+    getContentPane().add(display);
+    display.setLineWrap(true);
+    display.setEditable(false);
+    convert.addActionListener(this);
+  } // Converter()
+
+  public void actionPerformed( ActionEvent e ) {
+    double miles = 
+       Double.valueOf(input.getText()).doubleValue();
+    double km = MetricConverter.milesToKm(miles);
+    display.append(miles + " miles equals " + 
+                     km + " kilometers\n");
+  } // actionPerformed()
+  public static void main(String args[]) {
+    Converter f = new Converter();
+    f.setSize(400, 300);
+    f.setVisible(true);
+    f.addWindowListener(new WindowAdapter() {      
+      public void windowClosing(WindowEvent e) {
+        System.exit(0); // Quit the application
+      }
+    });
+  } // main()
+} // Converter
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Converter} class implements a simple GUI interface.
+\label{fig-converterclass}\label{pg-fig-converterclass}}
+\end{figure}
+
+We have to do all initializing tasks in the constructor.  First,
+we have to set the {\tt JFrame}'s layout to {\tt FlowLayout}.  A {\bf
+layout manager}\index{layout manager} is the object that is
+responsible for sizing and arranging the components in a container so
+that the elements are organized in the best possible manner.  A flow
+layout is the simplest arrangement: The components are arranged left
+to right in the window, wrapping around to the next ``row'' if
+necessary.
+
+
+Second, note the statements used to set the layout and to add
+components directly to the {\tt JFrame}. Instead of adding components
+directly to the {\tt JFrame}, we must add them to its content pane:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+getContentPane().add(input);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A {\bf content pane}\index{content pane} is a {\tt JPanel} that serves as the
+working area of the {\tt JFrame}. It contains all of the frame's
+components.  Java will raise an exception if you attempt to add a
+component directly to a {\tt JFrame}.
+
+\JavaTIP{DEBUGGING TIP}{Content Pane}{A {\tt JFrame} cannot directly
+contain GUI elements.  Instead, they must be added to its content
+pane, which can be retrieved using the {\tt getContentPane()} method.}
+
+\noindent The {\tt JFrame} and all the
+other top-level Swing windows have an internal structure made up of
+several distinct objects that can be manipulated by the
+program.  Because of this structure, GUI elements can be organized into
+different layers within the window to create many types of
+sophisticated layouts.  Also, one layer of the structure makes it
+possible to associate a menu with the frame.   
+
+Finally, note how the {\tt Converter} frame is instantiated, made
+visible, and eventually exited in the application's {\tt main()}
+method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String args[]) {
+   Converter f = new Converter();
+   f.setSize(400, 300);
+   f.setVisible(true);
+   f.addWindowListener(new WindowAdapter() {  
+                         // Quit the application
+       public void windowClosing(WindowEvent e) {
+           System.exit(0);
+       }
+   });
+} // main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It is necessary to set both the size and visibility of the
+frame, since these are not set by default.  Because we are using a
+{\tt FlowLayout}, it is especially important to give the frame an
+appropriate size.   Failure to do so can cause the components to be
+arranged in a confusing way and might even cause some components to not
+appear in the window.  These are limitations we will fix when
+we learn how to use some of the other layout managers.
+
+\subsection{Inner Classes and Adapter Classes}
+
+\noindent In this section we introduce two new language features, {\em
+inner classes} and {\em adapter classes}, which are used in the {\tt
+main()} method shown above to handle the closing of the
+{\tt Converter} application's window when the program is exited: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ f.addWindowListener(new WindowAdapter() { 
+       public void windowClosing(WindowEvent e) {
+           System.exit(0);
+       }
+ });
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This code segment provides a listener that listens for
+\marginnote{Inner classes}
+window closing events.  When such an event occurs, it exits the
+application by calling {\tt System.exit()}.
+
+The syntax used here is an example of an {\it anonymous inner class}.
+An {\bf inner class} is a class defined within another class.  The
+syntax is somewhat ugly, because it places the class definition right
+where a reference to a window listener object would go.  In effect
+what the code is doing is defining a subclass of {\tt WindowAdapter}
+and creating an instance of it to serve as a listener for window
+closing events.
+
+Anonymous inner classes provide a useful way of creating classes and
+objects on the fly to handle just this kind of listener task.  The
+syntax used actually enables us to write one expression that both
+defines a class and creates an instance of it to listen for window
+closing events.   The new subclass has local scope limited here to the
+{\tt main()} method.  It is anonymous, meaning we aren't even
+giving it a name, so you can't create other instances of it in the
+program.   Note that the body of the class definition is placed right
+after the {\tt new} keyword, which takes the place of the argument to
+the {\tt addWindowListener()} method.   For more details on the inner
+and anonymous classes, see Appendix~F.
+
+\BOXtwo{Inner Class.}{An inner class is
+a class defined within another class.  Inner classes are
+mostly used to handle a task that supports the work of
+the containing class.}
+
+An {\bf adapter class} is a wrapper class that implements trivial
+%\begin{marginalnote}\it Adapter class\end{marginalnote}
+\marginnote{Adapter class}
+versions of the abstract methods that make up a particular
+interface. (Remember from Chapter~4 that a wrapper class contains
+methods for converting primitive data into objects and for
+converting data from one type to another.)
+
+The {\tt Window\-Adapter} class implements the methods of the {\tt
+Window\-Listener} interface.  When you implement an interface, such as
+{\tt ActionListener}, you must implement all the abstract methods
+defined in the interface.  For {\tt ActionListener} there's just one
+method, the {\tt actionPerformed()} method, so we can implement it as
+part of our applet or frame class.  However, we want to use only one
+of the seven methods available in the {\tt WindowListener} interface,
+the {\tt windowClosing()} method, which is the method implemented in
+the anonymous inner class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void windowClosing(WindowEvent e) {
+    System.exit(0);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt WindowAdapter} is defined simply as
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract class WindowAdapter 
+                          implements WindowListener {
+    public void windowActivated(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {}
+    ...
+    // Five other window listener methods
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that each method is given a trivial implementation ({}).
+To create a subclass of {\tt WindowAdapter}, you must override at
+least one of its trivially implemented methods.
+
+Another way to manage the application's window closing event
+is to define a subclass of {\tt WindowAdapter}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class WindowCloser extends WindowAdapter {
+    public void windowClosing(WindowEvent e) {
+        System.exit(0);
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this class, we can then place the following statement
+in {\tt Converter}'s {\tt main()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+f.addWindowListener(new WindowCloser());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This is somewhat more familiar looking than the inner class
+construct. If you prefer this way of handling things, you can use this
+method in place of the inner classes here and in other examples.
+
+\JavaTIP{EFFECTIVE DESIGN}{Anonymous Adapter Classes.}{Anonymous adapter
+classes provide a useful way of creating an object to handle one
+particular kind of event within a program.}
+
+\pagebreak
+\subsection{GUI Design Critique}
+\noindent Figure~13.13 shows the converter interface.
+\marginfig{chptr13/9f8.eps}{The first version of the metric converter GUI.
+\label{fig-convertscreen}
+\label{pg-fig-convertscreen}}
+Although our basic GUI design satisfies the demands of input, output,
+control, and guidance, it has a few significant design flaws.
+
+First, it forces the user to manually clear the input field after each
+conversion.  Unless it is important that the user's input value remain
+displayed until another value is entered, this is just an
+inconvenience to the user.  In this case, the user's input value is
+displayed along with the result in the {\tt JTextArea}, so there's no
+reason not to clear the input text field:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+input.setText("");  // Clear the input field
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP{EFFECTIVE DESIGN}{Reduce the User's Burden.}{A GUI should aim to
+minimize the responsibility placed on the user.  In general, the
+program should perform any task that it can perform, unless, of course, there is
+a compelling reason that the user should do the task.}
+
+A second problem with our design is that it forces the user to switch
+between the keyboard (for input) and the mouse (for
+control). Experienced users will find this annoying.   An easy way to
+fix this problem is to make both the {\tt JTextField} and the
+{\tt JButton} serve as controls.  That way, to get the program to do the
+conversion, the user can just press the Enter key after typing a
+number into the text field.
+
+
+To give the interface this type of control, we only need to add an
+{\tt ActionLis\-tener} to the {\tt JTextField} during the initialization
+step:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+input.addActionListener(this);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A {\tt JTextField} generates an {\tt
+ActionEvent} whenever the Enter key is pressed.  We don't even need to
+modify the {\tt actionPerformed()} method, since both controls will
+generate the same action event.  This will allow users who prefer the
+keyboard to use just the keyboard.
+
+\JavaTIP{EFFECTIVE DESIGN}{User Interface.}{A GUI should aim to minimize the
+number of different input devices (mouse, keyboard) that the user has to
+manipulate to perform a particular task.}
+
+\noindent Given that the user can now interact with the
+interface with just the keyboard, a question arises over whether we
+should keep the button at all.  In this case, it seems justifiable to
+keep both the button and the text field controls.  Some users dislike
+typing and prefer to use the mouse.  Also, having two independent sets
+of controls is a desirable form of redundancy.  You see it frequently
+in menu-based systems that allow menu items to be selected either by
+mouse or by special control keys.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Desirable Redundancy.}{Certain forms of
+redundancy in an interface, such as two sets of independent controls
+(mouse and keyboard), make it a more flexible or more widely usable program.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Another deficiency in the converter interface is that it doesn't round
+off its result, leading sometimes to numbers with 20 or so
+digits.  Develop Java code to fix this problem.
+
+
+\item  Give an example of desirable redundancy in automobile design.
+
+\end{SSTUDY}
+
+\subsection{Extending the Basic GUI: Button Array}
+\label{sec-keypad}
+\noindent Suppose the coach likes our program but complains that some of the
+folks in the office are terrible typists and would prefer not to have
+to use the keyboard at all.  Is there some way we could modify the
+interface to accommodate these users?
+
+
+This gets back to the point we were just making about incorporating
+\marginnote{What components do we need?}  
+redundancy into the interface.  One way to satisfy this requirement
+would be to implement a numeric keypad for input, similar to a
+calculator keypad.  Regular {\tt JButton}s can be used as the keypad's
+keys.  As a user clicks keypad buttons, their face values---0 through
+9---are inserted into the text field.  The keypad will also need a
+button to clear the text field and one to serve as a decimal point.
+
+This new feature will add 12 new {\tt JButton} components to our
+\marginnote{\raggedright How should the components be organized?}
+interface.  Instead of inserting them into the {\tt JFrame}
+individually, it will be better to organize them into a separate
+panel and to insert the entire panel into the frame as a single
+unit.  This will help reduce the complexity of the display, especially
+if the keypad buttons can be grouped together visually.   Instead of
+having to deal with 16 separate components, the user will see the
+keypad as a single unit with a unified function.  This is an example of
+the abstraction principle, similar to the way we break long
+strings of numbers (1-888-889-1999) into subgroups to make them easier
+to remember.
+
+\JavaTIP{EFFECTIVE DESIGN}{Reducing Complexity.}{Organizing elements
+into distinct groups by function helps to reduce the GUI's complexity.}
+
+\noindent Figure~\ref{fig-metricgui2} shows the revised  
+converter interface design.  The containment hierarchy shows that the 12
+keypad {\tt JButton}s are contained within a {\tt JPanel}. In the
+frame's layout, the entire panel is inserted just after the text area.
+
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaright{chptr13/9f9.eps}{A widget hierarchy showing the
+containment relationships among the components.
+\label{fig-metricgui2}
+\label{pg-fig-metricgui2}}
+\end{figure}
+%\end{figure}
+
+Incorporating the keypad into the interface requires several changes
+%\begin{marginalnote}\it The {\tt JPanel}\end{marginalnote}
+%\marginnote{The {\tt JPanel}}
+in the program's design. Because the keypad has such a clearly defined
+role, let's make it into a separate object by defining a {\tt KeyPad}
+class (Fig.~13.15). The {\tt KeyPad} will be a subclass of {\tt
+JPanel} and will handle its own {\tt ActionEvent}s.  As we saw in
+Chapter~4, a {\tt JPanel} is a generic container.  It is a subclass of
+{\tt Container} via the {\tt JComponent} class
+(Fig.~\ref{fig-swing2}).  Its main purpose is to contain and organize
+\marginfig{chptr13/p490f1.eps}{A {\tt KeyPad} is a {\tt JPanel} of {\tt JButton}s that handles its
+own action events.
+\label{fig-p490f1}
+\label{pg-fig-p490f1}}
+components that appear together on an interface.
+
+In this case, we will use a {\tt JPanel} to hold the keypad buttons.
+As you might recall from Chapter~4, to add elements to a {\tt JPanel},
+you use the {\tt add()} method, which is inherited from {\tt
+Container}.  (A {\tt JApplet} is also a subclass of {\tt
+Container} via the {\tt Panel} class.)
+%\begin{figure}
+%\begin{graphic}
+%\end{graphic}
+%\end{figure}
+
+As a subclass of {\tt JPanel}, the {\tt KeyPad} will take care of
+%\marginnote{\em What data do we need?}
+holding and organizing the {\tt JButton}s in the visual
+display. We also need some way to organize and manage the 12 keypad
+buttons within the program's memory. Clearly, this is a good job for an
+array. Actually, two arrays would be even better, one for the buttons
+and one for their labels:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private JButton buttons[];
+private String labels[] = // An array of button labels
+            { "1","2","3",
+              "4","5","6",
+              "7","8","9",
+              "C","0","." };
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt label} array stores the strings that we will
+use as the buttons' labels.  The main advantage of the array is that
+we can use a loop to instantiate the buttons:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+buttons = new JButton[NBUTTONS]; // Create the array
+                          // For each labeled button
+for(int k = 0; k < buttons.length; k++) { 
+ buttons[k] = new JButton(labels[k]); // Create button
+ buttons[k].addActionListener(this); // and a listener
+ add(buttons[k]);           // and add it to the panel
+} // for
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This code should be placed in the {\tt KeyPad()}
+\marginnote{Algorithm design}
+constructor. It begins by instantiating the array itself. It then uses
+a for loop, bounded by the size of the array, to instantiate each
+individual button and insert it into the array. Note how the loop
+variable here, {\em k}, plays a dual role. It serves as the index into
+both the button array ({\tt buttons}) and the array of strings that
+serves as the buttons' labels ({\tt labels}). In that way the labels
+are assigned to the appropriate buttons. Note also how each button is
+assigned an {\tt ActionListener} and added to the panel:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+buttons[k].addActionListener(this); // Add listener
+add(buttons[k]);            //  Add button to panel
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent An important design issue for our {\tt KeyPad} object concerns how it will
+interact with the {\tt Converter} that contains it.  When the user
+clicks a keypad button, the key's label has to be displayed in the
+{\tt Converter}'s text area. But because the text area is private to the
+converter, the {\tt KeyPad} does not have direct access to it. To
+address this problem, we will use a Java interface to implement a 
+\marginnote{Callback design}
+{\bf callback design}\index{callback design}. In this design, whenever a {\tt KeyPad}
+button is pressed, the {\tt KeyPad} object calls a method in the
+{\tt Converter} that displays the key's label in the text area.
+
+
+Figure~\ref{fig-p493f1} provides a summary of the callback design.
+Note that the association between the {\tt Converter} and the {\tt
+KeyPad} is bi-directional. This means that each object has a reference
+to the other and can invoke the other's public methods. This will be
+effected by having the {\tt Converter} pass a reference to itself when
+it constructs the {\tt KeyPad}:
+
+\begin{figure}[b!]
+\figaleft{chptr13/p493f1.eps}{In a callback design, the {\tt Converter} implements
+the {\tt KeyPadClient} interface. It passes a reference to
+itself when it creates the {\tt KeyPad} object. The {\tt KeyPad}
+object can then invoke the {\tt keypressCallback()} method whenever
+a keypad button is pressed, and the {\tt Converter} can display the
+result of the keypress.
+\label{fig-p493f1}
+\label{pg-fig-p493f1}}
+\end{figure}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private KeyPad keypad = new KeyPad(this);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Another important design issue is that the {\tt KeyPad} needs 
+to know the name of the callback method and the {\tt Converter} needs
+to have an implementation of that method. This is a perfect job for an
+abstract interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract interface KeyPadClient {
+    public void keypressCallback(String s);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt KeyPad} can interact with any class that implements 
+the {\tt Key\-Pad\-Client} interface.  Note that the {\tt KeyPad} has a
+reference to the \break{\tt KeyPadClient}, which it will use to invoke the
+{\tt keypressCallback()} method.
+
+The implementation of {\tt KeyPad} is shown in Figure~13.17. 
+Note that its constructor takes a reference to a {\tt KeyPadClient}
+and saves it in an instance variable. Its {\tt actionPerformed()}
+method then passes the key's label to the {\tt KeyPadClient}'s 
+callback method.
+
+%% proglist ch9/converter2/Converter.java
+\begin{figure}[hbt]
+\jjjprogstart
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class KeyPad extends JPanel implements ActionListener{
+ 
+  private final static int NBUTTONS = 12;  
+  private KeyPadClient kpc;  // Owner of the KeyPad
+  private JButton buttons[];
+  private String labels[] =  // An array of button labels
+                { "1","2","3",
+                  "4","5","6",
+                  "7","8","9",
+                  "C","0","." };
+
+  public KeyPad(KeyPadClient kpc) {
+    this.kpc = kpc;
+    buttons = new JButton[NBUTTONS];         // Create the array
+    for(int k = 0; k < buttons.length; k++) { // For each button
+      buttons[k] = new JButton(labels[k]);   //  Create a button
+      buttons[k].addActionListener(this);     //  and a listener
+      add(buttons[k]);                    // and add it to panel
+    } // for
+  } // KeyPad()
+
+  public void actionPerformed(ActionEvent e) {
+    String keylabel = ((JButton)e.getSource()).getText();
+    kpc.keypressCallback(keylabel);
+  } // actionPerformed()
+} // KeyPad
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt KeyPad} object implements a 12-key keypad
+in a {\tt JPanel}. It has a reference to the {\tt KeyPadClient} that
+contains the keypad.}
+\label{fig-keypad}
+\end{figure}
+
+Given the {\tt KeyPad} design, we need to revise
+our design of the {\tt Converter} class (Fig.~\ref{fig-p493f1}).
+The {\tt Converter} will now implement the {\tt KeyPad\-Client}
+interface, which means it must provide an implementation of the
+{\tt keypressCall\-back()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void keypressCallback(String s) {
+    if (s.equals("C"))
+        input.setText("");
+    else
+        input.setText(input.getText() + s);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Recall that whenever the {\tt KeyPad} object calls the 
+{\tt keypressCallback()} method, it passes the label of the button that
+was pressed. The {\tt Converter} object simply appends the key's label
+to the input text field, just as if the user typed the key in the
+text field.
+
+The complete implementation of this revised version of the interface
+is shown in Figure~13.18 on the next page. The appearance of the
+interface itself is shown in Figure~3.19.
+
+%% proglist ch9/converter2/Converter.java
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+import javax.swing.*;      // Packages used 
+import java.awt.*;
+import java.awt.event.*;
+
+public class Converter extends JFrame   // Version 2
+                 implements ActionListener, KeyPadClient { 
+
+  private JLabel prompt = new JLabel("Distance in miles: "); 
+  private JTextField input = new JTextField(6);
+  private JTextArea display = new JTextArea(10,20);
+  private JButton convert = new JButton("Convert!");
+  private KeyPad keypad = new KeyPad(this);
+  
+  public Converter () {
+    getContentPane().setLayout(new FlowLayout()); 
+    getContentPane().add(prompt);
+    getContentPane().add(input);
+    getContentPane().add(convert);  
+    getContentPane().add(display);
+    getContentPane().add(keypad);
+    display.setLineWrap(true);
+    display.setEditable(false);
+    convert.addActionListener(this);   
+    input.addActionListener(this);
+  } // Converter()
+  
+  public void actionPerformed(ActionEvent e) {
+    double miles = 
+      Double.valueOf(input.getText()).doubleValue();
+    double km = MetricConverter.milesToKm(miles);
+    display.append(miles + " miles equals " + 
+                   km + " kilometers\n");
+    input.setText("");
+  } // actionPerformed()
+
+  public void keypressCallback(String s) {
+    if (s.equals("C"))
+        input.setText("");
+     else
+        input.setText(input.getText() + s);
+  }
+
+  public static void main(String args[]) {
+    Converter f = new Converter();
+    f.setSize(400, 300);  
+    f.setVisible(true);
+    f.addWindowListener(new WindowAdapter() {  
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);  // Quit the application
+      }
+    });
+  } // main()
+} // Converter
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The second version of the {\tt Converter} class, which
+implements the GUI shown in Figure 13.19.}
+\label{fig-convertclass2}
+\end{figure}
+
+\subsection{GUI Design Critique}
+\noindent Figure~3.19 shows that despite our
+\marginfig{chptr13/9f12.eps}{The second version of the metric converter
+GUI uses a set of keypad buttons for input, but they are not properly
+arranged.
+\label{fig-convertscreen2}
+\label{pg-fig-convertscreen2}}
+efforts to group the keypad into a rectangular array, it doesn't
+appear as a single entity in the interface itself, which indicates a
+layout problem.  The default layout for our {\tt KeyPad} (which is a
+{\tt JPanel}) is {\tt FlowLayout}, which is not appropriate for a
+numeric keypad that needs to be arranged into a two-dimensional grid
+pattern, which is the kind of layout our design called for
+(Fig.~\ref{fig-metricgui2}).
+
+Fortunately, this flaw can easily be fixed by using an appropriate
+layout manager from the AWT. In the next version of the
+program, we employ the {\tt java.awt.GridLayout}, which is perfectly suited for
+a two-dimensional keypad layout (Section~13.7.2).
+
+The lesson to be learned from this example is that screen layout is an
+important element of an effective GUI.~If not done well, it can
+undermine the GUI's effort to guide the user toward the appointed
+tasks.  If done poorly enough, it can even keep the user from doing the
+task at all.
+
+\JavaTIP{EFFECTIVE DESIGN}{Layout Design.}{The appropriate layout and
+management of GUI elements is an important part of interface
+design.  It contributes to the interface's ability to guide the user's
+action toward the interface's goals.}
+
+
+%%%\begin{figure}[tb]
+%%%\figa{chptr13/9f12.eps}{The second version of the metric converter
+%%%GUI uses a set of keypad buttons for input, but they are not properly
+%%%arranged.
+%%%\label{fig-convertscreen2}
+%%%\label{pg-fig-convertscreen2}}
+%%%\end{figure}
+
+%%%\endcasestudy
+
+
+\section{Containers and Layout Managers}
+\noindent A {\tt Container} is a component that can contain other components.
+Because containers can contain other containers, it is possible to
+create a hierarchical arrangement of components, as we did in the
+second version of our {\tt Converter} interface.  In its present form,
+the hierarchy for {\tt Converter} consists of a {\tt JFrame} as the
+top-level container (Fig.~\ref{fig-metricgui2}). Contained within
+the frame is a {\tt KeyPad} (subclass of {\tt JPanel}), which contains 12 {\tt JButton}s.
+Most GUIs will have a similar kind of containment hierarchy.
+
+
+\marginfig{chptr13/p495f1.eps}{A {\tt Container} contains {\tt Component}s.
+\label{fig-p495f1}
+\label{pg-fig-p495f1}}
+
+A {\tt Container} is a relatively simple object whose main task is
+primarily to hold its components in a particular order.  It has
+methods to add and remove components (Fig.~13.20).  As you
+can see from these methods, a container keeps track of the order of
+its elements, and it is possible to refer to a component by its index
+order.
+
+\subsection{Layout Managers}
+\noindent The hard work of organizing and managing the elements within
+a container is the task of the layout manager.  Among other tasks, the
+layout manager determines
+
+\begin{BL}
+\item  The overall size of the container.
+\item  The size of each element in the container.
+\item  The spacing between elements.
+\item  The positioning of the elements.
+\end{BL}
+
+\noindent Although it is possible to manage your own layouts, it is
+not easy to do.  For most applications you are much better off by
+learning to use one of the AWT's built-in layouts.  Table~13.3 gives a
+brief summary of the available layouts.  We will show examples of {\tt
+FlowLayout}, {\tt GridLayout}, and {\tt BorderLayout}. Some of the
+widely used Swing containers have a default layout manager assigned to
+them (Table~13.4).
+
+\begin{table}[b]
+%\hphantom{\caption{Some of Java's AWT and Swing layout managers.}}
+\TBT{-8pc}{Some of Java's AWT and Swing layout managers.}
+\hspace*{-8.5pc}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{35pc}{1pt}}\\[2pt]
+%%%\TBCH{Manager}&\TBCH{Description}
+{Manager}&{Description}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{35pc}{0.5pt}}\\[2pt]
+{\tt java.awt.BorderLayout} &  Arranges elements along the north, south, east, west,\cr
+                            &   and in the center of the container.\cr
+{\tt java.swing.BoxLayout}   &  Arranges elements in a single row or single column.\cr
+{\tt java.awt.CardLayout}   &  Arranges elements like a stack of cards, with one visible at a time.\cr
+{\tt java.awt.FlowLayout}   &  Arranges elements left to right across the container.\cr
+{\tt java.awt.GridBagLayout}   & Arranges elements in a grid of variably sized cells (complicated).\cr
+{\tt java.awt.GridLayout}   &  Arranges elements into a two-dimensional grid of equally sized cells.\cr
+{\tt java.swing.OverlayLayout}  &  Arranges elements on top of each other.
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{35pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+To override  the default layout for any of the {\tt JApplet},
+{\tt JDialog}, {\tt JFrame}, and {\tt JWindow} containers, you
+must remember to use the \mbox{\tt getContentPane()}. The correct
+statement is
+
+\begin{jjjlisting}
+\begin{lstlisting}
+getContentPane().setLayout(new FlowLayout());
+\end{lstlisting}
+\end{jjjlisting}
+
+\JavaTIP{DEBUGGING TIP}{Content Pane.}{Attempting to add a component
+directly to a {\tt JApplet} or a {\tt JFrame} will cause an
+exception.  For these top-level containers, components must be added to
+their content panes.}
+
+\begin{table}[tb]
+%\hphantom{\caption{Default layouts for some of the common Swing containers.}}
+\TBT{4pc}{Default layouts for some of the common \\\hspace*{4pc}Swing containers.}
+\hspace*{3.5pc}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{18pc}{1pt}}\\[2pt]
+%%%\TBCH{Container}&\TBCH{Layout Manager}
+{Container}&{Layout Manager}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{18pc}{0.5pt}}\\[2pt]
+{\tt JApplet}                 & {\tt BorderLayout} (on its content pane) \cr
+{\tt JBox}                    & {\tt BoxLayout}                           \cr
+{\tt JDialog}                 & {\tt BorderLayout} (on its content pane) \cr
+{\tt JFrame}                  & {\tt BorderLayout} (on its content pane) \cr
+{\tt JPanel}                  & {\tt FlowLayout}                         \cr
+{\tt JWindow}                 & {\tt BorderLayout} (on its content pane)
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{18pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+\subsection{The {\tt GridLayout} Manager}
+%<sec_gridlayout:\thisBheadno><pg_sec_gridlayout:\thispageno>
+\noindent It is simple to remedy the layout problem that affected the keypad in
+the most recent version of the {\tt Converter} program.  The problem
+was caused by the fact that as a subclass of {\tt JPanel}, the {\tt
+KeyPad} uses a default {\tt FlowLayout}, which causes its buttons to
+be arranged in a row.  A more appropriate layout for a numeric keypad
+would be a two-dimensional grid, which is exactly the kind of layout
+supplied by the {\tt java.awt.GridLayout}.  Therefore, to fix this
+problem, we need only set the keypad's layout to a {\tt
+GridLayout}. This takes a single statement, which should be added to
+the beginning of the {\tt KeyPad()} constructor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+setLayout(new GridLayout(4,3,1,1));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This statement creates a {\tt GridLayout} object and
+assigns it as the layout manager for the keypad. It will ensure that
+the keypad will have four rows and three columns of buttons
+(Fig.~13.21). The last two arguments in the
+constructor affect the relative spacing between the rows and the
+columns.  The higher the number, the larger the spacing.  As
+components are added to the keypad, they will automatically be
+arranged by the manager into a $4 \times 3$ grid.
+\marginfig{chptr13/9f13.eps}{This version of the metric converter GUI
+uses a keypad for mouse-based input.  It has an attractive overall layout.
+\label{fig-convertscreen3}\label{pg-fig-convertscreen3}}
+
+Note that for a {\tt JPanel}, the {\tt setLayout()} method applies to
+the panel itself.  Unlike the top-level containers, such as
+{\tt JFrame}, other containers don't have content panes.  The same point
+would apply when adding components to a {\tt JPanel}: They are
+added directly to the panel, not to a content pane.  Confusion
+over this point could be the source of bugs in your programs.
+
+\JavaTIP{DEBUGGING TIP}{Content Pane.}{Top-level containers, such as
+{\tt JFrame}, are the only ones that use a content pane.  For other
+containers, such as {\tt JPanel}, components are added directly to the
+container itself.}
+
+\noindent As its name suggests, the {\tt GridLayout} layout manager arranges
+components in a two-dimensional grid.  When components are added to the
+container, the layout manager starts inserting elements into the grid
+at the first cell in the first row and continues left to right across
+row 1, then row 2, and so on.  If there are not enough components to
+fill all cells of the grid, the remaining cells are left blank.   If an
+attempt is made to add too many components to the grid, the layout
+manager will try to extend the grid in some reasonable way in order to
+accommodate the components.  However, despite its effort in such cases,
+it usually fails to achieve a completely appropriate layout.
+
+\JavaTIP{PROGRAMMING TIP}{Grid Layouts.}{Make sure the number of
+components added to a {\tt GridLayout} is equal to the number of rows
+times the number of columns.}
+
+\subsection{GUI Design Critique}
+\noindent Although the layout in Figure~13.21 is much
+improved, there are still some deficiencies.  One problem is
+that the {\tt convert} button seems to be misplaced.   It would seem to
+make more sense if it were grouped with the keypad rather
+than with the input text field.
+
+A more serious problem results from the fact that we are still using a
+{\tt FlowLayout} for the program's main window, the
+{\tt JFrame}. Among all of Java's layouts, {\tt FlowLayout} gives you the
+least amount of control over the arrangement of the components.  Also,
+{\tt FlowLayout} is most sensitive to changes in the size and shape of
+its container.
+
+\subsection{The {\tt BorderLayout} Manager}
+\noindent One way to fix these problems is to use a {\tt BorderLayout} to divide
+the frame into five areas: north, south, east, west, and center, as
+shown in Figure~13.22. The {\tt BorderLayout} class contains two constructors:
+\marginfig{chptr13/9f14.eps}{Arrangement
+of components in  a border
+layout.  The relative size of the areas will vary.
+\label{fig-borderlayout}\label{pg-fig-borderlayout}}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public BorderLayout();
+public BorderLayout(int hgap, int vgap);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The two parameters in the second version of the constructor
+allow you to insert spacing between the areas.
+
+Components are added to a {\tt BorderLayout} by using the {\tt
+add(Com\-po\-nent, String)} method found in the {\tt Container} class.
+For example, to set the application window to a border layout and to
+add the keypad to its east area, we would use the following
+statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+getContentPane().setLayout(new BorderLayout(2, 2));
+getContentPane().add(keypad,"East");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this version of the {\tt add()} method, the second parameter
+must be a capitalized {\tt String} with one of the names, ``North,''
+``South,'' ``East,'' ``West,'' or ``Center.''  The order in which components
+are added does not matter.
+
+One limitation of the {\tt BorderLayout} is that only one component
+%\begin{marginalnote}\it Containment hierarchy\end{marginalnote}
+\marginnote{Containment hierarchy}
+can be added to each area.  That means that if you want to add
+several components to an area, you must first enclose them within a
+{\tt JPanel} and then add the entire panel to the area.   For example,
+let's create a panel to contain the prompt and the text field and
+place it at the north edge of the frame:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JPanel inputPanel = new JPanel(); // Create panel
+inputPanel.add(prompt);              // Add label
+inputPanel.add(input);           // Add textfield
+                    // Add the panel to the frame
+getContentPane().add(inputPanel,"North");
+\end{lstlisting}
+\end{jjjlisting}
+
+The same point would apply if we want to group the keypad
+with the convert button and place them at the east edge.
+There are several ways these elements could be grouped.  In this
+example, we give the panel a border layout and put the keypad
+in the center and the convert button at the south edge:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JPanel controlPanel= new JPanel(new BorderLayout(0,0));
+controlPanel.add(keypad,"Center");
+controlPanel.add(convert, "South");
+                    // Add the panel to the frame
+getContentPane.add(controlPanel,"East"); 
+\end{lstlisting}
+\end{jjjlisting}
+
+Given these details about the {\tt BorderLayout}, a more appropriate
+design for the converter application is shown in
+Figure~\ref{fig-metricgui3}.  Notice that the border layout for the
+top-level {\tt JFrame} uses only the center, north, and east areas.
+Similarly, the border layout for the control panel uses just the
+center and south areas.
+
+\begin{figure}[h!]
+\figa{chptr13/9f15.eps}{A border layout design for the metric
+converter program. The dotted lines show the panels.
+\label{fig-metricgui3}\label{pg-fig-metricgui3}}
+\end{figure}
+
+In a {\tt BorderLayout}, when one (or more) border area is not used,
+then one or more of the other areas will be extended to fill the
+unused area.  For example, if {\tt West} is not used, then {\tt North},
+{\tt South}, and {\tt Center} will extend to the left edge of the
+{\tt Container}. If {\tt North} is not used, then {\tt West}, {\tt East,} and
+{\tt Center} will extend to the top edge.  This is true for all areas except
+{\tt Center}. If {\tt Center} is unused, it is left blank.
+
+\pagebreak
+Figure~13.24 shows the results we get when we incorporate these
+\marginfig{chptr13/9f16.eps}{The metric converter, showing its appearance
+when a border design is used.
+\label{fig-convertscreen5}\label{pg-fig-convertscreen5}}
+changes into the program.  The only changes to the program itself
+occur in the constructor method, which in its revised form is defined
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public Converter() {
+  getContentPane().setLayout(new BorderLayout());
+  keypad = new KeyPad(this);
+
+  JPanel inputPanel = new JPanel(); // Input panel
+  inputPanel.add(prompt);
+  inputPanel.add(input);
+  getContentPane().add(inputPanel,"North");
+
+  JPanel controlPanel= new JPanel(new BorderLayout(0,0)); 
+                                  // Control panel
+  controlPanel.add(keypad, "Center");
+  controlPanel.add(convert, "South");
+  getContentPane().add(controlPanel, "East");
+                                 // Output display
+  getContentPane().add(display,"Center");  
+  display.setLineWrap(true);
+  display.setEditable(false);
+
+  convert.addActionListener(this);
+  input.addActionListener(this);
+} // Converter()
+\end{lstlisting}
+\end{jjjlisting}
+%\begin{figure}
+
+\noindent This layout divides the interface into three main panels,
+an input panel, display panel, and control panel, and gives each panel
+its own layout.  In addition, the control panel contains the keypad
+panel.  Thus, the containment hierarchy for this design is
+much more complex than in our original design.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  The border layout for the top window uses the north, center, and east
+regions.  What other combinations of areas might be used for these
+three components?
+
+\item  Why wouldn't a flow layout be appropriate for the control panel?
+
+\end{SSTUDY}
+%\clearpage
+
+\section{Checkboxes, Radio Buttons, and Borders}
+\noindent Suppose you are the software developer for your own software business
+%\begin{marginalnote}\it Problem statement\end{marginalnote}
+\marginnote{Problem statement}
+specializing in computer games.  You want to develop an applet-based
+order form that customers can use to order software over the Web.  At the
+moment you have three software titles---a chess game, a checkers
+game, and a crossword puzzle game.  The assumption is that the user
+will choose one or more of these titles from some kind of menu.  The
+user must also indicate a payment option---either E-cash, credit card,
+or debit card.  These options are mutually exclusive---the user can
+choose one and only one.
+
+Let's design an applet interface for this program.   Unlike the
+previous problem where the input was a numeric value, in this problem
+the input will be the user's selection from some kind of menu.   The
+result will be the creation of an order.  Let's suppose that this part
+\marginnote{Interface design}
+of the task happens behind the scenes---that is, we don't have to
+worry about creating an actual order.  The output the user sees will
+simply be an acknowledgment that the order was successfully
+submitted.
+
+There are several kinds of controls needed for this interface.   First,
+%\begin{marginalnote}\it What components do we need?\end{marginalnote}
+\marginnote{What components do we need?}
+a conventional way to have users indicate their purchase decisions
+is to have them click a Submit button.  They should
+also have the option to cancel the transaction at any time.
+
+In addition to these button controls, a couple of menus must be
+presented, one for the software titles, and one for the payment
+choices.  Swing and AWT libraries provide many options for building
+menus.
+
+One key requirement for this interface is the mutually exclusive
+payment options.  A conventional way to handle this kind of selection
+is with a {\tt JRadioButton}---a button that belongs to a group of
+mutually exclusive alternatives.  Only one button from the group may be
+selected at one time.   The selection of software titles could be
+handled by a collection of checkboxes.  A {\tt JCheckbox} is a button
+that can be selected and deselected and that always displays its
+current state to the user.  Using a checkbox will make it obvious to
+the user exactly what software has been selected.
+
+To complete the design, let's use a {\tt JTextArea} again to serve
+as something of a printed order form.  It will confirm the user's
+order and display other messages needed during the transaction.
+
+
+Given these decisions, we arrive at the design shown in
+Figure~\ref{fig-acmegui}. In this case, our design uses a {\tt JPanel}
+%\begin{figure}
+\begin{figure}[b]
+\figa{chptr13/9f17.eps}{A design for an online order form
+interface. \label{fig-acmegui}\label{pg-fig-acmegui}}
+\end{figure}
+%\end{figure}
+as the main container, instead of using the top window itself.  The
+reason for this decision is that we want to use Swing {\tt Borders}
+around the various {\tt JPanel}s to enhance the overall visual appeal
+of the design.  The borders will have titles that help explain the
+purpose of the various panels.
+
+Note that the top-level window in this case is a {\tt JApplet}. By default
+%\begin{marginalnote}\it What top-level windows do we use?\end{marginalnote}
+\marginnote{What top-level windows do we use?}
+it will have a border layout.  For the main {\tt JPanel} we are using a
+$3 \times 1$ {\tt GridLayout}. The components in the main panel are
+the {\tt JTextArea} and two other {\tt JPanel}s.  The {\tt GridLayout}
+will take care of sizing these so they are all of equal size.
+
+
+The center panel, which uses a flow layout, contains panels for the
+checkboxes and
+%\begin{marginalnote}\it Component layout\end{marginalnote}
+\marginnote{Component layout}
+the radio buttons.  These elements are grouped within
+their own panels.  Again, we can put a border around them in the final
+implementation (Fig.~13.26).  The button panels use a
+{\tt BoxLayout}, which we will discuss later.
+%\begin{marginalnote}\it Containment hierarchy\end{marginalnote}
+\marginnote{Containment hierarchy}
+This design leads to the most complex containment hierarchy thus far.
+
+\subsection{Checkbox and Radio Button Arrays}
+\noindent Because we will need three checkboxes, one for each title, and three
+%\begin{marginalnote}\it What data structures do we need?\end{marginalnote}
+\marginnote{What data structures do we need?}
+radio buttons, one for each payment option, it will be useful again to
+use arrays to store both the buttons and their titles:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+private ButtonGroup optGroup = new ButtonGroup();
+private JCheckBox titles[] = new JCheckBox[NTITLES];
+private JRadioButton options[] = new JRadioButton[NOPTIONS];
+private String titleLabels[] =
+    {"Chess Master - $59.95", "Checkers Pro - $39.95",
+                           "Crossword Maker - $19.95"};
+private String optionLabels[] = {"Credit Card", 
+             "Debit Card", "E-cash"};
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Again, the advantage of this design is that it simplifies the
+instantiation and initialization of the buttons:
+\marginfigvspace{-76pt}{chptr13/9f18.eps}{Borders around containers help make
+them stand out more.
+\label{fig-acmescreen}\label{pg-fig-acmescreen}}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for(int k = 0; k < titles.length; k++) {
+    titles[k] = new JCheckBox(titleLabels[k]);
+    titles[k].addItemListener(this);
+    choicePanel.add(titles[k]);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The only difference between this array of checkboxes and the keypad
+array of buttons that we used in the {\tt Converter} program is that
+checkboxes generate {\tt ItemEvent}s instead
+{\tt ActionEvent}s. Therefore, each checkbox must be registered with an
+{\tt ItemListener} (and, of course, the applet itself must implement the
+{\tt ItemListener} interface).  We'll show how {\tt ItemEvent}s are
+handled later.
+
+The code for instantiating and initializing the radio buttons is
+almost the same:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for(int k = 0; k < options.length; k++) {
+    options[k] = new JRadioButton(optionLabels[k]);
+    options[k].addItemListener(this);
+    optionPanel.add(options[k]);
+    optGroup.add(options[k] );
+}
+options[0].setSelected(true); // Set first button 'on'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Radio buttons also generate {\tt ItemEvent}s, so they too
+must be registered with an {\tt ItemListener}. Note that the
+first button is set on, which represents a default payment
+option for the user.
+
+The difference between checkboxes and radio buttons is that radio
+buttons must be added to a {\tt ButtonGroup}---here named {\tt
+optGroup}---in order to enforce mutual exclusion among them.  A {\tt
+ButtonGroup} is an object whose sole task is to enforce mutual
+exclusion among its members. Whenever you click one radio button, the
+{\tt ButtonGroup} will automatically be notified of this event and
+will turn off whatever other button was turned on.  As
+Figure~\ref{fig-p504f1} illustrates, radio buttons are monitored by
+two different objects, a {\tt ButtonGroup}, which manages the radio
+buttons' states, and an {\tt ItemListener}, which listens for clicks
+on the buttons and takes appropriate actions.
+
+\begin{figure}[h!]
+\figa{chptr13/p504f1.eps}{The {\tt ButtonGroup} object tracks each radio button's
+state, ensuring that only one is selected at a time. The {\tt ItemListener}
+listens for events on each button.
+\label{fig-p504f1}
+\label{pg-fig-p504f1}}
+\end{figure}
+
+Note the effective division of labor in the design of
+%\begin{marginalnote}\it Divide and conquer\end{marginalnote}
+\marginnote{Divide and conquer}
+the various objects to which a radio button belongs. The
+{\tt optionPanel} is a GUI component (a {\tt JPanel}) that contains the
+button within the visual interface. Its role is to help manage the
+graphical aspects of the button's behavior.  The {\tt ButtonGroup} is
+just an {\tt Object}, not a GUI component. Its task is to monitor the
+button's relationship to the other buttons in the group.  Each object
+has a clearly delineated task.
+
+This division of labor is a key feature of object-oriented design. It
+is clearly preferable to giving one object broad responsibilities.
+For example, a less effective design might have given the task of
+managing a group of buttons to the {\tt JPanel} that contains them.
+However, this would lead to all kinds of problems, not least of which
+is the fact that not everything in the container belongs to the same
+button group. So a clear division of labor is a much preferable
+design.
+
+\JavaTIP{EFFECTIVE DESIGN}{Division of Labor.}{In good object-oriented
+design, objects are specialists (experts) for very narrow, clearly
+defined tasks. If there's a new task that needs doing, design a new
+object to do it.}
+
+\subsection{Swing Borders}
+\noindent The Swing {\tt Border} and {\tt BorderFactory} classes can place
+borders around virtually any GUI element. Using borders is an
+effective way to make the grouping of components more
+apparent. Borders can have titles, which enhance the GUI's ability to
+guide and inform the user. They can also have a wide range of styles
+and colors, thereby helping to improve the GUI's overall appearance.
+
+
+
+A border occupies some space around the edge of a
+{\tt JComponent}. For the Acme Software Titles interface, we place titled borders around
+four of the panels (Fig.~13.26). The border on the
+main panel serves to identify the company again. The one around the
+button panel serves to group the two control buttons. The borders
+around both the checkbox and the radio button menus help to set them
+apart from other elements of the display and help identify the
+purpose of the buttons.
+
+
+Attaching a titled border to a component---in this case to a
+{\tt JPanel}---is very simple. It takes one statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+choicePanel.setBorder(
+       BorderFactory.createTitledBorder("Titles"));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt setBorder()} method is defined in {\tt JComponent},
+is inherited by all Swing components, and takes a {\tt Border}
+argument. In this case, we use the {\tt BorderFactory} class to create
+a border and assign it a title.  There are several versions of the static
+{\tt createTitledBorder()} method. This version lets us specify the
+border's title. It uses default values for type of border (etched),
+the title's position (sitting on the top line), justification
+(left), and for font's type and color.
+
+As you would expect, the {\tt Border} and {\tt BorderFactory} classes
+contain methods that let you exert significant control over the
+border's look and feel. You can even design and create your own custom
+borders.
+
+\subsection{The {\tt BoxLayout} Manager}
+\noindent Another type of layout to use is the {\tt BoxLayout}. This can be
+associated with any container, and it comes as the default with the
+Swing {\tt Box} container. We use it in this example to arrange the
+checkboxes and radio buttons (Fig.~\ref{fig-acmegui}).
+
+A {\tt BoxLayout} is like a one-dimensional grid layout. It allows
+multiple components to be arranged either vertically or horizontally
+in a row.  The layout will not wrap around, as does the
+{\tt FlowLayout}. Unlike the {\tt GridLayout}, the {\tt BoxLayout} does not
+force all its components to be the same size. Instead, it tries to use
+each component's preferred width (or height) in arranging them
+horizontally (or vertically).
+(Every Swing component has a preferred
+size that is used by the various layout managers in determining the
+component's actual size in the interface.)  The {\tt BoxLayout}
+manager also tries to align its components' heights (for horizontal
+layouts) or widths (for vertical layouts).
+
+
+Once again, to set the layout manager for a container you use the
+{\tt setLayout()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+choicePanel.setLayout(new 
+             BoxLayout(choicePanel,BoxLayout.Y_AXIS));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt BoxLayout()} constructor has two parameters. The
+first is a reference to the container that's being managed, and the
+second is a constant that determines whether horizontal ({\it x}-axis) or
+vertical ({\it y}-axis) alignment is used.
+
+One nice feature of the {\tt BoxLayout} is that it can be used in
+combinations to imitate the look of the very complicated
+{\tt GridBoxLayout}. For example, Figure~13.28 shows an
+example with two panels (Panel1 and Panel2) arranged horizontally
+within an outer box (Panel0), each containing four components arranged
+\marginfig{chptr13/9f19.eps}{Complex layouts can be achieved by
+nesting containers that use the {\tt BoxLayout}.
+\label{fig-nestedbox}\label{pg-fig-nestedbox}}
+vertically. The three panels all use the {\tt BoxLayout}.
+
+
+\subsection{The {\tt ItemListener} Interface }
+\noindent In this section, we will describe how to handle menu
+selections.  Whenever the user makes a menu selection, or clicks a
+check box or radio button, an {\tt ItemEvent} is generated.  {\tt
+ItemEvent}s are associated with items that make up menus, including
+{\tt JPop\-upMenu}s, {\tt JCheckboxes}, {\tt JRadioButton}s, and other
+types of menus. Item events are handled by the {\tt ItemListener}
+interface, which consists of a single method, the {\tt
+itemStateChanged()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void itemStateChanged(ItemEvent e) {
+  display.setText("Your order so far (Payment by: ");
+  for (int k = 0; k < options.length; k++ )
+    if (options[k].isSelected())
+      display.append(options[k].getText() + ")\n");
+  for (int k = 0; k < titles.length; k++ )
+    if (titles[k].isSelected())
+      display.append("\t" + titles[k].getText() + "\n");
+} // itemStateChanged()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This version of the method handles item changes for both the
+checkbox menu and the radio buttons menu.  The code uses two
+consecutive for loops. The first iterates through the {\tt options}
+menu (radio buttons) to determine what payment option the user has
+selected. Since only one option can be selected, only one title will
+be appended to the display. The second loop iterates through the
+titles menu (checkboxes) and appends each title the user selected to
+the display. This way the complete status of the user's order is
+displayed after every selection. The {\tt isSelected()} method is used
+to determine if a checkbox or radio button is selected or not.
+
+In this example, we have no real need to identify the item that caused
+the event. No matter what item the user selected, we want to display
+the entire state of the order. However, like the \mbox{\tt ActionEvent}
+class, the \mbox{\tt ItemEvent}  class contains methods that can 
+retrieve the item that caused the event:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+getItem();  // Returns a menu item within a menu
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt getItem()} method is the {\tt ItemListener}'s analogue
+to the {\tt ActionEvent}'s {\tt getSource()} method. It enables you to obtain
+the object that generated the event but returns a representation of
+the item that was selected or deselected.
+
+\subsection{The {\tt OrderApplet} }
+\noindent The design of the {\tt OrderApplet} is summarized in
+Figure~13.29 and its complete implementation is given in
+Figure~\ref{fig-orderapplet}. There are several important points to
+make about this program. First, five {\tt JPanel}s are used to
+organize the components into logical and visual groupings.  This
+conforms to the design shown in Figure~\ref{fig-acmegui}.
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr13/p507f1.eps}{The {\tt OrderApplet} makes extensive use of GUI components.
+\label{fig-p507f1}
+\label{pg-fig-p507f1}}
+%\end{graphic}
+%\end{figure}
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class OrderApplet extends JApplet 
+                     implements ItemListener, ActionListener {
+  private final int NTITLES = 3, NOPTIONS = 3;
+  private JPanel mainPanel = new JPanel(),
+                 centerPanel = new JPanel(),
+                 choicePanel = new JPanel(),
+                 optionPanel = new JPanel(),
+                 buttonPanel = new JPanel();
+  private ButtonGroup optGroup = new ButtonGroup();
+  private JCheckBox titles[] = new JCheckBox[NTITLES];
+  private JRadioButton options[] = new JRadioButton[NOPTIONS];
+  private String titleLabels[] =
+    {"Chess Master - $59.95", "Checkers Pro - $39.95",
+                                "Crossword Maker - $19.95"};
+  private String optionLabels[] = {"Credit Card", 
+                                    "Debit Card", "E-cash"};
+  private JTextArea display = new JTextArea(7, 25);
+  private JButton submit = new JButton("Submit Order"),
+                  cancel = new JButton("Cancel");
+
+  public void init() {
+    mainPanel.setBorder(BorderFactory.createTitledBorder(
+                                   "Acme Software Titles"));
+    mainPanel.setLayout(new GridLayout(3, 1, 1, 1));
+    cancel.addActionListener(this);
+    submit.addActionListener(this);
+    initChoices();
+    initOptions();
+    buttonPanel.setBorder(BorderFactory.createTitledBorder(
+                                              "Order Today"));
+    buttonPanel.add(cancel);
+    buttonPanel.add(submit);
+    centerPanel.add(choicePanel);
+    centerPanel.add(optionPanel);
+
+    mainPanel.add( display);
+    mainPanel.add(centerPanel);
+    mainPanel.add( buttonPanel);
+    getContentPane().add(mainPanel);
+    setSize(400,400);
+  } // init()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt OrderApplet} class, Part I.
+\label{fig-orderapplet}
+\label{pg-fig-orderapplet}}
+\end{figure}
+
+\begin{figure}[p]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlistingleft}[29pc]{-3pc}
+\begin{lstlisting}
+  private void initChoices() {
+    choicePanel.setBorder(
+             BorderFactory.createTitledBorder("Titles"));
+    choicePanel.setLayout(
+            new BoxLayout(choicePanel, BoxLayout.Y_AXIS));
+    for (int k = 0; k < titles.length; k++) {
+      titles[k] = new JCheckBox(titleLabels[k]);
+      titles[k].addItemListener(this);
+      choicePanel.add(titles[k]);
+    }
+  } // initChoices()
+
+  private void initOptions() {
+    optionPanel.setBorder(
+             BorderFactory.createTitledBorder("Payment By"));
+    optionPanel.setLayout(
+             new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
+    for (int k = 0; k < options.length; k++) {
+      options[k] = new JRadioButton(optionLabels[k]);
+      options[k].addItemListener(this);
+      optionPanel.add(options[k]);
+      optGroup.add(options[k]);
+    }
+    options[0].setSelected(true);
+  } // initOptions()
+
+  public void itemStateChanged(ItemEvent e) {
+    display.setText("Your order so far (Payment by: ");
+    for (int k = 0; k < options.length; k++ )
+      if (options[k].isSelected())
+        display.append(options[k].getText() + ")\n");
+    for (int k = 0; k < titles.length; k++ )
+      if (titles[k].isSelected())
+        display.append("\t" + titles[k].getText() + "\n");
+  } // itemStateChanged()
+
+  public void actionPerformed(ActionEvent e){
+    String label = submit.getText();
+    if (e.getSource() == submit) {
+      if (label.equals("Submit Order")) {
+        display.append(
+        "Thank you. Press 'Confirm' to submit your order!\n");
+        submit.setText("Confirm Order");
+      } else {
+        display.append(
+         "Thank you. You will receive your order tomorrow!\n");
+        submit.setText("Submit Order");
+      }
+    } else
+      display.setText(
+        "Thank you. Maybe we can serve you next time!\n");
+  } // actionPerformed()
+} // OrderApplet
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{{\it (continued)} The {\tt OrderApplet} class, Part II.}
+\end{figure}
+
+Second, note the use of titled borders around the four internal
+panels. These help reinforce that the components within the
+border are related by function.
+
+The applet {\tt init()} method is used to initialize the
+interface. This involves setting the layouts for the various
+containers and filling the containers with their components. Because
+their initializations are relatively long, the checkboxes and radio
+buttons are initialized in separate methods, the {\tt initChoices()}
+and {\tt initOptions()} methods, respectively.
+
+Finally, note how the {\tt actionPerformed()} method creates a mock
+order form in the display area. This allows the user to review the
+order before it is submitted. Also note that the algorithm used for
+submittal requires the user to confirm an order before it is actually
+submitted. The first time the user clicks the Submit button, the
+button's label is changed to, ``Confirm Order,'' and the user is
+prompted in the display area to click the \mbox{Confirm} button to submit the
+order. This design allows the interface to catch inadvertent button
+clicks.
+
+A user interface should anticipate errors by the user. When
+a program involves an action that can't be undone---such as placing
+an order---the program should make sure the user really wants to
+take the action before carrying it out.
+
+\JavaTIP{EFFECTIVE DESIGN}{Anticipate the User.}{A well-designed interface
+should make it difficult for the user to make errors and should
+make it easy to recover from mistakes when they do happen.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item What's your favorite interface horror
+story?  How would you have remedied the problem? The interface needn't
+be a computer interface.
+
+\end{SSTUDY}
+
+\pagebreak
+\section{Menus and Scroll Panes}
+\noindent Pop-up and pull-down menus allow an application or applet to grow in
+complexity and functionality without cluttering its interface. Menus
+are hierarchical in nature. A particular menu is divided into a number
+of menu items, which can themselves be further subdivided.  
+Java makes it simple to implement menus.
+
+A {\tt JMenuBar} is an implementation of a menu bar---a horizontal
+list of names that appears at the top of a window
+(Fig.~\ref{fig-menuterms}). 
+
+\begin{figure}[h!]
+\figa{chptr13/9f20.eps}{An application with a menu bar that is
+showing its edit menu. The edit menu contains a cascading drop-down menu that
+can show recent cuts.
+\label{fig-menuterms}\label{pg-fig-menuterms}}
+\end{figure}
+
+Almost all applications have a menu bar. To construct a menu, you add
+{\tt JMenu} objects to a {\tt JMenuBar}. A {\tt JMenu} is essentially
+a clickable area on a menu bar that is associated with a {\tt
+JPopupMenu}, a small window that pops up and displays the menu's {\tt
+JMenuItem}s.  A menu can also contain {\tt JSeparator}s, which are
+dividers that can be placed between menu items to organize them into
+logical groupings.
+
+\subsection{Adding a Menu Bar to an Application}
+\noindent It is easy to create menus in Swing. The process involves three steps,
+although you needn't perform them in this order:
+
+\begin{NL}
+\item  Create the individual {\tt JMenuItem}s.
+\item  Create a {\tt JMenu} and add the {\tt JMenuItem}s to it.
+\item  Create a {\tt JMenuBar} and add the {\tt JMenu}s to it.
+\end{NL}
+
+For example, suppose you're building the interface for a text
+editor. A text editor typically contains at least two standard
+menus. The file menu is used to create new documents, open and close
+files, save your document, and so on.  The edit menu is used to cut
+and paste selected text from the document. 
+
+Here's how you would create the file menu for this program. First, you
+create a menu bar and make it the menu bar for the application's
+{\tt JFrame} or for the {\tt JApplet}. This is usually done in the
+application's constructor or in the applet's {\tt init()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JMenuBar mBar = new JMenuBar();// Create menu bar
+this.setMenuBar(mBar);   // Add it to this window
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The next step involves creating and adding menus and menu
+items to the menu bar. This is also usually done in the constructor
+or the {\tt init()} method. If the menu is large, you should break
+this task into subtasks and define a method for each subtask.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Method Size.}{A method that gets longer
+than 20 to 25 lines is probably trying to do too much and should
+be divided into separate methods, each with a clearly defined
+task.}
+
+\noindent Here's the definition of the file menu for our
+simple text editor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void initFileMenu() {
+    fileMenu = new JMenu("File");   // Create menu
+    mBar.add(fileMenu);      // Add it to menu bar
+
+    openItem = new JMenuItem("Open"); // Open item
+    openItem.addActionListener( this );
+    openItem.setEnabled(false);
+    fileMenu.add(openItem);
+
+    saveItem = new JMenuItem("Save"); // Save item
+    saveItem.addActionListener(this);
+    saveItem.setEnabled(false);
+    fileMenu.add(saveItem);
+    fileMenu.addSeparator();  // Logical separator
+
+    quitItem = new JMenuItem("Quit"); // Quit item
+    quitItem.addActionListener(this);
+    fileMenu.add(quitItem);
+} // initFileMenu()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first two statements in the method create the file
+menu and add it to the menu bar.  The rest of the statements create the
+individual menu items that make up the file menu.  Note the use of a
+{\it separator} item after the save item. This has the effect of
+grouping the file-handling items (open and save) into one logical
+category and distinguishing them from the quit item. A separator is
+represented as a line in the menu (Fig.~\ref{fig-menuterms}).
+
+\JavaTIP{EFFECTIVE DESIGN}{Logical Design.}{In designing interfaces, an
+effort should be made to use visual cues, such as menu item separators
+and borders, to group items that are logically related. This will help
+to orient the user.}
+
+\noindent Note that each menu item is given an {\tt ActionListener}.  As
+we'll see shortly, action events for menu items are handled the same
+way as action events for buttons. Finally, note how the
+{\tt setEnabled()} method is used to disable both the open and save menu
+items. Implementation of these actions is left as an exercise.
+
+\subsection{Menu Hierarchies}
+\noindent Menus can be added to other menus to create a hierarchy. For
+example, the edit menu will include the standard cut, copy, and paste
+menu items.  Some edit menus also contain an ``Undo'' item, which can
+be used to undo the last editing operation that was performed. In
+other words, if you cut a piece of text, you can undo that operation
+and get that cut back. Many editors seem to allow just a single
+undo. If you cut two pieces of text, the first piece is lost to the
+user to undo. This can be an issue, especially if you didn't mean to
+do the first cut.
+
+To help remedy this type of situation, let's add a feature to our
+editor that will keep track of cuts by storing them in a {\tt
+Vector}. This function will be like an ``Unlimited Undo'' operation
+for cuts. For this example, we won't place any limit on the size of
+the vector. Every cut the user makes will be inserted at the beginning
+of the vector.  To go along with this feature we need a menu that can
+grow dynamically during the program. Each time the user makes a cut,
+the string that was cut will be added to the menu.
+
+%\begin{figure}
+%\begin{graphic}
+%\includegraphics{./art/9/9f22.eps}
+%\caption{A cascading
+%drop-down menu to keep track of the user's cuts.
+%\label{fig-cutsmenu}
+%\label{pg-fig-cutsmenu}}
+%\end{graphic}
+%\end{figure}
+
+This kind of menu should occur within the edit menu, but it will have
+its own items. This is a menu within a menu
+(Fig.~\ref{fig-menuterms}), an example of a {\it cascading}
+drop-down menu. The edit menu itself drops down from the menu bar,
+and the recent cuts menu drops down and to the right of where its
+arrow points. The following method was used to create the edit menu:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void initEditMenu() {
+  editMenu = new JMenu("Edit"); // Create edit menu
+  mBar.add(editMenu);            // Add to menu bar
+
+  cutItem = new JMenuItem ("Cut");      // Cut item
+  cutItem.addActionListener(this);
+  editMenu.add(cutItem);
+  copyItem = new JMenuItem("Copy");    // Copy item
+  copyItem.addActionListener(this);
+  editMenu.add(copyItem);
+  pasteItem = new JMenuItem("Paste"); // Paste item
+  pasteItem.addActionListener(this);
+  editMenu.add(pasteItem);
+  editMenu.addSeparator();
+  selectItem = new JMenuItem("Select All");// Select
+  selectItem.addActionListener(this);
+  editMenu.add(selectItem);
+  editMenu.addSeparator();
+  cutsMenu = new JMenu("Recent Cuts");//Cuts submenu
+  editMenu.add(cutsMenu);
+} // initEditMenu()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The main difference between this method and the
+one used to create the file menu is that here we insert an entire
+submenu as one of the items in the edit menu. The {\tt cutsMenu} will
+be used to hold the strings that are cut from the document.  Initially,
+it will be empty.
+
+
+\subsection{Handling Menu Actions}
+\noindent Handling {\tt JMenuItem} actions is no different from handling
+{\tt JButton} actions. Whenever a user makes a menu selection, an
+{\tt ActionEvent} is generated. Programs that use menus must implement the
+{\tt action\-Performed()} method of the {\tt ActionListener} interface.
+In the text editor example, there are a total of six enabled menu
+items, including the recent cuts menu. This translates into a large
+if-else structure, with each clause handling a single menu item. 
+
+The following {\tt actionPerformed()} method is used to handle the
+menu selections for the text editor:
+
+\begin{jjjlistingleft}[33pc]{-7pc}
+\begin{lstlisting}
+public void actionPerformed(ActionEvent e) {
+  JMenuItem m  = (JMenuItem)e.getSource(); // Get selected menu item
+  if ( m == quitItem ) {                   // Quit
+    dispose();}
+  } else if (m == cutItem) {                // Cut the selected text
+    scratchPad = display.getSelectedText(); // Copy text to scratchpad
+    display.replaceRange("",                //  and delete
+        display.getSelectionStart(),   //  from the start of selection
+        display.getSelectionEnd());    //  to the end
+        addRecentCut(scratchPad);      // Add text to the cuts menu
+  } else if (m == copyItem)            // Copy text to scratchpad
+    scratchPad = display.getSelectedText();
+  } else if (m == pasteItem) { // Paste scratchpad to document at caret
+    display.insert(scratchPad, display.getCaretPosition()); // position
+  } else if ( m == selectItem ) {
+    display.selectAll();              // Select the entire document
+  } else {
+    JMenuItem item = (JMenuItem)e.getSource(); // Default is cutsMenu
+    scratchPad = item.getActionCommand(); // Put cut back in scratchpad
+  }
+} // actionPerformed()
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent The method begins by getting the source of the {\tt ActionEvent}
+and casting it into a {\tt JMenuItem}. It then checks each case of the
+if-else structure. Because the actions taken by this program are
+fairly short, they are mostly coded within the {\tt actionPerformed()}
+method itself. However, for most programs it will be necessary to write
+a separate method corresponding to each menu item and then call
+the methods from {\tt actionPerformed()}.
+
+Our text editor's main task is to implement the cut/copy/paste
+functions, which are simple to do in Java. The text that's being
+edited is stored in a {\tt JTextArea}, which contains instance methods
+that make it very easy to select, insert, and replace text. To copy a
+piece of text, the program need only get the text from the
+{\tt JTextArea} ({\tt getSelectedText()}) and assign it to the
+{\tt scratchpad}, which is represented as a {\tt String}. To paste a piece
+of text, the program inserts the contents of the {\tt scratchpad} into
+the {\tt JTextArea} at the location marked by the {\it caret}, a
+cursor-like character in the document that marks the next insertion
+point.
+
+
+The structure of this if-else statement is significant. Note how the
+default case of the if-else is designed. We are using the last else
+clause as a ``catch all'' condition to catch and handle selections
+from the {\tt cutsMenu}.  All of the other
+%\begin{marginalnote}\it Default logic\end{marginalnote}
+menu items can be referred to by name. However, the menu items in the
+{\tt cutsMenu} are just snippets of a string that the user has
+\marginnote{Default logic}
+previously cut from the text, so they can't be referenced by
+name. Luckily, we don't really need to. For any {\tt JMenuItem}, the
+{\tt getActionCommand()} method returns its text, which in this case
+is the previously cut text. So we just assign the cut text from the
+menu to the {\tt scratchpad}.
+
+
+\JavaTIP{PROGRAMMING TIP}{Default Cases.}{Although the order of the
+clauses in an if-else structure is usually not important,
+the default clause can sometimes be used to handle cases that can't be
+referenced by name.}
+
+\subsubsection*{Handling Previously Cut Text}
+\noindent The most difficult function in our program is the cut operation. Not
+only must the selected text be removed from the document and stored in
+the {\tt scratchpad}, but it must also be inserted into the vector that is
+storing all the previous cuts. The {\tt addRecentCut()} method takes
+care of this last task. The basic idea here is to take the cut string
+%\begin{marginalnote}\it Algorithm design\end{marginalnote}
+\marginnote{Algorithm design}
+and insert it at the beginning of the vector, so that cuts will be
+maintained in a last-in--first-out order. Then the {\tt cutsMenu} must
+be completely rebuilt by reading its entries out of the vector, from
+first to last. That way the most recent cut will appear first in the
+menu:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void addRecentCut(String cut) {
+  recentCuts.insertElementAt(cut,0);
+  cutsMenu.removeAll();
+  for (int k = 0; k < recentCuts.size(); k++) {
+    JMenuItem item = 
+     new JMenuItem((String)recentCuts.elementAt(k));
+    cutsMenu.add( item );
+    item.addActionListener(this);
+  }
+} // addRecentCut()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt recentCuts Vector} stores the cut strings. Note
+the use of the {\tt insert\-ElementAt()} method to insert strings into the
+vector and the {\tt elementAt()} method to get strings from the
+vector. (You may find it helpful to review the section on vectors in Chapter~9.)
+
+Note also how menu items are removed and inserted in menus.  The
+{\tt cutsMenu} is reinitialized, using the {\tt removeAll()} method.  Then
+the for loop iterates through the strings stored in the vector, making
+new menu items from them, which are then inserted into the
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr13/p514f1.eps}{Design of the {\tt SimpleTextEditor}.
+\label{fig-p514f1}
+\label{pg-fig-p514f1}}
+%\end{graphic}
+%\end{figure}
+{\tt cutsMenu}.  In this way, the {\tt cutsMenu} is changed dynamically
+each time the user cuts a piece of text from the document.
+
+\subsection{Adding Scrollbars to a Text Area}
+\noindent The design of the {\tt SimpleTextEditor} class is summarized in
+Figure~13.32 and its complete implementation is shown in
+Figure~\ref{fig-texteditor}. 
+\pagebreak
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[37pc]{-11pc}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Vector;
+
+public class SimpleTextEditor extends JFrame implements ActionListener{
+  private JMenuBar mBar = new JMenuBar();        // Create the menu bar
+  private JMenu fileMenu, editMenu, cutsMenu;   // Menu references and items
+  private JMenuItem cutItem, copyItem, pasteItem, selectItem,recentcutItem; 
+  private JMenuItem quitItem, openItem, saveItem;       // File items
+  private JTextArea display = new JTextArea(); // Here's where the editing occurs
+  private String scratchPad = "";              // Scratch pad for cut/paste
+  private Vector recentCuts = new Vector();
+
+  public SimpleTextEditor() {
+    super("Simple Text Editor");     // Set the window title
+    this.getContentPane().setLayout(new BorderLayout());
+    this.getContentPane().add("Center", display);
+    this.getContentPane().add(new JScrollPane(display));
+    display.setLineWrap(true);
+    this.setJMenuBar(mBar);         // Set this program's menu bar
+    initFileMenu();                 // Create the menus
+    initEditMenu();
+  } // SimpleTextEditer()
+
+  private void initEditMenu() {
+    editMenu = new JMenu("Edit");     // Create the edit menu
+    mBar.add(editMenu);               //  and add it to menu bar
+    cutItem = new JMenuItem ("Cut");          // Cut item
+    cutItem.addActionListener(this);
+    editMenu.add(cutItem);
+    copyItem = new JMenuItem("Copy");         // Copy item
+    copyItem.addActionListener(this);
+    editMenu.add(copyItem);
+    pasteItem = new JMenuItem("Paste");       // Paste item
+    pasteItem.addActionListener(this);
+    editMenu.add(pasteItem);
+    editMenu.addSeparator();
+    selectItem = new JMenuItem("Select All"); // Select item
+    selectItem.addActionListener(this);
+    editMenu.add(selectItem);
+    editMenu.addSeparator();
+    cutsMenu = new JMenu("Recent Cuts");      // Recent cuts submenu
+    editMenu.add(cutsMenu);
+  } // initEditMenu()
+
+  private void initFileMenu() {
+    fileMenu = new JMenu("File");       // Create the file menu
+    mBar.add(fileMenu);                 //  and add it to the menu bar
+    openItem = new JMenuItem("Open");   // Open item
+    openItem.addActionListener( this );
+    openItem.setEnabled(false);
+    fileMenu.add(openItem);
+    saveItem = new JMenuItem("Save");   // Save item
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A menu-based {\tt SimpleTextEditor} application, Part I.
+\label{fig-texteditor}\label{pg-fig-texteditor}}
+\end{figure}
+
+\clearpage
+\begin{figure}[h!]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlisting}[37pc]
+\begin{lstlisting}
+    saveItem.addActionListener(this);
+    saveItem.setEnabled(false);
+    fileMenu.add(saveItem);
+    fileMenu.addSeparator();    // Logical separator
+    quitItem = new JMenuItem("Quit");   // Quit item
+    quitItem.addActionListener(this);
+    fileMenu.add(quitItem);
+  } // initFileMenu()
+  public void actionPerformed(ActionEvent e) {
+    JMenuItem m  = (JMenuItem)e.getSource();// Get selected menu item
+    if ( m == quitItem ) {                  // Quit
+      dispose();
+    } else if (m == cutItem) {   // Cut the selected text
+      scratchPad = display.getSelectedText(); // Copy text to scratchpad
+      display.replaceRange("",         //  and delete
+          display.getSelectionStart(), //  from the start of the selection
+          display.getSelectionEnd());  //  to the end
+      addRecentCut(scratchPad);   // Add the cut text to the cuts menu
+    } else if (m == copyItem) {  // Copy the selected text to the scratchpad
+      scratchPad = display.getSelectedText();
+    } else if (m == pasteItem) { // Paste the scratchpad to the document at caret
+      display.insert(scratchPad, display.getCaretPosition()); // position
+    } else if ( m == selectItem ) {
+      display.selectAll();       // Select the entire document
+    } else {
+      JMenuItem item = (JMenuItem)e.getSource(); // Default is cutsMenu
+      scratchPad = item.getActionCommand(); // Put cut back in the scratchpad
+    }
+  } // actionPerformed()
+  private void addRecentCut(String cut) {
+    recentCuts.insertElementAt(cut,0);
+    cutsMenu.removeAll();
+    for (int k = 0; k < recentCuts.size(); k++) {
+      JMenuItem item = 
+         new JMenuItem((String)recentCuts.elementAt(k));
+      cutsMenu.add( item );
+      item.addActionListener(this);
+    }
+  } // addRecentCut()
+
+  public static void main(String args[]) {
+    SimpleTextEditor f = new SimpleTextEditor();
+    f.setSize(300, 200);
+    f.setVisible(true);
+    f.addWindowListener(new WindowAdapter() {     
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);   // Quit the application
+      }
+    });
+  } // main()
+} // SimpleTextEditor
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{{\it (continued)} The {\tt SimpleTextEditor}, Part II.}
+\end{figure}
+
+\clearpage
+\noindent It uses a {\tt BorderLayout}, with the {\tt JTextArea}
+placed at the center.  Note how simple it is to add
+%\begin{marginalnote}\it Scrollbars\end{marginalnote}
+\marginnote{Scrollbars}
+scrollbars to the text area:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+this.getContentPane().add(new JScrollPane(display));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This statement creates a {\tt JScrollPane} and
+adds it to the application's container.  A {\tt JScrollPane} is one of
+Swing's scrollbar classes. Its function is to manage the viewing and
+scrolling of a scrollable component, such as a {\tt JTextArea}.  A
+{\tt JScrollPane} is actually a container, which is why it takes the
+{\tt display} as an argument. The {\tt display} is being added to the
+{\tt JScrollPane}.
+
+Just about any {\tt Component} can be added to a {\tt JScrollPane}.
+Once a component is added, the scroll pane will manage the
+scrolling functions for the component. The default constructor used in
+this example takes a single {\tt Component} parameter. This refers to
+the scrollable component, in this case to the {\tt JTextArea}.
+Another constructor that you might use takes the following form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public JScrollPane(Component comp, int vsbPolicy, 
+                                     int hsbPolicy);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The two integers refer to the vertical and horizontal
+scrolling policies. These cover properties such as whether the
+scrollbars are always present or just as needed. The default policy is
+to attach scrollbars to the component only when needed. Thus, to see
+the scrollbars in the {\tt SimpleText} {\tt Editor}, you would have to shrink
+the window to the point where all of the text cannot be viewed
+(Fig.~13.34).  Because the text area in this example
+is wrapping the text, the horizontal scrollbar will never be needed.
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr13/9f25.eps}{The scrollbars appear on the text area
+only when they are needed. In this case, only a vertical scrollbar
+is necessary.
+\label{fig-scrollexample}
+\label{pg-fig-scrollexample}}
+%\end{figure}
+%\end{figure}
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Modify the {\tt addRecentCut()} method so it limits the cuts stored
+in the vector to the last ten cuts.
+
+
+\item  Modify the {\tt addRecentCut()} method so that it doesn't duplicate
+cuts already stored in the vector. ({\it Hint}: Use the 
+{\tt indexOf(String)} method in the {\tt Vector} class.)
+
+\end{SSTUDY}
+
+\section*{{\color{cyan}Special Topic:} Are Computers Intelligent?}
+
+Contemporary computer interfaces are largely visual and graphical, and
+many things we use a computer for, such as word processing, still
+require us to type. Will there come a day when instead of typing a
+letter or e-mail message, we'll be able to dictate it to our computer?
+Will computers eventually have the same kind of interface we have---that is, will 
+we someday be able to carry on conversations with our
+computers?  Clearly, a ``conversational interface'' would require
+substantial intelligence on the part of the computer. Do computers
+have any chance of acquiring such intelligence?\\
+\hspace*{1pc}The question of machine intelligence or {\it artificial intelligence
+(AI)} has been the subject of controversy since the very first
+computers were developed. In 1950, in an article in the journal {\it
+Mind}, Alan Turing proposed the following test to settle the question
+of whether computers could be intelligent. Suppose you put a person
+and a computer in another room, and you let a human interrogate both
+with any kind of question whatsoever. The interrogator could ask them
+to parse a Shakespearian sonnet, or solve an arithmetic problem, or
+tell a joke. The computer's task would be to try to fool the
+interrogator into thinking that it was the human. And the (hidden)
+human's task would be to try to help the interrogator see that he or
+she was the human.\\
+\hspace*{1pc}Turing argued that someday computers would be able to play this game
+so well that interrogators would have no better than a 50/50 chance of
+telling which was which. When that day came, he argued, we would have
+to conclude that computers were intelligent.\\
+\hspace*{1pc}This so-called {\it Turing test} has been the subject of controversy ever
+since.  Many of the founders of AI and many of its current
+practitioners believe that computation and human thinking are
+basically the same kind of process and that eventually computers will
+develop enough capability that we'll have to call them intelligent.
+Skeptics argue that even if computers could mimic our intelligence,
+there's no way they will be self-conscious and, therefore, they can
+never be truly intelligent. According to the skeptics, merely
+executing programs, no matter how clever the programs are, will never
+add up to intelligence.\\
+\hspace*{1pc}Computers have made some dramatic strides lately. In 1997, an IBM
+computer named Deep Blue beat world chess champion
+Gary Kasparov in a seven-game chess match. In 1998, a computer
+at Los Alamos National Laboratory proved a mathematical theorem
+that some of the best mathematicians were unable to prove
+for the past 40 years.\\
+\hspace*{1pc}However, despite these achievements, most observers would agree that
+computers are not yet capable of passing the Turing test. One area
+where computers fall short is in natural language
+understanding. Although computers are good at understanding Java and
+other computer languages, human languages are still too complex and
+require too much common sense knowledge for computers to understand
+them perfectly. Another area where computers still fall somewhat short
+is in speech recognition. However, an American company recently
+demonstrated a telephone that could translate between English and
+German (as well as some other languages) in real time.  The device's
+only limitation was that its discourse was limited to the travel
+domain.  As computer processing speeds improve, this limitation is
+expected to be only temporary.  Thus, we may be closer than we think
+to having our ``conversational user interface.''\\
+\hspace*{1pc}Natural language understanding, speech recognition, learning,
+perception, chess playing, and problem solving are the kinds of
+problems addressed in AI, one of the major applied areas of computer
+science. Almost every major research group in AI has a Web site that
+describes its work. To find some of these, just do a search for
+``artificial intelligence'' and then browse through the links that
+are returned.
+
+\pagebreak
+\secSMHleft{Chapter Summary}
+%\addcontentsline{toc}{section}{\S~~~ Chapter Summary}
+
+\nopagebreak\secKTH{Technical Terms}
+
+\begin{KT}
+adapter class
+
+callback design
+
+content pane
+
+containment hierarchy
+
+controller
+
+event model
+
+inner class
+
+layout manager
+
+lightweight  component
+
+listener
+
+model
+
+model-view-controller (MVC)
+
+peer model
+
+pluggable look and feel
+
+view
+
+widget hierarchy
+
+\end{KT}
+
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}
+\item  Java provides two sets of Graphical User Interface
+(GUI) components, the Abstract Windowing Toolkit (AWT), which was part
+of Java 1.0 and the Swing component set, the
+GUI part of the Java Foundation Classes (JFC), introduced in JDK 1.1.
+
+\item  Unlike their AWT counterparts, Swing components are written
+entirely in Java. This allows programs written in Swing to have
+a platform-independent look and feel. There are three built-in
+look-and-feel packages in Swing: a Windows  style, a Unix-like
+Motif style, and a purely Java Metal style.
+
+\item  Swing components are based on the {\it model-view-controller (MVC)}
+architecture, in which the component is divided into three separate
+objects: how it looks ({\it view}), what state it's in ({\it model}),
+and what it does ({\it controller}). The view and controller parts are
+sometimes combined into a single {\it user interface} class, which can
+be changed to create a customized look and feel.
+
+\item  AWT components are based on the {\it peer model}, in which
+every AWT component has a peer in the native windowing system. This
+model is less efficient and more platform dependent than the MVC model.
+
+\item  Java's {\it event model} is based on {\it event listeners}. When
+a GUI component is created, it is registered with an appropriate event
+listener, which takes responsibility for handling the component's events.
+
+\item  A user interface combines four functions: guidance/information for the user,
+input, output, and control.
+
+\item  Components in a GUI are organized into a {\it containment
+hierarchy} that is rooted at the top-level window. {\tt JPanel}s and other
+{\tt Container}s can be used to organize the components into a hierarchy
+according to function or some other criterion.
+
+\item  The top-level Swing classes---{\tt JApplet}, {\tt JDialog},
+{\tt JFrame}, and {\tt JWindow}---use a {\it content pane} as their
+component container.
+
+\item  A GUI should minimize the number of input devices the user
+needs to manipulate, as well as the complexity the user needs
+to deal with. Certain forms of redundancy---such as two independent
+but complete sets of controls---are desirable because they make
+the interface more flexible and more widely applicable.
+
+\item  A {\it layout manager} is an object that manages the size and
+arrangement of the components in a container. The AWT and Swing
+provide a number of built-in layouts, including flow, border,
+grid, and box layouts.
+
+\item  A {\it radio button} is a toggle button that belongs to a group
+in which only one button from the group may be selected at the same
+time. A {\it checkbox} is a toggle button that always displays its
+state.
+
+\item  A well-designed interface should reduce the chance of
+user error and should make it as easy as possible to recover from
+errors when they do occur.
+
+\end{SMBL}
+
+%%\secANSHleft
+\secANSH
+%%\begin{ANSstr}
+\begin{ANS}
+%\addcontentsline{toc}{section}{\S~~~ Answers to Self-Study Exercises}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{chptr13/p528f1.eps}{A {\tt JButton} has internal model-view-controller
+components that interact with each other to produce the button's
+overall behavior.
+\label{fig-p528f1}
+\label{pg-fig-p528f1}}
+\end{figure}
+%\end{figure}
+
+\item  How can a button still be considered a component under the MVC model?
+This is a good question. The {\tt JButton} class acts as a wrapper
+class and hides the model-view-controller details
+(Fig.~\ref{fig-p528f1}). When you instantiate a {\tt JButton}, you
+still get a single instance.  Think of it this way: Your body consists
+of several systems that interact (internally) among themselves, but
+it's still one body that other bodies interact with as a single
+object. 
+
+\item  A component can indeed be registered with more than one listener.  For
+example, the {\tt ToggleButton} that we defined in
+Chapter 4 has two listeners. The first is the button
+itself, which takes care of toggling the button's label. The second is the
+applet in which the button is used, which takes care of handling
+whatever action the button is associated with.
+
+\item  Some components can have two different kinds of listeners.  For
+example, imagine a ``sticky button'' that works like this. When you
+click and release the button, it causes some action to take place,
+just like a normal button. When you click and hold the mouse button
+down, the button ``sticks'' to the cursor and you can then move it to
+a new location. This button would need listeners for
+{\tt ActionEvent}s, {\tt MouseEvent}s, and {\tt MouseMotionEvent}s.
+
+\item  To round a double you could use the {\tt Math.round()} method.  For
+example, suppose the number you want to round is {\tt d}. Then the
+expression {\tt Math.round(100 * d)/100.0} will round to two
+decimal places. Alternatively, you could use the
+{\tt java.text.Num\-ber\-Format} class. Both of these approaches were covered
+in Chapter~5.
+
+\item  Many cars today have cruise control as a alternative way to control the
+accelerator. Push buttons, usually located on the steering wheel, are
+used to speed up and slow down, so you can drive with your foot
+or your hand.
+
+\item As an alternative, a north-west-center border layout for the
+top-level window in the {\tt Converter} might work. So might
+center-south-east and center-south-west. What makes these possible is
+the fact that the layout manager will use up space in any edge area
+that is not assigned a component.
+
+\item  A flow layout would not be appropriate for the control panel because
+you would have little control of where the {\tt convert} button would be
+placed relative to the keypad.
+
+\item  Interface design disaster: My car uses the same kind of on/off switch
+for the headlights and the windshield wipers. One is a stem on the
+left side of the steering wheel, and the other is on a stem on the
+right side of the steering wheel. On more than one occasion, I've
+managed to turn off the headlights when I intended to turn on the
+wipers.
+
+\item  Modify the {\tt addRecentCut()} method so it limits the cuts
+stored in the vector to the last ten cuts. Solution: Check
+the size of the vector after inserting the cut. If it
+exceeds ten, remove the last element in the vector.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void addRecentCut(String cut) {
+  recentCuts.insertElementAt(cut, 0);
+  if (recentCuts.size() > 10) { // If more than 10 cuts
+    recentCuts.removeElementAt(10);  // remove oldest cut
+  }
+  cutsMenu.removeAll();
+  for (int k = 0; k < recentCuts.size(); k++) {
+    JMenuItem item = 
+      new JMenuItem((String) recentCuts.elementAt(k));
+    cutsMenu.add(item);
+    item.addActionListener(this);
+  }
+} // addRecentCut()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Modify the {\tt addRecentCut()} method so that it doesn't duplicate
+cuts stored in the vector. Solution: Use the {\tt indexOf()} method
+to search for the cut in the vector. If it's already there,
+don't insert the cut.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void addRecentCut(String cut) {
+  if (recentCuts.indexOf(cut) == -1) {// If not already cut
+    recentCuts.insertElementAt(cut,0);
+    if (recentCuts.size() > 10) { // If more than 10 cuts
+        recentCuts.removeElementAt(10); // remove oldest
+    }
+    cutsMenu.removeAll();
+    for (int k = 0; k < recentCuts.size(); k++) {
+        JMenuItem item = 
+          new JMenuItem((String) recentCuts.elementAt(k));
+        cutsMenu.add(item);
+        item.addActionListener(this);
+    }
+  } // if not already cut
+} // addRecentCut()
+\end{lstlisting}
+\end{jjjlisting}
+
+%%%\end{ANSstr}
+\end{ANS}
+
+
+%\section*{}{Exercises}
+
+\pagebreak
+\secEXRHtwo{Exercises}
+
+%%\begin{EXRtwostr}
+\begin{EXRtwo}
+
+\item  Explain the difference between the following pairs of terms:
+
+\begin{EXRtwoLL}
+\item  A {\it model} and a {\it view}.
+\item  A {\it view} and a {\it controller}.
+\item  A {\it lightweight} and {\it heavyweight} component.
+\item  A {\tt JButton} and a {\tt Button}.
+\item  A {\it layout manager} and a {\it container}.
+\item  A {\it containment hierarchy} and an {\it inheritance hierarchy}.
+\item  A {\it content pane} and a {\tt JFrame}.
+\end{EXRtwoLL}
+
+\marginnote{\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+
+\item  Fill in the blanks.
+
+\begin{EXRtwoLL}\baselineskip=14pt
+\item  A GUI component that is written entirely in Java is
+known as a  \rule{40pt}{0.5pt} component.
+\item   The AWT is not platform independent because it
+uses the \rule{40pt}{0.5pt} model to implement its GUI components.
+\item  The visual elements of a GUI are arranged in a \rule{40pt}{0.5pt}\,.
+\item  A \rule{40pt}{0.5pt} is an object that takes responsibility
+for arranging the components in a container.
+\item  The default layout manager for a {\tt JPanel} is \rule{40pt}{0.5pt}\,.
+\item  The default layout manager for a {\tt JApplet} is \rule{40pt}{0.5pt}\,.
+\end{EXRtwoLL}\baselineskip=11pt
+
+\item  Describe in general terms what you would have to do
+to change the standard look and feel of a Swing {\tt JButton}.
+
+\item  Explain the differences between the model-view-controller
+design of a {\tt JButton} and the design of an AWT {\tt Button}.
+Why is MVC superior?
+
+\item  Suppose you have an applet that contains a \mbox{\tt JButton}
+and a {\tt JLabel}. Each time the button is clicked, the applet
+rearranges the letters in the label. Using Java's event model as a
+basis, explain the sequence of events that happens in order for this
+action to take place.
+
+\item Draw a containment hierarchy for the most recent GUI version of the
+{\tt OneRowNim} program.
+
+\item  Create a GUI design, similar to the one shown in
+Figure~\ref{fig-acmegui}, for a program that would be
+used to buy tickets online for a rock concert.
+
+\item  Create a GUI design, similar to the one shown in
+Figure~\ref{fig-acmegui}, for an online program that
+would be used to play musical recordings.
+
+\item  Design and implement a GUI for the {\tt CDInterest}
+program (Fig.~5.18). This program should
+let the user input the interest rate, principal, and period
+and should accumulate the value of the investment.
+
+\item  Design and implement a GUI for the {\tt Temperature}
+class (Fig.~5.5). One challenge of
+this design is to find a good way for the user to indicate
+whether a Fahrenheit or Celsius value is being input. This
+should also determine the order of the conversion: F to C
+or C to F.
+
+\item  Design an interface for a 16-button integer calculator that supports
+addition, subtraction, multiplication, and division. Implement
+the interface so that the label of the button is displayed in the
+calculator's display---that is, it doesn't actually do the math.
+
+\item  {\bf Challenge: } Design and implement a {\tt Calculator}
+class to go along with the interface you developed in the previous
+exercise. It should function the same way as a hand calculator except
+it only handles integers.
+
+\item  Modify the {\tt Converter} application so that it can convert
+in either direction: from miles to kilometers or from kilometers to
+miles. Use radio buttons in your design to let the user select one or
+the other alternative.
+
+\item  Here's a design problem for you. A biologist needs an
+interactive program that calculates the average of some field data
+represented as real numbers. Any real number could be a data value, so
+you can't use a sentinel value, such as 9999, to indicate the end of
+the input. Design and implement a suitable interface for this problem.
+
+\item  {\bf Challenge:} A dialog box is a window associated
+with an application that appears only when needed. Dialog boxes have
+many uses. An error dialog is used to report an error message.  A file
+dialog is used to help the user search for and open a file. Creating a
+basic error dialog is very simple in Swing. The {\tt JOptionPane}
+class has class methods that can be used to create the kind of dialog
+shown in Figure~13.36. Such a dialog box can be created
+with a single statement:
+
+\marginfiglarge{chptr13/9f28.eps}{A basic {\tt J\-Option\-Pane} error dialog.
+\label{fig-errdialog}\label{pg-fig-errdialog}}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JOptionPane.showMessageDialog(this, 
+         "Sorry, your number is out of range.");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Convert the {\tt Validate} program (Fig.~6.12 from
+Chapter~6) to a GUI interface and use the {\tt JOptionPane} dialog to
+report errors.
+
+
+\item  {\bf Challenge:} Design and implement a version of the
+game {\it Memory}.  In this game you are given a two-dimensional grid
+of boxes that contains pairs of matching images or strings. The object
+is to find the matching pairs. When you click a box, its contents
+are revealed. You then click another box. If its contents match the
+first one, their contents are left visible.  If not, the boxes are
+closed up again. The user should be able to play multiple games
+without getting the same arrangement every time.
+
+\item {\bf Challenge:} Extend the {\tt SimpleTextEditor} program by
+adding methods to handle the opening, closing and saving of text
+files.
+
+%%\end{EXRtwostr}
+\end{EXRtwo}

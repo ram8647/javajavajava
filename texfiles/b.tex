@@ -1,0 +1,654 @@
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{\mbox{B.\arabic{table}}}%
+\renewcommand{\thefigure}{\mbox{B--\arabic{figure}}}%
+
+\chapter{The Java Development Kit}
+
+\markboth{{\color{cyan}APPENDIX\,B\,\,$\bullet$\,\,}The Java Development Kit}
+{{\color{cyan}APPENDIX\,B\,\,$\bullet$\,\,}The Java Development Kit}
+
+\label{appendix-jdk}
+\label{pg-appendix-jdk}
+
+\noindent The Java Development Kit (JDK) for Java$^{\rm TM}$\,2 Platform Standard Edition
+is a set of command-line tools for developing Java programs. It is
+available for free in versions for recent editions of Microsoft
+Windows, Linus, Macintosh OS X, and Solaris (Sun Microsystems).
+
+Download information and documentation are available for the entire
+range of products associated with the Java$^{\rm TM}$\,2 Platform,
+Standard Edition (J2SE) at;
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This appendix summarizes some of the primary tools available
+in the JDK.  For more detailed information you should consult Sun's
+Web site.
+
+Table~B.1 provides a summary of some of the JDK tools.
+
+\begin{table}[htb]
+%\hphantom{\caption{Tools included in the Java Development Kit.}}
+\TBT{0pc}{Tools included in the Java Development Kit.}
+\hspace*{-6pt}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%\TBCH{{\bf Tool Name}} & \TBCH{{\bf Description}}
+{\bf Tool Name} & {\bf Description}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+javac      &  Java compiler. Translates source code into bytecode.\cr
+java       &  Java interpreter. Translates and executes bytecode.\cr
+javadoc    &  Java documentation generator. Creates HTML pages from\cr
+           &  documentation comments embedded in Java programs.\cr
+appletviewer  &  Appletviewer. Used instead of a browser to run Java applets.\cr
+jar        &  Java archive manager. Manages Java archive (JAR) files.\cr
+jdb        &  Java debugger. Used to find bugs in a program.\cr
+javap      &  Java disassembler. Translates bytecode into Java source code.
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\noindent Sun Microsystems provides detailed instructions on how
+to install JDK for J2SE on computers running any of the above operating
+systems, including how to set the system's PATH and CLASSPATH variables.
+Installation instructions can be located using the above link to
+downloading information.
+
+\section*{The Java Compiler: {\tt javac}}
+\noindent The Java compiler ({\tt javac}) translates Java source files into Java
+bytecode.  A Java source file must have the {\tt .java} extension.   The
+{\tt javac} compiler will create a bytecode file with the same name
+but with the {\tt .class} extension.  The {\tt javac} command takes
+the following form:
+
+\vspace{6pt plus3pt minus2pt}
+\noindent {\tt javac} \qquad 
+ [ {\it options} ] \qquad 
+ {\it sourcefiles} \qquad 
+ [ {\it files} ]
+
+\vspace{6pt plus3pt minus2pt}\noindent The brackets in this expression indicate optional parts of
+the command.   Thus, {\it options} is an optional list of command-line options 
+(including the {\tt -classpath} option), and
+{\it files} is an optional list of files, each of which contains a
+list of Java source files.   The {\it files} option would be used if
+you were compiling a very large collection of files, too large to list
+each file individually on the command line.
+
+Most of the time you would simply list the {\it sourcefiles} you are
+compiling immediately after the word {\tt javac}, as in the
+following example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+javac MyAppletClass.java MyHelperClass.java
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this command, {\tt javac} will read class
+definitions contained in {\tt MyAppletClass.java} and {\tt MyHelperClass.java}
+in the current working directory
+and translate them into bytecode files named {\tt MyAppletClass.class} and
+{\tt MyHelperClass.class}.
+
+If a Java source file contains inner classes, these would be compiled
+into separate class files.  For example, if {\tt MyAppletClass.java}
+contained an inner class named {\tt Inner}, {\tt javac} would compile
+the code for the inner class into a file named {\tt
+MyAppletClass\$Inner.class}.
+
+If you are writing a program that involves several classes, it is not
+necessary to list each individual class on the command line.  You must
+list the main class---that is, the class where execution will begin.
+The compiler will perform a search for all the other classes used in
+the main class.  For example, if {\tt MyAppletClass} uses an instance
+of {\tt MyHelperClass}, you can compile both classes with the following
+command:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+javac MyAppletClass.java
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, {\tt javac} will perform a search for
+the definition of {\tt MyHelperClass}.
+
+\subsection*{How Java Searches for Class Definitions}
+\noindent When compiling a file, {\tt javac} needs a definition for every class
+or interface that's used in the source file.  For example, if you are
+creating a subclass of {\tt java.applet.Applet}, {\tt javac} will need
+definitions for all of {\tt Applet}'s superclasses, including {\tt
+Panel}, {\tt Container}, and {\tt Component}. The definitions for
+these classes are contained in the {\tt java.awt} package.   Here's how
+{\tt javac} will search for these classes.
+
+
+{\tt Javac} will first search among its library files for 
+definitions of classes, such as {\tt Applet}
+and {\tt Panel}.  Next, {\tt javac} will search among the files and
+directories listed on the user's {\it class path}. The class path is a
+\marginnote{The Classpath}
+system variable that lists all the user directories and files that
+should be searched when compiling a user's program.  
+JDK no longer requires a class path variable. The class path can
+be set either by using the environment variable CLASSPATH or by using
+the {\tt -classpath} option when invoking {\tt javac}. 
+By default, JDK will check in the current working directory
+for user classes. It doesn't require that the CLASSPATH variable be set. If this variable
+{\bf is} set, it must include the current directory.
+The preferred way to set the classpath is by using {\tt -classpath} option.
+For example,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+javac -classpath ../source:. MyApplet.java
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent will tell {\tt javac} to search in both the current directory (.)
+and in the {\tt ../source} directory for user source files. Because the
+details for setting the CLASSPATH variable are system dependent, it's best to
+consult the online installation documentation to see exactly how this is done on
+your system.
+
+During a successful search, {\tt javac} may find a source file, a
+class file, or both.   If it finds a class file but not source file,
+{\tt javac} will use the class file.  This would be the case for Java
+library code.  If {\tt javac} finds a source file but not a class file,
+it will compile the source and use the resulting class file.  This
+would be the case for the first compilation of one of your source
+programs.   If {\tt javac} finds both a source and a class file, it
+determines whether the class file is up-to-date.  If so, it uses it.  If
+not, it compiles the source and uses the resulting class file.  This
+would be the case for all subsequent compilations of one of your
+source programs.
+
+As noted earlier, if your application or applet uses several source
+files, you need only provide {\tt javac} with the name of the main
+application or applet file.   It will find and compile all the source
+files, as long as they are located in a directory that's listed in the
+class path.
+
+\section*{The Java Interpreter: {\tt java}}
+\noindent The {\tt java} interpreter launches a Java application.   This command
+takes one of the following forms:
+
+\vspace{6pt plus3pt minus2pt}\columnsep = 0pt\begin{multicols}{5}
+\small
+\parindent=0pc
+{\tt java} 
+
+{\tt java} 
+
+ [ {\it options} ] 
+
+ [ {\it options} ] 
+
+ classname 
+
+ {\bf -jar} 
+
+ [ {\it argument \dots } ] 
+
+ file.jar 
+
+\mbox{ }
+
+ [ {\it argument \dots } ]
+\end{multicols}
+
+\vspace{6pt plus3pt minus2pt}\noindent If the first form is used, {\tt java} starts a Java runtime
+environment.   It then loads the specified {\it classname} and runs
+that class's {\tt main()} method, which must be declared as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String args[])
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt String} parameter {\tt args[]} is an array
+of strings, which is used to pass any {\it argument}s listed on the
+command line.  Command-line arguments are optional.
+
+If the second form of the {\tt java} command is used, {\tt java} will
+load the classes and resources from the specified {\it Java archive
+(JAR)}. In this case, the special {\tt -jar} option flag must be
+specified. The {\bf options} can also include many other command-line
+options, including the {\tt -classpath} option.
+
+
+\section*{The {\tt appletviewer}}
+\noindent The {\tt appletviewer} tool lets you run Java applets without using
+a Web browser.   This command takes the following form:
+
+\vspace{6pt plus3pt minus2pt}
+\noindent {\tt appletviewer} \qquad 
+ [ {\it threads flag} ] \qquad 
+ [ {\it options } ] \qquad 
+ url \dots
+
+\vspace{6pt plus3pt minus2pt}\noindent The optional {\it threads flag} tells Java which of the various
+threading options to use.  This is system dependent.  For details on
+this feature and the command line {\it options}, refer to Sun's Web site.
+
+The appletviewer will connect to one or more HTML documents specified
+by their {\it Uniform Resource Locators (URLs)}. It will display each
+applet referenced in those documents in a separate window.  Some
+example commands would be
+
+\begin{jjjlisting}
+\begin{lstlisting}
+appletviewer http://www.domain.edu/~account/myapplet.html
+appletviewer myapplet.html
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the first case, the document's full path name is
+given.  In the second case, since no host computer is mentioned, {\tt
+appletviewer} will assume that the applet is located on the local host
+and will search the class path for {\tt myapplet.html}.
+\marginnote{\vspace{-24pt}AppletViewer tags}
+
+Once {\tt appletviewer} retrieves the HTML document, it will find the
+applet by looking for either the {\tt object}, {\tt embed}, or {\tt
+applet} tags within the document.  The {\tt appletviewer} ignores all
+other HTML tags.   It just runs the applet.  If it cannot find one of
+these tags, the appletviewer will do nothing.   If it does locate an
+applet, it starts a runtime environment, loads the applet, and then
+runs the applet's {\tt init()} method.  The applet's {\tt init()} must
+have the following method signature:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void init()
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection*{The {\tt applet} Tag}
+\noindent 
+The {\tt applet} tag is the original HTML 3.2 tag used for embedding
+applets within an HTML document.  If this tag is used, the applet will
+be run by the browser, using the browser's own implementation of the
+Java Runtime Environment (JRE).
+
+\spstrict Note, however, that if your applet uses the latest Java language
+features and the browser is not using the latest version of JRE, the
+applet may not run correctly.  For example, this might happen if your
+applet makes use of Swing features that are not yet supported in the
+browser's implementation of the JRE.~In that case, your applet won't
+run under that browser.\spnormalstr
+
+
+To ensure that the applet runs with the latest version of the JRE---the 
+one provided by Sun Microsystems---you can also use the {\tt
+object} or the {\tt embed} tags.  These tags are used to load the
+appropriate version of the JRE into the browser as a {\it plugin}
+module.   A plugin is a helper program that extends the browser's
+functionality.
+
+The {\tt applet} tag takes the following form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<applet
+    code="yourAppletClass.class"
+    object="serializedObjectOrJavaBean"
+    codebase="classFileDirectory"
+    width="pixelWidth"
+    height="pixelHeight"
+>
+   <param name="..." value="...">
+    ...
+   alternate-text
+</applet>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent You would use only the {\tt code} or {\tt object} attribute,
+not both.  For the programs in this book, you should always use the
+{\tt code} tag.  The {\tt code} tag specifies where the program
+will begin execution---that is, in the applet class.
+
+The optional {\tt codebase} attribute is used to specify a relative
+path to the applet.  It may be omitted if the applet's class file is in
+the same directory as the HTML document.
+
+The {\tt width} and {\tt height} attributes specify the initial
+dimensions of the applet's window.  The values specified in the applet
+tag can be overridden in the applet itself by using the {\tt
+setSize()} method, which the applet inherits from the {\tt
+java.awt.Component} class.
+
+The {\tt param} tags are used to specify arguments that can be
+retrieved when the applet starts running (usually in the applet's {\tt
+init()} method).  The methods for retrieving parameters are defined
+in the {\tt java.applet.Applet} class.
+
+Finally, the {\tt alternative-text} portion of the applet tag provides
+text that would be displayed on the Web page if the appletviewer or
+browser is unable to locate the applet.
+
+Here's a simple example of an applet tag:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<applet
+    code="HelloWorldApplet.class"
+    codebase="classfiles"
+    width="200"
+    height="200"
+>
+    <param name="author" value="Java Java Java">
+    <param name="date" value="May 1999">
+
+    Sorry, your browser does not seem to be able to
+    locate the HelloWorldApplet.
+</applet>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the applet's code is stored in a
+file name {\tt HelloWorld\-Applet.class}, which is stored in the {\tt
+classfiles} subdirectory---that is, a subdirectory of the directory
+containing the HTML file.   The applet's window will be $200 \times 200$
+pixels.  And the applet is passed the name of the program's author and
+date it was written.  Finally, if the applet cannot be located, the
+``Sorry \dots '' message will be displayed instead.
+
+\subsection*{The {\tt object} Tag}
+\noindent The {\tt object} tag is the HTML 4.0 tag for embedding applets and
+multimedia objects in an HTML document.  It is also an Internet
+Explorer (IE) 4.x extension to HTML.~It allows IE to run a Java applet
+using the latest JRE plugin from Sun.  The {\tt object} tag takes the
+following form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<object
+    classid="name of the plugin program"
+    codebase="url for the plugin program"
+    width="pixelWidth"
+    height="pixelHeight"
+>
+    <param name="code" value="yourClass.class">
+    <param name="codebase" value="classFileDirectory">
+     ...
+    alternate-text
+</object>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that parameters are used to specify your
+applet's code and codebase.  In effect, these are parameters
+to the plugin module.  An example tag that corresponds
+to the {\tt applet} tag for the {\tt HelloWorldApplet}
+might be as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<object
+    classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+    codebase="http://java.sun.com/products/plugin/"
+    width="200"
+    height="200"
+>
+    <param name="code" value="HelloWorldApplet.class">
+    <param name="codebase" value="classfiles">
+    <param name="author" value="Java Java Java">
+    <param name="date" value="May 1999">
+
+    Sorry, your browser does not seem to be able to
+    locate the HelloWorldApplet.
+</object>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If the browser has an older version of the plug in than
+shown in the {\tt codebase} attribute, the user will be prompted to
+download the newer version. If the browser has the same or newer
+version, that version will run. In theory Netscape 6 should also work
+the same as IE.  For further details on how to use the {\tt object}
+tag, see Sun's plugin site at:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/products/plugin/
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\vspace{-6pt}\subsection*{The {\tt embed} Tag}
+\noindent The embed tag is Netscape's version of the {\tt applet} and {\tt
+object} tags.  It is included as an extension to HTML 3.2.  It can be used
+to allow a Netscape 4.x browser to run a Java applet using the latest
+Java plugin from Sun.  It takes the following form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<embed
+    type="Type of program"
+    code="yourAppletClass.class"
+    codebase="classFileDirectory"
+    pluginspage="location of plugin file on the web"
+    width="pixelWidth"
+    height="pixelHeight"
+>
+    <noembed>
+    Alternative text
+    </noembed>
+</embed>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt type} and {\tt pluginspage} attributes
+are not used by the appletviewer, but they are necessary for
+browsers.  They would just be ignored by the appletviewer.
+
+For example, an {\tt embed} tag for {\tt HelloWorldApplet}
+would be as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<EMBED
+    type="application/x-java-applet;version=1.4"
+    width="200"
+    height="200"
+    code="HelloWorldApplet.class"
+    codebase="classfiles"
+    pluginspage="http://java.sun.com/products/plugin/"
+ >
+   <NOEMBED>
+       Sorry.  This page won't be able to run this applet.
+   </NOEMBED>
+</EMBED>
+\end{lstlisting}
+\end{jjjlisting}
+
+It may be possible to combine the {\tt applet}, {\tt embed}, and {\tt
+object} tags in the same HTML file.  Sun provides much more information,
+as well as demo programs on its plugin website:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/products/plugin/
+\end{lstlisting}
+\end{jjjlisting}
+
+\vspace{-6pt}\section*{The Java Archiver {\tt jar} Tool}
+\noindent The {\tt jar} tool can be used to combine multiple files into a single
+JAR archive file.  Although the {\tt jar} tool is a general-purpose
+archiving and compression tool, it was designed mainly to facilitate
+the packaging of Java applets and applications into a single file.
+
+
+The main justification for combining files into a single archive and
+compressing the archive is to improve download time.  The {\tt jar}
+command takes the following format:
+
+\vspace{6pt plus4pt minus2pt}
+\noindent {\tt jar} \qquad [ {\it options} ] destination-file \qquad 
+ input-file 
+\qquad  [ input-files ]
+
+\vspace{6pt plus4pt minus2pt}\noindent For an example of its usage, let's use it to
+archive the files involved in the {\tt WordGuess} example in
+Chapter~9. As you may recall, this example used classes, such as {\tt
+TwoPlayerGame}, and interfaces, such as {\tt IGame}, that were
+developed in earlier sections of the chapter.  So, to help manage the
+development of {\tt WordGuess}, it would be useful to have a library
+containing those files that must be linked together when we compile
+{\tt WordGuess}. 
+
+This is a perfect use of a {\tt jar} file. Let's name our library
+{\tt nplayerlib.jar}. We choose this name because the library
+can be used to create game programs that have {\em N} players,
+including two-player games.
+
+For the two-player game, {\tt WordGuess}, we want to combine all the
+{\tt .class} files needed by {\tt WordGuess.java} into a single jar
+file.  Here's a list of the files we want to archive:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+CLUIPlayableGame.class
+ComputerGame.class
+GUIPlayableGame.class
+IGame.class
+KeyboardReader.class
+Player.class
+TwoPlayerGame.class
+UserInterface.class
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Assuming all of these files are contained in a single
+directory (along with other files, perhaps), then the command we use
+from within that directory is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+jar cf nplayerlib.jar *.class
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the {\tt cf} options specify that we are
+creating a jar file named {\tt animated.jar} that will consist of all
+the files having the {\tt .class} suffix.  This will create a
+file named {\tt nplayerlib.jar}.  To list the contents of this
+file, you can use the following command:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+jar tf nplayerlib.jar
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Once we have created the jar file, we can copy it into the
+directory that contains our source code for the {\tt WordGuess}
+program.  We would then the following commands to include the code
+contained in the library when we compile and run {\tt WordGuess.java}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+javac -classpath nplayerlib.jar:. WordGuess.java
+java -classpath nplayerlib.jar:. WordGuess
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent These commands, which use the {\tt -classpath} option,
+tell {\tt javac} and {\tt java} to include code from the {\tt
+nplayerlib.jar}. The notation \verb|:.|, links code in the current
+directory (\.) with the library code.
+
+Once we have created a library, we can also use it for
+Java applets.  For example, suppose we have developed an applet
+version of the {\tt WordGuess}  game and linked all of the
+applet's code into a jar file named {\tt wordguessapplet.jar}.
+The following HTML file would allow users to download the applet
+from their web browser:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<html>
+    <head><title>WordGuess Applet</title></head>
+    <body>
+    <applet
+        archive="wordguessapplet.jar"
+        code="WordGuessApplet.class"
+        width=350 height=350
+    >
+        <parameter name="author" value="Java Java Java">
+        <parameter name="date" value="April 2005">
+    </applet>
+    </body>
+</html>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When specified in this way, the browser will take care
+of downloading the archive file and extracting the individual files
+needed by the applet.  Note that the {\tt code} attribute must still
+designate the file where the program will start execution.
+
+\section*{The Java Documentation Tool: {\tt javadoc}}
+\noindent The {\tt javadoc} tool parses the declarations and documentation
+comments in a Java source file and generates a set of HTML pages that
+describes the following elements: public and protected classes, inner
+classes, interfaces, constructors, methods, and fields.
+
+The {\tt javadoc} tool can be used on a single file or an entire package
+of files.  Recall that a Java documentation comment is one that begins
+with \verb|/**| and ends with \verb|*/|.  These are the comments that
+are parsed by {\tt javadoc}.
+
+The {\tt javadoc} tool has many features, and it is possible to use
+Java {\it doclets} to customize your documentation.  For full details
+on using the tool, it is best to consult Sun's Web site.  To illustrate
+how it might be used, let's just look at a simple example.
+
+The {\tt FirstApplet} program from Chapter~\ref{chapter-intro2}
+contains documentation comments.  It was processed using the
+following command:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+javadoc FirstApplet.java
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent {\tt javadoc} generated the following HTML documents:
+
+\begin{jjjlistingleft}[30pc]{-4pc}
+\begin{lstlisting}[stringstyle=\color{black}]
+FirstApplet.html      -The main documentation file
+allclasses-frame.html -Names and links to all the classes used in 
+                       FirstApplet
+overview-tree.html    -A tree showing FirstApplet's place 
+                       in the class hierarchy
+packages.html         -Details on the packages used in FirstApplet
+index.html            -Top-level HTML document for 
+                       FirstApplet documentation
+index-all.html        -Summary of all methods and variables in
+                       FirstApplet
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent To see how the documentation appears, review the {\tt FirstApplet.java}
+source file and the documentation it generated.  Both are available at
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.prenhall.com/morelli/
+\end{lstlisting}
+\end{jjjlisting}
+
+
+
+%

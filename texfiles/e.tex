@@ -1,0 +1,87 @@
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{\mbox{E.\arabic{table}}}%
+\renewcommand{\thefigure}{\mbox{E--\arabic{figure}}}%
+
+
+\chapter{Operator Precedence Hierarchy}
+
+\markboth{{\color{cyan}APPENDIX\,E\,\,$\bullet$\,\,}Operator Precedence Hierarchy}
+{{\color{cyan}APPENDIX\,E\,\,$\bullet$\,\,}Operator Precedence Hierarchy}
+
+%%\appendixright{E}{Operator Precedence Hierarchy}
+
+\noindent Table E.1 summarizes the precedence and
+associativity relationships for Java operators.   Within a single
+expression, an operator of order {\it m} would be evaluated before an
+operator of order {\it n} if $m < n$. Operators having the same order
+are evaluated according to their association order.  For example, the
+expression
+
+\begin{jjjlisting}
+\begin{lstlisting}
+25 + 5 * 2 + 3
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent would be evaluated in the order shown by the following
+parenthesized expression:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(25 + (5 * 2)) + 3   ==> (25 + 10) + 3 ==> 35 + 3  ==> 38
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, because \verb|*| has higher precedence
+than \verb|+|, the multiplication operation is done before either of
+the addition operations.   And because addition associates from left to
+right, addition operations are performed from left to right.
+
+
+
+Most operators associate from left to right, but note that assignment
+operators associate from right to left.   For example, consider the
+following code segment:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int i, j, k;
+i = j = k = 100;     // Equivalent to i = (j = (k = 100));
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{table}[h]
+%\hphantom{\caption{Java operator precedence and associativity table.\index{precedence table}}}
+\TBT{0pc}{Java operator precedence and associativity table.}
+\hspace*{-6pt}\begin{tabular}{clll}
+\multicolumn{4}{l}{\color{cyan}\rule{29pc}{1pt}}\\[2pt]
+%%%%\TBCH{{\bf Order}} & \TBCH{{\bf Operator}} & \TBCH{{\bf Operation}} & \TBCH{{\bf Association}}
+{\bf Order} & {\bf Operator} & {\bf Operation} & {\bf Association}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{29pc}{0.5pt}}\\[2pt]
+0 &\verb|(  )|&{\it Parentheses}\cr
+1 &\verb|++   -- |$\;\cdot$&{\it Postincrement,  Postdecrement, Dot Operator}&{\it L to R}\cr
+2 &\verb|++   --  +  -  !|&{\it Preincrement,  Predecrement, }&{\it R to L}\cr
+  &&{\it Unary plus,  Unary minus,  Boolean NOT}&\cr
+3 &\verb|(type)  new|&{\it Type  Cast, Object Instantiation}&{\it R to L}\cr
+4 &\verb|*  /  %|&{\it Multiplication,  Division,  Modulus}&{\it L to R}\cr
+5 &\verb|+ -  +|&{\it Addition,  Subtraction,  String Concatenation}&{\it L to R}\cr
+6 &\verb|<  >  <=  >=|&{\it Relational  Operators}&{\it L to R}\cr
+7 &\verb|==   !=|&{\it Equality  Operators}&{\it L to R}\cr
+8 &$\wedge$&{\it Boolean  XOR}&{\it L to R}\cr
+9 &\verb|&&|&{\it Boolean  AND}&{\it L to R}\cr
+10&\verb||||&{\it Boolean  OR}&{\it L to R}\cr
+11&\verb|= += -= *= /= %=|&{\it Assignment  Operators}&{\it R to L}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{29pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\noindent  In this case, each variable will be assigned 100 as its
+value.  But it's important that this expression be evaluated from right
+to left.  First, {\it k} is assigned 100. Then its value is assigned
+to {\it j}. And finally {\it j}'s value is assigned to {\it i}.
+
+For expressions containing mixed operators, it's always a good idea to
+use parentheses to clarify the order of evaluation.  This will also
+help avoid subtle syntax and semantic errors.

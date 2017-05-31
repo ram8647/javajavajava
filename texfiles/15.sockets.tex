@@ -1,0 +1,3793 @@
+%%%  Chapter 15: Sockets and Networking
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{14}
+
+\chapter{Sockets and Networking}
+\label{chapter-sockets}
+\label{pg-chapter-sockets}
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Understand some basics about networks.
+\item  Know how to use Java's {\tt URL} class
+to download network resources from an applet or application.
+\item  Be able to design networking applications,
+using the client/server model.
+\item  Understand how to use Java's {\tt Socket}
+and {\tt ServerSocket} classes.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item {Introduction}
+\item {An Overview of Networks}
+\item {Using Network Resources from an Applet}
+\item {From the Java Library: {\tt java.net.URL}}
+\item {The Slide Show Applet}
+\item {Using Network Resources from an Application}
+\item {Client/Server Communication via {\tt Socket}s}
+\item {Case Study: Generic Client/Server Classes}
+\item {Playing One Row Nim Over the Network}
+\item {Java Network Security Restrictions}
+\item[] {{\color{cyan}Special Topic:} Privacy and the Internet}
+\item {Java Servlets and Server Pages}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+\end{COL}
+\COend
+
+\section{Introduction}
+
+One of the key strengths of Java is the support it provides for the
+Internet and client/server programming.  In the previous chapter, we saw
+how to make Java programs transfer information to and from external
+files.  Although files are external to the programs that process them,
+they are still located on the same computer.  In this chapter, we learn
+how to transfer information to and from files that reside on a
+network.  This enables programs to communicate with programs running on
+other computers.   With networking, we can communicate with computers
+anywhere in the world.  
+
+\section{An Overview of Networks}
+\noindent Networking is a broad and complex topic.  In a typical computer science
+curriculum, it is covered in one or more upper-level
+courses.  Nevertheless, in this chapter you can learn enough about
+networking to be able to use network resources and to design simple
+Java networking applications.
+
+\subsection{Network Size and Topology}
+\noindent Computer networks come in a variety of sizes and shapes.  A {\it local
+area network (LAN)} is usually a privately owned network located
+within a single office or a single organization.  Your campus
+network would be an example of a LAN.~A {\it wide area
+network (WAN)} spans a wide geographical distance like a country
+or a continent.  It may use a combination of public, private,
+and leased communication devices.  Some of the large commercial
+networks, such as MCI and Sprint, are examples of WANs.
+
+The computers that make up a network can be arranged in a variety of
+{\it topologies}, or shapes, some of the most common of which are
+shown in Figures~\ref{fig-topology1} and \ref{fig-topology2}. 
+As you
+would expect, different topologies use different techniques for
+%\begin{marginalnote}\it Network topology\end{marginalnote}
+\marginnote{Network topology}
+transmitting information from computer to computer.
+%\begin{figure}
+\begin{figure}[h]
+\figaleft{chptr15/15f1.eps}{Star, bus, and ring topologies.
+\label{fig-topology1}\label{pg-fig-topology1}}
+\end{figure}
+%\end{figure}
+
+In a star network (Fig.~\ref{fig-topology1}), a central computer
+functions as a hub, with every other computer in the network connected
+to the hub.  Each computer can communicate with the others but only
+through the hub.  The bus topology doesn't have a hub computer.
+Instead, each node looks at each message sent on the  bus to find
+those that are addressed to it. In sending a message, a node waits
+until the bus is free and then transmits the message.
+
+A ring network (Fig.~\ref{fig-topology1}) also has no host, and the
+computers are connected in a loop, through which they exchange
+information.  The tree topology (Fig.~\ref{fig-topology2}) is
+organized into a hierarchy, with each level (trunk of the tree, major
+branch of the tree) controlled by a hub.  The fully connected mesh
+network directly connects all points to all points, eliminating the
+``middleman.''  Here there is no need to go through one or more other
+computers in order to communicate with a particular computer in the
+network.
+
+Network topologies differ quite a bit in the expense of the wiring
+they require, their efficiency, their susceptibility to failure, and
+the types of protocols they use.   These
+differences are beyond the scope of this chapter.
+
+\begin{figure}[tb]
+\figa{chptr15/15f2.eps}{Tree and fully connected mesh topologies.
+\label{fig-topology2}\label{pg-fig-topology2}}
+\end{figure}
+
+\subsection{Internets}
+\noindent An {\bf internet}\index{internet} (lowercase {\it i}) is a collection of two or more
+distinct networks, joined by devices called {\bf routers}\index{routers}
+(Fig.~\ref{fig-internet}).  An internet is like a meeting of the
+%\begin{marginalnote}\it An internet vs.  the Internet\end{marginalnote}
+\marginnote{An internet vs.  the Internet}
+United Nations.  Each country sends a delegation, all of whose members
+speak that country's language.  A national delegation is like a single
+computer network.  Language interpreters take on the task of
+translating one language to another so that any two delegations, say,
+the United States and China, can communicate.  The routers play a
+similar translation role within an internet.  The UN conference,
+composed of communicating delegations from all the different
+countries of the world, is like a worldwide internet.
+
+\begin{figure}[thb]
+\figaleft{chptr15/15f3.eps}{An internet is a collection of distinct
+networks joined together by routers.
+\label{fig-internet}\label{pg-fig-internet}}
+\end{figure}
+
+
+The United Nations is an apt analogy for the {\bf Internet}\index{Internet}
+(uppercase {\it I}), which is an example of a  particular  worldwide
+internet.  Internets, in the generic sense, shouldn't be confused
+with the Internet.   It's quite likely that your campus LAN is
+itself composed of several, smaller networks, each of
+which uses its own ``language.''
+
+\pagebreak
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  In a network of ten computers, which topology would require the
+most cables?
+
+\item  Which topology would be most resistant to having one of
+its computers crash?
+
+\item  Which topology would be least resistant to having one of
+its computers crash?
+\end{SSTUDY}
+
+
+\subsection{Network Protocols}
+%<sec_protocols:\thisBheadno><pg_sec_protocols:\thispageno>
+\noindent A {\bf protocol}\index{protocol} is a set of rules that governs the communication of
+information.  For example, the {\bf World Wide Web }is based on the {\bf
+HyperText} \mbox{\bf Transfer Protocol (HTTP)}. HTTP describes how information is
+to be exchanged between a Web browser, such as Internet Explorer or
+%\begin{marginalnote}\it Network protocols\end{marginalnote}
+\marginnote{Network protocols}
+Netscape Navigator, and a Web server, which stores an individual's or
+company's Web pages.  Web pages are encoded in the {\it HyperText
+Markup Language (HTML)}. Among other things, the HTTP protocol can
+interpret HTML pages.
+
+Similarly, the {\bf Simple Mail Transfer Protocol (SMTP)} is a set of
+rules that governs the transfer of {\it e-mail}. And the {\bf File
+Transfer Protocol (FTP)} is the protocol that governs the transfer of
+files across the Internet.
+
+\subsubsection*{Application Protocols}
+\noindent These three examples---HTTP, SMTP, and FTP---are examples of
+application protocols.  They are relatively high-level protocols that
+support and govern a particular network application, such as e-mail or
+WWW access.  Among the things they determine how we address
+different computers on the network.  For example, the HTTP protocol
+specifies Web addresses by using a {\bf Uniform Resource Locator
+(URL)}\index{Uniform Resource Locator (URL)}. A URL specifies three
+necessary bits of information: The method used to transfer information
+(e.g., HTTP or FTP), the address of the host computer (e.g., {\tt
+www.prenhall.com}), and the path describing where the file is located
+on the host ( {\tt /morelli/index.html}):
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+METHOD://HOST/PATH
+HTTP://www.prenhall.com/morelli/index.html
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, an e-mail address is specified by the SMTP protocol
+to consist of a local mailbox address ({\tt George.W.Bush}) followed by
+the address of the computer ({\tt mail.whitehouse.gov}):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+LOCAL_MAILBOX@COMPUTER
+George.W.Bush@mail.whitehouse.gov
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Another good example of an application protocol is the Internet's
+{\it Domain Name System (DNS)}, which is the system that governs how
+names, such as {\tt whitehouse.gov} and {\tt java.trincoll.edu}, can
+%\begin{marginalnote}\bf Internet domain names\end{marginalnote}
+\marginnote{Internet domain names}
+be translated into numeric addresses.  In the DNS, each host computer
+on the Internet is identified with a unique host name---for example,
+{\tt mail}, {\tt java}---which is usually made up by the network
+administrator whose job it is to manage an organization's network.
+The DNS divides the entire Internet into a hierarchy of {\it domains}
+and {\it subdomains}. The generic domains are names like {\tt com},
+{\tt edu}, and {\tt mil}, which refer to the type of organization---
+commercial, educational, and military, respectively.  In addition to
+these there are country domains, such as {\tt fr}, {\tt au}, and {\tt nz},
+for France, Australia, and New Zealand.  Finally, individuals and
+organizations can buy their own {\bf domain names}\index{domain names}, such as {\tt
+whitehouse}, {\tt microsoft}, and {\tt trincoll}.
+
+
+What makes the whole system work is that certain computers within the
+network are designated as DNS servers.  It is their role to translate
+names such as {\tt java.trincoll.edu} to numeric addresses whenever
+they are requested to do so by clients such as the SMTP or the HTTP
+server.  Also, the DNS servers must communicate among themselves to
+make sure that their databases of names and addresses are up-to-date.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  What's the URL of the Web server at Prentice Hall?  Identify its
+component parts---host name, domain name, Internet domain.
+\end{SSTUDY}
+
+\subsection{Client/Server Applications}
+\noindent The HTTP, FTP, SMTP, and DNS protocols are examples of {\bf
+client/server protocols}\index{client/server protocols}, and the applications they support are
+examples of client/server applications.  In general, a client/server
+application is one in which the task at hand has been divided into two
+subtasks, one performed by the {\bf client}\index{client} and one performed by the
+{\bf server}\index{server} (Fig.~15.4).
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr15/15f4.eps}{Client/server application.
+\label{fig-clientserverapp}\label{pg-fig-clientserverapp}}
+%\end{figure}
+%\end{figure}
+
+
+For example, in the HTTP case, the Web browser plays the role of a
+client by requesting a Web page from a Web (HTTP) server.  A Web server
+is just a computer that runs HTTP software---a program that
+%\begin{marginalnote}\it e-mail client/server\end{marginalnote}
+%%\marginnote{E-mail client/server}
+implements the HTTP protocol.   For e-mail, the program you use to read
+your e-mail---Eudora, Pine, or Outlook---is an e-mail client.  It
+requests certain services, such as send mail or get mail, from an
+e-mail (SMTP) server, which is simply a computer that runs SMTP
+software.  In the FTP case, to transfer a program from one computer to
+another, you would use an FTP client, such as Fetch.  Finally, in the
+DNS case, the DNS servers handle requests for name to address
+translations that come from HTTP, FTP, and SMTP servers, acting in this
+case like clients.
+
+So we can say that a client/server application is one that observes
+the following protocol:
+
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+Server: Set up a service on a particular host computer.
+Client: Contact the server and request the service.
+Server: Accept a request from a client and provide the service.
+\end{lstlisting}
+\end{jjjlistingleft}
+
+
+\noindent As these examples illustrate, many Internet applications are 
+designed as client/server applications.
+
+\JavaTIP{EFFECTIVE DESIGN}{Divide and Conquer.}{The client/server protocol
+is an example of the effective use of the divide-and-conquer strategy.}
+
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Lots of our everyday interactions fit into the cli\-ent/ser\-ver
+model.  Suppose you are the client in the following services:
+
+%%\begin{EXRBL}
+\begin{itemize}
+\item  Buying a piece of software at a bookstore.
+\item  Buying a piece of software over the phone.
+\item  Buying a piece of software over the Internet.
+%%\end{EXRBL}
+\end{itemize}
+
+\noindent Identify the server and then describe the basic protocol.
+\end{SSTUDY}
+
+\subsection{Lower Level Network Protocols}
+\noindent Modern computer networks, such as the Internet, are organized into a
+number of levels of software and hardware.  Each level has its own
+collection of protocols (Fig.~15.5).
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr15/15f5.eps}{Levels of network protocols.
+\label{fig-levels}\label{pg-fig-levels}}
+%\end{graphic}
+%\end{figure}
+
+
+The application level, which contains the HTTP, FTP, SMTP, and DNS
+protocols, is the highest level.  Underlying the application-level
+protocols are various {\it transmission protocols}, such as the {\it
+Transfer Control Protocol (TCP)} and the {\it User Datagram Protocol
+(UDP)}.  These protocols govern the transfer of large blocks of
+information, or {\bf packets}\index{packets}, between networked computers.  All of
+the applications we mentioned---WWW, e-mail, and file transfer---
+involve
+%\begin{marginalnote}\it Packet transfer\end{marginalnote}
+\marginnote{Packet transfer}
+data transmission and, therefore, rely on one or more of the
+transmission protocols.
+
+At the very lowest end of this hierarchy of protocols are those that
+govern the transmission of bits or electronic pulses over wires and
+those that govern the delivery of data from node to node.  Most of
+these protocols are built right into the hardware---the wires,
+connectors, transmission devices---that networks use.   On top of
+these are protocols, such as the \mbox{\bf ethernet protocol}\index{ethernet protocol} and {\it
+token ring protocol}, that govern the delivery of packets of
+information on a local area network.  These too may be built right into
+the network hardware.
+
+As you might expect, these lower level protocols are vastly different
+%\begin{marginalnote}\it Disparate protocols\end{marginalnote}
+\marginnote{Disparate protocols}
+from each other.  An ethernet network cannot talk directly to a
+token ring network.  How can we connect such disparate networks
+together?  Think again of our United Nations analogy.  How do we get
+French-speaking networks to communicate with English-speaking networks?
+The answer supplied by the Internet is to use the {\bf Internetworking
+Protocol (IP)}\index{Internetworking Protocol (IP)}, which governs the task of translating one network
+protocol to a common format (Fig.~\ref{fig-ipprotocol}).
+
+
+To push the UN analogy a bit further, the Internet's IP is like a
+%\begin{marginalnote}\it The Internet protocol\end{marginalnote}
+\marginnote{The Internet protocol}
+universal language built into the routers that transmit data between
+disparate networks.   On one end of a transmission, a router takes a
+French packet of information received from one of the delegates in its
+network.  The router translates the French packet into an IP packet, which
+it then sends on through the network to its destination.   When the IP
+packet gets close to its destination, another router takes it and
+translates it into an English packet before sending it on to its
+destination on its network.
+
+\subsection{The {\tt java.net} Package}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{chptr15/15f6.eps}{Routers between individual networks use the
+IP protocol to translate one network protocol to another.
+\label{fig-ipprotocol}\label{pg-fig-ipprotocol}}
+\end{figure}
+%\end{figure}
+
+\noindent As we have seen, networks are glued together by a vast array of
+protocols.   Most of these protocols are implemented in software that
+runs on general-purpose computers.   You can install software on your
+personal computer to turn it into a Web server, an FTP server, or an
+e-mail server.  Some of the lower level protocols are implemented in
+software that runs on special-purpose computers, the routers.  Still
+other protocols, such as the ethernet protocol, are implemented
+directly in hardware.
+
+Fortunately, we don't have to worry about the details of even the
+highest level protocols in order to write client/server applications
+in Java.   The {\tt java.net} (Fig.~\ref{fig-nethier}) package
+supplies a powerful and easy-to-use set of classes that supports
+network programming.
+
+%\begin{figure}
+\begin{figure}[h]
+\figaleft{chptr15/p825f1.eps}{The {\tt java.net} package.
+\label{fig-nethier}\label{pg-fig-nethier}}
+\end{figure}
+%\end{figure}
+
+The {\tt java.net.URL} class provides a representation of the
+%\begin{marginalnote}\tt java.net.*\end{marginalnote}
+\marginnote{\tt java.net.*}
+Internet's Uniform Resource Locator that we described earlier.  We'll
+show how to use its methods to download WWW pages.  We'll also
+look at an example that uses a URL and an input stream so that
+files stored on the Web can be used as input files to a Java applet
+or application program.
+
+The {\tt Socket} and {\tt ServerSocket} classes provide methods that
+let us develop our own networking applications.  They enable us to
+make a direct connection to an Internet host, and read and write data
+through \mbox{\tt InputStream}s and {\tt OutputStream}s.  As we will see,
+this is no more difficult than reading and writing data to and from
+files.  The {\tt DatagramPacket} and {\tt DatagramSocket} classes
+provide support for even lower-level networking applications, based on
+Internet packets.
+
+\marginfig{chptr15/15f8.eps}{An applet that continuously displays
+slides downloaded from the Web.
+\label{fig-slideshow}\label{pg-fig-slideshow}}
+\section{Using Network Resources from an Applet}
+\noindent Suppose you want to write an applet that will automatically display a
+slide show consisting of images or documents that you've prepared and
+stored on your Web site.   Perhaps you can use such an applet to give
+people who visit your site a tour of your campus
+(Fig.~15.8). Or perhaps a company might use such an
+applet to advertise its products.  In addition to making the slide show
+available through its main Web site, you can imagine it running
+\marginnote{Problem statement}
+continuously on a computer kiosk in the company's lobby.
+
+
+In order to solve this problem we have to be able to download and
+display Web resources.   As you know, Web resources are
+multimedia.  That is, they could be documents, images, sounds, video
+clips, and so on.  All Web resources are specified in terms of their
+%\begin{marginalnote}\it Specifying Web resources\end{marginalnote}
+\marginnote{Specifying Web resources}
+Uniform Resource Locators (URLs).  Thus, to download an image (or
+an HTML file or audio clip), we usually type its URL into a Web
+browser.  We want our program to know beforehand the URLs of the
+images it will display, so there won't be any need for inputting
+the URL.~We want to implement something like the following algorithm:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+repeat forever
+    Generate the URL for the next slide.
+    Use the URL to download the image or document.
+    Display the image or document.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A URL specification is just a {\tt String}, such as, 
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.cs.trincoll.edu:80/~ram/jjj/slideshow/slide1.gif
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent which describes how to retrieve the resource.   First, it
+specifies the protocol or method that should be used to download the
+resource ({\tt http}). Then, it provides the domain name of the server
+that runs the protocol and the port number where the service is
+running ({\tt www.cs.trincoll.edu:80}).  Next, the URL specifies the
+resource's file name ({\tt \verb|~|ram/jjj/slideshow/slide1.gif}).
+
+\section{From the Java Library: {\tt java.net.URL}}
+
+%\addcontentsline{toc}{section}{\S~~~ From the Java Library: {\tt java.net.URL} }
+
+
+\tBOXseven{Given such} a URL specification, how can we download its associated
+resource?  Are there Java classes that can help us solve this problem?
+Fortunately, there are.  First, the {\tt java.net.URL} class contains
+methods to help retrieve the resource associated with a particular URL
+(Fig.~15.9).  The {\tt URL} class represents a Uniform
+Resource Locator.  The {\tt URL()} constructor shown here (there are
+\marginfig{chptr15/p827f1.eps}{The {\tt java.net.URL} class.
+\label{fig-p827f1}\label{pg-fig-p827f1}}
+others) takes a URL specification as a {\tt String} and, assuming it
+specifies a valid URL, it creates a {\tt URL} object.  If the URL
+\WWWjava
+specification is invalid, a {\tt MalformedURLException} is thrown.  A
+URL might be invalid if the protocol were left off or if it is not a
+known protocol.  The following simple code creates a URL for the home
+page of our companion Web site:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+URL url;
+try {
+ url = 
+  new URL("http://www.prenhall.com:80/morelli/index.html");
+} catch (MalformedURLException e) {
+ System.out.println("Malformed URL: " + url.toString());
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how we catch the {\tt MalformedURLException}
+when we create a new {\tt URL}.
+
+Once we have a valid {\tt URL} instance, it can be used to download
+the data or object associated with it.  There are different ways to do
+this.  The {\tt openConnection()} method creates a {\tt
+URLConnection}, which can then be used to download the resource.  You
+would only use this method if your application required extensive
+control over the download process.  A much simpler approach would use
+the {\tt openStream()} method.  This method will open an {\tt
+%\begin{marginalnote}\it URLs and streams\end{marginalnote}
+InputStream}, which you can then use to read the associated URL data
+the same way you would read a file.  This method is especially useful
+for writing Java applications (rather than applets).  As you might
+guess, downloading Web resources is particularly easy from a Java
+\marginnote{URLs and streams}
+applet.  Now let's search around for other methods that we can use.
+
+\subsection{Code Reuse: The {\tt java.applet.Applet} Class}
+%\addcontentsline{toc}{subsection}{~~~\S~~~ Code Reuse: The {\tt java.applet.Applet} Class}
+\noindent The {\tt java.applet.Applet} class itself contains several useful
+methods for downloading and displaying Web resources.  These
+methods are inherited by {\tt javax.swing.JApplet}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Applet extends Panel {
+    public AppletContext getAppletContext();
+    public AudioClip getAudioClip(URL url);
+    public Image getImage(URL url);
+    public void play(URL url);
+    public void showStatus(String msg);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As you see, both the {\tt getImage()} and {\tt getAudioClip()}
+methods use a URL to download a resource.   An {\tt AudioClip} is a
+sound file encoded in {\tt AU} format, a special type of encoding for
+sound files.  The {\tt getImage()} method can return files in either
+{\tt GIF} or {\tt JPEG} format, two popular image file formats.  The
+{\tt play()} method downloads and plays an audio file in
+one easy step.  For example, to download and play an audio clip within
+an applet requires just two lines of code:
+
+\begin{jjjlistingleft}[30pc]{-4pc}
+\begin{lstlisting}
+URL url;
+try {
+  url = new 
+   URL("http://www.cs.trincoll.edu/~ram/jjj/slideshow/sound.au");
+  play(url);
+} catch (MalformedURLException e) {
+    System.out.println("Malformed URL: " + url.toString()) ;
+}
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent Similarly, to download (and store a reference to)
+an image is just as simple:
+
+\begin{jjjlistingleft}[30.5pc]{-4.5pc}
+\begin{lstlisting}
+URL url;
+try {
+  url = new 
+   URL("http://www.cs.trincoll.edu/~ram/jjj/slideshow/slide0.gif") ;
+  imgRef = getImage(url);
+} catch (MalformedURLException e) {
+    System.out.println( "Malformed URL: " + url.toString()) ;
+}
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent So, it looks as if we've found the methods we need to
+implement our slide show applet.   We'll use the {\tt URL()}
+%\begin{marginalnote}\it What methods can we use?\end{marginalnote}
+\marginnote{What methods can we use?}
+constructor to create a URL from a {\tt String}, and we'll use
+the {\tt Applet.getImage(URL)} method to retrieve the images
+from the Web.
+%%%\end{javalibrary}
+%%%\begin{textblock}{1}(-0.75,4)
+%%%\noindent\epsfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:CommonArt:BX7_Texture/cyan_03.eps,%
+%%%   height=20pc,width=3.25pc,clip=}
+%%%\end{textblock}
+
+
+\section{The Slide Show Applet}
+\subsection*{Problem Specification}
+\noindent Let's suppose our slide show will repeatedly display a set of images
+named ``slide0.gif,'' ``slide1.gif,'' and ``slide2.gif.'' Suppose these
+images are stored on a Web site on {\tt www.cs.trincoll.edu} and are
+stored in a directory named {\tt /\verb!~!ram/jjj/slideshow}. This means
+our program will have to load the following three URLs:
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.cs.trincoll.edu/~ram/jjj/slideshow/slide0.gif
+http://www.cs.trincoll.edu/~ram/jjj/slideshow/slide1.gif
+http://www.cs.trincoll.edu/~ramjjj/slideshow/slide2.gif
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We want our show to cycle endlessly through these
+images, leaving about 5 seconds between each slide.
+
+\subsection*{User Interface Design}
+\noindent The user interface for this applet doesn't contain any GUI
+components.  It just needs to display an image every 5 seconds.   It can
+use a simple {\tt paint()} method to display an image each time it is
+repainted:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void paint(Graphics g) {
+    if (currentImage != null)
+        g.drawImage(currentImage, 10, 10, this);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The assumption here is that the {\tt currentImage} instance
+variable will be set initially to {\tt null}. Each time an image is
+downloaded, it will be set to refer to that image.   Because
+{\tt paint()} is called before the applet starts downloading the images, it
+\marginfig{chptr15/p830f1.eps}{The {\tt SlideShow- Applet} downloads and displays the images.
+\label{fig-p830f1}\label{pg-fig-p830f1}}
+is necessary to guard against attempting to draw a {\tt null} image,
+which would lead to an exception.
+
+\subsection*{Problem Decomposition}
+\noindent One problem we face with this applet is getting it to pause between
+\marginfigvspace{15pt}{chptr15/p830f2.eps}{The {\tt Timer} class delays the applet thread between each slide.
+\label{fig-p830f2}\label{pg-fig-p830f2}}
+each slide.  One way to do this is to set up a loop that does nothing
+for about 5 seconds:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 1000000; k++ ) ;// Busy waiting
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent However, this isn't a very good solution.  As we saw in
+Chapter~14, this is a form of {\em busy waiting}\index{busy waiting}
+that monopolizes the CPU, making it very difficult to break out of the
+loop.  Another problem with this loop is that we don't really know how many
+iterations to do to approximate 5 seconds of idleness.
+
+A much better design would be to use a separate timer thread, which
+can {\tt sleep()} for 5 seconds between each slide.  So our program
+will have two classes: one to download and display the slides and one
+to serve as a timer (Figs.~15.10 and 15.11).
+
+\begin{BL}
+\item  {\tt SlideShowApplet}---This {\tt JApplet}  subclass
+will take care of downloading and displaying the images and starting
+the timer thread.
+
+\item  {\tt Timer}---This class will implement the
+{\tt Runnable} interface so that it can run as a separate thread.  It will
+repeatedly sleep for 5 seconds and then tell the applet to display the
+next side.
+\end{BL}
+
+\JavaTIP{EFFECTIVE DESIGN}{Busy Waiting.}{Instead of busy waiting, a
+thread that sleeps for a brief period on each iteration is a better
+way to introduce a delay into an algorithm.}
+
+\subsection{The {\tt SlideShowApplet} class}
+\noindent What should we do with the images we download? Should we repeatedly
+download and display them, or should we just download them once and
+store them in memory? The second of these alternatives seems more
+efficient.  If an image has already been downloaded, it would be
+wasteful to download it again.
+
+\JavaTIP{EFFECTIVE DESIGN}{Network Traffic.}{In general, a design
+that minimizes network traffic is preferable.}
+
+So we'll need an array to store the images.  Our slide show will then
+%\begin{marginalnote}\it What data do we need?\end{marginalnote}
+\marginnote{What data do we need?}
+consist of retrieving the next image from the array and displaying
+it.  To help us with this task, let's use a {\tt nextImg} variable as
+an array index to keep track of the next image.  Even though it isn't
+absolutely necessary, we could use a third variable here,
+{\tt currentImage}, to keep track of the current image being
+displayed.  Thus, our applet needs the following instance variables:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private static final int NIMGS = 3;
+private Image[] slide = new Image[NIMGS];
+private Image currentImage = null;
+private int nextImg = 0;
+\end{lstlisting}
+\end{jjjlisting}
+
+Given these variables, let's now write a method to take care of
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+choosing the next slide.  Recall that the {\tt paint()} method is
+responsible for displaying {\tt currentImage}, so all this method needs to
+do is to update both {\tt currentImage} and {\tt nextImg}.  This
+method should be designed so that it can be called by the {\tt Timer}
+thread whenever it is time to display the next slide, so it should be
+a {\tt public} method.   It can be a {\tt void} method with no
+parameters, because the applet already contains all the necessary information
+to display the next slide.  Thus, there's no need for information
+to be passed back and forth between {\tt Timer} and this method:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void nextSlide() {
+    currentImage = slide[nextImg];
+    nextImg = (nextImg + 1) % NIMGS;
+    repaint();
+}// nextSlide()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The method's algorithm is very simple.  It sets
+{\tt currentImage} to whatever {\tt slide} is designated by
+{\tt nextImg} and it then updates {\tt nextImg}'s value.   Note here the use
+of modular arithmetic to compute the value of {\tt nextImg}. Given
+that {\tt NIMGS} is 3, this algorithm will cause {\tt nextImg} to take
+on the repeating sequence of values 0, 1, 2, 0, 1, 2, and so forth.
+Finally, the method calls {\tt repaint()} to display the image.
+
+\JavaTIP{PROGRAMMING TIP}{Modular Arithmetic.}{Modular arithmetic \break
+({\tt x \% N}) is useful for cycling repeatedly through the values
+$0, 1, \ldots, N-1$.}
+
+\noindent The applet's {\tt init()} method will have two tasks:
+
+\begin{BL}
+\item  Download and store the images in {\tt slide[]}.
+\item  Start the {\tt Timer} thread.
+\end{BL}
+
+\noindent As we discussed, downloading Web resources requires
+the use of the {\tt getImage()} method. Here we just place these
+method calls in a loop:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k=0; k < NIMGS; k++) 
+    slide[k] = getImage(getCodeBase(), 
+                 "gifs/demo" + k + ".gif");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note here how we convert the loop variable
+{\it k} into a {\tt String} and concatenate it right into the URL
+specification.  This allows us to have URLs containing ``slide0.gif,''
+``slide1.gif,'' and ``slide2.gif.'' This makes our program easily extensible
+should we later decide to add more slides to the show.   Note also the
+use of the class constant {\tt NIMGS} as the loop bound.  This too adds
+to the program's extensibility.
+
+\JavaTIP{PROGRAMMING TIP}{Concatenation.}{Concatenating an
+integer value ({\tt k}) with a string lets you create
+file names of the form {\tt file1.gif}, {\tt file2.gif},
+and so on.}
+
+The task of starting the {\tt Timer} thread involves creating an
+instance of the {\tt Timer} class and calling its {\tt start()}
+method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Thread timer = new Thread(new Timer(this));
+timer.start();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that {\tt Timer} is passed a reference to
+{\tt this} applet.  This enables {\tt Timer} to call the applet's
+{\tt nextSlide()} method every 5 seconds.   This programming technique is
+known as {\it callback} and the {\tt nextSlide()} method is an example
+of a {\bf callback method}\index{callback method} (Fig.~15.12).
+
+\JavaTIP[false]{PROGRAMMING TIP}{Callback.}{Communication between two objects
+can often be handled using a callback technique.  One object is passed
+a reference to the other object.  The first object uses the reference
+to call one of the public methods of the other object.}
+
+\noindent This completes our design and development
+of {\tt SlideShowApplet}, which is shown in Figure~\ref{fig-slideapplet}.
+\marginfig{chptr15/p832f1.eps}{{\tt Timer} uses the {\tt nextSlide()}
+method to {\it call back} the applet to remind it to switch to the
+next slide.\label{fig-p832f1}\label{pg-fig-p832f1}}
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import javax.swing.*;
+import java.net.*;
+
+public class SlideShowApplet extends JApplet  {
+    public static final int WIDTH=300, HEIGHT=200;
+    private static final int NIMGS = 3;
+    private Image[] slide = new Image[NIMGS];
+    private Image currentImage = null;
+    private int nextImg = 0;
+
+    public void paint(Graphics g) {
+        g.setColor(getBackground());
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        if (currentImage != null)
+            g.drawImage(currentImage, 10, 10, this);
+    }//paint()
+
+    public void nextSlide() {
+        currentImage = slide[nextImg];
+        nextImg = (nextImg + 1) % NIMGS;
+        repaint();
+    }// nextSlide()
+
+    public void init() {
+        for (int k=0; k < NIMGS; k++) 
+            slide[k] = getImage(getCodeBase(), 
+                             "gifs/demo" + k + ".gif");
+        Thread timer = new Thread(new Timer(this));
+        timer.start();
+        setSize( WIDTH, HEIGHT );
+    }// init()
+}// SlideShowApplet
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt SlideShowApplet} class.
+\label{fig-slideapplet}\label{pg-fig-slideapplet}}
+\end{figure}
+
+\subsection{The {\tt Timer} Class}
+\noindent The {\tt Timer} class is a subclass of {\tt Thread}, which means it
+must implement the {\tt run()} method.   Recall that we never directly
+%\begin{marginalnote}\it The timer thread\end{marginalnote}
+\marginnote{The timer thread}
+call a thread's {\tt run()} method.  Instead, we call its {\tt start()}
+method, which automatically calls {\tt run()}.  This particular thread
+has a very simple and singular function.  It should call the
+{\tt SlideShowApplet.nextSlide()} method and then sleep for 5 seconds.
+So its main algorithm will be:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+while (true) {
+    applet.nextSlide();
+    sleep( 5000 );
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent However, recall that {\tt Thread.sleep()} throws the
+{\tt Interrupted\-Excep\-tion}. This means that we'll have to
+embed this while loop in a {\tt try/catch} block.
+
+To call the applet's {\tt nextSlide()} method, we also need a
+reference to the {\tt SlideShowApplet}, so we need to give it a
+reference, such as an instance variable, as well as a constructor that
+allows the applet to pass {\tt Timer} a reference to itself.
+
+Given these design decisions, the complete implementation of
+{\tt Timer} is shown in Figure~\ref{fig-timerthread}. To see how it works,
+download it from the {\it Java, Java, Java} Web site and run it.
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Timer implements Runnable {
+    private SlideShowApplet applet;
+
+    public Timer( SlideShowApplet app ) {
+        applet = app;
+    }
+
+    public void run() {
+        try {
+            while ( true ) {
+                applet.nextSlide();
+                Thread.sleep( 5000 );
+            }
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+    }// run()
+}// Timer
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Timer} class.
+\label{fig-timerthread}\label{pg-fig-timerthread}}
+\end{figure}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Describe the design changes you would make to 
+{\tt SlideShow\-Applet} if you wanted to play a soundtrack along with
+your slides.  Assume that the sounds are stored in a sequence of
+files, ``sound0.au,'' sound1.au,'' and so forth, on your Web site.
+\end{SSTUDY}
+
+\section{Using Network Resources from an \\Application}
+\noindent The {\tt SlideShowApplet} illustrates the ease of downloading Web
+resources from an applet.  However, applets have limited use in this
+\mbox{regard,} because they come with rather severe security restrictions that
+would make them a poor choice for most networking applications (see
+%\begin{marginalnote}\it Applet restrictions\end{marginalnote}
+\marginnote{Applet restrictions}
+Section~\ref{sec-security}). For example, applets cannot save
+files that they download, because they cannot access the host computer's
+file system.  Similarly, an applet can only download files from the
+same host from which it was downloaded.  This wouldn't be a problem for
+the slide show applet, since we can simply store the slides in the
+same directory as the applet itself.  So, we want to learn how to
+download Web resources from a Java application.  The next example
+illustrates a solution to this problem.
+
+\subsection*{Problem Specification}
+\noindent Suppose a realtor asks you to write a Java application that will
+allow customers to view pictures and descriptions of homes from
+%\begin{marginalnote}\it Problem statement\end{marginalnote}
+\marginnote{Problem statement}
+an online database.   The application should allow the customer to
+select a home and should then display both an image of the home and a
+text description of its features, such as square footage, asking
+price, and so on.
+
+Suppose that the database of image and text files is kept at a fixed
+location on the Web, but the names of the files themselves may change.
+This will enable the company to change the database as it sells the
+homes.  The company will provide a text file that contains the names
+of the files for the current selection of homes to input into the
+program.  To simplify matters, both image and text files have the same
+name but different extensions---for example, {\tt ranch.txt} and {\tt
+ranch.gif}.  The data file will store just the names of the files, one
+per line, giving it the following format:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+beautifulCape
+handsomeRanch
+lovelyColonial
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Downloading a Text File from the Web}
+\noindent This application requires us to solve three new problems:
+
+\begin{NL}
+\item  How do we download a text file of names that we want to use as
+menu items?
+\item  How do we download a text file and display it in a {\tt JTextArea}?
+\item  How do we download and display an image file?
+\end{NL}
+
+\noindent The third problem is very similar to the problem we solved
+in {\tt SlideShowApplet}, but here we can't use the {\tt Applet.getImage()}
+method.   However, as we shall see, we can find a Java library method
+to perform this task for us. Therefore, the most challenging part of this program is the task of
+\marginnote{Understanding the problem} 
+downloading a Web file and using its data in the program.
+
+For this program we must make use of two types of data downloaded from
+the Web.  The first will be the names of the image and document files.
+We'll want to read these names and use them as menu items that the
+user can select.  Second, once the user has selected a house to view,
+we must download and display an image and a text description of the
+house.  Downloading the text is basically the same as downloading the
+file of names.  The only difference is that we need to display this
+text in a {\tt JTextArea}.  Downloading the image file can be handled
+in more or less the same way that it was handled in the {\tt
+SlideShowApplet}--- by using a special Java method to download and
+display the image file.
+
+Clearly, the problems of downloading a file from the Web and reading a
+file from the disk are quite similar.  Recall that we used streams to
+handle the I/O operation when reading disk files.  The various {\tt
+InputStream} and {\tt OutputStream} classes contained the {\tt read()}
+and {\tt write()} methods needed for I/O.~The situation is the same
+for downloading Web files.
+
+Recall that the {\tt URL} class contains the {\tt openStream()}
+method, which opens an {\tt InputStream} to the resource associated
+with the {\tt URL}. Once the stream has been opened, you can read data
+from the stream just as if it were coming from a file.  The program
+%\begin{marginalnote}\it File download algorithm\end{marginalnote}
+\marginnote{File download algorithm}
+doesn't care whether the data are coming from a file on the Internet or
+a file on the disk.  It just reads data from the stream.  So, to
+download a data file from the Internet, regardless of whether it's a
+text file, image file, audio file, or whatever, you would use the
+following general algorithm:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+URL url;
+InputStream data;
+try {
+    url = new URL(fileURL);          // Create a URL
+    data = url.openStream(); // Open a stream to URL
+  // READ THE FILE INTO MEMORY} // Read dat
+    data.close();                     // Close the stream
+} catch (MalformedURLException e) { // Thrown by URL()
+    System.out.println(e.getMessage());
+} catch( IOException e ) { 
+    System.out.println(e.getMessage());
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent  The algorithm consists of four basic steps:
+
+\begin{BL}
+\item  Create a {\tt URL} instance.
+\item  Open an {\tt InputStream} to it.
+\item  Read the data.
+\item  Close the stream.
+\end{BL}
+
+\noindent Step 3 of this algorithm---read the data---involves many
+lines of code and has, therefore, been left as a subtask suitable for
+encapsulation within a method.
+
+
+\subsection*{Reading the Data}
+\noindent As we saw in the previous chapter, the algorithm for step 3 will
+%\begin{marginalnote}\it Text or binary data?\end{marginalnote}
+\marginnote{Text or binary data?}
+depend on the file's data.  If it's a text file, we would like to read
+one line at a time, storing the input in a {\tt String}.  If it's an
+image or an audio file, we would read one {\tt byte} at a time.
+
+Because our data are contained in a text file, we want to read one
+%\begin{marginalnote}\it What library methods can we use?\end{marginalnote}
+\marginnote{\raggedright\it What library methods can we use?}
+line at a time.  The {\tt BufferedReader} class contains a
+{\tt readLine()} method that returns either a {\tt String} storing
+the line or the value {\tt null} when it reaches the end of file.
+The following method shows how you would read a text file into
+the program's {\tt JTextArea}, which is named {\tt display}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void readTextIntoDisplay(URL url) 
+                                     throws IOException {
+  BufferedReader data
+    = new BufferedReader(
+               new InputStreamReader(url.openStream()));
+  display.setText("");            // Reset the text area
+  String line = data.readLine();
+  while (line != null)  {       // Read each line
+    display.append(line + "\n");// Add to display
+    line = data.readLine();
+  }
+  data.close();
+}// readTextIntoDisplay()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The method is passed the file's URL and it uses the
+{\tt URL.openStream()} method to open the input stream.  Note
+that the method throws \mbox{\tt IOException}, which means that
+%\begin{marginalnote}\it I/O exceptions\end{marginalnote}
+\marginnote{I/O exceptions}
+any I/O exceptions that get raised will be handled by the calling
+method.
+
+In this example, the input algorithm reads each line of the file and
+adds it to the {\tt display}.  For our real estate application, the
+same basic algorithm can be used to read the names of the data files
+and store them in a menu from which a user makes selections.  For
+example, if we use a {\tt JComboBox} menu named {\tt homeChoice}, we
+would simply add each line to it:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String line = data.readLine();
+while (line != null) {
+    homeChoice.addItem(line);
+    line = data.readLine();
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection*{Interface Design}
+
+\begin{figure}[tb]
+\figaright{chptr15/15f11.eps}{User interface design for the real
+estate application.
+\label{fig-realestategui}\label{pg-fig-realestategui}}
+\end{figure}
+
+\noindent The interface for this application is very important.  It
+should provide some means to display a text file and an image.  The
+text file can be displayed in a {\tt JTextArea}, and the image  can
+be drawn on a {\tt JPanel}.
+
+Next, let's consider the types of controls a user might need. The
+customer should be allowed to select a home to view from a menu of
+options.  Because the program will have the list of available homes,
+it can provide the options in a {\tt JComboBox} pull-down menu.
+
+To create an appropriate layout, we want to make sure that the
+controls, the image, and {\tt JTextArea} all have their own region of
+%\begin{marginalnote}\it Interface layout\end{marginalnote}
+%\marginnote{Interface layout}
+the application's window.  This suggests a {\tt BorderLayout}, which is
+the default layout for a {\tt JFrame}.  We can put the {\tt JComboBox}
+menu at the ``North'' border, and the image and text on the ``West''
+and ``East'' borders, respectively.  Figure~\ref{fig-realestategui}
+illustrates these various design decisions.
+\marginfig{chptr15/p838f1.eps}{The {\tt RealEstate- Viewer} class defines 
+the user interface.
+\label{fig-p838f1}\label{pg-fig-p838f1}}
+
+\subsection*{Problem Decomposition: {\tt RealEstateViewer}}
+\noindent The task of downloading and displaying information from the Internet
+%\begin{marginalnote}\it What classes do we need?\end{marginalnote}
+%%\marginnote{What classes do we need?}
+is best handled by two separate classes: One to perform the
+downloading and user interface tasks and the other to take care of
+displaying the image.
+
+The task of downloading the image and text files from the Web can be
+handled by the program's main class, the {\tt RealEstateViewer}, which
+will also handle the user interface (Fig.~15.16).  As the
+application's top-level window, {\tt RealEstateViewer} will is
+subclass of {\tt JFrame}.  Because its controls will include a {\tt
+JComboBox}, it must implement the {\tt itemStateChanged()} method of
+the {\tt ItemListener} interface.
+
+What components and other instance variables will we need for this
+class? According to our interface design, it will need a {\tt JComboBox},
+a {\tt JTextArea}, and the {\tt ImagePanel}. Because it will be
+downloading images, it will need an {\tt Image} variable.
+
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+
+public class RealEstateViewer extends JFrame 
+                                implements ItemListener {
+  public static final int WIDTH=400,HEIGHT=200;
+  private final String dataFileURL =
+    "http://java.trincoll.edu/~jjjava/homes/homes.txt";
+  private final String baseURL = 
+    "http://java.trincoll.edu/~jjjava/homes/";
+  private JTextArea display = new JTextArea(20,20);
+  private JComboBox homeChoice = new JComboBox();
+  private ImagePanel imagePanel = new ImagePanel(this);
+  public Image currentImage = null;
+
+  public RealEstateViewer () { }      // Stub Constructor
+                            // ItemListener interface
+  public void itemStateChanged(ItemEvent evt) { } // Stub
+
+  public static void main(String args[]) {
+    RealEstateViewer viewer = new RealEstateViewer();
+    viewer.setSize(viewer.WIDTH,viewer.HEIGHT);
+    viewer.setVisible(true);
+    viewer.addWindowListener(new WindowAdapter() {     
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);  // Quit the application
+      }
+    });
+  }// main()
+}// RealEstateViewer
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt RealEstateViewer}, Version 1.
+\label{fig-realviewer1}\label{pg-fig-realviewer1}}
+\end{figure}
+
+
+The constants used by this application include the URL string for the
+%\begin{marginalnote}\it What data do we need?\end{marginalnote}
+%%\marginnote{What data do we need?}
+data file. Also, because all the
+images and data files will start with the same prefix,
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.trincoll.edu/~jjjava/homes/
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent we should make this a constant in the program.  These preliminary
+decisions lead to the initial version of {\tt RealEstateViewer} shown
+in Figure~\ref{fig-realviewer1}. Note that the {\tt main()} method
+merely creates an instance of the application and shows it.  Note also
+that the {\tt currentImage} variable is declared {\tt public}. This
+will let the {\tt ImagePanel} have direct access to {\tt currentImage}
+whenever it needs to display a new image.
+
+\pagebreak
+\subsection*{The {\tt ImagePanel} Class}
+\noindent We'll use a second class, the {\tt ImagePanel}, to handle 
+displaying  the image (Figs.~15.18
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr15/p839f1.eps}{An overview of the {\tt ImagePanel} class.
+\label{fig-p839f1}\label{pg-fig-p839f1}}
+%\end{graphic}
+%\end{figure}
+and~\ref{fig-imagepanel}). The reason we use a separate class for this
+task is that we want the image to appear in its own panel (which
+appears on the West border of the main window). In addition to its
+constructor, the only method needed in this class
+%\begin{marginalnote}\it Overriding {\tt paintComponent()}\end{marginalnote}
+%\marginnote{Overriding {\tt paintComponent()}}
+is the {\tt paintComponent()} method.  This method will be called
+automatically whenever the main window is repainted.  Its task is
+simply to get the current image from its parent frame and display
+it.  Note that a reference to the parent frame is passed to the object
+in its constructor.
+
+\subsection*{Method Decomposition}
+\noindent The stub methods listed in the initial version of
+{\tt RealEstateViewer} (Fig.~\ref{fig-realviewer1}) outline the main
+tasks required by the application.  Some of these methods are very
+simple and even trivial to implement.  Others should be broken up into
+subtasks.
+
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+
+public class ImagePanel extends JPanel {
+
+    private RealEstateViewer frame;
+
+    public ImagePanel(RealEstateViewer parent) {
+        frame = parent;
+    }
+
+    public void paintComponent(Graphics g) {
+        if (frame.currentImage != null)
+            g.drawImage(frame.currentImage, 0, 0, this);
+    }
+}// ImagePanel
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt ImagePanel} class.
+\label{fig-imagepanel}\label{pg-fig-imagepanel}}
+\end{figure}
+
+The constructor method should be responsible for creating the user
+interface, most of which will involve the routine tasks of registering
+a listener for the {\tt homeChoice} menu and setting up an appropriate
+layout that implements the design we developed for the user interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public RealEstateViewer () {
+    super("Home Viewer Application");// Set window title
+    homeChoice.addItemListener( this);
+    this.getContentPane().add("North",homeChoice);
+    this.getContentPane().add("East",display);
+    this.getContentPane().add("Center",imagePanel);
+    display.setLineWrap(true);
+    initHomeChoices();      // Set up choice box
+    showCurrentSelection(); // Display current home
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note the last two statements of the method.
+The first sets up the {\tt JComboBox} by reading its contents from a file
+stored in the company's database.  Because that task will require
+several statements, we define it as a separate method,
+{\tt initHomeChoices()}, and defer its development for now.  Similarly,
+the task of displaying the current menu choice has been organized
+into the {\tt showCurrentSelection()} method, whose development
+we also defer for now.
+
+The {\tt itemStateChanged()} method is called automatically when the
+%\begin{marginalnote}\it ItemListener\end{marginalnote}
+\marginnote{ItemListener}
+user selects a home from the {\tt JComboBox} menu.  Its task is to
+download and display information about the current menu selection.
+To do this, it can simply call the {\tt showCurrentSelection()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void itemStateChanged(ItemEvent evt) {
+    showCurrentSelection();
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\subsection*{Downloading the Menu Items}
+\noindent Recall that according to our specification, the real estate firm
+stores its current listing of homes in a text file, one home per line.
+The {\tt initHomeChoices()} method downloads the text and uses its
+contents to set up the items in the {\tt homeChoice} {\tt JComboBox}
+menu:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void initHomeChoices() {
+  try {
+    URL url = new URL(dataFileURL);
+    BufferedReader data = new BufferedReader(
+        new InputStreamReader(url.openStream()));
+    String line = data.readLine();
+    while (line != null) {
+      homeChoice.addItem(line);
+      line = data.readLine();
+    }
+    data.close();
+  } catch (MalformedURLException e) {
+    System.out.println( "ERROR: " + e.getMessage());
+  } catch (IOException e) {
+    System.out.println( "ERROR: " + e.getMessage());
+  }
+}// initHomeChoices()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It uses the algorithm we developed earlier for downloading
+a text file.  Each line of the text file represents a menu item, so, as
+each line is read by {\tt readLine(data)}, it is added to the
+{\tt JComboBox} menu.
+
+\subsection*{Downloading and Displaying Home Information}
+\noindent The {\tt showCurrentSelection()} method is responsible for downloading and
+displaying images and text files whenever the user selects a home
+to view.  Recall that our specification called for using the name of
+the menu item as a basis for constructing the name of its corresponding
+text file and image file.   Therefore, the basic algorithm we need is
+
+\begin{BL}
+\item  Get the user's home choice.
+\item  Create a URL for the associated text file.
+\item  Download and display the associated text file.
+\item  Create a URL for the associated GIF file.
+\item  Download and display the image.
+\end{BL}
+
+\noindent Because downloading a text document requires stream
+processing, we should handle that in a separate method.  The task of
+downloading an image file is also a good candidate for a separate
+%\begin{marginalnote}\it Method decomposition\end{marginalnote}
+\marginnote{Method decomposition}
+method.  Both of these methods will use a URL, so we can leave that
+task up to {\tt showCurrent\-Selection()} itself.  The
+{\tt showCurrentSelection()} method will create the URLs and then invoke
+the appropriate methods to download and display the resources:
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+private void showCurrentSelection() {
+  URL url = null;
+                              // Get user's choice
+  String choice = homeChoice.getSelectedItem().toString();     
+  try {                   // Create url and download file         
+    url = new URL(baseURL + choice + ".txt");
+    readTextIntoDisplay(url);          
+                         // Create url and download image
+    url = new URL(baseURL + choice + ".gif"); 
+    currentImage = Toolkit.getDefaultToolkit().getImage(url);
+    Toolkit.getDefaultToolkit().beep(); // Beep user
+    repaint();
+  } catch (MalformedURLException e) {
+    System.out.println( "ERROR: " + e.getMessage()) ;
+  } catch (IOException e) {
+    System.out.println("ERROR: " + e.getMessage()) ;
+  } // Try/catch block
+} // showCurrentSelection()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that we have also elected to handle both the
+{\tt MalformedURLException} and {\tt IOException} in this method.  The
+advantage of this design is that it separates exception handling from the
+normal algorithm and organizes it into one method.  Finally, note how
+string concatenation is used to build the URL specifications,
+each of which consists of three parts: the {\tt baseURL}, the
+user's {\tt choice}, and the file extension.
+
+The task of reading the text file and displaying its contents has been
+encapsulated into the {\tt readTextIntoDisplay()} method.  This
+{\tt private} utility method performs a standard file-reading algorithm
+using the {\tt readLine()} method that we developed
+earlier.  Figure~\ref{fig-realestatescreen}
+provides a view of the program's appearance as it is displaying
+information to a user. Figure~\ref{fig-realestateclass} provides the complete
+implementation of this program.
+
+\begin{figure}[hbt]
+\figa{chptr15/15f14.eps}{The {\tt RealEstate- Viewer} program
+downloads images and documents over the Web.
+\label{fig-realestatescreen}\label{pg-fig-realestatescreen}}
+\end{figure}
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+
+public class RealEstateViewer extends JFrame 
+                                implements ItemListener {
+  public static final int WIDTH=400,HEIGHT=200;
+  private final String dataFileURL =
+    "http://java.trincoll.edu/~jjjava/homes/homes.txt";
+  private final String baseURL = 
+    "http://java.trincoll.edu/~jjjava/homes/";
+  private JTextArea display = new JTextArea(20,20);
+  private JComboBox homeChoice = new JComboBox();
+  private ImagePanel imagePanel = new ImagePanel(this);
+  public Image currentImage = null;
+
+  public RealEstateViewer () {
+    super("Home Viewer Application"); // Set window title
+    homeChoice.addItemListener( this);
+    this.getContentPane().add("North",homeChoice);
+    this.getContentPane().add("East",display);
+    this.getContentPane().add("Center",imagePanel);
+    display.setLineWrap(true);
+    initHomeChoices();        // Set up the choice box
+    showCurrentSelection();   // Display the current home
+  } // RealEstateViewer()
+
+  private void initHomeChoices() {
+    try {
+      URL url = new URL(dataFileURL);
+      BufferedReader data = new BufferedReader(
+               new InputStreamReader(url.openStream()));
+      String line = data.readLine();
+      while (line != null) {
+        homeChoice.addItem(line);
+        line = data.readLine();
+      } data.close();
+    } catch (MalformedURLException e) {
+        System.out.println("ERROR: " + e.getMessage()) ;
+    } catch (IOException e) {
+        System.out.println("ERROR: " + e.getMessage()) ;
+    }
+  }// initHomeChoices()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt RealEstateViewer} class, Part I.
+\label{fig-realestateclass}\label{pg-fig-realestateclass}}
+\end{figure}
+
+
+\begin{figure}[p]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlisting}[30pc]
+\begin{lstlisting}
+  private void readTextIntoDisplay(URL url) throws IOException {
+    BufferedReader data
+      = new BufferedReader(
+                      new InputStreamReader(url.openStream()));
+    display.setText("");            // Reset the text area
+    String line = data.readLine();
+    while (line != null)  {         // Read each line
+      display.append(line + "\n");  // And add it to the display
+      line = data.readLine();
+    } data.close();
+  }// readTextIntoDisplay()
+
+  private void showCurrentSelection() {
+    URL url = null;                          // Get user's choice
+    String choice = homeChoice.getSelectedItem().toString();     
+    try {
+      url = new URL(baseURL + choice + ".txt") ;    // Create URL
+      readTextIntoDisplay(url); // Download and display text file
+      url = new URL(baseURL + choice + ".gif");     // Create URL
+                                                // Download image
+      currentImage = Toolkit.getDefaultToolkit().getImage(url);
+      Toolkit.getDefaultToolkit().beep();       // Alert the user
+      repaint();
+    } catch (MalformedURLException e) {
+        System.out.println( "ERROR: " + e.getMessage()) ;
+    } catch (IOException e) {
+        System.out.println("ERROR: " + e.getMessage()) ;
+    }
+  }// showCurrentSelection()
+
+  public void itemStateChanged(ItemEvent evt) {
+    showCurrentSelection();
+  } // itemStateChanged()
+
+  public static void main(String args[]) {
+    RealEstateViewer viewer = new RealEstateViewer();
+    viewer.setSize(viewer.WIDTH,viewer.HEIGHT);
+    viewer.setVisible(true);
+    viewer.addWindowListener(new WindowAdapter() {     
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);    // Quit the application
+      }
+    });
+  }// main()
+}// RealEstateViewer
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{{\it (continued)} {\tt RealEstateViewer}, Part II.}
+\end{figure}
+
+\subsection{Reusing Code}
+\noindent As in other examples we have developed, our discovery and use of the
+{\tt Toolkit.getImage()} method and other classes from the Java class
+library illustrate an important principle of object-oriented
+programming.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Code Reuse.}{Before writing code to
+perform a particular task, search the available libraries to see if
+there is already code that performs that task.}
+
+\noindent An important step in designing object-oriented programs
+is making appropriate use of existing classes and methods.   In some
+cases, you want to directly instantiate a class and use its methods to
+perform the desired tasks.  In other cases, it is necessary to create a
+subclass (inheritance) or implement an interface (inheritance) in
+order to gain access to the methods you need.
+
+Of course, knowing what classes exist in the libraries is something
+that comes with experience.  There's no way that a novice Java
+programmer would know about, say, the {\tt Toolkit.getImage()} method.
+However, one skill or habit that you should try to develop is
+always to ask yourself the question: ``Is there a method that will do
+what I'm trying to do here?''  That question should be the first
+question on your search through the libraries and reference books.
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/1.5.0/docs/api/
+\end{lstlisting}
+\end{jjjlisting}
+
+\RHrightsec{15.6}{Client/Server Communication via {\tt Socket}s}
+\section{Client/Server Communication via {\tt Socket}s}
+\RHright{Client/Server Communication via {\tt Socket}s}
+\noindent As we said earlier, many networking applications are based on the
+client/ server model.  According to this model, a task is viewed as a
+service that can be requested by clients and handled by servers.  In
+this section, we develop a simple client/server framework based on a
+{\em socket} connection between the client and the server.
+
+A {\bf socket}\index{socket} is a simple communication channel through which two
+programs communicate over a network.  A socket supports two-way
+communication between a client and a server, using a well-established
+protocol.  The protocol simply prescribes rules and behavior that both
+the server and client must follow in order to establish two-way
+communication.
+
+According to this protocol, a server program creates a socket at a
+\marginnote{Sockets and ports}
+certain port and waits until a client requests a connection.  A {\bf
+port}\index{port} is a particular address or entry point on the host
+computer, which typically has hundreds of potential ports.  It is
+usually represented as a simple integer value.  For example, the
+standard port for an HTTP (Web) server is 80. Once the connection is
+established, the server creates input and output streams to the socket
+and begins sending messages to and receiving messages from the client.
+Either the client or the server can close the connection, but it's
+usually done by the client.
+
+\JavaTIP[false]{DEBUGGING TIP}{Reserved Port Numbers.}{Port numbers below 1024
+are reserved for system use and should not be used by an application
+program.}
+
+To help clarify this protocol, think of some service performed by a
+human using a telephone connection.   The ``server'' waits for the
+%\begin{marginalnote}\it Client/server protocol\end{marginalnote}
+\marginnote{Client/server protocol}
+phone to ring.  When it rings, the server picks it up and begins
+communicating with the client.  A socket, combined with input
+and output streams, is something like a two-way phone connection.
+
+From the client's side, the protocol goes as follows:  The client
+creates a socket and attempts to make a connection to the server.  The
+client has to know the server's URL and the port at which the service
+exists.  Once a connection has been established, the client creates
+input and output streams to the socket and begins exchanging messages
+with the server.  The client can close the connection when the service
+is completed.
+
+Think again of the telephone analogy.  A human client picks up the
+phone and dials the number of a particular service.  This is analogous
+to the client program creating a socket and making a connection to a
+server.  Once the service agent answers the phone, two-way
+communication between the client and the server can begin.
+
+Figure~\ref{fig-clientserverpict} provides a view of the client/server
+connection.   Note that a socket has two channels.  Once a connection
+%\begin{marginalnote}\it Sockets and channels\end{marginalnote}
+\marginnote{Sockets and channels}
+has been established between a client and a server, a single two-way
+channel exists between them.  The client's output stream is connected
+to the server's input stream.  The server's output stream is connected
+to the client's input stream.
+
+
+\JavaTIP{PROGRAMMING TIP}{Socket Streams.}{Each socket has two
+streams, one for input and one for output.}
+
+\begin{figure}[hbt]
+\figa{chptr15/15f16.eps}{A socket is a two-channel communication link.
+\label{fig-clientserverpict}\label{pg-fig-clientserverpict}}
+\end{figure}
+
+\subsection{The Server Protocol}
+\noindent Let's now see how a client/server application would be coded in Java.
+The template in Figure~\ref{fig-serverpro} shows the code that is
+necessary on the server side.   The first step the server takes is to
+create a {\tt ServerSocket}.  The first argument to the
+{\tt ServerSocket()} method is the port at which the service will
+reside.  The second argument specifies the number of clients that can
+be backlogged, waiting on the server, before a client will be refused
+service.   If more than one client at a time should request service,
+Java would establish and manage a waiting list, turning away clients
+when the list is full.
+
+The next step is to wait for a client request.  The {\tt accept()}
+%\begin{marginalnote}\it Waiting for client requests\end{marginalnote}
+\marginnote{Waiting for client requests}
+method will {\it block} until a connection is established.   The Java
+system is responsible for waking the server when a client request
+is received.
+
+\begin{figure}[thb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+Socket socket;    // Reference to the socket
+ServerSocket port;// The port where the server will listen
+try {
+    port = new ServerSocket(10001, 5); // Create a port
+    socket = port.accept();  // Wait for client to call
+
+ // Communicate with the client
+
+    socket.close();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Template for the server protocol.
+\label{fig-serverpro}\label{pg-fig-serverpro}}
+\end{figure}
+
+Once a connection is established, the server can begin communicating
+with the client.  As we have suggested, a socket connection is like
+a two-way telephone conversation.  Both the client and server can
+``talk'' back and forth to each other.  The details of this step
+are not shown here.  As we will see, the two-way conversation
+is managed by connecting both an input and an output stream to
+the socket.
+
+Once the conversation between client and server is finished---once
+the server has delivered the requested service---the server can close
+the connection by calling {\tt close()}. Thus, there are four steps
+involved on the server side:
+
+\begin{BL}
+\item  Create a {\tt ServerSocket} and establish a port number.
+\item  Listen for and accept a connection from a client.
+\item  Converse with the client.
+\item  Close the socket.
+\end{BL}
+
+\noindent What distinguishes the server from the client is that
+the server establishes the port and accepts the connection.
+
+
+
+\subsection{The Client Protocol}
+\noindent The client protocol (Fig.~\ref{fig-clientpro}) is just as easy to
+implement.   Indeed, on the client side there are only three steps involved.
+The first step is to request a connection to the server.  This is done
+%\begin{marginalnote}\it Initiating a request\end{marginalnote}
+\marginnote{Initiating a request}
+in the {\tt Socket()} constructor by supplying the server's URL and
+port number.  Once the connection is established, the client can carry
+out two-way communication with the server.  This step is not shown
+here.  Finally, when the client is finished, it can simply {\tt close()}
+the connection.  Thus, from the client side, the protocol involves just
+three steps:
+
+\begin{BL}
+\item  Open a socket connection to the server, given its address.
+\item  Converse with the server.
+\item  Close the connection.
+\end{BL}
+
+\noindent What distinguishes the client from the server is that the
+client initiates the two-way connection by requesting the service.
+
+\begin{figure}[thb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+Socket connection;     // Reference to the socket
+try {                  // Request a connection
+  connection = new Socket("java.cs.trincoll.edu", 10001);
+
+   // Carry on a two-way communication
+
+    connection.close();   // Close the socket
+} catch (IOException e ) {
+    e.printStackTrace();
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Template for the client protocol.
+\label{fig-clientpro}\label{pg-fig-clientpro}}
+\end{figure}
+
+\subsection{A Two-Way Stream Connection}
+\noindent Now that we have seen how to establish a socket connection between a
+client and server, let's look at the actual two-way communication that
+takes place.  Because this part of the process will be exactly the same
+for both client and server, we develop a single set of methods,
+{\tt writeToSocket()} and {\tt readFromSocket()}, that may be called by
+either.
+
+The {\tt writeToSocket()} method takes two parameters, the
+%\begin{marginalnote}\it Output routine\end{marginalnote}
+\marginnote{Output routine}
+{\tt Socket} and a {\tt String}, which will be sent to the
+process on the other end of the socket:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+protected void writeToSocket(Socket sock, String str) 
+                             throws IOException {
+    oStream = sock.getOutputStream();
+    for (int k = 0; k < str.length(); k++)
+        oStream.write(str.charAt(k));
+}// writeToSocket()
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent If {\tt writeToSocket()} is called by the server, then
+the string will be sent to the client.  If it is called by the client,
+the string will be sent to the server.
+
+The method is declared {\tt protected} because we will define it in a
+%\begin{marginalnote}\it Protected methods\end{marginalnote}
+\marginnote{Protected methods}
+super\-class so that it can be inherited and used by both the client and
+server classes.  Note also that the method declares that it throws an
+{\tt IOException}. Because there's no way to fix an {\tt IOException},
+we'll just let this exception be handled elsewhere, rather than
+handling it within the method.
+
+In order to write to a socket we need only get the socket's
+{\tt OutputStream} and then write to it.  For this example, {\tt oStream} is
+an instance variable of the client/server superclass.   We use the
+{\tt Socket.getOutputStream()} method to get a reference to the socket's
+output stream.  Note that we are not creating a new output stream
+here.  We are just getting a reference to an existing stream, which was
+created when the socket connection was accepted.   Note also that we do
+not close the output stream before exiting the method.   This is
+important.  If you close the stream, you will lose the ability to
+communicate through the socket.
+
+\JavaRule{Socket Streams.}{When a socket is created,
+it automatically creates its own streams.  To use one you just need
+to get a reference to it.}
+
+\JavaTIP{DEBUGGING TIP}{Socket Streams.}{After writing to or reading
+from a socket I/O stream, do not close the stream.  That would make the
+socket unusable for subsequent I/O.}
+
+Given the reference to the socket's output stream, we simply write
+each character of the string using the {\tt OutputStream.write()}
+method.  This method writes a single {\tt byte}. Therefore, the input
+stream on the other side of the socket must read bytes and convert
+them back into characters.
+
+\JavaTIP{EFFECTIVE DESIGN}{Designing a Protocol.}{In designing two-way
+communication between a client and a server, you are designing a
+protocol that each side must use.  Failure to design and implement a
+clear protocol will cause the communication to break down.}
+
+\noindent The {\tt readFromSocket()} method takes a {\tt Socket} parameter
+%\begin{marginalnote}\it Input routine\end{marginalnote}
+\marginnote{Input routine}
+and returns a {\tt String}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+protected String readFromSocket(Socket sock) 
+                                throws IOException {
+    iStream = sock.getInputStream();
+    String str="";
+    char c;
+    while (  ( c = (char) iStream.read() ) != '\n')
+        str = str + c + "";
+    return str;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent It uses the {\tt Socket.getInputStream()} method to obtain a
+reference to the socket's input stream, which has already been
+created.   So here again it is important that you don't close the
+stream in this method.  A socket's input and output streams will be
+closed automatically when the socket connection itself is closed.
+
+The {\tt InputStream.read()} method reads a single byte at a time from
+the input stream until an end-of-line character is received.  For this
+particular application, the client and server will both read and write
+one line of characters at a time.  Note the use of the cast operator
+{\tt (char)} in the {\tt read()} statement.   Because {\tt byte}s are
+being read, they must be converted to {\tt char} before they can be
+compared to the end-of-line character or concatenated to the
+{\tt String}. When the read loop encounters an end-of-line character, it
+terminates and returns the {\tt String} that was input.
+
+\JavaTIP{DEBUGGING TIP}{Bytes and Chars.}{It is a syntax error to compare
+a {\tt byte} and a {\tt char}. One must be converted to the other using
+an explicit cast operator.}
+
+\section{CASE STUDY: Generic Client/Server Classes}
+%%%\begin{casestudy}{Generic Client/Server Classes}
+%%%\secCSFH{CASE STUDY: Generic Client/Server Classes}
+\label{sec-clientserver}\label{pg-sec-clientserver}
+\noindent Suppose your boss asks you to set up generic client/server classes
+%\begin{marginalnote}\it Problem statement\end{marginalnote}
+\marginnote{Problem statement}
+that can be used to implement a number of related client/server
+applications.  One application that the company has in mind is a query
+service, in which the client would send a query string to the server,
+and the server would interpret the string and return a string that
+provides the answer.  For example, the client might send the query,
+``Hours of service,'' and the client would respond with the company's
+business hours.
+
+Another application the company wants will enable the client to fill out an
+order form and transmit it as a string to the server.  The server will
+interpret the order, fill it, and return a receipt, including
+instructions as to when the customer will receive the order.
+
+All of the applications to be supported by this generic client/server
+will communicate via strings, so something very much like the
+{\tt readFromSocket()} and {\tt writeToSocket()} methods can be used for
+their communication.  Of course, you want to design classes so they
+can be easily extended to support byte-oriented, two-way
+communications, should that type of service become needed.
+
+In order to test the generic models, we will subclass them to create a
+%\begin{marginalnote}\it The echo service\end{marginalnote}
+\marginnote{The echo service}
+simple echo service.  This service will echo back to the client any
+message that the server receives.  For example, we'll have the client
+accept keyboard input from the user and then send the user's input to
+the server and simply report what the server returns.   The following
+shows the output generated by a typical client session:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+CLIENT: connected to 'java.cs.trincoll.edu'
+SERVER: Hello, how may I help you?
+CLIENT: type a line or 'goodbye' to quit
+INPUT: hello
+SERVER: You said 'hello'
+INPUT: this is fun
+SERVER: You said 'this is fun'
+INPUT: java java java
+SERVER: You said 'java java java'
+INPUT: goodbye
+SERVER: Goodbye
+CLIENT: connection closed
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent On the server side, the client's
+message will be read from the input stream and then simply echoed back
+(with  some additional characters attached) through the output
+stream.  The server doesn't display a trace of its activity other than
+to report when connections are established and closed.  We will code
+the server in an infinite loop so that it will accept connections
+from a (potentially) endless stream of clients.  In fact, most servers
+are coded in this way.  They are designed to run forever and must be
+restarted whenever the host that they are running needs to be rebooted.
+The output from a typical server session is as follows:
+
+\begin{jjjlistingleft}[33pc]{-7pc}
+\begin{lstlisting}
+Echo server at java.cs.trincoll.edu/157.252.16.21 waiting for connections
+Accepted a connection from java.cs.trincoll.edu/157.252.16.21
+Closed the connection
+
+Accepted a connection from java.cs.trincoll.edu/157.252.16.21
+Closed the connection
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\JavaTIP{EFFECTIVE DESIGN}{Infinite Loop.}{A server is an
+application that's designed to run in an infinite loop.  The loop
+should be exited only when some kind of exception occurs.}
+
+\subsection{Object-Oriented Design}
+\noindent A suitable solution for this project will make extensive use of
+object-oriented design principles.  We want {\tt Server} and
+{\tt Client} classes that can easily be subclassed to support a wide
+variety of services.  The solution should make appropriate use of {\it
+inheritance} and {\it polymorphism} in its design.  Perhaps the best
+way to develop our generic class is first to design the echo service,
+as a typical example, and then generalize it.
+
+\subsection*{The Threaded Root Subclass: {\tt ClientServer} }
+\noindent One lesson we can draw at the outset is that both clients and servers
+\marginfig{chptr15/p851f1.eps}{Overall design of a client/server application.
+\label{fig-p851f1}\label{pg-fig-p851f1}}
+use basically the same socket I/O methods.  Thus, as we've seen, the
+{\tt readFromSocket()} and {\tt writeToSocket()} methods could be used
+by both clients and servers.  Because we want all clients and servers to
+inherit these methods, they must be placed in a common
+superclass.  Let's name this the {\tt ClientServer} class.
+
+
+Where should we place this class in the Java hierarchy? Should it be a
+%\begin{marginalnote}\it The class hierarchy\end{marginalnote}
+direct subclass of {\tt Object}, or should it extend some other class
+that would give it appropriate functionality?  One feature that would
+make our clients and servers more useful is if they were independent
+%еее\marginnote{The class hierarchy}
+threads.  That way they could be instantiated as part of another object
+and given the subtask of communicating on behalf of that object. 
+
+Therefore, let's define the {\tt ClientServer} class as a subclass of
+%\begin{marginalnote}\it Inheritance\end{marginalnote}
+%еее\marginnote{Inheritance}
+{\tt Thread} (Fig.~15.25). Recall from
+Chapter~14 that the typical way to derive
+functionality from a {\tt Thread} subclass is to override the {\tt
+run()} method.  The {\tt run()} method will be a good place to
+implement the client and server protocols.  Because they are
+different, we'll define {\tt run()} in both the {\tt Client} and {\tt
+Server} subclasses.
+
+For now, the only methods contained in {\tt ClientServer}
+(Fig.~\ref{fig-clientserver}) are the two I/O methods we designed.
+The only modification we have made to the methods occurs in
+the {\tt writeToSocket()} method, where we have added code to make
+sure that any strings written to the socket are terminated with an
+end-of-line character.
+
+This is an important enhancement, because the read loop in the
+{\tt read\-From\-Socket()} method expects to receive an end-of-line
+character.  Rather than rely on specific clients to
+guarantee that their strings end with \verb|\n|, our design takes care of
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.io.*;
+import java.net.*;
+
+public class ClientServer extends Thread {
+
+  protected InputStream iStream;  // Instance variables
+  protected OutputStream oStream;
+
+  protected String readFromSocket(Socket sock) 
+                                     throws IOException {
+    iStream = sock.getInputStream();
+    String str="";
+    char c;
+    while (  ( c = (char) iStream.read() ) != '\n')
+      str = str + c + "";
+    return str;
+  }
+
+  protected void writeToSocket(Socket sock, String str) 
+                                     throws IOException {
+    oStream = sock.getOutputStream();
+    if (str.charAt( str.length() - 1 ) != '\n')
+      str = str + '\n';
+    for (int k = 0; k < str.length() ; k++)
+      oStream.write(str.charAt(k));
+  } // writeToSocket()
+}// ClientServer
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt ClientServer} class serves as the superclass for client/server applications.
+\label{fig-clientserver}\label{pg-fig-clientserver}}
+\end{figure}
+this problem for them.   This ensures that every communication that
+takes place between one of our clients and servers will be
+line oriented.
+
+\JavaTIP{EFFECTIVE DESIGN}{Defensive Design.}{Code that performs I/O,
+whether across a network or otherwise, should be designed to
+anticipate and remedy common errors.  This will lead to more robust
+programs.}
+
+\subsection{The {\tt EchoServer} Class}
+
+\begin{figure}[ht]
+\figaleft{chptr15/p852f1.eps}{Design of the {\tt EchoServer} class.
+\label{fig-p852f1}\label{pg-fig-p852f1}}
+\end{figure}
+
+%%\marginfig{chptr15/p852f1.eps}{Design of the {\tt EchoServer} class.
+%%\label{fig-p852f1}\label{pg-fig-p852f1}}
+
+\noindent Let's now develop a design for the echo server.  This class will be a
+subclass of {\tt ClientServer} (Fig.~15.27). As we saw in
+discussing the server protocol, one task that echo server will do is
+create a {\tt ServerSocket} and establish a port number for its
+service.  Then it will wait for a {\tt Socket} connection, and once a
+connection is accepted, the echo server will then communicate with the client.
+This suggests that
+%\begin{marginalnote}\it What data do we need?\end{marginalnote}
+\marginnote{What data do we need?}
+our server needs at least two instance variables.  It also suggests
+that the task of creating a {\tt ServerSocket} would be an appropriate
+action for its constructor method.  This leads to the following initial
+definition:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+
+public class EchoServer extends ClientServer {
+
+    private ServerSocket port;
+    private Socket socket;
+
+    public EchoServer(int portNum, int nBacklog)  {
+      try {
+        port = new ServerSocket (portNum, nBacklog);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    public void run() { }  // Stub method
+}// EchoServer
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the constructor method catches the {\tt IOException}.
+Note also that we have included a stub version of {\tt run()}, which
+we want to define in this class.
+
+Once {\tt EchoServer} has set up a port, it should issue the
+{\tt port.accept()} method and wait for a client to connect.  This part
+of the server protocol belongs in the {\tt run()} method.   As we have said, most servers
+%\begin{marginalnote}\it The server algorithm\end{marginalnote}
+\marginnote{The server algorithm}
+are designed to run in an infinite loop.  That is, they don't just
+handle one request and then quit.  Instead, once started (usually by
+the system), they repeatedly handle requests until deliberately
+stopped by the system.  This leads to the following run algorithm:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  try {
+    System.out.println("Echo server at "
+                   + InetAddress.getLocalHost() 
+                   + " waiting for connections ");
+    while(true) {
+      socket = port.accept();
+      System.out.println("Accepted a connection from " 
+                           + socket.getInetAddress());
+      provideService(socket);
+      socket.close();
+      System.out.println("Closed the connection\n");
+    }
+  } catch (IOException e) {
+     e.printStackTrace();
+  }
+}// run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For simplicity, we are printing
+the server's status messages on {\tt System.out}. Ordinarily these
+should go to a log file.   Note also that the details of the actual
+service algorithm are hidden in the {\tt provideService()} method.
+
+As described earlier, the {\tt provideService()} method consists of
+writing a greeting to the client and then repeatedly reading a string
+from the input stream and echoing it back to the client via the output
+stream.  This is easily done using the {\tt writeToSocket()} and {\tt
+readFromSocket()} methods we developed.  The implementation of this
+method is shown, along with the complete implementation of {\tt
+EchoServer}, in Figure~\ref{fig-echoserver}.
+
+
+The protocol used by {\tt EchoServer.provideService()} starts by
+saying ``hello'' and loops until the client says ``goodbye.''  When
+the client says ``goodbye,'' the server responds with ``goodbye.''  In
+all other cases it responds with ``You said X,'' where X is the string
+that was received from the client.   Note the use of the
+{\tt toLowerCase()} method to convert client messages to lowercase.   This
+simplifies the task of checking for ``goodbye'' by removing the necessity of
+checking for different spellings of ``Goodbye.''
+
+\JavaTIP{EFFECTIVE DESIGN}{Defensive Design.}{Converting I/O to lowercase
+helps to minimize miscommunication between a client and server and
+leads to a more robust protocol.}
+
+This completes the design of the {\tt EchoServer}. We have deliberately
+designed it in a way that will make it easy to convert into a generic
+server.  Hence, we have the motivation for using {\tt provideService()} as the
+name of the method that provides the echo service.  In order to turn
+{\tt EchoServer} into a generic {\tt Server} class, we can simply make
+{\tt provideService()} an abstract method, leaving its implementation to
+%\begin{marginalnote}\it Designing for extensibility\end{marginalnote}
+\marginnote{Designing for extensibility}
+the {\tt Server} subclasses.  We'll discuss the details of this change
+later.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[30pc]{-4pc}
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+public class EchoServer extends ClientServer {
+  private ServerSocket port;
+  private Socket socket;
+  public EchoServer( int portNum, int nBacklog)  {
+    try {
+      port = new ServerSocket (portNum, nBacklog);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  } // EchoServer()
+  public void run() {
+    try {
+      System.out.println("Echo server at " + 
+        InetAddress.getLocalHost() + " waiting for connections ");
+      while(true) {
+        socket = port.accept();
+        System.out.println("Accepted a connection from " + 
+                                        socket.getInetAddress());
+        provideService(socket);
+        socket.close();
+        System.out.println("Closed the connection\n");
+      } // while
+    } catch (IOException e) {
+       e.printStackTrace();
+    } // try/catch
+  }// run()
+  protected void provideService (Socket socket) {
+    String str="";
+    try {
+      writeToSocket(socket, "Hello, how may I help you?\n");
+      do {
+        str = readFromSocket(socket);
+        if (str.toLowerCase().equals("goodbye"))
+          writeToSocket(socket, "Goodbye\n");
+        else
+          writeToSocket( socket, "You said '" + str + "'\n");
+      }  while (!str.toLowerCase().equals("goodbye"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch
+  }// provideServer()
+  public static void main(String args[]) {
+      EchoServer server = new EchoServer(10001,3);
+      server.start();
+  }// main()
+}// EchoServer
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{{\tt EchoServer} simply echoes the client's message.
+\label{fig-echoserver}\label{pg-fig-echoserver}}
+\end{figure}
+
+\pagebreak
+\subsection{The {\tt EchoClient} Class}
+
+%%%%\begin{figure}[ht]
+%%%%\figaleft{chptr15/p854f1.eps}{Design of the {\tt EchoClient} class.
+%%%%\label{fig-p854f1}\label{pg-fig-p854f1}}
+%%%%\end{figure}
+
+\marginfig{chptr15/p854f1.eps}{Design of the {\tt EchoClient} class.
+\label{fig-p854f1}\label{pg-fig-p854f1}}
+
+\noindent The {\tt EchoClient} class is just as easy to design
+(Fig.~15.29).  It, too, will be a subclass of {\tt
+ClientServer}. It needs an instance variable for the {\tt Socket} that
+it will use, and its constructor should be responsible for opening a
+socket connection to a particular server and port.  The main part of
+its protocol should be placed in the {\tt run()} method.  The initial
+definition is as follows:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+
+public class EchoClient extends ClientServer {
+
+     protected Socket socket;
+
+     public EchoClient(String url, int port) {
+       try {
+         socket = new Socket(url, port);
+         System.out.println("CLIENT: connected to " 
+                             + url + ":" + port);
+       } catch (Exception e) {
+         e.printStackTrace();
+         System.exit(1);
+       }
+     }// EchoClient()
+
+    public void run() { }// Stub method
+}// EchoClient
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The constructor method takes two
+parameters that specify the URL and port number of the echo server.  By
+making these parameters, rather than hard coding them within the
+method, we give the client the flexibility to connect to servers on a
+variety of hosts.
+
+As with other clients, {\tt EchoClient}'s {\tt run()} method will
+consist of requesting some kind of service from the server.  Our
+initial design called for {\tt EchoClient} to repeatedly input a line
+%\begin{marginalnote}\it The client algorithm\end{marginalnote}
+\marginnote{The client algorithm}
+from the user, send the line to the server, and then display the
+server's response.   Thus, for this particular client, the
+service requested consists of the following algorithm:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Wait for the server to say "hello".
+Repeat
+    Prompt and get and line of input from the user.
+    Send the user's line to the server.
+    Read the server's response.
+    Display the response to the user.
+until the user types "goodbye"
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent With an eye toward eventually turning {\tt EchoClient} into
+a generic client, let's encapsulate this procedure into a {\tt
+requestService()} method that we can simply call from the {\tt run()}
+method.  Like for the {\tt provideService()} method, this design is
+another example of the encapsulation principle:
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Encapsulation.}{Encapsulating a
+portion of the algorithm into a separate method makes it easy to
+change the algorithm by overriding the method.}
+
+\noindent The {\tt requestService()} method will take a {\tt Socket}
+parameter and perform all the I/O for this particular client:
+
+\begin{jjjlistingleft}[35pc]{-9pc}
+\begin{lstlisting}
+protected void requestService(Socket socket) throws IOException {
+  String servStr = readFromSocket(socket);                // Check for "Hello"
+  System.out.println("SERVER: " + servStr);    // Report the server's response
+  System.out.println("CLIENT: type a line or 'goodbye' to quit");    // Prompt
+  if (servStr.substring(0,5).equals("Hello")) {
+    String userStr = "";
+    do {
+      userStr = readFromKeyboard();                              // Get input
+      writeToSocket(socket, userStr + "\n");             // Send it to server
+      servStr = readFromSocket(socket);         // Read the server's response
+      System.out.println("SERVER: " + servStr);   // Report server's response
+    } while (!userStr.toLowerCase().equals("goodbye"));    // Until 'goodbye'
+  }
+} // requestService()
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent Although this method involves several lines, they should
+all be familiar to you.  Each time the client reads a message from the
+socket, it prints it on {\tt System.out}. The first message it reads
+should start with the substring ``Hello''. This is part of its
+protocol with the client.  Note how the {\tt substring()} method is
+used to test for this.  After the initial greeting from the server, the
+client begins reading user input from the keyboard, writing it to the
+socket, then reading the server's response, and displaying it on
+{\tt System.out}.
+
+Note that the task of reading user input from the keyboard has been
+made into a separate method, which is one we've used before:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+protected String readFromKeyboard() throws IOException {
+  BufferedReader input = new BufferedReader(
+                   new InputStreamReader(System.in));
+  System.out.print("INPUT: ");
+  String line = input.readLine();
+  return line;
+}// readFromKeyboard()
+\end{lstlisting}
+\end{jjjlisting}
+
+The only method remaining to be defined is the {\tt run()}, which is
+shown with the complete definition of {\tt EchoClient} in
+Figure~\ref{fig-echoclient}.  The {\tt run()} method can simply call
+the {\tt requestService()} method.  When control returns from the
+{\tt requestService()} method, {\tt run()} closes the socket connection.
+Because {\tt requestService()} might throw an {\tt IOException}, the entire
+method must be embedded within a {\tt try/catch} block that catches
+that exception.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[37pc]
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+
+public class EchoClient extends ClientServer {
+
+  protected Socket socket;
+
+  public EchoClient(String url, int port) {
+     try {
+        socket = new Socket(url, port);
+        System.out.println("CLIENT: connected to " + url + ":" + port);
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.exit(1);
+      }
+   }// EchoClient()
+
+  public void run() {
+    try {
+        requestService(socket);
+        socket.close();
+        System.out.println("CLIENT: connection closed");
+    } catch (IOException e) {
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+    }
+  }// run()
+
+  protected void requestService(Socket socket) throws IOException {
+    String servStr = readFromSocket(socket);                 // Check for "Hello"
+    System.out.println("SERVER: " + servStr);     // Report the server's response
+    System.out.println("CLIENT: type a line or 'goodbye' to quit");// Prompt user
+    if (servStr.substring(0,5).equals("Hello")) {
+       String userStr = "";
+       do {
+         userStr = readFromKeyboard();                 // Get input from user
+         writeToSocket(socket, userStr + "\n");   // Send it to server
+         servStr = readFromSocket(socket);          // Read server's response
+         System.out.println("SERVER: " + servStr);  // Report server's response
+       } while (!userStr.toLowerCase().equals("goodbye"));// Until 'goodbye'
+    }
+  }// requestService()
+
+  protected String readFromKeyboard( ) throws IOException {
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    System.out.print("INPUT: ");
+    String line = input.readLine();
+    return line;
+  }// readFromKeyboard()
+
+  public static void main(String args[]) {
+    EchoClient client = new EchoClient("java.trincoll.edu",10001);
+    client.start();
+  }// main()
+}// EchoClient
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt EchoClient} class prompts the user for a string
+and sends it to the {\tt EchoServer}, which simply
+echoes it back.
+\label{fig-echoclient}\label{pg-fig-echoclient}}
+\end{figure}
+
+
+\subsection*{Testing the Echo Service}
+\noindent Both {\tt EchoServer} and {\tt EchoClient} contain {\tt main()}
+methods (Figs.~\ref{fig-echoserver} and \ref{fig-echoclient}). In
+order to test the programs, you would run the server on one computer
+and the client on another computer.  (Actually they can both be run on the
+same computer, although they wouldn't know this and would still access
+each other through a socket connection.)
+
+
+
+The {\tt EchoServer} must be started first, so that its service will
+be available when the client starts running.  It also must pick a port
+number.   In this case it picks 10001. The only constraint on its
+choice is that it cannot use one of the privileged port numbers---those 
+below 1024---and it cannot use a port that's already in use.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String args[]) {
+    EchoServer server = new EchoServer(10001,3);
+    server.start();
+}// main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When an {\tt EchoClient} is created, it must be given the server's
+URL ({\tt java.\-trincoll.edu}) and the port that the service is using:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String args[]) {
+    EchoClient client = 
+            new EchoClient("java.trincoll.edu",10001);
+    client.start();
+}// main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As they are presently coded, you will have to modify both
+{\tt EchoServer} and {\tt EchoClient} to provide the correct URL and port
+for your environment.  In testing this program, you might wish to
+experiment by trying to introduce various errors into the code and
+observing the results.  When you run the service, you should observe
+something like the following output on the client side:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+CLIENT: connected to java.trincoll.edu:10001
+SERVER: Hello, how may I help you?
+CLIENT: type a line or 'goodbye' to quit
+INPUT: this is a test
+SERVER: You said 'this is a test'
+INPUT: goodbye
+SERVER: Goodbye
+CLIENT: connection closed
+\end{lstlisting}
+\end{jjjlisting}
+
+\section{Playing One Row Nim Over the Network}
+
+\noindent In the previous section we developed and tested a generic echo service.  
+It is based on a common root class, {\tt ClientServer}, which is a subclass of
+{\tt Thread}.  Both {\tt EchoServer} and {\tt EchoClient} extend the
+root class, and each implements its own version of {\tt run()}. In
+this section, we will generalize this design so that it can support a wide
+range of services.  To illustrate the effectiveness of the design, we
+will use it as the basis for a program that plays One Row Nim over the
+Internet.
+
+In order to generalize our design, we begin by identifying
+those elements that are common to all
+%\begin{marginalnote}\it Designing for extensibility\end{marginalnote}
+\marginnote{Designing for extensibility}
+servers and clients and what is particular to the echo service and
+client.  Clearly, the general server and client protocols that are defined
+here in their respective {\tt run()} methods, are something that all
+servers and clients have in common.  What differs from one application
+to another is the particular service provided and requested, as
+detailed in their respective {\tt provideService()} and {\tt
+requestService()} methods. In this example, the service that is
+provided will be One Row Nim.  The clients that use this service will
+be (human) players of the game.
+
+%\begin{figure}
+\begin{figure}[bt]
+\figa{chptr15/p858f1.eps}{Class hierarchy for a generic client/server application.
+\label{fig-p858f1}\label{pg-fig-p858f1}}
+\end{figure}
+%\end{figure}
+
+Therefore, the way to generalize this application is to define the
+%\begin{marginalnote}\it Abstract service methods\end{marginalnote}
+\marginnote{Abstract service methods}
+{\tt run()} method in the generic {\tt Server} and {\tt Client}
+classes. The overall design of the One Row Nim service will now consist of five classes
+organized into the hierarchy shown in Figure~\ref{fig-p858f1}.  At
+the root of the hierarchy is the {\tt ClientServer} class, which
+contains nothing but I/O methods used by both clients and servers.
+The abstract {\tt Server} and {\tt Client} classes contain
+implementations of the {\tt Thread.run()} method, which defines the
+basic protocols for servers and clients, respectively.   The details of the
+particular service are encoded in the {\tt provideService()} and
+{\tt requestService()} methods. Because the {\tt run()} methods defined 
+in {\tt Client} and {\tt Server} call {\tt
+provideService()} and {\tt requestService()}, respectively,  these
+methods must be declared as {\tt abstract} methods in the {\tt Server}
+and {\tt Client} classes.  Any class that contains an
+\mbox{\tt abstract} method must itself be declared {\tt abstract}. 
+
+Note that we have left the {\tt readFromSocket()} and {\tt
+writeToSocket()} methods in the {\tt ClientServer} class. These
+methods are written in a general way and can be used, without change,
+by a wide range of clients and servers.  If necessary, they can also
+be overridden by a client or server. In fact, as we will see, the
+{\tt NimServer} class does override the {\tt writeToSocket()} method.
+Similarly, note that the {\tt readFromKeyboard()} method is defined in
+the {\tt Client} superclass.  This is a general method that
+can be used by a large variety of clients, so it is best if they don't
+have to redefine it themselves.
+
+These design decisions lead to the definitions of {\tt Server} and
+{\tt Client} shown in Figures~\ref{fig-serverclass} and
+~\ref{fig-clientclass}, respectively. Note that {\tt provideService()}
+and {\tt requestService()} are left unimplemented.  Subclasses of {\tt
+Server}, such as {\tt NimServer}, and subclasses of {\tt Client}, such
+as {\tt NimClient}, can implement {\tt provideService()} and {\tt
+requestService()} in a way that is appropriate for the particular
+service they are providing.
+
+\JavaTIP{EFFECTIVE DESIGN}{Polymorphism.}{Defining a method as
+{\tt abstract} within a superclass, and implementing it in various ways in
+subclasses, is an example of polymorphism.  Polymorphism is a powerful
+object-oriented design technique.}
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+
+public abstract class Server extends ClientServer {
+  protected ServerSocket port;
+  protected Socket socket;
+
+  public Server(int portNum, int nBacklog)  {
+    try {
+      port = new ServerSocket (portNum, nBacklog);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch
+  }// Server()
+
+  public void run() {
+    try {
+      System.out.println("Server at " + 
+                       InetAddress.getLocalHost() +
+                       " waiting for connections ");
+      while (true) {
+        socket = port.accept();
+        System.out.println("Accepted a connection from " 
+                                + socket.getInetAddress());
+        provideService(socket);
+        socket.close();
+        System.out.println("Closed the connection\n");
+      }// while
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch 
+  }// run()
+
+ // Implemented in subclass
+ protected abstract void provideService(Socket socket);  
+}// Server
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The abstract {\tt Server} class.
+\label{fig-serverclass}\label{pg-fig-serverclass}}
+\end{figure}
+
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlistingleft}[27pc]{-1pc}
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+
+public abstract class Client extends ClientServer {
+  protected Socket socket;
+
+  public Client(String url, int port) {
+    try {
+      socket = new Socket(url,port);
+      System.out.println("CLIENT: connected to " + url + 
+                                              ":" + port);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    } // try/catch block
+  }// Client()
+
+  public void run() {
+    try {
+      requestService(socket);
+      socket.close();
+      System.out.println("CLIENT: connection closed");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+    } // try/catch block
+  }// run()
+
+  // Implemented in subclass
+  protected abstract void requestService(Socket socket) 
+                                      throws IOException;
+
+  protected String readFromKeyboard() throws IOException {
+    BufferedReader input = new BufferedReader 
+                     (new InputStreamReader(System.in));
+    System.out.print("INPUT: ");
+    String line = input.readLine();
+    return line;
+  }// readFromKeyboard()
+}// Client
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The abstract {\tt Client} class.
+\label{fig-clientclass}\label{pg-fig-clientclass}}
+\end{figure}
+
+\subsection{The {\tt NimServer} Class}
+
+Given the abstract definition of the {\tt Server} class, defining a
+new service is simply a matter of extending {\tt Server} and
+%\begin{marginalnote}\it Extensibility\end{marginalnote}
+\marginnote{Extensibility} implementing the {\tt provideService()}
+method in the new subclass. We will name the subclass {\tt NimServer}.
+
+\clearpage
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}[basicstyle=\scriptsize]
+import java.net.*;
+import java.io.*;
+
+public class NimServer extends Server {
+  public NimServer(int port, int backlog) {
+    super(port, backlog);
+  }
+  protected void provideService (Socket socket) {
+    OneRowNim nim = new OneRowNim();
+    try {
+      writeToSocket(socket, "Hi Nim player. You're Player 1 and I'm Player 2. " +
+           nim.reportGameState()  + " " + nim.getGamePrompt() + "\n");
+      play(nim, socket);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch
+  } // provideService()
+
+  private void play(OneRowNim nim, Socket socket) throws IOException {
+    NimPlayer computerPlayer = new NimPlayer(nim);
+    nim.addComputerPlayer(computerPlayer);
+    String str="", response="";
+    int userTakes = 0, computerTakes = 0;
+    do {     
+      str = readFromSocket(socket);
+      boolean legalMove = false;
+      do {
+        userTakes = Integer.parseInt(str);
+        if (nim.takeSticks(userTakes)) {
+          legalMove = true;
+          nim.changePlayer();
+          response = nim.reportGameState() + " ";
+          if (!nim.gameOver()) {
+            computerTakes = Integer.parseInt(computerPlayer.makeAMove(""));    
+            response = response + " My turn. I take " + computerTakes + " sticks. ";
+            nim.takeSticks(computerTakes);
+            nim.changePlayer();
+            response = response + nim.reportGameState() + " ";
+            if (!nim.gameOver())
+               response = response + nim.getGamePrompt();
+          } // if not game over
+          writeToSocket(socket, response);
+        } else {
+           writeToSocket(socket, "That's an illegal move. Try again.\n");
+           str = readFromSocket(socket);
+        } // if user takes
+      } while (!legalMove);
+    }  while (!nim.gameOver());
+  } // play
+
+  // Overriding writeToSocket to remove \n from str
+  protected void writeToSocket(Socket soc, String str) throws IOException {
+    StringBuffer sb = new StringBuffer();
+    for (int k = 0; k < str.length(); k++)
+      if (str.charAt(k) != '\n')
+        sb.append(str.charAt(k));
+    super.writeToSocket(soc, sb.toString() + "\n");
+  }
+  public static void main(String args[]) {
+    NimServer server = new NimServer(10001,5);
+    server.start();
+  } // main()
+} // NimServer
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The  {\tt NimServer} class.
+\label{fig-nimserverclass}\label{pg-fig-nimserverclass}}
+\end{figure}
+
+Figure~\ref{fig-nimserverclass} provides a definition of the {\tt
+NimServer} subclass. Note how its implementation of {\tt
+provideService()} uses an instance of the {\tt OneRowNim} class from
+Chapter~8. Also, the {\tt play()} method, which encapsulates the
+game-playing algorithm, uses an instance of {\tt NimPlayer}, also from
+Chapter~8. You might recall that {\tt OneRowNim} is a {\tt
+TwoPlayerGame} and {\tt NimPlayer} defines methods that allow a
+computer to play an optimal game of One Row Nim.  In this example, the
+server acts as one of the players and use a {\tt NimPlayer} to manage
+its playing strategy.  Thus, clients that connect to {\tt NimServer}
+will be faced by a computer that plays an optimal game.
+
+If you compare the details of the {\tt NimServer}'s {\tt play()}
+method with the {\tt play()} method from the implementation of {\tt
+OneRowNim}, you will see that they are very similar.  In this
+implementation, we use public methods of the {\tt OneRowNim} object to
+manage the playing of the game. Thus, {\tt addComputerPlayer()} adds
+an instance of {\tt NimPlayer} to the game. The {\tt takeSticks()},
+{\tt changePlayer()}, and {\tt gameOver()} methods are used to manage
+the moves made by both itself and the client.  And the {\tt
+getGamePrompt()} and {\tt reportGameState()} methods are used to
+manage the interaction and communication with the client.  Note also
+that whenever it is the server's turn to move, it uses the {\tt
+NimPlayer}'s {\tt makeAMove()} method to determine the optimal move to
+make.
+
+Although the programming logic employed in the {\tt play()}
+method looks somewhat complex, it is very similar to the logic
+employed in the Chapter~8 version of the game. The main difference
+here is that the server uses the {\tt writeToSocket()} and {\tt
+readFromSocket()} methods to manage the communication with the client.
+In this regard, this instance of {\tt provideService()} is no
+different than the {\tt provideService()} method we used in the {\tt
+EchoServer} class.
+
+Finally, note that {\tt NimServer} provides an implementation of the
+\marginnote{Overriding a method}
+{\tt writeToSocket()} method. This method is implemented in the {\tt
+ClientServer()} class and is inherited by {\tt NimServer}.  However,
+the default implementation assumes that the client will use the a
+carriage return ({\tt \verb|\n|}) to determine the end of a particular
+message in the socket.  Because {\tt OneRowNim}'s methods, {\tt
+getGamePrompt()} and {\tt reportGameState()}, contain embedded
+carriage returns, it is necessary to filter these. 
+The new version of {\tt writeToSocket()} performs this filtering and calls the
+default method ({\tt super.writeToSocket()}, after it has finished its
+filtering task.
+
+\subsection{The {\tt NimClient} Class}
+
+The {\tt NimClient} class is even easier to implement. As its task is
+simply to manage the communication between the human user and the {\tt
+NimServer}, it is very similar to the {\tt requestService()} method we
+used in {\tt EchoClient}.  The relationship between the abstract {\tt
+Client} class (Fig.~\ref{fig-clientclass}) and its extension in {\tt
+NimClient} (Fig.~\ref{fig-nimclientclass}) is very similar to the
+relationship between {\tt Server} and {\tt NimServer}.  The~{\tt
+request\-Service()} method is called by {\tt Client.run()}.  It is
+implemented in {\tt NimClient}. In this way, the {\tt Client} class
+can serve as a superclass for any number of clients.
+%\begin{marginalnote}\it Creating new clients\end{marginalnote}
+\marginnote{Creating new clients}
+New clients for new services can be derived from {\tt Client} by
+simply implementing their own {\tt requestService()} method.  
+
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[34pc]
+\begin{lstlisting}
+import java.net.*;
+import java.io.*;
+
+public class NimClient extends Client {
+  private KeyboardReader kb = new KeyboardReader();
+  public NimClient( String url, int port) {
+    super(url,port);
+  }
+
+  protected void requestService(Socket socket) throws IOException {
+    String servStr = readFromSocket(socket);    // Get server's response
+    kb.prompt("NIM SERVER: " + servStr +"\n");  // Report server's response
+    if ( servStr.substring(0,6).equals("Hi Nim") ) {
+      String userStr = "";
+      do {
+        userStr = kb.getKeyboardInput();        // Get user's move
+        writeToSocket(socket, userStr + "\n");  // Send it to server
+        servStr = readFromSocket(socket);       // Read server's response
+        kb.prompt("NIM SERVER: " + servStr + "\n");  // Report response
+      } while(servStr.indexOf("Game over!") == -1); // Until game over
+    }
+  }// requestService()
+
+  public static void main(String args[]) {
+    NimClient client = new NimClient("localhost", 10001);
+    client.start();
+  } // main()
+} // NimClient
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The derived {\tt NimClient} class.
+\label{fig-nimclientclass}\label{pg-fig-nimclientclass}}
+\end{figure}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Inheritance.}{By placing as much functionality
+as possible into a generic client/server superclass, you can simplify
+the creation of new services.  This is an effective use of Java's
+inheritance mechanism.}
+
+\subsection{Testing the Nim Service}
+\noindent Testing the One Row Nim service will be no different
+than testing the Echo service.  To test the service, you want to run
+both {\tt NimServer} and {\tt NimClient} at the same time and
+preferably on different computers.  As they are presently coded, you
+will have to modify the {\tt main()} methods of both {\tt NimServer}
+and {\tt NimClient} to provide the correct URL and port for your
+environment.
+
+\secEXRHone{Self-Study Exercise}
+
+\begin{SSTUDY}
+
+\item  The design of the client/server hierarchy makes it 
+easy to create a new service by extending both the {\tt Server} and
+{\tt Client} classes.  Describe how you would implement a scramble
+service with this model.  A scramble service can be used by people
+trying to solve the daily scramble puzzles found in many newspapers.
+Given a string of letters, the scramble service will return a string
+containing all possible letter combinations.  For example,
+given ``cat,'' the scramble service will return ``act atc cat cta tac
+tca.''
+
+\item  Describe what happens when each of the following errors is introduced
+into the {\tt EchoClient} or {\tt EchoServer} programs:
+
+%%\begin{EXRBL}
+\begin{itemize}
+\item  Specify the wrong host name when running {\tt EchoClient}.
+\item  Specify the wrong port number when running {\tt EchoClient}.
+\item  Remove the reference to \verb|\n| in the {\tt writeToSocket()}
+call in {\tt request\-Service()}.
+\end{itemize}
+%%%\end{EXRBL}
+\end{SSTUDY}
+%%%%\endcasestudy
+
+
+
+\section{Java Network Security Restrictions}
+\label{sec-security}\label{pg-sec-security}
+\noindent One of the most attractive features of Java is that extensive effort
+has been made to make it a {\it secure} language.  This is especially
+important for a language that makes it so easy to implement networking
+applications.   After all, nobody wants to download a Java applet that
+proceeds to erase the hard disk.  Such an applet might be written
+by a cyber terrorist, deliberately aiming to cause severe damage,
+or it might be written by a cyber doofus, who inadvertently writes
+code that does severe damage.
+
+What are some of Java's techniques for guarding against either
+deliberate or inadvertent insecure code?  One level of security is
+%\begin{marginalnote}\it Code verification\end{marginalnote}
+\marginnote{Code verification}
+Java's {\it bytecode verification} process, which the Java Virtual
+Machine performs on any ``untrusted'' code that it receives.  Java
+checks every class that it loads into memory to make sure it doesn't
+contain illegal or insecure code.  Another line of defense is the
+so-called {\bf sandbox security model}\index{sandbox security model}, which refers to the practice
+of restricting the kinds of things that certain programs can do.  For
+%\begin{marginalnote}\it Limited privileges\end{marginalnote}
+\marginnote{Limited privileges}
+example, the ``sandbox'' environment for Java applets
+restricts them from having any access whatsoever to the local file
+system.
+
+Another restriction imposed on applets is to limit their networking
+capabilities.  For example, a Java applet cannot create a network
+connection to any computer except the one from which its code was
+downloaded.  Also, a Java applet cannot listen for, or accept,
+%\begin{marginalnote}\it Limited network access\end{marginalnote}
+\marginnote{Limited network access}
+connections on privileged ports---those numbered 1024 or
+lower.  Together, these two restrictions severely limit the kinds of
+client/server programs that can be built as applets.
+
+Java sets aside certain locations as repositories for {\bf trusted
+code}\index{trusted code}. For example, the Java class libraries would be placed in such a
+location, as would the directories where your Java programs are
+stored.  Any class loaded from some other directory is considered {\it
+untrusted}. By this definition, applets downloaded over the Internet
+would be considered untrusted code.
+
+In addition to the restrictions for applets, which
+%\begin{marginalnote}\it Trusted code\end{marginalnote}
+\marginnote{Trusted code}
+apply to all untrusted code, Java defines a number of
+other limitations:
+
+\begin{BL}
+\item  Untrusted code cannot make use of certain system
+facilities, such as {\tt System.exit()} and classes
+in the {\tt java.security} package.
+
+\item  Untrusted code cannot make use of certain AWT
+methods, such as methods that access the system clipboard.   Another
+AWT restriction is that any window created by untrusted code must
+display a message informing the user that it is untrusted.  You might
+have seen such messages on windows opened from applets.
+
+\item  Untrusted code is limited in the kinds of threads
+it can create.
+\end{BL}
+
+Security enhancements introduced in JDK 1.2 are based on the
+concepts of ``permission'' and ``policy.'' Code is assigned
+``permissions'' based on the security policy currently in effect.  Each
+permission specifies the type of access allowed for a particular
+resource (such as ``read'' and ``write'' access to a specified file or
+directory, or ``connect'' access to a given host and port). The
+policy that controls permissions can be initialized from an external
+configurable policy file.  Unless a permission is explicitly granted to
+code, it cannot access the resource that is guarded by that
+permission.   These new enhancements offer a more fine-grained and
+extensible approach to security for both applets and applications.
+
+As this brief overview illustrates, the Java Virtual Machine is
+designed with security as one of its primary issues.  This
+doesn't guarantee 100 percent
+security, but it is a big improvement over some of
+the languages and systems that preceded Java.   Moreover, security is
+an ongoing concern of the Java development process.   Flaws in the existing
+security system are fixed very quickly.   Advanced methods are
+constantly being developed and incorporated into the system.  One such
+enhancement is the use of encryption to guarantee the integrity of
+classes transferred over the network.
+
+\section{Java Servlets and Java Server Pages}
+
+In this chapter we have been discussing the client/server model of
+computing.  Thus far we have learned how to implement client/server
+applications using socket connections between programs running on
+different computers. Because it requires the programmer to directly
+create and manage the socket protocol, this socket-level approach is a
+low-level approach.  It is important to know about sockets and how
+they are used, but most client/server applications are programmed at a
+much higher level by using Java library classes.
+
+Our focus in this section will be to give you a brief sense of how
+Java programs can be integrated into the Web pages. We will discuss
+two approaches: {\em Java Server Pages (JSP)} and {\em Java servlets}.  As
+Web-based approaches, both of these require the use of HTML (HyperText
+Markup Language) code, the language that is used for coding Web
+pages. This means that in order to write your own servlets and JSPs
+you would really have to learn a little about HTML code.  Fortunately,
+learning HTML code is not difficult and although it doesn't fit within
+the scope of this book, you can easily find books or Web sites that
+cover basic HTML coding.  Moreover, in order for servlets and JSPs to
+work, they must be associated with a Web server that is specially
+configured to understand Java code.  At the end of this section we
+will provide links to a Web site where you can learn more about HTML
+and about how to set up your own JSPs and servlets.
+
+\subsection{Java Server Pages}
+
+A Java Server Page (JSP) is a Web page that contains small snippets of
+Java code.  The simple example discussed here was downloaded from on
+online tutorial at 
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+ http://developer.apple.com/internet/java/tomcat1.html
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The Java code on a JSP embedded within {\tt <\% ... \%>}
+brackets and interspersed among a page's HTML tags. The Java code can
+extend over one or more lines. Figure~\ref{fig-jspcode} shows the
+complete sourcecode for a simple JSP.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+<html><head><title>Very Simple JSP Example</title></head>
+<body bgcolor="white">
+
+<h1>Very Basic JSP</h1>
+
+Current time: <%= new java.util.Date() %>
+<br><br>
+
+Reload this page to watch the greeting change.
+<br><br><b>
+
+<!-- including lines of Java code in an HTML page -->
+<%
+   int um = (int)( Math.random() * 5 );
+   switch ( um )
+   {
+      case 0: out.println("Welcome"); break;
+      case 1: out.println("Bienvenidos"); break;
+      case 2: out.println("Bienvenue"); break;
+      case 3: out.println("Bienvenuti"); break;
+      case 4: out.println("Willkommen"); break;
+      default: out.println("Huh? " + um);
+   }
+   out.println("<br>");
+%>
+</b>
+</body>
+</html>
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A simple JavaServer Page (JSP).
+\label{fig-jspcode}\label{pg-fig-jspcode}}
+\end{figure}
+
+
+In this example we see two uses of Java
+code.  In the first case, a JSP expression tag is used to display the
+current date on the Web page:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  Current time: <%= new java.util.Date() %>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A JSP expression element begins with {\tt <\%=} and ends
+with {\tt \%>}.  The expression contained within the tag is
+evaluated, converted into a Java {\tt String} and inserted into the
+Web page.  In this case the {\tt Date} object is evaluated and its
+string value is displayed on the Web page (Fig.~\ref{fig-jspscreen}).
+
+\begin{figure}[tb]
+\figaright{chptr15/jspscreen.eps}{A screen shot of a JSP.
+\label{fig-jspscreen}\label{pg-fig-jspscreen}}
+\end{figure}
+
+In the second case, a {\em scriptlet} of Java code uses the {\tt
+Math.random()} method to display a random greeting on the Web page.  A
+{\bf scriptlet} extends over several lines and is contained within the
+{\tt <\%...\%>} tag (Fig.~\ref{fig-jspcode}).  Note the use of the
+output statement, {\tt out.println()}. The {\tt out} object is a
+built-in output stream.  Anything written to {\tt out} will be
+transmitted as part of the HTML code that is sent to the Web page. In
+this case, one of the greetings is displayed each time the page is
+reloaded.
+
+Obviously, this simple example only scratches the surface of what you
+can do with JSP.  If you want to learn more about JSP, there are many
+helpful online tutorials available, such as {\tt http://www.jsptut.com/}.
+However, remember that in order to experiment with JSP, it will be
+necessary to have access to a JSP-aware Web server either on your
+own computer or on one provided by your service provider.
+
+\subsection{Java Servlets}
+
+A Java {\em servlet} is another high-level approach to developing
+client/server applications.  A {\bf servlet} is a Java program that
+runs on a Web server and processes Web pages using the HyperText
+Transfer Protocol (HTTP).  In a Web application, the browser serves as
+the client.
+
+Many URLs that we access on the web are pure HTML files that are
+simply transmitted back to the browser by the Web server.  For
+example, the URL for a simple HTML document on the author's Web site
+is:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.cs.trincoll.edu/~ram/jjj/hello.html
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If you type that URL into a Web browser, the Web server at
+{\tt www.cs.trincoll.edu} would transmit the following text file
+to your browser, which would then render and display the document.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+<HTML>
+<HEAD>  
+   <TITLE>Very Simple HTML Document</TITLE>
+</HEAD>
+
+<BODY>
+    <CENTER><H1>Hello</H1></CENTER>
+</BODY>
+</HTML>
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If we want the server to do some processing and submit the
+results of that processing to the browser, we could use a Java
+servlet.  A servlet can perform some processing task and return the
+results of that task to the browser in the form of an HTML document.
+
+The difference between a Java servlet and a Java applet is that
+\marginnote{Servlets vs. Applets} an applet performs all of its processing
+on the client side of the client/server connection. A servlet performs
+its processing on the server side.  When you load a Java applet into a
+browser, the Web server downloads the applet's bytecode into the
+browser.  The browser then runs the byte code, assuming, of course, it
+is equipped with a plugin for the Java Virtual Machine (JVM).  When
+you access a Java servlet from a browser, the Web server performs some
+computation and transmits just the results to the browser.
+
+There are several advantages of servlets over applets. First, servlets
+cut down significantly on the amount of data that has to be
+transmitted to the browser. Second, because the
+servlet returns an HTML-encoded page, there are many fewer
+platform-related problems.  All browsers can interpret HTML code, but
+not all browsers have the right plugins for interpreting Java applets.
+Third, servlets are not subject to the same security and privacy
+restrictions as Java applets, which, as we saw earlier in the chapter,
+must be run as untrusted code.  Finally, Java servlets can directly
+access large databases and other resources that are stored on the
+server.  Access to such resources via an applet would be very
+difficult and inefficient.
+
+So, servlets have many advantages over applets. Because of these
+advantages they have quickly become an industry standard for
+developing client/server applications on the Web.
+
+\subsection{A Simple Servlet Example}
+
+To illustrate the difference between a Java servlet and a simple HTML
+page, Figure~\ref{fig-hiservlet} shows a servlet that creates a
+Web page that says ``Hello.''  As you can see, a servlet is a
+Java program. In addition to libraries that you are already familiar
+with, such as {\tt java.io}, it also imports names from two new
+libraries: {\tt javax.servlet} and {\tt javax.servlet.http}.  The
+program defines a single class, the {\tt HelloServlet} class, which is
+a subclass of {\tt HttpServlet}, the standard superclass for all Java
+servlets.  
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class HelloServlet extends HttpServlet {
+
+    public void doGet(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+    {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        out.println("<HTML>");
+        out.println("<HEAD>");
+        out.println("<TITLE>Simple Servlet</TITLE>");
+        out.println("</HEAD>");
+        out.println("<BODY>");
+        out.println("<H1> Hi, from a Java Servlet.</H1>");
+        out.println("</BODY>");
+        out.println("</HTML>");
+    }
+}
+
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A simple Java servlet.
+\label{fig-hiservlet}\label{pg-fig-hiservlet}}
+\end{figure}
+
+The servlet defines the {\tt doGet()} method. This is a method that is
+defined in the {\tt HttpServlet} superclass. Our {\tt HelloServlet} is
+overriding that method.  In general, Web browsers make two types of
+requests when they request a Web page, a {\bf get} or a {\bf post}.  We
+won't go into the differences between these requests. The result in
+either case is that the Web server will respond to the request by
+transmitting some text data to the browser.  When
+a browser makes a get request, the server will automatically call the
+servlet's {\tt doGet()} method. That's why we have to override it.
+The {\tt HttpServlet} class also has a default {\tt doPost()} method,
+which is called automatically to handle {\em post} requests.
+
+Note the two parameters in the {\tt doGet()} method: the {\tt
+HttpServlet\-Request} and the {\tt HttpServletResponse}.  The {\tt
+doPost()} method has the same two parameters. These are the objects
+that are used to hold the data that are communicated between the
+client and the server.  When the client (browser) makes a get request,
+the {\tt HttpServletRequest} objects hold the data contained in
+the request. These data might include data that a user has typed into
+an HTML form.  We will see an example of how to extract these data
+in the next section.  
+
+The {\tt HttpServletResponse} object is where the servlet will write
+its response. As you can see from examining the code, the {\tt
+HttpServlet\-Response} object has an associated output stream, a {\tt
+PrintWriter}, and it is a simple matter to write text to that output
+stream.  Note that the text we write is HTML code that is practically
+identical to the code contained in the previous HTML example.
+
+\subsection{The Nim Servlet}
+
+The simple servlet in the preceding section illustrates how the
+servlet communicates with the client---by writing HTML code to the
+{\tt HttpServlet\-Response} object.  Let's now look at an example that
+uses two-way communication between the client and server. To keep the
+example simple, we will revisit once again on our One Row Nim game.  In
+this application the servlet will manage the One Row Nim game and will
+play against a human player, who will access the game through a Web
+browser.  
+
+\begin{figure}[h!]
+\figa{chptr15/nimscreen.eps}{The interface for the Nim servlet.
+\label{fig-nimscreen}\label{pg-fig-nimscreen}}
+\end{figure}
+
+The browser interface for this version of the game is shown in
+Figure~\ref{fig-nimscreen}. As you can see, it is a simple Web
+page. The sticks in this instance are replaced by pennies. In addition
+to reporting the total number of pennies left, the page displays
+images of pennies. This Web page itself is organized as a simple HTML
+form, which contains one text field for the user's input.  Each time
+the user hits the RETURN key in the text field, the user's input is
+transmitted to the servlet where it is processed.  The servlet then
+transmits a new page to the user's browser, which shows the updated
+state of the game. 
+
+Let's now look at the servlet program itself, whose code is shown in
+Figures~\ref{fig-nimservlet} and~\ref{fig-nimservlet2}.  This servlet
+program is quite a bit longer than the simple hello server, but it is
+not really any more complex or difficult.  The {\tt NimServlet}
+extends the {\tt HttpServlet} superclass and overrides the {\tt
+doGet()} method.  Note that it also overrides the {\tt doPost()}
+method, by simply having that method call the {\tt doPost()} method. So
+this servlet will work for both {\em get} and {\em post} requests.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.io.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class NimServlet extends HttpServlet {
+    
+    private OneRowNim nim = null;
+    private NimPlayer nimPlayer = null;
+
+    public void doPost(HttpServletRequest request, 
+                       HttpServletResponse response)
+      throws IOException, ServletException
+    {
+        doGet(request, response);
+    }
+
+    //  The doGet() method goes here.
+
+} // NimServlet
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Java code for the {\tt NimServlet}, minus the {\tt doGet()} method.
+\label{fig-nimservlet}\label{pg-fig-nimservlet}}
+\end{figure}
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[37pc]{-11pc}
+\begin{lstlisting}[basicstyle=\scriptsize]
+public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
+{
+  response.setContentType("text/html");
+  PrintWriter out = response.getWriter();
+  HttpSession session = request.getSession(true);
+
+  out.println("<html>");
+  out.println("<body>");
+  out.println("<head>");
+  out.println("<title>Simple Nim Game</title>");
+  out.println("</head>");
+  out.println("<body>");
+
+  out.println("<center><h1>One Row Nim</h1></center>");
+  out.println("<center><h3>The Rules</h3>");
+  out.println("A random number of pennies is thrown on the table.<BR>");
+  out.println("Two players alternate making moves,<BR>");
+  out.println("picking up between 1 and 3 pennies on each move.<BR>");
+  out.println("The player who picks up the last penny loses.<BR><BR>");
+
+  if (nim == null) {
+    nim = new OneRowNim(7 + (int)(Math.random() * 11));
+    nimPlayer = new NimPlayer(nim);
+    out.println("<h4>You go first!</h4></center>");
+  } else {
+    int userTakes = Integer.parseInt(request.getParameter("pickup"));
+    if (!nim.takeSticks(userTakes)) {
+       out.println("<h4><font color='red'>Woops. That's an illegal move!. Try again. </font><h4>");
+    } else if (!nim.gameOver()) {
+       nim.changePlayer();
+       out.println("<h4>So, you took <font color='blue'>" + userTakes + "</font><BR>"); 
+       out.println("That leaves me with <font color='blue'>" + nim.getSticks() + "</font><BR>");
+       int iTake = nimPlayer.move();
+       out.println("OK. I take <font color='red'>" + iTake + " </font>pennies.<BR></h4>");
+       nim.takeSticks(iTake);
+       nim.changePlayer();
+    } // if not gameover
+  } // else nim != null
+  if (!nim.gameOver()) {
+    if (nim.getPlayer() == 1)
+      out.println("<center><h3>Who's Turn: <font color='magenta'> Your turn </font><h3></center>");
+    else
+      out.println("<center><h3>Who's Turn: <font color='magenta'> My turn </font><h3></center>");
+    out.println("<center><h3>Pennies Left: <font color='red'>" + nim.getSticks() + "</font><h3></center>");
+    out.println("<center>");
+    for (int k=0; k < nim.getSticks(); k++)
+      out.println("<img src='http://xroads.virginia.edu/~CAP/LINCOLN/cent.jpg' width='25' height='25'>");
+    out.println("</center><br>");
+
+    out.println("<center>");
+    out.println("<form action='/jjj3e/NimServlet' method='POST'>");
+    out.println("<table border='0'>");
+    out.println("<tr><td>How many do you pickup?: </td>" +
+        "<td><input type='text' name='pickup' value='0'></td></tr>");
+    out.println("</table>");
+    out.println("</center>");
+    out.println("</form>");
+  } else {
+    out.println("<h3><font color='red'>Game over!</font><h3>");
+    if (nim.getPlayer() == 1)
+      out.println("<center><h4>And the winner is : <font color='magenta'> Me.</font><h4></center>");
+    else
+      out.println("<center><h4>And the winner is: <font color='magenta'> You.</font><h4></center>");
+    out.println("<center><h4><font color='magenta'> Nice game!</font><h4></center>");
+    out.println("<center><h4>To play again, just reload the page.<h4></center>");
+    nim = null;
+  } // else game over
+  out.println("</body>");
+  out.println("</html>");
+}// doGet
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{Java code for the {\tt NimServlet}'s {\tt doGet()} method.
+\label{fig-nimservlet2}\label{pg-fig-nimservlet2}}
+\end{figure}
+
+{\tt NimServlet} uses two other objects: a {\tt OneRowNim} object and
+a {\tt NimPlayer} object.  You should be familiar with these from
+Chapter~8, so we won't go over their internal details here. The
+{\tt OneRowNim} object manages the playing of the game and the
+{\tt NimPlayer} object acts as a computer-based player of the game.
+Note that variable references for these two objects are declared in
+the beginning of the class definition, but the objects themselves
+are declared within the {\tt doGet()} method.
+
+One of the tricky parts of {\tt NimServlet} is how we declare the {\tt
+OneRowNim} object.  As you might already know, the HTTP protocol is said to be a
+{\em stateless} protocol, which means that each time a browser submits
+a request to a Web server, the Web server sees the request as a
+completely independent communication. The server does not, in and of
+itself, maintain an internal state that keeps track of a series of
+transactions with a particular browser session.  For example, when you
+are shopping for books on Amazon, each time you go to a new page, the
+Amazon web server treats that request as a completely independent
+action.  Web applications use various techniques to get around the
+stateless nature of the HTTP protocol. One technique is to use {\em
+cookies} to record the progress of a session. A {\bf cookie} is a
+small text file containing data that the server uses to keep track of
+a user's session. Data that identifies the user and the state of the
+transaction---for example, buying a book---are passed back and forth
+between the browser and the server each time the user visits the
+Amazon Web site.
+
+Java's servlet library contains methods and objects that support the
+use of cookies. But rather than use cookies, we will use the {\tt
+OneRowNim} object itself to keep track of the state of the Nim game.
+The first time the user submits a request to Nim servlet---that is,
+when the user first visits the servlet's URL---the servlet will create
+an instance of the {\tt OneRowNim} object. Creating a {\tt OneRowNim}
+object will have the effect of initializing the game, including the
+creation of a {\tt NimPlayer} to play the server's moves.  The {\tt
+OneRowNim} object will persist throughout the playing of the game and
+will handle all subsequent user's move. When the game is over, the
+{\tt NimServlet} will, in effect, dispose of the {\tt OneRowNim}
+object by setting its reference to {\tt null}.  Thus, in outline
+form, the code for creating and disposing of the {\tt OneRowNim}
+object goes as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+// First request: Start a new Nim game
+if (nim == null) { 
+   nim = new OneRowNim(7 + (int)(Math.random() * 11));
+   nimPlayer = new NimPlayer(nim);
+// Code deleted here.
+else {
+   // Code for playing the game goes here.
+}
+if (!nim.gameOver()) {
+  // Code for playing the game goes here.
+} else {
+   // Code deleted here.
+  nim = null;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Those places where code has been deleted in this segment
+would contain Java code for responding to the user's input and
+deciding how many pennies to take. 
+
+Unlike the {\tt HelloServlet}, the {\tt NimServlet} accepts input from
+the client.  The code for handling user input is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int userTakes = 
+        Integer.parseInt(request.getParameter("pickup"));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This statements reads the user's input from the text field
+on the Web page by using the {\tt request.getParameter()} method.
+This is one of the public methods of the {\tt HttpServletRequest}
+object.  The name of the text field is 'pickup', which is provided as
+an argument in this method call.  As we noted above, the text field
+itself is on element of the HTML form contained in the servlet's
+Web page. The HTML code for creating the form element is also generated
+by the servlet:
+
+\begin{jjjlistingleft}[29pc]{-3pc}
+\begin{lstlisting}
+out.println("<form action='/jjj3e/NimServlet' method='POST'>");
+out.println("<table border='0'>");
+out.println("<tr><td>How many do you pick up?: </td>" +
+  "<td><input type='text' name='pickup' value='0'></td></tr>");
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent Unless you already know something about HTML, you won't
+completely understand this code. We will give a minimal
+explanation. In HTML, a text field is known as a input element of type
+'text'.  Note that this code segment names the element 'pickup', which
+allows our program to refer to it by that name.
+
+The remaining details in the servlet have to do with managing the game
+and repeat concepts that were covered in Chapter~8. We won't repeat
+them here, other than to note that any output sent to the client must
+be in the form of HTML statements, hence the appearance throughout the
+code of HTML tags, which are the elements in the angle brackets.
+
+\subsection{Setting Up and Using Java Servlets}
+
+Java servlets can only run on a Web server that is specially
+configured to interpret them.  To experiment with
+the servlets discussed in this chapter, just go to the
+following URL:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.cs.trincoll.edu/~ram/jjj/servlets
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent That web page contains links to both the {\tt HelloServlet}
+and {\tt NimServlet}.  It also contains links to Web sites where you
+can learn more about creating servlets. In order to create and run
+your own servlets, you will need access to a Web server that has been
+specially configured to run servlets.  There are several very good
+free servers that support Java servlets. You can download one of these
+onto your own computer and follow the directions on how to set it up.
+Links to Java servlet sites are also provided on our servlets page. 
+
+
+\secSMHleft{Chapter Summary}
+%\addcontentsline{toc}{section}{\S~~~ Chapter Summary}
+
+\secKTH{Technical Terms}
+\begin{KT}
+busy waiting
+
+callback method
+
+client
+
+client/server protocols
+
+domain name
+
+ethernet protocol
+
+File Transfer Protocol (FTP)
+
+get
+
+HyperText Transfer Protocol (HTTP)
+
+internet
+
+Internet
+
+Internetworking Protocol (IP)
+
+Java Server Page (JSP)
+
+packet
+
+port
+
+post
+
+protocol
+
+router
+
+sandbox security model
+
+scriptlet
+
+server
+
+servlet
+
+Simple Mail Transfer Protocol (SMTP)
+
+socket
+
+trusted code
+
+Uniform Resource Locator (URL)
+
+World Wide Web (WWW)
+
+\end{KT}
+
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}
+\item  An {\it internet} is a collection of two or more distinct networks
+joined by {\it routers}, which have the task of translating one
+network's language to the other's.  The {\it Internet} is a network of networks
+that uses the {\it Internet Protocol (IP)} as the translation medium.
+
+\item  A {\it protocol} is a set of rules that controls the transfer
+of information between two computers in a network.  The {\it HyperText
+Transfer Protocol (HTTP)} governs information exchange on the World
+Wide Web (WWW). The {\it Simple Mail Transfer Protocol} controls mail
+service on the Internet.  The {\it File Transfer Protocol (FTP)}
+controls the transfer of files between Internet computers.  The {\it
+Domain Name System (DNS)} governs the use of names on the Internet.
+
+\item  A {\it client/server} application is one that divides
+its task between a client, which requests service, and a
+server, which provides service.  Many Internet applications
+and protocols are based on the client/server model.
+
+\item  Lower-level protocols, such as the {\it ethernet protocol}
+and {\it token ring protocol}, govern the transmission of data between
+computers on a single network.  The {\it Internet Protocol (IP)}
+translates between such protocols.
+
+\item   A {\it Uniform Resource Locator (URL)} is a standard way of
+specifying addresses on the Internet.  It consists of several parts
+separated by slashes and colons: {\tt method://host:port/path/file}.
+The {\tt java.net.URL} class is used to represent URLs.
+
+\item  Files of text or data (images, audio files) on the Internet
+or Web can be downloaded using the same {\tt InputStream}s and
+{\tt OutputStream}s as files located on a disk.  To read or write
+a resource located on a network, you need to connect its URL to
+an input or output stream.
+
+\item  The {\tt java.awt.Toolkit} class contains useful methods
+for downloading {\tt Image}s into an application.
+
+\item  A {\it socket} is a two-way communication channel between
+two running programs on a network.  The {\tt java.net.Socket}
+class can be used to set up communication channels for
+client/server applications.  The {\it server} process
+listens at a socket for requests from a client.  The {\it client}
+process requests service from a server listening at a particular
+socket.  Once a connection exists between client and server,
+input and output streams are used to read and write data over
+the socket.
+\end{SMBL}
+
+%\section*{}{Answers to Self-Study Exercises}
+\secANSH
+%\addcontentsline{toc}{section}{\S~~~ Answers to Self-Study Exercises}
+
+\begin{ANS}
+\item  The fully connected mesh topology requires the most cables.
+
+\item  The fully connected mesh topology would have the most potential
+to use alternate routes if one of the host computers crashed.
+
+\item  The star topology would be rendered completely useless if
+its central hub crashed.
+
+\item  Prentice Hall's Web server is located at
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://www.prenhall.com 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The protocol is {\tt http}. The host computer is named {\tt www}.
+Prentice Hall's domain name is {\tt prenhall}, and it is part of the
+{\tt com} (commercial) Internet domain.
+
+
+\item  \mbox{ }
+\begin{ANSBL}
+\item  For buying a piece of software at a bookstore,
+the server would be the sales clerk.  The protocol would
+be to select the software from off the shelf, bring
+it to the checkout counter, give the sales clerk 
+money, and get a receipt.
+
+\item  For buying a piece of software over the phone,
+the server would be the telephone sales clerk.  The protocol would
+be to select from a catalog, provide the sales clerk with
+your credit card information, and say goodbye.
+
+\item  For buying a piece of software over the Internet,
+the server would be the computer that handles the transaction.  The
+protocol would be to select the item from a Web-based form, provide
+the form with personal and payment information, and click on the
+Buy button.
+\end{ANSBL}
+
+
+\item  To play sounds along with slides in the {\tt SlideShowApplet},
+you would make the following modifications to the code:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private URL soundURL[] = new URL[NIMGS];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Declare an array of {\tt URL}s to store the URLs of
+the audio files you want to play.
+
+\hspace*{1pc}Assign URLs to the array at the same time
+you input the images:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k=0; k < NIMGS; k++) {
+  url = 
+   new URL( "http://www.cs.trincoll.edu/~ram/jjj/slide" + 
+                                              k + ".gif");
+  slide[k] = getImage( url );
+  soundURL[k] = 
+   new URL("http://www.cs.trincoll.edu/~ram/jjj/sound" +
+                                               k + ".au");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Each time an image is displayed in {\tt paint()}, play
+the corresponding sound by using the URL from the array:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void paint(Graphics g) {
+    if (currentImage != null) {
+        g.drawImage(currentImage,10,10,this);
+        play( soundURL[currentImage] );
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The scramble service would be implemented by defining
+two new classes: The {\tt ScrambleServer} class is a
+subclass of {\tt Server}, and the {\tt ScrambleClient} class
+is a subclass of {\tt Client}.
+The {\tt ScrambleClient} would implement the {\tt requestService()}
+method and the {\tt ScrambleServer} would implement the
+{\tt provideService()} method.
+
+\item  \mbox{ }
+\begin{ANSBL}
+\item  If you specify the wrong host name or port, you will get the
+following exception:
+{\tt java.net.Connect\-Exception: Connection refused}.
+
+\item  If you leave off the \verb|\n| in the {\tt writeToSocket()}
+call, nothing will go wrong because the {\tt writeToSocket()} method
+will catch this error and add the end-of-line character to the string
+before sending it to the server.   The server reads lines from the
+client, so every communication must end with \verb|\n| or the protocol
+will break down.
+\end{ANSBL}
+\end{ANS}
+
+
+\secEXRHtwo{Exercises}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+\begin{EXRtwo}
+
+\item  Explain the difference between each of the following pairs of terms:
+
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  {\it Stream} and {\it socket}.
+\item  {\it Internet} and {\it internet}.
+\item  {\it Domain name} and {\it port}.
+\item  {\it Client} and {\it server}.
+\item  {\it Ethernet} and {\it Internet}.
+\item  {\it URL} and {\it domain name}.
+\end{multicols}
+\end{EXRtwoLL}
+\marginnote{\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+
+\item  What is a {\it protocol}? Give one or two examples
+of protocols that are used on the Internet.
+
+\item  What service is managed by the HTTP protocol?
+
+\item  Give examples of client applications that use
+the HTTP \mbox{protocol.}
+
+\item  Why is it important that applets be limited
+in terms of their network and file system access?  Describe the various
+networking restrictions that apply to Java applets.
+
+\item  What does the {\tt Internet Protocol} do?  Describe
+how it would be used to join an ethernet
+and a token ring network.
+
+\item  Describe one or two circumstances under which
+a {\tt Connect\-Exception} would be thrown.
+
+\item  Modify the {\tt SlideShowApplet} so that it plays
+an audio file along with each slide.
+
+\item  Design and implement a Java applet that downloads
+a random substitution cryptogram and provides an interface that
+helps the user try to solve the cryptogram.  The interface should
+enable the user to substitute an arbitrary letter for the
+letters in the cryptogram.  The cryptogram files should be
+stored in the same directory as the applet itself.
+
+\item  Design and implement a Java application that displays
+a random message (or a random joke) each time the user clicks a
+{\tt GetMessage} button.  The messages should be stored in a set of files in
+the same directory as the applet itself.  Each time the button is
+clicked, the applet should download one of the message files.
+
+\item  Write a client/server application of the message or
+joke service described in the previous exercise.  Your implementation
+should extend the {\tt Server} and {\tt Client} classes.
+
+\item  Write an implementation of the scramble service.  Given a word,
+the scramble service will return a string containing all possible
+permutations of the letter combinations in the word.  For example, given ``man,''
+the scramble service will return ``amn, anm, man, mna, nam, nma.''
+Use the {\tt Server} and {\tt Client} classes in your design.  (See the
+Self-Study Exercises for a description of the design.)
+
+\item  {\bf Challenge:} Modify the Nim server game in this chapter so that
+the client and server can negotiate the rules of the game, including
+how many sticks, how many pick ups per turn, and who goes first.
+
+\end{EXRtwo}
+%

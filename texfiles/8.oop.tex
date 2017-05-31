@@ -1,0 +1,3535 @@
+%%%  Chapter 8: Inheritance and Polymorphism
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{7}
+\chapter{Inheritance and Polymorphism}
+\label{chapter-inheritance}
+\label{pg-chapter-inheritance}
+
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+\begin{COBL}
+\item  Understand the concepts of inheritance and polymorphism.
+\item  Know how Java's dynamic binding mechanism works.
+\item  Be able to design and use abstract methods and classes.
+\item  Be able to design and use polymorphic methods.
+\item  Gain a better understanding of object-oriented design.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item Introduction
+\item Java's Inheritance Mechanism
+\item Abstract Classes, Interfaces, and Polymorphism
+\item Example: A Toggle Button
+\item[] {{\color{cyan}Special Topic:} Historical Cryptography}
+\item Example: The Cipher Class Hierarchy
+\item Case Study: A Two Player Game Hierarchy
+\item Principles of Object-Oriented Design
+\par\small\item[] Chapter Summary
+\par\small\item[] Solutions to Self-Study Exercises
+\par\small\item[] Exercises
+\end{COL}
+\COend
+
+\section{Introduction}
+
+Among the most important concepts in object oriented programming are
+the concepts of inheritance and polymorphism.  We first introduced the
+idea of inheritance in Chapter~0. There we compared inheritance to the
+natural form of inheritance, in which horses and cows share certain
+inherited characteristics, such as being warm-blooded, by virtue of
+their being mammals. We also gave the example of a hierarchy of
+chess pieces and showed how different kinds of chess pieces, such as
+{\tt Pawn} and {\tt Bishop}, inherited certain shared characteristics
+from their {\tt ChessPiece} superclass.
+
+We took a more technical look at inheritance in Chapter~3, where we
+talked about the {\tt toString()} method and how it is inherited from
+the {\tt Object} class. We illustrated there how subclasses of {\tt
+Object} could override the inherited {\tt toString()} method in order
+to customize it for their purposes. We also introduced the idea of
+polymorphism, in which a method call, such as {\tt obj.toString()},
+can have different behaviors depending on the type of object, {\tt
+obj}, on which it is called.
+
+In Chapter 4, we continued introducing inheritance and polymorphism,
+when we learned about Java's Abstract Windowing Toolkit (AWT) and
+Swing hierarchies, the class hierarchies that are used to create
+Graphical User Interfaces (GUIs).  We also learned how to extend a
+class to create our own subclass, and we made limited use of
+inheritance in the design of the {\tt SimpleGUI} class.  We were also
+introduced to the concept of a Java interface, and we learned how to
+use the {\tt ActionListener} interface to enable a {\tt SimpleGUI} to
+handle action events while the GUI is running.
+
+In this chapter we will take a much closer look at these important
+object-oriented concepts.  We will learn how Java's {\em dynamic
+binding} mechanism works and how it makes polymorphism possible.  Most
+importantly, we will see why inheritance and polymorphism are
+important elements of object-oriented design, and we will learn how to
+use these important tools to design several different programs.  In
+keeping with our running games example, we will develop a {\tt
+TwoPlayerGame} hierarchy and show how it can simplify the
+implementation of {\tt OneRowNim} and other two-player games.
+
+\section{Java's Inheritance Mechanism}
+
+As we described in Chapter~0, {\bf class inheritance} is the mechanism
+whereby a class acquires ({\em inherits}) the methods and variables of
+its superclasses.  To remind you of the basic concept, let's repeat an
+earlier example: Just as horses inherit the attributes and behaviors
+associated with mammals and vertebrates, a Java subclass inherits the
+attributes and behaviors of its superclasses.
+
+\marginfig{chptr08/horsehier.eps}{A class hierarchy for horses.
+\label{fig-horsehier}
+\label{pg-fig-horsehier}}
+
+Figure~8.1 uses a UML diagram to illustrate the relationships among
+horses, mammals, vertebrates, and animals. As the root of the
+hierarchy, which is always shown at the top, the Animal class contains
+the most general attributes, such as being alive and being able to
+move. All animals share these attributes. The class of vertebrates is
+a somewhat more specialized type of animal, in that vertebrates have
+backbones. Similarly, the class of mammals is a further specialization
+over the vertebrates in that mammals are warm-blooded and nurse their
+young.  Finally, the class of horses is a further specialization over
+the class of mammals, in that all horses have four legs. Some mammals,
+such as humans and penguins, do not have four legs.  Thus, by virtue
+of its class's position in this hierarchy, we can infer that a horse
+is a living, moving, four-legged vertebrate, which is warm blooded and
+nurses its young.
+
+We have deliberately used an example from the natural world to show
+that the concept of inheritance in Java is inspired by its counterpart
+in the natural world.  But how exactly does the concept of inheritance
+apply to Java (and to other object-oriented languages)? And, more
+importantly, how do we use the inheritance mechanism in
+object-oriented design?
+
+\subsection{Using an Inherited Method}
+
+In Java, the public and protected instance methods and instance
+variables of a superclass are inherited by all of its subclasses.
+This means that objects belonging to the subclasses can use the
+inherited variables and methods as their own.
+
+We have already seen some examples of this in earlier chapters. For
+example, recall that by default all Java classes are subclasses of the
+{\tt Object} class, which is the most general class in Java's class hierarchy.
+One public method that is defined in the {\tt Object} class is the
+{\tt toString()} method.  Because every class in the Java hierarchy is
+a subclass of {\tt Object}, every class inherits the {\tt toString()}
+method.  Therefore, {\tt toString()} can be used with any Java object.
+
+To illustrate this, suppose we define a {\tt Student} class as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Student {
+    protected String name;
+    public Student(String s) {
+        name = s;
+    }
+    public String getName() {
+        return name;
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Figure~8.2 shows the relationship between this class
+\marginfig{chptr08/student1.eps}{The {\tt Student} class hierarchy.
+\label{fig-student1}
+\label{pg-fig-student1}}
+and the {\tt Object} class.  As a subclass of {\tt Object}, the {\tt
+Student} class inherits the {\tt toString()} method. Therefore, for a
+given {\tt Student} object, we can call its {\tt toString()} as
+follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Student stu = new Student("Stu");
+System.out.println(stu.toString());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent How does this work? That is, how does Java know where to
+find the {\tt toString()} method, which, after all, is not defined in
+the {\tt Student} class?  The answer to this question is crucial to
+understanding how Java's inheritance mechanism works.  
+
+Note in this example that the variable {\tt stu} is declared to be of
+type {\tt Student} and is assigned an instance of the {\tt Student}
+class. When the expression {\tt stu.toString()} is executed, Java will
+first look in the {\tt Student} class for a definition of the {\tt
+toString()} method. Not finding one there, it will then search up the
+{\tt Student} class hierarchy (Fig.~8.2) until it finds a public or
+protected definition of the {\tt toString()} method. In this case, it
+finds a {\tt toString()} method in the {\tt Object} class and it
+executes that implementation of {\tt toString()}.  As you know from
+Chapter~3, this would result in the expression {\tt stu.toString()}
+returning something like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Student@cde100
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The default implementation of {\tt toString()} returns the
+name of the object's class and the address ({\tt cde100}) where the
+object is stored in memory. However, this type of result is much too
+general and not particularly useful.
+
+\subsection{Overriding an Inherited Method}
+
+In Chapter~3 we pointed out that the {\tt toString()} method is
+designed to be {\em overridden}---that is, to be redefined in
+subclasses of {\tt Object}. Overriding {\tt toString()} in a subclass
+provides a customized string representation of the objects in that
+subclass.  We showed that by redefining {\tt toString()} in our {\tt
+OneRowNim} class, we customized its actions so that it returned
+useful information about the current state of a {\tt
+OneRowNim} game.
+
+To override {\tt toString()} for the {\tt Student} class, let's add
+the following method definition to the {\tt Student} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String toString() {
+  return "My name is " + name +  " and I am a Student.";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\marginfig{chptr08/student2.eps}{The revised {\tt Student} class hierarchy.
+\label{fig-student2}
+\label{pg-fig-student2}}
+
+\noindent Given this change, the revised {\tt Student} class hierarchy
+is shown in Figure~8.3.  Note that both {\tt Object} and {\tt
+Student} contain implementations of {\tt toString()}. Now when the
+expression {\tt stu.toString()} is invoked, the following, more
+informative, output is generated:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    My name is Stu and I am a Student.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, when Java encounters the method call {\tt
+stu.toString()}, it invokes the {\tt toString()} method that it finds
+in the {\tt Student} class (Fig.~8.3).
+
+These examples illustrate two important object-oriented concepts:
+inheritance and method overriding.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Inheritance.}{The public and protected
+instance methods (and variables) in a class can be used 
+by objects that belong to the class's subclasses. }
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Overriding a Method.}{Overriding an inherited
+method is an effective way to customize that method for a particular
+subclass.}
+
+\subsection{Static Binding, Dynamic Binding \\and Polymorphism}
+
+The mechanism that Java uses in these examples is known as {\bf
+dynamic binding}, in which the association between a method call and
+the correct method implementation is made at run time. In dynamic
+binding a method call is bound to the correct implementation of the
+method at run time by the Java Virtual Machine (JVM).
+
+Dynamic binding is contrasted with {\bf static binding}, the mechanism
+by which the Java compiler {\em resolves} the association between a
+method call and the correct method implementation when the program is
+compiled. In order for dynamic binding to work, the JVM needs to
+maintain some kind of representation of the Java class hierarchy,
+including classes defined by the programmer.  When the JVM encounters
+a method call, it uses information about the class hierarchy to {\em
+bind} the method call to the correct implementation of that method.
+
+In Java, all method calls use dynamic binding except methods that are
+\marginnote{Dynamic binding}
+declared {\tt final} or {\tt private}. Final methods cannot be
+overridden, so declaring a method as {\tt final} means that the Java
+compiler can bind it to the correct implementation.  Similarly,
+private methods are not inherited and therefore cannot be overridden
+in a subclass. In effect, private methods are final methods and the
+compiler can perform the binding at compile time.
+
+Java's dynamic-binding mechanism, which is also called {\em late}
+\marginnote{Polymorphism}
+binding or {\em run-time} binding, leads to what is know as {\em
+polymorphism}.  {\bf Polymorphism} is a feature of object-oriented
+languages whereby the same method call can lead to different behaviors
+depending on the type of object on which the method call is made.  The
+term {\em polymorphism} means, literally, having many (poly) shapes
+(morphs).  Here's a simple example:
+
+\begin{jjjlisting}[32pc]
+\begin{lstlisting}
+ Object obj;                        // Static type: Object
+ obj = new Student("Stu");          // Actual type: Student
+ System.out.println(obj.toString());// Prints "My name is Stu..."
+ obj = new OneRowNim(11);           // Actual type: OneRowNim
+ System.out.println(obj.toString());// Prints "nSticks = 11, player = 1"
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The variable {\tt obj} is declared to be of type {\tt
+Object}.  This is its {\bf static} or {\em declared} type.  A
+variable's static type never changes.  However, a variable also has an
+{\bf actual} or {\em dynamic} type.  This is the actual type of the
+object that has been assigned to the variable.  As you know, an {\tt
+Object} variable can be assigned objects from any {\tt Object}
+subclass.  In the second statement, {\tt obj} is assigned a {\tt
+Student} object.  Thus, at this point in the program, the actual type
+of the variable {\tt obj} is {\tt Student}.  When {\tt obj.toString()}
+is invoked in the third line, Java begins its search for the {\tt
+toString()} method at the {\tt Student} class, because that is the
+variable's actual type.
+
+In the fourth line, we assign a {\tt OneRowNim} object to {\tt obj},
+thereby changing its actual type to {\tt OneRowNim}.  Thus, when {\tt
+obj.toString()} is invoked in the last line, the {\tt toString()}
+method is bound to the implementation found in the {\tt OneRowNim}
+class.
+
+Thus, we see that the same expression, {\tt obj.toString()}, is bound
+alternatively to two different {\tt toString()} implementations, based
+on the actual type of the object, {\tt obj}, on which it is invoked.
+This is polymorphism and we will sometimes say that the {\tt
+\marginnote{Polymorphic method}
+toString()} method is a {\em polymorphic} method. A {\bf polymorphic
+method} is a method signature that behaves differently when it is
+invoked on different objects.  An overridden method, such as the {\tt
+toString()} method, is an example of a polymorphic method,
+because its use can lead to different behaviors depending upon the
+object on which it is invoked.
+
+The previous example is admittedly somewhat contrived. In some
+object-oriented languages, a code segment such as that above would use
+static binding rather than dynamic binding. In other words, the
+compiler would be able to figure out the bindings.  So let's take an
+example where static binding, also called {\em early} binding, is not
+possible. Consider the following method definition:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void polyMethod(Object obj) {
+  System.out.println(obj.toString()); // Polymorphic
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The method call in this method, {\tt obj.toString()}, can't
+be bound to the correct implementation of {\tt toString()} until the
+method is actually invoked---that is, at run time.  For example,
+suppose we make the following method calls in a program:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Student stu = new Student("Stu");
+ polyMethod(stu);
+ OneRowNim nim = new OneRowNim();
+ polyMethod(nim);  
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first time {\tt polyMethod()} is called, the {\tt
+obj.toString()} is invoked on a {\tt Student} object.  Java will use
+its dynamic binding mechanism to associate this method call with the
+{\tt toString()} implementation in {\tt Student} and output ``My name
+is Stu and I am a Student.''  The second time {\tt polyMethod()} is
+called, the {\tt obj.toString()} expression is invoked on a {\tt
+OneRowNim} object. In this case, Java will bind the method call to the
+implementation in the {\tt OneRowNim} class. The output generated in
+this case will report how many sticks are left in the game. 
+
+The important point here is that polymorphism occurs when an
+overridden method is called on a superclass variable, {\tt obj}. In
+such a case, the actual method implementation that is invoked is
+determined at run time.  The determination depends on the type of
+object that was assigned to the variable.  Thus, we say that the
+method call {\tt obj.toString()} is polymorphic because it is bound to
+different implementations of {\tt toString()} depending on the actual
+type of the object that is bound to {\tt obj}.
+
+
+\subsection{Polymorphism and Object-Oriented Design}
+
+Now that we understand how inheritance and polymorphism work in Java,
+it will be useful to consider an example that illustrates how these
+mechanisms can be useful in designing classes and methods.  We have
+been using the various {\tt System.out.print()} and {\tt
+System.out.println()} methods since Chapter~1.  The {\tt print()} and
+{\tt println()} methods are examples of {\bf overloaded}
+methods---that is, methods that have the same name but different
+\marginnote{Overloaded methods}
+parameter lists.  Remember that a method's signature involves its
+name, plus the type, number, and order of its parameters. Methods that
+have the same name but different parameters are said to be overloaded.
+
+Here are the signatures of some of the different {\tt print()} and
+{\tt println()} methods:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+print(char c);           println(char c);
+print(int i);            println(int i);
+print(double d);         println(double d);
+print(float f);          println(float f);
+print(String s);         println(String s);
+print(Object o);         println(Object o);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Basically, there is a {\tt print()} and {\tt println()}
+method for every type of primitive data, plus methods for printing any
+type of object.  When Java encounters an expression involving {\tt
+print()} or {\tt println()} it chooses which particular {\tt print()}
+or {\tt println()} method to call. To determine the correct method,
+Java relies on the differences in the signatures of the various {\tt
+print()} methods. For example, because its argument is an {\tt int},
+the expression {\tt print(5)} is associated with the method whose
+signature is {\tt print(int i)} be cause its parameter is an {\tt
+int}.
+
+Note that there is only one set of {\tt print()} and {\tt println()}
+methods for printing {\tt Object}s.  The reason is that polymorphism
+is used by the {\tt print(Object o)} and {\tt println(Object o)}
+methods to print any type of object.  While we do not have access to
+the source code for these methods, we can make an educated guess that
+their implementations utilize the polymorphic {\tt toString()} method,
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public void print(Object o) {
+     System.out.print(o.toString());
+ }
+ 
+ public void println(Object o) {
+     System.out.println(o.toString());
+ }    
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Here again we have a case where an expression, {\tt
+o.toString()}, is bound dynamically to the correct implementation of
+{\tt toString()} based on the type of {\tt Object} that the variable
+{\tt o} is bound to. If we call {\tt System.out.print(stu)}, where
+{\tt stu} is a {\tt Student}, then the {\tt Student.toString()} method
+is invoked. On the other hand, if we call {\tt
+System.out.print(game)}, where {\tt game} is a {\tt OneRowNim}, then
+the {\tt OneRowNim.toString()} method is invoked.
+
+The beauty of using polymorphism in this way is the flexibility and
+\marginnote{Extensibility}
+extensibility that it allows.  The {\tt print()} and {\tt println()}
+methods can print any type of object, even new types of objects that
+did not exist when these library methods were written.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  To confirm that the {\tt print()} and {\tt println()} methods
+are implemented along the lines that we suggest here, compile and run
+the {\tt TestPrint} program shown here. Describe how it confirms our claim.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class TestPrint {
+    public static void main(String args[]) {
+        System.out.println(new Double(56));
+        System.out.println(new TestPrint());
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Override the {\tt toString()} method in the {\tt TestPrint}
+class and rerun the experiment. Describe how this adds further
+confirmation to our claim.
+
+\end{SSTUDY}
+
+
+\subsection{Using {\tt super} to Refer to the Superclass}
+
+One question that might occur to you is: Once you override the default
+{\tt toString()} method, is it then impossible to invoke the default
+method on a {\tt Student} object?  The default {\tt toString()} method
+(and any method from an object's superclass) can be invoked using the
+{\tt super} keyword.  For example, suppose that within the {\tt
+Student} class, you wanted to concatenate the result of both the
+default and the new {\tt toString()} methods. The following expression
+would accomplish that:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+super.toString() + toString()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt super} keyword specifies that the first
+{\tt toString()} is the one implemented in the superclass.  The second
+{\tt toString()} refers simply to the version implemented within the
+\marginnote{Keyword {\tt super}}
+{\tt Student} class.  We will see additional examples of using the
+{\tt super} keyword in the following sections.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Consider the following class definitions and determine the
+output that would be generated by the code segment.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class A {
+     public void method() { System.out.println("A"); }
+ }
+ public class B extends A {
+     public void method() { System.out.println("B"); }
+ }
+
+ // Determine the output from this code segment
+ A a = new A();
+ a.method();
+ a = new B();
+ a.method();
+ B b = new B();
+ b.method();
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  For the class {\tt B} defined in the previous exercise,
+modify its {\tt method()} so that it invokes {\tt A}'s version
+of {\tt method()} before printing out {\em B}.
+
+\item  Given the definitions of the classes {\tt A} and {\tt B},
+which of the following statements are valid? Explain.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    A a = new B();
+    a = new A();
+    B b = new A();
+    b = new B();
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\end{SSTUDY}
+
+\subsection{Inheritance and Constructors}
+
+Java's inheritance mechanism applies to a class's public and protected
+instance variables and methods. It does not apply to a class's
+constructors. To illustrate some of the implications of this language
+feature, let's define a subclass of {\tt Student} called {\tt
+CollegeStudent}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class CollegeStudent extends Student {
+    public CollegeStudent() { }
+    public CollegeStudent(String s) {
+        super(s);
+    }
+    public String toString() {
+       return "My name is " + name +  
+               " and I am a CollegeStudent.";
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Because {\tt CollegeStudent} is a subclass of {\tt Student},
+it inherits the public and protected instance methods and variables
+from {\tt Student}. So, a {\tt CollegeStudent} has an instance
+variable for {\tt name} and it has a public {\tt getName()}
+\marginfig{chptr08/collstudent.eps}{The class hierarchy for {\tt CollegeStudent} .
+\label{fig-collstudent}
+\label{pg-fig-collstudent}}
+method. Recall that a {\tt protected} element, such as the {\tt name}
+variable in the {\tt Student} class, is accessible only within the
+class and its subclasses. Unlike {\tt public} elements, it is not
+accessible to other classes.
+
+Note that {\tt CollegeStudent} overrides the {\tt toString()} method,
+giving it a more customized implementation.  The hierarchical
+relationship between {\tt CollegeStudent} and {\tt Student} is shown
+in Figure~8.4.  A {\tt CollegeStudent} is a {\tt Student} and both
+are {\tt Object}s. 
+
+Note how we have implemented the {\tt CollegeStudent(String s)}
+constructor. Because the superclass's constructors are not inherited,
+we have to implement this constructor in the subclass if we want to be
+able to assign a {\tt CollegeStudent}'s name during object
+construction.  The method call, {\tt super(s)}, is used to invoke the
+superclass constructor and pass it {\em s}, the student's name. The
+superclass constructor will then assign {\em s} to the {\tt name}
+variable.
+
+As we have noted, a subclass does not inherit constructors from its
+\marginnote{Constructor chaining} superclasses.  However, if the
+subclass constructor does not explicitly invoke a superclass
+constructor, Java will automatically invoke the default superclass
+constructor---in this case, {\tt super()}.  By ``default superclass
+constructor'' we mean the constructor that has no parameters.  For a
+subclass that is several layers down in the hierarchy, this automatic
+invoking of the {\tt super()} constructor will be repeated upwards
+through the entire class hierarchy.  Thus when a {\tt CollegeStudent}
+is constructed, Java will automatically call {\tt Student()} and {\tt
+Object()}.  Note that if one of the superclasses does not contain a
+default constructor, this will result in a syntax error.
+
+If you think about this, it makes good sense. How else will the
+inherited elements of the object be created? For example, in order for
+a {\tt CollegeStudent} to have a {\tt name} variable, a {\tt Student}
+object, where name is declared, must be created. The {\tt
+CollegeStudent} constructor then extends the definition of the {\tt
+Student} class.  Similarly, in order for a {\tt Student} object to
+have the attributes common to all objects, an {\tt Object} instance
+must be created and then extended into a {\tt Student}.
+
+Thus, unless a constructor explicitly calls a superclass constructor,
+Java will automatically invoke the default superclass constructors.
+It does this {\em before} executing the code in its own constructor.
+For example, if you had two classes, {\tt A} and {\tt B}, where {\tt
+B} is a subclass of {\tt A}, then whenever you create an instance of
+{\tt B}, Java will first invoke {\tt A}'s constructor before executing
+the code in {\tt B}'s constructor.  Thus, Java's default behavior
+during construction of {\tt B} is equivalent to the following
+implementation of {\tt B}'s constructor:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public B() {
+    A();   // Call the superconstructor 
+    // Now continue with this constructor's code
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Calls to the default constructors are made all the way
+up the class hierarchy, and the superclass constructor is always
+called before the code in the class's constructor is executed.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Consider the following class definitions and describe what would
+be output by the code segment.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class A {
+     public A() { System.out.println("A"); }
+ }
+ public class B extends A {
+     public B() { System.out.println("B"); }
+ }
+ public class C extends B {
+     public C() { System.out.println("C"); }
+ }
+
+ // Determine the output.
+ A a = new A();
+ B b = new B();
+ C c = new C();
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+     \section{Abstract Classes, Interfaces, \\ and Polymorphism}
+
+In Java, there are three kinds of polymorphism:
+
+\begin{itemize}
+\item Overriding an inherited method.
+\item Implementing an abstract method.
+\item Implementing a Java interface.
+\end{itemize}
+
+\noindent In the previous section we saw examples of the first type of
+polymorphism.  All forms of polymorphism are based on Java's dynamic
+binding mechanism. In this section we will develop an example that
+illustrates the other two types of polymorphism and discuss some of
+the design implications involved in choosing one or the other
+approach.
+
+\subsection{Implementing an Abstract Method}
+
+An important feature of polymorphism is the ability to invoke a
+polymorphic method that has been defined only abstractly in the
+superclass. To illustrate this feature, we will develop a hierarchy of
+simulated animals that make characteristic animal sounds, an example
+that is widely used to illustrate polymorphism.
+
+As we all know from our childhood, animals have distinctive ways of
+\marginnote{Extensibility} 
+speaking. A cow goes ``moo''; a pig goes ``oink''; and so on.  Let's
+design a hierarchy of animals that simulates this characteristic by
+printing the characteristic sounds that these animals make.  We want
+to design our classes so that any given animal will return something
+like ``I am a cow and I go moo,'' when we invoke the {\tt toString()}
+method.  Moreover, we want to design this collection of classes so
+that it is extensible---that is, so that we can continue to add new
+animals to our menagerie without having to change any of the code in
+the other classes.
+
+%%\begin{figure}[b]
+%%\figa{chptr08/animals.eps}
+%%%\figaleft{chptr08/animals.eps}
+%%{The {\tt Animal} class hierarchy.
+%%\label{fig-animals}
+%%\label{pg-fig-animals}}
+%%\end{figure}
+
+Figure~8.5 provides a summary of the design we will implement. The
+{\tt Animal} class is an {\tt abstract} class. That's why its name is
+italicized in the UML diagram. The reason that this class is abstract
+is because its {\tt speak()} method is an {\bf abstract method}, which
+is a method definition that does not contain an implementation. That
+is, the method definition contains just the method's signature, not
+its body. Any class that contains an abstract method, must itself be
+\marginfig{chptr08/animals.eps}{The {\tt Animal} class hierarchy.
+\label{fig-animals}
+\label{pg-fig-animals}}
+declared abstract. Here is the definition of the {\tt Animal} class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract class Animal {
+    protected String kind; // Cow, pig, cat, etc.
+         
+    public Animal()  {  }
+    public String toString() {
+        return "I am a " + kind + " and I go " + speak();
+    }
+    public abstract String speak();   // Abstract method
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how we declare the abstract method ({\tt speak()}) and
+the abstract class.  Because one or more of its methods is not
+implemented, an abstract class cannot be instantiated. That is, you
+cannot say:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Animal animal = new Animal(); // Error: Animal is abstract
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Even though it is not necessary, we give the {\tt Animal} 
+class a constructor.  If we had left this off, Java would have
+supplied a default constructor that would be invoked when {\tt Animal}
+subclasses are created.
+
+Java has the following rules on using abstract methods and
+\marginnote{Rules for abstract classes}
+classes.
+
+\begin{itemize}
+
+\item Any class containing an {\tt abstract} method must be declared
+an \mbox{\tt abstract} class.
+
+\item An {\tt abstract} class cannot be instantiated.  It must be
+subclassed.
+
+\item A subclass of an {\tt abstract} class may be instantiated only
+if it implements {\it all} of the superclass's {\tt abstract} methods.
+A subclass that implements only some of the {\tt abstract} methods
+must itself be declared {\tt abstract}.
+
+\item A class may be declared {\tt abstract} even it contains no {\tt
+abstract} methods.  It could, for example, contain instance variables
+that are common to all its subclasses.
+\end{itemize}
+
+Even though an abstract method is not implemented in the superclass,
+it can be called in the superclass. Indeed, note how the {\tt
+toString()} method calls the abstract {\tt speak()} method. The reason
+that this works in Java is due to the dynamic binding mechanism.  The
+polymorphic {\tt speak()} method will be defined in the various {\tt
+Animal} subclasses. When the {\tt Animal.toString()} method is called,
+Java will decide which actual {\tt speak()} method to call based on
+what subclass of {\tt Animal} is involved.  
+
+Definitions for two such subclasses are shown in
+Figure~\ref{fig-animalsubs}.  
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Cat extends Animal {
+    public Cat() {
+        kind = "cat";
+    }
+    public String speak() {
+        return "meow";
+    }
+}
+
+public class Cow extends Animal {
+    public Cow() {
+        kind = "cow";
+    }
+    public String speak() {
+        return "moo";
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Two {\tt Animal} subclasses.
+\label{fig-animalsubs}
+\label{pg-fig-animalsubs}}
+\end{figure}
+\noindent In each case the subclass extends the {\tt Animal} class and provides
+its own constructor and its own implementation of the {\tt speak()}
+method. Note that in their respective constructors, we can refer to
+the {\tt kind} instance variable, which is inherited from the {\tt
+Animal} class.  By declaring {\tt kind} as a {\tt protected} variable,
+it is inherited by all {\tt Animal} subclasses but hidden from
+all other classes.  On the other hand, if {\tt kind} had been declared
+{\tt public}, it would be inherited by {\tt Animal} subclasses, but it
+would also be accessible to every other class, which would violate the
+information hiding principle.
+
+Given these definitions, we can now demonstrate the power and
+flexibility of inheritance and polymorphism.  Consider the following
+code segment:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Animal animal = new Cow();
+ System.out.println(animal.toString()); // A cow goes moo
+ animal = new Cat();
+ System.out.println(animal.toString()); // A cat goes meow
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We first create a {\tt Cow} object and then invoke its
+(inherited) {\tt toString()} method. It returns, ``I am a cow and I go
+moo.''  We then create a {\tt Cat} object and invoke its (inherited)
+{\tt toString()} method, which returns, ``I am a cat and I go meow.''
+In other words, Java is able to determine the appropriate
+implementation of {\tt speak()} at run time in each case. The
+invocation of the abstract {\tt speak()} method in the {\tt
+Animal.toString()} method is a second form of polymorphism.
+
+What is the advantage of polymorphism here? The main advantage is the
+\marginnote{Advantage of polymorphism}
+extensibility that it affords our {\tt Animal} hierarchy.  We can
+define and use completely new {\tt Animal} subclasses without
+redefining or recompiling the rest of the classes in the hierarchy.
+Note that the {\tt toString()} method in the {\tt Animal} class does
+not need to know what type of {\tt Animal} subclass will be executing
+its {\tt speak()} method. The {\tt toString()} method will work
+correctly for any subclass of {\tt Animal} because every non-abstract
+subclass of {\tt Animal} must implement the {\tt speak()} method.
+
+To get a better appreciation of the flexibility and extensibility of
+this design, it might be helpful to consider an alternative design that
+does not use polymorphism. One such alternative would be to define each
+{\tt Animal} subclass with its own speaking method. A {\tt Cow} would
+have a {\tt moo()} method; a {\tt Cat} would have a {\tt meow()} method;
+and so forth.  Given this design, we could use a {\tt switch}
+statement to select the appropriate method call. For example, consider
+the following method definition:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String talk(Animal a) {
+  if (a instanceof Cow)
+     return "I am a " + kind + " and I go " + a.moo();
+  else if (a instanceof Cat)
+     return "I am a " + kind + " and I go " + a.meow();
+  else
+    return "I don't know what I am";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, we introduce the {\tt instanceof} operator,
+which is a built-in boolean operator. It returns true if the object on
+its left-hand side is an instance of the class on its right-hand side.
+
+The {\tt talk()} method would produce more or less the same result. If
+you call {\tt talk(new Cow())}, it will return ``I am a cow and I go
+moo.''  However, with this design, it is not possible to extend the
+{\tt Animal} hierarchy without rewriting and recompiling the {\tt
+talk()} method.
+
+Thus, one of the chief advantages of using polymorphism is the great
+\marginnote{Extensibility}
+flexibility and extensibility it affords. We can define new {\tt Animal}
+subclasses and define their {\tt speak()} methods. These will
+all work with the {\tt toString()} method in the {\tt Animal} class,
+without any need to revise that method.
+
+Another advantage of using abstract methods is the control that it
+gives the designer of the {\tt Animal} hierarchy.  By making it an
+abstract class with an abstract {\tt speak()} method, any non-abstract
+{\tt Animal} subclass must implement the {\tt speak()} method. This
+lends a great degree of predictability to the subclasses in the
+hierarchy, making it easier to use them in applications.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Following the examples in this section, define an {\tt Animal} subclass
+named {\tt Pig}, which goes ``oink.''
+
+\item  Show how you would have to modify the {\tt talk()} method
+defined above to incorporate the {\tt Pig} class. 
+
+\end{SSTUDY}
+
+\subsection{Implementing a Java Interface}
+
+A third form of polymorphism results through the implementation of
+Java {\bf interfaces}, which are like classes but contain only
+abstract method definitions and constants ({\tt final}) variables.  An
+\marginnote{Java interface}
+interface cannot contain instance variables.  We have already seen
+interfaces, such as when we encountered the {\tt ActionListener}
+interface in Chapter~4.
+
+The designer of an interface specifies what methods will be implemented
+by classes that {\em implement} the interface. This is similar to what
+we did when we implemented the abstract {\tt speak()} method in the
+animal example. The difference between implementing a method from an
+interface and from an abstract superclass is that a subclass {\em
+extends} an abstract superclass but it {\em implements} an interface.
+
+Java's interface mechanism gives us another way to design polymorphic
+methods. To see how this works, we will provide an alternative design
+for our animal hierarchy. Rather than defining {\tt speak()} as an
+abstract method within the {\tt Animal} superclass, we will define it
+as an abstract method in the {\tt Speakable} interface
+(Fig.~\ref{fig-speakable}).
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public interface Speakable {
+    public String speak();
+}
+public class Animal {
+    protected String kind; // Cow, pig, cat, etc.
+    public Animal()  {  }
+    public String toString() {
+        return "I am a " + kind + " and I go " + 
+               ((Speakable)this).speak();
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Defining and using the  {\tt Speakable} interface.
+\label{fig-speakable}
+\label{pg-fig-speakable}}
+\end{figure}
+
+Note the differences between this definition of {\tt Animal} and the
+previous definition. This version no longer contains the abstract {\tt
+speak()} method. Therefore, the class itself is not an abstract class.
+However, because the {\tt speak()} method is not declared in this
+class, we cannot call the {\tt speak()} method in the {\tt toString()}
+method, unless we cast this object into a {\tt Speakable} object.
+
+We encountered the cast operation in Chapter~5, where we used it with
+\marginnote{Cast operation}
+primitive types such as {\tt (int)} and {\tt (char)}.  Here, we use it
+to specify the actual type of some object.  In this {\tt toString()}
+example, {\tt this} object is some type of {\tt Animal} subclass, such
+as a {\tt Cat}. The cast operation, {\tt (Speakable)}, changes the
+object's actual type to {\tt Speakable}, which syntactically allows
+its {\tt speak()} method to be called.
+
+Given these definitions, {\tt Animal} subclasses will now {\tt extend}
+the {\tt Animal} class and {\tt implement} the {\tt Speakable}
+interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Cat extends Animal implements Speakable {
+    public Cat() { kind = "cat"; }
+    public String speak() { return "meow";  }
+}
+public class Cow extends Animal implements Speakable {
+    public Cow() { kind = "cow";  }
+    public String speak() { return "moo";  }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To implement a Java interface, one must provide a method
+implementation for each of the abstract methods in the interface. In
+this case there is only one abstract method, the {\tt speak()} method.
+
+Note, again, the expression from the {\tt Animal.toString()} class 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+((Speakable)this).speak();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent which casts {\tt this} object into a {\tt Speakable} object. 
+The reason that this cast is required is because an {\tt Animal} does
+not necessarily have a {\tt speak()} method. A {\tt speak()} method is
+not defined in the {\tt Animal} class. However, the {\tt Cat} subclass
+of {\tt Animal} does implement a {\tt sleep()} method as part of its
+{\tt Speakable} interface.  Therefore, in order to invoke {\tt speak()}
+on an object from one of the {\tt Animal} subclasses, the object must
+actually be a {\tt Speakable} and we must perform the cast as shown here.
+
+This illustrates, by the way, that a {\tt Cat}, by virtue of extending
+\marginnote{Interface inheritance}
+the {\tt Animal} class and implementing the {\tt Speakable} interface,
+is both an {\tt Animal} and a {\tt Speakable}.  In general, a class
+that implements an interface, has that interface as one of its types.
+Interface implementation is itself a form of inheritance. A Java class
+can be a direct subclass of only one superclass. But it can implement
+any number of interfaces. 
+
+Given these definitions of the {\tt Cow} and {\tt Cat} subclasses, the
+following code segment will produce the same results as in the previous
+section.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Animal animal = new Cow();
+ System.out.println(animal.toString()); // A cow goes moo
+ animal = new Cat();
+ System.out.println(animal.toString()); // A cat goes meow
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Although the design is different, both approaches produce the
+same result. We will put off, for now, the question of how one decides
+whether to use an abstract method or a Java interface. We will get to this
+question when we design the {\tt TwoPlayerGame} class hierarchy later in
+this chapter.
+
+\section{Example: A Toggle Button}
+\label{sec-toggle}
+\label{pg-sec-toggle}
+
+\noindent The ability to extend an existing class is one of the most
+\marginnote{Reusing code} powerful features of object-oriented
+programming.  It allows objects to reuse code defined in the
+superclasses without having to redefine or recompile the code.  As we
+saw in Chapter~4, a programmer-defined applet, such as {\tt
+GreeterApplet}, uses the {\tt public} methods defined for {\tt
+JApplet}s, {\tt JPanel}s, {\tt Container}s, {\tt Component}s, and {\tt
+Object}s simply because it is a subclass of {\tt JApplet}
+(Fig.~4.11).  By the same token, it can use all of the {\tt public}
+and {\tt protected} instance variables and constants defined in these
+classes by simply referring to them in its own code.
+
+In this section, we present an example of how inheritance can be used
+to extend and customize the functionality of a Java library class. As
+we saw in Chapter~4, a {\tt JButton} is a GUI component that can be
+associated with a particular action by implementing the {\tt
+ActionListener} interface.  For example, we used a {\tt JButton} in
+the {\tt GreeterApplet} to generate a greeting to the user.
+
+In this section, we will design a more sophisticated button. 
+We will call it a  {\tt ToggleButton} and define it as a {\tt JButton} subclass that
+\marginnote{Problem decomposition}
+toggles its label whenever it is clicked, in addition to
+carrying out some kind of associated action.
+
+A light switch behaves similarly to a {\tt ToggleButton} in this
+sense.  Whenever you flick a light switch, it changes its label from
+``on'' to ``off,'' but it also turns the lights on or off.  Although
+different switches are associated with different lights, every light
+switch toggles its label each time it is clicked.  So let's design a
+{\tt ToggleButton} that behaves like a light switch.
+
+The main idea in our design is that a {\tt ToggleButton} is a
+{\tt JButton} that has two labels. By default, a {\tt JButton} has just
+a single label. Thus, because of the type of behavior we want to elicit,
+we need to define {\tt ToggleButton} as a subclass of
+{\tt JButton} with two {\tt String} variables that will serve as its
+alternate labels (Fig.~8.8). Note that we give it a constructor
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr08/togglebutton.eps}{A {\tt ToggleButton} {\it isa} {\tt JButton} with two labels.
+\label{fig-toggleuml}
+\label{pg-fig-toggleuml}}
+%\end{graphic}
+%\end{figure}
+method that will allow us to provide the initial value of its two
+label strings. Another important feature of a {\tt ToggleButton} is
+that it should act as its own {\tt ActionListener} so that it can
+toggle its label whenever it is clicked. Therefore, it must also
+implement the {\tt ActionListener} interface.  
+
+The complete definition of {\tt ToggleButton} is given in
+Figure~\ref{fig-togglebutton}. Note how we have defined its
+constructor. Recall that the {\tt JButton} class has a constructor
+method with the signature {\tt JButton(String)}, which allows us to
+set a {\tt JButton}'s label during instantiation.  We need to do the
+same thing with one of {\tt ToggleButton}'s two labels.  That is, when
+we create a {\tt ToggleButton}, we want to initialize its label to one
+of its two alternative labels (here, ``On'' or ``Off'').
+
+\begin{figure}[b!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ToggleButton extends JButton 
+                        implements ActionListener {   
+  private String label1;   // Toggle between two labels
+  private String label2;
+   
+  public ToggleButton(String l1, String l2) {// Constructor
+    super(l1);          // Use l1 as the default label
+    label1 = l1; 
+    label2 = l2;
+    addActionListener(this);
+  } 
+  public void actionPerformed(ActionEvent e) {
+    String tempS = label1;  // Swap the labels
+    label1 = label2;
+    label2 = tempS;
+    setText(label1);
+  } // actionPerformed()
+} // ToggleButton
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt ToggleButton} class.
+\label{fig-togglebutton}
+\label{pg-fig-togglebutton}}
+\end{figure}
+
+Because constructor methods are {\it not} inherited by the subclass,
+we want to invoke the superclass's constructor in the {\tt ToggleButton()}
+constructor using the {\tt super} keyword. This must be done as the
+first statement in the {\tt ToggleButton()} constructor.
+By passing {\tt l1} to the super constructor we are making the first string
+that the user gives us the default label for our {\tt ToggleButton}.
+This will be the label that appears on the button when it is first
+displayed in the applet.
+
+Notice also in the {\tt ToggleButton()} constructor that the {\tt
+ToggleButton} is designated as its own {\tt ActionListener}, so
+whenever it is clicked, its
+%\begin{marginalnote}\it Swapping algorithm\end{marginalnote}
+\marginnote{Swapping algorithm} 
+{\tt actionPerformed()} method will be invoked. The {\tt
+actionPerformed()} method exchanges the button's current label for its
+other label.  Swapping two values in memory is a standard programming
+practice used in lots of different algorithms.  In order to do it
+properly, you must use a third variable to temporarily store one of
+the two values you are swapping. The comments in {\tt
+actionPerformed()} provide a step-by-step trace of the values of the
+three variables involved.
+
+\JavaTIP{PROGRAMMING TIP}{Swapping Values.}{It is necessary to
+use a temporary variable whenever you are swapping two values,
+of any type, in memory.  The temporary variable holds the
+first value while you overwrite it with the second value.}
+
+\noindent The first statement in {\tt actionPerformed()} creates a temporary
+%\begin{marginalnote}\it Swapping values requires a temporary variable\end{marginalnote}
+\marginnote{Swapping values requires a temporary variable}
+{\tt String} variable named {\tt tempS} and assigns it the value of
+{\tt label1}. Recall that \mbox{\tt label1} was the button's initial
+label.  To make this example easier to follow, let's suppose that
+initially {\tt label1} is ``off'' and that {\tt label2} is ``on.'' 
+After line 1 is executed, both {\tt tempS} and {\tt label1}
+contain ``off'' as their value.  Line 2 then assigns {\tt label2}'s
+value to {\tt label1}.  Now both {\tt label1} and {\tt label2}
+store ``on'' as their values.   In line 3 we assign {\tt tempS}'s value
+to {\tt label2}. Now {\tt label2} stores ``off'' and {\tt label1}
+stores ``on,'' and we have effectively swapped their original values.
+
+The next time we invoke {\tt actionPerformed()}, {\tt label1}
+and {\tt label2} will have their opposite values initially.  
+Swapping them a second time will assign them their initial values
+again.  We can continue toggling their values in this way
+indefinitely.  To complete the method, the last statement in
+{\tt actionPerformed()} assigns {\tt label1}'s current value as the new
+{\tt ToggleButton}'s label.
+
+Now that we have seen that a {\tt ToggleButton} toggles its label
+between two values, what about performing an associated action?
+\marginnote{Multiple event handlers} To do this, we need a design
+involving multiple event handlers, one to handle the toggling of the
+button's label and the other to handle its associated action
+(Fig~\ref{fig-p204}).
+\begin{figure}[h!]
+\figa{chptr04/p204.eps}{The {\tt ToggleButton} has two {\tt
+ActionListener}s.  When the button is clicked, the JVM will call each
+listener's {\tt actionPerformed()} method, and each listener will take
+its own independent action.
+\label{fig-p204}
+\label{pg-fig-p204}}
+\end{figure}
+In this design, {\tt lightSwitch} has two listeners that respond to
+its events: the {\tt lightSwitch} itself, as a result of the {\tt
+actionPerformed()} method in its class, and the {\tt ToggleApplet}, as
+a result of {\tt actionPerformed()} method in this class.
+
+The implementation of this design is given by {\tt ToggleApplet}, an
+applet that uses a {\tt ToggleButton} (Fig.~\ref{fig-toggletest}).
+Like the applet we designed in Chapter~4, this applet extends the {\tt
+JApplet} class and implements the {\tt ActionListener} interface.  In
+this example we use a {\tt ToggleButton} to simulate a light switch.
+Note that we assign the applet itself as an {\tt ActionListener} for
+the {\tt lightSwitch}, so that
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.applet.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ToggleApplet extends JApplet 
+                            implements ActionListener {
+  private ToggleButton lightSwitch;  
+
+  public void init() {
+    lightSwitch = new ToggleButton ("off","on");
+    getContentPane().add(lightSwitch);
+    lightSwitch.addActionListener(this);
+  } // init()
+
+  public void actionPerformed(ActionEvent e)  {
+    showStatus("The light is " + lightSwitch.getText());
+  } // actionPerformed()
+} // ToggleApplet
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt ToggleApplet} class.
+\label{fig-toggletest}
+\label{pg-fig-toggletest}}
+\end{figure}
+
+When {\tt lightSwitch} is clicked, the applet displays the message,
+``The light is on,'' or ``The light is off,'' in the applet's status
+bar (Fig.~8.12). This is a somewhat trivial action but it illustrates
+that a {\tt ToggleButton} both toggles its own label {\it and} carries
+out some associated action.
+
+%\begin{figure}
+\begin{figure}[h!]
+\figaleft{chptr04/4f23.eps}{When clicked, {\tt ToggleApplet}
+button causes ``The light is on'' or ``The light is off'' to appear in
+the applet's status bar.
+\label{fig-toggledump}
+\label{pg-fig-toggledump}}
+\end{figure}
+%\end{figure}
+
+The {\tt ToggleButton} design satisfies several key design
+principles of object-oriented\index{object-oriented design}
+programming.  First and foremost, it uses inheritance to extend the
+functionality of the predefined {\tt JButton} class---the
+\marginnote{Object oriented design  principles}
+extensibility principle. Secondly, it encapsulates a {\tt
+ToggleButton}'s essential behavior within the {\tt ToggleButton} class
+itself---the modularity principle. Finally, it hides the mechanism by
+which a {\tt ToggleButton} manages its labels---the information-hiding
+principle.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Inheritance.}{Inheritance enables you to
+specialize an object's behavior.  A {\tt ToggleButton} does everything
+that a {\tt JButton} does, plus it can toggle its own label.}
+
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Write a code segment (not a whole method) to swap
+two boolean variables, {\tt b1} and {\tt b2}.
+
+\item  Suppose you are designing an applet that plays a
+card game, and you want a single button that can
+be used both to deal the cards and to collect the cards.
+Write a code segment that creates this type of button,
+adds it to the applet, and designates the applet as its
+{\tt ActionListener}.
+
+\end{SSTUDY}
+
+\pagebreak
+\section*{{\color{cyan}Special Topic:} Historical Cryptography}
+
+{\bf Cryptography}, the study of secret writing,
+has had a long and interesting history.   Modern-day cryptographic
+techniques employ sophisticated mathematics to
+{\it encrypt\index{encryption}} and {\it decrypt} messages.  Today's most
+\mbox{secure} encryption schemes are safe from attack by even the most
+powerful computers.   Given our widespread dependence on computers and
+the Internet, secure encryption has become an important application
+area within computer science.  While the cryptographic techniques used up
+through World War II are too simple to serve as the basis for modern-day encryption 
+schemes, they can provide an interesting and accessible
+introduction to this important area of computer science.\\
+\hspace*{1pc}One of the earliest and simplest {\it ciphers\index{cipher}} is the
+Caesar\index{Caesar cipher} cipher, used by Julius Caesar during the
+Gallic wars.  According to this scheme, letters of the alphabet are
+{\it shifted} by three letters, wrapping around at the end of the
+alphabet:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+PlainText:     abcdefghijklmnopqrstuvwxyz
+CaesarShifted: defghijklmnopqrstuvwxyzabc
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When encrypting a message, you take each letter
+of the message and replace it with its corresponding letter from the
+shifted alphabet.  To decrypt a secret message, you perform the
+operation in reverse---that is, you take the letter from the shifted
+alphabet and replace it with the corresponding letter from the
+{\bf plaintext} alphabet\index{plaintext alphabet}.  Thus, ``hello'' would be
+Caesar encrypted as ``khoor.''\\
+\hspace*{1pc}The Caesar cipher is a {\bf substitution cipher}\index{substitution cipher},
+because each letter in the plaintext message is replaced with
+a substitute letter from the {\bf ciphertext}
+alphabet\index{ciphertext alphabet}. A more general form of a
+substitution cipher uses a {\it keyword\index{keyword, cipher}} to
+create a ciphertext alphabet:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+PlainText:  abcdefghijklmnopqrstuvwxyz
+Ciphertext: xylophneabcdfgijkmqrstuvwz
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, the keyword ``xylophone,''
+(with the second {\it o} removed) is used to set up a substitution
+alphabet.  According to this cipher, the word ``hello'' would be encrypted
+as ``epddi.''  Substitution ciphers of this form are found frequently in
+cryptogram puzzles in the newspapers.\\
+\hspace*{1pc}Another type of cipher is known as a {\bf transposition
+cipher}.\index{transposition cipher} In this type of cipher, the
+letters in the original message are rearranged in some methodical way.
+A simple example would be if we reversed the letters in each word so
+that ``hello'' became ``olleh.'' 
+
+\section{Example: The Cipher Class Hierarchy}
+
+Suppose we wish to design a collection of cipher classes, including a
+Caesar cipher and a transposition cipher.  Because the basic
+operations used in all forms of encryption are the same, both the 
+\marginnote{Problem decomposition}
+{\tt Caesar} class and the {\tt Transpose} class will have methods to {\tt
+encrypt()} and {\tt decrypt()} messages, where each message is assumed
+to be a string of words separated by spaces.  These methods will take
+a {\tt String} of words and translate each word using the encoding
+method that is appropriate for that cipher.  Therefore, in addition to
+{\tt encrypt()} and {\tt decrypt()}, each cipher class will need
+polymorphic {\tt encode()} and {\tt decode()} methods, which take a
+single word and encode or decode it according to the rules of that
+particular cipher.
+
+From a design perspective the {\tt encrypt()} and {\tt decrypt()}
+methods will be the same for every class: They simply break the
+message into words and encode or decode each word.  However, the
+{\tt encode()} and {\tt decode()} methods will be different for each
+different cipher.  The {\tt Caesar.encode()} method should replace each
+letter of a word with its substitute, whereas the
+{\tt Transpose.encode()} method should rearrange the letters of the
+word.  Given these considerations, how should we design this set of
+classes?
+
+Because all of the various ciphers will have the same methods, it will
+\marginfig{chptr07/p380f1.eps}{A hierarchy of cipher classes.
+The {\tt Cipher} class implements operations common to all ciphers.
+The {\tt Caesar} and {\tt Transpose} classes implement functions
+unique to those kinds of ciphers.
+\label{fig-cipherhier}
+\label{pg-fig-cipherhier}}
+be helpful to define a common {\tt Cipher} superclass
+(Fig.~8.13).  {\tt Cipher} will encapsulate those
+features that the individual cipher classes have in common---the
+{\tt encrypt()}, {\tt decrypt()}, {\tt encode()}, and {\tt decode()}
+methods.
+
+Some of these methods can be implemented in the {\tt Cipher} class
+itself.  For example, the {\tt encrypt()} method should take a message
+in a {\tt String} parameter, encode each word in the message, and
+return a {\tt String} result.  The following method definition will
+work for any cipher:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+public String encrypt(String s) {
+  StringBuffer result = new StringBuffer("");          
+  StringTokenizer words = new StringTokenizer(s);// Tokenize
+  while (words.hasMoreTokens()) {        // Encode each word 
+    result.append(encode(words.nextToken()) + " "); 
+  }
+  return result.toString();        // Return result
+} // encrypt()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method creates a local {\tt StringBuffer} variable,
+{\tt result}, and uses {\tt StringTokenizer} to break the original
+{\tt String} into its component words.  It uses the {\tt encode()} method to
+encode the word, appending the result into {\tt result}. The result is
+converted back into a {\tt String} and returned as the encrypted
+translation of {\it s}, the original message.
+
+If we define {\tt encrypt()} in the superclass, it will be inherited
+%\begin{marginalnote}\it Inheritance\end{marginalnote}
+\marginnote{Inheritance}
+by all of {\tt Cipher}'s subclasses.  Thus, if we define {\tt Caesar}
+and {\tt Transpose} as
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Caesar extends Cipher { ... }
+public class Transpose extends Cipher { ... }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent instances of these classes will be able to use
+the {\tt encrypt()} method.
+
+On the other hand, the polymorphic {\tt encode()} method cannot be
+implemented
+%\begin{marginalnote}\it Abstract method\end{marginalnote}
+within {\tt Cipher}. This is because unlike the {\tt encrypt()}
+method, which is the same for every {\tt Cipher} subclass, the {\tt
+encode()} method will be different for every subclass.  However, by
+declaring the {\tt encode()} method as {\tt abstract}, we can leave
+its implementation up to the {\tt Cipher} subclasses. Thus, within the
+{\tt Cipher} class, we would define {\tt encode()} and {\tt decode()}
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+           // Abstract methods
+public abstract String encode(String word); 
+public abstract String decode(String word);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent These declarations within the {\tt Cipher} class tell the
+compiler that these methods will be implemented in {\tt Cipher}'s
+subclasses. By defining it as {\tt abstract}, {\tt encode()} can be
+used in the {\tt Cipher} class, as it is within the {\tt encrypt()}
+method.
+
+\subsection{Class Design: {\tt Caesar} }
+\noindent Figure~\ref{fig-cipher} provides the full definition of the
+{\tt Cipher} class.  The \mbox{\tt encode()} and {\tt decode()} methods are
+declared abstract.  They are intended to be implemented by
+{\tt Cipher}'s subclasses.
+
+%% proglist ch7/cipher/Cipher.java
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[35pc]
+\begin{lstlisting}
+import java.util.*;
+
+public abstract class Cipher {
+  public String encrypt(String s) {
+    StringBuffer result = new StringBuffer("");         // Use a StringBuffer
+    StringTokenizer words = new StringTokenizer(s); // Break s into its words
+    while (words.hasMoreTokens()) {                     // For each word in s
+      result.append(encode(words.nextToken()) + " ");   //  Encode it
+    }
+    return result.toString();                            // Return the result
+  } // encrypt()
+
+  public String decrypt(String s) {
+    StringBuffer result = new StringBuffer("");        // Use a StringBuffer
+    StringTokenizer words = new StringTokenizer(s);    // Break s into words
+    while (words.hasMoreTokens()) {                    // For each word in s
+      result.append(decode(words.nextToken()) + " ");  //  Decode it
+    }
+    return result.toString();                       // Return the decryption
+  } // decrypt()
+
+  public abstract String encode(String word);            // Abstract methods
+  public abstract String decode(String word);
+} // Cipher
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt abstract Cipher} class.
+\label{fig-cipher}
+\label{pg-fig-cipher}}
+\end{figure}
+
+
+Note again that {\tt encrypt()} and {\tt decrypt()}, which are
+implemented in \mbox{\tt Cipher}, invoke {\tt encode()} and {\tt
+decode()}, \marginnote{\raggedright encode() and decode() are
+polymorphic} respectively, which are declared in {\tt Cipher} but
+implemented in {\tt Cipher}'s subclasses.  Java's dynamic binding
+mechanism will take care of invoking the appropriate implementation of
+{\tt encode()} or {\tt decode()}, depending on what type of object is
+involved.  For example, if {\tt caesar} and {\tt transpose} are {\tt
+Caesar} and {\tt Transpose} objects, respectively, then the following
+calls to {\tt encrypt()} will cause their respective {\tt encode()}
+methods to be invoked:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+// Invokes caesar.encode()
+caesar.encrypt("hello world");     
+// Invokes transpose.encode()
+transpose.encrypt("hello world");  
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When {\tt caesar.encrypt()} is called, it will in turn
+invoke {\tt caesar.en\-code()}---that is, it will call the
+{\tt encode()} method implemented in the {\tt Caesar} class.  When
+{\tt transpose.encrypt()} is invoked, it will in turn invoke
+{\tt trans\-pose.encode()}. In this way, each object can perform the encoding
+algorithm appropriate for its type of 
+\marginnote{Method polymorphism}
+cipher.
+
+\subsection{Algorithm Design: Shifting Characters}
+\noindent The {\tt Caesar} class is defined as an extension of {\tt Cipher}
+(Fig.~\ref{fig-caesar}). The only methods implemented in {\tt Caesar}
+are {\tt encode()} and {\tt decode()}. The {\tt encode()} method takes
+a {\tt String} parameter and returns a {\tt String} result.  It takes
+each character of its parameter ({\tt word.charAt(k)}) and performs a
+Caesar shift on the character.  Note how the shift is done:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ch = (char)('a' + (ch -'a'+ 3) % 26);// Caesar shift
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Recall from Chapter~5 that {\tt char} data in Java are
+represented as 16-bit integers.  This enables us to manipulate
+characters as numbers.  Thus, to shift a character by 3, we simply add
+3 to its integer representation.
+
+%% proglist ch7/cipher/Caesar.java
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}[35pc]
+\begin{lstlisting}
+public class Caesar extends Cipher {
+  public String encode(String word) {
+    StringBuffer result = new StringBuffer(); // Initialize a string buffer
+    for (int k = 0; k < word.length(); k++) { // For each character in word
+      char ch = word.charAt(k);               //  Get the character
+      ch = (char)('a' + (ch -'a'+ 3) % 26);   //  Perform caesar shift
+      result.append(ch);                   //  Append it to new string
+    }
+    return result.toString();              // Return the result as a string
+  } // encode()
+
+  public String decode(String word) {
+    StringBuffer result = new StringBuffer(); // Initialize a string buffer
+    for (int k = 0; k < word.length(); k++) { // For each character in word
+    char ch = word.charAt(k);                 //  Get the character
+       ch = (char)('a' + (ch - 'a' + 23) % 26); //  Perform reverse shift
+       result.append(ch);                     //  Append it to new string
+    }
+    return result.toString();            // Return the result as a string
+  } // decode()
+} // Caesar
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Caesar} class.
+\label{fig-caesar}
+\label{pg-fig-caesar}}
+\end{figure}
+
+For example, suppose that the character ({\tt ch}) is {\it h}, which has
+%\begin{marginalnote}\it Character conversions\end{marginalnote}
+\marginnote{Character conversions}
+an ASCII code of 104 (see Table~5.13). We want to shift it
+by 3, giving {\it k}, which has a code of 107. In this case, we could
+simply add 3 to 104 to get the desired result.  However, suppose
+that {\tt ch} was the character {\it y}, which has an ASCII code of
+121. If we simply add 3 in this case, we get 124, a code that
+corresponds to the symbol ``|,'' which is not our desired result.
+Instead, we want the shift in this case to ``wrap around'' to the
+beginning of the alphabet, so that {\it y} gets shifted into {\it b}.
+In order to accomplish this we need to do some modular arithmetic.
+
+Let's suppose the 26 characters {\it a} to {\it z} were numbered 0 through 25,
+so that {\it a} corresponds to 0, {\it b} to 1, and so on up to {\it z} as 25.  If
+we take any number {\it N} and divide it (modulo 26), we would get a
+number between 0 and 25. Suppose, for example, {\it y} were numbered
+24. Shifting it by 3 would give us 27, and {\tt 27 \% 26} would
+give us 1, which corresponds to {\it b}. So, if the {\it a} to {\it z} were
+numbered 0 through 25, then we can shift any character within that
+range by using the following formula:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(ch + 3) % 26         // Shift by 3 with wraparound
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To map a character in the range {\it a} to {\it z} onto the
+integers 0 to 25, we can simply subtract {\it a} from it:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+'a' - 'a' = 0
+'b' - 'a' = 1
+'c' - 'a' = 2
+...
+'z' - 'a' = 25
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Finally, we simply map the numbers 0 through 25 back to the
+characters {\it a} to {\it z} to complete the shift operation:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(char)('a' + 0) = 'a'
+(char)('a' + 1) = 'b'
+(char)('a' + 2) = 'c'
+...
+(char)('a' + 25) = 'z'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note the use here of the cast operator {\tt (char)} to
+covert an integer into a {\tt char}.
+
+To summarize, we can shift any character by 3 if we map it into the
+%\begin{marginalnote}\it Modular arithmetic\end{marginalnote}
+range 0 to 25, then add 3 to it mod 26, then map that result back into
+\marginnote{Modular arithmetic}
+the~range {\it a} to {\it z}. Thus, shifting {\it y} would go as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+(char)('a' + (ch -'a'+ 3) % 26)   //  Perform Caesar shift
+(char)('a' + ('y' - 'a' +3) % 26) //   on 'y'
+(char)(97 + (121 - 97 + 3) % 26)      //  Map 'y' to 0..25
+(char)(97 + (27 % 26))     //  Shift by 3, wrapping around
+(char)(97 + 1)           //  Map result back to 'a' to 'z'
+(char)(98)                    //  Convert from int to char
+'b'
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent  Note that in {\tt decode()} a reverse
+Caesar shift is done by shifting by 23, which is $26-3$. If the original
+shift is 3, we can reverse that by shifting an additional 23. Together
+this gives a shift of 26, which will give us back our original string.
+
+\subsection{Class Design: {\tt Transpose} }
+\noindent The {\tt Transpose} class (Fig.~\ref{fig-transpose}) is
+structured the same as the {\tt Caesar} class.  It implements both the
+{\tt encode()} and {\tt decode()} methods.  The key element here is
+the transpose operation, which in this case is a simple reversal of
+the letters in the word.  Thus, ``hello'' becomes ``olleh''.  This is
+very easy to do when using the {\tt StringBuffer.reverse()} method.  The
+{\tt decode()} method is even simpler, because all you need to do in
+this case is call {\tt encode()}. Reversing the reverse of a string
+gives you back the original string.
+
+%% proglist ch7/cipher/Transpose.java
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Transpose extends Cipher {
+  // encode() reverses and returns a word
+  public String encode(String word) {
+    StringBuffer result = new StringBuffer(word);
+    return result.reverse().toString(); 
+  } // encode()
+
+  public String decode(String word) {
+    return encode(word);         // Just call encode
+  } // decode
+} // Transpose
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Transpose} class\index{Transpose class}.
+\label{fig-transpose}
+\label{pg-fig-transpose}}
+\end{figure}
+
+\subsection{Testing and Debugging}
+\noindent Figure~\ref{fig-testcipher} provides a simple test program for testing
+{\tt Cipher} and its subclasses.  It creates a {\tt Caesar} cipher and
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[35pc]
+\begin{lstlisting}
+public class TestEncrypt {
+  public static void main(String argv[]) {
+    Caesar caesar = new Caesar();
+    String plain = "this is the secret message";   // Here's the message
+    String secret = caesar.encrypt(plain);         // Encrypt the message
+    System.out.println(" ********* Caesar Cipher Encryption *********");
+    System.out.println("PlainText: " + plain);    // Display the results
+    System.out.println("Encrypted: " + secret);
+    System.out.println("Decrypted: " + caesar.decrypt(secret));// Decrypt
+
+    Transpose transpose = new Transpose();
+    secret = transpose.encrypt(plain);
+    System.out.println("\n ********* Transpose Cipher Encryption *********");
+    System.out.println("PlainText: " + plain);    // Display the results
+    System.out.println("Encrypted: " + secret);
+    System.out.println("Decrypted: " + transpose.decrypt(secret));// Decrypt
+  } // main()
+} // end TestEncrypt
+
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt TestEncrypt} class\index{TestEncrypt class}.
+\label{fig-testcipher}
+\label{pg-fig-testcipher}}
+\end{figure}
+a {\tt Transpose} cipher and then encrypts and decrypts the same
+sentence using each cipher.  If you run this program, it will produce
+the following output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+     ********* Caesar Cipher Encryption *********
+    PlainText: this is the secret message
+    Encrypted: wklv lv wkh vhfuhw phvvdjh
+    Decrypted: this is the secret message
+
+     ********* Transpose Cipher Encryption *********
+    PlainText: this is the secret message
+    Encrypted: siht si eht terces egassem
+    Decrypted: this is the secret message
+\end{lstlisting}
+\end{jjjlisting}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Modify the {\tt Caesar} class so that
+it will allow various sized shifts to be used.  ({\it Hint}: Use an
+instance variable to represent the shift.)
+
+\item Modify {\tt Transpose.encode()} so that it uses a rotation
+instead of a reversal.  That is, a word like ``hello'' should be
+encoded as ``ohell'' with a rotation of one character.
+\end{SSTUDY}
+
+\section{Case Study: A Two Player Game Hierarchy}
+
+In this section we will redesign our {\tt OneRowNim} game to fit
+within a hierarchy of classes of two-player games, which are games
+that involve two players.  Many games that this characteristic:
+checkers, chess, tic-tac-toe, guessing games, and so forth. However,
+there are also many games that involve just 1 player: blackjack,
+solitaire, and others. There are also games that involve two or more
+players, such as many card games.  Thus, our redesign of {\tt
+OneRowNim} as part of a two-player game hierarchy will not be our
+last effort to design a hierarchy of game-playing classes. We will
+certainly re-design things as we learn new Java language constructs
+and as we try to extend our game library to other kinds of games.
+
+This case study will illustrate how we can apply inheritance and
+polymorphism, as well as other object-oriented design principles.  The
+justification for revising {\tt OneRowNim} at this point is to make it
+easier to design and develop other two-player games.  As we have seen,
+one characteristic of class hierarchies is that more general
+attributes and methods are defined in top-level classes. As one
+proceeds down the hierarchy, the methods and attributes become more
+specialized.  Creating a subclass is a matter of specializing a
+given class.
+
+\subsection{Design Goals}
+
+One of our design goals is to revise the {\tt OneRowNim} game so that
+it fits into a hierarchy of two-player games.  One way to do this is
+to generalize the {\tt OneRowNim} game by creating a superclass that
+contains those attributes and methods that are common to all
+two-player games.  The superclass will define the most general and
+\marginnote{Generic superclass}
+generic elements of two-player games.  All two-player games, including
+{\tt OneRowNim}, will be defined as subclasses of this top-level
+superclass and will inherit and possibly override its public and
+protected variables and methods. Also, our top-level class will
+contain certain abstract methods, whose implementations will be given
+in {\tt OneRowNim} and other subclasses.
+
+A second goal is to design a class hierarchy that makes it possible
+for computers to play the game, as well as human users. Thus, for a
+given two-player game, it should be possible for two humans to play
+each other, or for two computers to play each other, or for a human
+to play against a computer.  This design goal will require that our
+design exhibit a certain amount of flexibility.  As we shall see, this
+is a situation in which Java interfaces will come in handy.
+
+Another important goal is to design a two-player game hierarchy that
+can easily be used with a variety of different user interfaces,
+including command-line interfaces and GUIs.  To handle this feature,
+we will develop Java interfaces to serve as interfaces
+between our two-player games and various user interfaces.
+
+\subsection{Designing the {\tt TwoPlayerGame} Class}
+
+To begin revising the design of the {\tt OneRowNim} game, we first
+need to design a top-level class, which we will call the {\tt
+TwoPlayerGame} class.  What variables and methods belong in this
+class?  One way to answer this question is to generalize our current
+version of {\tt OneRowNim} by moving any variables and methods that
+apply to all two-player games up to the {\tt TwoPlayerGame} class.
+All subclasses of {\tt TwoPlayerGame}---which includes the {\tt
+OneRowNim} class---would inherit these elements.  Figure~8.18 shows
+the current design of {\tt OneRowNim}.
+\marginfig{chptr08/onerownim.eps}{The current {\tt OneRowNim}
+class.
+\label{fig-onerownim}
+\label{pg-fig-onerownim}}
+
+What variables and methods should we move up to the {\tt
+TwoPlayer\-Game} class?  Clearly, the class constants, {\tt PLAYER\_ONE}
+and {\tt PLAYER\_TWO}, apply to all two-player games. These
+should be moved up.  On the other hand, the {\tt MAX\_PICKUP} and {\tt
+MAX\_STICKS} constants apply just to the {\tt OneRowNim} game. They
+should remain in the {\tt OneRowNim} class.
+
+The {\tt nSticks} instance variable is a variable that only applies to
+the {\tt OneRowNim} game, but not to other two-player games. It should
+stay in the {\tt OneRowNim} class. On the other hand, the {\tt
+onePlaysNext} variable applies to all two-player games, so we will
+move it up to the {\tt TwoPlayerGame} class.
+
+Because constructors are not inherited, all of the constructor methods
+\marginnote{Constructors are not inherited}
+will remain in the {\tt OneRowNim} class. The instance methods, {\tt
+takeSticks()} and {\tt getSticks()}, are particular to {\tt
+OneRowNim}, so they should remain there. However, the other methods,
+{\tt getPlayer()}, {\tt gameOver()}, {\tt getWinner()}, and {\tt
+reportGameState()}, are methods that would be useful to all two-player
+games. Therefore these methods should be moved up to the superclass.
+Of course, while these methods can be defined in the superclass, some
+of the methods can only be implemented in subclasses.  For example,
+the {\tt reportGameState()} method reports the current state of the
+game, so it has to be implemented in {\tt OneRowNim}. Similarly, the
+{\tt getWinner()} method defines how the winner of the game is
+determined, a definition that can only occur in the subclass. Every
+two-player game needs methods such as these. Therefore, we will define
+these methods as abstract methods in the superclass.  The intention is
+that {\tt TwoPlayerGame} subclasses will provide game-specific
+implementations for these methods.
+
+Given these considerations, we come up with the design shown in
+Figure~\ref{fig-twoplayergame}.  The design shown in this figure
+is much more complex than designs we have used in earlier chapters.
+However, the complexity comes from combining ideas already
+discussed in previous sections of this chapter, so don't be put
+off by it.
+
+\begin{figure}[h!]
+\figaleft{chptr08/twoplayergame.eps}{{\tt TwoPlayerGame} is the
+superclass for {\tt OneRowNim} and other two player games.
+\label{fig-twoplayergame}
+\label{pg-fig-twoplayergame}}
+\end{figure}
+
+To begin with, notice that we have introduced two Java interfaces into
+our design in addition to the {\tt TwoPlayerGame} superclass.  As we
+will show, these interfaces lead to a more flexible design and one
+that can easily be extended to incorporate new two-player games. Let's
+take each element of this design separately.
+
+\subsection{The {\tt TwoPlayerGame} Superclass}
+
+As we have stated, the purpose of the {\tt TwoPlayerGame} class is to
+serve as the superclass for all two-player games. Therefore, it should
+define those variables and methods that are shared by
+two-player games. 
+
+The {\tt PLAYER\_ONE}, {\tt PLAYER\_TWO}, and {\tt onePlaysNext}
+variables and the {\tt getPlayer()}, {\tt setPlayer()}, and {\tt
+changePlayer()} methods have been moved up from the {\tt OneRowNim}
+class. Clearly, these variables and methods apply to all two-player
+games.  Note that we have also added three new variables:  {\tt
+nComputers}, {\tt computer1}, {\tt computer2} and their corresponding
+methods, {\tt getNComputers()} and {\tt addComputerPlayer()}.  We will
+use these elements to give our games the ability to be played by
+computer programs. Because we want all of our two-player games to have
+this capability, we define these variables and methods in the
+superclass rather than in {\tt OneRowNim} and subclasses of {\tt
+TwoPlayerGame}.
+
+Note that the {\tt computer1} and {\tt computer2} variables are declared
+to be of type {\tt IPlayer}.  {\tt IPlayer} is an interface, which 
+contains a single method declaration, the {\tt makeAMove()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public interface IPlayer {
+     public String makeAMove(String prompt);
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Why do we use an interface here rather than some type of
+game-playing object?  This is a good design question.  Using an
+interface here makes our design more flexible and extensible because
+it frees us from having to know the names of the classes that
+implement the {\tt makeAMove()} method.  The variables {\tt computer1}
+and {\tt computer2} will be assigned objects that implement {\tt
+IPlayer} via the {\tt addComputerPlayer()} method.
+
+The algorithms used in the various implementations of {\tt
+\marginnote{Game-dependent algorithms}
+makeAMove()} are {\em game-dependent}---they depend on the particular
+game being played.  It would be impossible to define a game-playing
+object that would suffice for all two-player games. Instead, if we
+want an object that plays {\tt OneRowNim}, we would define a {\tt
+OneRowNimPlayer} and have it implement the {\tt IPlayer}
+interface. Similarly, if we want an object that plays checkers, we
+would define a {\tt CheckersPlayer} and have it implement the {\tt
+IPlayer} interface.  By using an interface here, our {\tt
+TwoPlayerGame} hierarchy can deal with a wide range of
+\marginnote{The {\tt IPlayer} interface}
+differently named objects that play games, as long as they implement
+the {\tt IPlayer} interface.  So, using the {\tt IPlayer} interface
+adds flexibility to our game hierarchy and makes it easier to extend
+it to new, yet undefined, classes.  We will discuss the details of how
+to design a game player in one of the following sections.
+
+Turning now to the methods defined in {\tt TwoPlayerGame}, we have
+already seen implementations of {\tt getPlayer()}, {\tt setPlayer()},
+and {\tt changePlayer()} in the {\tt OneRowNim} class.  We will just
+move those implementations up to the superclass. The {\tt
+getNComputers()} method is the accessor method for the {\tt
+nComputers} variable, and its implementation is routine.  The {\tt
+addComputerPlayer()} method adds a computer player to the
+game. Its implementation is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void addComputerPlayer(IPlayer player) {
+   if (nComputers == 0)
+      computer2 = player;
+   else if (nComputers == 1)
+      computer1 = player;
+   else 
+      return; // No more than 2 players
+   ++nComputers;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As we noted earlier, the classes that play the various
+{\tt TwoPlayerGame}s must implement the {\tt IPlayer} interface.
+The parameter for this method is of type {\tt IPlayer}.  The
+algorithm we use checks the current value of {\tt nComputers}.
+If it is 0, which means that this is the first {\tt IPlayer}
+added to the game, the {\tt player} is assigned to {\tt computer2}.
+This allows the human user to be associated with {\tt PLAYER\-ONE}, if 
+this is a game between a computer and a human user.
+
+If {\tt nComputers} equals 1, which means that we are adding a second
+{\tt IPlayer} to the game, we assign that {\tt player} to {\tt
+computer1}.  In either of these cases, we increment {\tt nComputers}.
+Note what happens if {\tt nComputers} is neither 1 nor 2. In that
+case, we simply return without adding the {\tt IPlayer} to the game
+and without incrementing {\tt nComputers}. This, in effect, limits the
+number of {\tt IPlayer}s to two.  (A more sophisticated design would
+throw an exception to report an error. but we will leave that for
+a subsequent chapter.)
+
+The {\tt addComputerPlayer()} method is used to initialize a 
+game after it is first created. If this method is not called,
+the default assumption is that {\tt nComputers} equals zero
+and that {\tt computer1} and {\tt computer2} are both {\tt null}.
+Here's an example of how it could be used:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ OneRowNim nim = new OneRowNim(11); // 11 sticks
+ nim.add(new NimPlayer(nim));       // 2 computer players
+ nim.add(new NimPlayerBad(nim));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the {\tt NimPlayer()} constructor takes a
+reference to the game as its argument.  Clearly, our design should not
+assume that the names of the {\tt IPlayer} objects would be known to
+the {\tt TwoPlayerGame} superclass.  This method allows the objects to
+be passed in at run time.  We will discuss the details of {\tt
+NimPlayerBad} in a subsequent section.
+
+The {\tt getRules()} method is a new method whose purpose is to return
+\marginnote{Overriding a method}
+a string that describes the rules of the particular game. This method
+is implemented in the {\tt TwoPlayerGame} class with the intention
+that it will be overridden in the various subclasses. For example, its
+implementation in {\tt TwoPlayerGame} is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public String getRules() {
+     return "The rules of this game are: ";
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent and its redefinition in {\tt OneRowNim} is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String getRules() {
+  return "\n*** The Rules of One Row Nim ***\n" +
+  "(1) A number of sticks between 7 and " + MAX_STICKS + 
+          " is chosen.\n" + 
+  "(2) Two players alternate making moves.\n" + 
+  "(3) A move consists of subtracting between 1 and\n\t" + 
+  MAX_PICKUP + 
+  " sticks from the current number of sticks.\n" + 
+  "(4) A player who cannot leave a positive\n\t" + 
+  " number of sticks for the other player loses.\n";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The idea is that each {\tt TwoPlayerGame} subclass will take
+responsibility for specifying its own set of rules in a form that can
+be displayed to the user.  
+
+You might recognize that defining {\tt getRules()} in the superclass
+and allowing it to be overridden in the subclasses is a form of
+\marginnote{Polymorphism}
+polymorphism. It follows the design of the {\tt toString()} method,
+which we discussed earlier.  This design will allow us to use code
+that takes the following form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  TwoPlayerGame game = new OneRowNim();
+  System.out.println(game.getRules());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example the call to {\tt getRules()} is polymorphic.
+The dynamic binding mechanism is used to invoke the {\tt getRules()}
+method that is defined in the {\tt OneRowNim} class.
+
+The remaining methods in {\tt TwoPlayerGame} are defined abstractly.
+The {\tt gameOver()} and {\tt getWinner()} methods are both methods
+that are {\em game dependent}. That is, the details of their
+implementations depend on the particular {\tt TwoPlayerGame} subclass
+in which they are implemented.
+
+This is good example of how abstract methods should be used in
+designing a class hierarchy. We give abstract definitions in the
+superclass and leave the detailed implementations up to the individual
+subclasses.  This allows the different subclasses to tailor the
+implementations to their particular needs, while allowing all
+subclasses to share a common signature for these tasks.  This
+allows us to use polymorphism to create flexible, extensible class
+hierarchies.
+
+Figure~\ref{fig-twoplayercode} shows the complete implementation of
+the abstract {\tt TwoPlayerGame} class. We have already discussed the
+most important details of its implementation.  
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Abstract Methods.}{Abstract methods allow
+you to give general definitions in the superclass and to leave the
+implementation details to the different subclasses.}
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract class TwoPlayerGame {   
+  public static final int PLAYER_ONE = 1;
+  public static final int PLAYER_TWO = 2;
+
+  protected boolean onePlaysNext = true;
+  protected int nComputers = 0;     // How many computers
+                                // Computers are IPlayers
+  protected IPlayer computer1, computer2; 
+ 
+  public void setPlayer(int starter) {   
+    if (starter == PLAYER_TWO)
+      onePlaysNext = false;
+    else onePlaysNext = true;
+  } //setPlayer()
+  public int getPlayer() {   
+    if (onePlaysNext) 
+      return PLAYER_ONE;
+    else return PLAYER_TWO;
+  } //getPlayer()
+  public void changePlayer() {   
+    onePlaysNext = !onePlaysNext;
+  } //changePlayer()
+  public int getNComputers() {
+    return nComputers;
+  }
+  public String getRules() {
+    return "The rules of this game are: ";
+  }
+  public void addComputerPlayer(IPlayer player) {
+    if (nComputers == 0)
+      computer2 = player;
+    else if (nComputers == 1)
+      computer1 = player;
+    else 
+      return;  // No more than 2 players
+    ++nComputers;
+  }
+    public abstract boolean gameOver();// Abstract Methods
+    public abstract String getWinner();
+} //TwoPlayerGame
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt TwoPlayerGame} class
+\label{fig-twoplayercode}
+\label{pg-fig-twoplayercode}}
+\end{figure}
+
+
+\subsection{The {\tt CLUIPlayableGame} Interface}
+
+Let's turn now to the two interfaces shown in
+Figure~\ref{fig-twoplayergame}.  Taken together, the purpose of these
+interfaces is to create a connection between any two-player game and a
+command-line user interface (CLUI).  The interfaces provide method
+signatures for the methods that will implement the details of the
+interaction between a {\tt TwoPlayerGame} and a {\tt UserInterface}.
+Because the details of this interaction vary from game to game, it is
+best to leave the implementation of these methods to the games
+themselves.
+
+Note that {\tt CLUIPlayableGame} extends the {\tt IGame} interface.
+\marginnote{Extending an interface}
+The {\tt IGame} interface contains two methods that are used to define
+a standard form of communication between the CLUI and the game.  The
+{\tt getGamePrompt()} method defines the prompt that is used to signal
+the user for some kind of move---for example, ``How many sticks do you
+take (1, 2, or 3)?''  And the {\tt reportGameState()} method defines
+how that particular game will report its current state---for example,
+``There are 11 sticks remaining.''  {\tt CLUIPlayableGame} adds the
+{\tt play()} method to these two methods. As we will see shortly, the
+{\tt play()} method will contain the code that will control the
+playing of the game.
+
+\noindent The source code for these interfaces is very simple:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public interface CLUIPlayableGame extends IGame {
+    public abstract void play(UserInterface ui);
+}
+public interface IGame {
+    public String getGamePrompt();
+    public String reportGameState();
+} //IGame
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Notice that the {\tt CLUIPlayableGame} interface extends the
+{\tt IGame} interface. A {\tt CLUIPlayableGame} is a game that can be
+played through a CLUI. The purpose of its {\tt play()} method is to
+contain the {\em game dependent} control loop that determines how the
+game is played via some kind of user interface (UI).  In pseudocode, a
+typical control loop for a game would look something like the
+following:
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}[stringstyle=\color{black}]
+Initialize the game.
+While the game is not over 
+  Report the current state of the game via the UI.
+  Prompt the user (or the computer) to make a move via the UI.
+  Get the user's move via the UI.
+  Make the move.
+  Change to the other player.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The play loop sets up an interaction between the game and
+the UI.  The {\tt UserInterface} parameter allows the game to connect
+directly to a particular UI.  To allow us to play our games through a
+variety of UIs, we define {\tt UserInterface} as the following Java
+interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public interface UserInterface {
+     public String getUserInput();
+     public void report(String s);
+     public void prompt(String s);
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Any object that implements these three methods can serve as
+a UI for one of our {\tt TwoPlayerGame}s.  This is another example of
+the flexibility of using interfaces in object-oriented design.  
+
+To illustrate how we use {\tt UserInterface}, let's attach it to our
+{\tt KeyboardReader} class, thereby letting a {\tt KeyboardReader}
+serve as a CLUI for {\tt TwoPlayerGame}s. We do this simply by
+implementing this interface in the {\tt KeyboardReader} class, as
+follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class KeyboardReader implements UserInterface
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As it turns out, the three methods listed in {\tt
+UserInterface} match three of the methods in the current
+version of {\tt KeyboardReader}.  This is no accident. The design of
+{\tt UserInterface} was arrived at by identifying the minimal number
+of methods in {\tt KeyboardReader} that were needed to interact with a
+{\tt TwoPlayerGame}.
+
+\JavaTIP{EFFECTIVE DESIGN}{Flexibility of Java Interfaces.}{A Java
+interface provides a means of associating useful methods with a
+variety of different types of objects, leading to a more flexible
+object-oriented design.}
+
+\noindent The benefit of defining the parameter more generally as a
+\marginnote{Generality principle}
+{\tt User\-Interface}, instead of as a {\tt KeyboardReader}, is that
+we will eventually want to allow our games to be played via other
+kinds of command-line interfaces. For example, we might later define
+an Internet-based CLUI that could be used to play {\tt OneRowNim}
+among users on the Internet. This kind of extensibility---the ability
+to create new kinds of UIs and use them with {\tt TwoPlayerGame}s---
+is another important design feature of Java interfaces.
+
+\JavaTIP{EFFECTIVE DESIGN}{Extensibility and  Java Interfaces.}
+{Using interfaces to define useful method signatures increases the
+extensibility of a class hierarchy.}
+
+As Figure~\ref{fig-twoplayergame} shows, {\tt OneRowNim} implements
+the {\tt CLUIPlayable\-Game} interface, which means it must supply
+implementations of all three abstract methods: {\tt play()}, {\tt
+getGamePrompt()}, and {\tt reportGame\-State()}.
+
+\subsection{Object Oriented Design: Interfaces or Abstract Classes}
+
+Why are these methods defined in interfaces? Couldn't we just as
+easily define them in the {\tt TwoPlayerGame} class and use
+inheritance to extend them to the various game subclasses?  After all,
+isn't the net result the same, namely, that {\tt OneRowNim} must
+implement all three methods.
+
+These are very good design questions, exactly the kinds of questions
+\marginnote{Interfaces vs. abstract methods}
+one should ask when designing a class hierarchy of any sort. As we
+pointed out in the {\tt Animal} example earlier in the chapter, you
+can get the same functionality from a abstract interface and from an
+abstract superclass method.  When should we put the abstract method in
+the superclass and when does it belong in an interface? A very good
+discussion of these and related object-oriented design issues is
+available in {\em Java Design, 2nd Edition}, by Peter Coad and
+Mark Mayfield (Yourdan Press, 1999). Our discussion of these issues
+follows many of the guidelines suggested by Coad and Mayfield. 
+
+We have already seen that using Java interfaces increases the
+flexibility and extensibility of a design.  Methods defined in an
+interface exist independently of a particular class hierarchy. By
+their very nature, interfaces can be attached to any class, which
+\marginnote{Flexibility of interfaces}
+makes them very flexible to use.
+
+Another useful guideline for answering this question is that the
+superclass should contain the basic common attributes and methods that
+define a certain type of object.  It should not necessarily contain
+methods that define certain {\em roles} that the object plays.  For
+example, the {\tt gameOver()} and {\tt getWinner()} methods are
+fundamental parts of the definition of a {\tt TwoPlayerGame}.  One
+cannot define a game without defining these methods.  By contrast,
+methods such as {\tt play()}, {\tt getGamePrompt()}, and {\tt
+reportGameState()} are important for playing the game but they do not
+contribute in the same way to the game's definition. Thus these
+methods are best put into an interface. So, one important design
+guideline is:
+
+\JavaTIP{EFFECTIVE DESIGN}{Abstract Methods.}{Methods defined 
+abstractly in a superclass should contribute in a fundamental way
+toward the basic definition of that type of object, not merely toward
+one of its roles or its functionality.}
+
+\subsection{The Revised {\tt OneRowNim} Class}
+
+Figure~\ref{fig-revisednim} provides a listing of the revised 
+{\tt OneRowNim} class, one that fits into the {\tt TwoPlayerGame}
+class hierarchy. Our discussion in this section will focus on just
+those features of the game that are new or revised.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[32pc]
+\begin{lstlisting}
+public class OneRowNim extends TwoPlayerGame 
+                                 implements CLUIPlayableGame {   
+  public static final int MAX_PICKUP = 3;
+  public static final int MAX_STICKS = 11;
+  private int nSticks = MAX_STICKS;
+
+  public OneRowNim() { }        // Constructors
+  public OneRowNim(int sticks) {   
+    nSticks = sticks;
+  }  // OneRowNim()
+  public OneRowNim(int sticks, int starter) {   
+    nSticks = sticks;
+    setPlayer(starter);
+  } // OneRowNim()
+  public boolean takeSticks(int num) {   
+    if (num < 1 || num > MAX_PICKUP || num > nSticks) 
+      return false;                // Error
+    else                             // Valid move
+    {   nSticks = nSticks - num;
+        return true;
+    } //else
+  } // takeSticks()
+  public int getSticks() {   
+    return nSticks;
+  } // getSticks()
+  public String getRules() {
+    return "\n*** The Rules of One Row Nim ***\n" +
+    "(1) A number of sticks between 7 and " + MAX_STICKS + 
+         " is chosen.\n" + 
+    "(2) Two players alternate making moves.\n" + 
+    "(3) A move consists of subtracting between 1 and\n\t" + 
+        MAX_PICKUP + " sticks from the current number of sticks.\n" + 
+    "(4) A player who cannot leave a positive\n\t" + 
+    " number of sticks for the other player loses.\n";
+  } // getRules()
+  public boolean gameOver() {   /** From TwoPlayerGame */
+    return (nSticks <= 0);
+  }  // gameOver()
+  public String getWinner()  {       /** From TwoPlayerGame */
+    if (gameOver()) //{
+      return "" + getPlayer() + " Nice game.";
+    return "The game is not over yet.";   // Game is not over
+  } // getWinner()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The revised  {\tt OneRowNim} class, Part I.
+\label{fig-revisednim}
+\label{pg-fig-revisednim}}
+\end{figure}
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[32pc]{-6pc}
+\begin{lstlisting}
+  /** From CLUIPlayableGame */
+  public String getGamePrompt() {
+    return "\nYou can pick up between 1 and " + 
+                    Math.min(MAX_PICKUP,nSticks) + " : ";
+  } // getGamePrompt()
+  public String reportGameState() {   
+    if (!gameOver())
+       return ("\nSticks left: " + getSticks() + 
+          " Who's turn: Player " + getPlayer());
+    else
+       return ("\nSticks left: " + getSticks() + 
+        " Game over! Winner is Player "  + getWinner() +"\n");
+  }   // reportGameState()
+  public void play(UserInterface ui) {// From CLUIPlayableGame interface
+    int sticks = 0;
+    ui.report(getRules());
+    if (computer1 != null) 
+      ui.report("\nPlayer 1 is a " + computer1.toString());
+    if (computer2 != null)
+      ui.report("\nPlayer 2 is a " + computer2.toString());
+    while(!gameOver()) {  
+      IPlayer computer = null;     // Assume no computers
+      ui.report(reportGameState());
+      switch(getPlayer()) {
+      case PLAYER_ONE:             // Player 1's turn
+        computer = computer1;
+        break;
+      case PLAYER_TWO:             // Player 2's turn
+        computer = computer2;
+        break;
+      } // cases
+      if (computer != null) {      // If computer's turn
+        sticks = Integer.parseInt(computer.makeAMove(""));
+        ui.report(computer.toString() + " takes " + 
+                                   sticks + " sticks.\n");
+      } else {                  // otherwise, user's turn
+        ui.prompt(getGamePrompt());
+        sticks = 
+          Integer.parseInt(ui.getUserInput()); // Get user's move 
+      }
+      if (takeSticks(sticks))      // If a legal move
+        changePlayer();
+    } // while
+    ui.report(reportGameState());  // The game is now over
+  } // play()
+} // OneRowNim class
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The revised  {\tt OneRowNim} class, continued from previous page.
+\label{fig-revisednim2}
+\label{pg-fig-revisednim2}}
+\end{figure}
+
+The {\tt gameOver()} and {\tt getWinner()} methods, which are now
+inherited from the {\tt TwoPlayerGame} superclass, are virtually the
+same as in the previous version. One small change is that {\tt
+getWinner()} now returns a {\tt String} instead of an {\tt int}.  This
+makes that method more generally useful as a way of identifying the
+winner for all {\tt TwoPlayerGame}s.  
+
+Similarly, the {\tt getGamePrompt()} and {\tt reportGameState()}
+methods merely encapsulate functionality that was present in the
+earlier version of the game. In our earlier version the prompts to the
+user were generated directly by the main program.  By encapsulating
+\marginnote{Inheritance and generality}
+this information in an inherited method, we make it more generally
+useful to all {\tt TwoPlayerGame}s.
+
+The major change to {\tt OneRowNim} comes in the {\tt play()} method,
+which controls the playing of the {\tt OneRowNim}
+(Fig.~\ref{fig-revisednim2}).  Because this version of the game
+incorporates computer players, the play loop is a bit more complex
+than in earlier versions of the game.  The basic idea is still the
+same: The method loops until the game is over.  On each iteration of
+the loop, one or the other of the two players, {\tt PLAYER\_ONE} or
+{\tt PLAYER\_TWO}, takes a turn making a move---that is, deciding how
+many sticks to pick up. If the move is a legal move, then it becomes
+the other player's turn.
+
+Let's look now at how the code distinguishes between whether it is a
+computer's turn to move or a human player's turn.  Note that at the
+beginning of the {\tt while} loop, it sets the {\tt computer} variable
+to null. It then assigns {\tt computer} a value of either {\tt
+computer1} or {\tt computer2}, depending on whose turn it is. But
+recall that one or both of these variables may be {\tt null},
+depending on how many computers are playing the game. If there are no
+computers playing the game, then both variables will be null. If only
+one computer is playing, then {\tt computer1} will be null. This is
+determined during initialization of the game, when the {\tt addComputerPlayer()}
+is called. (See above.)
+
+In the code following the {\tt switch} statement, if {\tt computer} is
+not {\tt null}, then we call {\tt computer.makeAMove()}. As we know,
+the {\tt makeAMove()} method is part of the {\tt IPlayer}
+interface. The {\tt makeAMove()} method takes a {\tt String} parameter
+that is meant to serve as a prompt, and returns a {\tt String} that is
+meant to represent the {\tt IPlayer}'s move:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public interface IPlayer {
+     public String makeAMove(String prompt);
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In {\tt OneRowNim} the ``move'' is an integer, representing
+the number of sticks the player picks. Therefore, in {\tt play()}
+{\tt OneRowNim} has to convert the {\tt String} into an {\tt int}, which
+represents the number of sticks the {\tt IPlayer} picks up.  
+
+On the other hand, if {\tt computer} is {\tt null}, this means that it
+is a human user's turn to play. In this case, {\tt play()} calls {\tt
+ui.getUserInput()}, employing the user interface to input a value from the
+keyboard.  The user's input must also be converted from {\tt String}
+to {\tt int}.  Once the value of {\tt sticks} is set, either from the
+user or from the {\tt IPlayer}, the {\tt play()} method calls {\tt
+takeSticks()}. If the move is legal, then it changes whose turn it is,
+and the loop repeats.
+
+There are a couple of important points to notice about the design of
+\marginnote{Encapsulation of game-dependent knowledge}
+the {\tt play()} method. First, the {\tt play()} method has to know
+what to do with the input it receives from the user or the {\tt
+IPlayer}.  This is game-dependent knowledge. The user is inputting the
+number of sticks to take in {\tt OneRowNim}. For a tic-tac-toe game,
+the ``move'' might represent a square on the tic-tac-toe board. This
+suggests that {\tt play()} is a method that should be implemented in
+{\tt OneRowNim}, as it is here, because {\tt OneRowNim} encapsulates
+the knowledge of how to play the One Row Nim game.
+
+A second point is to notice that the method call {\tt
+computer.make\-AMove()} is another example of polymorphism at work.
+\marginnote{Polymorphism}
+The {\tt play()} method does not know what type of object the {\tt
+computer} is, other than that it is an {\tt IPlayer}---that is, an
+object that implements the {\tt IPlayer} interface. As we will show in
+the next section, the {\tt OneRowNim} game can be played by two
+different {\tt IPlayer}s: one named {\tt NimPlayer} and another named
+{\tt NimPlayerBad}.  Each has its own game-playing strategy, as
+implemented by their own versions of the {\tt makeAMove()} method.
+Java uses dynamic binding to decide which version of {\tt makeAMove()}
+to invoke depending on the type of {\tt IPlayer} whose turn it is.
+Thus, by defining different {\tt IPlayer}s with different {\tt
+makeAMove()} methods, this use of polymorphism makes it possible to
+test different game-playing strategies against each other.
+
+\subsection{The {\tt IPlayer} Interface}
+
+The last element of our design is the {\tt IPlayer} interface, which,
+as we just saw, consists of the {\tt makeAMove()} method.  To see how
+we use this interface, let's design a class to play the game of {\tt
+OneRowNim}.  We will call the class {\tt NimPlayerBad} and give it a
+very weak playing strategy. For each move it will pick a random number
+between 1 and 3, or between 1 and the total number of sticks left, if
+there are fewer than 3 sticks.  (We will leave the task of defining
+{\tt NimPlayer}, a good player, as an exercise.)
+\marginfig{chptr08/nimplayer.eps}{Design of the {\tt NimPlayerBad} class.
+\label{fig-nimplayer}
+\label{pg-fig-nimplayer}}
+
+As an implementer of the {\tt IPlayer} interface, {\tt NimPlayerBad}
+will implement the {\tt makeAMove()} method. This method will contain
+{\tt NimPlayerBad}'s strategy (algorithm) for playing the game.  The
+result of this strategy will be the number of sticks that the player
+will pick up.
+
+What other elements (variables and methods) will a {\tt NimPlayerBad}
+need?  Clearly, in order to play {\tt OneRowNim}, the player must know
+the rules and the current state of the game.  The best way
+to achieve this is to give the Nim player a reference to the {\tt
+OneRowNim} game.  Then it can call {\tt getSticks()} to determine how
+many sticks are left, and it can use other public elements of the {\tt
+OneRowNim} game. Thus, we will have a variable of type {\tt OneRowNim},
+and we will assign it a value in a constructor method.
+
+Figure~8.23 shows the design of {\tt NimPlayerBad}. Note that we have
+added an implementation of the {\tt toString()} method.  This will
+be used to give a string representation of the {\tt NimPlayerBad}.
+Also, note that we have added a private helper method named
+{\tt randomMove()}, which will simply generate an appropriate
+random number of sticks as the player's move.
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+public class NimPlayerBad implements IPlayer {   
+  private OneRowNim game;
+  public NimPlayerBad (OneRowNim game) {  
+    this.game = game;
+  } // NimPlayerBad()
+  public String makeAMove(String prompt) {   
+    return "" + randomMove();
+  } // makeAMove()
+  private int randomMove() {   
+    int sticksLeft = game.getSticks();
+    return 1 + (int)(Math.random() * 
+           Math.min(sticksLeft, game.MAX_PICKUP));
+  } // randomMove()
+  public String toString() { 
+    String className = 
+        this.getClass().toString(); // Gets 'class NimPlayerBad'
+    return className.substring(5);  // Cut off the word 'class'
+  } // toString()
+} // NimPlayerBad
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt NimPlayerBad} class.
+\label{fig-nimbad}
+\label{pg-fig-nimbad}}
+\end{figure}
+
+The implementation of {\tt NimPlayerBad} is shown in
+Figure~\ref{fig-nimbad}. The {\tt makeAMove()} method converts the
+{\tt randomMove()} to a {\tt String} and returns it, leaving it up to
+{\tt OneRowNim}, the calling object, to convert that move back into an
+{\tt int}.  Recall the statement in {\tt OneRowNim} where {\tt
+makeAMove()} is invoked:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ sticks = Integer.parseInt(computer.makeAMove(""));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this context, the {\tt computer} variable, which is of
+type {\tt IPlayer}, is bound to a {\tt NimPlayerBad} object.  In order
+for this interaction between the game and a player to work, the {\tt
+OneRowNim} object must know what type of data is being returned by
+{\tt NimPlayerBad}.  This is a perfect use for a Java interface, which
+specifies the signature of {\tt makeAMove()} without committing to any
+particular implementation of the method.  Thus, the association between
+{\tt OneRowNim} and {\tt IPlayer} provides a flexible and effective model
+for this type of interaction.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Interface Associations.}{Java interfaces 
+provide a flexible way to set up associations between two different
+types of objects.}
+
+Finally, note the details of the {\tt randomMove()} and {\tt
+toString()} methods.  The only new thing here is the use of the {\tt
+getClass()} method in {\tt toString()}.  This is a method that is
+defined in the {\tt Object} class and inherited by all Java
+objects. It returns a {\tt String} of the form ``class X'' where {\em
+X} is the name of that object's class. Note here that we are removing
+the word ``class'' from this string before returning the class name.
+This allows our {\tt IPlayer} objects to report what type of players
+they are, as in the following statement from {\tt OneRowNim}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ui.report("\nPlayer 1 is a " + computer1.toString());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If {\tt computer1} is a {\tt NimPlayerBad}, it would
+report ``Player1 is a NimPlayerBad.''
+
+\pagebreak
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Define a class {\tt NimPlayer} that plays the optimal strategy
+for {\tt OneRowNim}. This strategy was described in Chapter~5. 
+
+\end{SSTUDY}
+
+\subsection{Playing {\tt OneRowNim}}
+
+Let's now write a {\tt main()} method to play {\tt OneRowNim}:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+public static void main(String args[]) {
+  KeyboardReader kb = new KeyboardReader();
+  OneRowNim game = new OneRowNim();
+  kb.prompt("How many computers are playing, 0, 1, or 2? ");
+  int m = kb.getKeyboardInteger();
+  for (int k = 0; k < m; k++) {
+    kb.prompt("What type of player, " + 
+                  "NimPlayerBad = 1, or NimPlayer = 2 ? ");
+    int choice = kb.getKeyboardInteger();
+    if (choice == 1) {
+      IPlayer computer = new NimPlayerBad(game);
+      game.addComputerPlayer(computer);
+    } else {
+      IPlayer computer = new NimPlayer(game);
+      game.addComputerPlayer(computer);
+    }
+  }
+  game.play(kb);
+ } // main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent After creating a {\tt KeyboardReader} and then creating an
+instance of {\tt OneRowNim}, we prompt the user to determine how many
+computers are playing. We then repeatedly prompt the user to identify
+the names of the {\tt IPlayer} and use the {\tt addComputerPlayer()}
+method to initialize the game.  Finally, we get the game started by
+invoking the {\tt play()} method, passing it a reference to the {\tt
+KeyboardReader}, our {\tt UserInterface}.
+
+Note that in this example we have declared a {\tt OneRowNim} variable
+to represent the game.  This is not the only way to do things.  For
+example, suppose we wanted to write a {\tt main()} method that could
+be used to play a variety of different {\tt TwoPlayerGame}s.  Can we
+\marginnote{Generality}
+make this code more general? That is, can we rewrite it to work with
+any {\tt TwoPlayerGame}?
+
+A {\tt OneRowNim} object is also a {\tt TwoPlayerGame}, by virtue of
+inheritance, and it is also a {\tt CLUIPlayableGame}, by virtue of
+implementing that interface.  Therefore, we can use either of these
+types to represent the game.  Thus, one alternative way of coding this
+is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    TwoPlayerGame game = new OneRowNim();
+    ...
+    IPlayer computer = new NimPlayer((OneRowNim)game);
+    ...
+    ((CLUIPlayableGame)game).play(kb);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Here we use a {\tt TwoPlayerGame} variable to represent the
+game. However, note that we now have to use a cast expression, {\tt
+(CLUIPlayableGame)}, in order to call the {\tt play()} method.  If we
+don't cast {\tt game} in this way, Java will generate the following
+syntax error:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ OneRowNim.java:126: cannot resolve symbol
+ symbol  : method play (KeyboardReader)
+ location: class TwoPlayerGame
+        game.play(kb);
+           ^
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The reason for this error is that {\tt play()} is not a
+method in the {\tt TwoPlayerGame} class, so the compiler cannot find
+the {\tt play()} method. By using the cast expression, we are telling
+the compiler to consider {\tt game} to be a {\tt
+CLUIPlayableGame}. That way it will find the {\tt play()} method. Of
+course, the object assigned to {\tt nim} must actually implement the
+{\tt CLUIPlayableGame} interface in order for this to work at run
+time.  We also need a cast operation in the {\tt NimPlayer()}
+constructor in order to make the argument ({\tt computer}) compatible
+with that method's parameter.
+
+Another alternative for the {\tt main()} method would be the
+following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ CLUIPlayableGame game = new OneRowNim();
+ ...
+ IPlayer computer = new NimPlayer((OneRowNim)game);
+ ((TwoPlayerGame)game).addComputerPlayer(computer);
+ ...
+ game.play(kb);
+  nim.play(kb);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent By representing the game as a {\tt
+CLUIPlayableGame} variable, we don't need the cast expression to call
+{\tt play()}, but we do need a different cast expression, {\tt
+(TwoPlayerGame)}, to invoke {\tt addComputerPlayer()}.  Again, the
+reason is that the compiler cannot find the {\tt add\-Computer\-Player()}
+method in the {\tt CLUIPlayableGame} interface, so we must tell it to
+consider {\tt game} as a {\tt TwoPlayerGame}, which of course it
+is. We still need the cast operation for the call to the {\tt
+NimPlayer()} constructor.
+
+All three of the code options that we have considered will generate
+something like the interactive session shown in
+Figure~\ref{fig-playnim} for a game in which two {\tt IPlayer}s play
+each other.
+
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlistingleft}[28.5pc]{-2.5pc}
+\begin{lstlisting}[stringstyle=\color{black}]
+How many computers are playing, 0, 1, or 2? {\color{cyan}2}
+
+*** The Rules of One Row Nim ***
+(1) A number of sticks between 7 and 11 is chosen.
+(2) Two players alternate making moves.
+(3) A move consists of subtracting between 1 and
+        3 sticks from the current number of sticks.
+(4) A player who cannot leave a positive
+         number of sticks for the other player loses.
+
+Player 1 is a  NimPlayerBad
+Player 2 is a  NimPlayer
+Sticks left: 11 Who's turn: Player 1 NimPlayerBad takes 2 sticks.
+Sticks left: 9 Who's turn: Player 2 NimPlayer takes 1 sticks.
+Sticks left: 8 Who's turn: Player 1 NimPlayerBad takes 2 sticks.
+Sticks left: 6 Who's turn: Player 2 NimPlayer takes 1 sticks.
+Sticks left: 5 Who's turn: Player 1 NimPlayerBad takes 3 sticks.
+Sticks left: 2 Who's turn: Player 2 NimPlayer takes 1 sticks.
+Sticks left: 1 Who's turn: Player 1 NimPlayerBad takes 1 sticks.
+Sticks left: 0 Game over! Winner is Player 2 Nice game.
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{A typical run of the {\tt OneRowNim} using a command-line
+user interface. 
+\label{fig-playnim}
+\label{pg-fig-playnim}}
+\end{figure}
+
+Given our object-oriented design for the {\tt TwoPlayerGame}
+hierarchy, we can now write generalized code that can play any {\tt
+TwoPlayerGame} that implements the {\tt CLUIPlayableGame}
+interface. We will give a specific example of this in the next
+section.
+
+\subsection{Extending the {\tt TwoPlayerGame} Hierarchy}
+
+Now that we have described the design and the details of the
+{\tt TwoPlayerGame} class hierarchy, let's use it to develop
+a new game. If we've gotten the design right, developing
+new two-player games and adding them to the hierarchy should 
+be much simpler than developing them from scratch. 
+
+The new game is a guessing game in which the two players take turns
+guessing a secret word.  The secret word will be generated randomly
+from a collection of words maintained by the game object. The letters
+of the word will be hidden with question marks, as in ``????????.''
+On each turn a player guesses a letter. If the letter is in the secret
+word, it replaces one or more question marks, as in ``??????E?.''  A
+player continues to guess until an incorrect guess is made and then it
+becomes the other player's turn.  Of course, we want to develop a
+version of this game that can be played either by two humans, or by
+one human against a computer---that is, against an {\tt IPlayer}---or
+by two different {\tt IPlayer}s.
+
+\begin{figure}[h]
+\figaright{chptr08/wordguess.eps}{Design of the {\tt WordGuess}
+class as part of {\tt TwoPlayerGame} hierarchy.
+\label{fig-wordguessuml}
+\label{pg-fig-wordguessuml}}
+\end{figure}
+
+Let's call the game class {\tt WordGuess}. Following the design of
+{\tt OneRowNim}, we get the design shown in 
+Figure~\ref{fig-wordguessuml}.  The {\tt WordGuess} class extends the
+{\tt TwoPlayerGame} class and implements the {\tt CLUIPlayableGame}
+interface. We don't show the details of the interfaces and the {\tt
+TwoPlayerGame} class, as these have not changed.  Also, following the
+design of {\tt NimPlayerBad}, the {\tt WordGuesser} class implements
+the {\tt IPlayer} interface.  Note how we show the association between
+{\tt WordGuess} and zero or more {\tt IPlayer}s.  A {\tt WordGuess}
+uses between zero and two instances of {\tt IPlayer}s, which in
+this game are implemented as {\tt WordGuesser}s.
+
+\begin{figure}[h!!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+public class WordGuess extends TwoPlayerGame implements CLUIPlayableGame {
+    private String secretWord;
+    private StringBuffer currentWord;
+    private StringBuffer previousGuesses;
+    private int unguessedLetters;
+
+    public WordGuess() {   
+        secretWord = getSecretWord();
+        currentWord = new StringBuffer(secretWord);
+        previousGuesses = new StringBuffer();
+        for (int k = 0; k < secretWord.length(); k++)
+           currentWord.setCharAt(k,'?');
+        unguessedLetters = secretWord.length();
+    } // WordGuess()
+    public String getPreviousGuesses() {
+        return previousGuesses.toString();
+    } // getPreviousGuesses()
+    public String getCurrentWord() {
+        return currentWord.toString();
+    } // getCurrentWord()
+    private String getSecretWord() {   
+        int num = (int)(Math.random()*10);
+        switch (num)
+        {   case 0: return "SOFTWARE";
+            case 1: return "SOLUTION";
+            case 2: return "CONSTANT";
+            case 3: return "COMPILER";
+            case 4: return "ABSTRACT";
+            case 5: return "ABNORMAL";
+            case 6: return "ARGUMENT";
+            case 7: return "QUESTION";
+            case 8: return "UTILIZES";
+            case 9: return "VARIABLE";
+            default: return "MISTAKES";
+        } //switch
+    } // getSecretWord()
+    private boolean guessLetter(char letter) {   
+       previousGuesses.append(letter);
+       if (secretWord.indexOf(letter) == -1)
+            return false; // letter is not in secretWord
+        else // find positions of letter in secretWord
+        {   for (int k = 0; k < secretWord.length(); k++)
+            {   if (secretWord.charAt(k) == letter)
+                {   if (currentWord.charAt(k) == letter)
+                        return false; ////already guessed
+                    currentWord.setCharAt(k,letter);
+                    unguessedLetters--; //one less to find
+                } //if
+            } //for
+            return true;
+        } //else
+    } //guessLetter()
+
+    public String getRules() {      // Overridden from TwoPlayerGame
+        return "\n*** The Rules of Word Guess ***\n" +
+        "(1) The game generates a secret word.\n" +
+        "(2) Two players alternate taking moves.\n" +
+        "(3) A move consists of guessing a letter in the word.\n" +
+        "(4) A player continues guessing until a letter is wrong.\n" +
+        "(5) The game is over when all letters of the word are guessed\n" +
+        "(6) The player guessing the last letter of the word wins.\n";
+    } //getRules()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt WordGuess} class, Part I.
+\label{fig-wordguess}
+\label{pg-fig-wordguess}}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}[basicstyle=\scriptsize]
+    public boolean gameOver() {   // From TwoPlayerGame
+        return (unguessedLetters <= 0);
+    } // gameOver()
+    public String getWinner() {  // From TwoPlayerGame
+        if (gameOver())
+            return "Player " + getPlayer();
+        else return "The game is not over.";
+    } // getWinner()
+    public String reportGameState() {   
+        if (!gameOver())
+            return "\nCurrent word " + currentWord.toString() + " Previous guesses " 
+                + previousGuesses + "\nPlayer " + getPlayer() + " guesses next.";
+        else
+	    return "\nThe game is now over! The secret word is " + secretWord 
+              + "\n" + getWinner() + " has won!\n";
+    } // reportGameState()
+    public String getGamePrompt() {    // From CLUIPlayableGame
+        return "\nGuess a letter that you think is in the secret word: ";
+    } // getGamePrompt()
+    public String move(String s) {   
+        char letter = s.toUpperCase().charAt(0);
+        if (guessLetter(letter)) {   //if correct 
+            return "Yes, the letter " + letter +
+                   " IS in the secret word\n";
+         } else {   
+             changePlayer();
+             return "Sorry, " + letter + " is NOT a " +
+                    "new letter in the secret word\n";
+         } 
+    } // move()
+    public void play(UserInterface ui) {  // From CLUIPlayableGame
+        ui.report(getRules());
+        if (computer1 != null) 
+            ui.report("\nPlayer 1 is a " + computer1.toString());
+        if (computer2 != null)
+            ui.report("\nPlayer 2 is a " + computer2.toString());
+
+        while(!gameOver()) {  
+           IPlayer computer = null;       // Assume no computers playing
+           ui.report(reportGameState());
+           switch(getPlayer()) {
+           case PLAYER_ONE:             // Player 1's turn
+               computer = computer1;
+               break;
+           case PLAYER_TWO:             // Player 2's turn
+               computer = computer2;
+               break;
+           } // cases
+
+           if (computer != null) {      // If computer's turn
+               ui.report(move(computer.makeAMove("")));
+           } else {                     // otherwise, user's turn
+               ui.prompt(getGamePrompt());
+               ui.report(move(ui.getUserInput()));
+           }
+        } // while
+        ui.report(reportGameState());  // The game is now over
+    } //play()
+} //WordGuess class
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt WordGuess} class, continued.
+\label{fig-wordguess2}
+\label{pg-fig-wordguess2}}
+\end{figure}
+
+Let's turn now to the details of the {\tt WordGuess} class, whose
+source code is shown in Figures~\ref{fig-wordguess} and
+\ref{fig-wordguess2}.  The game needs to have a supply of words from
+which it can choose a secret word to present to the players.  The {\tt
+getSecretWord()} method will take care of this task. It calculates a
+random number and then uses that number, together with a {\tt switch}
+statement, to select from among several words that are coded right into
+the {\tt switch} statement.  The secret word is stored in the {\tt
+secretWord} variable.  The {\tt currentWord} variable stores the
+partially guessed word. Initially, {\tt currentWord} consists entirely
+of question marks.  As the players make correct guesses, {\tt
+currentWord} is updated to show the locations of the guessed letters.
+Because {\tt currentWord} will change as the game progresses, it is
+stored in a {\tt StringBuffer}, rather than in a {\tt String}. Recall
+that {\tt String}s are immutable in Java, whereas a {\tt StringBuffer}
+contains methods to insert letters and remove letters.
+
+The {\tt unguessedLetters} variable stores the number of letters
+remaining to be guessed.  When {\tt unguessedLetters} equals 0, the
+game is over.  This condition defines the {\tt gameOver()}
+method, which is inherited from {\tt TwoPlayerGame}.  The winner of
+the game is the player who guessed the last letter in the secret word.
+This condition defines the {\tt getWinner()} method, which
+is also inherited from {\tt TwoPlayerGame}. The other methods that are
+inherited from {\tt TwoPlayerGame} or implemented from the {\tt
+CLUIPlayableGame} are also implemented in a straightforward manner.
+
+A move in the {\tt WordGuess} game consists of trying to guess a
+letter that occurs in the secret word. The {\tt move()} method
+processes the player's guesses. It passes the guessed letter to the
+{\tt guessLetter()} method, which checks whether the letter is a new,
+secret letter. If so, {\tt guessLetter()} takes care of the various
+housekeeping tasks. It adds the letter to {\tt previousGuesses},
+which keeps track of all the players' guesses.  It decrements the
+number of {\tt unguessedLetters}, which will become 0 when all the
+letters have been guessed. And it updates {\tt currentWord} to show
+where all occurrences of the secret letter are located.  Note how {\tt
+guessLetter()} uses a for-loop to cycle through the letters in the
+secret word. As it does so, it replaces the question marks in {\tt
+currentWord} with the correctly guessed secret letter.  The {\tt
+guessLetter()} method returns false if the guess is incorrect.  In
+that case, the {\tt move()} method changes the player's turn.  When
+correct guesses are made, the current player keeps the turn.
+
+The {\tt WordGuess} game is a good example of a string-processing
+\marginnote{Reusing code}
+problem.  It makes use of several of the {\tt String} and {\tt
+StringBuffer} methods that we learned in Chapter~7.  The
+implementation of {\tt WordGuess}, as an extension of {\tt
+TwoPlayerGame}, is quite straight forward. One advantage of
+the {\tt TwoPlayerGame} class hierarchy is that it decides many
+of the important design issues in advance. Developing a new game
+is largely a matter of implementing methods whose definitions have
+already been determined in the superclass or in the interfaces.  This
+greatly simplifies the development process.
+
+Let's now discuss the details of {\tt WordGuesser} class
+(Fig.~\ref{fig-wordguesser}). Note that the constructor takes a {\tt
+WordGuess} parameter. This allows {\tt WordGuesser} to be passed a
+reference to the game, which accesses the game's {\tt public}
+methods, such as {\tt getPreviousGuesses()}.  The {\tt toString()}
+method is identical to the {\tt toString()} method in the {\tt
+NimPlayerBad} example.  The {\tt makeAMove()} method, which is part of
+the {\tt IPlayer} interface, is responsible for specifying the
+algorithm that the player uses to make a move.  The strategy in this
+case is to repeatedly pick a random letter from {\em A} to {\em Z}
+until a letter is found that is not contained in {\tt
+previousGuesses}.  That way, the player will not guess letters that
+have already been guessed. 
+
+\begin{figure}[t]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class WordGuesser implements IPlayer {   
+  private WordGuess game;
+  public WordGuesser (WordGuess game) {   
+    this.game = game;
+  }
+  public String makeAMove(String prompt)  {   
+    String usedLetters = game.getPreviousGuesses();
+    char letter;
+    do {  // Pick one of 26 letters
+      letter = (char)('A' + (int)(Math.random() * 26));
+    } while (usedLetters.indexOf(letter) != -1);
+    return "" + letter;
+  }
+  public String toString() { // returns 'NimPlayerBad'
+    String className = this.getClass().toString(); 
+    return className.substring(5);        
+  }
+} // WordGuesser
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt WordGuesser} class.
+\label{fig-wordguesser}
+\label{pg-fig-wordguesser}}
+\end{figure}
+
+\section{Principles Of Object-Oriented Design}
+
+To conclude this chapter, it will be helpful to focus briefly on how
+the examples we've seen address the various object-oriented design
+(OOD) principles we set out at the beginning of the book.
+
+\begin{itemize}
+\item {\bf Divide-and-Conquer Principle.}  Notice how all of the
+problems tackled in this chapter have been solved by dividing them
+into several classes, with each of the classes divided into separate
+methods.  The very idea of a class hierarchy is an application of
+this principle.
+
+\item {\bf Encapsulation Principle.} The superclasses in our designs,
+{\tt Cipher} and {\tt TwoPlayerGame}, encapsulate those features of the
+class hierarchy that are shared by all objects in the hierarchy. The
+subclasses, {\tt CaesarCipher} and {\tt OneRowNim}, encapsulate features
+that make them distinctive with the class hierarchy. 
+
+\item {\bf Interface Principle.}  The several Java interfaces we've
+designed, {\tt IPlayer}, {\tt CLUIPlayableGame} and {\tt UserInterface},
+specify clearly how various types of related objects will interact
+with each other through the methods contained in the interfaces.
+Clean interfaces make for clear communication among objects.
+
+\item {\bf Information Hiding Principle.} We have continued to make
+consistent use of the {\tt private} and {\tt public} qualifiers, and have
+now introduced the {\tt protected} qualifier to extend this concept. 
+The inheritance mechanism gives subclasses access to protected and
+public elements of their superclasses.  
+
+\item {\bf Generality Principle.}  As you move down a well-designed
+class hierarchy, you go from the more general to the more specific
+features of the objects involved. The abstract {\em encode()} method
+specifies the general form that encoding will take while the various
+implementations of this method in the subclasses provide the
+specializations necessary to distinguish, say, Caesar encoding from
+Transpose encoding.  Similarly, the abstract {\tt makeAMove()} method
+in the {\tt IPlayer} interface  provides a general format for
+a move in a two-player game, while its various implementations provide
+the specializations that distinguish one game from another.
+
+\item {\bf Extensibility Principle.}  Overriding inherited methods and
+implementing abstract methods from either an abstract superclass or a
+Java interface provide several well-designed ways to extend the
+functionality in an existing class hierarchy. Extending a class is a
+form of specialization of the features inherited from the superclass.
+
+\item {\bf Abstraction Principle.} Designing a class hierarchy is an
+exercise in abstraction, as the more general features of the objects
+involved are moved into the superclasses. Similarly, designing a Java
+interface or an abstract superclass method is a form of abstraction,
+whereby the signature of the method is distinguished from its various
+implementations. 
+
+\end{itemize}
+
+These, then, are some of the ways that the several examples we have
+considered and this chapter's discussion have contributed
+to a deepening of our understanding of object-oriented design.
+
+\pagebreak
+\secSMHleft{Chapter Summary} 
+\secKTH{Technical Terms}
+
+\begin{KT}
+abstract method
+
+actual type (dynamic type)
+
+ciphertext
+
+class inheritance 
+
+cryptography
+
+dynamic binding (late binding)
+
+interface
+
+overloaded method
+
+plaintext
+
+polymorphic method
+
+polymorphism 
+
+static binding (early binding)
+
+static type (declared type)
+
+substitution cipher
+
+transposition cipher
+
+\end{KT}
+
+
+\secKTH{Summary of Important Points}
+\begin{SMBL}
+\item Inheritance is an object-oriented mechanism whereby subclasses inherit
+the public and protected instance variables and methods from their superclasses.
+
+\item Dynamic binding (or late binding) is the mechanism by which a
+method call is bound to (associated with) the correct implementation
+of the method at run time. In Java, all method calls, except for {\tt
+final} or {\tt private} methods, are resolved using dynamic binding.
+
+\item Static binding (or early binding) is the association of a method
+call with its corresponding implementation at compile time.
+
+\item Polymorphism is an object-oriented language feature in which a
+method call can lead to different actions depending on the object on
+which it is invoked.  A polymorphic method is a method signature that
+is given different implementation by different classes in a class
+hierarchy.
+
+\item A static type is a variable's declared type. A dynamic type, or actual type,
+is the type of object assigned to that variable at a given point in a running program.
+
+\item An {\tt abstract} method is a method definition that lacks an
+implementation. An {\tt abstract} class is one that contains one or
+more {\tt abstract} methods.  An {\tt abstract} class can be
+subclassed but not instantiated.
+
+\item A Java interface is a class that contains only method signatures and
+(possibly) constant declarations, but no variables.  An interface can be
+implemented by a class by providing implementations for all of its abstract
+methods.
+
+\end{SMBL}
+
+
+\secANSHleft
+\begin{ANS}
+
+\item Running the {\tt TestPrint} program will produce the 
+output shown here. It is clear that the inherited {\tt toString()}
+method is used by {\tt println()} when printing a {\tt TestPrint}
+object.  
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ 56.0
+ TestPrint@be2d65
+\end{lstlisting}
+\end{jjjlisting}
+
+\item If you override the {\tt toString()} method in {\tt TestPrint},
+you should get something like the output shown here, depending on how
+you code {\tt toString()}.  It is clear that the {\tt toString()}
+method is used polymorphously by {\tt println()}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ 56.0
+ Hello from TestPrint
+\end{lstlisting}
+\end{jjjlisting}
+
+\item The output produced when constructing objects of type {\em A}
+and {\tt B} in the order shown in the exercise would be as follows,
+with each letter occurring on a separate line:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ A B B
+\end{lstlisting}
+\end{jjjlisting}
+
+\item The new implementation of {\tt B}'s {\tt method()} will
+invoke {\tt A}'s version of the method before printing {\em B}.
+This will print ``A A B A B''.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ void method () { 
+     super.method();  
+     System.out.println("B");
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Give the definitions of classes {\tt A} and {\tt B} in the
+exercise, the marked statements would be invalid:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+A a = new B();   // Valid a B is an A
+a = new A();     // Ok
+B b = new A();   // Invalid. An A is not necessarily a B
+b = new B();     // OK
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Given the class definitions and code segment in this exercise, the
+output would be, {\tt A A B A B C}, with each letter printing on a separate
+line.
+
+\item Definition of an {\tt Pig} subclass of {\tt Animal}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class Pig extends Animal {
+    public Pig() {
+        kind = "pig";
+    }
+    public String speak() {
+        return "oink";
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item If polymorphism was not used in our design, the {\tt talk()}
+method would have to be modified to the following in order to accommodate
+a {\tt Pig} subclass:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String talk(Animal a) {
+  if (a instanceof Cow)
+     return "I am a " + kind + " and I go " + a.moo();
+   else if (a instanceof Cat)
+     return "I am a " + kind + " and I go " + a.meow();
+   else if (a instanceof Pig)
+     return "I am a " + kind + " and I go " + a.oink();
+   else
+     return "I don't know what I am";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Code to swap two {\tt boolean} variables:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ boolean temp = b1; // Save b1's value
+ b1 = b2;           // Change b1 to b2
+ b2 = temp;         // Change b2 to b1's original value
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Creating a {\tt ToggleButton} that can be used to deal or
+collect cards:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ private ToggleButton dealer = 
+            new ToggleButton("deal","collect");
+ add(dealer);
+ dealer.addActionListener(this);
+\end{lstlisting}
+\end{jjjlisting}
+
+
+
+%{Exercise 7.20}
+\item  Modify the {\tt Caesar} class so that it will allow various-sized
+shifts to be used.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private int shift;                               
+public void setShift(int n) { shift = n;    }
+public int getShift()       { return shift; }
+// Modification to encode():
+ch = (char)('a' + (ch -'a'+ shift) % 26); // Shift
+// Modification to decode():
+ch = (char)('a' + (ch -'a'+ (26-shift)) % 26); // Shift
+\end{lstlisting}
+\end{jjjlisting}
+
+
+%{Exercise 7.21}
+\item  Modify {\tt Transpose.encode()} so that it uses a rotation instead of
+a reversal.  The operation here is very similar to the shift operation
+in the Caesar cipher.  It uses modular arithmetic to rearrange the letters
+in the word. For example, suppose the word is ``hello''.  Its letters are
+indexed from 0 to 4. The following table shows how the expression \verb|((k+2) % 5)|
+will rearrange the letters as {\it k} varies from 0 to 4:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    k  charAt(k)  (k+2) % 5   charAt((k+2) % 5)
+    -------------------------------------------
+    0  'h'          2          'l'
+    1  'e'          3          'l'
+    2  'l'          4          'o'
+    3  'l'          0          'h'
+    4  'o'          1          'e'
+
+// Modification to encode():
+public String encode(String word) {
+    StringBuffer result = new StringBuffer();
+    for (int k=0; k < word.length(); k++)
+        result.append(word.charAt((k+2) % word.length()));
+    return result.toString();
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item A {\tt NimPlayer} class that plays the optimal {\tt OneRowNim} game would
+be identical to the {\tt NimPlayerBad} class except the {\tt move():int} method
+would be replaced with the following implementation:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public int move() {   
+    int sticksLeft = game.getSticks();
+    if (sticksLeft % (game.MAX_PICKUP + 1) != 1)
+        return (sticksLeft - 1) % (game.MAX_PICKUP +1);
+    else {
+        int maxPickup = Math.min(game.MAX_PICKUP, sticksLeft);
+         return 1 + (int)(Math.random() * maxPickup);
+    }
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{ANS}
+
+\secEXRHtwo{Exercises}
+\marginnote{\vspace{12pt}\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+\begin{EXRtwo}
+
+\item  Fill in the blanks in each of the following sentences:
+
+\begin{EXRtwoLL}
+\baselineskip=13pt
+\item  A method that lacks a body is an \rule{40pt}{0.5pt} method.
+\item  An \rule{40pt}{0.5pt} is like a class except that it contains
+only instance methods, no instance variables.
+\item  Two ways for a class to inherit something in Java is to  \rule{40pt}{0.5pt}
+a class and \rule{40pt}{0.5pt}  an interface.
+\item  Instance variables and instance methods that are declared
+ \rule{40pt}{0.5pt}  or \rule{40pt}{0.5pt}  are inherited by the subclasses.
+\item  An object can refer to itself by using the \rule{40pt}{0.5pt} keyword.
+\item  If an applet intends to handle {\tt ActionEvent}s, it must
+implement the \rule{40pt}{0.5pt} interface.
+\item   A \rule{40pt}{0.5pt} method is one 
+that  does different things depending upon the object that invokes it.
+\end{EXRtwoLL}
+
+\baselineskip=11pt\item  Explain the difference between the following pairs of
+concepts:
+
+\begin{EXRtwoLL}
+\item  {\it Class} and {\it interface}.
+\item  {\it Stub method} and {\it abstract method}.
+\item  {\it Extending a class} and {\it instantiating an object}.
+\item  {\it Defining a method} and {\it implementing a method}.
+\item  A {\tt protected} method and a {\tt public} method.
+\item  A {\tt protected} method and a {\tt private} method.
+\end{EXRtwoLL}
+
+\item  Draw a hierarchy to represent the following situation.
+There are lots of languages in the world.  English, French, Chinese,
+and Korean are examples of natural languages.  Java, C, and C++ are
+examples of formal languages.  French and Italian are considered
+romance languages, while Greek and Latin are considered classical
+languages.
+
+\item  Look up the documentation for the {\tt JButton} class
+on Sun's Web site:
+
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://java.sun.com/j2se/1.5.0/docs/api/
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent List the names of all the methods that would be inherited by
+the {\tt ToggleButton} subclass that we defined in this chapter.
+
+\item Design and write a {\tt toString()} method for the {\tt
+ToggleButton} class defined in this chapter. The {\tt toString()}
+method should return the {\tt ToggleButton}'s current label.
+
+\item Design a class hierarchy rooted in the class {\tt Employee} that
+includes subclasses for {\tt HourlyEmployee} and {\tt SalaryEmployee}.
+The attributes shared in common by these classes include the name, and
+job title of the employee, plus the accessor and mutator methods
+needed by those attributes.  The salaried employees need an attribute
+for weekly salary, and the corresponding methods for accessing and
+changing this variable.  The hourly employees should have a pay rate
+and an hours worked variable.  There should be an abstract method
+called {\tt calculateWeeklyPay()}, defined abstractly in the
+superclass and implemented in the subclasses. The salaried worker's
+pay is just the weekly salary. Pay for an hourly employee is simply
+hours worked times pay rate.
+
+\item Design and write a subclass of {\tt JTextField} called {\tt
+Integer\-Field} that is used for inputting integers but behaves in all
+other respects like a {\tt JTextField}.  Give the subclass a public
+method called {\tt getInteger()}.
+
+\item Implement a method that uses the following variation of the
+Caesar cipher.  The method should take two parameters, a {\tt String}
+and an {\tt int} {\it N}. The result should be a {\tt String} in which
+the first letter is shifted by {\it N}, the second by $N+1$, the third
+by $N+2$, and so on.  For example, given the string ``Hello,'' and an
+initial shift of 1, your method should return ``Igopt.''
+
+\noindent Write a method that converts its {\tt String}
+parameter so that letters are written in blocks five characters long.
+
+\item  Design and implement an applet that lets the user type a document
+into a {\tt TextArea} and then provides the following analysis of the
+document: the number of words in the document, the number of
+characters in the document,~and the percentage of words that have more
+than six letters.
+
+\item  Design and implement a {\tt Cipher} subclass to
+implement the following substitution cipher: Each letter in the alphabet
+is replaced with a letter from the opposite end of the alphabet:
+{\it a} is replaced with {\it z}, {\it b} with {\it y}, and so forth.
+
+\item  One way to design a substitution alphabet for a cipher
+is to use a keyword to construct the alphabet.  For example,
+suppose the keyword is ``zebra.'' You place the keyword
+at the beginning of the alphabet, and then fill out the
+other 21 slots with remaining letters, giving the following
+alphabet:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Cipher alphabet:   zebracdfghijklmnopqstuvwxy
+Plain alphabet:    abcdefghijklmnopqrstuvwxyz
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Design and implement an {\tt Alphabet} class for
+constructing these kinds of substitution alphabets.  It should have a
+single public method that takes a keyword {\tt String} as an argument
+and returns an alphabet string.  Note that an alphabet cannot contain
+duplicate letters, so repeated letters in a keyword like ``xylophone''
+would have to be removed.
+
+\item  Design and write a {\tt Cipher} subclass for a
+substitution cipher that uses an alphabet from the {\tt Alphabet}
+class created in the previous exercise.
+
+\item  {\bf Challenge:} Find a partner and concoct your own encryption scheme.
+Then work separately with one partner writing {\tt encode()} and the
+other writing {\tt decode()}. Test to see that a message can be
+encoded and then decoded to yield the original message.
+
+\item Design a {\tt TwoPlayerGame} subclass called {\tt
+Multi\-plication\-Game}.  The rules of this game are that the game
+generates a random multiplication problem using numbers between 1 and
+10, and the players, taking turns, try to provide the answer to
+the problem. The game ends when a wrong answer is given. The winner
+is the player who did not give a wrong answer. 
+
+\item Design a class called {\tt MultiplicationPlayer} that plays the
+multiplication game described in the previous exercise.  This class
+should implement the {\tt IPlayer} interface.
+
+\item Design a {\tt TwoPlayerGame} subclass called {\tt
+Rock\-Paper\-Scis\-sors}.  The rules of this game are that each player, at
+the same time, picks either a rock, a paper, or a scissors. For each
+round, the rock beats the scissors, the scissors beats the paper, and
+the paper beats the rock. Ties are allowed.  The game is won in a best 
+out of three fashion when one of the players wins two rounds.
+
+\item Design a class called {\tt RockPaperScissorsPlayer} that plays
+the the game described in the previous exercise.  This class should
+implement the {\tt IPlayer} interface.
+
+\end{EXRtwo}
+

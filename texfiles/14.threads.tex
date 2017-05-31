@@ -1,0 +1,3181 @@
+%%%  Chapter 14: Threads and Concurrent Programming
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{13}
+\chapter{Threads and Concurrent Programming}
+\label{chapter-threads}
+\label{pg-chapter-threads}
+
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Understand the concept of a thread.
+\item  Know how to design and write multithreaded programs.
+\item  Be able to use the {\tt Thread} class and the {\tt Runnable} interface.
+\item  Understand the life cycle of a thread.
+\item  Know how to synchronize threads.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item {Introduction}
+\item {What Is a Thread?}
+\item {From the Java Library: {\tt java.lang.Thread}}
+\item {Thread States and Life Cycle}
+\item {Using Threads to Improve Interface Responsiveness}
+\item {Case Study: Cooperating Threads}
+\item {Case Study: The Game of Pong}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}\
+\end{COL}
+\COend
+
+\section{Introduction}
+\noindent This chapter is about doing more than one thing at a time.  Doing
+more than one thing at once is commonplace in our everyday lives.
+For example, let's say your breakfast today consists of cereal,
+toast, and a cup of java.  You have to do three things at once
+to have breakfast: eat cereal, eat toast, and drink coffee.
+
+Actually, you do these things ``at the same time'' by alternating
+among them: You take a spoonful of cereal, then a bite of toast, and
+then sip some coffee.  Then you have another bite of toast, or another
+spoonful of cereal, more coffee, and so on, until breakfast is
+finished.  If the phone rings while you're having breakfast, you will
+probably answer it---and continue to have breakfast, or at least to
+sip the coffee.  This means you're doing even more ``at the same
+time.''  Everyday life is full of examples where we do more than one
+task at the same time.
+
+The computer programs we have written so far have performed one task
+at a time.  But there are plenty of applications where a program needs
+to do several things at once, or {\bf
+concurrently}\index{concurrently}.  For example, if you wrote an
+Internet chat program, it would let several users take part in a
+discussion group.  The program would have to read messages from
+several users at the same time and broadcast them to the other
+participants in the group.  The reading and broadcasting tasks would
+have to take place concurrently. In Java, concurrent programming is
+handled by {\it threads}, the topic of this chapter.
+
+\section{What Is a Thread?}
+\noindent A {\bf thread}\index{thread} (or a {\it thread of execution} or a {\it thread of
+control}) is a single sequence of executable statements within a
+program.  For Java applications, the flow of control begins at the
+first statement in {\tt main()} and continues sequentially through the
+program statements.  For Java applets, the flow of control
+begins with the first statement in {\tt init()}.  Loops within a
+program cause a certain block of statements to be repeated.  If-else
+structures cause certain statements to be selected and others to be
+skipped.  Method calls cause the flow of execution to jump to another
+part of the program, from which it returns after the method's
+statements are executed.   Thus, within a single thread, you can trace
+the sequential flow of execution from one statement to the next.
+
+One way to visualize a thread is to imagine that you could make a
+%\begin{marginalnote}\it Visualizing a thread\end{marginalnote}
+\marginnote{Visualizing a thread}
+list of the program's statements as they are executed by the
+computer's central processing unit (CPU).  Thus, for a particular
+execution of a program with loops, method calls, and selection
+statements, you could list each instruction that was executed,
+beginning at the first, and continuing until the program stopped, as a
+single sequence of executed statements.  That's a thread!
+
+
+Now imagine that we break a program up into two or more independent
+threads.  Each thread will have its own sequence of instructions.
+Within a single thread, the statements are executed one after the
+other, as usual.  However, by alternately executing the statements
+from one thread and another, the computer can run several threads {\it
+concurrently}.  Even though the CPU executes one instruction at at
+time, it can run multiple threads concurrently by rapidly alternating
+among them. The main advantage of concurrency is that it allows the
+computer to do more than one task at a time.  For example, the CPU
+could alternate between downloading an image from the Internet and
+running a spreadsheet calculation. This is the same way you ate toast
+and cereal and drank coffee in our earlier breakfast example.  From
+our perspective, it might look as if the computer had several CPUs
+working in parallel, but that's just the illusion created by an
+effectively scheduling threads.
+
+
+\BOXtwo{JVM Threads.}{The Java Virtual Machine (JVM)
+is itself an example of a multithreaded program.  JVM threads perform
+tasks that are essential to the successful execution of Java programs.}
+
+\BOXtwo{Garbage Collector Thread.}{One of the JVM
+threads, the {\it garbage collector thread}, automatically reclaims
+memory taken up by objects that are not used in your programs.   This
+happens at the same time that the JVM is interpreting your program.}
+
+\subsection{Concurrent Execution of Threads}
+\noindent The technique of concurrently executing several tasks within a program
+%\begin{marginalnote}\it Multitasking\end{marginalnote}
+\marginnote{Multitasking}
+is known as {\bf multitasking}\index{multitasking}. A {\bf task} in this sense is a
+computer operation of some sort, such as reading or saving a file,
+compiling a program, or displaying an image on the screen.  Multitasking
+requires the use of a separate thread for each of the tasks.  The
+methods available in the Java {\tt Thread} class make it possible (and
+quite simple) to implement {\bf multithreaded}\index{multithreaded} programs.
+
+Most computers, including personal computers, are {\it sequential}
+machines that consist of a single CPU, which is capable of executing
+one machine instruction at a time.  In contrast, {\it parallel
+computers}, used primarily for large scale scientific and engineering
+applications, are made up of multiple CPUs working in tandem.
+
+Today's personal computers, running at clock speeds over 1
+gigahertz---1 {\it gigahertz} equals 1 billion cycles per second---are capable of executing 
+millions of machine instructions per second.
+Despite its great speed, however, a single CPU can process only one
+instruction at a time.
+
+Each CPU uses a {\bf fetch-execute cycle}\index{fetch-execute cycle}
+to retrieve the next instruction from memory and execute it.  Since
+CPUs can execute only one instruction at a time, multithreaded
+programs are made possible by dividing the CPU's time and sharing it
+among the threads.  The CPU's schedule is managed by a {\bf scheduling
+algorithm}, which is an algorithm that schedules threads for execution
+on the CPU. The choice of a scheduling algorithm depends on the
+platform on which the program is running. Thus, thread scheduling might
+be handled differently on Unix, Windows, and Macintosh systems.
+
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{chptr14/13f1.eps}{Each thread gets a slice of the CPU's time.
+\label{fig-timeslicing}
+\label{pg-fig-timeslicing}}
+\end{figure}
+%\end{figure}
+
+One common scheduling technique is known as {\bf time slicing}\index{time slicing},
+%\begin{marginalnote}\it CPUs are sequential\end{marginalnote}
+\marginnote{CPUs are sequential}
+in which each thread alternatively gets a slice of the CPU's time.
+For example, suppose we have a program that consists of two threads.
+Using this technique, the system would give each thread a small {\bf
+quantum}\index{quantum} of CPU time---say, one thousandth of a second (one {\it
+millisecond})---to execute its instructions.  When its quantum
+expires, the thread would be {\it preempted} and the other thread
+%\begin{marginalnote}\it Time slicing\end{marginalnote}
+would be given a chance to run.  The algorithm would then alternate in this
+{\bf round-robin}\index{round-robin} fashion between one thread and the other
+(Fig.~\ref{fig-timeslicing}). During each millisecond on a 300-megahertz CPU, 
+\marginnote{Time slicing}
+a thread can execute 300,000 machine
+instructions.  One {\bf megahertz} equals 1 million
+cycles per second. Thus, within each second of real time, each thread will
+receive 500 time slices and will be able to execute something like
+150 million machine instructions.
+
+
+Under {\bf priority scheduling}\index{priority scheduling}, threads of higher priority are
+%\begin{marginalnote}\it Priority scheduling\end{marginalnote}
+\marginnote{Priority scheduling}
+allowed to run to completion before lower-priority threads are given a
+chance.  An example of a high-priority thread would be one that
+is processing keyboard input or any other kind of interactive input
+from the user.  If such tasks were given low priority, users would
+experience noticeable delays in their interaction, which would be
+quite unacceptable.
+
+The only way a high-priority thread can be preempted is if a thread of
+still higher priority becomes available to run.  In many cases,
+higher-priority threads are those that can complete their task within
+a few milliseconds, so they can be allowed to run to completion
+without starving the lower-priority threads. An example would be
+processing a user's keystroke, a task that can begin as soon as the
+key is struck and can be completed very quickly. Starvation occurs
+when one thread is repeatedly preempted by other threads.
+
+\BOXtwoleft{Thread Support.}{Depending on the hardware
+platform, Java threads can be supported by assigning different threads
+to different processors, by time slicing a single processor, or by
+time slicing many hardware processors.}
+
+\subsection{Multithreaded Numbers}
+\noindent Let's consider a simple example of a threaded program.  Suppose we give
+every individual thread a unique ID number, and each time it runs, it
+prints its ID ten times. ~For example, when the thread with ID 1
+runs the output produced would just be a sequence of ten 1's: 1111111111.
+
+
+
+As shown in Figure~14.2, the {\tt NumberThread} class is defined
+\marginfig{chptr14/p706f1.eps}{The {\tt NumberThread} class overrides the inherited {\tt run()}
+method.
+\label{fig-p706f1}
+\label{pg-fig-p706f1}}
+%\begin{marginalnote}\it A {\tt Thread} subclass\end{marginalnote}
+as a subclass of {\tt Thread} and overrides the {\tt run()} method.
+To set the thread's ID number, the constructor takes a single
+parameter that is used to set the thread's ID number.  In the {\tt
+run()} method, the thread simply executes a loop that prints its own
+number ten times:
+%\begin{figure}
+%\begin{graphic}
+%\end{graphic}
+%\end{figure}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class NumberThread extends Thread {
+    int num;
+
+    public NumberThread(int n) {
+        num = n;
+    }
+    public void run() {
+        for (int k=0; k < 10; k++) {
+            System.out.print(num);
+        } //for
+    } // run()
+} // NumberThread
+\end{lstlisting}
+\end{jjjlisting}
+\marginnote{{\tt Thread} subclass}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{chptr14/p707f1.eps}{The {\tt Numbers} object creates several instances of
+{\tt NumberThread} and tells each one to {\tt start()}.
+\label{fig-p707f1}
+\label{pg-fig-p707f1}}
+\end{figure}
+%\end{figure}
+
+\noindent Now let's define another class whose task will be to 
+create many \mbox{\tt NumberThread}s and get them all running at the
+same time (Fig.~\ref{fig-p707f1}).  For each {\tt NumberThread}, we
+want to call its constructor and then {\tt start()} it:
+
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class Numbers {
+  public static void main(String args[]) {
+                                  // 5 threads
+    NumberThread number1, number2, number3, number4, number5; 
+
+     // Create and start each thread
+    number1 = new NumberThread(1); number1.start(); 
+    number2 = new NumberThread(2); number2.start();
+    number3 = new NumberThread(3); number3.start();
+    number4 = new NumberThread(4); number4.start();
+    number5 = new NumberThread(5); number5.start();
+  } // main()
+} // Numbers
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When a thread is started by calling its {\tt start()}
+method, it automatically calls its
+\marginnote{Starting a thread}
+{\tt run()} method.  The output generated by this version of the
+{\tt Numbers} application is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+11111111112222222222333333333344444444445555555555
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent From this output, it appears that the individual threads
+were run in the order in which they were created.  In this case, each
+thread was able to run to completion before the next thread started
+running.
+
+What if we increase the number of iterations that each thread performs?
+Will each thread still run to completion? The following output was
+generated for 200 iterations per thread:
+
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+111111111111111111111111111111111111111111111111111111111111111111111
+111111111111111111111111111111111111111111111111111111111111111111111
+111111111111111111111111111111111111111111111111111111111111112222222
+222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222223333333333333333333333333
+333333333333333333333333333333333333333333333333333333333333333333333
+333333333333333333333333333444444444444444444444444444444444444444444
+444444444444444444444444444444444444444444444444444444444444444444444
+444444444455555555555555555555555555555555555555555555555555555555555
+555555555555555555555555555555555555555555555555555555555555552222222
+222233333333333333333333333333333333333333333333333333333333333333333
+333333333333334444444444444444444444444444445555555555555555555555555
+555555555555555555555555555555555555555555555555555555444444444444444
+4444444444444444444444444444444444
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, only thread 1 managed to run
+to completion.  Threads 2, 3, 4, and 5 did not.  As this example
+illustrates, the order and timing of a thread's execution are highly
+unpredictable.  This example also serves to illustrate one way of
+creating a multithreaded program:
+
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr14/p708f1.eps}{The {\tt java.lang.Thread} class. NOTE: NEEDS
+REVISION TO ADD PRIORITY, YIELD() and SLEEP().
+\label{fig-p708f1}
+\label{pg-fig-p708f1}}
+%\end{graphic}
+%\end{figure}
+
+\begin{BL}
+\item Create a subclass of the {\tt Thread} class.
+\item Within the subclass, implement a method with the signature 
+ {\tt void run()} that contains the statements to be executed by that
+ thread.
+\item Create several instances of the subclass and start each
+ thread by invoking the {\tt start()} method on each instance.
+\end{BL}
+
+\BOXtwoleft{Thread Creation.}{One way to create a thread
+in Java is to define a subclass of {\tt Thread} and override the
+default {\tt run()} method.}
+
+\section{From the Java Library: {\tt java.lang.Thread}}
+{The} {\tt java.lang.Thread} class contains the public methods shown
+in Figure~14.4 (the figure contains only a partial list).  Note that
+{\tt Thread} implements the {\tt Runnable} interface, which consists
+simply of the {\tt run()} method.  As we will now see, another way to
+create a thread is to instantiate a {\tt Thread} object and pass it a
+{\tt Runnable} object that will become its body. This approach allows
+you to turn an existing class into a separate thread.
+
+A {\tt Runnable} object is any object that implements the {\tt
+Runnable} interface---that is, any object that implements the {\tt
+run()} method (Fig.~14.5).  The following example provides an
+alternative way to implement the {\tt NumberThread} program:
+\marginfig{chptr14/p709f1.eps}{Any object that implements the {\tt Runnable} 
+interface can be run as a separate thread.
+\label{fig-p709f1}
+\label{pg-fig-p709f1}}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class NumberPrinter implements Runnable {
+    int num;
+
+    public NumberPrinter(int n) {
+        num = n;
+    }
+
+    public void run() {
+        for (int k=0; k < 10; k++)
+            System.out.print(num);
+    } // run()
+} // NumberPrinter
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this definition, we would then pass instances of this class to
+the individual threads as we create them:
+
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}
+public class Numbers {
+  public static void main(String args[]) {
+
+    Thread number1, number2, number3, number4, number5;
+     // Create and start each thread
+    number1 = new Thread(new NumberPrinter(1)); number1.start(); 
+    number2 = new Thread(new NumberPrinter(2)); number2.start();
+    number3 = new Thread(new NumberPrinter(3)); number3.start();
+    number4 = new Thread(new NumberPrinter(4)); number4.start();
+    number5 = new Thread(new NumberPrinter(5)); number5.start();
+  } // main()
+} // Numbers
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt NumberPrinter} class implements
+{\tt Runnable} by defining exactly the same {\tt run()} that was used
+previously in the {\tt NumberThread} class.  We then pass instances of
+{\tt NumberPrinter} when we create the individual threads.  Doing
+things this way gives exactly the same output as earlier.  This example
+serves to illustrate another way of creating a multithreaded program:
+
+\begin{BL}
+\item Implement the {\tt Runnable} interface for an existing class
+ by implementing the {\tt void run()} method, which contains the
+ statements to be executed by that thread.
+
+\item Create several {\tt Thread} instances by first creating
+ instances of the {\tt Runnable} class and passing each instance as
+ an argument to the {\tt Thread()} constructor.
+
+\item For each thread instance, start it by invoking the {\tt start()} 
+ method on it.
+\end{BL}
+
+
+\BOXtwo{Thread Creation.}{A thread can be created by
+passing a {\tt Runnable} object to a new {\tt Thread} instance.  The
+object's {\tt run()} method will be invoked automatically as soon as
+the thread's {\tt start()} method is called.}
+
+\pagebreak
+\JavaTIP{EFFECTIVE DESIGN}{Converting a Class to a Thread.}{Using the
+{\tt Runnable} interface to create threads enables you to turn an existing
+class into a thread.  For most applications, using the {\tt Runnable}
+interface is preferable to redefining the class as a {\tt Thread}
+subclass.}
+
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  Use the {\tt Runnable} interface to convert the
+following class into a thread.  You want the
+thread to print all the odd numbers up to its bound:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class PrintOdds {
+    private int bound;
+    public PrintOdds(int b) {
+        bound = b;
+    }
+
+    public void print() {
+        if (int k = 1; k < bound; k+=2)
+            System.out.println(k);
+    }
+} // PrintOdds
+\end{lstlisting}
+\end{jjjlisting}
+\end{SSTUDY}
+
+\subsection{Thread Control}
+\noindent The various methods in the {\tt Thread} class (Fig.~14.4)
+can be used to exert
+%\begin{marginalnote}\it Controlling threads\end{marginalnote}
+\marginnote{Controlling threads}
+some control over a thread's execution.  The {\tt start()} and
+{\tt stop()} methods play the obvious roles of starting and stopping a
+thread.  These methods will sometimes be called automatically.
+For example, an applet is treated as a thread by the browser,
+or appletviewer, which is responsible for starting and stopping it.
+
+As we saw in the {\tt NumberThread} example, the {\tt run()} method
+encapsulates the thread's basic algorithm.   It is usually not called
+directly.  Instead, it is called by the thread's {\tt start()} method,
+which handles any system-dependent initialization tasks before calling
+{\tt run()}.
+
+\subsection{Thread Priority}
+\noindent The {\tt setPriority(int)} method lets you set a thread's priority to
+an integer value between {\tt Thread.MIN\_PRIORITY} and
+{\tt Thread.MAX\_PRIOR\-ITY}, the bounds defined as constants in the
+{\tt Thread} class.  Using {\tt set\-Prior\-ity()} gives you some control over a
+thread's execution.  In general, higher-priority threads get to run
+before, and longer than, lower-priority threads.
+%%%\begin{textblock}{1}(-0.75,4)
+%%%\noindent\epsfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:CommonArt:BX7_Texture/cyan.eps,%
+%%%   height=51pc,width=3.25pc,clip=}
+%%%\end{textblock}
+
+\JavaRule[false]{Preemption.}{A higher-priority thread that
+wants to run will {\it preempt} any threads of lower priority.}
+
+\noindent To see how {\tt setPriority()} works, suppose we change
+{\tt NumberThread}'s constructor to the following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public NumberThread(int n) {
+    num = n;
+    setPriority(n);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, each thread sets its priority to its ID number.
+So, thread five will have priority five, a higher priority than
+%\begin{marginalnote}\it Thread priority\end{marginalnote}
+\marginnote{Thread priority}
+all the other threads.   Suppose we now run 2 million iterations of
+each of these threads.  Because 2 million iterations will take a long
+time if we print the thread's ID on each iteration, let's modify the
+{\tt run()} method, so that the ID is printed every 1 million
+iterations:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 10; k++)
+    if (k % 1000000 == 0)
+        System.out.print(num);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this modification, we get the following output when we
+run \break{\tt Numbers}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+5544332211
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It appears from this output that the threads ran to completion
+in priority order.  Thus, thread five completed 2 million iterations before
+thread four started to run, and so on.  This shows that, on my system at
+least, the Java Virtual Machine (JVM) supports priority scheduling.
+
+\JavaTIP{PROGRAMMING TIP}{Platform Dependence.}{Thread implementation in
+Java is platform dependent.  Adequate testing is necessary to ensure
+that a program will perform correctly on a given platform.}
+
+\JavaTIP{EFFECTIVE DESIGN}{Thread Coordination.}{One way to coordinate the
+behavior of two threads is to give one thread higher priority than
+another.}
+
+\JavaTIP{DEBUGGING TIP}{Starvation.}{A high-priority thread that never
+gives up the CPU can starve lower-priority threads by preventing them from
+accessing the CPU.}
+
+\subsection{Forcing Threads to Sleep}
+\noindent The {\tt Thread.sleep()} and {\tt Thread.yield()} methods also
+provide some control over a thread's behavior.  When executed by
+a thread, the {\tt yield()} method causes the thread to
+%\begin{marginalnote}\it Sleep vs.  yield\end{marginalnote}
+yield the CPU, allowing the thread scheduler to choose another
+\marginnote{Sleep versus yield}
+thread.  The {\tt sleep()} method causes the thread to yield
+and not to be scheduled until a certain amount of real time
+has passed.
+%%%\begin{textblock}{1}(45.7,4)
+%%%\noindent\epsfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:CommonArt:BX7_Texture/cyan.eps,%
+%%%   height=51pc,width=3.25pc,clip=}
+%%%\end{textblock}
+
+\JavaRule{Sleep Versus Yield.}{Both the {\tt yield()}
+and {\tt sleep()} methods yield the CPU, but the {\tt sleep()} method
+keeps the thread from being rescheduled for a fixed amount of real
+time.}
+
+\noindent The {\tt sleep()} method can halt a running thread for a given number
+of milliseconds, allowing other waiting threads to run.  The {\tt
+sleep()} method throws an {\tt InterruptedException}, which is a
+checked exception.  This means that the {\tt sleep()} call must be
+embedded within a {\tt try/catch} block or the method it's in must
+throw an {\tt InterruptedException}.  Try/catch blocks were covered in
+Chapter~10.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try {
+    sleep(100);
+} catch (InterruptedException e) {
+    System.out.println(e.getMessage());
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For example, consider the following version of the
+{\tt NumberPrinter.run()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+    for (int k=0; k < 10; k++) {
+        try {
+            Thread.sleep((long)(Math.random() * 1000));
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.print(num);
+    } // for
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, each thread is forced to sleep for a random
+number of milliseconds between 0 and 1,000. When a thread sleeps, it
+gives up the CPU, which allows one of the other waiting threads to
+run.  As you would expect, the output we get from this example will
+reflect the randomness in the amount of time that each thread sleeps:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+14522314532143154232152423541243235415523113435451
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As we will see, the {\tt sleep()} method provides a
+rudimentary form of thread synchronization, in which one thread
+yields control to another.
+%%%\begin{textblock}{1}(-0.75,4)
+%%%\noindent\epsfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:CommonArt:BX7_Texture/cyan.eps,%
+%%%   height=51pc,width=3.25pc,clip=}
+%%%\end{textblock}
+
+\pagebreak
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  What happens if you run five {\tt NumberThread}s of equal priority
+through 2 million iterations each? Run this experiment and note the
+output.  Don't print after every iteration! What sort of scheduling
+algorithm (round-robin, priority scheduling, or something else) was used
+to schedule threads of equal priority on your system?
+
+\item  Try the following experiment and note the output.   Let each thread
+sleep for 50 milliseconds (rather than a random number of
+milliseconds). How does this affect the scheduling of the threads? To
+make things easier to see, print each thread's ID after every 100,000
+iterations.
+
+\item  The purpose of the Java garbage collector is to recapture
+memory that was used by objects that are no longer being
+used by your program.  Should its thread have higher or
+lower priority than your program?
+\end{SSTUDY}
+
+
+\subsection{The Asynchronous Nature of Threaded Programs}
+\noindent Threads are {\bf asynchronous}\index{asynchronous}. This means that the order of execution
+and the timing of a set of threads are unpredictable, at
+least from the programmer's point of view.  Threads are executed under
+the control of the scheduling algorithm used by the operating system
+and the Java Virtual Machine.  In general, unless threads are
+explicitly synchronized, it is impossible for the programmer to
+predict when and for how long an individual thread will
+%\begin{marginalnote}\it Thread preemptions are unpredictable\end{marginalnote}
+\marginnote{Thread preemptions are unpredictable}
+run.  In some systems, under some circumstances, a thread might run to
+completion before any other thread can run.  In other systems, or
+under different circumstances, a thread might run for a short time and
+then be suspended while another thread runs. Of course, when a thread
+is preempted by the system, its state is saved so that its execution
+can be resumed without losing any information.
+
+One implication of a thread's asynchronicity is that it is not
+generally possible to determine where in its source code an individual
+thread might be preempted.  You can't even assume that a thread will
+be able to complete a simple Java arithmetic operation once it has started
+it.   For example, suppose a thread had to execute the following
+operation:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int N = 5 + 3;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This operation computes the sum of 5 and 3 and assigns the result to
+{\tt N}.  It would be tempting to think that once the thread started
+%\begin{marginalnote}\it An arithmetic operation can be interrupted\end{marginalnote}
+\marginnote{\raggedright An arithmetic operation can be interrupted}
+this operation, it would be able to complete it, but that is not
+necessarily so.  You have to remember that Java code is compiled into
+a rudimentary bytecode, which is translated still further into
+the computer's machine language.   In machine language, this operation
+would break down into something like the following three steps:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Fetch 5 from memory and store it in register A.
+Add 3 to register A.
+Assign the value in register A to N.
+\end{lstlisting}
+\end{jjjlisting}
+%%%\begin{textblock}{1}(45.7,4)
+%%%\noindent\epsfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:CommonArt:BX7_Texture/cyan_02.eps,%
+%%%   height=29pc,width=3.25pc,clip=}
+%%%\end{textblock}
+
+\noindent Although none of the individual machine instructions can
+be preempted, the thread could be interrupted between any two machine
+instructions.  The point here is that not even a single Java language
+instruction can be assumed to be indivisible or unpreemptible.
+Therefore, it is impossible to make any assumptions about when a
+particular thread will run and when it will give up the CPU.~This
+suggests the following important principle of multithreaded programs:
+%\begin{marginalnote}\it Threads are asynchronous\end{marginalnote}
+\marginnote{Threads are asynchronous}
+
+\JavaRule{Asynchronous Thread Principle.}{Unless they are
+explicitly prioritized or synchronized, threads behave in a completely
+{\it asynchronous} fashion.}
+
+\JavaTIP{PROGRAMMING TIP}{Thread Timing.}{Unless they are explicitly
+synchronized, you cannot make any assumptions about when, or
+in what order, individual threads will execute, or where a thread
+might be interrupted or preempted during its execution.}
+
+\noindent As we will see, this principle plays a large role
+in the design of multithreaded programs.
+%%%\end{javalibrary}
+
+\begin{figure}[b]
+\figaleft{chptr14/13f9.eps}{A depiction of a thread's life cycle.
+\label{fig-lifecycle}
+\label{pg-fig-lifecycle}}
+\end{figure}
+
+\section{Thread States and Life Cycle}
+\noindent Each thread has a {\bf life cycle}\index{life cycle} that
+consists of several different states, which are summarized in
+Figure~\ref{fig-lifecycle} and Table~14.1.  Thread states are
+represented by labeled ovals, and the transitions between states are
+represented by labeled arrows. Much
+%\begin{marginalnote}\it Ready, running, and sleeping\end{marginalnote}
+\marginnote{Ready, running, and sleeping}
+of a thread's life cycle is under the control of the operating system
+and the Java Virtual \mbox{Machine.}  Those transitions represented by method names---such as
+%\begin{marginalnote}\it Controlling a thread\end{marginalnote}
+\marginnote{Controlling a thread}
+{\tt start()}, {\tt stop()}, {\tt wait()}, {\tt sleep()}, {\tt notify()}---can be controlled
+by the program.  Of these methods, the {\tt stop()} method has been
+deprecated in JDK 1.2 because it is inherently unsafe to stop a thread
+in the middle of its execution.  Other transitions---such as {\it dispatch, I/O
+request, I/O done, time expired, done sleeping}---are under the
+control of the CPU scheduler. When first created a thread is in the
+ready state, which means that it is ready to run.   In the ready state,
+a thread is waiting, perhaps with other threads, in the 
+{\bf ready queue}\index{ready queue}, 
+for its turn on the CPU.  A {\bf queue}\index{queue} is like a waiting
+line.  When the CPU becomes available, the first thread in the ready
+queue will be {\bf dispatched}\index{dispatched}---that is, it will be given the
+CPU.~It will then be in the running state.
+\marginnote{The ready queue}
+
+\begin{table}[t]
+%\hphantom{\caption{A summary of the different thread states.}}
+\TBT{2.5pc}{A summary of the different thread states.}
+\hspace*{2pc}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{22pc}{1pt}}\\[2pt]
+%%%\TBCH{State} & \TBCH{Description}
+{State} & {Description}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{22pc}{0.5pt}}\\[2pt]
+Ready      & The thread is ready to run and waiting for the CPU.\\[2pt]
+Running    & The thread is executing on the CPU.\\[2pt]
+Waiting    & The thread is waiting for some event to happen.\\[2pt]
+Sleeping   & The thread has been told to sleep for a time.\\[2pt]
+Blocked    & The thread is waiting for I/O to finish.\\[2pt]
+Dead       & The thread is terminated.
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{22pc}{1pt}}
+\end{tabular}
+\endTB
+%%
+\end{table}
+
+Transitions between the ready and running states happen under the
+control of the CPU scheduler, a fundamental part of the Java runtime
+%\begin{marginalnote}\it CPU Scheduler\end{marginalnote}
+\marginnote{CPU scheduler}
+system.  The job of scheduling many threads in a fair and
+efficient manner is a little like sharing a single bicycle among
+several children.   Children who are ready to ride the bike wait in line
+for their turn.  The grown up (scheduler) lets the first child (thread)
+ride for a period of time before the bike is taken away and given to
+the next child in line.  In round-robin scheduling, each child (thread)
+gets an equal amount of time on the bike (CPU).
+
+When a thread calls the {\tt sleep()} method, it voluntarily gives up
+the CPU, and when the sleep period is over, it goes back into the
+ready queue.   This would be like one of the children deciding to rest
+for a moment during his or her turn.   When the rest was over, the
+child would get back in line.
+
+When a thread calls the {\tt wait()} method, it voluntarily gives up
+the CPU, but this time it won't be ready to run again until it is
+%\begin{marginalnote}\it Threads can give up the CPU\end{marginalnote}
+\marginnote{Threads can give up the CPU}
+notified by some other thread.
+
+This would be like one child giving his
+or her turn to another child.  When the second child's turn is up, it
+would notify the first child, who would then get back in line.
+
+The system also manages transitions between the {\bf blocked}\index{blocked} and
+ready states.  A thread is put into a blocked state when it does some
+kind of I/O operation.  I/O devices, such as disk drives, modems, and
+%\begin{marginalnote}\it Threads block on I/O operations\end{marginalnote}
+\marginnote{Threads block on I/O operations}
+keyboards, are very slow compared to the CPU.~Therefore, I/O
+operations are handled by separate processors known as {\it
+controllers}. For example, when a thread wants to read data from a
+disk drive, the system will give this task to the disk controller,
+telling it where to place the data.  Because the thread can't do anything
+until the data are read, it is blocked, and another thread is allowed
+to run.   When the disk controller completes the I/O operation, the
+blocked thread is unblocked and placed back in the ready queue.
+
+In terms of the bicycle analogy, blocking a thread would be like
+giving the bicycle to another child when the rider has to stop to tie
+his or her shoe.  Instead of letting the bicycle just sit there, we let
+another child ride it.  When the shoe is tied, the child is ready to
+ride again and goes back into the ready line.  Letting other threads
+run while one thread is waiting for an I/O operation to complete
+improves the overall utilization of the CPU.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Round-robin scheduling isn't always the best idea.  Sometimes
+{\it priority scheduling} leads to a better system.  Can you
+think of ways that priority scheduling---higher-priority
+threads go to the head of the line---can be used to improve
+the responsiveness of an interactive \mbox{program?}
+\end{SSTUDY}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Threads and Interface Responsiveness}
+
+\RHrightsec{13.4}{Using Threads to Improve Interface Responsiveness}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Threads and Interface Responsiveness}
+
+\section{Using Threads to Improve \\\hspace*{2.8pc}Interface Responsiveness}
+\RHrightsec{13.4}{Using Threads to Improve Interface Responsiveness}
+\noindent One good use for a {\it multithreaded} program is to help
+make a more responsive user interface.  In a single-threaded program,
+a program that is executing statements in a long (perhaps even
+infinite) loop remains unresponsive to the user's actions until the
+loop is exited.  Thus, the user will experience a noticeable and
+sometimes frustrating delay between the time an action is initiated
+and the time it is actually handled by the program.
+
+\subsection{Single-Threaded Design}
+\noindent It's always a good idea that the interface be responsive to
+user input, but sometimes it is crucial to an application.  For
+example, suppose a psychology experiment is trying to measure how
+quickly a user responds to a certain stimulus presented by a program.
+Obviously, for this kind of application, the program should take
+action as soon as the user clicks a button to indicate a response to
+the stimulus. Let's work through an appropriate program design for
+the experiment. First, we will formally state the situation and
+describe what the program should do.  Then, we will examine the
+components that would make up an effective program.
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr14/13f2.eps}{Random dots are drawn until the user
+clicks the Clear button.
+\label{fig-dotsscreen}
+\label{pg-fig-dotsscreen}}
+%\end{graphic}
+%\end{figure}
+
+\subsection*{Problem Statement}
+\noindent A psychologist is conducting a psychometric experiment to measure user
+response to a visual cue and asks you to create the following
+program.  The program should have two buttons.  When the Draw button
+is clicked, the program begins drawing thousands of black dots at
+%\begin{marginalnote}\it Problem specification\end{marginalnote}
+\marginnote{Problem specification}
+random locations within a rectangular region of the screen
+(Fig.~14.7).  After a random time interval, the
+program begins drawing red dots.  This change corresponds to the
+presentation of the stimulus.  As soon as the stimulus is presented
+the user is supposed to click on a Clear button, which clears the
+drawing area.  To provide a measure of the user's reaction time, the
+program should report how many red dots were drawn before the user
+clicked the Clear button.
+
+\pagebreak
+Figure~\ref{fig-dotsgui} shows a design for this program's GUI.
+%\begin{marginalnote}\it GUI design\end{marginalnote}
+It contains a control {\tt JPanel} that contains the two
+{\tt JButton}s.  The dots are drawn on a {\tt JPanel}, which is
+positioned in the center of a {\tt BorderLayout} design. 
+\marginnote{GUI design}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{chptr14/13f3.eps}{GUI design for the dot-drawing program.
+\label{fig-dotsgui}
+\label{pg-fig-dotsgui}}
+\end{figure}
+%\end{figure}
+
+\subsection*{Problem Decomposition}
+
+%\begin{marginalnote}\it Interface class and drawing class\end{marginalnote}
+\noindent This program should be decomposed into two classes, a GUI to handle
+\marginnote{Interface class and drawing class}
+the user interface and a drawing class to manage the drawing.
+The main features of its classes are as follows:
+
+\begin{BL}
+\item  {\tt RandomDotGUI} Class: This class manages the user interface,
+responding to user actions by calling methods of the {\tt Dotty} class
+(Fig.~14.9).
+
+\item  {\tt Dotty} Class:  This class contains {\tt draw()} and {\tt clear()}
+methods for drawing on the GUI's drawing panel (Fig.~14.10).
+\end{BL}
+
+
+
+\subsection*{The {\tt RandomDotGUI} Class}
+\marginfig{chptr14/p716f1.eps}{The {\tt RandomDotGUI}.
+\label{fig-p716f1}
+\label{pg-fig-p716f1}}
+\noindent The implementation of {\tt RandomDotGUI} is shown in
+Figure~\ref{fig-randomdotgui}.  The GUI arranges the control and
+drawing panels in a {\tt BorderLayout} and listens for action events
+on its {\tt JButton}s.  When the user clicks the Draw button, the
+GUI's {\tt action\-Per\-formed()} method will create a new {\tt Dotty}
+instance and call its {\tt draw()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+dotty = new Dotty(canvas, NDOTS);
+dotty.draw();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that {\tt Dotty} is passed a reference to the drawing
+{\tt canvas} as well as the number of dots to be drawn.   When the user
+clicks the Clear button, the GUI should call the {\tt dotty.clear()}
+method.  Of course, the important question is, how responsive will
+the GUI be to the user's action?
+\marginfig{chptr14/p716f2.eps}{The {\tt Dotty} class manages the drawing actions.
+\label{fig-p716f2}
+\label{pg-fig-p716f2}}
+
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class RandomDotGUI extends JFrame 
+                            implements ActionListener  {
+  public final int NDOTS = 10000;
+  private Dotty dotty;        // The drawing class
+  private JPanel controls = new JPanel();
+  private JPanel canvas = new JPanel();
+  private JButton draw = new JButton("Draw");
+  private JButton clear = new JButton("Clear");
+ 	
+  public RandomDotGUI() {
+    getContentPane().setLayout(new BorderLayout());
+    draw.addActionListener(this);
+    clear.addActionListener(this);
+    controls.add(draw);
+    controls.add(clear);
+    canvas.setBorder(
+      BorderFactory.createTitledBorder("Drawing Canvas"));
+    getContentPane().add("North", controls);
+    getContentPane().add("Center", canvas);
+    getContentPane().setSize(400, 400);
+  } 
+  public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == draw) {
+      dotty = new Dotty(canvas, NDOTS);
+      dotty.draw();
+    } else {
+      dotty.clear();
+    }
+  } // actionPerformed()
+  public static void main(String args[]){
+    RandomDotGUI gui = new RandomDotGUI();
+    gui.setSize(400,400);
+    gui.setVisible(true);        
+  }
+} // RandomDotGUI
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt RandomDotGUI} class.
+\label{fig-randomdotgui}\label{pg-fig-randomdotgui}}
+\end{figure}
+
+\subsection*{The {\tt Dotty} Class}
+
+\noindent The purpose of the {\tt Dotty} class will be to draw the
+dots and to report how many red dots were drawn before the canvas was
+cleared.  Because it will be passed a reference to the drawing panel
+and the number of dots to draw, the {\tt Dotty} class will need
+instance variables to store these two values.  It will also need a
+variable to keep track of how many
+%\begin{marginalnote}\it What data do we need?\end{marginalnote}
+%%\marginnote{What data do we need?}
+dots were drawn.  Finally, since it will be drawing within a fixed
+rectangle on the panel, the reference coordinates and dimensions
+of the drawing area are declared as class constants. 
+
+The {\tt Dotty()} constructor method will be passed a reference to a
+drawing panel as well as the number of dots to be drawn and will
+merely assign these parameters to its instance variables.   In addition
+to its constructor method, the {\tt Dotty} class will have public
+{\tt draw()} and {\tt clear()} methods, which will be called from the
+GUI.   The {\tt draw()} method will use a loop to draw random
+dots.  The {\tt clear()} will clear the canvas and report the
+number of dots drawn.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[30pc]
+\begin{lstlisting}
+import java.awt.*;
+import javax.swing.*;   // Import Swing classes
+
+public class Dotty {
+                            // Coordinates
+  private static final int HREF = 20, VREF = 20, LEN = 200; 
+  private JPanel canvas;
+  private int nDots;        // Number of dots to draw
+  private int nDrawn;       // Number of dots drawn
+  private int firstRed = 0; // Number of the first red dot
+
+  public Dotty(JPanel canv, int dots) {
+    canvas = canv;
+    nDots = dots;
+  }
+  public void draw() {
+    Graphics g = canvas.getGraphics();
+    for (nDrawn = 0; nDrawn < nDots; nDrawn++) {
+      int x = HREF + (int)(Math.random() * LEN);
+      int y = VREF + (int)(Math.random() * LEN);
+      g.fillOval(x, y, 3, 3);           // Draw a dot
+
+      if ((Math.random() < 0.001) && (firstRed == 0)) {
+        g.setColor(Color.red); // Change color to red
+        firstRed = nDrawn;
+      }
+    } //for
+  } // draw()
+  public void clear() {  // Clear screen and report result
+    Graphics g = canvas.getGraphics();
+    g.setColor(canvas.getBackground());
+    g.fillRect(HREF, VREF, LEN + 3, LEN + 3);
+    System.out.println(
+     "Number of dots drawn since first red = " + (nDrawn-firstRed));
+  } // clear()
+} // Dotty
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Dotty} class, single-threaded version.
+\label{fig-singledotty}\label{pg-fig-singledotty}}
+\end{figure}
+
+The complete implementation of {\tt Dotty} is shown in
+Figure~\ref{fig-singledotty}. Note how its {\tt draw()} method is
+designed.  The drawing loop is bounded by the number of dots to be
+drawn.  On each iteration, the {\tt draw()} method picks a
+%\begin{marginalnote}\it Drawing algorithm\end{marginalnote}
+random location within the rectangle defined by the coordinates
+(HREF,VREF) and (HREF+LEN, VREF+LEN), and draws a dot there.   On each
+iteration it also generates a random number.  If the random number is
+less than 0.001, it changes the drawing color to red and keeps track
+of the number of dots drawn up to that point.
+
+The problem with this design is that as long as the {\tt draw()}
+method is executing, the program will be unable to respond to
+the GUI's Clear button.  In a single-threaded design, both the
+%\begin{marginalnote}\it Single-threaded design: Waiting for the loop to end \end{marginalnote}
+%%\marginnote{Single-threaded design: Waiting for the loop to end }
+GUI and {\tt dotty} are combined into a single thread of execution
+(Fig.~\ref{fig-dottytrace}).
+\begin{figure}[h!]
+\figaleft{chptr14/13f6.eps}{A single-threaded execution of random
+dot drawing.
+\label{fig-dottytrace}
+\label{pg-fig-dottytrace}}
+\end{figure}
+When the user clicks the Draw button, the GUI's {\tt
+actionPerformed()} method is invoked.  It then invokes {\tt Dotty}'s
+{\tt draw()} method, which must run to completion before anything else
+can be done.  If the user clicks the Clear button while the dots are
+being drawn, the GUI won't be able to get to this until all the dots
+are drawn.
+
+If you run this program with {\tt nDots} set to 10,000, the program
+will not clear the drawing panel until all 10,000 dots are drawn, no
+matter when the Clear button is pressed.  Therefore, the values
+reported for the user's reaction time will be wrong.   Obviously, since
+it is so unresponsive to user input, this design completely fails to
+satisfy the program's specifications.
+
+\JavaRule{Single-Threaded Loop.}{In a single-threaded
+design, a loop that requires lots of iterations will completely
+dominate the CPU during its execution, which forces other tasks, including
+user I/O tasks, to wait.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Suppose the Java Virtual Machine (JVM) was single threaded and your
+program got stuck in an infinite loop.  Would you be able to break out
+of the loop by typing some special command (such as Control-C) from
+the keyboard?
+\end{SSTUDY}
+
+\marginfig{chptr14/p719f1.eps}{In a multithreaded design, the {\tt Dotty} class implements {\tt Runnable}.
+\label{fig-p719f1}
+\label{pg-fig-p719f1}}
+\subsection{Multithreaded Drawing: The {\tt Dotty} Thread}
+\noindent One way to remedy this problem is to create a second thread (in
+addition to the GUI itself) to do the drawing.  The drawing thread
+will be responsible just for drawing, while the GUI thread will be
+responsible for handling user actions in the interface.   The trick to
+making the user interface more responsive will be to interrupt the
+drawing thread periodically so that the GUI thread has a chance to
+\marginnote{Multithreaded design: Interrupt the drawing loop}
+handle any events that have occurred.
+
+As Figure~14.14 illustrates, the easiest way to convert
+{\tt Dotty} into a thread is to have it implement the {\tt Runnable}
+interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Dotty implements Runnable {
+
+    // Everything else remains the same
+
+    public void run() {
+        draw();
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This version of {\tt Dotty} will perform the same task as before
+except that it will now run as a separate thread of execution.  Note
+that its {\tt run()} method just calls the {\tt draw()} method that we
+defined in the previous version.   When the {\tt Dotty} thread is
+started by the {\tt RandomDotGUI}, we will have a multithreaded
+program.
+
+However, just because this program has two threads doesn't
+necessarily mean that it will be any more responsive to the user.
+There's no guarantee that the drawing thread will stop as soon as the
+Clear button is clicked.  On most systems, if both threads have
+%\begin{marginalnote}\it Thread control\end{marginalnote}
+\marginnote{Thread control}
+equal priority, the GUI thread won't run until the drawing thread
+finishes drawing all {\it N} dots.
+
+
+\JavaTIP{DEBUGGING TIP}{Thread Control.}{Just breaking a program into two
+separate threads won't necessarily give you the desired
+performance.  It might be necessary to {\it coordinate} the threads.}
+
+\noindent Therefore, we have to modify our design in order to guarantee that the
+GUI thread will get a chance to handle the user's actions.   One
+good way to do this is to have {\tt Dotty} sleep for a short
+instance after it draws each dot.  When a thread sleeps, any other
+%\begin{marginalnote}\it Using {\tt sleep()} to interrupt the drawing\end{marginalnote}
+\marginnote{\raggedright Using {\tt sleep()} to interrupt the drawing}
+threads that are waiting their turn will get a chance to run.  If the
+GUI thread is waiting to handle the user's click on Clear, it
+will now be able to call {\tt Dotty}'s {\tt clear()} method.
+
+The new version of {\tt draw()} is shown in
+Figure~\ref{fig-threadeddotty}.  In this version of {\tt draw()}, the
+thread sleeps for 1 millisecond on each iteration of the loop.  This
+will make it possible for the GUI to run on every iteration, so it
+will handle user actions immediately.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[31pc]{-5pc}
+\begin{lstlisting}
+import java.awt.*;
+import javax.swing.*;     // Import Swing classes
+
+public class Dotty implements Runnable {
+                                     // Coordinates
+  private static final int HREF = 20, VREF = 20, LEN = 200; 
+  private JPanel canvas;
+  private int nDots;           // Number of dots to draw
+  private int nDrawn;          // Number of dots drawn
+  private int firstRed = 0;    // Number of the first red dot
+  private boolean isCleared = false; // Panel is cleared
+
+  public void run() {
+    draw();
+  }
+  public Dotty(JPanel canv, int dots) {
+    canvas = canv;
+    nDots = dots;
+  }
+  public void draw() {
+    Graphics g = canvas.getGraphics();
+    for (nDrawn = 0; !isCleared && nDrawn < nDots; nDrawn++) {
+      int x = HREF + (int)(Math.random() * LEN);
+      int y = VREF + (int)(Math.random() * LEN);
+      g.fillOval(x, y, 3, 3);          // Draw a dot
+
+      if (Math.random() < 0.001 && firstRed == 0) {
+        g.setColor(Color.red);  // Change color to red
+        firstRed = nDrawn;
+      }
+      try {
+        Thread.sleep(1);        // Sleep for an instant
+      } catch (InterruptedException e) {
+        System.out.println(e.getMessage());
+      }
+    } //for
+  } // draw()
+  public void clear() {
+    isCleared = true;
+    Graphics g = canvas.getGraphics();
+    g.setColor( canvas.getBackground() );
+    g.fillRect(HREF,VREF,LEN+3,LEN+3);
+    System.out.println("Number of dots drawn since first red = "
+                                             + (nDrawn-firstRed));
+  } // clear()
+} // Dotty
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{By implementing the {\tt Runnable} interface, this version of {\tt Dotty} 
+can run as a separate thread.
+\label{fig-threadeddotty}\label{pg-fig-threadeddotty}}
+\end{figure}
+
+Another necessary change is that once the {\tt clear()} method is
+called, the {\tt Dotty} thread should stop running (drawing). The
+correct way to stop a thread is to use some variable whose value will
+cause the run loop (or in this case the drawing loop) to exit, so the
+new version of {\tt Dotty} uses the {\tt boolean} variable
+{\tt isCleared} to control when drawing is stopped.  Note that the variable
+is initialized to {\tt false} and then set to {\tt true} in the
+{\tt clear()} method.  The for loop in {\tt draw()} will exit when
+{\tt isCleared} becomes {\tt true}. This causes the {\tt draw()} method
+to return, which causes the {\tt run()} method to return, which
+causes the thread to stop in an orderly fashion.
+
+\JavaTIP{EFFECTIVE DESIGN}{Threaded GUIs.}{Designing a multithreaded
+GUI involves creating a secondary thread that will run concurrently
+with the main GUI thread.  The GUI thread handles the user interface,
+while the secondary thread performs CPU-intensive calculations.}
+
+\JavaTIP{PROGRAMMING TIP}{Threading an GUI.}{Creating a
+second thread within a GUI requires three steps: (1) Define the
+secondary thread to implement the {\tt Runnable} interface, (2)
+override its {\tt run()} method, and (3) incorporate some mechanism,
+such as a {\tt sleep()} state, into the thread's run algorithm so that
+the GUI thread will have a chance to run periodically.}
+
+\subsection*{Modifications to {\tt RandomDotGUI}}
+
+\noindent We don't need to make many changes in {\tt RandomDotGUI} to
+get it to work with the new version of {\tt Dotty}. The primary change
+comes in the {\tt actionPerformed()} method.  Each time the Draw
+button was clicked in the original version of this method, we created
+a {\tt dotty} instance and then called its {\tt draw()} method.  In
+the revised version we must create a new {\tt Thread} and pass it
+%\begin{marginalnote}\it Starting the drawing thread\end{marginalnote}
+\marginnote{Starting the drawing thread}
+an instance of {\tt Dotty}, which will then run as a separate
+thread:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void actionPerformed(ActionEvent e) { 
+    if (e.getSource() == draw) { 
+        dotty = new Dotty(canvas, NDOTS); 
+        dottyThread = new Thread(dotty); 
+        dottyThread.start(); 
+    } else { 
+        dotty.clear(); 
+    } 
+} // actionPerformed()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that in addition to a reference to {\tt dotty}
+we also have a reference to a {\tt Thread} named {\tt dottyThread}.
+This additional variable must be declared within the GUI.
+
+Remember that when you call the {\tt start()} method, it automatically
+calls the thread's {\tt run()} method.   When {\tt dottyThread} starts
+to run, it will immediately call the {\tt draw()} method and start
+drawing dots.  After each dot is drawn, {\tt dottyThread} will sleep
+for an instant.
+
+Notice how the GUI stops the drawing thread.  In the new version, {\tt
+Dotty.clear()} will set the {\tt isCleared} variable, which will cause
+the drawing loop to terminate.  Once again, this is the proper way to
+stop a thread.  Thus, as soon as the user clicks the Clear button, the
+{\tt Dotty} thread will stop drawing and report its result.
+
+\JavaTIP{DEBUGGING TIP}{Stopping a Thread.}{The best way to stop a thread is to use
+a {\tt boolean} control variable whose value can be set to true or false to
+exit the {\tt run()} loop.}
+
+\subsection{Advantages of Multithreaded Design}
+\noindent By creating a separate thread for {\tt Dotty}, we have turned
+a single-threaded program into a multithreaded program.   One thread,
+the GUI, handles the user interface.  The second thread handles the
+drawing task.  By forcing the drawing to sleep on each iteration, we
+guarantee that the GUI thread will remain responsive to the user's
+actions.  Figure~\ref{fig-threadedtrace} illustrates the difference
+\marginnote{Divide and conquer!}
+between the single- and multithreaded designs.  Note that the GUI
+thread starts and stops the drawing thread, and the GUI thread
+executes {\tt dotty.clear()}.  The drawing thread simply executes its
+{\tt draw()} method.  In the single-threaded version, all of these
+actions are done by one thread.
+
+\begin{figure}[h!]
+\figaleft{chptr14/13f8.eps}{Two independent threads: one for drawing,
+the other for the GUI.
+\label{fig-threadedtrace}
+\label{pg-fig-threadedtrace}}
+\end{figure}
+
+The trade-off involved in this design is that it will take
+longer to draw {\it N} random dots, since {\tt dottyThread.draw()} will
+%\begin{marginalnote}\it Trade-off: speed vs.  responsiveness\end{marginalnote}
+\marginnote{Trade-off: speed vs.  responsiveness}
+sleep for an instant on each iteration.  However, the extra time is hardly
+noticeable.  By breaking the program into two separate threads of
+control, one to handle the drawing task and one to handle the user
+interface, the result is a much more responsive program.
+
+\JavaTIP{EFFECTIVE DESIGN}{Responsive Interfaces.}{In order to give a
+program a more responsive user interface, divide it into separate
+threads of control.  Let one thread handle interactive tasks, such as
+user input, and let the second thread handle CPU-intensive
+computations.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Someone might argue that because the Java Virtual Machine uses a
+round-robin scheduling algorithm, it's redundant to use the
+{\tt sleep()} method, since the GUI thread will get its chance to
+run.  What's wrong with this argument for interface
+responsiveness?
+
+\item  Instead of sleeping on each iteration, another way to make the
+interface more responsive would be to set the threaded {\tt Dotty}'s
+priority to a low number, such as 1. Make this change, and experiment
+with its effect on the program's responsiveness.   Is it more or less
+responsive than sleeping on each iteration?  Why?
+\end{SSTUDY}
+
+\section{CASE STUDY: Cooperating Threads}
+
+\noindent For some applications it is necessary to synchronize and coordinate
+the behavior of threads to enable them to carry out a cooperative
+task.   Many cooperative applications are based on the {\bf
+producer/consumer model}\index{producer/consumer model}. According to this model, two threads
+cooperate at producing and consuming a particular resource or piece of
+data.  The producer thread creates some message or result, and the
+consumer thread reads or uses the result.  The consumer has
+to wait for a result to be produced, and the producer has to take care
+not to overwrite a result that hasn't yet been consumed.  Many types
+of coordination problems fit the producer/consumer model.
+
+One example of an application for this model would be to control the display of data
+that is read by your browser.  As information arrives from the
+%\begin{marginalnote}\it Producer and consumer threads\end{marginalnote}
+\marginnote{Producer and consumer threads}
+Internet, it is written to a buffer by the producer thread.   A
+separate consumer thread reads information from the buffer and
+displays it in your browser window.  Obviously, the two threads must be
+carefully synchronized.  
+
+
+\subsection{Problem Statement}
+\noindent To illustrate how to address the sorts of problems that can arise when
+you try to synchronize threads, let's consider a simple application in
+which several threads use a shared resource.   You're familiar with
+%\begin{marginalnote}\it Simulating a waiting line\end{marginalnote}
+\marginnote{Simulating a waiting line}
+those take-a-number devices that are used in bakeries to manage a
+waiting line.  Customers take a number when they arrive, and the clerk
+announces who's next by looking at the device.  As customers are
+called, the clerk increments the ``next customer'' counter by one.
+
+There are some obvious potential coordination problems here.   The device
+must keep proper count and can't skip customers.  Nor can it give the
+same number to two different customers.  Nor can it allow the clerk to
+serve nonexistent customers.
+
+Our task is to build a multithreaded simulation that uses a
+model of a take-a-number device to coordinate the behavior of
+customers and a (single) clerk in a bakery waiting line.  To help
+illustrate the various issues involved in trying to coordinate
+threads, we will develop more than one version of the program.
+
+\subsection*{Problem Decomposition}
+\noindent This simulation will use four classes of objects.
+\marginnote{What classes do we need?}  Figure~\ref{fig-p726f1}
+provides a UML representation of the interactions among the
+objects. 
+\begin{figure}[h!]
+\figa{chptr14/p726f1.eps}{The {\tt Bakery} creates the {\tt Customer}
+and {\tt Clerk} threads and the {\tt TakeANumber} gadget.
+Then {\tt Customer}s request and receive waiting numbers
+and the {\tt Clerk} requests and receives the number of 
+the next customer to serve.
+\label{fig-p726f1}
+\label{pg-fig-p726f1}}
+\end{figure}
+The {\tt TakeANumber} object will serve as a model of a
+take-a-number device.  This is the resource that will be shared by the
+threads, but it is not a thread itself.  The {\tt Customer} class, a
+subclass of {\tt Thread}, will model the behavior of a customer who
+arrives on line and takes a number from the {\tt TakeANumber} device.
+There will be several {\tt Customer} threads created that then compete
+for a space in line.  The {\tt Clerk} thread, which simulates the
+behavior of the store clerk, should use the {\tt TakeANumber} device
+to determine who the next customer is and should serve that customer.
+Finally, there will be a main program that will have the task of
+creating and starting the various threads.  Let's call this the {\tt
+Bakery} class, which gives us the following list of classes:
+
+\begin{BL}
+\item  {\tt Bakery}---creates the threads and starts
+the \mbox{simulation.}
+\item  {\tt TakeANumber}---represents the gadget that keeps track of the
+next customer to be served.
+\item  {\tt Clerk}---uses the {\tt TakeANumber} to determine the
+next customer and will serve the customer.
+\item  {\tt Customer}---represents the customers who will use
+the {\tt TakeANumber} to take their place in line.
+\end{BL}
+
+
+\subsection{Design: The {\tt TakeANumber} Class}
+\noindent The {\tt TakeANumber} class must track two things: Which
+customer will be served next, and which waiting number the next
+customer will be given.  This suggests that it should have at least two
+%\begin{marginalnote}\it What methods do we need?\end{marginalnote}
+%\marginnote{What methods do we need?}
+public methods: {\tt nextNumber()}, which will be used by customers to
+get their waiting numbers, and {\tt nextCustomer()}, which will be used
+by the clerk to determine who should be served (Fig.~14.18).
+Each of these methods will simply retrieve the values of the instance
+\marginfig{chptr14/p726f2.eps}{The {\tt TakeANumber} object keeps 
+track of numbers and customers.
+\label{fig-p726f2}
+\label{pg-fig-p726f2}}
+variables, {\tt next} and {\tt serving}, which keep track of these two
+values.  As part of the object's state, these variables should be {\tt
+private}.
+
+
+How should we make this {\tt TakeANumber} object accessible to all of
+the other objects---that is, to all of the customers and to the
+clerk?  The easiest way to do that is to have the main program pass a
+reference to the {\tt TakeANumber} when it constructs the
+%\begin{marginalnote}\it Passing a reference to a shared object\end{marginalnote}
+{\tt Customer}s and the {\tt Clerk}.  They can each store the reference as
+an instance variable.   In this way, all the objects in the simulation
+can share a {\tt TakeANumber} object as a common resource.
+Our design considerations lead to the definition of
+\marginnote{Passing a reference to a shared object}
+the {\tt TakeANumber} class shown in Figure~\ref{fig-takeanumber1}.
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+class TakeANumber {
+    private int next = 0;     // Next place in line
+    private int serving = 0;  // Next customer to serve
+
+    public synchronized int nextNumber() {
+        next = next + 1;
+        return next;
+    } // nextNumber()
+
+    public int nextCustomer() {
+        ++serving;
+        return serving;
+    } // nextCustomer()
+
+} // TakeANumber
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt TakeANumber} class, Version 1.
+\label{fig-takeanumber1}\label{pg-fig-takeanumber1}}
+\end{figure}
+
+Note that the {\tt nextNumber()} method is declared
+{\tt synchronized}.  As we will discuss in more detail, this ensures that
+only one customer at a time can take a number.   Once a thread begins
+executing a {\tt synchronized} method, no other thread can execute that
+method until the first thread finishes.
+%\begin{marginalnote}\it Synchronized methods\end{marginalnote}
+\marginnote{Synchronized methods} This is important because,
+otherwise, several {\tt Customer}s could call the {\tt nextNumber}
+method at the same time.  It's important that the customer threads
+have access only one at a time, also called {\em mutually exclusive
+access} to the {\tt TakeANumber} object.  This form of {\bf mutual
+exclusion}\index{mutual exclusion} is important for the correctness of
+the simulation.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item What is the analogue to mutual
+exclusion in the real-world bakery situation?
+\end{SSTUDY}
+
+\subsection{Java Monitors and Mutual Exclusion}
+\noindent An object that contains {\tt synchronized} methods has a {\bf monitor}\index{monitor}
+associated with it.  A monitor is a widely used synchronization
+%\begin{marginalnote}\it The monitor concept\end{marginalnote}
+\marginnote{The monitor concept}
+mechanism that ensures that only one thread at a time can execute a
+{\tt synchronized} method.   When a {\tt synchronized} method is
+called, a {\bf lock}\index{lock} is acquired on that object.  For example, if one
+of the {\tt Customer} threads calls {\tt nextNumber()}, a lock will be
+placed on that {\tt TakeANumber} object.   While an object is {\it
+locked}, no other {\tt synchronized} method can run in that
+object.  Other threads must wait for the lock to be released before
+they can execute a {\tt synchronized} method.
+
+While one {\tt Customer} is executing {\tt nextNumber()}, all other
+\marginnote{Mutually exclusive access to a shared object}
+{\tt Customer}s will be forced to wait until the first {\tt Customer}
+is finished.  When the {\tt synchronized} method is exited, the lock
+on the object is released, allowing other {\tt Customer} threads to
+access their {\tt synchronized} methods.  In effect, a {\tt
+synchronized} method can be used to guarantee mutually exclusive
+access to the {\tt TakeANumber} object among the competing customers.
+
+\JavaRule{{\tt synchronized}.}{Once a thread begins to
+execute a {\tt synchronized} method in an object, the object is {\it
+locked} so that no other thread can gain access to that object's
+synchronized methods.}
+
+\JavaTIP{EFFECTIVE DESIGN}{Synchronization.}{In order to restrict access
+of a method or set of methods to one object at a time (mutual
+exclusion), declare the methods {\tt synchronized}.}
+
+\noindent One cautionary note here is that although a synchronized method blocks
+access to other synchronized methods, it does not block access to
+nonsynchronized methods.   This could cause problems.   We
+will return to this issue in the next part of our case study when we discuss the
+testing of our program.
+
+\subsection{The {\tt Customer} Class}
+\noindent A {\tt Customer} thread should model the behavior of taking a number
+from the {\tt TakeANumber} gadget.   For the sake of this simulation,
+let's suppose that after taking a number, the {\tt Customer} object just prints it
+%\begin{marginalnote}\it Simulating the customer\end{marginalnote}
+%\marginnote{Simulating the customer}
+out.  This will serve as a simple model of ``waiting on line.'' What
+about the {\tt Customer}'s state?  To help distinguish one customer
+\marginfig{chptr14/p728f1.eps}{The {\tt Customer} thread.
+\label{fig-p728f1}
+\label{pg-fig-p728f1}}
+from another, let's give each customer a unique ID number starting at
+10001, which will be set in the constructor method.  Also, as we noted
+earlier, each {\tt Customer} needs a reference to the {\tt
+TakeANumber} object, which is passed as a constructor parameter
+(Fig.~14.20).  This leads to the definition of {\tt
+Customer} shown in Figure~\ref{fig-customer1}.  Note that before
+taking a number the customer sleeps for a random interval of up to
+1,000 milliseconds.  This will introduce a bit of randomness into the
+simulation.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Customer extends Thread {
+
+  private static int number = 10000; // Initial ID number
+  private int id;
+  private TakeANumber takeANumber;
+
+  public Customer( TakeANumber gadget ) {
+    id = ++number;
+    takeANumber = gadget;
+  }
+
+  public void run() {
+    try {
+      sleep( (int)(Math.random() * 1000 ) );
+      System.out.println("Customer " + id + 
+       " takes ticket " + takeANumber.nextNumber());
+    } catch (InterruptedException e) {
+      System.out.println("Exception " + e.getMessage());
+    }
+  } // run()
+} // Customer
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt Customer} class, Version 1.
+\label{fig-customer1}\label{pg-fig-customer1}}
+\end{figure}
+
+Another important feature of this definition is the use of the
+{\tt static} variable {\tt number} to assign each customer a unique ID
+number.   Remember that a {\tt static} variable belongs to the class
+%\begin{marginalnote}\it Static (class) variables\end{marginalnote}
+\marginnote{Static (class) variables}
+itself, not to its instances.  Therefore, each {\tt Customer} that is
+created can share this variable.  By incrementing it and assigning its
+new value as the {\tt Customer}'s ID, we guarantee that each customer
+has a unique ID number.
+
+\JavaRule[false]{Static (Class) Variables.}{Static variables
+are associated with the class itself and not with its instances.}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Unique IDs.}{Static variables are often used to
+assign a unique ID number or a unique initial value to each instance
+of a class.}
+
+
+
+\subsection{The {\tt Clerk} Class}
+
+\noindent The {\tt Clerk} thread should simulate the behavior of serving the
+next customer in line, so the {\tt Clerk} thread will repeatedly
+%\begin{marginalnote}\it Simulating the clerk\end{marginalnote}
+%\marginnote{Simulating the clerk}
+access {\tt TakeANumber.\-nextCustomer()} and then serve that customer.
+For the sake of this simulation, we'll just print a message to
+indicate which customer is being served.  Because there's only one
+clerk in this simulation, the only variable in its internal state will
+be a reference to the {\tt TakeANumber} object
+(Fig.~14.22).  In addition to the constructor, all we
+really need to define for this class is the {\tt run()} method.  This
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr14/p729f1.eps}{The {\tt Clerk} thread.
+\label{fig-p729f1}
+\label{pg-fig-p729f1}}
+%\end{graphic}
+%\end{figure}
+leads to the definition of {\tt Clerk} shown in
+Figure~\ref{fig-clerk1}.  In this case, the {\tt sleep()} method is
+necessary to allow the {\tt Customer} threads to run.  The {\tt Clerk}
+will sit in an infinite loop serving the next customer on each
+iteration.
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class Clerk extends Thread {
+  private TakeANumber takeANumber;
+
+  public Clerk(TakeANumber gadget) {
+    takeANumber = gadget;
+  }
+
+  public void run() {
+    while (true) {
+      try {
+        sleep( (int)(Math.random() * 50));
+        System.out.println("Clerk serving ticket " + 
+                        takeANumber.nextCustomer());
+      } catch (InterruptedException e) {
+        System.out.println("Exception " + e.getMessage() );
+      }
+    } //while
+  } //run()
+} // Clerk
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of {\tt Clerk}, Version 1.
+\label{fig-clerk1}\label{pg-fig-clerk1}}
+\end{figure}
+
+
+\subsection{The {\tt Bakery} Class}
+\noindent Finally, {\tt Bakery} is the simplest class to design.   It contains
+the {\tt main()} method, which gets the whole simulation started.   As
+we said, its role will be to create one {\tt Clerk} thread and
+%\begin{marginalnote}\it The main program\end{marginalnote}
+\marginnote{The main program}
+several {\tt Customer} threads, and get them all started
+(Fig.~\ref{fig-bakery}). Notice that the {\tt Customer}s and the
+{\tt Clerk} are each passed a reference to the shared
+{\tt TakeANumber} gadget.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+public class Bakery {
+  public static void main(String args[]) {
+    System.out.println("Starting clerk and customer threads");
+    TakeANumber numberGadget = new TakeANumber();
+    Clerk clerk = new Clerk(numberGadget);
+    clerk.start();
+    for (int k = 0; k < 5; k++) {
+      Customer customer = new Customer(numberGadget);
+      customer.start();
+    }
+  } // main()
+} // Bakery
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{Definition of the {\tt Bakery} class.
+\label{fig-bakery}\label{pg-fig-bakery}}
+\end{figure}
+
+\subsection*{Problem: Nonexistent Customers}
+\noindent Now that we have designed and implemented the classes, let's run
+several experiments to test that everything works as intended.  Except
+for the {\tt synchronized} {\tt nextNumber()} method, we've made
+little attempt to make sure that the {\tt Customer} and {\tt Clerk}
+threads will work together cooperatively, without violating the
+%\begin{marginalnote}\it Testing and debugging\end{marginalnote}
+real-world constraints that should be satisfied by the simulation.   If
+we run the simulation as it is presently coded, it will generate five
+customers and the clerk will serve all of them.  But we get something
+\marginnote{Testing and debugging}
+like the following output:
+
+%%%%% output from bakery1
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Starting clerk and customer threads
+  Clerk serving ticket 1
+  Clerk serving ticket 2
+  Clerk serving ticket 3
+  Clerk serving ticket 4
+  Clerk serving ticket 5
+Customer 10004 takes ticket 1
+Customer 10002 takes ticket 2
+  Clerk serving ticket 6
+Customer 10005 takes ticket 3
+  Clerk serving ticket 7
+  Clerk serving ticket 8
+  Clerk serving ticket 9
+  Clerk serving ticket 10
+Customer 10001 takes ticket 4
+Customer 10003 takes ticket 5
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Our current solution violates an important
+real-world constraint: You can't serve customers before they enter the
+%\begin{marginalnote}\it Problem: The clerk thread doesn't wait for customer threads\end{marginalnote}
+\marginnote{Problem: The clerk thread doesn't wait for customer threads}
+line! How can we ensure that the clerk doesn't serve a customer unless
+there's actually a customer waiting?
+
+The wrong way to address this issue would be to increase the amount of
+sleeping that the {\tt Clerk} does between serving customers.  Indeed,
+this would allow more customer threads to run, so it might appear to
+have the desired effect, but it doesn't truly address the main
+problem: A clerk cannot serve a customer if no customer is waiting.
+
+The correct way to solve this problem is to have the clerk check that
+there are customers waiting before taking the next customer.   One way
+to model this would be to add a {\tt customerWaiting()} method to our
+{\tt TakeANumber} object.   This method would return {\tt true}
+whenever {\tt next} is greater than {\tt serving}. That will
+correspond to the real-world situation in which the clerk can see
+%\begin{marginalnote}\it The clerk checks the line\end{marginalnote}
+\marginnote{The clerk checks the line}
+customers waiting in line.  We can make the following
+modification to {\tt Clerk.run()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  while (true) {
+    try {
+      sleep((int)(Math.random() * 50));
+      if (takeANumber.customerWaiting())    
+        System.out.println("Clerk serving ticket " 
+                    + takeANumber.nextCustomer());
+    } catch (InterruptedException e) {
+      System.out.println("Exception " + e.getMessage());
+    }
+  } // while
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent And we add the following method to {\tt TakeANumber} 
+(Fig.~14.25):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean customerWaiting() {
+    return next > serving;
+}
+\end{lstlisting}
+\end{jjjlisting}
+\marginfig{chptr14/p731f1.eps}{The revised {\tt TakeANumber} class.
+\label{fig-p731f1}
+\label{pg-fig-p731f1}}
+
+\noindent In other words, the {\tt Clerk} won't serve a customer
+unless there are customers waiting---that is, unless {\tt next} is
+greater than {\tt serving}.  Given these changes, we get the following
+type of output when we run the simulation:
+
+%%% output from bakery2
+\begin{jjjlisting}
+\begin{lstlisting}
+Starting clerk and customer threads
+Customer 10003 takes ticket 1
+  Clerk serving ticket 1
+Customer 10005 takes ticket 2
+  Clerk serving ticket 2
+Customer 10001 takes ticket 3
+  Clerk serving ticket 3
+Customer 10004 takes ticket 4
+  Clerk serving ticket 4
+Customer 10002 takes ticket 5
+  Clerk serving ticket 5
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This example illustrates that when application design
+involves cooperating threads, the algorithm used must ensure the
+proper cooperation and coordination among the threads.
+
+\JavaTIP{EFFECTIVE DESIGN}{Thread Coordination.}{When two or more threads
+must behave cooperatively, their interaction must be carefully
+coordinated by the algorithm.}
+
+\subsection{Problem: Critical Sections}
+%<sec_asynchronicity:\thisBheadno><pg_sec_asynchronicity:\thispageno>
+\noindent It is easy to forget that thread behavior is asynchronous.  You can't
+predict when a thread might be interrupted or might have to give up
+\marginnote{Thread interruptions are \hfill\break unpredictable}
+the CPU to another thread.   In designing applications that involve
+cooperating threads, it's important that the design incorporates
+features to guard against problems caused by
+asynchronicity.   To illustrate this problem, consider the following
+statement from the {\tt Customer.run()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println("Customer " + id + 
+       " takes ticket " + takeANumber.nextNumber());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Even though this is a single Java statement, it breaks
+up into several Java bytecode statements.  A {\tt Customer} thread
+could certainly be interrupted between getting the next number back
+from {\tt TakeANumber} and printing it out.  We can simulate this by
+breaking the {\tt println()} into two statements and putting a
+{\tt sleep()} in their midst:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  try {
+    int myturn = takeANumber.nextNumber();
+    sleep( (int)(Math.random() * 1000 ) );
+    System.out.println("Customer " + id + 
+                   " takes ticket " + myturn);
+  } catch (InterruptedException e) {
+    System.out.println("Exception " + e.getMessage());
+  }
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If this change is made in the simulation, you might get
+the following output:
+
+%%%Output from bakery3
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Starting clerk and customer threads
+  Clerk serving ticket 1
+  Clerk serving ticket 2
+  Clerk serving ticket 3
+Customer 10004 takes ticket 4
+  Clerk serving ticket 4
+  Clerk serving ticket 5
+Customer 10001 takes ticket 1
+Customer 10002 takes ticket 2
+Customer 10003 takes ticket 3
+Customer 10005 takes ticket 5
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Because the {\tt Customer} threads are now interrupted
+in between taking a number and reporting their number, it looks as if
+they are being served in the wrong order.  Actually, they
+are being served in the correct order.  It's their reporting of
+their numbers that is wrong!
+
+The problem here is that the {\tt Customer.run()} method is being
+interrupted in such a way that it invalidates the simulation's output.
+%\begin{marginalnote}\it Problem: An interrupt in a critical section\end{marginalnote}
+\marginnote{Problem: An interrupt in a critical section}
+A method that displays the simulation's state should be designed so
+that once a thread begins reporting its state, that thread will be
+allowed to finish reporting before another thread can start reporting
+its state.   Accurate \mbox{reporting} of a thread's state is a critical
+element of the simulation's overall integrity.
+
+A {\bf critical section}\index{critical section} is any section of a thread that should not be
+interrupted during its execution.  In the bakery simulation, all of the
+statements that report the simulation's progress are critical
+sections.  Even though the chances are small that a thread will be
+interrupted in the midst of a {\tt println()} statement, the faithful
+reporting of the simulation's state should not be left to
+chance.  Therefore, we must design an algorithm that prevents the
+interruption of critical sections.
+
+\subsection*{Creating a Critical Section}
+\noindent The correct way to address this problem is to treat the reporting of
+the customer's state as a critical section.  As we saw earlier when we
+discussed the concept of a monitor, a {\tt synchronized} method within
+a shared object ensures that once a thread starts the method, it will
+be allowed to finish it before any other thread can start
+%\begin{marginalnote}\it Making a critical section uninterruptible\end{marginalnote}
+\marginnote{\raggedright Making a critical section uninterruptible}
+it.  Therefore, one way out of this dilemma is to redesign the {\tt
+nextNumber()} and {\tt nextCustomer()} methods in the {\tt
+TakeANumber} class so that they report which customer receives a
+ticket and which customer is being served
+(Fig.~\ref{fig-takeanumber2}).  In this version all of the methods are
+{\tt synchronized}, so all the actions of the {\tt TakeANumber} object
+are treated as critical sections.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class TakeANumber {
+  private int next = 0;     // Next place in line
+  private int serving = 0;  // Next customer to serve
+
+  public synchronized int nextNumber(int custId) {
+    next = next + 1;
+    System.out.println( "Customer " + custId + "
+                                  takes ticket " + next );
+    return next;
+  } // nextNumber()
+  public synchronized int nextCustomer() {
+    ++serving;
+    System.out.println("  Clerk serving ticket " 
+                                              + serving );
+    return serving;
+  } // nextCustomer()
+  public synchronized boolean customerWaiting() {
+    return next > serving;
+  } // customerWaiting()
+} // TakeANumber
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt TakeANumber} class, Version 2.
+\label{fig-takeanumber2}\label{pg-fig-takeanumber2}}
+\end{figure}
+
+
+Note that the reporting of both the
+next number and the next customer to be served are now handled by
+{\tt TakeANumber} in Figure~\ref{fig-takeanumber2} . Because the methods that handle these actions are
+{\tt synchronized}, they cannot be interrupted by any threads involved in
+the simulation.  This guarantees that the simulation's output will
+faithfully report the simulation's state.
+
+\pagebreak
+Given these changes to {\tt TakeANumber}, we must remove the {\tt
+println()} statements from the {\tt run()} methods in {\tt Customer}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  try {
+    sleep((int)(Math.random() * 2000));
+    takeANumber.nextNumber(id);
+  } catch (InterruptedException e) {
+    System.out.println("Exception: "+ e.getMessage());
+  }
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent and from the {\tt run()} method in {\tt Clerk}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  while (true) {
+    try {
+      sleep( (int)(Math.random() * 1000));
+      if (takeANumber.customerWaiting())
+        takeANumber.nextCustomer();    
+    } catch (InterruptedException e) {
+      System.out.println("Exception: "+e.getMessage());
+    }
+  } // while
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Rather than printing their numbers, these
+methods now just call the appropriate methods in {\tt TakeANumber}.
+Given these design changes, our simulation now produces the
+following correct output:
+
+%% OUTPUT PRODUCED BY bakery4
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Starting clerk and customer threads
+Customer 10001 takes ticket 1
+  Clerk serving ticket 1
+Customer 10003 takes ticket 2
+Customer 10002 takes ticket 3
+  Clerk serving ticket 2
+Customer 10005 takes ticket 4
+Customer 10004 takes ticket 5
+  Clerk serving ticket 3
+  Clerk serving ticket 4
+  Clerk serving ticket 5
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The lesson to be learned from this is that in
+designing multithreaded programs, it is important to assume that if a
+thread can be interrupted at a certain point, it will be interrupted at
+%\begin{marginalnote}\it Preventing undesirable interrupts\end{marginalnote}
+\marginnote{Preventing undesirable interrupts}
+that point.  The fact that an interrupt is unlikely to occur is no
+substitute for the use of a critical section.  This is something like
+``Murphy's Law of Thread Coordination.''
+
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{The Thread Coordination Principle.}{Use
+critical sections to coordinate the behavior of cooperating threads.
+By designating certain methods as synchronized, you can ensure their
+mutually exclusive access.  Once a thread starts a synchronized method,
+no other thread will be able to execute the method until the first
+thread is \mbox{finished.}}
+
+\noindent In a multithreaded application, the classes and
+methods should be designed so that undesirable interrupts will
+not affect the correctness of the algorithm.
+
+\JavaTIP[false]{PROGRAMMING TIP}{Critical Sections.}{Java's monitor mechanism
+will ensure that while one thread is executing a synchronized method,
+no other thread can gain access to it.  Even if the first thread is
+interrupted, when it resumes execution again it will be allowed to
+finish the synchronized method before other threads can access
+synchronized methods in that object.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Given the changes we've described, the bakery simulation should now
+run correctly regardless of how slow or fast the {\tt Customer} and
+{\tt Clerk} threads run.  Verify this by placing different-sized sleep
+intervals in their {\tt run()} methods.  ({\it Note}: You don't want to
+put a {\tt sleep()} in the synchronized methods because that would
+undermine the whole purpose of making them {\tt synchronized} in the
+first place.)
+\end{SSTUDY}
+
+
+\subsection{Using {\tt wait/notify} to Coordinate Threads}
+\noindent The examples in the previous sections were designed to illustrate the
+issue of thread asynchronicity and the principles of mutual exclusion
+and critical sections.  Through the careful design of the algorithm and
+the appropriate use of the {\tt synchronized} qualifier, we have
+managed to design a program that correctly coordinates the behavior of
+the {\tt Customer}s and {\tt Clerk} in this bakery simulation.
+
+\subsection*{The Busy-Waiting Problem}
+%<sec_busywait:\thisCheadno><pg_sec_busywait:\thispageno>
+\noindent One problem with our current design of the Bakery algorithm is that it
+uses {\em busy waiting}\index{busy waiting} 
+%\begin{marginalnote}\it Busy waiting\end{marginalnote}
+\marginnote{Busy waiting} on the part of the {\tt Clerk} thread. {\bf
+Busy waiting} occurs when a thread, while waiting for some condition
+to change, executes a loop instead of giving up the CPU.  Because busy
+waiting is wasteful of CPU time, we should modify the algorithm.
+
+\pagebreak
+As it is presently designed, the {\tt Clerk} thread sits in a loop
+that repeatedly checks whether there's a customer to serve:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  while (true) {
+    try {
+      sleep( (int)(Math.random() * 1000));
+      if (takeANumber.customerWaiting())
+        takeANumber.nextCustomer();
+    } catch (InterruptedException e) {
+      System.out.println("Exception: " + e.getMessage());
+    }
+  } // while
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+A far better solution would be to force the {\tt Clerk} thread to wait
+until a customer arrives without using the CPU.  Under such a design,
+the {\tt Clerk} thread can be notified and enabled to run as
+soon as a {\tt Customer} becomes available.  Note that
+this description views the customer/clerk relationship as one-half of
+the producer/consumer
+%\begin{marginalnote}\it Producer/consumer\end{marginalnote}
+\marginnote{Producer/consumer} relationship.  When a customer takes a
+number, it {\it produces} a customer in line that must be served (that
+is, {\it consumed}) by the clerk.
+
+This is only half the producer/consumer relationship because we
+haven't placed any constraint on the size of the waiting line.  There's
+no real limit to how many customers  can be produced.   If we
+did limit the line size, customers might be forced to wait before
+taking a number if, say, the tickets ran out, or the bakery filled up.
+In that case, customers would have to wait until the line resource
+became available and we would have a full-fledged producer/consumer
+relationship.
+
+\subsection*{The {\tt wait/notify} Mechanism}
+\noindent So, let's use Java's {\tt wait/notify} mechanism to
+eliminate busy waiting from our simulation.  As noted in
+Figure~\ref{fig-lifecycle}, the {\tt wait()} method puts a thread into
+a waiting state, and {\tt notify()} takes a thread out of waiting and
+places it back in the ready queue.  To use these methods in this
+program we need to modify the {\tt nextNumber()} and {\tt
+nextCustomer()} methods.  If there is no customer in line when the
+{\tt Clerk} calls the {\tt nextCustomer()} method, the {\tt Clerk}
+should be made to {\tt wait()}:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+public synchronized int nextCustomer() {
+  try {
+    while (next <= serving)
+      wait();
+  } catch(InterruptedException e) {
+    System.out.println("Exception: " + e.getMessage());
+  } finally {
+    ++serving;
+    System.out.println(" Clerk serving ticket " + serving);
+    return serving;
+  }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the {\tt Clerk} still checks whether
+there are customers waiting.  If there are none, the {\tt Clerk} calls
+the {\tt wait()} method.  This removes the {\tt Clerk} from the CPU
+%\begin{marginalnote}\it A waiting thread gives up the CPU\end{marginalnote}
+\marginnote{A waiting thread gives up the CPU}
+until some other thread notifies it, at which point it will be ready
+to run again.  When it runs again, it should check that there is in
+fact a customer waiting before proceeding.  That's why we use a
+while loop here.  In effect, the {\tt Clerk} will wait until there's a
+customer to serve.   This is not busy waiting because the
+{\tt Clerk} thread loses the CPU and must be notified each time a customer
+becomes available.
+
+When and how will the {\tt Clerk} be notified? Clearly, the {\tt
+Clerk} should be notified as soon as a customer takes a number.
+Therefore, we put a {\tt notify()} in the {\tt nextNumber()} method,
+which is the method called by each {\tt Customer} as it gets in line:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public synchronized int nextNumber( int custId) {
+  next = next + 1;
+  System.out.println("Customer " + custId + 
+                     " takes ticket " + next);
+  notify();
+  return next;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, as soon as a {\tt Customer} thread executes the
+{\tt nextNumber()} method, the {\tt Clerk} will be notified and allowed
+to proceed. 
+
+What happens if more than one {\tt Customer} has executed a {\tt
+wait()}?  In that case, the JVM will maintain a queue of waiting {\tt
+Customer} threads.  Then, each time a {\tt notify()} is executed, the
+JVM will take the first {\tt Customer} out of the queue and allow it
+to proceed.
+
+If we use this model of thread coordination, we no longer need to test
+{\tt customerWaiting()} in the {\tt Clerk.run()} method.  It is
+to be tested in the {\tt TakeANumber.nextCustomer()}. Thus,
+the {\tt Clerk.run()} can be simplified to
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void run() {
+  while (true) {
+    try {
+      sleep((int)(Math.random() * 1000));
+      takeANumber.nextCustomer();
+    } catch (InterruptedException e) {
+      System.out.println("Exception: "+ e.getMessage());
+    }
+  } // while
+} // run()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt Clerk} thread may be forced to wait
+when it calls the {\tt nextCustomer} method.
+
+
+Because we no longer need the {\tt customerWaiting()} method, we end
+up with the new definition of {\tt TakeANumber} shown in
+\marginfig{chptr14/p737f1.eps}{In the final design of {\tt TakeANumber}, 
+its methods are synchronized.
+\label{fig-p737f1}
+\label{pg-fig-p737f1}}
+Figures~14.27 and~\ref{fig-takeanumber3}.  
+
+\begin{figure}[h]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class TakeANumber {
+  private int next = 0;
+  private int serving = 0;
+
+  public synchronized int nextNumber(int custId) {
+    next = next + 1;
+    System.out.println( "Customer " + custId + 
+                        " takes ticket " + next);
+    notify();
+    return next;
+  } // nextNumber()
+
+  public synchronized int nextCustomer() {
+    try {
+      while (next <= serving)  {
+        System.out.println("  Clerk waiting ");
+        wait();
+      }
+    } catch(InterruptedException e) {
+       System.out.println("Exception " + e.getMessage());
+    } finally {
+       ++serving;
+       System.out.println("  Clerk serving ticket " 
+                                          + serving);
+       return serving;
+    }
+  } // nextCustomer()
+} // TakeANumber
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt TakeANumber} class, Version 3.
+\label{fig-takeanumber3}\label{pg-fig-takeanumber3}}
+\end{figure}
+
+\noindent Given this version of the program, the following kind of
+output will be generated:
+
+%%  Output from bakery5
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Starting clerk and customer threads
+Customer 10004 takes ticket 1
+Customer 10002 takes ticket 2
+  Clerk serving ticket 1
+  Clerk serving ticket 2
+Customer 10005 takes ticket 3
+Customer 10003 takes ticket 4
+  Clerk serving ticket 3
+Customer 10001 takes ticket 5
+  Clerk serving ticket 4
+  Clerk serving ticket 5
+  Clerk waiting
+\end{lstlisting}
+\end{jjjlisting}
+
+
+
+\JavaTIP[false]{PROGRAMMING TIP}{Busy Waiting.}{Java's {\tt wait/notify}
+mechanism can be used effectively to eliminate busy waiting from a
+multithreaded application.}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{\hspace*{2.5pt}P\hspace*{0.5pt}r\hspace*{0.5pt}o\hspace*{0.5pt}d\hspace*{0.5pt}u%
+\hspace*{0.5pt}c\hspace*{0.5pt}e\hspace*{0.5pt}r\hspace*{1pt}/\hspace*{1pt}C\hspace*{0.5pt}o%
+\hspace*{0.5pt}n\hspace*{0.5pt}s\hspace*{0.5pt}u\hspace*{0.5pt}m\hspace*{0.5pt}e\hspace*{0.5pt}r%
+\hspace*{0.5pt}.\hspace*{4.5pt}}
+{The producer/consumer model is a useful design for coordinating the wait/notify interaction.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  An interesting experiment to try is to make the {\tt Clerk} a little
+slower by making it sleep for up to 2,000 milliseconds.  Take a
+guess at what would happen if you ran this experiment.  Then
+run the experiment and observe the results.
+\end{SSTUDY}
+
+\subsection*{The {\tt wait/notify} Mechanism}
+\noindent There are a number of important restrictions that must be observed
+%\begin{marginalnote}\it Wait/notify go into synchronized methods\end{marginalnote}
+\marginnote{\raggedright Wait/notify go into synchronized methods}
+when using the {\tt wait/notify} mechanism:
+
+\begin{BL}
+\item  Both {\tt wait()} and {\tt notify()} are methods of the
+{\tt Object} class, not the {\tt Thread} class.  This enables
+them to lock objects, which is the essential feature of
+Java's monitor mechanism.
+
+\item  A {\tt wait()} method can be used within a {\tt synchronized}
+method.  The method doesn't have to be part of a {\tt Thread}.
+
+
+\item  You can only use {\tt wait()} and {\tt notify()}  within
+{\tt synchronized} methods.  If you use them in other methods,
+you will cause an {\tt Illegal\-Moni\-torStateException} with
+the message ``current thread not owner.''
+
+\item  When a {\tt wait()}---or a {\tt sleep()}---is used within a
+{\tt synchronized} method, the lock on that object is released
+so that other methods can access the object's {\tt synchronized}
+methods.
+\end{BL}
+
+\JavaTIP[false]{DEBUGGING TIP}{Wait/Notify.}{It's easy to forget that the
+{\tt wait()} and \mbox{\tt notify()} methods can only be used within
+{\tt synchronized} methods.}
+
+\section{CASE STUDY: The Game of Pong}
+
+The game of Pong was one of the first computer video games and was all
+the rage in the 1970s. The game consists of a ball that moves
+horizontally and vertically within a rectangular region, and a single
+paddle, which is located at the right edge of the region that can
+be moved up and down by the user. When the ball hits the top, left,
+or bottom walls or the paddle, it bounces off in the opposite
+direction. If the ball misses the paddle, it passes through the right
+wall and re-emerges at the left wall. Each time the ball bounces off
+a wall or paddle, it emits a pong sound.
+
+\subsection{A Multithreaded Design}
+
+Let's develop a multithreaded applet to play the game of Pong.
+\marginfig{chptr14/pongscreensmall.eps}{The UI for Pong.
+\label{fig-pongscreen}
+\label{pg-fig-pongscreen}}
+Figure~14.29 shows how the game's GUI should appear.  There
+are three objects involved in this program: the applet, which serves
+as the GUI, the ball, which is represented as a blue circle in the
+applet, and the paddle, which is represented by a red rectangle along
+the right edge of the applet. What cannot be seen in this figure is 
+that the ball moves autonomously, bouncing off the walls and paddle.
+The paddle's motion is controlled by the user by pressing the up- and
+down-arrow keys on the keyboard. 
+
+We will develop class definitions for the ball, paddle, and the
+applet. Following the example of our dot-drawing program earlier in
+the Chapter, we will employ two independent threads, one for the GUI
+and one for the ball.  Because the user will control the movements of
+the paddle, the applet will employ a listener object to listen for and
+respond to the user's key presses. 
+
+Figure~\ref{fig-pongdesign} provides an overview of the
+object-oriented design of the Pong program. The {\tt PongApplet} class
+is the main class. It uses instances of the {\tt Ball} and {\tt
+Paddle} classes.  {\tt PongApplet} is a subclass of {\tt JApplet} and
+\begin{figure}[h!]
+\figaleft{chptr14/pongdesign.eps}{Design of the Pong program.
+\label{fig-pongdesign}
+\label{pg-fig-pongdesign}}
+\end{figure}
+implements the {\tt KeyListener} interface. This is another of the
+several event handlers provided in the {\tt java.awt} library. This
+one handles {\tt KeyEvent}s and the {\tt KeyListener} interface
+consists of three abstract methods: {\tt keyPressed()}, {\tt
+keyTyped()}, and {\tt keyReleased()}, all of which are associated with
+the act of pressing a key on the keyboard. All three of these
+methods are implemented in the {\tt PongApplet} class.  A key-typed
+event occurs when a key is pressed down. A key-release event occurs
+when a key that has been pressed down is released.  A key-press event
+is a combination of both of these events.
+
+The {\tt Ball} class is a {\tt Thread} subclass. Its data and methods
+are designed mainly to keep track of its motion within the applet's
+drawing panel. The design strategy employed here leaves the drawing of
+the ball up to the applet. The {\tt Ball} thread itself just 
+handles the movement within the applet's drawing panel.  Note that the {\tt
+Ball()} constructor takes a reference to the {\tt PongApplet}. As we
+will see, the {\tt Ball} uses this reference to set the dimensions of
+the applet's drawing panel. Also, as the {\tt Ball} moves, it will
+repeatedly call the applet's {\tt repaint()} method to draw the ball.
+
+The {\tt Paddle} class is responsible for moving the paddle up and
+down along the drawing panel's right edge. Its public methods, {\tt
+moveUP()} and {\tt moveDown()},  will be called by the applet in
+response to the user pressing the up and down arrows on the
+keyboard.  Because the applet needs to know where to draw the applet,
+the paddle class contains several public methods, {\tt getX()}, {\tt
+getY()}, and {\tt resetLocation()}, whose tasks are to report the
+paddle's location or to adjust its location in case the applet
+is resized.
+
+The {\tt PongApplet} controls the overall activity of the program.
+Note in particular its {\tt ballHitsPaddle()} method. This method has
+the task of determining when the ball and paddle come in contact as
+the ball continuously moves around in the applet's drawing panel.  As
+in the {\tt ThreadedDotty} example earlier in the chapter, it is
+necessary for the {\tt Ball} and the the applet to be implemented as
+separated threads so that the applet can be responsive to the user's
+key presses.
+
+\subsection{Implementation of the Pong Program}
+
+We begin our discussion of the program's implementation with the {\tt Paddle} class
+implementation (Fig.~\ref{fig-paddle}).
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class Paddle {
+    public static final int HEIGHT = 50;  // Paddle size
+    public static final int WIDTH = 10;       
+    private static final int DELTA = HEIGHT/2; // Move size
+    private static final int BORDER = 0;
+    private int gameAreaHeight;
+    private int locationX, locationY;
+    private PongApplet applet;
+
+    public Paddle (PongApplet a) {
+       applet = a;
+       gameAreaHeight  = a.getHeight();
+       locationX = a.getWidth()-WIDTH;
+       locationY = gameAreaHeight/2;
+    } // Paddle()
+    public void resetLocation() {
+       gameAreaHeight  = applet.getHeight();
+       locationX = applet.getWidth()-WIDTH;
+    }
+    public int getX() {
+         return locationX;
+    }
+    public int getY() {
+         return locationY;
+    }
+    public void moveUp () {
+       if (locationY > BORDER )
+           locationY -= DELTA;
+    } // moveUp()
+    public void moveDown() {
+       if (locationY + HEIGHT < gameAreaHeight - BORDER)
+           locationY += DELTA;
+    } // moveDown()
+} // Paddle
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt Paddle} class.
+\label{fig-paddle}\label{pg-fig-paddle}}
+\end{figure}
+
+Class constants, {\tt HEIGHT} and {\tt WIDTH} are used to
+define the size of the {\tt Paddle}, which is represented on
+the applet as a simple rectangle. The applet will use the
+{\tt Graphics.fillRect()} method  to draw the paddle:
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+g.fillRect(pad.getX(),pad.getY(),Paddle.WIDTH,Paddle.HEIGHT);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how the applet uses the paddle's {\tt getX()}
+and {\tt getY()} methods to get the paddle's current location. 
+
+
+The class constants {\tt DELTA} and {\tt BORDER} are used to control
+the paddle's movement. {\tt DELTA} represents the number of pixels
+that the paddle moves on each move up or down, and {\tt BORDER} is
+used with {\tt gameAreaHeight} to keep the paddle within the
+drawing area.  The {\tt moveUp()} and {\tt moveDown()} methods are
+called by the applet each time the user presses an up- or down-arrow key.
+They simply change the paddle's location by {\tt DELTA} pixels up or
+down.
+
+\pagebreak
+The {\tt Ball} class (Fig.~\ref{fig-ball}) uses the class constant
+{\tt SIZE} to determine the size of the oval that represents the ball,
+drawn by the applet as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+g.fillOval(ball.getX(),ball.getY(),ball.SIZE,ball.SIZE);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As with the paddle, the applet uses the
+ball's {\tt getX()} and {\tt getY()} method to determine the ball's
+current location.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[34.5pc]
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.Toolkit;
+
+public class Ball extends Thread {
+  public static final int SIZE = 10;   // Diameter of the ball
+  private PongApplet applet;           // Reference to the applet
+  private int topWall, bottomWall, leftWall, rightWall;  // Boundaries
+  private int locationX, locationY;     // Current location of the ball
+  private int directionX = 1, directionY = 1; //x- and y-direction (1 or -1)
+  private Toolkit kit = Toolkit.getDefaultToolkit(); //For beep() method
+
+  public Ball(PongApplet app) {
+    applet = app;
+    locationX = leftWall + 1;                // Set initial location
+    locationY = bottomWall/2;
+  } // Ball()
+  public int getX() {
+    return locationX;
+  } // getX()
+  public int getY() {
+    return locationY;
+  } // getY()
+  public void move() {
+    rightWall = applet.getWidth() - SIZE;   // Define bouncing region
+    leftWall = topWall = 0;                 // And location of walls
+    bottomWall = applet.getHeight() - SIZE;
+    locationX = locationX + directionX; // Calculate a new location
+    locationY = locationY + directionY;
+
+    if (applet.ballHitsPaddle()){
+      directionX = -1;   //  move toward left wall
+      kit.beep();
+    } //if ball hits paddle
+    if (locationX <= leftWall){
+      directionX = + 1;   //  move toward right wall
+      kit.beep();
+    } //if ball hits left wall
+    if (locationY + SIZE >= bottomWall || locationY <= topWall){
+      directionY = -directionY;      //  reverse direction
+      kit.beep();
+    } //if ball hits top or bottom walls
+    if (locationX  >= rightWall + SIZE) {
+      locationX = leftWall + 1;   // jump back to left wall
+    } //if ball goes through right wall
+  } // move()
+  public void run() {
+    while (true) {
+      move();                // Move
+      applet.repaint();
+      try {  sleep(15);
+      } catch (InterruptedException e) {}
+    } // while
+  } // run()
+} // Ball
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt Ball} class.
+\label{fig-ball}\label{pg-fig-ball}}
+\end{figure}
+
+Unlike the paddle, however, the ball moves autonomously.  Its {\tt
+run()} method, which is inherited from its {\tt Thread} superclass,
+repeatedly moves the ball, draws the ball, and then sleeps for a brief
+interval (to slow down the speed of the ball's apparent motion).  The
+{\tt run()} method itself is quite simple because it consists of a
+short loop.  We will deal with the details of how the ball is painted
+on the applet when we discuss the applet itself.
+
+The most complex method in the {\tt Ball} class is the {\tt move()}
+method. This is the method that controls the ball's movement within
+the boundaries of the applet's drawing area. This method begins
+by moving the ball by one pixel left, right, up, or down by adjusting
+the values of its {\tt locationX} and {\tt locationY} coordinates:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+locationX = locationX + directionX; // Calculate location
+locationY = locationY + directionY;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt directionX} and {\tt directionY} variables are set
+to either $+1$ or $-1$, depending on whether the ball is moving left
+or right, up or down. After the ball is moved, the method uses a
+sequence of {\tt if} statements to check whether the ball is touching
+one of the walls or the paddle.  If the ball is in contact with the
+top, left, or bottom walls or the paddle, its direction is changed by
+reversing the value of the {\tt directionX} or {\tt directionY}
+variable. The direction changes depend on whether the ball has touched
+a horizontal or vertical wall. When the ball touches the right wall,
+having missed the paddle, it passes through the right wall and
+re-emerges from the left wall going in the same direction.
+
+Note how the applet method, {\tt ballHitsPaddle()} is used to
+determine whether the ball has hit the paddle. This is necessary
+because only the applet knows the locations of both the ball and the
+paddle.
+
+\subsection{The {\tt KeyListener} Interface}
+
+The implementation of the {\tt PongApplet} class is shown in
+figure~\ref{fig-pongapplet}. The applet's main task is to manage the
+drawing of the ball and paddle and to handle the user's key presses.
+Handling keyboard events is a simple matter of implementing the {\tt
+KeyListener} interface. This works in much the same way as the {\tt
+ActionListener} interface, which is used to handle button clicks and
+other {\tt ActionEvent}s.  Whenever a key is pressed, it generates
+{\tt KeyEvent}s, which are passed to the appropriate methods of the
+{\tt KeyListener} interface.
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[32pc]{-6pc}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class PongApplet extends JApplet implements KeyListener {
+     private Ball ball;
+     private Paddle pad;
+
+     public void init() {
+         setBackground(Color.white);
+         addKeyListener(this);
+         pad = new Paddle(this);  // Create the paddle
+         ball = new Ball(this);      // Create the ball
+         ball.start();
+         requestFocus();  // Required to receive key events
+     } // init()
+
+     public void paint (Graphics g ) {
+          g.setColor(getBackground());   // Erase the drawing area
+          g.fillRect(0,0,getWidth(),getHeight());
+
+          g.setColor(Color.blue);       // Paint the ball
+          g.fillOval(ball.getX(),ball.getY(),ball.SIZE,ball.SIZE);
+
+          pad.resetLocation();          // Paint the paddle
+          g.setColor(Color.red);
+          g.fillRect(pad.getX(),pad.getY(),Paddle.WIDTH,Paddle.HEIGHT);
+     } // paint()
+
+      public boolean ballHitsPaddle() {
+          return ball.getX() + Ball.SIZE >= pad.getX()
+             && ball.getY() >= pad.getY()
+             && ball.getY() <= pad.getY() + Paddle.HEIGHT;
+     } // ballHitsPaddle()
+
+     public void keyPressed( KeyEvent e) { // Check for arrow keys
+         int keyCode = e.getKeyCode();
+         if (keyCode == e.VK_UP)            // Up arrow
+             pad.moveUp();
+         else if (keyCode == e.VK_DOWN)     // Down arrow
+             pad.moveDown();
+     } // keyReleased()
+     public void keyTyped(KeyEvent e) {}     // Unused
+     public void keyReleased( KeyEvent e) {} // Unused
+} // PongApplet
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{Definition of the {\tt PongApplet} class.
+\label{fig-pongapplet}\label{pg-fig-pongapplet}}
+\end{figure}
+
+There's a bit of redundancy in the {\tt KeyListener} interface in the
+sense that a single key press and release generates three {\tt
+KeyEvent}s: A key-typed event, when the key is pressed, a key-released
+event, when the key is released, and a key-pressed event, when the key
+is pressed and released.  While it is important for some programs to
+be able to distinguish between a key-typed and key-released event, for
+this program, we will take action whenever one of the arrow keys is
+pressed (typed and released). Therefore, we implement the {\tt
+keyPressed()} method as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void keyPressed( KeyEvent e) { // Check arrow keys
+   int keyCode = e.getKeyCode();
+   if (keyCode == e.VK_UP)            // Up arrow
+      pad.moveUp();
+   else if (keyCode == e.VK_DOWN)     // Down arrow
+      pad.moveDown();
+} // keyReleased()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Each key on the keyboard has a unique code that 
+identifies the key. The key's code is gotten from the {\tt
+KeyEvent} object by means of the {\tt getKeyCode()} method. Then it is
+compared with the codes for the up-arrow and down-arrow keys, which
+are implemented as class constants, {\tt VK\_UP} and {\tt VK\_DOWN},
+in the {\tt KeyEvent} class.  If either of those keys were typed, the
+appropriate paddle method, {\tt moveUP()} or {\tt moveDown()}, is
+called.  
+
+Note that even though we are not using the {\tt keyPressed()} and {\tt
+keyReleased()} methods in this program, it is still necessary to
+provide implementations for these methods in the applet.  In order to
+implement an interface, such as the {\tt KeyListener} interface, you
+must implement {\em all} the abstract methods in the interface.  That
+is why we provide trivial implementations of both the {\tt
+keyPressed()} and {\tt keyReleased()} methods.
+
+\subsection{Animating the Bouncing Ball}
+
+Computer animation is accomplished by repeatedly drawing, erasing, and
+re-drawing an object at different locations on the drawing panel.  The
+applet's {\tt paint()} method is used for drawing the ball and the
+paddle at their current locations.  The {\tt paint()} method is never
+called directly. Rather, it is called automatically after the {\tt init()}
+method, when the applet is started. It is then invoked indirectly by
+the program by calling the {\tt repaint()} method, which is called in
+the {\tt run()} method of the {\tt Ball} class.  The reason that {\tt
+paint()} is called indirectly is because Java needs to pass it the
+applet's current {\tt Graphics} object. Recall that in Java all
+drawing is done using a {\tt Graphics} object.
+
+In order to animate the bouncing ball, we first erase the current
+image of the ball, then we draw the ball in its new location. We also
+draw the paddle in its current location. These steps are carried out
+in the applet's {\tt paint()} method. First, the drawing area is
+cleared by painting its rectangle in the background color.  Then the
+ball and paddle are painted at their current locations. Note that
+before painting the paddle, we first call its {\tt resetLocation()}
+method. This causes the paddle to be relocated in case the user has
+resized the applet's drawing area.  There is no need to do this for
+the ball because the ball's drawing area is updated within the {\tt
+Ball.move()} method every time the ball is moved.
+
+One problem with computer animations of this sort is that the repeated
+\marginnote{Double buffering}
+drawing and erasing of the drawing area can cause the screen to
+flicker. In some drawing environments a technique known as {\bf double
+buffering} is used to reduce the flicker. In double buffering, an
+invisible, off-screen, buffer is used for the actual drawing
+operations and it is then used to replace the visible image all at
+once when the drawing is done.  Fortunately, Java's Swing components,
+including {\tt JApplet} and {\tt JFrame}, perform an automatic form of
+double buffering, so we needn't worry about it.  Some graphics
+environments, including Java's AWT environment, do not perform double
+buffering automatically, in which case the program itself must carry
+it out.
+
+Like the other examples in this chapter, the game of Pong provides a
+simple illustration of how threads are used to coordinate concurrent
+actions in a computer program. As most computer game fans will
+realize, most modern interactive computer games utilize a
+multithreaded design. The use of threads allows our interactive
+programs to achieve a responsiveness and sophistication that is not
+possible in single-threaded programs.  One of the great advantages of
+Java is that it simplifies the use of threads, thereby making thread
+programming accessible to programmers.  However, one of the lessons
+that should be drawn from this chapter is that multithreaded programs
+must be carefully designed in order to work effectively.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item Modify the {\tt PongApplet} program so that it contains a second
+ball that starts at a different location from the first ball.
+
+\end{SSTUDY}
+
+
+
+\secSMHleft{Chapter Summary}
+
+\secKTH{Technical Terms}
+%\parindent=0pt
+
+\begin{KT}
+asynchronous
+
+blocked
+
+busy waiting
+
+concurrent
+
+critical section
+
+dispatched
+
+fetch-execute cycle
+
+lock
+
+monitor
+
+multitasking
+
+multithreaded
+
+mutual exclusion
+
+priority scheduling
+
+producer/consumer model
+
+quantum
+
+queue
+
+ready queue
+
+round-robin scheduling
+
+scheduling algorithm 
+
+task
+
+thread
+
+thread life cycle
+
+time slicing
+
+\end{KT}
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}\baselineskip=11.9pt
+\item  {\it Multitasking} is the technique of executing several
+tasks at the same time within a single program.  In Java
+we give each task a separate {\it thread of execution},
+thus resulting in a {\it multithreaded} program.
+
+\item  A {\it sequential} computer with a single {\it central
+processing unit (CPU)} can execute only one machine instruction
+at a time.  A {\it parallel} computer uses multiple CPUs operating
+simultaneously to execute more than one instruction at a time.
+
+\item  Each CPU uses a {\it fetch-execute cycle} to retrieve the
+next machine instruction from memory and execute it.  The cycle is
+under the control of the CPU's internal clock, which typically runs at
+several hundred {\it megahertz}---where 1 megahertz (MHz) is 1
+million cycles per second.
+
+\item  {\it Time slicing} is the technique whereby several threads
+can share a single CPU over a given time period.  Each thread is given
+a small slice of the CPU's time under the control of some kind of
+scheduling algorithm.  
+
+\item In {\it round-robin scheduling}, each thread is
+given an equal slice of time, in a first-come--first-served order.  In
+{\it priority scheduling}, higher-priority threads are allowed to
+run before lower-priority threads are run.
+
+\item  There are generally two ways of creating threads in a program.
+One is to create a subclass of {\tt Thread} and implement a
+{\tt run()} method.  The other is to create a {\tt Thread} instance
+and pass it a {\tt Runnable} object---that is, an object that
+implements {\tt run()}.
+
+\item  The {\tt sleep()} method removes a thread from the CPU
+for a determinate length of time, giving other threads a chance
+to run.
+
+\item  The {\tt setPriority()} method sets a thread's priority.
+Higher-priority threads have more and longer access to the CPU.
+
+\item  Threads are {\it asynchronous}. Their timing and duration
+on the CPU are highly sporadic and unpredictable.  In designing
+threaded programs, you must be careful not to base your
+algorithm on any assumptions about the threads' timing.
+
+\item  To improve the responsiveness of interactive programs,
+you could give compute-intensive tasks, such as drawing
+lots of dots, to a lower-priority thread or to a thread
+that sleeps periodically.
+
+\item  A thread's life cycle consists of ready, running, waiting,
+sleeping, and blocked states.  Threads start in the ready
+state and are dispatched to the CPU by the scheduler,
+an operating system program.  If a thread performs an
+I/O operation, it blocks until the I/O is completed.  If
+it voluntarily sleeps, it gives up the CPU.
+
+\item  According to the {\it producer/consumer} model, two
+threads share a resource, one serving to produce the
+resource and the other to consume the resource.  Their
+cooperation must be carefully synchronized.
+
+\item  An object that contains {\tt synchronized} methods
+is known as a {\it monitor}. Such objects ensure that only one thread
+at a time can execute a synchronized method.   The object is {\it
+locked} until the thread completes the method or voluntarily
+sleeps.  This is one way to ensure mutually exclusive access to
+a resource by a collection of cooperating threads.
+
+\item  The {\tt synchronized} qualifier can also be used to
+designate a method as a {\it critical section}, whose execution
+should not be preempted by one of the other cooperating
+threads.
+
+\item  In designing multithreaded programs, it is useful to
+assume that if a thread {\it can} be interrupted at a
+certain point, it {\it will} be interrupted there.  Thread
+coordination should never be left to chance.
+
+\item  One way of coordinating two or more cooperating
+threads is to use the {\tt wait/notify} combination.
+One thread waits for a resource to be available, and the
+other thread notifies when a resource becomes available.
+
+\end{SMBL}
+
+\pagebreak
+\secANSHleft
+%\addcontentsline{toc}{section}{\S~~~ Answers to Self-Study Exercises}
+
+%%%\begin{ANSstr}
+\begin{ANS}
+\item \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class PrintOdds implements Runnable {
+  private int bound;
+  public PrintOdds(int b) {
+   bound = b;
+  }
+
+  public void print() {
+    if (int k = 1; k < bound; k+=2)
+      System.out.println(k);
+  }
+
+  public void run() {
+    print();
+  }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  On my system, the experiment yielded the following output, if
+each thread printed its number after every 100,000 iterations:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+1111112222222211111111333333322222221111113333333
+222224444444433333344444445555555544444555555555555
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This suggests that round-robin scheduling
+is being used.
+
+
+\item  If each thread is given 50 milliseconds of sleep on each
+iteration, they tend to run in the order in which they
+were created:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+123451234512345...
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The garbage collector runs whenever the available memory drops
+below a certain threshold.  It must have higher priority than
+the application, since the application won't be able to run
+if it runs out of memory.
+
+
+%\item{EXERCISE 13.8}
+\item  To improve the responsiveness of an interactive program, the system
+could give a high priority to the threads that interact with the user
+and a low priority to those that perform noninteractive computations,
+such as number crunching.
+
+\item  If the JVM were single threaded, it wouldn't be possible to break out
+of an infinite loop, because the program's loop would completely
+consume the CPU's attention.
+
+
+%\item{EXERCISE 13.6}
+\item  If round-robin scheduling is used, each thread will be get a portion
+of the CPU's time, so the GUI thread will eventually get its turn.
+But you don't know how long it will be before the GUI gets its
+turn, so there might still be an unacceptably long wait before the
+user's actions are handled.   Thus, to {\it guarantee} responsiveness,
+it is better to have the drawing thread sleep on every iteration.
+
+%\item{EXERCISE 13.7}
+\item  If {\tt Dotty}'s priority is set to 1, a low value, this
+does improve the responsiveness of the interface, but it
+is significantly less responsive than using a {\tt sleep()}
+on each iteration.
+
+\item  In a real bakery only one customer at a time can take a number.  The
+take-a-number gadget ``enforces'' mutual exclusion by virtue of its
+design: There's room for only one hand to grab the ticket and there's
+only one ticket per number.  If two customers got ``bakery rage'' and
+managed to grab the same ticket, it would rip in half and neither
+would benefit.
+
+\item  One experiment to run would be to make the clerk's performance very
+slow by using large sleep intervals.   If the algorithm is correct,
+this should not affect the order in which customers are
+served.  Another experiment would be to force the clerk to work fast
+but the customers to work slowly.  This should still not affect the order
+in which the customers are served.
+
+\item  You should observe that the waiting line builds up as
+customers enter the bakery, but the clerk should
+still serve the customers in the correct order.
+%%%\end{ANSstr}
+
+\item A two-ball version of Pong would require the following
+changes to the original version:
+\begin{enumerate}
+\item A new {\tt Ball()} constructor that has parameters to
+set the initial location and direction of the ball.
+\item The {\tt PongApplet} should create a new {\tt Ball}
+instance, start it, and draw it.
+\end{enumerate}
+
+\end{ANS}
+
+\secEXRHtwo{Exercises}
+
+\begin{EXRtwo}
+\item  Explain the difference between the following
+pairs of terms:
+
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  {\it Blocked} and {\it ready}.
+\item  {\it Priority} and {\it round-robin} scheduling.
+\item  {\it Producer} and {\it consumer}.
+\item  {\it Monitor} and {\it lock}.
+\item  {\it Concurrent} and {\it time slicing}.
+\item  {\it Mutual exclusion} and {\it critical section}.
+\item  {\it Busy} and {\it nonbusy} waiting.
+\end{multicols}
+\end{EXRtwoLL}
+
+\marginnote{\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+
+\item  Fill in the blanks.
+\begin{EXRtwoLL}\baselineskip=12pt
+\item  \rule{40pt}{0.5pt} happens when a CPU's time is divided among several
+different threads.
+\item  A method that should not be interrupted during its
+execution is known as a  \rule{40pt}{0.5pt}\,.
+\item  The scheduling algorithm in which each thread gets
+an equal portion of the CPU's time is known as  \rule{40pt}{0.5pt}\,.
+\item  The scheduling algorithm in which some threads can
+preempt other threads is known as \rule{40pt}{0.5pt}.
+\item  A \rule{40pt}{0.5pt} is a mechanism that enforces mutually exclusive
+access to a synchronized method.
+\item  A thread that performs an I/O operation may be forced
+into the \rule{40pt}{0.5pt}  state until the operation is completed.
+\end{EXRtwoLL}\baselineskip=11pt
+
+\item  Describe the concept of {\it time slicing} as
+it applies to CPU \mbox{scheduling.}
+
+\item  What's the difference in the way concurrent
+threads would be implemented on a computer with several processors and
+on a computer with a single processor?
+
+\item  Why are threads put into the {\it blocked} state
+when they perform an I/O operation?
+
+\item  What's the difference between a thread in the
+sleep state and a thread in the ready state?
+
+\item  {\bf Deadlock} is a situation that occurs when one thread is
+holding a resource that another thread is waiting for, while 
+the other thread is holding a resource that the first
+thread is waiting for. Describe how deadlock can occur at a 
+four-way intersection with cars entering from each
+branch. How can it be avoided?
+
+\item  {\bf Starvation} can occur if one thread is repeatedly 
+preempted by other threads. Describe how starvation
+can occur at a four-way intersection and how it can be avoided.
+
+\item  Use the {\tt Runnable} interface to define
+a thread that repeatedly generates random numbers
+in the interval 2 through 12.
+
+\item  Create a version of the {\tt Bakery} program that
+uses two clerks to serve customers.
+
+\item  Modify the {\tt Numbers} program so that the user can
+interactively create {\tt NumberThread}s and assign them a priority.
+Modify the {\tt NumberThread}s so that they print their numbers
+indefinitely (rather than for a fixed number of iterations). Then
+experiment with the system by observing the effect of introducing
+threads with the same, lower, or higher priority.  How do the threads
+behave when they all have the same priority? What happens when you
+introduce a higher-priority thread into the mix? What happens when you
+introduce a lower-priority thread into the mix?
+
+\item  Create a bouncing ball simulation in which
+a single ball (thread) bounces up and down in a vertical line.  The
+ball should bounce off the bottom and top of the enclosing frame.
+
+\item  Modify the simulation in the previous exercise so
+that more than one ball can be introduced.   Allow the user to
+introduce new balls into the simulation by pressing the space bar or
+clicking the mouse.
+
+\item  Modify your solution to the previous problem by having
+the balls bounce off the wall at a random angle.
+
+
+\item  {\bf Challenge:} One type of producer/consumer problem
+is the {\it reader/writer} problem.  Create a subclass of
+{\tt JTextField} that can be shared by threads, one of which writes a
+random number to the text field, and the other of which reads the
+value in the text field.  Coordinate the two threads so that the
+overall effect of the program will be to print the values from 0
+to 100 in the proper order.  In other words, the reader thread
+shouldn't read a value from the text field until there's a value to
+be read.   The writer thread shouldn't write a value to the text field
+until the reader has read the previous value.
+
+\item  {\bf Challenge:} Create a streaming banner thread that
+moves a simple message across a panel.  The message should repeatedly
+enter at the left edge of the panel and exit from the right
+edge.  Design the banner as a subclass of {\tt JPanel} and have it
+implement the {\tt Runnable} interface.  That way it can be added to
+any user interface.  One of its constructors should take a {\tt String}
+argument that lets the user set the banner's message.
+
+\item {\bf Challenge: } Create a slide show applet, which repeatedly
+cycles through an array of images.  The action of displaying the
+images should be a separate thread.  The applet thread should handle
+the user interface.  Give the user some controls that let it pause,
+stop, start, speed up, and slow down the images.
+
+\item  {\bf Challenge:} Create a horse race simulation, using separate
+threads for each of the horses.  The horses should race horizontally
+across the screen, with each horse having a different vertical
+coordinate.  If you don't have good horse images to use, just
+make each horse a colored polygon or some other shape.  Have the
+horses implement the {\tt Drawable} interface, which we introduced
+in Chapter~8.
+
+\item  {\bf Challenge:} Create a multithreaded digital clock application.
+One thread should keep time in an endless while loop. The other
+thread should be responsible for updating the screen each second.
+
+%%%\end{EXRtwostr}
+\end{EXRtwo}
+%% LocalWords:  multithreaded java nother

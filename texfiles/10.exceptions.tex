@@ -1,0 +1,2558 @@
+%%%  Chapter 10: Exceptions: When Things Go Wrong
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{9}
+\chapter{Exceptions: When Things Go Wrong}
+\label{chapter-exceptions}
+\label{pg-chapter-exceptions}
+
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Understand Java's exception-handling mechanisms.
+\item  Be able to use the Java {\tt try/catch} statement.
+\item  Know how to design effective exception handlers.
+\item  Appreciate the importance of exception handling
+in program design.
+\item  Be able to design your own {\tt Exception} subclasses.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item {Introduction}
+\item {Handling Exceptional Conditions}
+\item {Java's Exception Hierarchy}
+\item {Handling Exceptions Within a Program}
+\item {Error Handling and Robust Program Design}
+\item {Creating and Throwing Your Own Exceptions}
+\item {From the Java Library: {\tt javax.swing.JOptionPane}}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+\end{COL}
+\COend
+
+
+\section{Introduction}
+
+\noindent Mistakes happen.  Making mistakes is the norm rather than the
+exception.  This is not to say that we make mistakes more often than
+we get it right.  It is to say that (almost) nothing we do or build is
+ever perfectly correct, least of all computer software. No matter how
+well-designed a program is, there is always the chance that some kind
+of error will arise during its execution.
+
+An {\bf exception}\index{exception} is an erroneous or anomalous
+condition that arises \marginnote{Exception} while a program is
+running. Examples of such conditions that we have discussed in this
+text include attempting to divide by 0 (arithmetic exception), reading
+a decimal value when an integer is expected (number format exception),
+attempting to write to a file that doesn't exist (I/O exception), or
+referring to a nonexistent character in a string (index out of bounds
+exception).  The list of potential errors and anomalies is endless.
+
+A well-designed program should include code to guard against errors
+and other exceptional conditions when they arise.  This code should be
+incorporated into the program from the very first stages of its
+development.  That way it can help identify problems during
+development. In Java, the preferred way of handling such conditions is
+to use {\bf exception handling}\index{exception handling}, a 
+\marginnote{Exception handling}
+divide-and-conquer approach that separates a program's normal code 
+from its error-handling code.
+
+
+This chapter describes Java's exception handling features.  We begin
+by contrasting the traditional way of handling errors within a program
+with Java's default exception-handling mechanism.  We show how
+exceptions are raised (thrown) and handled (caught) within a program
+and identify the rules that apply to different kinds of exceptions.
+We then focus on some of the key design issues that govern when,
+where, and how to use exceptions in your programs.  Finally, we show
+how to design and implement one's own {\tt Exception} subclass.
+
+\section{Handling Exceptional Conditions}
+
+\begin{figure}[b]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * Precondition:  N > 0
+  * Postcondition: avgFirstN() = (1+2+...+N)/N
+  */
+public double avgFirstN(int N) {
+    int sum = 0;
+    for (int k = 1; k <= N; k++)
+        sum += k;
+    return sum/N;         // What if N is 0?
+} // avgFirstN()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Poor design.  No attempt is made to guard against 
+a divide-by-zero error.
+\label{fig-intavg1}\label{pg-fig-intavg1}}\end{figure}
+
+\noindent To introduce you to handling exceptional conditions,
+Figure~\ref{fig-intavg1} shows a method that computes the average of
+the first {\it N} integers, an admittedly contrived example.  We use
+it mainly to illustrate the basic concepts involved in exception
+handling. As its precondition suggests, the {\tt avgFirstN()} method
+expects that {\it N} will be greater than 0.  If {\it N} happens to be
+0, an error will occur in the expression {\tt sum/N}, because you
+cannot divide an integer by 0.
+
+\subsection{Traditional Error Handling}
+\noindent Obviously, the method in Figure~\ref{fig-intavg1} should not
+simply ignore the possibility that {\it N}
+\marginnote{Divide-by-zero error}
+might be 0. Figure~\ref{fig-traditional} shows a revised version of
+the method, which includes code that takes action if the method's
+precondition fails.  Because there is no way to compute an average of
+0 elements, the revised method decides to abort the program.  Aborting
+the program appears to be a better alternative than returning 0 or
+some other default value (like $-1$) as the method's result and
+thereby allowing an erroneous value to spread throughout the
+program.  That would just compound the error.
+
+\JavaTIP{EFFECTIVE DESIGN}{Unfixable Error.}{If an unfixable error is detected, 
+it is far better to terminate the program abnormally than to allow the
+error to propagate throughout the program.}
+
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+ /**
+  * Precondition:  N > 0
+  * Postcondition: avgFirstN() equals (1+2+...+N) divided by N
+  */
+public double avgFirstN(int N) {
+    int sum = 0;
+    if (N <= 0) {
+      System.out.println(
+           "ERROR avgFirstN: N <= 0. Program terminating.");
+      System.exit(0);
+    }
+    for (int k = 1; k <= N; k++)
+        sum += k;
+    return sum/N;         // What if N is 0?
+} // avgFirstN()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{One way to handle a divide-by-zero error might be to
+terminate the program, if there is an attempt to divide by 0, assuming
+it's the kind of program that can be safely aborted.  This version
+does not use exception handling.
+\label{fig-traditional}
+\label{pg-fig-traditional}}
+\end{figure}
+
+\noindent The revised {\tt avgFirstN()} method takes the traditional 
+approach to error handling: Error-handling code is built right into
+the algorithm.  If {\it N} happens to be 0 when {\tt avgFirstN()} is
+called, the following output will be generated:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ERROR avgFirstN: N <= 0. Program terminating.
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsection{Java's Default Exception Handling}
+\noindent To help detect and handle common runtime errors, Java's creators
+incorporated an exception-handling model into the language
+itself. In the case of our divide-by-zero error, the Java Virtual
+Machine (JVM) would detect the error and abort the program. To
+see this, consider the program in Figure~\ref{fig-calcavg}. Note that
+the {\tt avgFirstN()} method is passed an argument of 0 in the {\tt
+CalcAvgTest.main()}.  When the JVM detects the error, it will abort
+the program and print the following message:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Exception in thread "main" 
+   java.lang.ArithmeticException:  / by zero
+        at CalcAverage.avgFirstN(Compiled Code)
+        at CalcAvgTest.main(CalcAvgTest.java:5)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The error message describes the error and
+provides a trace of the method calls, from last to first, that led to
+the error.  This trace shows that the error occurred in the {\tt
+CalcAverage.avgFirstN()} method, which was called by the {\tt
+CalcAvgTest.main()} method.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class CalcAverage {
+
+    public double avgFirstN(int N) {
+        int sum = 0;
+        for (int k = 1; k <= N; k++)
+            sum += k;
+        return sum/N;         // What if N is 0?
+    } // avgFirstN()
+}//CalcAverage
+
+public class CalcAvgTest {
+    public static void main(String args[]) {
+        CalcAverage ca = new CalcAverage();
+        System.out.println( "AVG + " + ca.avgFirstN(0) );        
+    }//main
+}//CalcAvgTest
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Note that there are two public classes defined in this figure,
+which would be saved in separate Java files.
+\label{fig-calcavg}
+\label{pg-fig-calcavg}}
+\end{figure}
+
+As this example suggests, Java's default exception handling is able to
+detect and handle certain kinds of errors and exceptional conditions. In
+the next section, we will identify what kinds of conditions are handled
+by the JVM.
+
+\section{Java's Exception Hierarchy}
+\label{sec-excepthier}\label{pg-sec-excepthier}
+
+\begin{figure}[tb]
+\figaright{chptr10/exchier.eps}{Part of Java's exception hierarchy.  All  
+subclasses of {\tt RuntimeException} are known as {\it unchecked} exceptions.
+Java programs are not required to catch these exceptions.
+\label{fig-excepthier}
+\label{pg-fig-excepthier}}
+\end{figure}
+
+\noindent The Java class library contains a number of predefined exceptions,
+some of which are shown in Figure~\ref{fig-excepthier}.  The most
+general type of exception, {\tt java.lang.Exception}, is located in
+the {\tt java.lang} package, but most of its subclasses
+are contained in other packages.  Some of the various {\tt IOException}
+classes are contained in the {\tt java.io} package, while others are
+contained in the {\tt java.net}
+\marginnote{Exception hierarchy}
+package.  In general, exception classes are placed in the package that
+contains the methods that throw those exceptions.
+
+Each of the classes in Figure~\ref{fig-excepthier} identifies a
+particular type of exception, and each is a subclass of the {\tt
+Exception} class.  Obviously a subclass defines a more specific
+exception than its superclass.  Thus, both {\tt
+Array\-IndexOutOfBoundsException} and {\tt
+StringIndexOutOfBounds\-Excep\-tion} are more specific than {\tt
+Index\-OutOfBoundsException}.  
+
+
+\begin{table}[htb]
+\TBT{0pc}{Some of Java's important exceptions.}
+%%\hspace*{-6pc}
+\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{38.5pc}{1pt}}\\[2pt]
+%%%REW \TBCH{Class}&\TBCH{Description}
+{\bf Class}&{\bf Description}  %%%REW added
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{38.5pc}{0.5pt}}\\[2pt]
+{\tt ArithmeticException}&Division by zero or some other kind of arithmetic problem\cr
+{\tt ArrayIndexOutOfBoundsException}&An array index is less than zero or greater\cr
+&\quad than or equal to the array's length\cr
+{\tt FileNotFoundException}&Reference to a file that cannot be found\cr
+{\tt IllegalArgumentException}&Calling a method with an improper argument\cr
+{\tt IndexOutOfBoundsException}&An array or string index is out of bounds\cr
+{\tt NullPointerException}&Reference to an object that has not been instantiated\cr
+{\tt NumberFormatException}&Use of an illegal number format, such as when calling a method\cr
+{\tt StringIndexOutOfBoundsException}\hspace*{12pt}&A {\tt String} index is less than zero or greater than\cr
+&\quad or equal to the {\tt String}'s length
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{38.5pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+Table~10.1 gives a brief summary of some of the most
+important exceptions. You've undoubtedly encountered some of these
+exceptions, because they are thrown by methods we have used repeatedly
+in programming examples.  Table~10.2 summarizes the
+exceptions raised by some of the methods we've used most frequently.
+
+
+\begin{table}[htb]
+\TBT{-9pc}{Some of Java's important exceptions by method.}
+\hspace*{-9.5pc}
+\begin{tabular}{llll}
+\multicolumn{4}{l}{\color{cyan}\rule{38.5pc}{1pt}}\\[2pt]
+%%%REW \TBCH{Class}& \TBCH{Method} & \TBCH{Exception Raised} & \TBCH{Description}
+{\bf Class}& {\bf Method} & {\bf Exception Raised} & {\bf Description}
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{38.5pc}{0.5pt}}\\[2pt]
+{\tt Double}&{\tt valueOf(String)}&{\tt NumberFormatException}&The {\tt String} is not a {\tt double}\cr
+{\tt Integer}&{\tt parseInt(String)}&{\tt NumberFormatException}&The {\tt String} is not a {\tt int}\cr
+{\tt String}&{\tt String(String)}&{\tt NullPointerException}&The {\tt String} is {\tt null}\cr
+&{\tt indexOf(String)}&{\tt NullPointerException}&The {\tt String} is {\tt null}\cr
+&{\tt lastIndexOf(String)}&{\tt NullPointerException}&The {\tt String} is {\tt null}\cr
+&{\tt charAt(int)}&{\tt StringIndexOutOfBoundsException}&The {\tt int} is not a valid index\cr
+&{\tt substring(int)}&{\tt StringIndexOutOfBoundsException}&The {\tt int} is not a valid index\cr
+&{\tt substring(int,int)}&{\tt StringIndexOutOfBoundsException}&An {\tt int} is not a valid index
+\\[-4pt]\multicolumn{4}{l}{\color{cyan}\rule{38.5pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  What type of exception would be thrown for the following statements?
+
+\begin{EXRLL}
+\item  {\tt Integer.parseInt("26.2");}     %%%REW added      
+\item  {\tt String s; s.indexOf('a');}       %%%REW added    
+\item  {\tt String s = "hello"; s.charAt(5);}   %%%REW added
+\end{EXRLL}
+\end{SSTUDY}
+
+
+\subsection{Checked and Unchecked Exceptions}
+
+\noindent Java's exception hierarchy is divided into two types of exceptions.  A
+{\bf checked exception}\index{checked exception} is one that can be analyzed by the Java
+\marginnote{Checked exceptions} compiler. Checked exceptions are
+thrown by methods such as the {\tt Buffered\-Reader.read\-Line()}
+method, in which there is a substantial likelihood that something
+might go wrong.  When the compiler encounters one of these method
+calls, it checks whether the program either handles or declares the
+exception.  Compile-time checking for these exceptions is
+\mbox{designed} to reduce the number of exceptions that are not
+properly handled within a program. This improves the security of Java
+programs.
+
+\JavaRule{Checked Exceptions.}{A checked exception, such as an {\tt IOException}, must either
+be handled or declared within the program.}
+
+\subsubsection*{The {\tt throws} Clause}
+\noindent The {\tt IOException}, which we encountered in
+Chapter~4 , is a checked exception.  The Java compiler knows that 
+{\tt readLine()} is a method that can throw an {\tt IOException}. 
+A method that contains an expression that might throw a
+checked exception must either handle the exception or declare it.
+Otherwise, the compiler would generate a syntax error.
+The simplest way to avoid such a syntax error is to {\em declare the exception},
+\marginnote{Declaring an exception}
+in our case that means qualifying the method header with the expression
+{\tt throws IOException}.
+
+In general, any method that contains an expression that might throw a 
+checked expression must declare the exception.   
+However, because one method can call another method, declaring exceptions can get a
+little tricky. If a method calls another method that contains an
+expression that might throw an unchecked exception, then both methods
+must have a {\tt throws} clause. For example, consider the following
+program:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.io.*;
+public class Example {
+    BufferedReader input = new BufferedReader
+            (new InputStreamReader(System.in));
+    public void doRead() throws IOException {
+        // May throw IOException
+        String inputString = input.readLine();    
+    }
+    public static void main(String argv[]) 
+                        throws IOException {
+        Example ex = new Example();
+        ex.doRead();
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the {\tt doRead()} method contains a
+{\tt readLine()} expression, which might throw an {\tt IOException}.
+Therefore, the {\tt doRead()} method must declare that it {\tt throws
+IOException}. However, because {\tt doRead()} is called by {\tt
+main()}, the {\tt main()} method must also declare the {\tt
+IOException}.  
+
+\JavaRule{Where to Use {\tt throws}.}{Unless a checked 
+exception, such as an {\tt IOException}, is caught and handled by 
+a method, it must be declared with a {\tt throws} clause
+within the method and within any method that calls that method.}
+
+The alternative approach would be to {\em catch} the {\tt IOException} 
+within the body of the method.  We will discuss this approach
+in the next section.
+
+\subsubsection*{Unchecked Exceptions}
+\noindent An {\bf unchecked exception}\index{unchecked exception} is any 
+exception belonging to a subclass
+of {\tt RuntimeException} (Fig.~\ref{fig-excepthier}). Unchecked
+exceptions are not checked by the compiler.  The possibility that some
+statement or expression will lead to an {\tt ArithmeticException} or
+{\tt NullPointerException} is extremely difficult to detect at compile
+time.  The designers of Java decided that forcing programmers to
+declare such exceptions would not significantly improve the
+correctness of Java programs.
+
+Therefore, unchecked exceptions do not have to be handled within a
+program.  And they do not have to be declared in a {\tt throws}
+\marginnote{Runtime (unchecked) exceptions} clause.  As shown in the
+chapter's early divide-by-zero exception example, unchecked exceptions
+are handled by Java's default exception handlers, unless your program
+takes specific steps to handle them directly.  In many cases leaving
+the handling of such exceptions up to Java may be the best course of
+action, as we will see Section~\ref{sec-robust}.
+
+\JavaRule[false]{Unchecked Exceptions.}{An unchecked excep\-tion---one 
+belonging to some subclass of
+{\tt RunTimeException}---does not have to be caught within your
+program.}
+
+\subsection{The {\tt Exception} Class}
+\noindent The {\tt java.lang.Exception} class itself is very simple,
+consisting of just two constructor methods (Fig.~10.5). The {\tt
+Throwable} class, from which {\tt Exception} is derived, is the root
+class of Java's exception and error hierarchy.  It contains
+definitions for the {\tt getMessage()} and {\tt printStackTrace()}
+methods, which are
+two methods that we will use frequently in our error-handling routines.
+
+
+\secEXRHone{Self-Study Exercise}
+\marginfig{chptr10/excuml.eps}{The {\tt java.lang.Ex\-cep\-tion} class.
+\label{fig-excuml}
+\label{pg-fig-excuml}}
+\begin{SSTUDY}
+
+\item  Which of the following are examples 
+of unchecked \mbox{exceptions?}
+
+\begin{EXRLL}
+\item  IOException                 
+\item  IndexOutOfBoundsException   
+\item  NullPointerException        
+\item  ClassNotFoundException      
+\item  NumberFormatException       
+\end{EXRLL}
+
+\end{SSTUDY}
+
+\section{Handling Exceptions Within a Program}
+\noindent This section will describe how to handle exceptions
+within the program rather than leaving them to be
+handled by the JVM. 
+
+\subsection{Trying, Throwing, and Catching an Exception}
+\noindent In Java, errors and other abnormal conditions are handled by throwing
+\marginnote{Pulling the program's fire alarm} and catching exceptions.
+When an error or an exceptional condition is detected, you can {\em
+throw an exception}\index{throw an exception} as a way of signaling
+the abnormal condition.  This is like pulling the fire alarm.  When an
+exception is thrown, an exception handler will catch the exception and
+deal with it (Fig.~10.6). We will discuss try blocks, which typically
+\marginfig{chptr10/exchand.eps}{Exception handling. When an exception
+occurs, an object will throw an {\tt Exception}. The exception
+handler, possibly the same object, will catch it.
+\label{fig-exchand}
+\label{pg-fig-exchand}}
+are associated with catching exceptions, later in the section.
+
+
+If we go back to our {\tt avgFirstN()} example, the typical way of
+handling this error in Java would be to throw an exception in
+the \mbox{\tt avgFirstN()} method and catch it in the calling method.
+Of course, the calling method could be in the same object or it could
+belong to some other object. In the latter case, the detection of the
+error is separated from its handling.  This division of labor opens up
+a wide range of possibilities.  For example, a program could dedicate
+a single object to serve as the handler for all its exceptions.  The
+object would be sort of like the program's fire department.
+
+To illustrate Java's {\tt try/throw/catch} mechanism, let's revisit the
+{\tt Calc\-Avg\-Test} program.  The version shown in
+Figure~\ref{fig-calcavg2} mimics the way Java's default exception
+handler works. If the {\tt avgFirstN()} method is called with an
+argument that is zero or negative, an {\tt IllegalArgumentException} 
+is thrown.  The exception is caught by the {\tt catch} clause in the {\tt
+CalcAvgTest.main()} method.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[30.5pc]
+\begin{lstlisting}
+public class CalcAverage {
+  /**
+   * Precondition:  N > 0
+   * Postcondition: avgFirstN() equals the average of (1+2+...+N)
+   */
+  public double avgFirstN(int N) {
+    int sum = 0;
+    if (N <= 0)
+      throw new IllegalArgumentException("ERROR: Illegal argument");
+    for (int k = 1; k <= N; k++)
+      sum += k;
+    return sum/N;         // What if N is 0?
+  } // avgFirstN()
+} // CalcAverage
+
+public class CalcAvgTest {
+  public static void main(String args[]) {
+    try {
+      CalcAverage ca = new CalcAverage();
+      System.out.println( "AVG + " + ca.avgFirstN(0));        
+    } 
+    catch (IllegalArgumentException e) { // Exception Handler
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+      System.exit(0);
+    }
+  }//main
+}// CalcAvgTest
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{In this version of the {\tt calc\-Avg\-Test} program, an
+{\tt Illegal\-Argument\-Exception} thrown in {\tt
+Calc\-Average.avgFirstN()}, would be handled by the catch clause in
+{\tt Calc\-Avg\-Test.main()}.
+\label{fig-calcavg2}
+\label{pg-fig-calcavg2}}
+\end{figure}
+
+Let's go through this example step by step.  The first thing to
+notice is that if the {\tt CalcAverage.avg\-FirstN()} method has 
+a zero or negative argument, it will {\tt throw} an exception:
+
+\begin{jjjlisting}[28.5pc]
+\begin{lstlisting}
+if (N <= 0)
+  throw new IllegalArgumentException("ERROR: Illegal argument");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note the syntax of the {\tt throw} statement.
+It creates a new {\tt Illegal\-Argument\-Exception} object and passes
+it a message that describes the error. This message becomes part of
+the exception object. It can be retrieved using the {\tt getMessage()}
+method, which is inherited from the {\tt Throwable} class
+(Fig.~\ref{fig-excepthier}).
+
+When a {\tt throw} statement is executed, the JVM interrupts the
+normal execution of the program and searches for an exception
+handler. We will describe the details of this search shortly.  In this
+case, the exception handler is the {\tt catch} clause contained in the
+{\tt CalcAvgTest.main()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+catch (IllegalArgumentException e) {// Exception Handler
+   System.out.println(e.getMessage());
+   e.printStackTrace();
+   System.exit(0);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent When an {\tt IllegalArgumentException} is thrown, the statements 
+within this {\tt catch} clause are executed. The first statement uses
+the {\tt getMessage()} method to print a copy of the error message. The
+second statement uses the {\tt printStackTrace()} method, which is
+defined in {\tt Throwable} and inherited by all {\tt Exception}s, to
+print a trace of the method calls leading up to the exception.  The
+last statement causes the program to terminate. 
+
+When we run this program, the following output will be generated as a
+result of the illegal argument error:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}[stringstyle=\color{black}]
+ERROR: Can't average 0 elements
+java.lang.IllegalArgumentException: ERROR: Illegal argument
+   at java.lang.Throwable.fillInStackTrace(Native Method)
+   at java.lang.Throwable.<init>(Throwable.java:94)
+   at java.lang.Exception.<init>(Exception.java:42)
+   at java.lang.RuntimeException.<init>
+                       (RuntimeException.java:47)
+   at java.lang.IllegalArgumentException.<init>
+                       (IllegalArgumentException.java:43)
+   at CalcAverage.avgFirstN(Compiled Code)
+   at CalcAvgTest.main(CalcAvgTest.java:5)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, as in the previous example of Java's default
+exception handler, our exception handler also prints out a description
+of the error and a trace of the method calls that led up to the
+error. However, in this example, we are directly handling the
+exception rather than leaving it up to Java's default exception handler.
+Of course, this example is intended mainly for illustrative purposes.
+It would make little sense to write our own exception handler if
+it does nothing more than mimic Java's default handler.
+
+\JavaTIP{EFFECTIVE DESIGN}{Using an Exception.}{Unless your program's
+handling of an exception is significantly different from Java's
+default \mbox{handling} of it, the program should just rely on the default.}
+
+\noindent Finally, note that the {\tt catch} clause is associated with a
+{\tt try} block.  The handling of exceptions in Java takes place
+in two parts: First, we {\it try} to execute some statements,
+which may or may not lead to an exception. These are the statements
+contained within the {\tt try} clause:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try {
+    CalcAverage ca = new CalcAverage();
+    System.out.println( "AVG + " + ca.avgFirstN(0));        
+} 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Second, we provide one or more {\tt catch} clauses
+to handle particular types of exceptions. In this case, we
+are only handling {\tt IllegalArgumentException}s.  
+
+As we said earlier, throwing an exception is like pulling a fire alarm.
+The throw occurs somewhere within the scope of the {\tt try} block. 
+The ``fire department'' in this case is the code contained in the {\tt
+catch} clause that immediately follows the try block.  This is the
+\marginnote{Responding to the fire alarm}
+exception handler for this particular exception. There's something
+like a game of catch going on here: Some method within the try block
+throws an {\tt Exception} object, which is caught and handled by the
+catch block located in some other object (Fig.~\ref{fig-exccatch}).
+
+\begin{figure}[h!]
+\figa{chptr10/exccatch.eps}{Playing catch: In this design, 
+the {\tt Illegal\-Argument\-Exception} is thrown
+by the {\tt Calc\-Average.avg\-FirstN()} method and caught by the catch
+clause within {\tt Calc\-Avg\-Test.main()} method.
+\label{fig-exccatch}
+\label{pg-fig-exccatch}}
+\end{figure}
+
+\subsection{Separating Error Checking from Error Handling}
+\noindent As we see in the {\tt CalcAvgTest} example, an important difference
+between Java's exception handling and
+\marginnote{Divide and conquer}
+more traditional approaches is that error handling can be separated
+from the normal flow of execution within a program. The {\tt
+CalcAverage.avgFirstN()} method still checks for the error and
+it still {\tt throws} {\tt IllegalArgumentException} if {\it N} does not
+satisfy the method's precondition.  But it does not contain code for
+handling the exception. The exception-handling code is located in the
+{\tt CalcAvgTest} class.
+
+Thus, the {\tt CalcAvgTest} program creates a clear separation between
+the normal algorithm and the exception-handling code.  One advantage
+of this design is that the normal algorithm is uncluttered by
+error-handling code and, therefore, easier to read.
+
+Another advantage is that the program's response to errors has been
+organized into one central location.  By locating the exception
+handler in {\tt Calc\-AvgTest.main()}, one exception handler can be used
+to handle other errors of that type.  For example, this catch clause
+could handle {\it all} {\tt IllegalArgumentException}s that get thrown in
+the program.  Its use of {\tt printStackTrace()} will identify exactly
+where the exception occurred. In fact, because a Java application
+starts in the {\tt main()} method, encapsulating all of a program's
+executable statements within a single {\tt try} block in the {\tt
+main()} method will effectively handle all the exceptions that occur
+within a program.
+
+\JavaTIP{EFFECTIVE DESIGN}{Normal Versus Exceptional Code.}{A key element of
+Java's exception-handling mechanism is that the exception handler---the catch 
+block---is distinct from the code that throws the
+exception---the try block.   The try block contains the normal
+algorithm.  The catch block contains code for handling exceptional
+conditions.}
+
+\subsection{Syntax and Semantics of Try/Throw/Catch}
+\noindent A {\bf try block}\index{try block} begins with the keyword {\tt try} followed by a block
+\marginnote{The try block}
+of code enclosed within curly braces.  A {\it catch clause} or {\bf
+catch block}\index{catch block} consists of the keyword {\tt catch}, followed by a
+parameter declaration that identifies the type
+of {\tt Exception} being caught, followed by a collection of
+statements enclosed within curly braces.  These are the statements that
+\marginnote{The catch block}
+handle the exception by taking appropriate action.
+
+Once an exception is thrown, control is transferred out of the try
+block to an appropriate catch block.  Control does not return to the
+try block.
+
+\JavaRule{Try Block Control.}{If an exception is
+thrown, the try block is exited and control does not return to it.}
+
+
+\noindent The complete syntax of the {\tt try/catch} statement is
+summarized in Figure~\ref{fig-trystmt}.  The try block is meant to
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+ try {
+      // Block of statements
+      // At least one of which may throw an exception
+      if ( /* Some condition obtains */ )
+          throw new ExceptionName();
+ } catch (ExceptionName ParameterName) {
+     // Block of statements to be executed
+     // If the ExceptionName exception is thrown in try
+ }  catch (ExceptionName2 ParameterName) {
+     // Block of statements to be executed
+     // If the ExceptionName2 exception is thrown in try
+...  // Possibly other catch clauses
+ } finally {
+     // Optional block of statements that is executed
+     // Whether an exception is thrown or not
+ }
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Java's try/catch statement.
+\label{fig-trystmt}\label{pg-fig-trystmt}}
+\end{figure}
+include a statement or statements that might throw an exception.  The
+catch blocks---there can be one or more---are meant to handle
+exceptions that are thrown in the try block.  A catch block will
+handle any exception that matches its parameter class, including
+subclasses of that class.  The {\bf finally block} clause is an
+optional clause that is always executed, whether an exception is
+thrown or not.
+
+
+
+The statements in the try block are part of the program's normal flow
+\marginnote{Normal flow of execution}
+of execution.  By encapsulating a group of statements within a
+try block, you thereby indicate that one or more exceptions may be
+thrown by those statements, and that you intend to catch them.   In
+effect, you are {\it trying} a block of code with the possibility that
+something might go wrong.
+
+If an exception is thrown within a try block, Java exits the block and
+\marginnote{Exceptional flow of execution}
+transfers control to the first {\tt catch} block that matches the
+particular kind of exception that was thrown.   Exceptions are thrown
+by using the {\tt throw} statement, which takes the following general
+form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+throw new ExceptionClassName(OptionalMessageString);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The keyword {\tt throw} is followed by the instantiation
+of an object of the {\tt ExceptionClassName} class.   This is done the
+same way we instantiate any object in Java: by using the {\tt new}
+operator and invoking one of the exception's constructor methods.  Some
+of the constructors take an {\tt OptionalMes\-sage\-String}, which is the
+message that gets returned by the exception's {\tt getMessage()}
+method.
+
+A {\tt catch} block has the following general form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+catch (ExceptionClassName ParameterName) {
+    // Exception handling statements
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A {\tt catch} block is very much like a method definition.
+It contains a parameter, which specifies the class of exception that
+is handled by that block.  The {\it ParameterName} can be any valid
+identifier, but it is customary to use {\tt e} as the {\tt catch}
+block parameter.  The parameter's scope is limited to the catch block,
+and it is used to refer to the caught exception.
+
+The {\it ExceptionClassName} must be one of the classes in Java's
+\marginnote{Exceptions are objects}
+exception hierarchy (see Fig.~\ref{fig-excepthier}).  A thrown
+exception will match any parameter of its own class or any of its
+superclasses.  Thus, if an {\tt ArithmeticEx\-cep\-tion} is thrown,
+it will match both an {\tt ArithmeticException} parameter and an {\tt
+Exception} parameter, because {\tt ArithmeticException} is a subclass
+of {\tt Exception}.
+
+Note that there can be multiple {\tt catch} clauses associated with a
+given {\tt try} block, and the order with which they are arranged is
+important. A thrown exception will be caught by the first {\tt catch}
+clause it matches.  Therefore, {\tt catch} clauses
+\marginnote{Arranging {\tt catch} clauses} should be arranged in order
+from most specific to most general (See the exception hierarchy in
+Figure~\ref{fig-excepthier}).  If a more general catch clause precedes a
+more specific one, it will prevent the more specific one from
+executing.  In effect, the more specific clause will be hidden by the
+more general one.  You might as well just not have the more specific
+clause at all.
+
+To illustrate how to arrange catch clauses, suppose an
+{\tt Arithmetic\-Exception} is thrown in the following {\tt try/catch}
+statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try {
+     // Suppose an ArithmeticException is thrown here
+} catch (ArithmeticException e) {
+     System.out.println("ERROR: " + e.getMessage() );
+     e.printStackTrace();
+     System.exit(1);
+} catch (Exception e) {
+     System.out.println("ERROR: " + e.getMessage() );
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the exception would be handled by the more
+specific {\tt Arithmetic\-Excep\-tion} block.  On the other hand, if some
+other kind of exception is raised, it will be caught by the second
+\marginnote{Which handler to use?}
+catch clause.   The {\tt Exception} class will match any exception that is
+thrown.  Therefore, it should always occur last in a sequence of
+{\tt catch} clauses.
+
+\JavaTIP{PROGRAMMING TIP}{Arranging Catch Clauses.}{Catch clauses should
+be arranged from most specific to most general.  The {\tt Exception}
+clause should always be the last in the sequence.}
+
+\subsection{Restrictions on the {\tt try/catch/finally} \\Statement}
+\noindent There are several important restrictions that apply to Java's
+exception-handling mechanism.  We'll describe these in more detail
+later in this chapter.
+
+\begin{BL}
+\item  A try block must be immediately followed by one or more
+catch clauses and a catch clause may only follow a try block.
+
+\item  A {\tt throw} statement is used to
+throw both  checked exceptions and  unchecked exceptions, where
+unchecked exceptions are those belonging to {\tt Runtime\-Ex\-cep\-tion} or
+its subclasses. Unchecked exceptions need not
+be caught by the program.
+
+\item  A {\tt throw} statement must be contained within
+the dynamic scope of a try block, and the type of {\tt Exception}
+thrown must match at least one of the try block's catch clauses.  Or the
+{\tt throw} statement must be contained within a method or constructor
+that has a {\tt throws} clause for the type of thrown {\tt Exception}.
+\end{BL}
+
+\JavaRule{Try/Catch Syntax.}{A try block must be
+followed immediately---with no intervening code---by one or more
+catch blocks.   A catch block can only be preceded by a try block or by
+another catch block.  You may not place intervening code between catch
+blocks.}
+
+
+\subsection{Dynamic Versus Static Scoping}
+\noindent How does Java know that it should execute the {\tt catch} clause in
+{\tt CalcAvg\-Test.main()} when an exception is thrown in {\tt
+avgFirstN()}?  Also, doesn't the latest version of {\tt avgFirstN()}
+(Fig.~\ref{fig-calcavg2}) violate the restriction that a {\tt throw}
+statement must occur within a try block?
+
+An exception can only be thrown within a {\it dynamically enclosing}
+try block.  This means that the {\tt throw} statement must fall within
+the {\bf dynamic scope}\index{dynamic scope} of an enclosing try block.  Let's see what
+\marginnote{Dynamic scope}
+this means.
+
+Dynamic scoping refers to the way a program is executed.  For example,
+in {\tt CalcAverage} (Fig.~\ref{fig-calcavg2}), the {\tt avgFirstN()}
+method is called from within the try block located in {\tt
+CalcAvgTest.main()}.  Thus, it falls within the dynamic scope of that
+try block.
+
+Contrast dynamic with what you have learned about {\bf static scope}\index{static scope}, which
+\marginnote{Static scope}
+we've used previously to define the scope of parameters and local
+variables (Fig. \ref{fig-dynamic}).  Static scoping refers to the
+way a program is written.  A statement or variable occurs within the
+scope of a block if its text is actually written within that block.
+For example, consider the definition of {\tt MyClass}
+(Fig.~\ref{fig-myclass}). The variable {\tt X} occurs within the
+(static) scope of {\tt method1()}, and the variable {\tt Y} occurs
+within the (static) scope of {\tt method2()}.
+\begin{figure}[h]
+\figa{chptr10/dynamic.eps}{Dynamic versus static scoping.  Static
+scoping refers to how the program is written.  Look at its definitions.
+Dynamic scoping refers to how the program executes.  Look at
+what it actually does.
+\label{fig-dynamic}\label{pg-fig-dynamic}}
+\end{figure}
+
+
+A method's parameters and local variables occur within its static
+scope.  Also, in the {\tt MyClass} definition, the
+{\tt System.out.println()} statements occur within the static scope of
+{\tt method1()} and {\tt method2()}, respectively.   In general, static
+scoping refers to where a variable is declared or where a statement is
+located.  Static scoping can be completely determined by just reading
+the program.
+
+
+Dynamic scoping can only be determined by running the program.  For
+example, in \mbox{\tt MyClass} the order in which its statements are
+executed depends on the result of {\tt Math.random()}.  Suppose that
+when {\tt random()} is executed it returns the value 0.99. In that
+case, {\tt main()} will call {\tt method2()}, which will call {\tt
+System.out.println()}, which will print ``Hello2.''  In that case, the
+statement {\tt System.out.println("Hello" + Y}) has the following
+dynamic scope:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+main()
+    method2()
+        System.out.println("Hello" + Y);
+\end{lstlisting}
+\end{jjjlisting}
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class MyClass {
+    public void method1() {
+        int X = 1;
+        System.out.println("Hello" + X);
+    }
+    public void method2() {
+        int Y = 2;
+        System.out.println("Hello" + Y);
+    }
+    public static void main( String argv[] ) {
+        MyClass myclass = new MyClass();
+        if (Math.random() > 0.5)
+            myclass.method2();
+        else
+            myclass.method1();
+    }
+} // MyClass
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{An example of dynamic versus static scoping.
+\label{fig-myclass}\label{pg-fig-myclass}}\end{figure}
+
+\noindent It occurs within the (dynamic) scope of {\tt method2()},
+which is within the (dynamic) scope of {\tt main()}. On the other
+hand, if the result of {\tt random()} had been 0.10, that particular
+{\tt println()} statement wouldn't have been executed at all.  Thus, to
+determine the dynamic scope of a particular statement, you must trace
+the program's execution.  In fact, this is what the {\tt
+printStackTrace()} method does.  It prints a trace of a statement's
+dynamic scope.
+
+\subsection{Exception Propagation: Searching for a Catch Block}
+\noindent When an exception is thrown, Java uses both static and dynamic scoping
+to find a catch clause to handle it.  Java knows how the program is
+defined---after all, it compiled it.  Thus, the static scope of a
+program's methods is determined by the compiler.  Java also places a
+record of every method call the program makes on a method call stack.
+A {\bf method call stack}\index{method call stack} is a
+\marginnote{Method call stack} data structure that behaves like a
+stack of dishes in the cafeteria.  For each method call, a {\it method
+call block} is placed on top of the stack (like a dish), and when a
+particular method call returns, its block is removed from the top of
+the stack (Fig.~\ref{fig-methodstack}).
+
+An important feature of the method call stack is that the current
+executing method 
+is always represented by the top block on the method call
+stack.   If an exception happens during that method call, you can trace
+backward through the method calls, if necessary, to find an
+exception handler for that exception.  In Figure~\ref{fig-methodstack},
+you can visualize this back trace as a matter of reversing the
+direction of the curved arrows.
+
+\begin{figure}[tb]
+\figaright{chptr10/stack.eps}{The method call stack for the {\tt Propagate}
+program.  The curved arrows give a trace of the method
+calls leading to the program's present state.
+\label{fig-methodstack}
+\label{pg-fig-methodstack}}
+\end{figure}
+
+In order to find a matching catch block for an exception, Java 
+uses its knowledge of the program's static and dynamic scope to
+perform a {\bf method stack trace}\index{method stack trace}.  The basic idea is that Java
+\marginnote{Method stack trace}
+traces backward through the program until it finds an appropriate
+catch clause.  The trace begins within the block that threw the
+exception.  Of course, one block can be nested (statically) within
+another block.  If the exception is not caught by the block in which
+it is thrown, Java searches the enclosing block.  This is static
+scoping.  If it is not caught within the enclosing block, Java
+searches the next higher enclosing block, and so on.  This is still
+static scoping.
+
+If the exception is not caught at all within the method in which it
+was thrown, Java uses the method call stack
+(Fig.~\ref{fig-methodstack}) to search backward through the method
+calls that were made leading up to the exception.  This is dynamic
+scoping.  In the case of our {\tt CalcAvgTest()} example
+(Fig.~\ref{fig-calcavg2}), Java would search backward to the {\tt
+CalcAvgTest.main()} method, which is where {\tt avgFirstN()} was
+called, and it would find the {\tt catch} clause there for handling
+{\tt IllegalArgumentException}s.  It would, therefore, execute that catch
+clause.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Suppose a program throws an {\tt ArrayIndexOutOf\-Bounds\-Exception}.
+Using the exception hierarchy in Figure~\ref{fig-excepthier},
+determine which of the following catch clauses could handle
+that exception.
+
+\begin{EXRLL}
+\item  {\tt catch (RunTimeException e) {}}                 
+\item  {\tt catch (StringIndexOutOfBoundsException e) {}}  
+\item  {\tt catch (IndexOutOfBoundsException e) {}}        
+\item  {\tt catch (Exception e) {}}                        
+\item  {\tt catch (ArrayStoreException e) {}}              
+\end{EXRLL}
+
+
+\item  In the  program that follows suppose that the first time {\tt random()}
+is called it returns 0.98, and the second time it is called it returns
+0.44.  What output would be printed by the program?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+class MyClass2 {
+    public void method1(double X) {
+        if (X > 0.95)
+            throw new ArithmeticException(X 
+                      + " is out of range");
+        System.out.println("Hello " + X);
+    }
+    public void method2(double Y) {
+        if (Y > 0.5)
+             throw new ArithmeticException(Y 
+                      + " is out of range");
+        System.out.println("Hello " + Y);
+    }
+    public static void main(String argv[]) {
+        MyClass2 myclass = new MyClass2();
+        try {
+            myclass.method1(Math.random());
+            myclass.method2(Math.random());
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+        }
+    } // main()
+} // MyClass2
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  For the values returned by {\tt random()} in the previous exercise,
+show what would be output if {\tt printStackTrace()} were called
+in addition to printing an error message.
+
+
+\item  In the {\tt MyClass2} program, suppose that the first time
+{\tt random()} is called it returns 0.44, and the second time it is called
+it returns 0.98.  What output would be printed by the program?
+
+
+\item  For the values returned by {\tt random()} in the previous exercise,
+show what would be output if {\tt printStackTrace()} were called
+instead of printing an error message.
+
+
+\item  Find the divide-by-zero error in the following program,
+and then show what stack trace would be printed by the
+program:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class BadDivide {
+    public void method1 (int n) {
+        method2(100, n);
+    }
+    public void method2 (int n, int d) {
+         System.out.println(n / d);
+    }
+    public static void main(String args[]) {
+        BadDivide bd = new BadDivide();
+        for (int k = 0; k < 5; k++)
+            bd.method1(k);
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Modify {\tt method2()} so that it handles the divide-by-zero
+exception itself, instead of letting Java handle it.  Have
+it print an error message and a stack trace.
+
+
+\item  What would be printed by the following
+code segment if {\tt someValue} equals 1000?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int M = someValue;
+try {
+    System.out.println("Entering try block");
+    if (M > 100)
+        throw new Exception(M + " is too large");
+    System.out.println("Exiting try block");
+} catch (Exception e) {
+    System.out.println("ERROR: " + e.getMessage());
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  What would be printed by the code segment in the
+preceding question if {\tt someValue} equals 50?
+
+
+\item  Write a {\tt try/catch} block that throws an
+{\tt Exception} if the value of variable {\tt X} is less than zero.
+The exception should be an instance of {\tt Exception} and, when
+it is caught, the message returned by {\tt getMessage()} should
+be ``ERROR: Negative value in X coordinate.''
+
+\end{SSTUDY}
+
+
+\section{Error Handling and Robust \\Program Design}
+\label{sec-robust}\label{pg-sec-robust}
+\noindent An important element of program design is to develop appropriate ways
+of handling erroneous and exceptional conditions.  As we have seen, the
+JVM will catch any unchecked exceptions that are not caught by the
+program itself.  For your own (practice) programs, the best design may
+\marginnote{Let Java do it?}
+simply be to use Java's default exception handling.  The program will
+terminate when an exception is thrown, and then you can debug the error
+and recompile the program.
+
+On the other hand, this strategy would be inappropriate for commercial
+software, which cannot be fixed by its users.  A well-designed
+commercial program should contain exception handlers for those truly
+exceptional conditions that may arise.
+
+In general there are three ways to handle an exceptional condition
+that isn't already handled by Java (Table~10.3).  If the
+\begin{table}[h!]
+\TBT{0pc}{Exception-handling strategies.}
+\hspace*{-6pt}\begin{tabular}{lll}
+\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}\\[2pt]
+%%%REW \TBCH{Kind of Exception}&\TBCH{Kind of Program}&\TBCH{Action to Be Taken}
+{\bf Kind of Exception}&{\bf Kind of Program}&{\bf Action to Be Taken} %%%REW added
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{0.5pt}}\\[2pt]
+Caught by Java&&Let Java handle it\cr
+Fixable condition&&Fix the error and resume execution\cr
+Unfixable condition&Stoppable&Report the error and terminate \\
+&&\quad the program\cr
+Unfixable condition&Not stoppable&Report the error and resume \\
+&&\quad processing
+\\[-4pt]\multicolumn{3}{l}{\color{cyan}\rule{27pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+exceptional condition cannot be fixed, the program should be
+terminated, with an appropriate error message.  Second, if the
+%\begin{marginalnote}\it What action should we take?\end{marginalnote}
+\marginnote{What action should we take?}
+exceptional condition can be fixed without invalidating the program,
+then it should be remedied and the program's normal execution should
+be resumed.  Third, if the exception cannot be fixed, but the program
+cannot be terminated, the exceptional condition should be reported or
+logged in some way, and the program should be resumed.
+
+\JavaTIP{EFFECTIVE DESIGN}{Handling Exceptions.}{There are three general
+ways to handle exceptions: (1) Report the exception and terminate the
+program; (2) fix the exceptional condition and resume normal
+execution; and (3) report the exception to a log and resume execution.}
+
+\subsection{Print a Message and Terminate}
+\noindent Our illegal argument example is a clear case in which the
+exception is best handled by terminating the program.  In this case,
+this particular error is best left to Java's default exception
+handling, which will terminate the program when the exception is
+thrown.  There is simply no way to satisfy the postcondition of the
+{\tt avgFirstN()} method when {\it N} is less than or equal to 0.
+%\begin{marginalnote}\it Program development\end{marginalnote}
+\marginnote{Program development}
+This type of error often calls attention to a design flaw in the
+program's logic that should be caught during program development.  The
+throwing of the exception helps identify the design flaw.
+
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Exceptions and Program Development.}{
+Java's built-in exception handling helps identify design flaws during
+program development.  Your own use of exceptions should follow this
+approach.}
+
+\noindent Similar problems can (and often do) arise in connection with
+errors that are not caught by Java.  For example, suppose that your
+program receives an erroneous input value, whose use would invalidate
+the calculation it is making.  This won't be caught by Java.  But it
+should
+\marginnote{Don't spread bad data!}
+be caught by your program, and an appropriate alternative here is to
+report the error and terminate the program.   Fixing this type of
+error may involve adding routines to validate the input data
+before they are used in the calculation.
+
+In short, rather than allowing an erroneous result to propagate
+throughout the program, it is best to terminate the program.
+
+\JavaTIP{EFFECTIVE DESIGN}{Report and Terminate.}{If an unfixable exception
+arises in a program that can be terminated, it is better to report the
+error and terminate the program. That would be better than allowing it
+to run with an erroneous value.}
+
+\subsection{Log the Error and Resume}
+\noindent Of course, the advice to stop the program assumes that the program can
+{\it be} terminated reasonably.  Some programs---such as programs that
+monitor the space shuttle or programs that control a nuclear magnetic
+resonance (NMR) machine---cannot (and should not) be terminated
+because of such an error.
+
+Such programs are called {\it failsafe} because they are designed to
+\marginnote{\vspace{-24pt}Failsafe programs}
+run without termination.  For these programs, the exception should be
+reported in whatever manner is most appropriate, but the program
+should continue running.  If the
+exceptional condition invalidates the program's computations, then
+the exception handler should make it clear that the results are
+tainted.
+
+Other programs---such as programs that analyze a large transaction
+\marginnote{Programs that can't be stopped}
+database---should be designed to continue processing after catching
+such errors.  For example, suppose the program a large
+airline runs a program once a day to analyze the ticketing transactions that
+took place.  This kind of program might use exceptions to identify
+erroneous transactions or transactions that involve invalid data of
+some sort.  Because there are bound to be many errors of this kind in the
+database, it is not reasonable to stop the program.  This kind of
+program shouldn't stop until it has finished processing all of the
+transactions.  An appropriate action for this kind of program is to
+log the exceptions into some kind of file and continue processing the
+transactions.
+
+
+Suppose a divide-by-zero error happened in one of these programs.   In
+that case, you would override Java's default exception handling to
+ensure that the program is {\it not} terminated.   More generally, it's
+important that these types of programs be designed to catch and report
+such exceptions.  This type of exception handling should be built right
+into the program's design.
+
+\JavaTIP{EFFECTIVE DESIGN}{Report and Resume.}{If an unfixable
+exception arises in a program that cannot be terminated reasonably,
+the exception should be reported and the program should continue
+executing.}
+
+\subsection{Fix the Error and Resume}
+\noindent As an example of a problem that can be addressed as the
+\marginnote{Problem statement} 
+program runs, consider the task of inputting an integer into a text
+field.  As you have probably experienced, if a program is expecting an
+integer and you attempt to input something beside an integer, a {\tt
+NumberFormatException} is generated and the program will terminate.
+For example, if you enter ``\$55'' when prompted to input an integer
+dollar amount, this will generate an exception when the {\tt
+Integer.parseInt()} method is invoked.  The input string cannot be
+parsed into a valid {\tt int}.  However, this is the kind of error
+that can be addressed as the program is running.
+
+Let's design a special {\tt IntField} that functions like a normal
+text field but accepts only integers.  If the user enters a value that
+generates a {\tt NumberFormatException}, an error message should be
+printed and the user should be invited to try again.  As
+\marginfig{chptr10/intfield.eps}{An {\tt IntField} is a {\tt
+JTextField} that accepts only integers.
+\label{fig-intfield}
+\label{pg-fig-intfield}}
+Figure~10.13 shows, we want this special field to be a subclass of
+{\tt JTextField} and to inherit the basic {\tt JTextField}
+functionality.  It should have the same kind of constructors that a
+normal {\tt JTextField} has.  This leads to the definition shown in
+Figure~\ref{fig-intfieldprog}.
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+
+public class IntField extends JTextField {
+    public IntField () {
+        super();
+    }
+    public IntField (int size) {
+        super(size);
+    }
+    public int getInt() throws NumberFormatException {
+        return Integer.parseInt(getText());
+    } // getInt()
+} // IntField
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A {\tt Number\-Format\-Exception} might be thrown by
+the {\tt Integer.parseInt()} method in  {\tt IntField.getInt()}.
+\label{fig-intfieldprog}\label{pg-fig-intfieldprog}}
+\end{figure}
+
+Note that the constructor methods use {\tt super} to call the
+{\tt JTextField} constructor.  For now, these two constructors should
+\marginnote{What constructors do we need?}  suffice.  However, later
+we will introduce a third constructor that allows us to associate a
+bound with the {\tt IntField} later in this chapter.
+
+Our {\tt IntField} class needs a method that can return its
+contents.  This method should work like {\tt JTextField.getText()}, but
+\marginnote{What methods do we need?}
+it should return a valid integer.  The {\tt getInt()} method takes no
+parameters and will return an {\tt int}, assuming that a valid integer
+is typed into the {\tt IntField}.  If the user enters ``\$55,'' a
+{\tt NumberFormatException} will be thrown by the {\tt Integer.parseInt()}
+method.  Note that {\tt getInt()} declares that it throws this
+exception.  This is not necessary because a {\tt NumberFormatException}
+is not a checked exception, but it makes the code clearer.
+
+Where and how should this exception be handled? The exception cannot
+easily be handled within the {\tt getInt()} method.  This method has to
+return an integer value.  If the user types in a non-integer, there's
+no way to return a valid value.  Therefore, it's better just to throw
+the exception to the calling method, where it can be handled more
+easily.
+
+
+In a GUI application or applet, the calling method is likely to be
+an {\tt actionPerformed()} method, such as the following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void actionPerformed(ActionEvent e) {
+  try {
+    userInt = intField.getInt();
+    message = "You input " + userInt + " Thank you.";
+  } catch (NumberFormatException ex) {
+    JOptionPane.showMessageDialog(this,
+     "The input must be an integer.  Please re-enter.");
+  } finally {
+      repaint();
+  }
+} // actionPerformed()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The call to {\tt getInt()} is embedded in a {\tt try/catch}
+block.  This leads to the design summarized in 
+Figure~\ref{fig-numformat}.  The {\tt IntField} throws an exception that
+is caught by the applet, which then displays an error message.
+
+\begin{figure}[h]
+\figa{chptr10/numformat.eps}{If the user types a
+non-integer into an {\tt IntField}, it will throw a {\tt
+NumberFormatException}. The applet will display an error message in a
+{\tt JOptionPane} (a dialog window).
+\label{fig-numformat}
+\label{pg-fig-numformat}}
+\end{figure}
+
+If the user inputs a valid integer, the program will just report a
+message that displays the value.  A more real-world example would make
+a more significant use of the value.  On the other hand, if the user
+types an erroneous value, the program will pop up the dialog box shown
+in Figure~\ref{fig-errmsg}. (See the ``From the Library'' section of
+this chapter for more on dialog boxes.) When the user clicks the OK
+button, the program will resume normal execution, so that when an
+exception is raised, the enter value is not used, and no harm is done
+by an erroneous value.  The user can try again to input a valid
+integer.  Note that the finally clause repaints the GUI.  In this
+case, repainting would display the appropriate message on the applet
+or the application.
+
+\begin{figure}[tb]
+\figa{chptr10/errmsg1.eps}{This exception handler opens a dialog
+box to display an error message.
+\label{fig-errmsg}
+\label{pg-fig-errmsg}}
+\end{figure}
+
+
+This is an example of what we might call {\em defensive} design.
+Defensive design is when we anticipate a possible
+\marginnote{Defensive design: Anticipating an \break exception}
+input error and take steps to ensure that a bad value is not
+propagated throughout the program.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Defensive Design.}{Well-designed code should
+anticipate potential problems, especially potential input problems.
+Effective use of exceptions can help with this task.}
+
+Admittedly, the sense in which the error here is ``fixed'' is simply
+that the user's original input is ignored and reentered.  This is a
+legitimate and simple course of action for this particular
+situation.  It is far preferable to ignoring the exception.  If the
+program does not handle this exception itself, Java will catch it and
+will print a stack trace and terminate the program.  That would not be
+a very user-friendly interface!
+
+Clearly, this is the type of exceptional condition that should be
+\marginnote{Anticipating exceptions}
+anticipated during program design.  If this happens to be a program
+designed exclusively for your own use, then this type of
+exception handling might be unnecessary.  But if the program is meant to
+be used by others, it is important that the program be able to handle
+erroneous user input without crashing.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Fixing an Exception.}{If a method can handle an
+exception effectively, it should handle it locally.   This is both
+clearer and more efficient.}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Library Exception Handling.}{Many of Java's
+library classes do not handle their own exceptions.  The thinking
+behind this design is that the user of the class is in a better
+position to handle the exception in a way that's appropriate for the
+application.}
+
+\subsection{To Fix or Not to Fix}
+\noindent Let's now consider a problem where it is less clear whether an
+exception can be successfully fixed ``on the fly.''  Suppose you have
+a program that contains an array of {\tt String}s, which is initially
+created with just two elements.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String list[] = new String[2];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If an attempt is made to add more than
+two elements to the array, an \mbox{\tt ArrayIndexOutOfBoundsException}
+will be raised.  This exception can be handled by extending the size of
+the array and inserting the element.  Then the program's normal
+execution can be resumed.
+
+To begin creating such a program, let's first design a method that
+will insert a string into the
+\marginnote{Problem statement} array.  Suppose that this is intended
+to be a {\tt private} method that will only be used within the
+program.  Also, let's suppose that the program maintains a variable,
+{\tt count}, that tracks how many values have been stored in the
+array.  Therefore, it will not be necessary to pass the array as a
+parameter.  So, we are creating a {\tt void} method with one
+parameter, the {\tt String} to be inserted:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void insertString(String str) {
+     // Might throw ArrayIndexOutOfBoundsException
+    list[count] = str; 
+    ++count;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The comment notes where an exception might be thrown.
+
+Can we handle this exception?  When this exception is raised, we could
+create a new array with one more element than the current array.  We
+\marginnote{Algorithm design}
+could copy the old array into the new array and then insert the
+{\tt String} in the new location.  Finally, we could set the variable
+{\tt list}, the array reference, so that it points to the new array.
+Thus, we could use the following {\tt try/catch} block to handle this
+exception:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void insertString(String str) {
+    try {
+        list[count] = str;
+    } catch (ArrayIndexOutOfBoundsException e) {
+        // Create a new array
+        String newList[] = new String[list.length+1];
+        for (int k = 0; k < list.length; k++) // Copy array
+            newList[k] = list[k];
+        newList[count] = str;   // Insert into new array
+        list = newList;         // Make old point to new
+    } finally {         // Since the exception is now fixed
+        count++;        // Increase the count
+    }
+} // insertString()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The effect of the {\tt catch} clause is to create a new
+array, still referred to as {\tt list}, but that contains one more
+element than the original array.
+\marginfig{chptr10/fixuml.eps}{The {\tt FixArrayBound} class uses exception handling to
+extend the size of an array each time a new element is inserted.
+\label{fig-fixuml}
+\label{pg-fig-fixuml}}
+
+Note the use of the {\tt finally} clause here.  For this problem it's
+important that we increment {\tt count} in the {\tt finally}
+clause.  This is the only way to guarantee that {\tt count} is
+incremented exactly once whenever an element is assigned to the array.
+
+
+The design of the {\tt FixArrayBound} class is shown in
+Figure~10.17. It provides a simple GUI interface that enables you to
+test the {\tt insertString()} method. This program has a standard
+Swing interface, using a {\tt JFrame} as the top-level window.  The
+program's components are contained within a {\tt JPanel} that's added
+to the {\tt JFrame} in the {\tt main()} method.
+
+\begin{figure}[b]
+\figa{chptr10/fixpic.eps}{The strings displayed are stored in an
+array that is extended each time a new string is entered.
+\label{fig-arrayfixscreen}\label{pg-fig-arrayfixscreen}}
+\end{figure}
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlisting}[29pc]
+\begin{lstlisting}
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class FixArrayBound extends JPanel 
+                            implements ActionListener  {
+  public static final int WIDTH = 350, HEIGHT = 100;
+  private JTextField inField = new JTextField(10);
+  private JLabel prompt = new JLabel(
+                      "Input a word and type <ENTER>: ");
+                   // Initially list has 2 elements
+  private String list[] = new String[2]; 
+  private int count = 0;
+
+  public  FixArrayBound() {
+    inField.addActionListener(this);
+    add(prompt);
+    add(inField);
+    setSize(WIDTH, HEIGHT);
+  } // FixArrayBound()
+
+  public void paintComponent(Graphics g) {
+    g.setColor(getBackground());  // Clear the background
+    g.fillRect(0, 0, WIDTH, HEIGHT);
+    g.setColor(getForeground());
+    String tempS = "";
+    for (int k = 0; k < list.length; k++)
+      tempS = tempS +  list[k] + " ";
+    g.drawString(tempS, 10, 50);
+  } // paintComponent
+
+  private void insertString(String str) {
+    try {
+      list[count] = str;
+    } catch (ArrayIndexOutOfBoundsException e) {
+      String newList[] = new String[list.length+1]; // New array
+      for (int k = 0; k < list.length; k++) // Copy old to new
+        newList[k] = list[k];
+        newList[count] = str; // Insert item into new
+        list = newList;       // Make old point to new
+    } finally {            // The exception is now fixed
+     count++;              //  so increase the count
+    }
+  } // insertString()
+
+  public void actionPerformed(ActionEvent evt) {
+    insertString(inField.getText());
+    inField.setText("");
+    repaint();
+  } // actionPerformed()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{{\tt FixArrayBound} increases the size of the array when
+a {\tt Array\-Index\-Out\-Of\-Bounds\-Exception} is raised.
+\label{fig-arraybound}\label{pg-fig-arraybound}}
+\end{figure}
+
+\begin{figure}[tb]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+    public static void main( String args[] ) {
+        JFrame f = new JFrame("Array Fixer");
+        FixArrayBound panel = new FixArrayBound();
+        f.getContentPane().add(panel);
+        f.setSize(panel.WIDTH, panel.HEIGHT);
+        f.setVisible(true);
+        f.addWindowListener(new WindowAdapter() { 
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);  // Quit the application
+            }
+        });
+    } // main()
+} // FixArrayBound
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{{\it(continued)} {\tt FixArrayBound} increases the size of the array when
+ {\tt ArrayIndexOutOfBoundsException} is raised.
+\label{fig-arraybound2}\label{pg-fig-arraybound2}}
+\end{figure}
+
+
+
+Each time the user types a string into the text field, the
+{\tt action\-Performed()} method calls the {\tt insertString()} method to add
+the string to the array.  On each user action, the {\tt JPanel} is
+repainted.  The {\tt paintComponent()} method simply clears the panel
+and then displays the array's elements
+(Fig.~10.18).
+
+\JavaTIP{DEBUGGING TIP}{Clearing the JPanel.}{Swing components, such as
+{\tt JPanel}, do not automatically clear their backgrounds. This
+must be done explicitly in the {\tt paintComponent()} method.}
+
+The complete implementation of {\tt FixArrayBound} is given in Figure~10\mbox{--}19.
+This example illustrates how an exception {\it can} be handled
+successfully and the program's normal flow of control
+resumed.  However, the question is whether such an exception {\it
+should} be handled this way.
+
+Unfortunately, this is not a well-designed program.  The array's
+\marginnote{Poor program design}
+initial size is much too small for the program's intended
+use.  Therefore, the fact that these exceptions arise at all is the
+result of poor design.  In general, exceptions should {\it not} be used
+as a remedy for poor design.
+
+\JavaTIP{EFFECTIVE DESIGN}{Truly Exceptional Conditions.}{A well-designed
+program should use exception handling to deal with truly exceptional
+conditions, not to process conditions that arise under normal or
+expected circumstances.}
+
+\noindent For a program that uses an array, the size of the array should
+be chosen so that it can store all the objects required by the
+\marginnote{Proper array usage}
+program.  If the program is some kind of failsafe program, which cannot afford
+to crash, then something like the previous approach might be justified,
+provided this type of exception occurs very rarely.  Even in that case
+it would be better to generate a message that alerts the program's
+user that this condition has occurred.   The alert will indicate a need
+to modify the program's memory requirements and restart the program.
+
+
+If it is not known in advance how many objects will be stored in an
+array, a better design would be to make use of the
+{\tt java.util.Vector} class (see ``From the Java Library'' in
+Chapter~9). Vectors are
+\marginnote{Choosing the correct data structure}
+designed to grow as new objects are inserted.  In some
+ways the exception-handling code in our example mimics the behavior of
+a vector.   However, the {\tt Vector} class makes use of efficient
+algorithms for extending its size.  By contrast, exception-handling
+code is very inefficient.  Because exceptions force the system into an
+abnormal mode of execution, it takes considerably longer to handle an
+exception than it would to use a {\tt Vector} for this type of
+application.  
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Appropriate Data Structure.}{A major component
+of problem solving is choosing the best way to represent the data.   A
+vector should be used as an array structure whenever the size of the
+array will grow and shrink dynamically during the program's execution.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  For each of the following exceptions, determine whether it can be
+handled in such a way that the program can be resumed or whether the
+program should be terminated:
+
+\begin{EXRLL}
+\item  A computer game program detects a problem with one of its GUI
+elements and throws a {\tt NullPointerException}.
+
+\item  A factory assembly-line control program determines that an
+important control value has become negative and generates an
+{\tt Arithmetic\-Exception}.
+
+\item  A company's Web-based order form detects that its user has entered
+an invalid {\tt String} and throws a {\tt SecurityException}.
+\end{EXRLL}
+
+\end{SSTUDY}
+
+\marginfig{chptr10/intoutuml.eps}{The {\tt IntOutOfRange} exception.
+\label{fig-intoutuml}
+\label{pg-fig-intoutuml}}
+\section{Creating and Throwing Your Own \\ Exceptions}
+\label{sec-throws}\label{pg-sec-throws}
+
+\noindent Like other Java classes, the {\tt Exception} class can be extended to
+handle cases that are not already covered by Java's built-in
+exceptions.  Exceptions that you define will be handled the same way
+by the Java interpreter, but you will have to {\tt throw} them
+yourself.
+
+For example, Figure~10.20 shows the design of an exception
+that can be used for validating that an integer is less than or equal
+to a certain maximum value. It would be coded as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  *  IntOutOfRangeException reports an exception when 
+  *    an integer exceeds its bound.
+  */
+public class IntOutOfRangeException extends Exception {
+
+    public IntOutOfRangeException (int Bound) {
+      super("The input value exceeds the bound " + Bound);
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The class extends {\tt Exception} and consists entirely of
+a constructor method that calls the superclass constructor.
+The argument passed to the superclass constructor is the message
+that will be returned by {\tt getMessage()} when an instance of
+this exception is created.
+
+
+Now let's consider an example where this new exception will be
+thrown.  Suppose we wish to constrain the {\tt IntField} class that we
+developed previously (Fig.~10.14) so that it will only
+accept numbers that are less than a certain bound.   First, let's
+modify {\tt IntField} so that its bound can be set when an
+instance is created. We want its bound to be an instance
+variable with some initial value, and we want to provide a
+constructor that can be used to override the default
+(Fig.~10.21).  
+\marginfig{chptr10/intfielduml.eps}{The revised {\tt
+IntField} class contains a bound on the size of the numbers that
+should be entered.
+\label{fig-intfielduml}
+\label{pg-fig-intfielduml}}
+
+This leads to the following revision of {\tt IntField}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class IntField extends JTextField {
+    private int bound = Integer.MAX_VALUE;
+
+    public IntField(int size, int max) {
+        super(size);
+        bound = max;
+    }
+   // The rest of the class is unchanged for now
+} // IntField
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Our new constructor has the signature {\tt
+IntField(int,int)}, which doesn't duplicate any of {\tt JTextField}'s
+constructors.  This is good design, because in extending a class, we want to be
+careful about the effect that our definitions have on the original
+methods in the superclass.  Superclass methods should be overridden by
+design, not by accident.  If a method
+is redefined inadvertently, it might not function as expected by users
+of the subclass.
+
+\JavaTIP{EFFECTIVE DESIGN}{Extending a Class.}{When extending a class,
+care must taken to ensure that the superclass's methods are
+not inadvertently overridden.  A superclass method should only be
+overridden by design, not by accident.}
+
+Note how we have handled the problem of setting the default value of
+the {\tt bound}. {\tt Integer.MAX\_VALUE} is a class constant that
+sets the maximum value for the {\tt int} type.  It's an appropriate
+value to use, because any valid {\tt int} that the user types should
+be less than or equal to {\tt MAX\_VALUE}.  Given these changes to
+{\tt IntField}, let's now incorporate our new exception into its
+{\tt getInt()} method (Fig.~\ref{fig-intfield2}).
+
+
+This new version of {\tt getInt()} throws an exception if the integer
+entered by the user is greater than the {\tt IntField}'s
+{\tt bound}. Here again, it is difficult to handle this exception
+appropriately in this method.  The method would either have to return
+an erroneous value---because it must return something---or it must
+terminate.  Neither is an acceptable alternative.  It is far better to
+throw the exception to the calling method.
+
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+import javax.swing.*;
+
+public class IntField extends JTextField {
+    private int bound = Integer.MAX_VALUE;
+
+    public IntField (int size) {
+        super(size);
+    }
+
+    public IntField(int size, int max) {
+        super(size);
+        bound = max;
+    }
+
+    public int getInt() throws NumberFormatException, 
+                               IntOutOfRangeException {
+        int num = Integer.parseInt(getText());
+        if (num > bound)
+            throw new IntOutOfRangeException(bound);
+        return num;
+    } // getInt()
+
+} // IntField
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The revised {\tt IntField} class containing the
+revised {\tt getInt()} method.
+\label{fig-intfield2}\label{pg-fig-intfield2}}\end{figure}
+
+
+The {\tt IntFieldTester} class (Fig.~\ref{fig-intbound}) has the
+design and functionality shown in Figure~\ref{fig-numformat}. It provides
+a simple GUI interface to test the {\tt IntField} class.  It prompts
+the user to type an integer that is less than 100, and then it
+echoes the user's input.  Note how the exception is handled in the
+{\tt actionPerformed()} method.  If an exception is thrown in {\tt
+IntField.getInt()}, the {\tt actionPerformed()} method pops up an
+error dialog, and the erroneous input is not used.  Instead, the user is
+given another chance to enter a valid integer.
+
+
+\begin{figure}[p]
+\jjjprogstart
+\begin{jjjlistingleft}[30.5pc]{-4.5pc}
+\begin{lstlisting}
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class IntFieldTester extends JPanel 
+                                       implements ActionListener  {
+  public static final int WIDTH = 300, HEIGHT = 300;
+  private JLabel prompt = new JLabel("Input an integer <= 100: ");
+  private IntField intField = new IntField(12, 100);
+  private int userInt;
+  private String message = "Hello";
+
+  public IntFieldTester() {
+    add(prompt);
+    intField.addActionListener(this);
+    add(intField);
+    setSize(WIDTH, HEIGHT);
+  } // IntFieldTester()
+
+  public void paintComponent( Graphics g ) {
+    g.setColor(getBackground());            // Clear the panel
+    g.fillRect(0, 0, WIDTH, HEIGHT);
+    g.setColor(getForeground());
+    g.drawString(message, 10, 70);
+  } // paintComponent()
+
+  public void actionPerformed(ActionEvent evt) {
+    try {
+      userInt = intField.getInt();
+      message = "You input " + userInt + " Thank you.";
+    } catch (NumberFormatException e) {
+      JOptionPane.showMessageDialog(this,
+       "The input must be an integer.  Please reenter.");
+    } catch (IntOutOfRangeException e) {
+      JOptionPane.showMessageDialog(this, e.getMessage());
+    } finally {
+      repaint();
+    }
+  } // actionPerformed()
+
+  public static void main(String args[]) {
+    JFrame f = new JFrame("IntField Tester");
+    IntFieldTester panel = new IntFieldTester();
+    f.getContentPane().add(panel);
+    f.setSize(panel.WIDTH, panel.HEIGHT);
+    f.setVisible(true);
+    f.addWindowListener(new WindowAdapter() { 
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);   // Quit the application
+      }
+    });
+  } // main()
+} // IntFieldTester
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{An application that uses an {\tt IntField} object to process integers.
+\label{fig-intbound}\label{pg-fig-intbound}}\end{figure}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Define a new {\tt Exception} named {\tt FieldIsEmpty\-Exception},
+which is meant to be thrown if the user forgets to enter
+a value into a {\tt IntField}.
+
+
+\item  Modify the {\tt IntField.getInt()} method so that it throws and catches
+the {\tt FieldIsEmptyException}.
+
+\end{SSTUDY}
+
+\section{From the Java Library: {\tt JOptionPane}}
+\label{sec-dialogs}\label{pg-sec-dialogs}
+
+\tBOXseven{A} {\bf dialog box}\index{dialog box} is a window that can be opened by a program to
+communicate in some way with the user.   Dialog boxes come in many
+varieties and have many uses in a GUI environment.  You've undoubtedly
+encountered them when using your own computer.
+
+For example, a {\it file dialog} is opened whenever you want to open
+or save a file.  It provides an interface that lets you name the file
+\WWWjava
+and helps you search through the computer's directory structure to
+find a file.
+
+
+A {\it warning dialog} or {\bf error dialog}\index{error dialog} is opened whenever a
+program needs to notify or warn you that some kind of error
+occurred.  It usually presents an error message and an OK button that
+you click to dismiss the dialog.
+
+
+Dialogs are easy to create and use in Java.  The Swing component set
+provides several different kinds of basic dialogs that can be
+incorporated into your program with one or two lines of code.  For
+example, the {\tt IntFieldTester} class makes use of a simple message
+dialog to report an input error to the user.   This dialog was created
+by the following code segment in the program (see
+Figure~\ref{fig-intbound}):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+catch (NumberFormatException e) {
+  JOptionPane.showMessageDialog(this,
+    "The input must be an integer.  Please reenter.");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method call displays the window shown in
+Figure~\ref{fig-errmsg}. It contains the error message and an
+OK button that is used to close the window.  The
+{\tt showMessageDialog()} method is a {\tt static} method of the
+{\tt javax.swing.J\-OptionPane} class.  This class provides a
+collection of similar methods for creating and displaying basic dialog
+boxes.
+\marginfig{chptr10/p634f1.eps}{A dialog window cannot stand alone. It must be created
+by a top-level window.
+\label{fig-p634f1}
+\label{pg-fig-p634f1}}
+
+A dialog differs from other kinds of top-level windows---such as
+{\tt JApplet} and {\tt JFrame}---in that it is associated with
+another window (Fig.~10\mbox{--}24).  The first parameter in this
+version of the {\tt showMessageDialog()} method is a reference to the
+dialog's parent window.  The second parameter is a {\tt String}
+representing the message.
+
+The basic message dialog used in this example is known as a
+{\bf modal dialog}\index{modal dialog}. This means that once it's been displayed, you
+can't do anything else until you click the OK button and
+dismiss the dialog.  It's also possible to create {\it nonmodal}
+dialogs.  These can stay around on the screen while you move on to
+\marginnote{Modal and nonmodal dialogs}
+other tasks.
+
+Note that the dialog box also contains an {\it icon} that symbolizes
+the purpose of the message (Fig.~\ref{fig-errmsg2}). The icon
+\begin{figure}[h]
+\figa{chptr10/errmsg2.eps}{An error dialog.
+\label{fig-errmsg2}\label{pg-fig-errmsg2}}
+\end{figure}
+is representative of the dialog's message type.  Among the basic
+types available in {\tt JOptionPane} are the following:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+JOptionPane.PLAIN_MESSAGE
+JOptionPane.INFORMATIONAL_MESSAGE     // Default
+JOptionPane.WARNING_MESSAGE
+JOptionPane.QUESTION_MESSAGE
+JOptionPane.ERROR_MESSAGE
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To set the dialog to anything other than the default
+(informational) type, you can use the following version of
+{\tt showMessageDialog()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+showMessageDialog(Component comp, Object message, 
+                  String title, int msgType);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first parameter is a reference to the parent window.
+The second is the message string.  The third is a string used as the
+dialog window's title, and the fourth is one of the five dialog types.
+For example, we can change our dialog to an error dialog with the
+following statement:
+
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+catch (IntOutOfRangeException e) {
+    JOptionPane.showMessageDialog(this,
+            e.getMessage(),
+            "Error dialog",
+            JOptionPane.ERROR_MESSAGE);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This would produce the dialog shown in Figure~\ref{fig-errmsg2}.
+
+The other kinds of basic dialogs provided by the {\tt JOptionPane}
+class are listed in Table~10.4. All of the dialogs listed
+there can be created with a line or two of code.  In addition to
+\marginnote{Basic Swing dialogs}
+these, it's also possible to create sophisticated dialogs that can
+be as customized as any other GUI interface you can build in Java.
+
+\begin{table}[htb]
+\vspace{-6pt}\TBT{2pc}{Basic dialogs provided by {\tt JOptionPane}.}
+\hspace*{1.5pc}\begin{tabular}{ll}
+\multicolumn{2}{l}{\color{cyan}\rule{23pc}{1pt}}\\[2pt]
+%%%REW \TBCH{Dialog}&\TBCH{Description}
+{\bf Dialog}&{\bf Description}
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{23pc}{0.5pt}}\\[2pt]
+Message Dialog&Presents a simple error or informational message \cr
+Confirm Dialog&Prompts the user to confirm a particular action \cr
+Option Dialog&Lets the user choose from some options\cr
+Input Dialog&Prompts and inputs a string
+\\[-4pt]\multicolumn{2}{l}{\color{cyan}\rule{23pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+In this chapter, you have learned how to handle exceptional conditions
+that occur in programs. You now know that Java has a default exception
+handler that can take of many situations, and you also understand that
+proper program design using Java excpetion-handling elements helps
+deal with many other situations. This chapter continues the emphasis
+on good program design for creating useful, stable programs.
+
+\secSMHleft{Chapter Summary}
+
+\secKTH{Technical Terms}
+\begin{KT}
+catch block
+
+catch an exception
+
+checked exception
+
+dialog box
+
+dynamic scope
+
+error dialog
+
+exception
+
+exception handling
+
+finally block
+
+method call stack
+
+method stack trace
+
+modal dialog
+
+static scope
+
+throw an exception
+
+try block
+
+unchecked exception
+
+\end{KT}
+
+\secSMHtwo{The Try/Catch Statement}
+
+\noindent The {\tt try/catch/finally} statement has the following syntax:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try {
+    // Block of statements
+    // At least one of which may throw an exception
+
+    if ( * Some condition obtains */ )
+        throw new ExceptionName();
+} catch (ExceptionName ParameterName) {
+    // Block of statements to be executed
+    // If the ExceptionName exception is thrown in try
+}
+..
+} catch (ExceptionName2 ParameterName) {
+    // Block of statements to be executed
+    // If the ExceptionName2 exception is thrown in try
+} finally {
+    // Optional block of statements that is executed
+    // Whether an exception is thrown or not
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The try block is meant to include a statement or
+statements that might throw an exception.  The catch blocks---there
+can be one or more---are meant to handle exceptions that are thrown
+in the try block.  A catch block will handle any exception that
+matches its parameter class, including subclasses of that class.
+The finally block is optional.  It will be executed whether
+an exception is thrown or not.  If an exception is thrown in
+the try block, the try block is exited permanently.
+
+The {\tt throw} statement inside the try block is there
+to illustrate how {\tt throw} can be used.  You will
+usually not see a {\tt throw} statement in a try block,
+because most throws are done from within Java library methods,
+which are called from a {\tt try} block.
+
+\secSMHtwo{Summary of Important Points}
+
+\begin{SMBL}
+\item  In Java, when an error or exceptional condition occurs,
+you {\tt throw} an {\tt Exception}, which is caught by special code
+known as an {\it exception handler}. A {\tt throw} statement---{\tt throw new Exception()}---is used to throw an exception.
+
+\item   A {\it try block} is a block of statements containing one
+or more statements that may throw an exception.   Embedding a statement
+in a try block indicates your awareness that it might throw an
+exception and your intention to handle the exception.
+
+\item  Java distinguishes between {\it checked} and {\it unchecked}
+exceptions.  Checked exceptions must either be caught by the method in
+which they occur or you must declare that the method containing that
+statement {\tt throws} the exception.
+
+
+\item  Unchecked exceptions are those that belong to
+subclasses of {\tt Runtime\-Exception}. If they are left uncaught, they
+will be handled by Java's default exception handlers.
+
+
+\item  A {\it catch block} is a block of statements that handles
+the exceptions that match its parameter.   A catch block can only
+follow a try block, and there may be more than one catch block
+for each try block.
+
+\item  The {\tt try/catch} syntax allows you to separate the normal
+parts of an algorithm from special code meant to handle errors
+and exceptional conditions.
+
+\item  A {\it method stack trace} is a trace of the method calls
+that have led to the execution of a particular statement in the
+program.  The {\tt Exception.print\-StackTrace()} method can be
+called by exception handlers to print a trace of exactly how
+the program reached the statement that threw the exception.
+
+\item  {\it Static scoping} refers to how the text of the program
+is arranged.  If a variable is declared within a method or a block,
+its static scope is confined to that method or block.
+
+\item  {\it Dynamic scoping} refers to how the program is executed.
+A statement is within the dynamic scope of a method or block if
+it is called from that method or block, or if it is called by some
+other method that was called from that method or block.
+
+\item  When searching for a catch block to handle an exception
+thrown by a statement, Java searches upward through the
+statement's static scope and backward through its dynamic
+scope until it finds a matching catch block.  If none is
+found, the Java Virtual Machine will handle the exception itself
+by printing an error message and a method stack trace.
+
+\item  Many Java library methods throw exceptions when an
+error occurs.  These {\tt throw} statements do not appear in the
+program.  For example, Java's integer division operator will throw an
+{\tt ArithmeticException} if an attempt is made to divide by zero.
+
+\item  Generally, there are four ways to handle an exception: (1)
+Let Java handle it; (2) fix the problem that led to the exception and
+resume the program; (3) report the problem and resume the program; and
+(4) print an error message and terminate the program.  Most erroneous
+conditions reported by exceptions are difficult or impossible to fix.
+
+\item  A {\tt finally} statement is an optional part of a
+{\tt try/catch} block.  Statements contained in a finally block will be
+executed whether an exception is raised or not.
+
+\item  A well-designed program should use exception handling to
+deal with truly exceptional conditions, not as a means
+of normal program control.
+
+\item  User-defined exceptions can be defined by extending the
+{\tt Exception} class or one of its subclasses.
+\end{SMBL}
+
+
+\secANSHleft
+%\addcontentsline{toc}{section}{\S~~~ Answers to Self-Study Exercises}
+
+\begin{ANS}
+\item \mbox{ }
+\begin{enumerate}
+
+\item[a.]  {\tt Integer.parseInt("26.2");        ==> NumberFormatException}  
+\item[b.]  {\tt String s; s.indexOf('a');        ==> NullPointerException}    
+\item[c.]  {\tt String s = "hello"; s.charAt(5); ==> String\-Index\-Out\-Of\-BoundsException}  
+
+\end{enumerate}
+
+\item  The unchecked exceptions are {\tt IndexOut\-OfBounds\-Exception},
+{\tt NumberFormatException}, and {\tt NullPointer\-Exception}, because
+these are subclasses of {\tt Runtime\-Exception}. The others are
+checked exceptions.
+
+\item  An {\tt ArrayIndexOutOf\-Bounds\-Exception} could be handled by
+the handlers in a, c, or d, because their classes
+are all superclasses of {\tt Array\-IndexOutOfBoundsException}.
+
+\item  If {\tt Math.random()} in {\tt MyClass2} returns 0.98 and then
+0.44, the program will generate the following output: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+0.98 is out of range
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that because the out-of-range error occurs in {\tt method1()},
+{\tt method2()} is not called at all.
+
+\item  If {\tt Math.random()} in {\tt MyClass2} returns 0.98 and then
+0.44, the following stack trace would be printed:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+java.lang.ArithmeticException: 0.98 is out of range
+    at MyClass2.method1(MyClass2.java:3)
+    at MyClass2.main(MyClass2.java:15)
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  If {\tt Math.random()} in {\tt MyClass2} returns 0.44 and then
+0.98, the program will generate the following output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Hello 0.44
+0.98 is out of range
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  If {\tt Math.random()} in {\tt MyClass2} returns 0.44 and then
+0.98, the following stack trace would be printed:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+java.lang.ArithmeticException: 0.98 is out of range
+    at MyClass2.method2(MyClass2.java:8)
+    at MyClass2.main(MyClass2.java:16)
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The divide-by-zero error in {\tt BadDivide} occurs
+in the expression {\tt n/d} in {\tt Method2()}. It would
+generate the following stack trace:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+java.lang.ArithmeticException: divide by zero
+    at BadDivide.method2(BadDivide.java:7)
+    at BadDivide.method1(BadDivide.java:3)
+    at BadDivide.main(BadDivide.java:13)
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The following version of {\tt BadDivide.method2()}
+will handle the divide-by-zero error itself:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void method2 (int n, int d) {
+    try {
+        System.out.println(n / d);
+    } catch (ArithmeticException e) {
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+        System.exit(0);
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  If {\tt someValue} equals 1000, the code segment will print
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Entering try block
+ERROR: 1000 is too large
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  If {\tt someValue} equals 50, the code segment will print
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Entering try block
+Exiting try block
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+try {
+ if (X < 0)
+    throw new Exception(
+           "ERROR: Negative value in X coordinate");
+} catch (Exception e) {
+ System.out.println( e.getMessage() );
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  \mbox{ }
+
+\begin{enumerate}
+\item[a.]  It depends.  This is a computer game, so one way to handle
+this problem would be to generate a message into a log file and resume
+the game.  If the GUI element is crucial to the game, it's hard
+to see how it could be successfully handled.
+
+\item[b.]  It depends.  You would have to decide whether it would be
+more harmful or dangerous to continue production than not.
+
+\item[c.]  The program could report the security violation to the
+user and to the system manager and then keep accepting user input.
+
+\end{enumerate}
+
+\item  \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class FieldIsEmptyException extends Exception {
+    public FieldIsEmptyException () {
+        super("The input field is empty ");
+    }
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  \mbox{ }
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getInt() {
+    int num = 0;
+    try {
+        String data = getText();
+        if (data.equals(""))
+            throw new FieldIsEmptyException();
+        num = Integer.parseInt( getText() );
+        if (num > bound)
+            throw new IntOutOfRangeException(bound);
+    } catch (FieldIsEmptyException e) {
+        System.out.println("Error: " + e.getMessage() );
+    } catch (NumberFormatException e) {
+      System.out.println("Error: You must input an integer.  
+                                       Please try again.");
+    } catch (IntOutOfRangeException e) {
+        System.out.println(e.getMessage());
+        return 0;
+    }
+    return num;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{ANS}
+
+
+\secEXRHtwo{Exercises}
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+\begin{EXRtwo}
+\item  Explain the difference between the following pairs of terms:
+\begin{EXRtwoLL}
+\item  {\it Throwing an exception} and {\it catching an exception}.
+\item  {\it Try block} and {\it catch block}.
+\item  {\it Catch block} and {\it finally block}.
+\item  {\it Try block} and {\it finally block}.
+\item  {\it Dynamic scope} and {\it static scope}.
+\item  {\it Dialog box} and {\it top-level window}.
+\item  {\it Checked} and {\it unchecked} exception.
+\item  {\it Method stack} and {\it method call}.
+\end{EXRtwoLL}
+
+\item  Fill in the blanks.
+\begin{EXRtwoLL}\baselineskip=14pt
+\item  \rule{40pt}{0.5pt} an exception is Java's way of signaling
+that some kind of abnormal situation has occurred.
+\item  The only place that an exception can be thrown in
+a Java program is within a \rule{40pt}{0.5pt}\,.
+\item  The block of statements placed within a catch block is generally
+known as an  \rule{40pt}{0.5pt}\,.
+\item  To determine a statement's \rule{40pt}{0.5pt} scope, you have to trace
+the program's execution.
+\item  To determine a statement's \rule{40pt}{0.5pt} scope, you can just
+read its definition.
+\item  When a method is called, a representation of the method
+call is placed on the \rule{40pt}{0.5pt}\,.
+\item  The root of Java's exception hierarchy is
+the \rule{40pt}{0.5pt} class.
+\item  A  \rule{40pt}{0.5pt} exception must be either caught or declared
+within the method in which it might be thrown.
+\nopagebreak[4]\item  An \rule{40pt}{0.5pt} exception can be left up to Java to handle.
+\end{EXRtwoLL}\baselineskip=11pt
+
+\item  Compare and contrast the four different ways of handling
+exceptions within a program.
+
+\item  Suppose you have a program that asks the user to input
+a string of no more than five letters.  Describe the steps you'd
+need to take in order to design a {\tt StringTooLongException}
+to handle cases where the user types in too many characters.
+
+\item  Exceptions require more computational overhead than
+normal processing.  Explain.
+
+\item  Suppose the following {\tt ExerciseExample} program
+is currently executing the if statement in {\tt method2()}: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class ExerciseExample {
+  public void method1(int M) {
+    try {
+      System.out.println("Entering try block");
+      method2( M );
+      System.out.println("Exiting try block");
+    } catch (Exception e) {
+      System.out.println("ERROR: " + e.getMessage());
+    }
+  } // method1()
+
+  public void method2(int M) {
+    if (M > 100)
+      throw new ArithmeticException(M + " is too large");
+  }
+
+  public static void main(String argv[]) {
+    ExerciseExample ex = new ExerciseExample();
+    ex.method1(500);
+  }
+} // ExerciseExample
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Draw a picture of the  method call stack that represents this situation.
+
+\item  Repeat the previous exercise for the situation where the
+program is currently executing the second {\tt println()}
+statement in {\tt method1()}.
+
+\item  Draw a hierarchy chart that represents the static scoping
+relationships among the elements of the {\tt ExerciseExample} program.
+
+\item  What would be printed by the {\tt ExerciseExample} program
+when it is run?
+
+\item  What would be printed by the {\tt ExerciseExample}
+program, if the statement in its main method were changed to
+{\tt ex.method1(5)}?
+
+\item  Consider again the {\tt ExerciseExample} program.
+If the exception thrown were {\tt Exception} rather than
+{\tt ArithmeticException}, explain why we would get the following error
+message: {\tt java.lang.Exception must be caught, or it must be
+declared\dots }.
+
+\item  Write a {\tt try/catch} block that throws an
+{\tt Exception} if the value of variable {\tt X} is less than zero.
+The exception should be an instance of {\tt Exception} and, when
+it is caught, the message returned by {\tt getMessage()} should
+be ``ERROR: Negative value in X coordinate.''
+
+\item  Look at the {\tt IntFieldTester} program
+(Fig.~\ref{fig-intbound}) and the {\tt IntField} class definition
+(Fig.~\ref{fig-intfield2}). Suppose the user inputs a value that's
+greater than 100. Show what the method call stack would look like
+when the {\tt IntField.getInt()} method is executing the
+{\tt num > bound} expression.
+
+
+\item  As a continuation of the previous exercise, show what the
+program's output would be if the user input a value greater than
+100.
+
+\item  As a continuation of the previous exercise, modify the
+{\tt IntOutOfRange\-Exception} handler so that it prints the
+message call stack.  Then show what it would print.
+
+\item  Define a subclass of {\tt RuntimeException} named
+{\tt In\-valid\-PasswordException}, which contains two constructors.   The
+first constructor takes no parameters and an exception thrown with
+this constructor should return ``ERROR: invalid password'' when its
+{\tt getMessage()} is invoked.  The second constructor takes a single
+{\tt String} parameter.  Exceptions thrown with this constructor should
+return the constructor's argument when {\tt getMessage()} is
+invoked.
+
+\item  Extend the {\tt IntField} class so that it will constrain
+the integer {\tt JText\-Field} to an {\tt int} between both a lower and
+upper bound.  In other words, it should throw an exception if the user
+types in a value lower than the lower bound or greater than the upper
+bound.
+
+\item  Design Issue: One of the preconditions for the {\tt Insertion\-Sort()}
+method (Fig.~9.13) is that its array parameter not
+be null.  Of course, this precondition would fail if the array
+were passed a null array reference.   In that case, Java would
+throw a {\tt NullPointerException} and terminate the program.
+Is this an appropriate way to handle that exception?
+
+\item  With respect to the previous exercise, suppose you
+decide that it is more appropriate to handle the
+{\tt NullPointerException} by presenting an error dialog.  Modify the method to
+accommodate this behavior.
+
+\item  Design Issue: Another possible way to design the
+{\tt sequential\-Search()} method (Fig.~9.16)
+would be to have it throw an exception when its key is not
+found in the array.  Is this a good design? Explain.
+
+\end{EXRtwo}
+

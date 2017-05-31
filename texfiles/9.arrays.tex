@@ -1,0 +1,4256 @@
+%%%  Chapter 9: Arrays and Array Processing
+%%%  3rd Edition
+
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{8}
+\chapter{Arrays and Array Processing}
+\label{chapter-arrays}
+\label{pg-chapter-arrays}
+
+\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Know how to use array data structures.
+\item  Be able to solve problems that require collections of data.
+\item  Know how to sort an array of data.
+\item  Be familiar with sequential and binary search algorithms.
+\item  Gain a better understanding of inheritance and polymorphism.
+\end{COBL}
+
+\secCOLH{Outline}
+\begin{COL}
+\item {Introduction}
+\item {One-Dimensional Arrays}
+\item {Simple Array Examples}
+\item {Example: Counting Frequencies of Letters}
+%%RAM\item[] {\color{cyan}Data Compression}
+\item {Array Algorithms: Sorting}
+\item {Array Algorithms: Searching}
+\item {Two-Dimensional Arrays}
+\item {Multidimensional Arrays (Optional)}
+\item {Object-Oriented Design: Polymorphic Sorting (Optional)}
+\item {From the Java Library: {\tt java.util.Vector}}
+\item {Case Study: An N-Player Computer Game}
+\item {A GUI-Based Game (Optional Graphics)}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+\end{COL}
+\COend
+
+\section{Introduction}
+
+\noindent In this chapter we will learn about arrays.  An {\bf array} 
+is a named collection of contiguous storage locations---storage
+locations that are next to each other---that contain data items of the
+same type.
+
+Arrays offer a more streamlined way to store data than using
+individual data items for each variable.  Arrays also allow you to
+work with their data more efficiently than with data stored in
+individual variables.
+
+Let's see why.  Suppose you want to create a GUI that has 26 buttons
+on it, one for each letter of the alphabet.  Given our present
+knowledge of Java, our only alternative would be to declare a separate
+{\tt JButton} variable for each letter of the alphabet:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ JButton button1;
+ JButton button2;
+ ...
+ JButton button26;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Obviously, requiring 26 separate variables for this
+problem is tedious and inconvenient. Similarly, to instantiate and
+assign a label to each button would require 26 statements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ button1 = new JButton("A");
+ button2 = new JButton("B");
+ ...
+ button26 = new JButton("Z");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This approach is also tedious.  What we need is some way to
+use a loop to process each button, using a loop counter, {\it k}, to
+refer to the {\it k}th button on each iteration of the loop.  An array
+lets us do that.  For example, the following code will declare an
+array for storing 26 {\tt JButton}s and then instantiate and label
+each button:
+
+\begin{jjjlisting}\begin{lstlisting}
+ JButton letter[]  = new JButton[26];
+ for (int k = 0; k < 26; k++)
+     letter[k] = new JButton("A" + k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent You don't yet understand the code in this segment, but you can
+see how economical it is. It uses just three lines of code to do what
+would have required 50 or 60 lines of code without arrays. 
+
+Our discussion of arrays will show how to store and retrieve data from
+one-, two-, and three-dimensional arrays.  We also study sorting and
+searching algorithms to process arrays. Finally, we illustrate how
+arrays can be used in a variety of applications, including an
+animation problem, a sorting class, and a card-playing \mbox{program.}
+
+\section{One-Dimensional Arrays}
+
+\noindent An array is considered a {\em data structure}. A {\bf data
+structure} is an organized collection of data. In an array, data are
+arranged \marginnote{The array data structure} in a linear or
+sequential structure, with one element following another.  When
+referencing elements in an array, we refer to the position of the
+particular element within the array. For example, if the array is
+named {\tt arr}, then the elements are named
+\verb|arr[0], arr[1], arr[2], ... arr[n-1]|, where {\it n} gives the
+number of elements in the array.  This naming also reflects the fact
+that the array's data are contained in storage locations that are next
+to each other. In Java, as in C, C++, and some other programming
+languages, the first element of an array has index 0.
+\marginnote{Zero indexing}
+(This is the same convention we used for {\tt String}s.)
+
+\begin{figure}[h!]
+\figa{chptr09/8f1.eps}{An array of 15 integers named {\tt arr}.
+\label{fig-intarray}
+\label{pg-fig-intarray}}
+\end{figure}
+Figure~\ref{fig-intarray} shows an array named {\tt arr} that
+contains 15 {\tt int} elements.  
+The syntax for referring to elements of an array is
+
+\BOXDT{{\tt {\it arrayname} [ {\it subscript} ] }}
+
+\noindent where {\it arrayname} is the name of the array---any valid
+identifier will do---and {\it subscript} is the position of the
+element within the array. As Figure~\ref{fig-intarray} shows, the
+first element in the array has subscript 0, the second has subscript
+1, and so on.
+
+
+A {\bf subscript} is an integer quantity contained in square brackets
+that is used to identify an array element. An subscript must be
+either an integer value or an integer
+\marginnote{Subscript expressions}
+expression.  Using Figure~\ref{fig-intarray} to illustrate an example,
+suppose that {\it j} and {\it k} are integer variables equaling 5 and
+7, respectively.  Each of the following then would be valid references
+to elements of the array {\it arr}:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+arr[4]     //Refers to 16
+arr[j]     //Is arr[5] which refers to 20
+arr[j + k] //Is arr[5+7] which is arr[12] which refers to 45
+arr[k % j] //Is arr[7%5] which is arr[2] which refers to -1
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\noindent These examples show that when an expression, such as {\tt j
+ + k}, is used as a subscript, it is evaluated (to 12 in this case)
+before the reference is made.
+
+It is a syntax error to use a noninteger type as an array subscript.
+Each of the following expressions would be invalid:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+arr[5.0]  // 5.0 is a float and can't be an array subscript
+arr["5"]  // "5" is a string not an integer
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For a given array, a valid array subscript must be in the
+range \verb|0 ... N-1|, where {\tt N} is the number of elements in the
+array or it is considered out-of-bounds. An out-of-bounds subscript
+creates a run-time error---that is, an error that occurs when the
+program is running---rather than a syntax error, which can be detected
+when the program is compiled.  For the array {\tt arr}, each of the
+following expressions contain out-of-bounds subscripts:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+arr[-1]  // Arrays cannot have negative subscripts
+arr['5'] // Char '5' promoted to its Unicode value, 53
+arr[15]  // The last element of arr has subscript 14
+arr[j*k] // Since j*k equals 35
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Each of these references would lead to an {\tt
+IndexOutOfBoundsException}.  (Exceptions are covered in detail in
+Chapter~10.)
+
+\JavaRule{Array Subscripts.}{Array subscripts must be
+integer values in the range {\tt 0...(N-1)}, where {\it N} is the number of
+elements in the array.}
+
+\JavaTIP{DEBUGGING TIP}{Array Subscripts.}{In developing array algorithms,
+it's important to design test data that show that array subscripts
+do not cause run-time errors.}
+
+
+\subsection{Declaring and Creating Arrays}
+\noindent For the most part, arrays in Java are treated as objects.  
+Like objects, they are instantiated with the {\tt new} operator 
+\marginnote{Are arrays objects?}
+and they have instance variables (for example, {\tt length}). Like
+variables for objects, array variables are considered {\it reference}
+variables.  When arrays are used as parameters, a reference to the
+array is passed rather than a copy of the entire array.  The primary
+difference between arrays and full-fledged objects is that arrays
+aren't defined in terms of an {\tt Array} class.  Thus, arrays don't
+fit into Java's {\tt Object} hierarchy.  They don't inherit any
+properties from {\tt Object} and they cannot be subclassed.
+
+You can think of an array as a container that contains a number of
+variables.  As we've seen, the variables contained in an array object
+are not referenced by name but by their relative position in the
+array.  The variables are called {\it components}. If an array object
+has {\it N} components\index{array component}, then we say that the
+{\bf array length}\index{array length} is {\it N}. Each of the
+components of the array has the same type, which is called the array's
+{\it component\index{array component type} type}.  An {\it empty}
+array is one that contains zero variables.
+
+A {\bf one-dimensional} array\index{one-dimensional array} has
+%\begin{marginalnote}\it Components and elements\end{marginalnote}
+\marginnote{Components and elements}
+components that are called the array's {\bf elements\index{array
+element}}. Their type is the array's {\bf element\index{array element
+type} type}. An array's elements may be of any type, including
+primitive and reference types.  This means  you can have arrays of {\tt int,
+char, boolean, String, Object, Image, TextField, TwoPlayerGame}, and so on.
+
+When declaring a one-dimensional array, you have to indicate both the
+array's element type and its length.  Just as in declaring and creating
+other kinds of objects, creating an array object requires that we
+create both a name for the array and then the array\index{array
+declaration} itself.   The following statements create the array shown
+in Figure~\ref{fig-intarray}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[];          // Declare a name for the array
+arr = new int[15];  // Create the array itself
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent These two steps can be combined into a single statement
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[] = new int[15];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, the array's element type is {\tt int} and
+its {\tt length} is 15, which is fixed and cannot be changed.  This
+means that the array contains 15 variables of type {\tt int}, which
+will be referred to as {\tt arr[0], arr[1], \dots arr[14]}.
+%%It is important to note that once an array
+%%has been instantiated, its length is fixed and cannot be changed.
+
+\subsection{Array Allocation}
+\noindent Creating the array in Figure~\ref{fig-intarray}  means allocating
+\marginnote{Allocating memory}
+15 storage locations that can store integers.  Note that one
+difference between declaring an array and declaring some other kind of
+object is that square brackets ({\tt []}) are used to declare an array
+type.  The brackets can be attached either to the array's name or to
+its type, as in the following examples:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[];     // The brackets may follow the array's name
+int[] arr;     // The brackets may follow the array's type
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The following example creates an array of five {\tt String}s
+and then uses a for loop to assign the strings {\tt "hello1"}, {\tt
+"hello2"}, {\tt "hello3"}, {\tt "hello4"}, and {\tt "hello5"} to the
+five array locations:
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+String strarr[];                // Declare a name for the array
+strarr = new String[5];              // Create the array itself
+                                 // Assign strings to the array
+for (int k = 0; k < strarr.length; k++)     // For each element
+  strarr[k] = new String("hello" + (k + 1)); // Assign a string
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the expression \verb|k < strarr.length| specifies
+the loop bound.  Every array has a {\tt length}\index{array length}
+instance variable, which refers to the number of elements contained in
+the array.  As we mentioned, arrays, like {\tt String}s, are zero
+\marginnote{{\tt length} vs.  {\tt length()}}
+indexed, so the last element of the array is always given by its {\tt
+length-1}.  However, {\tt length} is an instance variable for arrays,
+whereas {\tt length()} is an instance method for {\tt String}s.
+Therefore, it would be a syntax error in this example to refer to {\tt
+strarr.length()}.
+
+\JavaTIP{DEBUGGING TIP}{Array Length.}{A common syntax error involves
+forgetting that for arrays {\tt length} is an instance variable,
+not an instance method, as it is for {\tt String}s.}
+
+In the example, we first use the {\tt new} operator to create {\tt
+strarr}, an array of type {\tt String} of length five.  We then use a
+{\tt String} constructor to create the five {\tt String}s that are
+stored in the array.  It is important to realize that creating an
+array to store five {\tt Object}s (as opposed to five primitive data
+elements) does not also create the {\tt Object}s themselves that will
+be stored in the array.
+
+When an {\tt array} of objects is created, the array's elements are
+\marginnote{Arrays of objects}
+references to those objects (Fig.~\ref{fig-arrayobjs}). Their initial
+values, like all reference variables, are {\tt null}.  So to create
+and initialize the array {\tt strarr}, we need to create {\it six}
+objects---the array itself, which will contain five {\tt String}s, and
+then the five {\tt String}s that are stored in {\tt strarr}.
+
+%\begin{figure}
+\begin{figure}[tb]
+%%\figaleft{chptr09/p406f1.eps}{Creating an array of five {\tt String}s involves
+\figa{chptr09/p406f1.eps}{Creating an array of five {\tt String}s involves
+six objects, because the array itself is a separate object.
+In (a), the array variable is declared.  In (b), the array
+is instantiated, creating an array of five {\tt null}
+references.  In (c), the five {\tt Strings} are created
+and assigned to the array.
+\label{fig-arrayobjs}
+\label{pg-fig-arrayobjs}}
+\end{figure}
+%\end{figure}
+
+One more example will help underscore this point.   The following
+statements create four {\it new} {\tt Object}s, an array to store
+three {\tt Student}s plus the three {\tt Student}s themselves:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Student school[] = new Student[3];   // A 3 Student array
+school[0] = new Student("Socrates"); // The first Student
+school[1] = new Student("Plato");    // The second Student
+school[2] = new Student("Aristotle");// The third Student
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first statement creates an array named {\tt school}
+to store three \mbox{\tt Student}s, and the next three statements create
+the individual {\tt Student}s and assign them to the array
+(Fig.~9.3).  Thus, creating the array and initializing
+its elements require four {\tt new} statements.
+
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr09/p407f1.eps}{An array of {\tt Student}s.
+\label{fig-studarray}
+\label{pg-fig-studarray}}
+%\end{graphic}
+%\end{figure}
+The following sequence of statements would lead to a null pointer
+exception because the array's elements have not been instantiated:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Student students[] = new Student[3]; // A 3 Student array
+System.out.println(students[0].getName());
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, {\tt students[0]} is a null reference, thus
+causing the exception.
+
+%%RAM false argument flips icon to other side
+\JavaTIP[false]{DEBUGGING TIP}{Array Instantiation.}{Creating a new {\tt array}
+does not also create the objects that are stored in the array.  They
+must be instantiated separately.   It is a semantic error to refer to
+an uninstantiated ({\tt null}) array element.}
+
+\noindent Now that we've assigned the three {\tt Student}s to
+the array, we can refer to them by means of subscripted references.  A
+reference to the \mbox{\tt Student} named ``Socrates'' is now {\tt
+school[0]}, and a reference to the \mbox{\tt Student} named ``Plato''
+is {\tt school[1]}. In other words, to refer to the three individual
+students we must refer to their locations within {\tt school}. Of
+course, we can also use variables, such as loop counters, to refer to
+a {\tt Student}'s location within {\tt school}. The following for loop
+invokes each {\tt Student}'s {\tt getState()} method to print out its
+current state:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < school.length; k++)
+    System.out.println(school[k].getState());
+\end{lstlisting}
+\end{jjjlisting}
+
+What if the three {\tt Student}s already existed before the array was
+created? In that case, we could just assign their references to the
+array elements, as in the following example:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Student student1 = new Student("Socrates"); 
+Student student2 = new Student("Plato");
+Student student3 = new Student("Aristotle");
+Student school = new Student[3]; // A 3 Student array
+school[0] = student1;
+school[1] = student2;
+school[2] = student3;
+\end{lstlisting}
+\end{jjjlisting}
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr09/p408f1.eps}{Arrays of objects store references to
+the objects, not the objects themselves.
+\label{fig-arrayalloc}
+\label{pg-fig-arrayalloc}}
+%\end{graphic}
+%\end{figure}
+
+\noindent In this case, each of the three {\tt Student} objects
+can be referenced by two different references---its variable
+identifier (such as {\tt student1}) and its array location (such as
+{\tt school[0]}).  For arrays of objects, Java stores just the reference to
+the object in the array itself, rather than the entire object.  This
+conserves memory, since references require only 4 bytes each whereas
+each object may require hundreds of bytes (Fig.~9.4).
+
+When an array\index{array allocation} of {\it N} elements is
+%\begin{marginalnote}\it How much memory?\end{marginalnote}
+created, the compiler {\it allocates} storage for {\it N} variables of
+the element's type.  In the case of {\tt arr} that we discussed
+earlier, the compiler would allocate storage for 15 {\tt int}s---60
+contiguous bytes of storage, because each {\tt int} requires 4 bytes
+(32 bits) of storage.  If we declare an array of 20 {\tt double}s,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double arr[] = new double[20];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent the compiler will allocate 160 bytes of storage---20
+variables of 8 bytes (64~bits) each.  In the case of the
+\marginnote{How much memory?}  {\tt Student} examples and {\tt String}
+examples, because these are objects (not primitive types), the
+compiler will allocate space for {\it N} addresses, where {\it N} is
+the length of the array and where each address requires 4 bytes.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+\item  How much space  (in bytes) would be allocated
+for each of the following?
+
+\begin{EXRLL}
+\item {\tt int a[] = new int[5];}    
+\item {\tt double b[] = new double[10];}    
+\item {\tt char c[] = new char[30];}        
+\item {\tt String s[] = new String[10];}    
+\item {\tt Student p[] = new Student[5];}  
+\end{EXRLL}
+
+\end{SSTUDY}
+
+\subsection{Initializing Arrays}
+
+\noindent Array elements are automatically initialized
+to default values that depend on the element type:
+Boolean elements are initialized to {\tt false}, and integer and real
+types are initialized to 0. Reference types---that is, arrays of
+\marginnote{Default initialization}
+objects---are initialized to {\tt null}.
+
+Arrays can also be assigned initial values when they are created,
+although this is feasible only for relatively small arrays.  An {\bf
+array initializer}\index{array initializer} is written as a list of expressions separated by
+commas and enclosed by braces.   For example, we can declare and
+\marginnote{Array initializer}
+initialize the array shown in Figure~\ref{fig-intarray} with the
+following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[] = {-2,8,-1,-3,16,20,25,16,16,8,18,19,45,21,-2};
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Similarly, to create and initialize an array of {\tt String}s,
+we can use the following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String strings[] = {"hello", "world", "goodbye", "love"};
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This example creates and stores four {\tt String}s
+in the array.  Subsequently, to refer to ``hello'', we would use the
+reference {\tt strings[0]}, and to refer to ``love'', we would use the
+reference {\tt strings[3]}. Note in these examples that when an array
+declaration contains an initializer, it is not necessary to use
+{\tt new} and it is not necessary to specify the number of elements in the
+array.  The number of elements is determined from the number of values
+in the initializer list.
+
+\subsection{Assigning and Using Array Values}
+\noindent Array elements can be used in the same way as other variables.  The
+%\begin{marginalnote}\it Array assignment\end{marginalnote}
+\marginnote{Array assignment}
+only difference, of course, is that references to the elements are
+subscripted.  For example, the following assignment\index{array
+assignment} statements assign values to the elements of two arrays,
+named {\tt arr} and {\tt strings}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+arr[0] = 5;
+arr[5] = 10;
+arr[2] = 3;
+strings[0] = "who";
+strings[1] = "what";
+strings[2] = strings[3] = "where";
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The following loop assigns the first 15 squares---{\tt 1, 4,
+9 \dots }---to the array {\tt arr}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < arr.length; k++)
+    arr[k] = (k+1) * (k+1);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The following loop prints the values of the array {\tt arr}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < arr.length; k++)
+    System.out.println(arr[k]);
+\end{lstlisting}
+\end{jjjlisting}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Declare an array named {\tt farr} that contains ten {\tt float}s
+initialized to the values {\tt 1.0, 2.0, \dots , 10.0}.
+
+\item  Write an expression that prints the first element of {\tt farr}.
+
+
+\item  Write an assignment statement that assigns 100.0 to
+the last element in {\tt farr}.
+
+
+\item  Write a loop to print all of the elements of {\tt farr}.
+
+\end{SSTUDY}
+
+
+\section{Simple Array Examples}
+
+\noindent The program in Figure~\ref{fig-initarrays} creates two arrays of ten
+elements each and displays their values on the Java console.   In this
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+public class PrintArrays { 
+  static final int ARRSIZE = 10;         // The array's size
+  static int intArr[] = new int[ARRSIZE];// Create int array
+  static double realArr[] = { 1.1, 2.2, 3.3, 4.4,
+     5.5, 6.6, 7.7, 8.8, 9.9, 10.10 }; // And a double array
+
+  public static void main(String args[]) {
+    System.out.println("Ints \t Reals");  // Print a heading
+                          // For each int and double element
+    for (int k = 0; k < intArr.length; k++) 
+       System.out.println( intArr[k] + " \t " + 
+                                 realArr[k]);  // Print them
+    } // main()
+} // PrintArrays
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A program that displays two arrays. Its output
+is shown in Figure~9.6. 
+\label{fig-initarrays}\label{pg-fig-initarrays}}
+\end{figure} 
+
+\noindent example, the elements of \mbox{\tt intArr} have not been given initial
+\marginpar{
+\vspace*{-10pc}
+\small
+{\color{cyan}\rule{12.5pc}{1pt}}\\[2pt]
+\begin{tabular}{cc}
+\hspace*{18pt}Ints\hspace*{18pt}    &      \hspace*{18pt}Reals\hspace*{18pt}  \\[4pt]
+0       &      \hphantom{0}1.1  \\
+0       &      \hphantom{0}2.2  \\
+0       &      \hphantom{0}3.3  \\
+0       &      \hphantom{0}4.4  \\
+0       &      \hphantom{0}5.5  \\
+0       &      \hphantom{0}6.6  \\
+0       &      \hphantom{0}7.7  \\
+0       &      \hphantom{0}8.8  \\
+0       &      \hphantom{0}9.9  \\
+0       &      10.1  \\
+\end{tabular}
+\captionmargin{Output of the {\tt PrintArrays} program.
+\label{fig-printarraysout}}
+\normalsize
+}
+values whereas the elements of \mbox{\tt realArr} have been
+initialized.  Note the use of the integer constant
+\mbox{\tt ARRSIZE} to store the arrays' size.  By using the constant
+in this way, we do not have to use the literal value {\tt 10} anywhere
+in the program, thereby making it easier to read and to modify the
+program.  If we want to change the size of the array that the program
+handles, we can just change the value of {\tt ARRSIZE}. This is an
+example
+%\begin{marginalnote}Maintainability Principle\end{marginalnote}
+\marginnote{Maintainability principle}
+of the maintainability
+principle\index{Maintainability Principle}.
+
+\JavaTIP{EFFECTIVE DESIGN}{Symbolic Constants.}{Using symbolic
+constants (final variables) instead of literal values makes the
+program easier to read and to maintain.}
+
+\noindent Note the use of the {\tt static} qualifier throughout the
+{\tt PrintArrays} class. This enables us to refer to the array
+and the other variables from within the {\tt main()} method. If
+{\tt intArr} were not declared {\tt static}, we would get the
+compiler error {\tt attempt to make static use of a non-static variable.}
+This use of {\tt static} is justified mainly as a coding convenience
+rather than a principle of object-oriented design. The only examples
+we've seen so far in which static elements were a necessary design
+element were the use of static elements in the {\tt Math} class---{\tt Math.PI} 
+and {\tt Math.sqrt()}---and the use of static
+final variables in {\tt TwoPlayerGame}---{\tt TwoPlayerGame.PLAYER\_ONE}.
+
+
+For large arrays, it is not always feasible to initialize them in an
+%\begin{marginalnote}\it Array initializers\end{marginalnote}
+initializer statement.  Consider the problem of initializing an array
+with the squares of the first 100 integers.  Not only would it be
+tedious to set these values in an initializer statement, it would also
+be error prone, since it is relatively easy to type in the wrong value
+for one or more of the squares.
+
+\JavaTIP{DEBUGGING TIP}{Array Initialization.}{Initializer statements
+should be used only for relatively small arrays.}
+
+\noindent The example in Figure~\ref{fig-squares100} creates an array of 50
+integers and then fills the elements with the values 1, 4, 9, 16, and
+so on.  It then prints the entire array.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Squares {
+  static final int ARRSIZE = 50;     // The array's size
+  static int intArr[] = new int[ARRSIZE]; // Instantiate
+  public static void main(String args[]) {
+    for (int k = 0; k < intArr.length; k++)// Initialize
+      intArr[k] = (k+1) * (k+1);
+    System.out.print("The first 50 squares are"); 
+    for (int k = 0; k < intArr.length; k++) { // Print
+      if (k % 5 == 0)             // For each 5th square
+        System.out.println(" ");//   print a new line
+      System.out.print( intArr[k] + " ");
+    } // for
+  } // main()
+} // Squares
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A program with an array that stores the squares of the first 50 integers.
+Its output is shown in Figure~9.8.
+\label{fig-squares100}\label{pg-fig-squares100}}
+\end{figure}
+\marginpar{
+\vspace*{-10pc}
+\small
+{\color{cyan}\rule{12.5pc}{1pt}}\\[2pt]
+\it 1 4 9 16 25 \\
+36 49 64 81 100\\
+121 144 169 196 225\\
+256 289 324 361 400\\
+441 484 529 576 625\\
+676 729 784 841 900\\
+961 1024 1089 1156 1225\\
+1296 1369 1444 1521 1600\\
+1681 1764 1849 1936 2025\\
+2116 2209 2304 2401 2500 \rm\\[-4pt]
+\captionmargin{Output of the {\tt Squares} program.
+\label{fig-squaresout}}
+}
+
+
+This example illustrates some important points about the use of
+array variables.  The array's elements are individual
+storage\index{array storage} locations.  In this example, {\tt intArr}
+has 50 storage locations.  Storing a value in one of these variables
+is done by an assignment statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+intArr[k] = (k+1) * (k+1);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The use of the variable {\it k} in this assignment
+statement allows us to vary the location that is assigned on each
+iteration of the for loop.  Note that in this example, {\it k} occurs as
+the array index on the left-hand side of this expression, while
+{\it k+1} occurs on the right-hand side as the value to be squared.  The
+reason for this is that arrays are indexed starting at 0 but we want
+our table of squares to begin with the square of 1. So the square of
+some number {\it n+1} will always be stored in the array whose index
+is one less than the number itself---that 
+\marginnote{Zero vs.  unit indexing}
+is, {\it n}.
+
+An array's {\tt length} variable can always be used as a loop bound
+when iterating through all elements of the array:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < intArr.length; k++)
+    intArr[k] = (k+1) * (k+1);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent However, it is important to note that the last element in
+the array is always at location \verb|length-1|. Attempting to refer
+to {\tt intArr[length]}
+\marginnote{Off-by-one error}
+would cause an {\tt IndexOutOfBoundsException} because no such element
+exists.
+
+\JavaTIP{DEBUGGING TIP}{Off-by-One Error.}{Because of zero
+indexing, the last element in an array is always $length-1$.
+Forgetting this fact can cause an off-by-one error.}
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Declare an array of 100 {\tt double}s and write a loop to assign the
+first 100 square roots to its elements.  [Use {\tt Math.sqrt(double)}.]
+
+\end{SSTUDY}
+
+\section{Example: Counting Frequencies of Letters}
+\noindent Suppose you wish to write a program to help break a text
+message that has been encrypted with one of the historical ciphers
+that we have discussed in the two previous chapters.  It is well known
+that historical ciphers often can be broken, that is, the plaintext
+can be found from the ciphertext, by examining the frequencies of
+letters and comparing them to the average frequencies of typical
+samples of plaintext.  For example, {\tt E} and {\tt T} are the two
+most frequently used letters in the English language. So, in a
+ciphertext encrypted with a Caesar cipher, {\tt E} and {\tt T} are
+good guesses as the plaintext letter corresponding to the most
+frequent letter in a ciphertext message.
+
+Let's write a program that will count how many times each of the {\tt
+26} letters of the English language appears in a given string.  There
+are a number of ways to design such a program depending on how
+flexible you wish the program to be.  Let us keep this example simple
+by assuming that we will only be interested in counting occurrences of
+the letters {\tt A} through {\tt Z} and not of occurrences of spaces
+or punctuation marks.  Assume further that we will change lowercase
+letters in our string sample to uppercase before counting letters and
+that we will want to print out the frequencies of letters to the
+console window.  Finally, assume that, later in the chapter after we
+discuss sorting arrays, we will want to enhance our program so that it
+can print out the letter frequencies in order of increasing frequency.
+
+\subsection{A Class to Store the Frequency of One Letter}
+
+\noindent It is clear that an array should be used for storing the
+frequencies, but a decision must also be made as to what to store as the
+array elements.  If we store letter frequencies as {\tt int} values,
+with the frequency of {\em A} stored at index 0, and the frequency of
+{\em B} at index 1, and so forth, we will not be able to rearrange the
+frequencies into increasing order without losing track of which letter
+corresponds to which frequency.  One way of solving this problem is to
+create an array of objects, where each object stores both a letter and
+its frequency.
+
+So let us design a {\tt LetterFreq} class that stores a letter
+in an instance variable of type {\tt char} and its frequency in an instance
+variable of type {\tt int}. These instance variables can be declared as:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ private char letter;    //A character being counted
+ private int freq;       //The frequency of letter
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We will want a constructor that can initialize these two values
+and two accessor methods to return these values.  We are familiar enough
+with these kinds of methods that it will not be necessary to discuss them any
+further.  We need one additional method to increment {\tt freq} whenever
+we encounter the letter while processing the string:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public void incrFreq() {
+     freq++;
+ } //setFreq()
+\end{lstlisting}
+\end{jjjlisting}
+
+A UML diagram for the {\tt LetterFreq} class is given in Figure~9.9 and
+\marginfig{chptr09/letfrequml.eps}{UML for {\tt LetterFreq}.
+\label{fig-letfrequml}
+\label{pg-fig-letfrequml}}
+the class definition is given
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class LetterFreq {
+    private char letter;    //A character being counted
+    private int freq;       //The frequency of letter
+
+    public LetterFreq(char ch, int fre) {
+        letter = ch;
+        freq = fre;
+    }
+    public char getLetter() {
+        return  letter;
+    }
+    public int getFreq() {
+        return  freq;
+    }
+    public void incrFreq() {
+        freq++;
+    }
+} //LetterFreq
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt LetterFreq} class definition.
+\label{fig-letfreq}}
+\end{figure}
+in Figure~\ref{fig-letfreq}. Note that we will have to make a minor
+modification to this class later in this chapter to enable us to sort
+an array of objects from this class.
+
+\subsection{A Class to Count Letter Frequencies}
+
+\noindent Now let us turn to designing a class named {\tt AnalyzeFreq}
+that will use an array of objects of type {\tt LetterFreq} to count
+the frequencies of the letters {\tt A} through {\tt Z} in a given
+string.  The array, let's call it {\tt freqArr}, will be the only
+instance variable of the class.  The class needs a constructor to
+instantiate the array and to create the {\tt 26} array elements, each
+with a different letter and an initial frequency of {\tt 0}.  This
+class should also have two methods: a method to count the frequencies
+of the {\tt 26} letters in a given string and a method that prints out
+the frequency 
+\marginfig{chptr09/anafrequml.eps}{UML for {\tt
+AnalyzeFreq}.
+\label{fig-anafrequml}
+\label{pg-fig-anafrequml}}
+of each letter to the console window.  The UML diagram for the class
+is given in Figure~9.11.
+
+The array instance variable can be declared by:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ private LetterFreq[] freqArr; //An array of frequencies
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The constructor creates an array of {\tt 26} elements to
+store references to {\tt LetterFreq} objects with the statement
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ freqArr = new LetterFreq[26];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The indices of the array range from {\tt 0} to {\tt 25} and
+the elements at these locations should store the letters {\tt A} to
+{\tt Z}.  Recall that in Java, {\tt char} data are a form of {\tt int}
+data and can be used in arithmetic.  If we let {\tt k} be an integer
+that ranges between {\tt 0} and {\tt 25}, then the expression {\tt
+(char)('A' + k)} will correspond to the letters {\tt A} to {\tt Z}.  .
+Thus, the following loop will initialize the array correctly.  
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < 26; k++) {
+    freqArr[k] = new LetterFreq((char)('A' + k), 0);
+} //for
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt countLetters()} method must identify the array index for {\tt
+LetterFreq} object that stores a letter between {\tt A} and {\tt Z}.
+If {\tt let} is a {\tt char} variable that stores such a letter, then
+the expression {\tt (let - 'A')} will give the index of the array
+element corresponding to {\tt let}.  Thus the following code will
+calculate the frequencies the letters in the string parameter, {\tt
+str}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public void countLetters(String str) {
+     char let;     //For use in the loop.
+     str = str.toUpperCase();
+     for (int k = 0; k < str.length(); k++) {
+         let = str.charAt(k);
+         if ((let >= 'A') && (let <= 'Z')) {
+             freqArr[let - 'A'].incrFreq();
+         } //if
+     } //for
+ } //countLetters()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The definition of the {\tt printArray()} method is completely
+straight forward:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void printArray() {
+  for (int k = 0; k < 26; k++) {
+    System.out.print("letter: " + freqArr[k].getLetter());
+    System.out.println("   freq: " + freqArr[k].getFreq());
+  } //for
+} //printArray()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The entire definition of {\tt AnalyzeFreq} is
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+public class AnalyzeFreq {
+  private LetterFreq[] freqArr; //An array of frequencies
+
+  public AnalyzeFreq() {
+    freqArr = new LetterFreq[26];
+    for (int k = 0; k < 26; k++) {
+      freqArr[k] = new LetterFreq((char)('A' + k), 0);
+    } //for
+  }
+  public void countLetters(String str) {
+    char let; //For use in the loop.
+    str = str.toUpperCase();
+    for (int k = 0; k < str.length(); k++) {
+      let = str.charAt(k);
+      if ((let >= 'A') && (let <= 'Z')) {
+        freqArr[let - 'A'].incrFreq();
+      } //if
+    } //for
+  }
+  public void printArray() {
+    for (int k = 0; k < 26; k++) {
+      System.out.print("letter: " + freqArr[k].getLetter());
+      System.out.println(" freq: " + freqArr[k].getFreq());
+    } //for
+  } 
+} //AnalyzeFreq
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt AnalyzeFreq} class definition.
+\label{fig-anafreq}}
+\end{figure}
+\noindent given in Figure~\ref{fig-anafreq}. We will modify this class later in
+the chapter to be able to sort the array after counting.  The
+following {\tt main()} method, either in this class or in its own
+class will demonstrate how the class methods are used.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String[] argv) {
+  AnalyzeFreq af = new AnalyzeFreq();
+  af.countLetters("Now is the time for all good students" +
+     " to study computer related topics.");
+  af.printArray();
+} //main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Rewrite the {\tt main()} of the {\tt AnalyzeFreq} class so that
+it opens a file named {\tt freqtest.txt} and counts the frequencies of
+the letters of the text stored in the file.  You will need to use the
+{\tt Scanner} class to read from the file as was done in Chapter~4.
+Create a file named {\tt freqtest.txt} that contains several hundred
+characters of typical English text to test the new {\tt main()} method
+\end{SSTUDY}
+
+
+\section{Array Algorithms: Sorting}
+\label{sec-sort}\label{pg-sec-sort}
+\noindent {\bf Sorting} an array is the process of arranging its elements in
+ascending or descending order.   Sorting algorithms are among the most
+widely used algorithms.  Any time large amounts of data are maintained,
+there is some need to arrange them in a particular order.   For example,
+the telephone company needs to arrange its accounts by the last name
+of the account holder as well as by phone number.
+
+
+\subsection{Insertion Sort}
+\noindent The first sorting algorithm we'll look at is known as {\bf
+insertion sort}, so named because as it traverses through the array
+from the first to the last element, it inserts each element
+into its correct position in the partially sorted array. 
+
+For an array of {\em N} elements, let's think of the array as divided
+into two parts. The {\em sorted} part will be the left hand side of
+the array.  And the {\em unsorted} part will be the right hand side of
+the array.  Initially, the sorted part consists of the first element
+in the array---the element at index 0.
+
+Insertion sort moves through the unsorted portion of the
+array---that is its loop variable, {\em k}, ranges from 1 through
+{\em N-1}.  On each iteration it inserts the {\em k}th element into
+its correct position in the sorted part of the array.  To insert an
+element into the sorted part of the array, it may be necessary to move
+elements greater than the one being inserted out of the way.
+
+In pseudocode, insertion sort can be represented as follows:
+
+\begin{jjjlistingleft}[32pc]{-6.5pc}
+\begin{lstlisting}
+Insertion Sort of an array, arr, of N elements into ascending order
+1. For k assigned 1 through N-1
+2.   Remove the element arr[k] and store it in x.
+3.   For i starting at k-1 and for all preceding elements greater than x
+4.     Move arr[i] one position to the right in the array.
+5.   Insert x at its correct location.
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent As is apparent from the pseudocode, we have a nested for
+loops. The outer ({\em k}) loop, iterates through the array from 1 to
+{\em N-1}. The inner loop iterates as many times as necessary,
+starting with the element just to the left of the {\em k}th element
+in order to insert the {\em k}th element into its correct position in
+the sorted portion.  Note that the {\em k}th element is always removed
+from the array (and stored in the variable {\em x}), to make room for
+elements that have to be moved to the right.
+
+To see how this works, consider an integer array containing the ages
+of five friends:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+21 |  20  27  24  19      x = 20
+      k 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For this five-element array, insertion sort initially will
+assume that the element at index 0 is in the correct position. The
+vertical line marks the boundary between the sorted and unsorted
+portions of the array.  The outer loop will look at each of the
+remaining elements, one at a time, inserting it into its proper
+position in the sorted portion of the array.  To insert 20, the number
+at index 1, the inner loop will move 21 to the right by one
+position. To do this, the algorithm will remove 20 from its location
+and store it in x. It will then move 21 one space to the
+right. Finally, it will insert 20, which is stored in x, at index 0,
+where it belongs relative to the other elements in the sorted part of
+the array.  At this point, the sorted portion of the array consists of
+the first two elements, which are in the correct order, relative to
+each other.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+20  21 |  27  24  19     x = 27
+          k  
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For the next element, 27, none of elements
+in the sorted portion need to be moved, so the inner for loop
+will iterate zero times. This gives us:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+20  21  27 |  24  19    x = 24
+              k 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For the fourth element, 24, only the previous element, 27,
+needs to be moved to the right, giving:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+20  21  24  27 | 19    x = 19
+                 k 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent At this point, the sorted part of the array consists of the
+first four elements, which are in the correct order relative to each
+other.  Finally, for the last element, 19, all of the elements in the
+sorted part of the array need to be moved one space to the right.
+This will require four iterations of the inner loop. We show the state
+of the array after each iteration of the inner for loop:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+              k
+20 21 24 27 | 19   Remove 19 and store it x = 19  
+20 21 24 27 | 27   Move 27 to the right
+20 21 24 24 | 27   Move 24 to the right
+20 21 21 24 | 27   Move 21 to the right
+20 20 21 24 | 27   Move 20 to the right
+19 20 21 24 27 |   Insert x=19 at index 0
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Clearly, the fact that so many elements may have to moved on
+each iteration of the outer loop shows that insertion sort is not
+a very efficient algorithm.
+
+The {\tt Sort} class (Fig~\ref{fig-bubblemeth}) provides an
+implementation of the {\tt insertionSort()} method.  There are several
+points worth noting about this code. First, because it takes an {\tt
+int} array as a parameter, the {\tt insertionSort()} method will sort
+any array of integers, regardless of the array's length.
+
+\begin{figure}[bth]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Sort {
+  public void insertionSort(int arr[]) {
+    int temp;  // Temporary variable for insertion
+    for (int k = 1; k < arr.length; k++)  { 
+      temp = arr[k]; // Remove element from array
+      int i;         // For larger preceding elements
+      for (i = k-1; i >= 0 && arr[i] > temp; i--) 
+        arr[i+1] = arr[i]; // Move it right by one
+      arr[i+1] = temp;       // Insert the element
+    }
+  } // insertionSort()
+  public void print(int arr[]) {
+    for (int k = 0; k < arr.length; k++)// For each integer
+      System.out.print( arr[k] + " \t "); //  Print it
+    System.out.println();
+  } // print()
+  public static void main(String args[]) {
+    int intArr[] = { 21, 20, 27, 24, 19 };
+    Sort sorter = new Sort();
+    sorter.print(intArr);
+    sorter.insertionSort(intArr); // Passing an array
+    sorter.print(intArr);
+  } // main()
+} //Sort
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Source code for  the {\tt insertionSort()} method.
+Note in {\tt main()} how an integer array is passed to the method.
+\label{fig-bubblemeth}\label{pg-fig-bubblemeth}}
+\end{figure}
+
+Second, note how empty brackets ({\tt []}) are used to
+\marginnote{Array parameters} declare an array parameter.  If the
+brackets were omitted, then {\tt arr} would be indistinguishable from
+an ordinary {\tt int} parameter.  Using the brackets indicates that
+this method takes an array of integers as its parameter.
+
+\JavaTIP{DEBUGGING TIP}{Array Parameter.}{When declaring an array
+parameter, empty brackets must be used either after the array name or
+after the type name to distinguish it from a non-array parameter.}
+
+Third, note how an array of integers is passed to the {\tt
+insertionSort()} method in the {\tt main()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ sorter.insertionSort(intArr); // Pass intArr to the method
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent That is, when passing an array to a method, you use just the
+name of the array, without brackets. Both of the following statements
+would cause syntax errors:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+sorter.insertionSort(intArr[]); // Err: Can't have brackets
+sorter.insertionSort(intArr[5]);// Err: passing an integer
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In the first case, empty brackets are only used when you
+declare an array variable, not when you are passing the array to a
+method.  In the second case, {\tt intArr[5]} is an {\tt int}, not an
+array, and cannot legally be passed to {\tt insertionSort()}.
+
+\JavaTIP{DEBUGGING TIP}{Passing an Array Argument.}{It is a syntax error
+to use empty brackets when passing an array argument to a method,
+where the only the array's name should be used. Empty rackets are only
+used when declaring an array variable.}
+
+\noindent Finally, within the {\tt insertionSort()} method itself,
+note that we declare the index for the inner {\tt for} loop outside of
+the {\tt for} statement. This is so it can be used outside the scope
+of the {\tt for} loop to insert {\tt temp} at location {\tt arr[i+1]}, its
+correct location. Note also that the index of its correct location is
+{\tt i+1}, rather than just {\tt i}. This is because the inner loop
+might iterate past location 0, which would give {\em i} a value of -1
+at that point.
+
+
+\subsection{Selection Sort}
+\label{sec-selectionsort}
+
+\noindent There are a large variety of array sorting
+algorithms. Selection sort is different from, but comparable to,
+insertion sort in its overall performance.  To illustrate the {\bf
+selection sort} algorithm, suppose you want to sort a deck of 25 index
+cards, numbered from 1 to 25.  Lay the 25 cards out on a table, one
+card next to the
+%\begin{marginalnote}\it Selection sort algorithm\end{marginalnote}
+\marginnote{Selection sort algorithm} other.  Starting with the
+first card, look through the deck and find the smallest card, the
+number 1 card, and exchange it with the card in the first location.
+Then, go through the deck again starting at the second card, find the
+next smallest card, the number 2 card, and exchange it with the card
+in the second location.  Repeat this process 24 times.
+
+Translating this strategy into pseudocode gives the following
+\mbox{algorithm:}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Selection sort of a 25-card deck from small to large
+1. For count assigned 1 to 24  // Outer loop
+2.   smallestCard = count
+3.   For currentCard assigned count+1 to 25 // Inner loop
+4.     If deck[currentCard] < deck[smallestCard]
+5.        smallestCard = currentCard
+6.   If smallestCard != count // You need to swap
+7       Swap deck[count] and deck[smallestCard]
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For a deck of 25 cards, you need to repeat the outer loop
+24 times.  In other words, you must select the smallest
+card and insert it in its proper location 24 times.  The inner loop
+takes care of finding the smallest remaining card.
+
+On each iteration of this outer loop, the algorithm assumes that the
+card specified by the outer loop variable, {\tt count}, is the
+smallest card (line 2). It usually won't be, of course, but we have
+to start somewhere.
+
+The inner loop then iterates through the remaining cards (from {\tt
+count+1} to 25) and compares each one with the card that is currently
+the smallest (lines 4 and 5). Whenever it finds a card that is smaller
+than the smallest card, it designates it as the smallest card (line
+5). At the end of the loop, the {\tt smallestCard} variable will
+remember where the smallest card is in the deck.
+
+Finally, when the inner loop is finished, the algorithm swaps the
+smallest card with the card in the location designated by {\tt count}.
+
+\subsection{Algorithm: Swapping Memory Elements}
+
+\noindent An important feature of the selection sort algorithm is its
+need to swap two array elements, or cards, to continue our
+example. Swapping two memory elements, whether they are array elements
+or not, requires the use of a temporary variable. For example, to swap
+the {\em j}th and {\em k}th elements in an {\tt int} array named {\tt
+arr}, you would use the following algorithm: \marginnote{Swapping
+algorithm}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int temp = arr[j]; // Store the jth element in temp
+arr[j] = arr[k];   // Move the kth element into j
+arr[k] = temp;     // Move the jth element into k
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt temp} variable temporarily stores the {\em j}th
+element so its value is not lost when its location is overwritten by
+the {\em k}th element. The need for this variable is a subtlety that
+beginning programmers frequently overlook. But consider what would
+happen if we used the following erroneous algorithm:
+\marginnote{Swapping blunder}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+arr[j] = arr[k]; // Erroneous swap code
+arr[k] = arr[j];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If {\tt arr[j]} refers to 4 and {\tt arr[k]} refers to 2 in
+the array \mbox{{\tt 1 4 2 8}}, then the erroneous algorithm would
+produce \mbox{{\tt 1 2 2 8}}, the wrong result.  
+
+
+\JavaTIP[false]{PROGRAMMING TIP}{Swapping Variables.}{When 
+swapping two memory elements, a temporary variable must be
+used to store one of the elements while its memory location
+is being overwritten.}
+
+\noindent The following method implements the swap algorithm for two
+elements, {\it el1} and {\it el2} of an {\tt int} array:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+void swap(int arr[], int el1, int el2) {
+    int temp = arr[el1]; // Assign first element to temp
+    arr[el1] = arr[el2]; // Overwrite first with second
+    arr[el2] = temp;     // Overwrite second with first
+} // swap()
+\end{lstlisting}
+\end{jjjlisting}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Sort the array, 24 18 90 1 0 85 34 18, using the insertion sort
+algorithm.  Show the order of the elements after each iteration of the
+outer loop.
+
+\item Sort the array, 24 18 90 1 0 85 34 18, using the selection sort
+algorithm.  Show the order of the elements after each iteration of the
+outer loop.
+
+\item  Write a Java code segment to swap two {\tt Student} objects,
+{\tt student1} and {\tt student2}.
+
+\item Write a Java implementation of the {\tt selectionSort()} method to 
+sort an array of {\tt int}.
+\end{SSTUDY}
+
+\subsection{Passing a Value and Passing a Reference}
+\noindent Recall from Chapter~3 that when an {\tt Object} is
+passed to a method, a copy of the reference to the {\tt Object} is
+passed.  Because an array is an object, a reference to the array is
+passed to {\tt insertionSort()}, rather than the whole array itself.
+This is in contrast to how a value of a primitive type is passed.  In
+that case, a copy of the actual value is passed.
+
+\pagebreak
+\JavaRule{Primitive vs. Object Parameters.}{When a value of a
+primitive data type---{\tt int, double, char, boolean}--- is passed as
+an argument to a method, a copy of the value is passed; when a
+reference to an {\tt Object} is passed, a copy of the reference is
+passed.}
+
+\noindent One implication of this distinction is that for arguments of
+primitive type, the original argument cannot be changed from within
+the method because the method has only a copy of its value.  For
+example, the following method takes an {\tt int} parameter {\it
+n}, which is incremented within the method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void add1(int n) {
+  System.out.print("n = " + n);
+  n = n + 1;
+  System.out.println(",  n = " + n);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent But because {\it n} is a parameter of primitive type, incrementing
+it within the method has no effect on its associated argument.  Thus,
+in the following segment, the value of {\it Num}---{\it n}'s associated
+argument---will not be affected by what goes on inside the {\tt add()}
+\marginnote{Passing a primitive value}
+method.  The output produced by the code segment is shown in the comments:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int Num = 5;
+System.out.println("Num = " + Num); // Prints Num = 5
+add1(Num);                    // Prints n = 5,  n = 6            
+System.out.println("Num = " + Num); // Prints Num = 5
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that while {\it n}'s value has changed inside the
+method, {\it Num}'s value remains unaffected.
+
+The case is much different when we pass a reference to an object.  In
+that case, the object itself can be manipulated from within the
+method.  The {\tt insertionSort()} method is a good illustration.  In
+the following code
+\marginnote{Passing an object}
+segment, the array {\tt anArr} is printed, then sorted, and then printed
+again:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Sort sorter = new Sorter();
+ int anArr[] = { 5, 10, 16, -2, 4, 6, 1 }; 
+ sorter.print(anArr);           // Prints 5 10 16 -2 4 6 1
+ sorter.insertionSort(anArr);   // Sorts anArr
+ sorter.print(anArr);           // Prints -2 1 4 5 6 10 16
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As you can see, the object itself (the array) has been
+changed from within the method. This shows that changes within {\tt
+insertionSort} to the array referenced by {\tt arr} are actually being
+made to {\tt anArr} itself.  If fact, because {\tt insertionSort()} is
+passed a copy of the reference variable {\tt anArr}, both {\tt arr}
+and {\tt anArr} are references to the very same object---that is, to
+the same array (Fig.~\ref{fig-arrayparam}).
+
+\begin{figure}[tbh]
+\figaleft{chptr09/8f11.eps}{When an array is passed to a method, both
+the parameter and the corresponding argument refer to the same object.
+\label{fig-arrayparam}\label{pg-fig-arrayparam}}
+\end{figure}
+
+The justification for passing a reference to an object rather than the
+\marginnote{Method call overhead}
+entire object itself is a matter of efficiency.  A reference uses just
+4 bytes of data, whereas an object may use thousands of bytes.   It
+would just be too inefficient to copy hundreds of bytes each time an
+object is passed to a method.  Instead, the method is passed a
+reference to the object, thereby giving it access to the object
+without incurring the expense of copying large amounts of data.
+Indeed, Java provides no way to pass a copy of an object to a method.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item Give the values that will be stored in {\tt myArr} and {\tt k}
+after you invoke {\tt mystery(myArr, k)}, where {\tt myArr}, {\tt k}
+and {\tt mystery()} are declared as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int myArr[] = {1,2,3,4,5};    int k = 3;
+void mystery(int a[], int m) {
+    ++a[m];
+    --m;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+\section{Array Algorithms: Searching}
+\noindent Suppose we have a large array and we need to find one of its
+elements.  We need an algorithm to search the array for a particular
+value, usually called the {\it key}. If the elements of the array are
+not arranged in any particular order, the only way we can be sure to
+find the key, assuming it is in the array, is to search every element,
+beginning at the first element, until we find it.
+
+
+\subsection{Sequential Search}
+%<sec_seqsearch:\thisBheadno><pg_sec_seqsearch:\thispageno>
+\noindent This approach is known as a {\bf sequential\index{sequential search}
+search}, because each element of the array will be examined in
+sequence until the key is found (or the end of the array is
+reached). A pseudocode description of this algorithm is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+1. For each element of the array
+2.    If the element equals the key
+3.       Return its index
+4. If the key is not found in the array
+5.    Return -1 (to indicate failure)
+\end{lstlisting}
+\end{jjjlisting}
+
+This algorithm can easily be implemented in a method that searches an
+integer array, which is passed as the method's parameter.  If the key
+is found in the array, its location is returned.  If it is not found,
+then $-1$ is returned to indicate failure.
+
+\marginfig{chptr09/p430f1.eps}{The {\tt Search} class.
+\label{fig-p430f1}
+\label{pg-fig-p430f1}}
+
+The {\tt Search} class (Figs.~9.15 and \ref{fig-search})
+provides the Java implementation of the {\tt sequentialSearch()} method.
+The method takes two parameters: the array to be searched and the key
+to be searched for.  It uses a for statement to examine each element
+of the array, checking whether it equals the key or not.  If an
+element that equals the key is found, the method immediately returns
+that element's index.  Note that the last statement in the method will
+only be reached if no element matching the key is found.
+%\clearpage
+
+\begin{figure}[bht]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Search {
+
+  public int sequentialSearch(int arr[], int key) {
+    for (int k = 0; k < arr.length; k++)
+      if (arr[k] == key)
+        return k;
+    return -1;           // Failure if this is reached
+  } // sequentialSearch()
+
+  public int binarySearch(int arr[], int key) {
+    int low = 0;                // Initialize bounds
+    int high = arr.length - 1;
+    while (low <= high) {   // While not done
+      int mid = (low + high) / 2;
+      if (arr[mid] == key)
+        return mid;            // Success
+      else if (arr[mid] < key)
+        low = mid + 1;        // Search top half
+      else
+        high = mid - 1;       // Search bottom half
+    }  // while
+    return -1;     // Post: if low > high search failed
+  } // binarySearch()
+}//Search
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Search} class contains both a {\tt sequentialSearch()}
+and a {\tt binarySearch()}.
+\label{fig-search}\label{pg-fig-search}}
+\end{figure}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Sentinel Return Value.}{Like Java's
+{\tt indexOf()} method, the {\tt sequentialSearch()} returns
+a sentinel value ($-1$) to indicate that the key was not found.
+This is a common design for search methods.}
+
+\subsection{Binary Search}
+\noindent If the elements of an array have been sorted into ascending or
+descending order, it is not necessary to search sequentially through
+each element of the array in order to find the
+key.  Instead, the search algorithm can make use of the knowledge that
+the array is ordered and perform what's known as a {\bf
+binary\index{binary search} search}, which is a
+divide-and-conquer\index{divide-and-conquer} algorithm that divides
+the array in half on each iteration and limits its search to just that
+half that could contain the key.
+
+To illustrate the binary search, recall the familiar guessing game in
+which you try to guess a secret number between 1 and 100, being told
+``too high'' or ``too low'' or ``just right'' on each guess.   A good
+first guess should be 50. If this is too high, the next guess should
+be 25, because if 50 is too high the number must be between 1 and 49.
+If 50 was too low, the next guess should be 75, and so on.   After each
+wrong guess, a good guesser should pick the midpoint of the sublist
+that would contain the secret number.
+
+Proceeding in this way, the correct number can be guessed in at most
+%\begin{marginalnote}\it How many guesses?\end{marginalnote}
+\marginnote{How many guesses?}
+$log_2 N$ guesses, because the base-2 logarithm of {\it N} is the
+number of times you can divide {\it N} in half.  For a list of 100
+items, the search should take no more than seven guesses ($2^7 = 128
+> 100$). For a list of $1,000$ items, a binary search would take at most
+ten guesses (2$^{10}=1,024>1,000$).
+
+So a binary search is a much more efficient way to search, provided
+the array's elements are in order.  Note that ``order'' here needn't be
+numeric order.  We could use binary search to look up a word in a
+dictionary or a name in a phone book.
+
+\noindent A pseudocode representation of the binary search is given
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
+
+1. Assign 0 low and assign N-1 to high initially
+2. As long as low is not greater than high
+3.    Assign (low + high) / 2 to mid
+4.    If the element at mid equals the key
+5.        then return its index
+6.    Else if the element at mid is less than the key
+7.        then assign mid + 1 to low
+8.    Else assign mid - 1 to high
+9. If this is reached return -1 to indicate failure
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Just as with the sequential search algorithm,
+this algorithm can easily be implemented in a method that searches an
+integer array that is passed as the method's parameter
+(Fig.~\ref{fig-search}). If the key is found in the array, its
+location is returned.  If it is not found, then $-1$ is returned to
+indicate failure.  The {\tt binarySearch()} method takes the same type
+of parameters as {\tt sequentialSearch()}. Its local variables, {\tt
+low} and {\tt high}, are used as pointers, or references, to the
+current low and high ends of the array, respectively.  Note the
+loop-entry condition: \verb|low <= high|. If {\tt low} ever becomes
+greater than {\tt high}, this indicates that {\tt key} is not
+contained in the array.  In that case, the algorithm returns $-1$.
+
+As a binary search progresses, the array is repeatedly cut in half and
+{\tt low} and {\tt high} will be used to point to the low and high
+index values in that portion of the array that is still being
+searched.  The local variable {\tt mid} is used to point to the
+approximate midpoint of the unsearched portion of the array.  If the
+key is determined to be past the midpoint, then {\tt low} is adjusted
+to {\tt mid+1}; if the key occurs before the midpoint, then {\tt high}
+is set to \verb|mid-1|.  The updated values of {\tt low} and {\tt
+high} limit the search to the unsearched portion of the original
+array.
+
+Unlike sequential search, binary search does not have to examine every
+location in the array to determine that the key is not in the array.
+It searches only that part of the array that could contain the key.
+For example, suppose we are searching for $-5$ in the following array:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int sortArr[] = 
+   { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The $-5$ is
+smaller than the smallest array element. Therefore, the algorithm will
+repeatedly divide the low end of the array in half until the condition
+\verb|low > high| becomes true.  We can see this by tracing the values
+that low, mid, and high will take during the search:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Key  Iteration  Low   High    Mid
+----------------------------------
+ -5   0          0     19      9
+ -5   1          0     8       4
+ -5   2          0     3       1
+ -5   3          0     0       0
+ -5   4          0     -1      Failure
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As this trace shows, the algorithm examines only
+four locations to determine that $-5$ is not in the array.
+After checking location 0, the new value for {\tt high} will become
+$-1$, which makes the condition \verb|low <= high | false.  So the
+search will terminate.
+
+\marginfig{chptr09/p432f1.eps}{The {\tt TestSearch} class.\\
+\label{fig-p432f1}
+\label{pg-fig-p432f1}}
+
+The {\tt TestSearch} class (Figs.~9.17 and \ref{fig-testsearch})
+provides a  program that can be used to test two search methods.
+It creates an integer array, whose values are in ascending order.  It
+then uses the {\tt getInput()} method to input an integer from the
+keyboard and then performs both a {\tt sequentialSearch()} and a {\tt
+binarySearch()} for the number.
+
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  For the array containing the elements 2, 4, 6, and so on up to 28 in
+that order, draw a trace showing which elements are examined if you
+search for 21 using a binary search.
+
+\end{SSTUDY}
+
+\begin{figure}[thb]
+\jjjprogstart
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+import java.io.*;
+public class TestSearch {
+  public static int getInput() {
+    KeyboardReader kb = new KeyboardReader();
+    kb.prompt("This program searches for values in an array.");
+    kb.prompt(
+    "Input any positive integer (or any negative to quit) : ");
+    return kb.getKeyboardInteger();
+  } // getInput()
+
+  public static void main(String args[]) throws IOException {
+    int intArr[] = { 2,4,6,8,10,12,14,16,18,20,22,24,26,28};
+    Search searcher = new Search();
+    int key = 0, keyAt = 0;
+    key = getInput();
+    while (key >= 0) {
+      keyAt = searcher.sequentialSearch( intArr, key );
+      if (keyAt != -1)
+        System.out.println("  Sequential: " + key + 
+                              " is at intArr[" + keyAt + "]");
+      else
+        System.out.println("  Sequential: " + key 
+                           + " is not contained in intArr[]");
+      keyAt = searcher.binarySearch(intArr, key);
+      if (keyAt != -1)
+        System.out.println("  Binary: " + key + 
+                              " is at intArr[" + keyAt + "]");
+      else
+        System.out.println("  Binary: " + key + 
+                             " is not contained in intArr[]");
+      key = getInput();
+    } // while
+  } // main()
+} // TestSearch
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The {\tt TestSearch} class.
+\label{fig-testsearch}\label{pg-fig-testsearch}}
+\end{figure}
+
+
+\section{Two-Dimensional Arrays}
+\noindent A {\bf two-dimensional array}, an array whose components are
+themselves arrays, is necessary or useful for certain kinds of
+problems.  For example, you would use this type of array if you are
+doing a scientific study in which you have to track the amount of
+precipitation for every day of the year.
+
+One way to organize these data would be to create a one-dimensional
+array, consisting of 365 elements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double rainfall[] = new double[365];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent However, with this representation, it would make it very
+difficult to calculate the average rainfall within a given month,
+which might be an important part of your study.
+
+A better representation for this problem would be to
+\marginnote{What data do we need?}
+use a two-dimensional array, one dimension for the months and one
+for the days.  The following statement declares the array
+variable {\tt rainfall} and creates a 12 by 31 array object
+as its reference:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double rainfall[][] = new double[12][31];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, {\tt rainfall} is an {\it array of arrays}.
+You can think of the first array as the 12 months required for the
+problem.  And you can think of each month as an array of 31 days.
+The months will be indexed from 0 to 11, and the days will be
+indexed from 0 to 30.
+
+The problem with this representation is that when we want to refer to
+\marginnote{Choosing an appropriate\hfill\break representation}
+the rainfall for January 5, we would have to use
+{\tt rainfall[0][4]}. This is awkward and misleading.  The problem is that
+dates---1/5/1999---are unit indexed, while arrays are zero
+indexed.  Because it will be difficult to remember this fact, our
+representation of the rainfall data may cause us to make errors when
+we start writing our algorithms.
+
+We can easily remedy this problem by just defining our array to
+have an extra month and an extra day each month:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double rainfall[][] = new double[13][32];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This representation creates an array with 13 months, indexed
+from 0 to 12, with 32 days per month, indexed from 0 to 31. However,
+we can simply ignore the 0 month and 0 day by using unit indexing in
+all of the algorithms that process the array.  In other words,
+if we view this array as a two-dimensional table, consisting of
+13 rows and 32 columns, we can leave row 0 and column 0 unused
+(Fig.~\ref{fig-rainfall}).
+
+\begin{figure}[bth]
+%%\figaleft{chptr09/8f14.eps}{A two-dimensional array with 13 rows
+\figa{chptr09/8f14.eps}{A two-dimensional array with 13 rows
+and 32 columns.  To represent 12 months of the year, we can simply
+ignore row 0 and column 0.
+\label{fig-rainfall}\label{pg-fig-rainfall}}
+\end{figure}
+
+As Figure~\ref{fig-rainfall} shows, the very first element of this
+416-element array has subscripts (0,0) while the last location has
+subscripts (12,31). The main advantages of this representation is that
+the program as a whole will be much easier to read and understand and
+much less prone to error.
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Readability.}{To improve a program's robustness and 
+readability, it may be preferable to use unit array indexing by
+declaring extra array elements and ignoring those with index 0.}
+
+In order to refer to an element in a two-dimensional array, you need
+to use two subscripts.  For the {\tt rainfall} array, the first
+subscript will specify the {\it month} and the second will specify the
+{\it day} within the month.  Thus, the following statements assign 1.15 to
+the {\tt rainfall} element representing January 5, and then print its
+\marginnote{Referencing two-dimensional arrays}
+value:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+rainfall[1][5] = 1.15;   // Rainfall for January 5
+System.out.println( rainfall[1][5] );
+\end{lstlisting}
+\end{jjjlisting}
+
+Just as in the case of one-dimensional arrays, it is an error to
+attempt to reference an element that is not in the array.  Each of the
+following examples would cause Java to raise an
+{\tt IndexOutOfBoundsException}\index{IndexOutOfBoundsException}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+rainfall[13][32] = 0.15 ;  // No such element
+rainfall[11][33] = 1.3;    // No such column
+rainfall[14][30] = 0.74;   // No such row
+\end{lstlisting}
+\end{jjjlisting}
+
+If the initial values of an array's elements are supposed to be zero,
+there is no need to initialize the elements.  Java will do it
+automatically when you create the array with {\tt new}. However, for
+\marginnote{Initializing two-dimensional arrays}
+many array problems it is necessary to initialize the array elements
+to some other value.  For a two-dimensional array, this would require a
+nested loop.  To illustrate this algorithm, let's use a nested for loop
+to initialize each element of the {\tt rainfall} array to 0:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+// Note that both loops are unit indexed.
+for (int month = 1; month < rainfall.length; month++)
+  for (int day = 1; day < rainfall[month].length; day++)
+     rainfall[month][day] = 0.0;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that both for loops use unit indexing.  This is
+in keeping with our decision to leave month 0 and day 0 unused.
+
+Remember that when you have a nested for loop, the inner loop iterates
+%\begin{marginalnote}\it Nested for loops\end{marginalnote}
+\marginnote{Nested for loops}
+faster than the outer loop.  Thus, for each month, the inner loop will
+iterate over 31 days.  This is equivalent to processing the array
+as if you were going across each row and then down to the next
+row in the representation shown in Figure~\ref{fig-rainfall}.
+
+Note that for a two-dimensional array, both dimensions have an
+associated {\tt length} variable, which is used in this example to
+specify the upper bound of each for loop.  For the {\tt rainfall}
+array, the first dimension (months) has a length of 13 and the second
+dimension (days) has a length of 32.
+
+Another way to view the {\tt rainfall} array is to remember that it is
+an array of arrays. The length of the first array, which
+\marginnote{Array of arrays}
+corresponds to the number (13) of months, is given by
+{\tt rainfall.length}. The length of each month's array, which corresponds
+to the number of days (32) in a month, is given by
+{\tt rainfall[month].length}.
+
+The outer loop of the nested for loop iterates through months 1
+through 12, and the inner for loop iterates through days 1 through
+31.  In this way,  $372\; =\; 12\;\times\; 31$ elements of the array are set to 0.0.
+In Table~9.1, the boldface numbers along the top
+represent the day subscripts, while the boldface numbers along the
+left represent the month subscripts.
+
+
+\begin{table}[htb]
+%\hphantom{\caption{The initialized {\tt rainfall} array.  The unused
+%array elements are shown as dashes.}}
+\TBT{1.5pc}{The initialized {\tt rainfall} array.  The unused array \\
+\hspace*{1.5pc}elements are shown as dashes.}
+\hspace*{1pc}\begin{tabular}{cccccccc}
+\multicolumn{8}{l}{\color{cyan}\rule{24pc}{1pt}}\\[2pt]
+ & {\bf0} & {\bf1}  & {\bf2} & {\bf3} &  {$\cdots$} & {\bf30} & {\bf31}
+\\[-4pt]\multicolumn{8}{l}{\color{cyan}\rule{24pc}{0.5pt}}\\[2pt]
+{\bf0} & \hspace*{10pt}--\hspace*{10pt}       & \hspace*{10pt}-- \hspace*{10pt}       &\hspace*{10pt} --
+\hspace*{10pt}      & \hspace*{10pt}-- \hspace*{10pt}      &
+\hspace*{10pt}$\cdots$ \hspace*{10pt}       &\hspace*{10pt} --\hspace*{10pt}        &\hspace*{10pt}
+--\hspace*{10pt}       \\[2pt]
+{\bf1} & --       & 0.0        & 0.0       & 0.0       & $\cdots$     & 0.0       & 0.0       \\[2pt]
+{\bf2} & --       & 0.0        & 0.0       & 0.0       & $\cdots$     & 0.0       & 0.0       \\[0pt]
+{$\vdots$}  &  $\vdots$   &  $\vdots$    &  $\vdots$   &  $\vdots$   &  $\vdots$    &  $\vdots$   & $\vdots$    \\[4pt]
+{\bf10} & --       & 0.0        & 0.0       & 0.0       & $\cdots$     & 0.0       & 0.0       \\[2pt]
+{\bf11} & --       & 0.0        & 0.0       & 0.0       & $\cdots$     & 0.0       & 0.0       \\[2pt]
+{\bf12} & --       & 0.0        & 0.0       & 0.0       & $\cdots$     & 0.0       & 0.0       
+\\[-4pt]\multicolumn{8}{l}{\color{cyan}\rule{24pc}{1pt}}
+\end{tabular}
+\endTB
+\end{table}
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Declare a two-dimensional array of {\tt int}, named {\tt int2d},
+that contains five rows,  each of which  contains ten integers.
+
+
+\item  Write a statement that prints the last integer in the third row of the
+array that you created in the previous exercise.  Then write an assignment
+statement that assigns 100 to the last element in the {\tt int2d}
+array.
+
+\item Write a loop to print all of the elements of {\tt int2d}, which
+you declared in the previous exercise.  Print one row per line with a
+space between each element on a line.
+
+\end{SSTUDY}
+
+\subsection{Two-Dimensional Array Methods}
+\noindent Now that we have figured out how to represent the data for our
+scientific experiment, let's develop methods to calculate some
+results.   First, we want a method to initialize the array.  This method
+will simply incorporate the nested loop algorithm we developed previously:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void initRain(double rain[][]) {
+    for (int month = 1; month < rain.length; month++)
+        for (int day = 1; day < rain[month].length; day++)
+            rain[month][day] = 0.0;
+} // initRain()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note how we declare the parameter for a multidimensional
+array.  In addition to the element type ({\tt double}), and the name of
+%\begin{marginalnote}\it Array parameters\end{marginalnote}
+\marginnote{Array parameters}
+the parameter ({\tt rain}), we must also include a set of brackets
+for {\it each} dimension of the array.
+
+Note also that we use the parameter name within the method to refer
+to the array.  As with one-dimensional arrays, the parameter is a
+reference to the array, which means that any changes made to the array
+within the~method will persist when the method is exited.
+
+\subsubsection*{The {\tt avgDailyRain()} Method}
+\noindent One result that we need from our experiment is the average daily 
+\marginnote{Algorithm design}
+rainfall.  To calculate this result, we would add up all of the
+rainfalls stored in the $12 \;\times\; 31$ array and divide by 365.
+Of course, the array itself contains more than 365 elements.   It
+contains 416 elements,  but we're not using the first month of the
+array, and within some months---those with fewer than 31 days---we're not using some of 
+the day elements.   For example, there's no
+such day as {\tt rainfall[2][30]}, which would represent February 30.
+However, because we initialized all of the array's elements to 0, the
+rainfall recorded for the non-days will be 0, which won't affect our
+overall average.
+
+The method for calculating average daily rainfall should take
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+our two-dimensional array of \mbox{\tt double} as a parameter, and it
+should return a \mbox{\tt double}. Its algorithm will use a nested
+for loop to iterate through the elements of the array, adding
+each element to a running total.  When the loops exits, the
+total will be divided by 365 and returned:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public double avgDailyRain(double rain[][]) {
+    double total = 0;
+    for (int month = 1; month < rain.length; month++)
+        for (int day = 1; day < rain[month].length; day++)
+            total += rain[month][day];
+    return total/365;
+} // avgDailyRain()
+\end{lstlisting}
+\end{jjjlisting}
+
+\subsubsection*{The {\tt avgRainForMonth()} Method}
+\noindent One reason we used a two-dimensional array for this problem is so we
+could calculate the average daily rainfall for a given month.  Let's
+write a method to solve this problem.  The algorithm for this method
+%\begin{marginalnote}\it Algorithm design\end{marginalnote}
+\marginnote{Algorithm design}
+will not require a nested for loop. We will just iterate
+through the 31 elements of a given month, so the month subscript
+will not vary.  For example, suppose we are calculating the average
+for January, which is represented in our array as month 1:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double total = 0;
+for (int day = 1; day < rainfall[1].length; day++)
+    total = total + rainfall[1][day];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, the month subscript is held constant (at 1)
+while the day subscript iterates from 1 to 31. Of course,
+in our method we would use a parameter to represent the month,
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+thereby allowing us to calculate the average daily rainfall for any
+given month.
+
+
+Another problem that our method has to deal with is that months don't
+all have 31 days, so we can't always divide by 31 to compute the
+monthly average.  There are various ways to solve this problem, but
+%\begin{marginalnote}\it Method design: What data do we need?\end{marginalnote}
+\marginnote{Method design: What data do we need?}
+perhaps the easiest is to let the number of days for that month be
+specified as a third parameter.  That way, the month itself and the
+number of days for the month are supplied by the user of the method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public double avgRainForMonth(double rain[][], 
+                           int month, int nDays) {
+    double total = 0;
+    for (int day = 1; day < rain[month].length; day++)
+        total = total + rain[month][day];
+    return total/nDays;
+} // avgRainForMonth()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this definition, we can call this method to
+calculate and print the average daily rainfall for March as in 
+the following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println("March: " + 
+                         avgRainForMonth(rainfall,3,31));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that when passing the entire two-dimensional array to
+the method, we just use the name of the array.  We do not have to
+follow the name with \mbox{subscripts.}
+
+\subsection{Passing Part of an Array to a Method}
+\noindent Instead of passing the entire rainfall array to the
+{\tt avgRainForMonth()} method, we could redesign this method so that it
+%\begin{marginalnote}\it Method design: What data?\end{marginalnote}
+is only passed the particular month that's being averaged.  Remember
+that a two-dimensional array is an array of arrays, so if we pass the
+month of January, we are passing an array of 32 days.  If we use this
+\marginnote{Method design: What data?}
+approach, we need only two parameters: the month, which is array of
+days, and the number of days in that month:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public double avgRainForMonth(double monthRain[], 
+                                          int nDays) {
+    double total = 0;
+    for (int day = 1; day < monthRain.length; day++)
+        total = total + monthRain[day];
+    return total/nDays;
+} // avgRainForMonth()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Given this definition, we can call it to
+calculate and print the average daily rainfall for March as
+in the following statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println("March: " + 
+                      avgRainForMonth(rainfall[3],31));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, we're passing an array of {\tt double}
+to the method, but in order to reference it, we have to pull it out of
+the two-dimensional array by giving its {\it row} subscript as well.
+Thus, {\tt rainfall[3]} refers to one month of data in the
+two-dimensional array, the month of March.  But
+{\tt rainfall[3]} is itself a one-dimensional array.
+Figure~\ref{fig-twodrow} helps to clarify this point.
+
+\begin{figure}[h!]
+%%\figaleft{chptr09/8f15.eps}{Referencing individual elements and
+\figa{chptr09/8f15.eps}{Referencing individual elements and
+array elements in a two-dimensional array.
+\label{fig-twodrow}\label{pg-fig-twodrow}}
+\end{figure}
+
+It's important to note that deciding whether to use brackets when
+%\begin{marginalnote}\it Specifying an argument\end{marginalnote}
+\marginnote{Specifying an argument}
+passing data to a method is not just a matter of whether you are
+passing an array.  It is a matter of what type of data the method
+parameter specifies.   So, whenever you call a method that involves a
+parameter, you have to look at the method definition to see what kind
+of data that parameter specifies.  Then you must supply an argument
+that refers to that type of data.
+
+For our two-dimensional {\tt rainfall} array, we can refer to the
+entire array as {\tt rainfall}. We can refer to one of its months as
+{\tt rainfall[j]}, where {\it j} is any integer between 1 and 12. And
+we can refer to any of its elements as {\tt rainfall[j][k]}, where
+{\it j} is any integer between 1 and 12, and {\it k} is any integer
+between 1 and 31.
+
+\JavaRule{Arguments and Parameters.}{The argument in a
+method call must match the data type in the method definition.  This
+applies to all parameters, including array parameters.}
+
+
+\noindent The {\tt Rainfall} class (Figs.~9.21 and \ref{fig-rainfallclass})
+\begin{figure}[htb]
+\figa{chptr09/p440f1.eps}{The {\tt Rainfall} class.}
+\label{fig-p440f1}
+\label{pg-fig-p440f1}
+\end{figure}
+\begin{figure}[p!]
+\jjjprogstart
+\begin{jjjlisting}[32pc]
+\begin{lstlisting}
+public class Rainfall {
+  /**
+   * Initializes the rainfall array
+   * @param rain is a 2D-array of rainfalls
+   * Pre:  rain is non null
+   * Post: rain[x][y] == 0 for all x,y in the array
+   * Note that the loops use unit indexing.
+   */
+  public void initRain(double rain[][]) {
+    for (int month = 1; month < rain.length; month++)
+      for (int day = 1; day < rain[month].length; day++)
+        rain[month][day] = Math.random() * 2.0;    // Random rainfall
+  } // initRain()
+  /**
+   * Computes average daily rainfall for a year of rainfall data
+   * @param rain is a 2D-array of rainfalls
+   * @return The sum of rain[x][y] / 356
+   * Pre:  rain is non null
+   * Post: The sum of rain / 365 is calculated
+   * Note that the loops are unit indexed
+   */
+  public double avgDailyRain(double rain[][]) {
+    double total = 0;
+    for (int month = 1; month < rain.length; month++)
+      for (int day = 1; day < rain[month].length; day++)
+        total += rain[month][day];
+    return total/365;
+  } // avgDailyRain()
+  /**
+   * Computes average daily rainfall for a given month containing nDays
+   * @param monthRain is a 1D-array of rainfalls
+   * @param nDays is the number of days in monthRain
+   * @return The sum of monthRain / nDays
+   * Pre:  1 <= nDays <= 31
+   * Post: The sum of monthRain / nDays is calculated
+   */
+  public double avgRainForMonth(double monthRain[], int nDays) {
+    double total = 0;
+    for (int day = 1; day < monthRain.length; day++)
+      total = total + monthRain[day];
+    return total/nDays;
+  } // avgRainForMonth()
+  public static void main(String args[]) {
+    double rainfall[][] = new double[13][32];
+    Rainfall data = new Rainfall();
+    data.initRain(rainfall);
+    System.out.println("The average daily rainfall = " 
+                      +  data.avgDailyRain(rainfall));
+    System.out.println("The average daily rainfall for March = " 
+                      +  data.avgRainForMonth(rainfall[3],31));
+  } // main()
+}//Rainfall
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Definition of the {\tt Rainfall} class.
+\label{fig-rainfallclass}\label{pg-fig-rainfallclass}}
+\end{figure}
+shows how we can test our array algorithms.  It creates the {\tt
+rainfall} array in the {\tt main()} method.  It then initializes the
+array and prints out average daily rainfall and average daily rainfall
+for the month of March.  However, note that we have made a slight
+modification to the {\tt initRain()} method.  Instead of just
+assigning 0 to each element, we assign a random value between 0 and
+2.0:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+rain[month][day] = Math.random() * 2.0;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Using the {\tt Math.random()} method in this way enables
+us to generate some realistic test data.  In this case, we
+%\begin{marginalnote}\it Generating test data\end{marginalnote}
+\marginnote{Generating test data}
+have scaled the data so that the daily rainfall is between 0 and 2
+inches.  (Rainfall like this would probably be appropriate for an
+Amazonian rain forest!)  Testing our algorithms with these data
+provides some indication that our methods are in fact working
+properly.
+
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Generating Test Data.}{The {\tt Math.random()}
+method can be used to generate numeric test data, when large amounts
+of data are required.  The data can be scaled to fit within the
+range that the actual data are expected to have.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Suppose you're going to keep track of the daily newspaper sales at the
+local kiosk.   Declare a $52\;\times\;7$ two-dimensional array of {\tt int}
+and initialize each of its elements to 0.
+
+
+\item  Write a method to calculate the average number of newspapers sold per week,
+using the array you declared in the previous \mbox{exercise.}
+
+
+\item  Write a method to calculate the average number of newspapers sold on Sundays,
+using the array you declared in the previous exercise.  Assume that
+Sunday is the last day of the week.%
+
+\end{SSTUDY}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Multidimensional Arrays}
+
+\section{Multidimensional Arrays (Optional)}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, Multidimensional Arrays}
+
+\noindent Java doesn't limit arrays to just two dimensions.  For example, suppose
+we decide to extend our rainfall survey to cover a ten-year
+period.  For each year we now need a two-dimensional array.  This
+results in a three-dimensional array consisting of an array of years,
+each of which contains an array of months, each of which contains an
+array of days:
+
+
+\begin{jjjlisting}
+\begin{lstlisting}
+final int NYEARS = 10;
+final int NMONTHS = 13;
+final int NDAYS = 32;
+double rainfall[][] = new double[NYEARS][NMONTHS][NDAYS];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Following the design convention of not using the
+0 month and 0 days, we end up with a $10 \;\times\; 13 \;\times\; 32$ array.
+Note the use of {\tt final} variables to represent the size of each
+dimension of the array.  This helps to make the program more readable.
+
+In Figure~\ref{fig-threedarray}, each year of the rainfall data is
+represented as a separate page. On each page, there is a
+two-dimensional table that consists of 12 rows (1 per month) and 31
+columns (1 per day).
+
+
+\begin{figure}[htb]
+\figaright{chptr09/8f17.eps}{Three-dimensional data might be viewed as a
+collection of pages, each of which contains a two-dimensional table.
+\label{fig-threedarray}\label{pg-fig-threedarray}}
+\end{figure}
+
+You might imagine that our study could be extended to
+cover rainfall data from a number of different cities.  That would
+result in a four-dimensional array, with the first dimension now being
+the city.   Of course, for this to work, cities would have to be
+represented by integers, because array subscripts must be integers.
+
+
+As you might expect, algorithms for processing each element
+in a three-dimensional table would require a three-level
+nested loop.  For example, the following algorithm would
+be used to initialize all elements of our three-dimensional
+rainfall array:
+
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+for (int year = 0; year < rainfall.length; year++)
+ for (int month = 0; month < rainfall[year].length; month++)
+  for (int day = 0; day < rainfall[year][month].length; day++)
+   rainfall[year][month][day] = 0.0;
+\end{lstlisting}
+\end{jjjlistingleft}
+
+
+\noindent Note again the proper use of the {\tt length}\index{array length}
+attribute for each of the three dimensions of the array.   In the outer
+loop, {\tt rainfall.length}, we're referring to the number of
+years.  In the middle loop, {\tt rainfall[year].length}, we're
+referring to number of months within a given year.  In the inner loop,
+{\tt rainfall[year][month].length}, we're referring to the number of
+days within a month.
+
+If we added a fourth dimension to our array and wanted to extend this
+algorithm to initialize it, we would simply embed the three-level loop
+within another for loop that would iterate over each city.
+
+\subsection{Array Initializers}
+\noindent It is possible to use an initializer\index{initializer, array} with a
+{\bf multidimensional array}\index{multidimensional array}.  For instance, the
+following examples create several small arrays and initialize their
+elements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int a[][] = {{1,2,3}, {4,5,6}};
+char c[][] = {{'a','b'}, {'c','d'}};
+double d[][][] = 
+    {{1.0,2.0,3.0}, {4.0,5.0}, {6.0,7.0,8.0,9.0}};
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The first of these declarations creates a $2\; \times \;3$ array of
+integers.   The second example creates a $2\; \times\; 2$ array of
+characters, and the third example creates an array of {\tt double}
+consisting of three rows, each of which has a different number of
+elements.   The first row contains three elements, the second contains two
+elements, and the last row contains four elements.  As this last example
+shows, the rows in a multidimensional array don't all have to have the
+same length.  
+
+Using initializers, as in these examples, is feasible only for
+relatively small arrays.  To see why, just imagine what the initializer
+expression would be for our three-dimensional {\tt rainfall} array.  It
+would require $4,160 \;=\; 10 \; \times \; 13 \; \times \; 32$ zeroes,
+separated by commas!
+
+\JavaTIP{PROGRAMMING TIP}{Array Initializers.}{Initializer (assignment)
+expressions can be used to assign initial values to relatively small
+arrays.  For larger arrays, an initializer method should be designed.}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, OOD: Polymorphic Sorting}
+
+\section{OBJECT-ORIENTED DESIGN: \\[2pt]Polymorphic Sorting (Optional)}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, OOD: Polymorphic Sorting}
+
+\noindent One limitation of the sort routines developed so far is that they only
+work on one particular type of data. If you've written an insertion
+sort to sort {\tt int}s, you can't use it to sort {\tt double}s. What
+would be far more desirable is a {\bf polymorphic sort method}---that
+is, one method that could sort any kind of data. This is easily done
+by making use of Java wrapper classes, such as {\tt Integer} and {\tt
+Double}, together with the {\tt java.lang.Comparable} interface, which
+is specially designed for this purpose.
+
+The {\tt java.lang.Comparable} interface consists of the
+\mbox{\tt compareTo()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract interface Comparable {
+  public int compareTo(Object o);// Abstract method
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent By implementing {\tt compareTo()}, a class
+\marginfig{chptr09/p443f1.eps}{Java wrapper classes, such as
+{\tt Integer} and {\tt Double}, implement the {\tt Comparable} interface.
+\label{fig-p443f1}
+\label{pg-fig-p443f1}}
+can impose an order on its objects. The {\tt Comparable}
+interface is implemented by all of Java's wrapper classes---that is,
+by {\tt Integer}, {\tt Double}, {\tt Float}, {\tt Long}, and so on
+(Fig.~9.24).
+
+As we saw in Chapter~8, Java interfaces allow us to create a form of
+{\em multiple inheritance}. For example, as Figure~9.24 shows, an
+{\tt Integer} is both an \mbox{\tt Object} and a {\tt Comparable}. One
+implication of this is that an {\tt Integer} can be used in any method
+that takes either an {\tt Object} parameter or a {\tt Comparable}
+parameter.
+
+The {\tt compareTo()} method takes an {\tt Object} parameter and
+returns an {\tt int}. It is meant to be invoked as {\tt
+o1.compareTo(o2)}, where {\em o1} and {\em o2} are objects of the same
+type. Classes that implement {\tt compareTo()} must abide by the
+following rules for its return value:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+if (o1 < o2)       then o1.compareTo(o2) < 0
+if (o1.equals(o2)) then o1.compareTo(o2) == 0
+if (o1 > o2)       then o1.compareTo(o2) > 0
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, if {\tt o1 < o2}, then {\tt o1.compareTo(o2)} 
+will return a negative integer. If {\tt o1 > o2}, then {\tt
+o1.compareTo(o2)} will return a positive integer. And if {\tt o1} and
+{\tt o2} are equal, then {\tt o1.compareTo(o2)} will return~0.
+
+For a class that implements {\tt Comparable}, we can use the \mbox{\tt
+compareTo()} method to help sort its elements. For example, the
+following revised version of {\tt insertionSort()} method can be used
+to sort any array of {\tt Comparable} objects---that is, any array of
+objects whose class implements {\tt Comparable}:
+
+\begin{jjjlistingleft}[27pc]{-1pc}
+\begin{lstlisting}
+public void sort(Comparable[] arr) {
+  Comparable temp;   // Temporary variable for insertion
+  for (int k = 1; k < arr.length; k++)  {
+    temp = arr[k];    // Remove it from array
+    int i;
+    for (i = k-1; i >= 0 && arr[i].compareTo(temp) > 0; i--) 
+      arr[i+1] = arr[i];   // Move it right by one
+    arr[i+1] = temp;        // Insert the element
+  }
+} // sort()
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent In this version, the parameter is an array of
+{\tt Comparable}. Thus, we can pass it any array whose elements
+implement {\tt Comparable}, including an array of {\tt Integer} or
+{\tt Float}, and so on.  Then, to compare elements of a {\tt
+Comparable} array, we use the {\tt compareTo()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (i = k-1; i >= 0 && arr[i].compareTo(temp) > 0; i--) 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that our algorithm no longer refers to {\tt int}s, as
+in the original insertion sort. Indeed, it doesn't mention the
+specific type---{\tt Integer}, {\tt Float}, or whatever---of the
+objects that it is sorting. It refers only to {\tt Comparable}s.
+Therefore, we can use this method to sort any type of object, as long
+as the object's class implements the {\tt Comparable} interface. Thus,
+by using {\tt Comparable}, we have a more general {\tt
+insertionSort()} method, one that can sort any one-dimensional array
+of {\tt Comparable}s. 
+
+The {\tt TestSort} class (Figs.~9.25 and ~\ref{fig-testsort}) provides
+an example of how to use the polymorphic {\tt sort()} method.
+\marginfig{chptr09/p445f1.eps}{The {\tt TestSort()} class.
+\label{fig-p445f1}
+\label{pg-fig-p445f1}}
+
+It contains three methods: The {\tt sort()} method that we just
+described; a polymorphic {\tt print()} method, which can be used to
+print the values of any array of {\tt Comparable}; and a {\tt main()}
+method. The {\tt main()} method creates arrays of {\tt Integer} and
+{\tt Float} and then uses the polymorphic {\tt sort()} method to sort
+them.  Note how the {\tt print()} method uses the polymorphic {\tt
+toString()} method to print the elements of a {\tt Comparable} array.
+
+\begin{figure}[bth]
+\jjjprogstart
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+public class TestSort {
+  public static int MAXSIZE = 25;
+
+  public void sort(Comparable[] arr) {
+    Comparable temp;      // Temporary variable for insertion
+    for (int k = 1; k < arr.length; k++) { // For each element
+      temp = arr[k];                     // Remove it 
+      int i;
+      for (i = k-1; i >= 0 && arr[i].compareTo(temp) > 0; i--) 
+        arr[i+1] = arr[i]; // Move larger to the right
+      arr[i+1] = temp;       // Insert the element
+    }
+  } // sort()
+  public void print(Comparable arr[]) {
+    for (int k = 0; k < arr.length; k++) {
+      if (k % 5 == 0)  System.out.println();  // New row  
+        System.out.print(arr[k].toString() + "\t"); 
+    }
+    System.out.println();
+  }
+  // Sorts two different types of array with the same method.
+  public static void main(String args[]) {
+    Integer iArr[] = new Integer[TestSort.MAXSIZE]; 
+    Float fArr[] = new Float[TestSort.MAXSIZE];   
+    for (int k = 0; k < TestSort.MAXSIZE; k++) { // Create data
+      iArr[k] = new Integer((int) (Math.random() * 10000));
+      fArr[k] = new Float(Math.random() * 10000);
+    }
+    TestSort test = new TestSort();
+    test.sort(iArr);     // Sort and print Integers
+    test.print(iArr);
+    test.sort(fArr);     // Sort and print Floats
+    test.print(fArr);                      
+  } // main()
+}
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{{\tt TestSort} uses the polymorphic {\tt sort()} method
+to sort either {\tt Integer}s or {\tt Float}s. 
+\label{fig-testsort}
+\label{pg-fig-testsort}}
+\end{figure}
+
+
+This example of polymorphic sorting illustrates once again the great
+power of inheritance and polymorphism in object-oriented programming.
+The {\tt Integer} and {\tt Float} classes use class inheritance to
+inherit features from the {\tt Object} class, and they use interface
+implementation to inherit the {\tt compareTo()} method from the {\tt
+Comparable} class.  By implementing versions of the {\tt toString()}
+and {\tt compareTo()} methods that are appropriate for these wrapper
+classes, Java makes it easier to use {\tt Integer} and {\tt Float}
+objects in a variety of contexts.  Taken together, inheritance and
+polymorphism enable us to design very general and extensible
+algorithms.  In this example, we defined a {\tt sort()} method that
+can sort an array containing any kind of object as long as the object
+implements the {\tt Comparable} interface. 
+
+\subsection{The {\tt java.util.Arrays.sort()} Method}
+
+\noindent While sorting algorithms provide a good way to introduce the
+concepts of array processing, real-world programmers never write their
+own sort algorithms. Instead they use library methods, which have been
+written and optimized by programming experts. Moreover, library sort
+routines use sort algorithms that are much more efficient than the
+ones we've discussed.
+
+The {\tt java.util.Arrays} class contains a polymorphic sort
+method that is very simple to use. For example, here's how we
+would use it to sort the two arrays declared in the {\tt TestSort}
+program:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+java.util.Arrays.sort(iArr);
+java.util.Arrays.sort(fArr);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent That's all there is to it! Obviously, learning how to use
+Java's class and method library, saves real-word programmers lots of
+effort.
+
+\marginfig{chptr09/p446f1.eps}{The {\tt java.util.Vector} class.
+\label{fig-p446f1}
+\label{pg-fig-p446f1}}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Add a definition of a {\tt compareTo()} method to the
+{\tt LetterFreq} class so that it implements the {\tt Comparable}
+interface.  The method should define one object to be less than
+another object if its {\tt freq} instance variable is less.
+
+
+
+\item  Add a definition of a {\tt sort()} method that  can
+be added to the definition of the {\tt AnalyzeFreq} class. Make it so
+the array in the class can be sorted into ascending order using the
+ordering of {\tt LetterFreq} defined in the previous exercise.
+Use the {\tt java.util.Arrays.sort()} method.
+
+\item  Rewrite the {\tt main()} of the {\tt AnalyzeFreq} class to make
+use of the {\tt sort()} method of the previous exercise.
+\end{SSTUDY}
+
+
+\section{From the Java Library: java.util.Vector}
+\label{sec-vectors}\label{pg-sec-vectors}
+\WWWjava
+
+The {\tt java.util.Vector} class implements an array of objects that
+can grow in size as needed.  One limitation of regular arrays is that
+their lengths remain fixed.  Once the array is full---once every
+element is used---you can't allocate additional elements.
+
+The {\tt Vector} class contains methods for storing and retrieving
+objects, and for accessing objects by their index position within the
+{\tt Vector} (Fig.~9.27).
+
+One use for a {\tt Vector} would be when a program needs to store
+input from the user or a file without knowing in advance how
+many items there are.  Using a {\tt Vector} is less efficient than an
+array in terms of processing speed, but it gives you the flexibility
+of growing the data structure to meet the storage
+requirements.
+
+As an illustration of this idea, the program in
+Figure~\ref{fig-vectordemo} creates a random number of integers and
+then stores them in a {\tt Vector}. The {\tt Vector}, which is
+declared and instantiated in {\tt main()}, is initially
+empty.  Integers from 0 to the random {\tt bound} are then inserted
+into the {\tt Vector}. In this case, insertions are done with the
+{\tt addElement()} method, which causes the {\tt Vector} object to insert
+the element at the next available location, increasing its size, if
+necessary.
+
+
+\begin{figure}[hb]
+\jjjprogstart
+\begin{jjjlisting}[27pc]
+\begin{lstlisting}
+import java.util.Vector;
+
+public class VectorDemo {
+
+  public static void printVector(Vector v) {
+    for (int k=0; k < v.size(); k++)
+      System.out.println(v.elementAt(k).toString());
+  } // printVector()
+
+  public static void main(String args[]) {
+    Vector vector = new Vector();  // An empty vector
+
+    int bound = (int)(Math.random() * 20);
+    for (int k = 0; k < bound; k++ )   // Insert a random
+      vector.addElement(new Integer(k));// number of Integers
+    printVector(vector);            // Print the elements
+  } // main()
+}// VectorDemo
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Demonstration of the {\tt Vector} class.  
+\label{fig-vectordemo}\label{pg-fig-vectordemo}}
+\end{figure}
+
+Once all the integers have been inserted, the {\tt printVector()}
+method is called.  Note that it uses the {\tt size()} method to
+determine how many elements the {\tt Vector} contains.  This is similar
+to using the {\tt length()} method to determine the number of
+characters in a {\tt String}.
+
+Finally, note that a {\tt Vector} stores objects.  It cannot be used to
+%\begin{marginalnote}\it Vectors store objects\end{marginalnote}
+store primitive data values.  You cannot store an {\tt int} in a
+{\tt Vector}. Therefore, we need to use the {\tt Integer} wrapper class to
+convert {\tt int}s into {\tt Integer}s before they can be inserted
+into the {\tt Vector}. Because you can't just print an {\tt Integer},
+or any other {\tt Object}, the {\tt toString()} method is used to
+print the string representation of the object.
+
+By defining {\tt Vector} to store {\tt Object}s, Java's designers have
+\marginnote{Vectors store objects}
+made it as general as possible and, therefore, as widely useful as 
+possible.  
+
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Generality.}{Defining a data collection, such
+as an array or a {\tt Vector}, in terms of the {\tt Object} class
+makes it capable of storing and processing any type of value,
+including values of primitive data types.  This is because the
+{\tt Object} class is the root of~the~Java class hierarchy.}
+
+\section{Case Study: An N-Player Computer Game}
+
+\noindent In this section we will make use of arrays to extend our
+game-playing library by developing a design that can support games
+that involve more than two players. We will use an array to store a
+variable number of players. Following the object-oriented design
+principles described in Chapter~8, we will make use of inheritance and
+polymorphism to develop a design that is flexible and extensible, 
+one that can be used to implement a wide variety of computer games.
+As in our {\tt TwoPlayer} game example from Chapter~8, our design will
+allow both humans and computers to play the games.  To help simplify
+the example, we will modify the {\tt WordGuess} game that we developed
+in the Chapter~8. As you will see, it requires relatively few
+modifications to convert it from a subclass of {\tt TwoPlayerGame} to
+a subclass of {\tt ComputerGame}, the superclass for our N-Player game
+hierarchy.
+
+\subsection{The {\tt ComputerGame} Hierarchy}
+
+\begin{figure}[bt]
+\figaright{chptr09/nplayerwordguess.eps}{Overview of the {\tt
+ComputerGame} class hierarchy.
+\label{fig-game}
+\label{pg-fig-game}}
+\end{figure}
+
+Figure~\ref{fig-game} provides a summary overview of the {\tt
+ComputerGame} hierarchy.  This figure shows the relationships
+among the many classes and interfaces involved.  The two classes whose
+symbols are bold, {\tt WordGuess} and {\tt WordGuesser}, are the
+classes that define the specific game we will be playing.  The
+rest of the classes and interfaces are designed to be used with
+any N-player game. 
+
+At the root of this hierarchy is the abstract {\tt ComputerGame}
+class.  Note that it uses from 1 to {\em N} {\tt Player}s. These
+objects will be stored in a one-dimensional array in {\tt
+ComputerGame}.  Recall from Chapter~8 that an {\em IPlayer} was any
+class that implements the {\tt makeAMove()} method.  In this design,
+we have put the abstract {\tt makeAMove()} method into the {\tt
+Player} class, a class that defines a generic player of computer
+games.  For the {\tt WordGuess} game, the {\tt WordGuesser} class
+extends {\tt Player}.  In order to play Word Guess, we will create a
+{\tt WordGuess} instance, plus one or more instances of {\tt
+WordGuesser}s. This is similar to the {\tt OneRowNim} example from the
+previous chapter,
+
+Note where the {\tt TwoPlayerGame} and {\tt OneRowNim} classes occur
+in the hierarchy.  {\tt TwoPlayerGame} will now be an extension of
+{\tt ComputerGame}. This is in keeping with the fact that a two-player
+game is a special kind of N-player computer game.  As we will see when
+we look at the details of these classes, {\tt TwoPlayerGame} will
+override some of the methods inherited from {\tt ComputerGame}.
+
+Because it contains the abstract {\tt makeAMove()} method, the {\tt
+Player} class is an abstract class.  Its purpose is to define and
+store certain data and methods that can be used by any computer
+games. For example, one important piece of information defined in {\tt
+Player} is whether the player is a computer or a person.  {\tt
+Player}'s data and methods will be inherited by {\tt WordGuesser} and
+by other classes that extend {\tt Player}.  Given its position in the
+hierarchy, we will be able to define polymorphic methods for {\tt
+WordGuesser}s that treat them as {\tt Player}s. As we will see, this
+will give our design great flexibility and extensibility.
+
+\subsection{The {\tt ComputerGame} Class}
+
+Figure~9.30 shows the design details of the {\tt ComputerGame}
+class. One of the key tasks of the {\tt ComputerGame} class is to
+manage the one or more computer game players. Because this is a task
+that is common to all computer games, it makes sense to manage it here
+in the superclass. Toward this end, {\tt ComputerGame} declares four
+instance variables and several methods. Three {\tt int} variables
+define the total number of players ({\tt nPlayers}), the number of
+players that have been added to the game ({\tt addedPlayers}), and the
+player whose turn it is ({\tt whoseTurn}).  An array named {\tt
+player} stores the {\tt Player}s.  In keeping with the zero indexing
+convention of arrays, we number the players from 0 to {\em
+nPlayers-1}. These variables are all declared {\tt protected}, so that
+they can be referenced directly by {\tt ComputerGame} subclasses, but
+as {\tt protected} variables, they remain hidden from all other
+classes.
+
+\marginfig{chptr09/computergame.eps}{The {\tt ComputerGame} class.
+\label{fig-computergame}
+\label{pg-fig-computergame}}
+The {\tt ComputerGame(int)} constructor allows the number of players
+to be set when the game is constructed.  The default constructor sets
+the number of players to one. The constructors create an array of
+length {\tt nPlayers}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public ComputerGame(int n) {
+  nPlayers = n;
+  player = new Player[n]; // Create the array
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt setPlayer()} and {\tt getPlayer()} methods are the
+mutator and accessor methods for the {\tt whoseTurn} variable. This variable
+allows a user to determine and set whose turn it is, a useful feature
+for initializing a game.  The {\tt changePlayer()} method uses the default
+expression, 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ whoseTurn = (whoseTurn + 1) % nPlayers 
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent for changing whose turn it is.  Assuming that players are
+numbered from 0 to {\em nPlayers-1}, this code gives the turn to the
+next player, wrapping around to player 0, if necessary. Of course, a
+subclass of {\tt ComputerGame} can override this method if the game
+requires some other order of play.
+
+The {\tt addPlayer(Player)} method is used to add a new {\tt Player}
+to the game, including any subclass of {\tt Player}.  The
+method assumes that {\tt addedPlayers} is initialized to 0. It
+increments this variable by 1 each time a new player is added to the
+array. For the game {\tt WordGuess}, we would be adding {\tt Player}s
+of type {\tt WordGuesser} to the game.
+
+The complete source code for {\tt ComputerGame} is shown in
+Figure~\ref{fig-gamesource}.
+
+\begin{figure}[h!]
+\scriptsize
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract class ComputerGame {   
+  protected int nPlayers;
+  protected int addedPlayers = 0;
+  protected int whoseTurn;
+  protected Player player[];  // An array of players
+
+  public ComputerGame() {
+    nPlayers = 1;       // Default: 1 player game
+    player = new Player[1];
+  }
+  public ComputerGame(int n) {
+    nPlayers = n;
+    player = new Player[n]; // N-Player game
+  }
+  public void setPlayer(int starter) { 
+    whoseTurn = starter; 
+  }
+  public int getPlayer() { 
+    return whoseTurn;  
+  }
+  public void addPlayer(Player p) {
+    player[addedPlayers] = p;
+    ++addedPlayers;
+  }
+  public void changePlayer() { 
+    whoseTurn = (whoseTurn + 1) % nPlayers;
+  }
+  public String getRules() {
+    return "The rules of this game are: ";
+  }
+  public String listPlayers() {
+    StringBuffer result = 
+          new StringBuffer("\nThe players are:\n");
+    for (int k = 0; k < nPlayers; k++)
+      result.append("Player" + k + " " + 
+                      player[k].toString() + "\n");
+      result.append("\n");
+      return result.toString();
+  }
+  public abstract boolean gameOver(); // Abstract
+  public abstract String getWinner(); //  methods
+} //ComputerGame
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Implementation of the {\tt ComputerGame} class.
+\label{fig-gamesource}
+\label{pg-fig-gamesource}}
+\end{figure}
+
+\noindent There are several points worth noting about this
+implementation. First, note that just as in the case of the abstract
+{\tt TwoPlayerGame} class from Chapter~8, the methods {\tt gameOver()}
+and {\tt getWinner()} are defined as {\tt abstract} and the {\tt
+getRules()} method is given a generic implementation. The intent here
+is that the subclass will override {\tt getRules()} and will provide
+game-specific implementations for the abstract methods.
+
+Second, note how the {\tt addPlayer()} method is coded. It uses the
+{\tt addedPlayers} variable as the index into the {\tt player} array,
+which always has length {\tt nPlayers}.  An attempt to call this
+method when the array is already full will lead to the following
+exception being thrown by Java:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Exception in thread ``main'' 
+    java.lang.ArrayIndexOutOfBoundsException: 2
+    at ComputerGame.addPlayer(ComputerGame.java:22)
+    at TwentyOne.main(TwentyOne.java:121)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In other words, it is an error to try to add more players
+than will fit in the {\tt player} array. In Chapter~11, we will learn
+how to design our code to guard against such problems. 
+
+Finally, note the implementation of the {\tt listPlayers()} method
+(Fig.~\ref{fig-gamesource}).
+%%%RAM\begin{jjjlisting}
+%%%RAM\begin{lstlisting}
+%%%RAMpublic String listPlayers() {
+%%%RAM  StringBuffer result =  
+%%%RAM             new StringBuffer("\nThe players are:\n");
+%%%RAM  for (int k = 0; k < nPlayers; k++)
+%%%RAM    result.append("Player" + k + " " + 
+%%%RAM                                player[k].toString() + "\n");
+%%%RAM  result.append("\n");
+%%%RAM  return result.toString();
+%%%RAM}
+%%%RAM\end{lstlisting}
+%%%RAM\end{jjjlisting}
+\noindent Here is a good example of polymorphism at work. The
+elements of the {\tt player} array have a declared type of {\tt
+Player}. Their dynamic type is {\tt WordGuesser}. So when the
+expression {\tt player[k].toString()} is invoked, dynamic binding is
+used to bind this method call to the implementation of {\tt
+toString()} defined in the {\tt WordGuesser} class.  Thus, by
+allowing {\tt toString()} to be bound at run time, we are able
+to define a method here that doesn't know the exact types of the
+objects it will be listing.
+
+The power of polymorphism is the flexibility and extensibility it
+\marginnote{polymorphism}
+lends to our class hierarchy.  Without this feature, we would not be
+able to define {\tt listPlayers()} here in the superclass, and would
+instead have to define it in each subclass.  
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Extensibility.}{Polymorphic
+methods allow us to implement methods that can be applied to
+yet-to-be-defined subclasses.}
+
+\marginfigscaled{chptr09/wordguess.eps}{0.9}{The {\tt WordGuess} class.
+\label{fig-wordguess}
+\label{pg-fig-wordguess}}
+\subsection{The {\tt WordGuess} and {\tt WordGuesser} Classes}
+
+We will assume here that you are familiar with the {\tt WordGuess}
+example from Chapter~8. If not, you will need to review that section
+before proceeding.  Word Guess is a game in which players take turns
+trying to guess a secret word by guessing its letters. Players keep
+guessing as long as they correctly guess a letter in the word. If they
+guess wrong, it becomes the next player's turn. The winner of the game
+is the person who guesses the last letter secret letter, thereby
+completely identifying the word. 
+
+Figure~9.32 provides an overview of the {\tt WordGuess} class.  If
+you compare it with the design we used in Chapter~8, the only change
+in the instance methods and instance variables is the addition of a
+new constructor, {\tt WordGuess(int)}, and an {\tt init()} method.  This
+constructor takes an integer parameter representing the number of
+players. The default constructor assumes that there is one player.  Of
+course, this version of {\tt WordGuess} extends the {\tt ComputerGame}
+class, rather than the {\tt TwoPlayerGame} class.  Both constructors
+call the {\tt init()} method to initialize the game:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public WordGuess() { super(1); init(); }
+ public WordGuess(int m) { super(m); init(); } 
+ public void init() {
+     secretWord = getSecretWord();
+     currentWord = new StringBuffer(secretWord);
+     previousGuesses = new StringBuffer();
+     for (int k = 0; k < secretWord.length(); k++)
+        currentWord.setCharAt(k,'?');
+     unguessedLetters = secretWord.length();
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+The only other change required to convert {\tt WordGuess} to an
+N-player game, is to rewrite its {\tt play()} method.  Because the new
+{\tt play()} method makes use of functionality inherited from the {\tt
+ComputerGame()} class, it is actually much simpler than the {\tt play()}
+method in the Chapter~8 version:
+
+\begin{jjjlisting}[28pc]
+\begin{lstlisting}
+public void play(UserInterface ui) {
+  ui.report(getRules());
+  ui.report(listPlayers());
+  ui.report(reportGameState());
+
+  while(!gameOver()) {  
+    WordGuesser p = (WordGuesser)player[whoseTurn];
+    if (p.isComputer())
+      ui.report(submitUserMove(p.makeAMove(getGamePrompt())));
+    else {
+      ui.prompt(getGamePrompt());
+      ui.report(submitUserMove(ui.getUserInput()));
+    }
+    ui.report(reportGameState());
+  } // while
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The method begins by displaying the game's rules and listing
+its players. The {\tt listPlayers()} method is inherited from the {\tt
+ComputerGame} class.  After displaying the game's current state, the
+method enters the play loop. On each iteration of the loop, a
+player is selected from the array:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ WordGuesser p = (WordGuesser)player[whoseTurn];
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The use of the {\tt WordGuesser} variable, {\tt p},  
+just makes the code somewhat more readable. Note that we have to use
+a cast operator, {\tt (WordGuesser)}, to convert the array element, a
+{\tt Player}, into a {\tt WordGuesser}.  Because {\tt p} is a {\tt
+WordGuesser}, we can refer directly to its {\tt isComputer()} method. 
+
+If the player is a computer, we prompt it to make a move, submit
+the move to the {\tt submitUserMove()} method, and then report the
+result.  This is all done in a single statement:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ ui.report(submitUserMove(p.makeAMove(getGamePrompt())));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent If the player is a human, we prompt the player and use the {\tt
+KeyboardReader}'s {\tt getUserInput()} method to read the user's move.
+We then submit the move to the {\tt submitUserMove()} method and
+report the result.  At the end of the loop, we report the game's
+updated state. The following code segment illustrates a small portion
+of the interaction generated by this {\tt play()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ Current word ???????? Previous guesses GLE
+ Player 0 guesses next.Sorry, Y is NOT a new letter 
+                       in the secret word
+ Current word ???????? Previous guesses GLEY
+ Player 1 guesses next.Sorry, H is NOT a new letter 
+                       in the secret word
+ Current word ???????? Previous guesses GLEYH
+ Player 2 guesses next.
+ Guess a letter that you think is in the secret word: a
+ Yes, the letter A is in the secret word
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, players 0 and 1 are computers and player 2 is
+a human. 
+
+\marginfig{chptr09/wordguesser.eps}{The {\tt WordGuesser} class
+extends {\tt Player}.
+\label{fig-wordguesser}
+\label{pg-fig-wordguesser}}
+
+In our new design, the {\tt WordGuesser} class is a subclass of {\tt
+Player} (Figure~9.33).  The {\tt WordGuesser} class itself requires
+no changes other than its declaration:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public class WordGuesser extends Player
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As we saw when we were discussing the {\tt WordGuess} class, the
+{\tt play()} method invokes {\tt WordGuesser}'s {\tt isComputer()}
+method. But this method is inherited from the {\tt Player} class.  The
+only other method used by {\tt play()} is the {\tt makeAMove()}
+method. This method is coded exactly the same as it was in the
+previous version of {\tt WordGuesser}.
+
+Figure~\ref{fig-player} shows the implementation of the {\tt Player}
+class. Most of its code is very simple. Note that the default value
+for the {\tt kind} variable is {\tt HUMAN} and the default {\tt id} is
+-1, indicating the lack of an assigned identification.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public abstract class Player  {   
+  public static final int COMPUTER=0;
+  public static final int HUMAN=1;
+  protected int id = -1;  // Id between 0 and nPlayers-1
+  protected int kind = HUMAN; // Default is HUMAN
+
+  public Player() { }
+  public Player(int id, int kind) {
+    this.id = id;
+    this.kind = kind;
+  }
+  public void setID(int k) { id = k; }
+  public int getID() { return id; }
+  public void setKind(int k) { kind = k; }
+  public int getKind() { return kind; }
+  public boolean isComputer() { return kind == COMPUTER; }
+  public abstract String makeAMove(String prompt); 
+} // Player
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Implementation of the {\tt Player} class.
+\label{fig-player}
+\label{pg-fig-player}}
+\end{figure}
+
+What gives {\tt Player} its utility is the fact that it encapsulates
+those attributes and actions that are common to all computer game
+players. Defining these elements, in the superclass, allows them to
+be used throughout the {\tt Player} hierarchy.  It also makes it
+possible to establish an association between a {\tt Player} and a {\tt
+ComputerGame}.
+
+Given the {\tt ComputerGame} and {\tt Player} hierarchies and
+the many interfaces they contain, the task of designing and
+implementing a new N-player game is made much simpler. This too is due
+to the power of object-oriented programming. By learning to use a
+library of classes, such as these, even inexperienced programmers can
+create relatively sophisticated and complex computer games.
+
+\JavaTIP{EFFECTIVE DESIGN}{Code Reuse.}{Re-using library code by
+extending classes and implementing interfaces makes it much
+simpler to create sophisticated applications.}
+
+Finally, the following {\tt main()} method instantiates and runs an instance
+of the {\tt WordGuess} game in a command-line user interface (CLUI):
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String args[]) 
+{ KeyboardReader kb = new KeyboardReader();
+  ComputerGame game = new WordGuess(3);
+  game.addPlayer(new WordGuesser((WordGuess)game, 0, 
+                                           Player.HUMAN));
+  game.addPlayer(new WordGuesser((WordGuess)game, 1, 
+                                         Player.COMPUTER);
+  game.addPlayer(new WordGuesser((WordGuess)game, 2, 
+                                         Player.COMPUTER);
+  ((CLUIPlayableGame)game).play(kb);
+} //main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this example, we create a three player game in which two
+of the players are computers.  Note how we create a new {\tt
+WordGuesser}, passing it a reference to the game itself, as well as
+its individual identification number, and its type (HUMAN or
+COMPUTER).  To run the game, we simply invoke its {\tt play()} method.
+You know enough now about object-oriented design principles to
+recognize that the use of {\tt play()} in this context is an example
+of polymorphism.
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, A GUI-Based Game}
+
+\section{A GUI-Based Game (Optional Graphics)}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, A GUI-Based Game}
+
+Most modern computer games do not use a command-line interface.  This
+section addresses this shortcoming by expanding our {\tt ComputerGame}
+hierarchy so that it works with Graphical User Interfaces (GUIs) as
+well as Command-Line User Interfaces (CLUIs).
+
+The Sliding Tile Puzzle is a puzzle game. It is played by one player,
+a human. The puzzle consists of six tiles arranged on a board
+containing seven spaces. Three of the tiles are labeled {\em L} and
+three are labeled {\em R}.  Initially the tiles are arranged as {\em
+RRR\_LLL}.  In other words, the {\em R} tiles are arranged to the left
+of the {\em L} tiles, with the blank space in the middle. The object
+of the puzzle is to rearrange the tiles into {\em LLL\_RRR}. The rules
+are that tiles labeled {\em R} can only move right. Tiles labeled {\em
+L} can only move left. Tiles may move directly into the blank space or
+they can jump over one tile into the blank space.
+
+Our purpose in this section is to develop a GUI that plays this
+game. An appropriate GUI is shown Figure~\ref{fig-capture}.  Here the
+tiles and the blank space are represented by an array of buttons.  To
+make a move the user clicks on the 'tile' he or she wishes to
+move. The GUI will assume that the user wants to move that tile into
+the blank space. If the proposed move is legal, the GUI will carry out
+the move. Otherwise, it will just ignore it. For example, if the user
+were to click on the third {\em R} button from the left, a legal move,
+the GUI would rearrange the labels on the buttons so that their new
+configuration would be {\em RR\_RLLL}. On the other hand, if the user
+were to click on the rightmost {\em L} button, the GUI would ignore
+that move, because it is illegal.
+
+\begin{figure}[h!]
+\figascaled{chptr09/captureGUI.eps}{0.8}{The Sliding Tile Puzzle.
+\label{fig-capture}
+\label{pg-fig-capture}}
+\end{figure}
+
+\subsection{The {\tt GUIPlayableGame} Interface}
+
+How should we extend our game-playing hierarchy to accommodate
+GUI-based games? As we learned in Chapter~4, one difference between
+GUI-based applications and CLUI-based applications, is the locus of
+control. In a CLUI-based application, control resides in the
+computational object which, for games, is the game object.  That's why
+the {\tt play()} method in our CLUI-based games contains the game's
+control loop.  By contrast, control resides in the GUI's event loop in
+GUI-based applications.  That's why, we learned how to
+manage Java's event hierarchy in Chapter~4. Thus, in the GUI shown in
+Figure~\ref{fig-capture}, the GUI will {\em listen} and take {\em
+action} when the user clicks one of its buttons.
+
+However, given that control will reside in the GUI, there is still a
+need for communication between the GUI and the game
+object. In the CLUI-based games, we have used the {\tt
+CLUIPlayableGame} interface to manage the communication between the
+game and the user interface.  We will follow the same design strategy
+in this case.  Thus, we will design a {\tt GUIPlayableGame} interface that
+can be implemented by any game that wishes to use a GUI (Fig.~9.36).
+
+What method(s) should this interface contain?  One way to answer this
+question is to think about the type of interaction that must take
+place when the user clicks  one of the tiles.  If the user clicks
+the third {\em R} button, the GUI should pass this information to the
+game. The game should then decide whether or not that is a legal move
+and communicate this back to the GUI. Assuming it is a legal move, the
+game should also update its representation of the game's state to
+reflect that the tile array has changed. And it should somehow make
+communicate the game's state to the GUI.
+\marginfig{chptr09/GUIplayable.eps}{The {\tt GUIPlayableGame} interface
+extends the {\tt IGame} interface.
+\label{fig-GUIplayble}
+\label{pg-fig-GUIplayable}}
+
+Because it is impossible to know in advance just what form of data a
+game's moves might take, we will use Java {\tt String}s to communicate
+between the user interface and the game object. Thus, a method with
+the following signature will enable us to submit a {\tt
+String} representing the user's move to the game  and receive in return a {\tt
+String} representing the game object's response to the move:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ submitUserMove(String move): String;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In addition to this method, a GUI interface could use the
+{\tt report\-Game\-State()} and {\tt get\-Game\-Prompt()} methods that are
+part of the {\tt IGame} interface.  Th design shown in Figure~9.36
+leads to the following definition for the {\tt GUIPlayableGame}
+interface:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public interface GUIPlayableGame extends IGame {
+    public String submitUserMove(String theMove);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Because it extends {\tt IGame}, this interface inherits the
+{\tt getGamePrompt()} and {\tt report\-Game\-State()} from the {\tt IGame}
+interface. The GUI should be able to communicate with any game that
+implements this interface.
+
+\subsection{The {\tt SlidingTilePuzzle}}
+
+Let's now discuss the design and details of the 
+{\tt SlidingTilePuzzle} itself. Its design is summarized in
+Figure~9.37.  Most of the methods should be familiar
+to you, because the design closely follows the design we employed in
+the {\tt WordGuess} example. It has implementations of inherited
+methods from the {\tt ComputerGame} class and the {\tt
+GUIPlayableGame} interface.  
+
+We will represent the sliding tile puzzle in a one-dimensional array
+of {\tt char}. We will store the puzzle's solution in a Java {\tt
+String} and we will use an {\tt int} variable to keep track of where
+the blank space is in the array.  This leads to the following
+class-level declarations:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ private char puzzle[] = {'R','R','R',' ','L','L','L'};
+ private String solution = "LLL RRR";
+ private int blankAt = 3;
+\end{lstlisting}
+\end{jjjlisting}
+
+\marginfig{chptr09/slidingtilepuzzle.eps}{The {\tt SlidingTilePuzzle} is
+a {\tt ComputerGame} that implements the {\tt GUIPlayableGame} interface.
+\label{fig-slidingpuzzle}
+\label{pg-fig-slidingpuzzle}}
+\noindent Note how we initialize the {\tt puzzle} array with the
+initial configuration of seven characters. Taken together, these
+statements initialize the puzzle's state.
+
+Because a puzzle is a one-person game and our sliding tile puzzle will be
+played by a human, this leads to a very simple constructor 
+definition:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public SlidingTilePuzzle() {
+     super(1);
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We call the {\tt super()} constructor ({\tt ComputerGame()})
+to create a one-person game.
+
+The puzzle's state needs to be communicated to the GUI as a {\tt
+String}. This is the purpose of the {\tt reportGameState()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public String reportGameState() {   
+     StringBuffer sb = new StringBuffer();
+     sb.append(puzzle);
+     return sb.toString();
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent We use a {\tt StringBuffer()} to convert the puzzle, a {\tt
+char} array, into a {\tt String}.
+
+The most important method for communicating with the GUI is the {\tt
+submitUserMove()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public String submitUserMove(String usermove) {   
+  int tile = Integer.parseInt(usermove);
+  char ch = puzzle[tile];
+  if (ch == 'L' && 
+               (blankAt == tile-1 || blankAt == tile-2))
+    swapTiles(tile,blankAt);
+  else if (ch == 'R' && 
+               (blankAt == tile+1 || blankAt == tile+2))
+    swapTiles(tile,blankAt);
+  else 
+    return "That's an illegal move.\n";
+  return "That move is legal.\n";
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This is the method that processes the user's move, which is
+communicated through the GUI. As we saw, the puzzle's 'tiles' are
+represented by an array of buttons in the GUI.  The buttons are
+indexed 0 through 6 in the array. When the user clicks a button,
+the GUI should pass its index, represented as a {\tt String} to the
+{\tt submitUserMove()} method.  Given the index number of the tile
+that was selected by the user, this method determines if the move is
+legal.
+
+The {\tt Integer.parseInt()} method is used to extract the tile's
+index from the method's parameter. This index is used to get a 'tile'
+from the {\tt puzzle} array. The logic in this method reflects the
+rules of the game. If the tile is an {\em L}, then it can only move
+into a blank space that is either 1 or 2 spaces to its left.
+Similarly, an {\em R} tile can only move into a blank space that is 1
+or 2 spaces to its right. All other moves are illegal. For legal
+moves, we simply swap the tile and the blank space in the array, a
+task handled by the {\tt swap()} method.  In either case, the method
+returns a string reporting whether the move was legal or illegal.
+
+Figure~\ref{fig-puzzlecode} shows the full implementation for the {\tt
+SlidingTilePuzzle}, the remaining details of which are straight forward.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class SlidingTilePuzzle extends ComputerGame 
+                            implements GUIPlayableGame {
+  private char puzzle[] = {'R','R','R',' ','L','L','L'};
+  private String solution = "LLL RRR";
+  private int blankAt = 3;
+  public SlidingTilePuzzle() { super(1); }
+
+  public boolean gameOver() { // True if puzzle solved
+    StringBuffer sb = new StringBuffer();
+    sb.append(puzzle);
+    return sb.toString().equals(solution);    
+  } 
+  public String getWinner() {   
+    if (gameOver())
+      return "\nYou did it! Very Nice!\n";
+    else return "\nGood try. Try again!\n";
+  }
+  public String reportGameState() {   
+    StringBuffer sb = new StringBuffer();
+    sb.append(puzzle);
+    return sb.toString();
+  } 
+  public String getGamePrompt() {    
+    return "To move a tile, click on it.";
+  } //prompt()
+
+  public String submitUserMove(String usermove) {   
+    int tile = Integer.parseInt(usermove);
+    char ch = puzzle[tile];
+    if (ch=='L' && (blankAt==tile-1 || blankAt==tile-2))
+      swapTiles(tile,blankAt);
+    else if (ch=='R' && 
+                   (blankAt==tile+1 || blankAt==tile+2))
+      swapTiles(tile,blankAt);
+    else 
+      return "That's an illegal move.\n";
+    return "That move is legal.\n";
+  }
+  private void swapTiles(int ti, int bl) {
+    char ch = puzzle[ti];
+    puzzle[ti] = puzzle[bl];
+    puzzle[bl] = ch;
+    blankAt = ti;   // Reset the blank
+  }
+} //SlidingTilePuzzle
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Implementation of the {\tt SlidingTilePuzzle} class.
+\label{fig-puzzlecode}
+\label{pg-fig-puzzlecode}}
+\end{figure}
+
+\pagebreak
+\subsection{The {\tt SlidingGUI} Class}
+
+Let's now implement a GUI that can be used to play the sliding tile
+puzzle. We will model the GUI itself after those we designed in
+Chapter~4. 
+
+Figure~9.39 provides a summary of the design. As an implementor of the
+\marginfig{chptr09/slidingGUI.eps}{The {\tt SlidingGUI} class.
+\label{fig-slidingGUI}
+\label{pg-fig-slidingGUI}}
+{\tt ActionListener} interface, {\tt SlidingGUI} implements the {\tt
+actionPerformed()} method, which is where the code that controls the
+puzzle is located.  The main data structure is an array of seven {\tt
+JButton}s, representing the seven tiles in the puzzles. The buttons'
+labels will reflect the state of the puzzle.  They will be rearranged
+after every legal move by the user. The {\tt reset} button is used to
+reinitialize the game. This allows users to play again or to start
+over if they get stuck.
+
+The {\tt puzzleState} is a {\tt String} variable that stores the
+puzzle's current state, which is updated repeatedly from the {\tt
+SlidingTilePuzzle} by calling its {\tt reportGameState()} method.  The
+private {\tt labelButtons()} method will read the {\tt puzzleState}
+and use its letters to set the labels of the GUI's buttons.
+
+The implementation of {\tt SlidingGUI} is shown in
+Figure~\ref{fig-GUIsource}.  Its constructor and {\tt buildGUI()}
+methods are responsible for setting up the GUI. We use of a {\tt for}
+loop in {\tt buildGUI()} to create the {\tt JButton}s, associate an
+{\tt ActionListener} with them, and add them to the GUI. Except for
+the fact that we have an array of buttons, this is very similar to the
+GUI created in Chapter~4. Recall that associating an {\tt
+ActionListener} with the buttons allows the program to respond to
+button clicks in its {\tt actionPerformed()} method.
+
+Note how an instance of the {\tt SlidingTilePuzzle} is created in
+the constructor, and how its state is retrieved and stored in
+the {\tt puzzleState} variable:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ puzzleState = sliding.reportGameState();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt labelButtons()} method transfers the
+letters in {\tt puzzleState} onto the buttons.
+
+\begin{figure}[p]
+\scriptsize
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class SlidingGUI extends JFrame implements ActionListener {
+  private JButton tile[] = new JButton[7];
+  private JButton reset = new JButton("Reset");
+  private SlidingTilePuzzle sliding;
+  private String puzzleState;
+  private Label label;
+  private String prompt = "Goal: [LLL RRR]. " +
+    " Click on the tile you want to move." +
+    " Illegal moves are ignored.";
+  public SlidingGUI(String title) {
+    sliding = new SlidingTilePuzzle();
+    buildGUI();
+    setTitle(title);
+    pack();
+    setVisible(true);
+  } // SlidingGUI()
+  private void buildGUI() {
+    Container contentPane = getContentPane();
+    contentPane.setLayout(new BorderLayout());
+    JPanel buttons = new JPanel();
+    puzzleState = sliding.reportGameState();
+    for (int k = 0; k < tile.length; k++) {
+      tile[k] = new JButton(""+puzzleState.charAt(k));
+      tile[k].addActionListener(this);
+      buttons.add(tile[k]);
+    }
+    reset.addActionListener(this);
+    label = new Label(prompt);
+    buttons.add(reset);
+    contentPane.add("Center", buttons);
+    contentPane.add("South", label);
+  } // buildGUI()
+  private void labelButtons(String s) {
+    for (int k = 0; k < tile.length; k++)
+      tile[k].setText(""+ s.charAt(k));
+  } // labelButtons()
+  public void actionPerformed(ActionEvent e) {
+    String result = "";
+    if (e.getSource() == reset) { // Reset clicked?
+      sliding = new SlidingTilePuzzle();
+      label.setText(prompt);
+    }
+    for (int k = 0; k < tile.length; k++) // Tile clicked?
+      if (e.getSource() == tile[k])
+        result = ((GUIPlayableGame)sliding).submitUserMove(""+ k);
+    if (result.indexOf("illegal") != -1)
+      java.awt.Toolkit.getDefaultToolkit().beep();
+    puzzleState = sliding.reportGameState();
+    labelButtons(puzzleState);
+    if (sliding.gameOver()) 
+      label.setText("You did it! Very nice!");
+  } // actionPerformed()
+  public static void main(String args[]) {
+    new SlidingGUI("Sliding Tile Puzzle");
+  } // main()
+} // SlidingGUI
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{Implementation of the {\tt SlidingGUI} class.
+\label{fig-GUIsource}
+\label{pg-fig-GUIsource}}
+\end{figure}
+
+The most important method in the GUI is the {\tt actionPerformed()}
+method. This method controls the GUI's actions and is called
+automatically whenever one of the GUI's buttons is clicked. First, we
+check whether the {\tt reset} button has been clicked. If so, we reset
+the puzzle by creating a new instance of {\tt SlidingTilePuzzle} and
+re-initializing the prompt label.
+
+Next we use a for loop to check whether one of the tile buttons has
+been clicked.  If so, we use the loop index, {\em k}, as the tile's
+identification and submit this to the puzzle as the user's move:
+
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+if (e.getSource() == tile[k])
+  result = ((GUIPlayableGame)sliding).submitUserMove(""+ k);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The cast operation is necessary here because we declared
+{\tt sliding} as a {\tt SlidingTilePuzzle} rather than as a {\tt
+GUIPlayableGame}.  Note also that we have to convert {\em k} to a {\tt
+String} when passing it to {\tt submitUserMove()}. 
+
+As a result of this method call, the puzzle returns a {\tt result},
+which is checked to see if the user's move was illegal. If
+{\tt result} contains the word ``illegal'', the computer beeps to signal an
+error:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ if (result.indexOf("illegal") != -1)
+    java.awt.Toolkit.getDefaultToolkit().beep();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt java.awt.Toolkit} is a class that contains lots of
+useful methods, including the {\tt beep()} method. Note that no matter
+what action is performed, a reset or a tile click, we update {\tt
+puzzleState} by calling {\tt reportGameState()} and use it to relabel
+the tile buttons.  The last task in the {\tt actionPerformed()} method
+is to invoke the puzzle's {\tt gameOver()} method to check if the user
+has successfully completed the puzzle. If so, we display a
+congratulatory message in the GUI's window.
+
+Finally, the {\tt main()} for a GUI is very simple, consisting of a
+single line of code:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+   new SlidingGUI("Sliding Tile Puzzle");
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Once a {\tt SlidingGUI} is created, with the
+title of ``Sliding Tile Puzzle,'' it will open a window
+and manage the control of the puzzle.
+
+\secSMH{Chapter Summary}
+
+%\addcontentsline{toc}{section}{Chapter Summary}
+\secKTH{Technical Terms}
+
+\begin{KT}
+array
+
+array \break initializer
+
+array length
+
+binary search
+
+data structure 
+
+element
+
+element type
+
+insertion sort
+
+multidimensional array
+
+one-dimensional \break array
+
+polymorphic sort method
+
+selection sort
+
+sequential search
+
+sorting
+
+subscript
+
+two-dimensional array
+
+\end{KT}
+
+
+\secSMHtwo{Summary of Important Points}
+\begin{SMBL}
+
+\item An {\bf array}\index{array} is a named collection of contiguous
+storage locations, each of which stores a data item of the same data
+type.  Each element of an array is referred to by a {\it
+subscript\index{subscript}}---that is, by its position in the array.
+If the array contains {\it N} elements, then its length is {\it N} and
+its indexes are {\tt 0, 1, \dots N-1}.  
+
+\item Array elements are referred to using the following subscript
+notation {\em arrayname[subscript]}, where {\it arrayname} is any
+valid identifier, and {\it subscript} is an integer value in the range
+0 to {\tt arrayname.length - 1}. The array's {\tt length} instance
+variable can be used as a bound for loops that process the array.
+
+\item An {\it array declaration} provides the name and type of the
+array.  An array instantiation uses the keyword {\tt new} and causes
+the compiler to allocate memory for the array's elements:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[]; // Declare a one-dimensional array variable
+arr = new int[15];// Allocate 15 int locations for it
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Multidimensional arrays have arrays as their components:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int twoDarr[][]; // Declare a two-dimensional array variable
+twoDarr = new int[10][15]; // Allocate 150 int locations
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  An array's values must be initialized by assigning
+values to each array location.  An {\it initializer\index{array
+initializer}} expression may be included as part of the array
+declaration.
+
+\item Insertion sort and selection sort are examples of array sorting
+algorithms.  Both algorithms require several passes over the array.
+
+\item When an array is passed as a argument to a method, a reference
+to the array is passed rather than the entire array itself.
+
+\item  Swapping two elements of an array, or any
+two locations in memory, requires the use of a temporary variable.
+
+\item Sequential search and binary search are examples of array
+searching algorithms.  Binary search requires that the array be
+sorted.
+
+\item For multidimensional arrays, each dimension of the array has its
+own {\tt length} variable.
+
+\item Inheritance and polymorphism are useful design features for
+developing a hierarchy of computer games. 
+
+\end{SMBL}
+
+
+\secANSHleft
+
+%\addcontentsline{toc}{section}{Answers to Self-Study Exercises}
+%\begin{itemize}
+
+\begin{ANS}
+\item  
+Space (in bytes) allocated for each of the following?
+
+\begin{enumerate}
+\scriptsize
+\item[a.]  \verb|int a[] = new int[5];       |{\color{cyan}\verb|   // 5 * 4 = 20 bytes|}
+\item[b.]  \verb|double b[] = new double[10];|{\color{cyan}\verb|   // 10 * 8 = 80 bytes|}
+\item[c.]  \verb|char c[] = new char[30];    |{\color{cyan}\verb|   // 30 * 2  = 60 bytes|}
+\item[d.]  \verb|String s[] = new String[10];|{\color{cyan}\verb|   // 10 * 4 (reference) = 40 bytes|}
+\item[e.]  \verb|Student s[] = new Student[5]; |{\color{cyan}\verb| // 5 * 4 (reference) = 20 bytes|} 
+\normalsize
+\end{enumerate}
+
+
+\item  An array containing 10 {\tt float}s, 1.0 to 10.0.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+float farr[] = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Prints the first element of {\tt farr}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(farr[0]);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Assigns 100.0 to the last element in {\tt farr}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+farr[farr.length-1] = 100.0;
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A loop to print all of the elements of {\tt farr}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int j = 0; j < farr.length; j++)
+    System.out.println(farr[j]);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  An array containing the first 100 square roots.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double doubarr[] = new double[100];
+for (int k = 0; k < doubarr.length; k++)
+    doubarr[k] = Math.sqrt(k+1);
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Analyzing the letter frequencies in a file.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+import java.io.*;
+import java.util.Scanner;
+public static void main(String[] argv) {
+  Scanner fileScan;  // To read lines of text from the file
+  String str;        // To store the line of text
+  AnalyzeFreq af = new AnalyzeFreq();
+  try {         // Create a Scanner
+    File theFile = new File("freqtest.txt");
+    fileScan = Scanner.create(theFile);
+    fileScan = fileScan.useDelimiter("\r\n"); //For Windows
+    while (fileScan.hasNext()) { // Read and count
+      str = fileScan.next();
+      af.countLetters(str);
+    } //while
+    af.printArray(); // Print frequencies
+  } catch (Exception e) {
+     e.printStackTrace();
+  } //catch()
+} //main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Sort 24 18 90 1 0 85 34 18 with insertion sort.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+  24 18 90 1  0  85 34 18 // Initial
+  18 24 90 1  0  85 34 18 // Pass 1
+  18 24 90 1  0  85 34 18 // Pass 2
+  1  18 24 90 0  85 34 18 // Pass 3
+  0  1  18 24 90 85 34 18 // Pass 4
+  0  1  18 24 85 90 34 18 // Pass 5
+  0  1  18 24 34 85 90 18 // Pass 6
+  0  1  18 18 24 34 85 90 // Pass 7
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Sort 24 18 90 1 0 85 34 18 with selection sort.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+24 18 90 1   0   85 34 18 // Initial
+0  18 90 1   24  85 34 18 // Pass 1
+0  1  90 18  24  85 34 18 // Pass 2
+0  1  18 90  24  85 34 18 // Pass 3
+0  1  18 18  24  85 34 90 // Pass 4
+0  1  18 18  24  85 34 90 // Pass 5
+0  1  18 18  24  34 85 90 // Pass 6
+0  1  18 18  24  34 85 90 // Pass 7
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Code to swap two {\tt Student}s.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Student tempStud = student1;
+student1 = student2;
+student2 = tempStud;
+\end{lstlisting}
+\end{jjjlisting}
+
+\item Implementation of the {\tt selectionSort()}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ public void selectionSort(int arr[]) {
+    int smallest;      // Location of smallest element
+    for (int k = 0; k < arr.length-1; k++) {  
+        smallest = k;
+        for (int j = k+1; j < arr.length; j++) 
+            if (arr[j] < arr[smallest]) 
+                smallest = j;
+        if (smallest != k) {   // Swap smallest and kth
+            int temp = arr[smallest];      
+            arr[smallest] = arr[k];	
+            arr[k] = temp;
+        } // if
+    } // outer for
+ } // selectionSort()
+
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  After {\tt mystery(myArr,k)}, {\tt myArr} will store 1,2,3,5,5 and {\it k} will store 3.
+
+
+\item  Binary search trace for 21 in  2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+key  iteration  low   high    mid
+--------------------------------------
+21   0          0     13      6
+21   1          7     13      10
+21   2          7     9       8
+21   3          9     9       9
+21   4          10    9       failure
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A two-dimensional array with 5 rows of 10 integers.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int int2d[][] = new int[5][10];
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  Prints the last integer in the third row {\tt int2d} and
+assigns 100 to its last element.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+System.out.println(int2d[2][9]);
+int2d[4][9] = 100;
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Prints all of the elements of {\tt int2d}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = 0; k < int2d.length; k++) {
+     for (int j = 0; j < int2d[k].length; j++)
+         System.out.print( int2d[k][j] + " ");
+     System.out.println();    // new line
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A $52\; \times \;7$ two-dimensional array of {\tt int}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int sales[][] = new int[52][7];
+for (int k = 0; k < sales.length; k++)
+    for (int j= 0; j < sales[k].length; j++)
+        sales[k][j] = 0;
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A method to calculate average number of newspapers per week.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double avgWeeklySales(int arr[][]) {
+    double total = 0;
+    for (int k = 0; k < arr.length; k++)
+        for (int j= 0; j < arr[k].length; j++)
+            total += arr[k][j];
+    return total/52;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A  method to calculate average Sunday newspapers.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+double avgSundaySales(int arr[][]) {
+    double total = 0;
+    for (int k = 0; k < arr.length; k++)
+        total += arr[k][6];
+    return total/52;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item A {\tt compareTo()} for {\tt LetterFreq}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int compareTo(Object lf) {
+     LetterFreq  letFreq = (LetterFreq)lf;
+     if (freq < letFreq.getFreq())
+         return -1;
+     else if (freq > letFreq.getFreq())
+         return +1;
+     else return 0; //The frequencies must be equal.
+} //compareTo()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item A {\tt sort()} for {\tt AnalyzeFreq}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void sort() {
+     java.util.Arrays.sort(freqArr);
+} //sort()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item A new {\tt AnalyzeFreq.main()} that uses {\tt sort()}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String[] argv) {
+  AnalyzeFreq af = new AnalyzeFreq();
+  af.countLetters("Now is the time for all good students" +
+     " to study computer-related topics.");
+  af.sort();
+  af.printArray();
+} //main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{ANS}
+
+\secEXRHtwoleft{Exercises}
+
+\marginnote{\vspace{9pt}\raggedright{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+\begin{EXRtwo}
+%\addcontentsline{toc}{section}{Exercises}
+
+\item  Explain the difference between the following
+pairs of terms:
+
+\begin{EXRtwoLL}
+\item  An {\it element} and an element {\it type}.
+\item  A {\it subscript} and an {\it array element}.
+\item  A {\it one-dimensional} array and {\it two-dimensional} array.
+\item  An {\it array} and a {\it vector}.
+\item  A {\it insertion sort} and a {\it selection sort}.
+\item  A {\it binary search} and a {\it sequential search}.
+\end{EXRtwoLL}
+
+\item  Fill in the blanks.
+\begin{EXRtwoLL}\baselineskip=14pt
+\item  The process of arranging an array's elements into a
+particular order is known as  \rule{40pt}{0.5pt}\,.
+\item  One of the preconditions of the binary search method is that
+the array has to be  \rule{40pt}{0.5pt}\,.
+\item  An \rule{40pt}{0.5pt} is an object that can store a collection
+of elements of the same type.
+\item  An \rule{40pt}{0.5pt} is like an array except that it can grow.
+\item  For an array, its  \rule{40pt}{0.5pt} is represented by an instance
+variable.
+\item  An expression that can be used during array instantiation to assign
+values to the array is known as an  \rule{40pt}{0.5pt}\,.
+\item  A \rule{40pt}{0.5pt} is an array of arrays.
+\item  A sort method that can be used to sort different types of data
+is known as a \rule{40pt}{0.5pt} method.
+\item  To instantiate an array you have to use the \rule{40pt}{0.5pt} operator.
+\item  An array of objects stores \rule{40pt}{0.5pt} to the objects.
+\end{EXRtwoLL}
+
+\baselineskip=11pt\item  Make each of the following array declarations:
+\begin{EXRtwoLL}
+\item  A $4 \times 4$ array of {\tt double}s.
+\item  A $20 \times 5$ array of {\tt String}s.
+\item  A $3 \times 4$ array of {\tt char} initialized to `*';
+\item  A $2 \times 3 \times 2$ array of {\tt boolean} initialized to true.
+\item  A $3 \times 3$  array of {\tt Student}s.
+\item  A $2 \times 3$  array of {\tt String}s initialized to ``one,'' ``two,''
+and so on.
+\end{EXRtwoLL}
+
+\item Identify and correct the syntax error in
+each of the following expressions:
+\begin{EXRtwoLL}
+\item  \verb|int arr = new int[15];|
+\item  \verb|int arr[] = new int(15);|
+\item  \verb|float arr[] = new [3];|
+\item  \verb|float arr[] = new float {1.0,2.0,3.0};|
+\item  \verb|int arr[] = {1.1,2.2,3.3};|
+\item  \verb|int arr[][] = new double[5][4];|
+\item  \verb|int arr[][] = { {1.1,2.2}, {3.3, 1} };|
+\end{EXRtwoLL}
+
+
+\item  Evaluate each of the following expressions, some
+of which may be erroneous:
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[] = { 2,4,6,8,10 };
+\end{lstlisting}
+\end{jjjlisting}
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  \verb|arr[4]|
+\item  \verb|arr[ arr.length ]|
+\item  \verb|arr[ arr[0] ]|
+\item  \verb|arr[ arr.length / 2 ]|
+\item  \verb|arr[ arr[1] ]|
+\item  \verb|arr[ 5 % 2 ]|
+\item  \verb|arr[ arr[ arr[0] ] ]|
+\item  \verb|arr[ 5 / 2.0 ]|
+\item  \verb|arr[ 1 + (int) Math.random() ]|
+\item  \verb|arr[ arr[3] / 2 ]|
+\end{multicols}
+\end{EXRtwoLL}
+
+\item  What would be printed by the following code segment?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[] = { 24, 0, 19, 21, 6, -5, 10, 16};
+for (int k = 0; k < arr.length; k += 2)
+  System.out.println( arr[k] );
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  What would be printed by the following code segment?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[][] = { {24, 0, 19}, {21, 6, -5}, {10, 16, 3}, 
+                                           {1, -1, 0} };
+for (int j = 0; j < arr.length; j++)
+  for (int k = 0; k < arr[j].length; k++)
+    System.out.println( arr[j][k] );
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  What would be printed by the following code segment?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int arr[][] = { {24, 0, 19}, {21, 6, -5}, {10, 16, 3}, 
+                                           {1, -1, 0} };
+for (int j = 0; j < arr[0].length; j++)
+    for (int k = 0; k < arr.length; k++)
+        System.out.println(arr[k][j]);
+\end{lstlisting}
+\end{jjjlisting}
+
+
+\item  What's wrong with the following code segment,
+which is supposed to swap the values of the {\tt int}
+variables, {\it n1} and {\it n2}?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int temp = n1;
+n2 = n1;
+n1 = temp;
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Explain why the following method does
+not successfully swap the values of its two parameters?  Hint: Think
+about the difference between value and reference parameters.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void swapEm(int n1, int n2) {
+    int temp = n1;
+    n1 = n2;
+    n2 = temp;
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Declare and initialize an array to store the
+following two-dimensional table of values:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+1   2   3   4
+5   6   7   8
+9  10  11  12
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  For the two-dimensional array you created in
+the previous exercise, write a nested for loop to print the values in
+the following order: 1 5 9 2 6 10 3 7 11 4 8 12. That is, print the
+values going down the columns instead of going across the rows.
+
+\item  Define an array that would be suitable for
+storing the following values:
+
+\begin{EXRtwoLL}
+\item  The GPAs of 2,000 students.
+\item  The lengths and widths of 100 rectangles.
+\item  A week's worth of hourly temperature measurements,
+  stored so that it is easy to calculate the average daily temperature.
+\item  A board for a tic-tac-toe game.
+\item  The names and capitals of the 50 states.
+\end{EXRtwoLL}
+
+\item  Write a code segment that will compute the sum
+of all the elements of an array of {\tt int}.
+
+\item  Write a code segment that will compute the
+sum of the elements in a two-dimensional array of {\tt int}.
+
+\item  Write a method that will compute the average
+of all the elements of a two-dimensional array of {\tt float}.
+
+\item  Write a method that takes two parameters, an
+{\tt int} array and an integer, and returns the
+location of the last element of the array
+that is greater than or equal to the second parameter.
+
+\item  Write a program that tests whether
+a $3\; \times \;3$ array, input by the user, is a {\it magic
+square}. A magic square\index{square} is an $N\; \times\; N$ matrix of
+numbers in which every number from 1 to $N^2$ must appear just once,
+and every row, column, and diagonal must add up to the same total---for example,
+
+\begin{jjjlisting}
+\begin{lstlisting}
+6 7 2
+1 5 9
+8 3 4
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Revise the program in the previous exercise so that
+it allows the user to input the dimensions of the array,
+up to $4\; \times\; 4$.
+
+\item Modify the {\tt AnalyzeFreq} program so that it can display the
+relative frequencies of the 10 most frequent and 10 least frequent
+letters.
+
+\item  The {\it merge sort} algorithm takes two collections
+of data that have been sorted and merges them together.  Write a
+program that takes two 25-element {\tt int} arrays, sorts them, and
+then merges them, in order, into one 50-element array.
+
+\item  {\bf Challenge: } Design and implement a {\tt BigInteger}
+class that can add and subtract integers with up to 25 digits.   Your
+class should also include methods for input and output of the
+numbers.  If you're really ambitious, include methods for
+multiplication and division.
+
+\item  {\bf Challenge: } Design a data structure
+for this problem: As manager of Computer Warehouse, you want to
+track the dollar amount of purchases made by those clients that
+have regular accounts.   The accounts are numbered from {\tt 0, 1, \dots ,
+N}. The problem is that you don't know in advance how many purchases
+each account will have.  Some may have one or two purchases.  Others
+may have 50 purchases.
+
+\item  An {\it anagram} is a word made by rearranging the
+letters of another word.  For example, {\it act} is an
+anagram of {\it cat}, and {\it aegllry} is an anagram of
+{\it allergy}. Write a Java program that accepts two
+words as input and determines if they are anagrams.
+
+\item  {\bf Challenge:} An {\it anagram dictionary} is a dictionary that
+organizes words together with their anagrams.  Write a program that lets
+the user enter up to 100 words (in a {\tt TextField}, say). After
+each word is entered, the program should display (in a {\tt TextArea}
+perhaps) the complete anagram dictionary for the words entered.
+Use the following sample format for the dictionary.  Here the words
+entered by the user were:  {\it felt, left, cat, act, opt, pot, top.}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+act:  act cat
+eflt:  felt left
+opt:   opt pot top
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Acme Trucking Company has hired you
+to write software to help dispatch its trucks.  One important element
+of this software is knowing the distance between any two cities that
+it services.   Design and implement a {\tt Distance} class that stores
+the distances between cities in a two-dimensional array.   This class
+will need some way to map a city name, {\it Boise}, into an integer that
+can be used as an array subscript.  The class should also contain
+methods that would make it useful for looking up the distance between
+two cities.  Another useful method would tell the user the closest city
+to a given city.
+
+\item Rewrite the {\tt main()} method for the {\tt WordGuess} example so
+that it allows the user to input the number of players and whether each 
+players is a computer or a human. Use a {\tt KeyboardReader}.
+
+\item Write a smarter version of the {\tt WordGuesser} class that
+``knows'' which letters of the English language are most
+frequent. HINT: Rather than using random guesses, store the player's
+guesses in a string in order of decreasing frequency:
+"ETAONRISHLGCMFBDGPUKJVWQXYZ".
+
+\item Write a CLUI version of the {\tt SlidingTilePuzzle}. You will
+need to make modifications to the {\tt SlidingTilePuzzle} class. 
+
+
+\end{EXRtwo}
+%

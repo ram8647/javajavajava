@@ -1,0 +1,261 @@
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{\mbox{G.\arabic{table}}}%
+\renewcommand{\thefigure}{\mbox{G--\arabic{figure}}}%
+
+\chapter{Java Autoboxing and Enumeration}
+
+\markboth{{\color{cyan}APPENDIX\,G\,\,$\bullet$\,\,}Java Autoboxing and Enumeration}
+{{\color{cyan}APPENDIX\,G\,\,$\bullet$\,\,}Java Autoboxing and Enumeration}
+
+\noindent This appendix describes some basic properties of {\em autoboxing}
+and {\em enumeration}, two of the features added to the Java language
+with the release of Java 5.0.  As for many language features, there
+are details and subtleties involved in using these features that are
+not covered here.  For further details, you should consult Sun's
+online references or other references for a more comprehensive
+description.
+
+\section*{Autoboxing and Unboxing}
+\noindent {\bf Autoboxing} refers to the automatic storing of a value
+of primitive type into an object of the corresponding wrapper class.
+Before autoboxing, it was necessary to explicitly box values into wrapper 
+class objects with code like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Integer iObj = new Integer(345);
+double num = -2.345;
+Double  dObj = new Double(num);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Java 5.0 automatically creates a wrapper class object from a
+value of primitive type in many situations where a wrapper class object
+is expected.  The assignments above can be accomplished with the simpler code:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Integer iObj = 345;
+double num = -2.345;
+Double  dObj = num;
+\end{lstlisting}
+\end{jjjlisting}
+
+There is a corresponding feature in Java 5.0 which automatically performs 
+the {\bf unboxing} of primitive values from wrapper class objects.
+Instead of the explicit unboxing in:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int m = iObj.intValue();
+double x = dObj.doubleValue();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Java 5.0 allows the simpler:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int m = iObj;
+double x = dObj;
+\end{lstlisting}
+\end{jjjlisting}
+
+Java 5.0 provides autoboxing of primitive values and automatic unboxing of wrapper 
+class objects in expressions or in arguments of methods, where such a conversion
+is needed to complete a computation.  Beginning programmers are unlikely to
+encounter many problems that require such conversions.  One situation which often
+requires boxing and unboxing are applications that involve data structures.  The 
+generic type data structures of Chapter 16 must store objects but the data to
+be stored might be represented as values of a primitive type.  The code segment
+below should give you some idea of the type of situation where autoboxing and 
+unboxing can be a genuine help simplifying one's code: 
+ 
+\begin{jjjlisting}
+\begin{lstlisting}
+Stack<Integer> stack = new Stack<Integer>();
+for(int k = -1; k > -5; k--)
+    stack.push(k);
+while (!stack.empty())
+    System.out.println(Math.abs(stack.pop()));
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent  Notice that the {\tt stack.push(k)} method is expecting an
+{\tt Integer} object so the {\tt int} value stored in {\tt k} will be
+autoboxed into such an object before the method is executed.  Also note that
+the {\tt Math.abs()} method in the last line of the code fragment is
+expecting a value of primitive type so the {\tt  Integer} value returned
+by {\tt stack.pop()} must be automatically unboxed before the {\tt Math.abs()} 
+method can be applied.
+
+Sun's online Java 5.0 documentation can be consulted for a more precise description 
+of where autoboxing and unboxing takes place and a list of some special situations 
+where code allowing autoboxing can lead to confusion and problems.
+
+\section*{Enumeration}
+\noindent A new {\bf enumeration} construct was included in Java 5.0 to make 
+it simpler to represent a finite list of named values as a type. The
+{\bf enum} keyword was added as part of this construct. Standard
+examples of lists of values appropriate for enumerations are the days
+of the week, months of the year, the four seasons, the planets, the
+four suits in a deck of cards, and the ranks of cards in a deck of
+cards. The following declaration of {\tt Season} enumerated type is an
+example used by the Sun online documentation.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public enum Season {spring, summer, fall, winter}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Compiling a file that contains only this statement will create a
+{\tt Season.class} file that defines a Java type just in the same way
+that compiling class definitions does.  The variables and values of type
+{\tt Season} can be referred to in other classes just like other types and
+values. For example, the following statements are valid statements in 
+a method definition in another class:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Season s1 = winter;
+if (s1 == spring)
+    System.out.println(s1);    
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that the values of enumerated types can be used in 
+assignment  statements, equality relations, and it will be printed out exactly
+as declared in the {\tt enum} statement.
+
+The {\tt enum} declaration could also occur inside the definition of a
+class and be declared as either {\tt public} or {\tt private}. In this case the 
+visibility of the type would be determined in a manner similar to inner classes.
+
+A standard way to represent such a finite list of values in Java before the
+{\tt enum} construct was to create a list of constants of type {\tt int}.
+For example, if one wanted to represent the four seasons you would have to do 
+it inside a definition of a class, say of a class named {\tt Calendar}.
+Such a representation might look like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Calendar {
+    public static final int SPRING = 0;
+    public static final int SUMMER = 1;
+    public static final int FALL = 2;
+    public static final int WINTER = 3;
+    
+    // Other Calendar definitions
+    
+} // Calendar
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In addition to being a lengthier declaration, note that other classes 
+that wish to refer to this representation would have to use notation something like:
+ 
+\begin{jjjlisting}
+\begin{lstlisting}
+int s1 = Calendar.WINTER;
+if (s1 == Calendar.SPRING)
+    System.out.println(s1);    
+\end{lstlisting}
+\end{jjjlisting}
+ 
+\noindent In addition to being more awkward, note that the {\tt println()}
+call will print out an integer in this case.  Some additional code would have 
+to be written to be able to print the names of the seasons from the
+{\tt int} values used to represent them.  It is the case that for methods in the
+{\tt Calendar} class, the names of the constants look very much like the
+values of the {\tt enum} type.
+
+To illustrate a couple of additional advantages of the {\tt enum}
+structure, lets consider using the {\tt int} representation above in a method
+definition that describes the start date of a given season. Code for such a method
+would look something like:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+    public static String startDate(int s){
+        switch(s){
+        case SPRING : return "Vernal Equinox";
+        case SUMMER : return "Summer Solstice";
+        case FALL : return "Autumnal Equinox";
+        case WINTER : return "Winter Solstice";
+        } // switch
+        return "error";
+    } // startDate()   
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method has a problem referred to as not being {\bf typesafe}.
+We would want the {\tt startDate()} method to be called only with an
+argument equal to an {\tt int} value of 0, 1, 2,  or 3.  There is no
+way to tell the compiler to make sure that other {\tt int} values
+are not used as an argument to this method.
+
+Let's contrast this with a similar {\tt startDate()} method that
+can refer to the {\tt Season} enumerated type that was defined above. 
+The {\tt Calendar} class (Figure~G--1) shows the definition of 
+a {\tt startDate()} method as well as a method to print a list of 
+seasons with corresponding starting dates.
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+public class Calendar {
+    public static String startDate(Season s){
+        switch(s){
+        case spring : return "Vernal Equinox";
+        case summer : return "Summer Solstice";
+        case fall : return "Autumnal Equinox";
+        case winter : return "Winter Solstice";
+        } // switch
+        return "error";
+    } // startDate()
+ 
+    public static void printDates(){
+        for (Season s : Season.values())
+            System.out.println(s + " - " + startDate(s));
+    } // printDates()
+} // Calendar
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{A Calendar class using the {\tt Season}.
+\label{fig-calendar}\label{pg-fig-calendar}}
+\end{figure}
+Note that the parameter of {\tt startDate()} is of type {\tt Season}
+and so the Java compiler can check that call to this method have
+an argument of this type.  This time the {\tt startDate()} is typesafe.
+
+The {\tt printDates()} method illustrates another feature of the 
+enumeration structure.  The {\tt for} loop in this method is the 
+{\tt for-in} loop which was added to Java 5.0.  The expression
+{\tt Season.values()} denotes a list of the elements of the
+type in the order that they were declared.  The {\tt for-in} loop
+iterates through all the values of the type in the correct order and,
+in this case, prints out the type name followed by a dash followed
+by the {\tt String} computed by the {\tt startDate()} method. 
+The output when the {\tt printDates()} method is called is given below: 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+spring - Vernal Equinox
+summer - Summer Solstice
+fall - Autumnal Equinox
+winter - Winter Solstice
+\end{lstlisting}
+\end{jjjlisting}
+
+The {\tt for-in} loop provides a very nice way to iterate through the
+values of any enumerated type. You may wish to write a corresponding 
+method for the  earlier {\tt int} representation of the seasons for a
+comparison.
+
+Sun's online Java 5.0 documentation provides a more precise definition of 
+enumerated types and describes quite a number of other features that we
+have not alluded to.
+
+

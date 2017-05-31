@@ -1,0 +1,2755 @@
+%%%  Chapter 12: Recursive Problem Solving
+%%%  3rd Edition
+\setcounter{SSTUDYcount}{1}
+\setcounter{chapter}{11}
+\chapter{Recursive Problem Solving}
+\label{chapter-recursion}
+\label{pg-chapter-recursion}
+
+
+\CObegin
+\secCOBH{Objectives}
+
+\noindent After studying this chapter, you will
+
+\begin{COBL}
+\item  Understand the concept of recursion.
+\item  Know how to use recursive programming techniques.
+\item  Have a better understanding of recursion as a
+problem-solving technique.
+\end{COBL}
+
+\secCOLH{Outline}
+{\bf \large Outline}
+
+\begin{COL}
+\item {Introduction}
+\item {Recursive Definition}
+\item {Recursive String Methods}
+\item {Recursive Array Processing}
+\item {Example: Drawing (Recursive) Fractals}
+\item {Object-Oriented Design: Tail Recursion}
+\item {Object-Oriented Design: Recursion or Iteration?}
+\item[] {{\color{cyan}Special Topic:} Exploring the Mandelbrot Set}
+\item {From the Java Library: {\tt javax.swing.JComboBox}}
+\item[] {Java Language Summary}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+\end{COL}
+\COend
+
+
+\section{Introduction}
+\noindent The pattern in Figure~12.1 is known as the Sierpinski
+gasket.  Its overall shape is that of an equilateral triangle.  But
+notice how inside the outer triangle there are three smaller
+triangles that are similar to the overall pattern.  And inside each of
+those are three even smaller triangles, and so on.   The Sierpinski
+gasket is known as a {\it fractal} because when you divide it up, you
+end up with a smaller version of the overall pattern.  The overall
+gasket pattern is repeated over and over, at smaller and smaller
+scales, throughout the figure.
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr12/sierpinski1.eps}{The Sierpinski gasket.
+\label{fig-sierpinski1}\label{pg-fig-sierpinski1}}
+%\end{figure}
+%\end{figure}
+
+
+How would you draw this pattern?  If you try to use some kind of
+nested loop structure, you'll find that it is very challenging.   It
+can be done using loops, but it isn't easy.  On the other hand, if you
+use an approach known as {\it recursion}, this problem is much easier
+to solve.  It's a little bit like the representation issue we discussed
+%%%REWin Chapter~\ref{chapter-models}. Your ability to solve a problem often
+in Chapter~5. Your ability to solve a problem often
+depends on how you represent the problem.  Recursion gives you another
+way to approach problems that involve repetition, such as the problem
+of drawing the Sierpinski gasket.
+
+The main goal of this chapter is to introduce recursion as both a
+problem-solving technique and as alternative to loops
+%%%REW(Chapter~\ref{chapter-loops}) for implementing repetition.  We begin
+(which we discussed in Chapter~6) for implementing repetition.  We
+begin with the notion of a {\it recursive definition}, a concept used
+widely in mathematics and computer science.  We then introduce the
+idea of a {\it recursive method}, which is the way recursion is implemented
+in a program.  
+
+Recursion is a topic that is taken up in considerable detail in
+upper-level computer science courses, so our goal here is mainly to
+introduce the concept and give you some idea of its power as a
+problem-solving approach.  To illustrate recursion, we use a number of
+simple examples throughout the chapter.  One risk in using simple
+examples, though, is that you might be tempted to think that recursion
+is only good for ``toy problems.'' Nothing could be further from the
+truth.  Recursion is often used for some of the most difficult
+algorithms.  Some of the exercises at the end of the chapter are
+examples of more challenging problems.
+
+
+\subsection{Recursion as Repetition}
+\noindent A {\bf recursive method}\index{recursive method} is a method that calls itself.  An {\bf
+iterative method}\index{iterative method} is a method that uses a loop to repeat an action.  In
+one sense, {\it recursion} is an alternative to the iterative
+(looping) control structures we studied in
+%%%REWChapter~\ref{chapter-loops}.  In this sense, recursion is just another
+Chapter~6.  In this sense, recursion is just another
+way to repeat an action.
+
+For example, consider the following iterative method for
+%\begin{marginalnote}\it Iterative method\end{marginalnote}
+\marginnote{Iterative method}
+saying ``Hello'' {\it N} times:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void hello(int N)  {
+    for (int k = 0; k < N; k++)
+        System.out.println("Hello");
+} // hello()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent A recursive version of this method would be defined
+%\begin{marginalnote}\it Recursive method\end{marginalnote}
+\marginnote{Recursive method}
+as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void hello(int N)  {
+    if (N > 0) \verb!{!
+        System.out.println("Hello");
+        hello(N - 1);                // Recursive call
+} // hello()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method is recursive because it calls itself when {\it
+N} is greater than 0. However, note that when it calls itself, it
+passes $N-1$ as the value for its parameter.  If this method is
+initially called with {\it N} equal to 5, the following is a trace of
+what happens.  The indentations indicate each time the method calls
+itself:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+hello(5)
+    Print "Hello"
+    hello(4)
+        Print "Hello"
+        hello(3)
+            Print "Hello"
+            hello(2)
+                Print "Hello"
+                hello(1)
+                    Print "Hello"
+                    hello(0)
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Thus, ``Hello'' will be printed five times, just as
+it would be in the iterative version of this method.
+
+So, in one sense, recursion is just an alternative to iteration.  In
+fact, there are some programming languages, such as the original
+versions of LISP and PROLOG, that do not have loop structures.  In
+these languages, {\it all} repetition is done by recursion.  In
+contrast, if a language contains loop structures, it can do without
+recursion.  Anything that can be done iteratively can be done
+recursively, and vice versa.
+
+Moreover, it is much less efficient to call a method five times than to
+repeat a for loop five times.  Method calls take up more memory than
+loops and involve more {\bf computational overhead}\index{computational overhead}---for such tasks
+%\begin{marginalnote}\it Computational overhead\end{marginalnote}
+\marginnote{Computational overhead}
+as passing parameters, allocating storage for the method's local
+variables, and returning the method's results.   Therefore, because of
+its reliance on repeated method calls, recursion is often less
+efficient than iteration as a way to code a particular algorithm.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Efficiency.}{Iterative algorithms and
+methods are generally more efficient than recursive algorithms
+that do the same thing.}
+
+\pagebreak
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+\item  What would be printed if we call the following method with
+the expression {\tt mystery(0)}? 
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void mystery(int N) {
+    System.out.print(N + " ");
+    if (N <= 5)
+        mystery(N + 1);
+} // mystery()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent What about {\tt mystery(100)}?
+
+\item  What would be printed if we call the following method with
+the expression {\tt mystery(5)}?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void mystery(int N) {
+    System.out.print(N + " ");
+    if (N <= 5)
+        mystery(N - 1);
+} // mystery()
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+
+\subsection{Recursion as a Problem-Solving Approach}
+\noindent Given that recursion is not really necessary---if a
+programming language has loops---and is not more efficient than loops,
+why is it so important?  The answer is that, in a broader sense,
+recursion is an effective approach to problem solving.  It is a way of
+viewing a problem.  It is mostly in this sense that we want to study
+recursion.
+
+Recursion is based on two key problem-solving concepts: {\it
+divide and conquer}\index{divide and conquer} and {\bf
+self-similarity}\index{self-similarity}.  In recursive problem solving
+we use the divide-and-conquer strategy repeatedly to break a big
+problem into a sequence of smaller and smaller problems until we
+arrive at a problem that is practically trivial to solve.
+
+What allows us to create this series
+%\begin{marginalnote}\it Subproblems\end{marginalnote}
+\marginnote{Subproblems}
+of subproblems is that each
+subproblem is similar to the original problem---that is, each
+subproblem is just a smaller version of the original problem.   Look
+again at the task of saying ``Hello'' {\it N} times.  Solving this task
+involves solving the similar task of saying ``Hello'' $N-1$ times,
+which can be divided into the similar task~of saying ``Hello'' $N-2$
+times.  And so on.
+
+The ability to see a problem as being composed of smaller,
+self-similar problems is at the heart of the recursive approach.  And
+%\begin{marginalnote}\it Self-similarity\end{marginalnote}
+\marginnote{Self-similarity}
+although you might not have thought about this before, a surprising
+number of programming problems have this self-similarity
+characteristic.   Let's illustrate these ideas with some simple
+examples.
+
+
+\JavaTIP{PROGRAMMING TIP}{Divide and Conquer.}{Many programming problems
+can be solved by dividing them into smaller, simpler problems.   For
+recursive solutions, finding the key to the subproblem often holds
+the solution to the original problem.}
+
+\section{Recursive Definition}
+\noindent One place you might have already seen recursion is in
+mathematics.  A {\bf recursive definition}\index{recursive definition}
+consists of two parts: a recursive part in which the {\it n}th value
+is defined in terms of the $(n-1)$st value, and a nonrecursive, {\em
+boundary} or {\bf base case}, which defines a limiting condition.
+
+\subsection{Factorial: {\it N}!}
+\noindent For example, consider the problem of calculating the
+factorial\index{factorial} of {\it n}---that is, {\it n}! for $n
+\geq 0$. As you may recall, {\it n}! is calculated as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+n! = n * (n-1) * (n-2) * ... * 1, for n > 0
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In addition, 0! is defined as 1. Let's now look at some
+examples for different values of {\it n}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+4! = 4 * 3 * 2 * 1 = 24
+3! = 3 * 2 * 1 = 6
+2! = 2 * 1 = 2
+1! = 1
+0! = 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As these examples suggest, {\it n}! can always be calculated
+in terms of $(n-1)$!  This relationship might be clearer if we rewrite
+the previous calculations as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+4! = 4 * 3 * 2 * 1 = 4 * 3! = 24
+3! = 3 * 2 * 1     = 3 * 2! = 6
+2! = 2 * 1         = 2 * 1! = 2
+1!                 = 1 * 0! = 1
+0!                 = 1
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The only case in which we can't calculate {\it n}! in terms of
+$(n-1)$! is when {\it n} is 0. Otherwise, in each case we see that
+
+\begin{jjjlisting}
+\begin{lstlisting}
+n! = n * (n-1)!
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This leads to the following recursive definition:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+n! = 1          if n = 0    // Boundary (or base) case
+n! = n * (n-1)! if n > 0    // Recursive case
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent   Note
+that if we had omitted the base case, the recursion would have
+continued to $(-1)$! and $(-2)$! and so on.
+
+
+\JavaTIP[false]{DEBUGGING TIP}{Bounding the Repetition.}{An infinite repetition
+will result if a recursive definition is not properly bounded.}
+
+\noindent The recursive\index{recursion, recursive case} case uses
+divide and conquer to break the problem into a smaller problem, but
+the smaller problem is just a smaller version of the original
+problem.  This combination of self-similarity and divide and conquer is
+what characterizes recursion.  The base\index{recursion, base case}
+case is used to stop or limit the recursion.
+
+\JavaTIP{EFFECTIVE DESIGN}{Recursive Definition.}{For recursive
+algorithms and definitions, the base case serves as the bound for the
+algorithm.  The {\bf recursive case}\index{recursive case} defines the
+{\it n}th case in terms of the $(n-1)$st case.}
+
+
+\subsection{Drawing a Nested Pattern}
+%%%\marginnote{Self-similarity}
+\noindent As another example, consider the problem of drawing the nested boxes
+pattern in Figure~12.2. The self-similarity occurs in the
+fact that for this pattern, its parts resemble the
+whole.  The basic shape involved is a square, which is repeated over
+and over at an ever-smaller scale.  A recursive definition for this
+\marginfig{chptr12/boxes.eps}{The nested squares pattern.
+\label{fig-boxes}\label{pg-fig-boxes}}
+pattern would be
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Base case:      if side < 5 do nothing
+Recursive case: if side >= 5
+                  draw a square
+                  decrease the side and draw a smaller 
+                             pattern inside the square
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This definition uses the length of the square's side
+to help define the pattern.  If the length of the side is greater than or
+equal to 5, draw a square with dimensions $side \times side$. Then
+decrease the length of the side and draw a smaller version of the
+%%%\marginnote{Smaller subpattern}
+pattern inside that square.  In this case, the {\it side} variable will
+decrease at each level of the drawing.  When the length of the side
+becomes less than 5, the recursion stops.  Thus, the length of the side
+serves as the limit or bound for this algorithm.
+
+You should note that the length of the side functions here like a
+%\begin{marginalnote}\it The side as a parameter\end{marginalnote}
+%%%\marginnote{\vspace{-12pt}The side as a parameter}
+parameter in a method definition: It provides essential information
+for the definition, just as a method parameter provides essential data
+to the method.  Indeed, this is exactly the role that parameters play
+in recursive methods.  They provide essential information that
+determines the method's behavior.
+
+\pagebreak
+Figure~12.3 illustrates how we would apply the definition.
+\marginfig{chptr12/nestedbox.eps}{A trace of the nested boxes
+definition starting with a side of 20 and decreasing the
+side by 5 each time.
+\label{fig-nestedbox2}\label{pg-fig-nestedbox2}}
+Suppose the side starts out at 20 and decreases by 5 at each level of
+recursion.  Note that as you move from top to bottom across the four
+patterns, each pattern contains the one below it.  A {\tt
+nestedBoxes(20)} can be drawn by first drawing a $20 \times 20$ square
+and then drawing a {\tt nestedBoxes(15)} pattern inside it.
+Similarly, a {\tt nestedBoxes(15)} can be drawn by first drawing a $15
+\times 15$ square and then drawing a {\tt nestedBoxes(10)} pattern
+inside it.  And so on.
+
+These examples illustrate the power of recursion\index{recursion} as a
+%\begin{marginalnote}\it Recursive vs.  iterative bound\end{marginalnote}
+%´´´\marginnote{\vspace{6pt}Recursive vs.  iterative bound}
+problem-solving technique for situations that involve repetition.
+Like the iterative (looping) control structures we studied in
+%%%REWChapter~\ref{chapter-loops}, recursion is used to implement repetition
+Chapter~6, recursion is used to implement repetition
+within a bound.   For recursive algorithms, the bound is defined by the
+base case, whereas for loops, the bound is defined by the loop's entry
+condition.   In either case, repetition stops when the bound is
+reached.
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  You can calculate $2^n$ by multiplying 2 by itself {\it n} times.
+For example, $2^3$ is $2 \times 2 \times 2$. Note also
+that $2^0=1$. Given these facts, write a recursive definition
+for $2^n$, for $n \geq 0$.
+
+
+\item  Generalize your solution to the previous exercise by giving
+a recursive definition for $x^n$, where $x$ and $n$ are both
+integers $\geq 0$.
+
+
+\item  Is the recursive definition given earlier for the nested boxes
+equivalent to the following recursive definition?  Explain.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Draw a square.         // in every case
+If side > 5
+    draw a smaller nested boxes inside the square
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, the base case $(side <= 5)$ is implicit.
+
+
+\item  Write a recursive definition for the recursive pattern shown in
+Figure~12.4.
+
+
+\JavaTIP{DEBUGGING TIP}{Infinite Recursion.}{An unbounded or incorrectly
+bounded recursive algorithm will lead to infinite repetition.  Care
+must be taken to get the bound right.}
+
+\end{SSTUDY}
+%%\marginfigvspace{-80pt}{chptr12/circlebox.eps}{Write a
+
+
+\section{Recursive String Methods}
+\noindent Remember that a {\em recursive method} is a method that
+calls itself.  Like recursive definitions, recursive methods are
+designed around the divide-and-conquer and self-similarity principles.
+Defining a recursive method involves a similar analysis to the one we
+used in designing recursive definitions.  We identify a self-similar
+subproblem of the original problem plus one or more limiting cases.
+
+The idea of a method calling itself seems a bit strange at first.  It's
+\marginfig{chptr12/circlebox.eps}{Write a
+recursive definition for this pattern.
+\label{fig-exercise}\label{pg-fig-exercise}}
+perhaps best understood in terms of a clone or a copy.  When a method
+calls itself, it really calls a copy of itself, one that has a
+slightly different internal state.  Usually the difference in state is
+the result of a difference in the invoked method's parameters.
+\marginnote{How can a method call itself?}
+
+\subsection{Printing a String}
+\noindent To illustrate the concept of a recursive method, let's define a
+recursive method for printing a string.  This is not intended to be a
+practical method---we already have the {\tt println()} method for
+printing strings.   But pretend for a moment that you only have a
+version of {\tt println()} that works for characters, and your task is
+to write a version that can be used to print an entire string of
+characters.
+
+A little terminology will help us describe the algorithm.  Let's call
+the first letter of a string the {\it head} of the string, and let's
+refer to all the remaining letters in the string as the {\it tail} of
+the string.  Then the problem of printing a string can be solved using
+a {\bf head-and-tail algorithm}\index{head-and-tail algorithm}, 
+\marginnote{Head-and-tail algorithm}
+which consists of two parts: printing
+the head of the string and recursively printing its tail.  The
+limiting case here is when a string has no characters in it.  It's
+trivial to print the empty string---there is nothing to print!  This
+leads to the method definition shown in Figure~\ref{fig-printstring}.
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * printString() prints each character of the string s
+  * Pre: s is initialized (non-null)
+  * Post: none
+  */
+public void printString(String s) {
+    if (s.length() == 0)
+        return;                  // Base case: do nothing
+    else {        // Recursive case: 
+        System.out.print(s.charAt(0)); // Print head
+        printString(s.substring(1));   // Print tail
+    }
+} // printString()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The recursive {\tt printString()} method.
+\label{fig-printstring}\label{pg-fig-printstring}}
+\end{figure}
+
+The base case here provides a limit and bounds the recursion
+when the length of {\it s} is 0---that is, when the string is
+empty.  The recursive case solves the problem of printing {\it s} by
+solving the smaller, self-similar problem of printing a substring of
+{\it s}.  Note that the recursive case makes progress toward the
+limit.  On each recursion, the tail will get smaller and smaller until it
+becomes the empty string.
+
+\JavaTIP{EFFECTIVE DESIGN}{Recursive Progress.}{In a recursive algorithm,
+each recursive call must make progress toward the bound, or base case.}
+
+\noindent Let's now revisit the notion of a method\index{method call, recursive}
+%\begin{marginalnote}\it Recursive call\end{marginalnote}
+\marginnote{Recursive call}
+calling itself.  Obviously this is what happens in the recursive case,
+but what does it mean---what actions does this lead to in the
+program?  Each recursive call to a method is really a call to a {\it
+copy} of that method, and each copy has a slightly different internal
+state.  We can define {\tt printString()}'s internal state completely
+in terms of its recursion parameter, {\it s}, which is the string that's being
+printed.  A {\bf recursion parameter}\index{recursion parameter} is a parameter whose value is
+used to control the progress of the recursion.   In this case, if
+{\it s} differs in each copy, then so will {\tt s.substring(1)} and
+{\tt s.charAt(0)}.
+
+\JavaTIP{EFFECTIVE DESIGN}{Recursion and Parameters.}{Recursive methods
+use a recursion parameter to distinguish between self-similar
+instances of the method call.  The parameter controls the progress of
+the recursion toward its bound.}
+
+Figure~\ref{fig-traceprint} illustrates the sequence of recursive
+method calls and the output that results when
+\begin{figure}[htb]
+\figa{chptr12/traceprint.eps}{A recursive method call invokes a copy
+of the method, each with a slightly different internal state.  As
+this is done repeatedly, a stack of method calls is created.
+\label{fig-traceprint}\label{pg-fig-traceprint}}
+\end{figure}
+{\tt printString("hello")} is invoked.  Each box represents a separate
+instance of the {\tt printString()} method, with its own internal
+\marginnote{Self-similar instances} state.  In this illustration, its
+state is represented by its parameter, {\tt s}.  Because each instance
+has a different parameter, behaviors differ slightly. Each box shows
+the character that will be printed by that instance ({\tt
+s.charAt(0)}), and the string that will be passed on to the next
+instance ({\tt s.substring(1)}).
+
+\JavaTIP[false]{DEBUGGING TIP}{Off-by-One Error.}{The expressions {\tt s.charAt(0)}
+and {\tt s.substring(1)} will generate exceptions if {\it s} is the
+empty string.}
+
+\noindent The arrows represent the method calls and returns.  Note that the
+first {\tt return} executed is the one in the base case.  Each
+instance of the method must wait for the instance it called to return
+before it can return.  That's why the instances ``pile up'' in a
+cascade-like structure.  The arrowless lines trace the order in which
+the output is produced.
+
+
+Each instance of {\tt printString()} is similar to the next in that
+each will print one character and then pass on a substring, but each
+performs its duties on a different string.  Note how the string, the
+recursion parameter in this case, gets smaller in each instance of
+{\tt printString()}.  \marginnote{Progress toward the bound} This
+represents progress toward the method's base case {\tt s.length() ==
+0}.  When the empty string is passed as an argument, the recursion
+will stop.  If the method does not make progress toward its bound in
+this way, the result will be an infinite recursion.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Bounding the Recursion.}{For recursive
+algorithms, the  recursion parameter is used to express the
+algorithm's bound or base case. In order for the algorithm to
+terminate, each recursive call should make progress toward the bound.}
+
+\noindent Note also the order in which things are done in this method.
+First {\tt s.charAt(0)} is printed, and then {\tt s.substring(1)} is
+%\begin{marginalnote}\it Self-similarity\end{marginalnote}
+\marginnote{Self-similarity}
+passed to {\tt printString()} in the recursion.  This is a typical
+structure for a head-and-tail algorithm. What makes this work is
+that the tail is a smaller, self-similar version of the original
+structure.
+
+\JavaTIP{EFFECTIVE DESIGN}{Head-and-Tail Algorithm.}{Many recursive solutions
+involve breaking a sequential structure, such as a string or an array,
+into its head and tail. An operation is performed on the
+head, and the algorithm recurses on the tail.}
+
+\pagebreak
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  What would be printed by the following 
+version of the {\tt printString2()}
+method, if it is called with {\tt printString2("hello")}?
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void printString2(String s)  {
+ if (s.length() == 1)
+   System.out.print(s.charAt(0));         // Base case:
+ else {
+                           // Print last char
+   System.out.print(s.charAt(s.length() - 1)); 
+                          // Print rest of string
+   printString2(s.substring(0, s.length() - 1));  
+ }
+} // printString2()
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{SSTUDY}
+
+\subsection{Printing the String Backward}
+\noindent What do you suppose would happen if we reversed the order of the
+statements in the {\tt printString()} method? That is, what
+if the recursive call came before {\tt s.charAt(0)} is printed, as
+in the following method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * printReverse() prints each character s in reverse order
+  * Pre: s is initialized (non-null)
+  * Post: none
+  */
+public void printReverse(String s) {
+  if (s.length() > 0) {      // Recursive case:
+     printReverse(s.substring(1));  // Print tail
+     System.out.print(s.charAt(0)); // Print first char
+  }
+} // printReverse()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent As its name suggests, this method will print the string in
+reverse order.  The trace in Figure~\ref{fig-tracerevprint} shows how
+\begin{figure}[h]
+\figaleft{chptr12/printreverse.eps}{A trace of {\tt print\-Reverse(s)}, which
+prints its string argument in reverse order.
+\label{fig-tracerevprint}\label{pg-fig-tracerevprint}}
+\end{figure}
+this works.  Before {\tt printReverse("hello")} can print {\it h}, it calls
+{\tt printReverse("ello")} and must wait for that call to complete its
+execution and return.  But {\tt printReverse("ello")} calls
+{\tt printReverse("llo")} and so must wait for that call to complete its
+execution and return.
+
+
+
+This process continues until {\tt printReverse("")} is called.  While
+the base case is executing, the other five instances of
+{\tt printReverse()} must each wait for the instance that they called to
+complete its execution.  It is only after the base case returns, that
+{\tt printReverse("o")} can print its first character and return.   So
+the letter {\it o} will be printed first.  After {\tt printReverse("o")}
+has returned, then {\tt printReverse("lo")} can print its first
+character.  So the letter {\it l} will be printed next, and so on, until the
+original call to {\tt printReverse("hello")} is completed and
+returns.  Thus, the string will be printed in reverse order.
+
+
+Note that the method call and return structure in this example follows
+%\begin{marginalnote}\it Last-in--first-out protocol\end{marginalnote}
+a {\bf last-in--first-out (LIFO) protocol}\index{last-in--first-out (LIFO) protocol}. 
+\marginnote{Last-in--first-out protocol}
+That is, the last method
+called is always the first method to return.  This is the protocol used
+by all method calls, recursive or otherwise.
+
+\JavaRule[false]{LIFO.}{All programming languages, including Java,
+use a last-in-first-out protocol for procedure call and return.}
+
+\noindent For example, compare the order in which things happen in
+%\begin{marginalnote}\it Method call stack\end{marginalnote}
+Figure~\ref{fig-tracerevprint} with the method stack trace in
+%%%REWFigure~\ref{fig-methodstack}. The only real difference between the two
+Figure~10.12. The only real difference between the two
+figures is that here the method stack is represented as growing
+%%%REWdownward, whereas in Figure~\ref{fig-methodstack} it grows upward.
+downward, whereas in Figure~10.12 it grows upward.
+As each method call is made, a representation of the method call is
+placed on the {\em method call stack}. 
+\marginnote{Method call stack}
+When a method returns, its
+block is removed from the top of the stack.  The only difference
+between recursive and nonrecursive method calls is that recursive
+methods call instances of the same method definition.   Of course, as
+we've seen, the instances are all slightly different from each other.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Write a recursive method called {\tt countDown()} that takes
+a single {\tt int} parameter, $N \geq 0$, and prints a countdown,
+such as ``5, 4, 3, 2, 1, blastoff.'' In this case, the
+method would be called with {\tt countDown(5)}.
+
+
+\item  Revise the method in the previous exercise so that when it's
+called with {\tt countDown(10)}, it will print ``10 8 6 4 2 blastoff'';
+if it's called with {\tt countDown(9)}, it prints ``9 7 5 3 1 blastoff.''
+
+\end{SSTUDY}
+
+\subsection{Counting Characters in a String}
+\noindent Suppose you're writing an encryption program and you need to count the
+%\begin{marginalnote}\it Problem statement\end{marginalnote}
+\marginnote{Problem statement}
+frequencies of the letters of the alphabet.  Let's write a recursive
+method for this task.
+
+This method will have two parameters: a {\tt String} to store the
+string that will be processed and a {\tt char} to store the
+target character---the one we want to count.   The method should
+return an {\tt int}, representing the number of occurrences of the
+target character in the string:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ // Goal: count the occurrences of ch in s
+ public int countChar(String s, char ch) {
+     ...
+ }
+\end{lstlisting}
+\end{jjjlisting}
+
+Here again our analysis must identify a recursive step that breaks the
+problem into smaller, self-similar versions of itself, plus a base
+case or limiting case that defines the end of the recursive process.
+Because the empty string will contain no target characters, we can use
+%\begin{marginalnote}\it Base case\end{marginalnote}
+\marginnote{Base case}
+it as our base case.  So, if it is passed the empty string,
+ {\tt countChar()} should just return 0 as its result.
+
+For the recursive case, we can divide the string into its head and
+%\begin{marginalnote}\it Recursive case\end{marginalnote}
+\marginnote{Recursive case}
+tail.  If the head is the target character, then the number of
+occurrences in the string is (1 + the number of occurrences in its
+tail). If the head of the string is not the target character, then the
+number of occurrences is (0 + the number of occurrences in its tail).  Of
+course, we'll use recursion to calculate the number of occurrences in the
+tail.
+
+
+This analysis leads to the recursive method shown in
+Figure~\ref{fig-countch}. Note that for both recursive cases the
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * Pre:  s is a non-null String, ch is any character
+  * Post: countChar() == the number of occurrences of ch in str
+  */
+public int countChar(String s, char ch) {
+ if (s.length() == 0)    // Base case: empty string
+   return 0;
+ else if (s.charAt(0) == ch)  // Recursive case 1
+   return 1 + countChar(s.substring(1), ch); // Head = ch
+ else                         // Recursive case 2
+   return 0 + countChar(s.substring(1), ch); // Head != ch
+} // countChar()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The recursive {\tt count\-Char()} method.
+\label{fig-countch}\label{pg-fig-countch}}
+\end{figure}
+same recursive call is used.  In both cases we pass the tail of the
+original string, plus the target character.  Note also how the
+return statement is evaluated:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+return 1 + countChar(s.substring(1),ch); // Head = ch
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Before the method can return a value, it must receive the
+result of calling {\tt countChar(s.substring(1),ch)} and add it to
+%\begin{marginalnote}\it Evaluation order is crucial\end{marginalnote}
+\marginnote{Evaluation order is crucial}
+1. Only then can a result be returned to the calling method.   This
+leads to the following evaluation sequence for
+{\tt countChar("dad",'d')}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+countChar("dad",'d');
+1 + countChar("ad",'d');
+1 + 0 + countChar("d",'d');
+1 + 0 + 1 + countChar("",'d');
+1 + 0 + 1 + 0 = 2              // Final result
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this way, the final result of calling {\tt
+countChar("dad",'d')} is built up recursively by adding together the
+partial results from each separate instance of {\tt countChar()}. The
+evaluation process is shown graphically in Figure~12.9.
+
+\begin{figure}[htb]
+\figaleft{chptr12/tracecount.eps}{A trace of
+{\tt countChar("dad",'d')}, which
+returns the value 2.
+\label{fig-tracecount}\label{pg-fig-tracecount}}
+\end{figure}
+
+\JavaTIP[false]{DEBUGGING TIP}{Return Type.}{A common error with nonvoid
+recursive algorithms is forgetting to make sure that those return
+statements that contain a recursive call yield the correct data type.}
+
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Here's a numerical problem.  Write a recursive method to compute
+the sum of 1 to {\it N}, given {\it N} as a parameter.
+
+\end{SSTUDY}
+
+\subsection{Translating a String}
+\noindent A widely used string-processing task is to convert one string into
+another string by replacing one character with a substitute throughout
+the string.  For example, suppose we want to convert a Unix path name,
+%\begin{marginalnote}\it Problem statement\end{marginalnote}
+which uses the forward slash ``/'' to separate one part of the path from
+another, into a Windows path name, which uses the backslash character
+\marginnote{Problem statement}
+``$\backslash$'' as a separator.   For example, we want a method
+that can translate the following two strings into one another:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+/unix_system/myfolder/java
+\Windows_system\myfolder\java
+\end{lstlisting}
+\end{jjjlisting}
+
+Thus, we want a method that takes three parameters: a {\tt String},
+on which the conversion will be performed, and two {\tt char}
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design}
+variables, the first being the original character in the string and
+the second being its substitute.   The precondition for this method is
+simply that each of these three parameters has been properly
+initialized with a value.  The postcondition is that all occurrences of
+the first character have been replaced by the second character.
+
+As in our previous
+%\begin{marginalnote}\it Head-and-Tail Algorithm\end{marginalnote}
+\marginnote{Head-and-tail algorithm}
+string-processing methods, the limiting case in
+this problem is the empty string, and the recursive case will divide
+the string into its head and its tail.  If the head is the character we
+want to replace, we concatenate its substitute with the result we
+obtain by recursively converting its tail.
+
+
+This analysis leads to the definition shown in
+%%%REWFigure~\ref{fig-convert}. This method has more or less the same head
+Figure~12.10. This method has more or less the same head
+and tail structure as the preceding example.  The difference is that
+here the operation we perform on the head of the string is
+concatenation rather than addition.
+
+\begin{figure}[htb]
+\jjjprogstart
+\begin{jjjlistingleft}[29pc]{-3pc}
+\begin{lstlisting}
+ /**
+  * Pre:  str, ch1, ch2 have been initialized
+  * Post: the result contains a ch2 everywhere that ch1 
+  *       had occurred in str
+  */
+public static String convert(String str, char ch1, char ch2) {
+ if (str.length() == 0)         // Base case: empty string
+   return str;
+ else if (str.charAt(0) == ch1) // Recursive 1: ch1 at head
+                                // Replace ch1 with ch2
+   return ch2 + convert(str.substring(1), ch1, ch2); 
+ else                       // Recursive 2: ch1 not at head
+   return str.charAt(0) + convert(str.substring(1), ch1, ch2);
+} // convert()
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The {\tt convert()} method replaces one character with another
+in a string.
+\label{fig-convert}\label{pg-fig-convert}}
+\end{figure}
+
+The base case is still the case in which {\tt str} is the empty
+string.  The first recursive case occurs when the character being
+replaced is the head of {\tt str}. In that case, 
+its substitute ({\tt ch2}) is concatenated with the result of
+converting the rest of the string and returned as the result.   The second recursive case occurs
+when the head of the string is {\it not} the character being
+replaced.  In this case, the head of the string is simply concatenated
+with the result of converting the rest of the
+string.  Figure~\ref{fig-traceconvert} shows an example of its
+execution.
+
+\begin{figure}[h!]
+\figaleft{chptr12/traceconvert.eps}{A trace of {\tt convert("bad",'d','m')},
+which returns ``bam.''
+\label{fig-traceconvert}\label{pg-fig-traceconvert}}
+\end{figure}
+
+\pagebreak
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item Write a recursive method that changes
+each blank in a string into two consecutive blanks, leaving the rest
+of the string \mbox{unchanged.}
+
+\end{SSTUDY}
+
+\subsection{Printing all Possible Outcomes when Tossing N Coins}
+
+\noindent Suppose that a student who is studying probability wishes to have a Java 
+program that, for any positive integer $N$, will print out a list of all possible 
+outcomes when $N$ coins are tossed.  For purposes of analyzing the problem, it is 
+assumed that the coins are numbered $1$ through $N$ and that they are tossed one 
+at a time.  An outcome will be represented by a string of {\tt H}s and {\tt T}s 
+corresponding to heads and tails.  Thus, if $N = 2$, the string {\tt HT}  represents 
+a head on the first  coin and a tail on the second coin.  What we need is a method 
+\marginnote{A coin tossing experiment}
+which, when given the number of coins, will print out all strings of this type.  
+In case of two coins the output should be:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+HH
+HT
+TH
+TT
+\end{lstlisting}
+\end{jjjlisting}
+
+Let's devise a strategy, given any positive integer $N$, for printing the strings 
+\marginnote{Designing a recursive algorithm}
+that correspond to all possible outcomes when tossing $N$ coins. Clearly, for $N = 1$, 
+the method needs to print an {\tt H} on one line and a {\tt T} on the next line.  For 
+an arbitrary number of coins $N$, one way to generate all outcomes is to think of 
+two kinds of strings---those that start with an {\tt H} and those that start with a {\tt T}.  
+The strings that start with {\tt H} can be generated by inserting an {\tt H} in front of 
+each of the outcomes that occur when $N-1$ coins are tossed.  The strings beginning with 
+{\tt T} can be generated in a similar manner.  Thus, using the outcomes for two coins 
+above, we know that the outcomes for three coins for which the first coin is {\tt H} are:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+HHH
+HHT
+HTH
+HTT
+\end{lstlisting}
+\end{jjjlisting}
+
+Using an argument similar to the one above, we can generalize this to
+a description of the recursive case for an algorithm. We want an
+algorithm that generates all those outcomes for $N$ coins where we are
+given a string {\tt STR} representing one particular outcome for all
+but the last $K$ coins where $0 < K <= N$.  To print out all such
+outcomes, just print all 
+outcomes with a fixed outcome corresponding to {\tt STR + "H"} for all
+but the last $K - 1$ coins and then print all outcomes with the fixed
+outcome {\tt STR + "T"} for all but the last $K - 1$ coins.  The base
+case is the special case $K = 1$ when you just need {\tt STR
++ "H"} on one line and  {\tt STR + "T"} on the next.  If you
+start the algorithm with {\tt STR = ""} and $K = N$, this algorithm
+will print out all the outcomes for tossing $N$ coins.
+
+To translate this into Java code we can create a class called CoinToss
+which has a single static method called {\tt printOutcomes(String
+str,int N)}. The above recursive description easily translates into
+code for the method in Figure~\ref{fig-cointoss}.
+
+\begin{figure}[htb] 
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+ * printOutcomes(str, N) prints out all possible outcomes  
+ * beginning with str when N more coins are tossed.
+ * Pre: str is a string of Hs and Ts.
+ * Pre: N is a positive integer.
+ * Post: none
+ */
+ public static void printOutcomes(String str,int N){
+     if (N == 1){ // The base case
+         System.out.println(str + "H");
+         System.out.println(str + "T");
+     } else {  // The recursive case
+         printOutcomes(str + "H", N - 1);
+         printOutcomes(str + "T", N - 1);
+     } //else
+}// printOutcomes()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The method {\tt printOutcomes()} prints all outcomes given the
+results on some initial coins.
+\label{fig-cointoss}\label{pg-fig-cointoss}}
+\end{figure}
+
+To print out all outcomes when tossing, say, seven coins, just make the 
+method call {\tt CoinToss.printOutcomes("",7)}.  This particular call would 
+generate the desired output:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+HHHHHHH
+HHHHHHT
+.......
+TTTTTTH
+TTTTTTT
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent To better understand how the recursive method definition generates
+its output, it might be helpful to trace the order of recursive calls and
+output to {\tt System.out} that occurs when executing {\tt printOutcomes("",3)}
+as shown in Figure~12.13.
+
+Notice that the recursive case in the method implementation makes two
+\marginfig{chptr12/cointoss.eps}{The order in which the recursive calls and 
+output occur when {\tt printOutcomes("",3)} is executed.
+\label{fig-cointoss2}\label{pg-fig-cointoss2}}
+calls to itself and as a result it is not so clear how this method
+would be written using a loop instead of recursion.  This example is
+more typical of the type of problem for which a recursive method is
+shorter and clearer than a method that solves the same problem without
+using recursion.
+
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Modify the above  {\tt printOutcomes()} method 
+so that it will print out all possible outcomes when a chess player plays a series 
+of $N$ games.  The outcome of each game is to be represented by a {\tt W}, {\tt L}, 
+or {\tt D} corresponding to the player winning, losing, or drawing the game.
+\end{SSTUDY}  
+
+\pagebreak
+\section{Recursive Array Processing}
+
+\noindent Like strings, arrays also have a recursive structure.  Just as each
+substring of a string is similar to the string as a whole, each
+portion of an array is similar to the array as a whole.  Similarly,
+just as a string can be divided into a head and a tail, an array can
+be divided into its {\it head}, the first element, and its {\it tail},
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr12/headtail.eps}{An array of {\tt int} is a recursive
+structure whose tail is similar to the array as a whole.
+\label{fig-headtail}\label{pg-fig-headtail}}
+%\end{graphic}
+%\end{figure}
+the rest of its elements (Fig.~12.14). Because the tail
+of an array is itself an array, it satisfies the self-similarity
+principle.  Therefore, arrays have all the appropriate characteristics
+that make them excellent candidates for recursive processing.
+
+
+\subsection{Recursive Sequential Search}
+\noindent Let's start by developing a recursive version of the sequential
+search algorithm that we discussed in Chapter~9.
+Recall that the sequential search method takes two parameters:
+%\begin{marginalnote}\it Method design\end{marginalnote}
+\marginnote{Method design} the array being searched and the {\it key},
+or target value, being searched for.  If the key is found in the
+array, the method returns its index.  If the key is not found, the
+method returns $-1$, thereby indicating that the key was not contained
+in the array.  The iterative version of this method has the following
+general form:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * Performs a sequential search of an integer array
+  * @param arr is the array of integers
+  * @param key is the element being searched for
+  * @return the key's index is returned if the key is
+  *  found otherwise -1 is returned
+  * Pre:  arr is not null
+  * Post: either -1 or the key's index is returned
+  */
+public int sequentialSearch(int arr[], int key) {
+    return -1;           // failure if this is reached
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+If we divide the array into its head and tail, then one way to
+describe a recursive search algorithm is as follows:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+If the array is empty, return -1
+If the array's head matches the key, return its index
+If the array's head doesn't match the key,
+ return the result of searching the tail of the array
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This algorithm clearly resembles the approach we used
+in recursive string processing: Perform some operation on the head of
+the array and recurse on the tail of the array.
+
+The challenge in developing this algorithm is not so much knowing what
+%\begin{marginalnote}\it How do we represent head-and-tail?\end{marginalnote}
+\marginnote{How do we represent head and tail?}
+to do but knowing how to represent concepts like the head and the tail of
+the array.  For strings, we had methods such as {\tt s.charAt(0)} to
+represent the head of the string and {\tt s.substring(1)} to represent
+the string's tail.  For an array named {\tt arr}, the expression
+{\tt arr[0]} represents the head of the array.  Unfortunately, we have no
+method comparable to the {\tt substring()} method for strings that
+lets us represent the tail of the array.
+
+To help us out of this dilemma, we can use an integer parameter to
+represent the head of the array.  Let's have the {\tt int} parameter,
+{\it head}, represent the current head of the array
+(Fig.~\ref{fig-headtail2}).  Then $head+1$ represents the start of the
+tail, and {\tt arr.length-1} represents the end of the tail.  Our
+method will always be passed a reference to the whole array, but it
+will restrict the search to the portion of the array starting at {\it
+head}. If we let {\it head} vary from 0 to {\tt arr.length} on each
+recursive call, the method will recurse through the array in
+head/tail fashion, searching for the key.  The method will stop when {\tt head =
+arr.length}. 
+
+\begin{figure}[htb]
+\figaleft{chptr12/headtail2.eps}{A
+parameter, {\it head}, can represent the head of some portion of the array.
+\label{fig-headtail2}\label{pg-fig-headtail2}}
+\end{figure}
+
+\JavaTIP{PROGRAMMING TIP}{Subarray Parameter.}{For methods that take an
+array argument, an {\tt int} parameter can be used to designate the
+portion of the array that should be processed in the method.}
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+  /**
+   * search(arr,head,key)---Recursively search arr for key
+   *  starting at head
+   * Pre:  arr != null and 0 <= head <= arr.length
+   * Post: if arr[k] == key for k, 0 <= k < arr.length, 
+   *       return k else return -1
+   */
+private int search(int arr[], int head, int key)  {
+ if (head == arr.length) // Base: empty list - failure
+   return -1;
+ else if (arr[head] == key) // Base: key found---success
+   return head;
+ else               // Recursive: search the tail
+   return search(arr, head + 1, key);
+}
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The recursive search method takes three parameters.  The
+{\it head} parameter points to the begin\-ning of that portion of the
+array that is being searched.
+\label{fig-rsearch}\label{pg-fig-rsearch}}
+\end{figure}
+
+
+This leads to the definition for recursive search shown in
+Figure~\ref{fig-rsearch}.  Note that the recursive search method takes
+three parameters: the array to be searched, {\tt arr}, the {\tt key}
+being sought, and an integer {\tt head} that gives the starting
+location for the search.   The algorithm is bounded when {\tt head =
+arr.length}. In effect, this is like saying the recursion should stop
+when we have reached a tail that contains 0 elements.  This underscores
+%\begin{marginalnote}\it Recursion parameter\end{marginalnote}
+the point we made earlier about the importance of parameters in
+designing recursive methods.  Here the {\it head} parameter serves as
+the {\em recursion parameter}\index{recursion parameter}. 
+\marginnote{Recursion parameter}
+It controls the progress of the
+recursion.
+
+Note also that for the search algorithm we need two base cases.  One
+represents the successful case, where the key is found in the array.
+The other represents the unsuccessful case, which comes about after we
+have looked at every possible head in the array and not found the
+key.  This case will arise through exhaustion---that is, when we have
+exhausted all possible locations for the key.
+
+\JavaTIP[false]{DEBUGGING TIP}{Recursive Search.}{For the recursive search method
+to work properly, it must be called with the correct value for the
+{\it head} parameter.}
+
+\subsection{Information Hiding}
+\noindent Note that in order to use the {\tt search()} method, you would have to
+know that you must supply a value of 0 as the argument for the {\it
+head} parameter.  This is not only awkward but also impractical.
+After all, if we want to search an array, we just want to pass two
+arguments, the array and the key we're searching for.  It's
+%\begin{marginalnote}\it Design issue\end{marginalnote}
+\marginnote{Design issue}
+unreasonable to expect users of a method to know that they also have
+to pass 0 as the head in order to get the recursion started.  This
+design is also prone to error, because it's quite easy for a mistake
+to be made when the method is called.
+
+For this reason, it is customary to provide a nonrecursive interface
+to the recursive method.  The interface hides the fact that a
+recursive algorithm is being used, but this is exactly the kind of
+implementation detail that should be hidden from the user. This is an
+example of the principle of information hiding that we introduced in
+Chapter~0. A more
+%\begin{marginalnote}\it Hide implementation details\end{marginalnote}
+\marginnote{Hide implementation details}
+appropriate design would make the recursive method a {\tt private}
+method that's called by the public method, as shown
+Figure~\ref{fig-searcher} and implemented in the {\tt Searcher} class
+(Fig.~\ref{fig-searcherclass}).
+
+\begin{figure}[htb]
+\figaleft{chptr12/searcher.eps}{The public {\tt search()} method serves
+as an interface to the private recursive method, {\tt search()}.
+Note that the methods have different signatures.
+\label{fig-searcher}
+\label{pg-fig-searcher}}
+\end{figure}
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[29pc]{-3pc}
+\begin{lstlisting}
+public class Searcher {
+  /**
+   * search(arr,key) -- searches arr for key.
+   * Pre:  arr != null and 0 <= head <= arr.length
+   * Post: if arr[k] == key for k,  0 <= k < arr.length, 
+   *       return k,  else return -1
+   */
+  public int search(int arr[], int key) {
+    return search(arr, 0, key); // Call recursive search 
+  }
+  /**
+   * search(arr, head, key) -- Recursively search arr for key
+   *  starting at head
+   * Pre:  arr != null and 0 <= head <= arr.length
+   * Post: if arr[k] == key for k,  0 <= k < arr.length, return k
+   *       else return -1
+   */
+  private int search(int arr[], int head, int key)  {
+    if (head == arr.length)   // Base case: empty list - failure
+      return -1;
+    else if (arr[head] == key)// Base case: key found -- success
+      return head;
+    else                      // Recursive case: search the tail
+        return search(arr, head + 1, key);
+  } // search()
+  public static void main(String args[]) {
+    int numbers[] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+    Searcher searcher = new Searcher();
+    for (int k = 0; k <= 20; k++) {
+        int result = searcher.search(numbers, k);
+        if (result != -1)
+          System.out.println(k + " found at " + result);
+        else
+          System.out.println(k + " is not in the array ");
+    } // for
+  } // main()
+} // Searcher
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{Information hiding principle: The {\tt public} {\tt search()}
+method calls the {\tt private}, recursive {\tt search()}, thereby hiding the
+fact that a recursive algorithm is used.
+\label{fig-searcherclass}\label{pg-fig-searcherclass}}
+\end{figure}
+
+\JavaTIP[false]{EFFECTIVE DESIGN}{Information Hiding.}{Unnecessary implementation
+details, such as whether a method uses a recursive or iterative
+algorithm, should be hidden within the class.  Users of a class or
+method should be shown only those details that they need to know.}
+
+\pagebreak
+\secEXRHone{Self-Study Exercise}
+\begin{SSTUDY}
+
+\item  Write a {\tt main()} method for the {\tt Searcher} class to conduct
+the following test of {\tt search()}. Create an {\tt int} array of ten
+elements, initialize its elements to the even numbers from 0 to 18,
+and then use a for loop to search the array for each of the numbers
+from 0 to 20.
+
+\end{SSTUDY}
+
+\subsection{Recursive Selection Sort}
+\noindent Next we want you to think back to Chapter~9, where we
+introduced the selection sort algorithm. To review the concept,
+suppose you have a deck of 52 cards.  Lay them out on a table, face
+up, one card next to the other.  Starting at the last card, look
+through the deck, from
+%\begin{marginalnote}\it Sorting a deck of cards\end{marginalnote}
+\marginnote{Sorting a deck of cards}
+last to first, find the largest card and exchange it with the last
+card.  Then go through the deck again starting at the next to the last
+card, find the next largest card, and exchange it with the next to the
+last card.  Go to the next card, and so on.  If you repeat this
+process 51 times, the deck will be completely sorted.
+
+\JavaTIP{DEBUGGING TIP}{Off-by-One Error.}{Sorting algorithms are
+particularly susceptible to an off-by-one error.  To sort an array with
+{\it N} elements, you generally need to make $N-1$ passes.}
+
+Let's design a recursive version of this algorithm.  The algorithm we
+just described is like a head-and-tail algorithm in reverse, where the
+last card in the deck is like the head, and the cards before it are
+like the tail.  After each pass or recursion, the last card will be in
+its proper location, and the cards before it will represent the
+unsorted portion of the deck.  If we use parameter to represent {\it
+last}, then it will be moved one card to the left at each level of the
+recursion.
+
+\begin{figure}[b]
+\figa{chptr12/selectsort.eps}{Selection sort: Using a head-and-tail
+algorithm in reverse to sort an integer array.
+\label{fig-selectsort}\label{pg-fig-selectsort}}
+\end{figure}
+
+Figure~\ref{fig-selectsort} illustrates this process for an array of
+integers.  The base case is reached when the {\it last} parameter is
+pointing to the first element in the array.  An array with one element
+in it is already sorted.   It needs no rearranging.  The recursive case involves
+searching an ever-smaller portion of the array.  This is represented in
+our design by moving {\it last} down one element to the left.
+
+Figure~\ref{fig-selectionsort} provides a partial implementation of
+selection sort for an array of {\tt int}. In this definition, the
+array is one parameter.  The second parameter, {\tt int last}, defines
+that portion of the array, from right to left, that is yet to be
+sorted.   On the first call to this method, {\it last} will be
+{\tt arr.length $-$ 1}.  On the second, it will be {\tt arr.length $-$ 2}, and so
+on.  When {\it last} gets to be 0, the array will be sorted.  Thus,
+in terms of the card deck analogy, {\it last} represents the last
+card in the unsorted portion of the deck.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * selectionSort(arr,last)--Recursively sort arr starting 
+  *   at last element
+  * Pre:  arr != null and 0 <= last < arr.length
+  * Post: arr will be arranged so that arr[j] <= arr[k], 
+  *   for any j < k
+  */
+private void selectionSort(int arr[], int last) {
+ if (last > 0) {
+   int maxLoc = findMax (arr, last);// Find the largest
+   swap(arr, last, maxLoc);         // Swap it with last
+   selectionSort(arr, last - 1);    // Move down the array
+ }
+} // selectionSort()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt selection-} {\tt Sort()} method uses the {\tt findMax()}
+and {\tt swap()} methods to help it sort an array.
+\label{fig-selectionsort}\label{pg-fig-selectionsort}}
+\end{figure}
+
+Note how simply the {\tt selectionSort()} method can be coded.   Of
+course, this is because we have used separate methods to handle the
+%\begin{marginalnote}\it Task decomposition\end{marginalnote}
+\marginnote{Task decomposition}
+tasks of finding the largest element and swapping the last element and
+the largest.  This not only makes sense in terms of the
+divide-and-conquer principle, but we also already defined a {\tt swap()}
+%%%REWmethod in Chapter~\ref{chapter-arrays}. So this is a good example of
+method in Chapter~9. So here is a good example of 
+reusing code:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /**
+  * swap(arr, el1 el2) swaps el1 and el2 in the array, arr
+  * Pre: arr is non null, 0 <= el1 < arr.length, 
+                          0 <= el2 < arr.length
+  * Post: the locations of el1 and el2 are swapped in arr
+  */
+private void swap(int arr[], int el1, int el2)  {
+ int temp = arr[el1]; // Assign the first element to temp
+ arr[el1] = arr[el2]; // Overwrite first with second
+ arr[el2] = temp;     // Overwrite second with first(temp)
+} // swap()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The definition of the {\tt findMax()} method is left as a
+self-study exercise.
+
+\JavaTIP[false]{PROGRAMMING TIP}{Method Decomposition.}{A task can be simplified
+by breaking it up into simpler subtasks, especially if you already
+have methods for solving one or more of the subtasks.}
+
+%%
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item As in the case of the {\tt search()}
+method, we need to provide a public interface to the recursive {\tt
+selectionSort()} method. We want to enable the user to sort an array
+just by calling {\tt sort(arr)}, where {\tt arr} is the name of the
+array to be sorted.  Define the {\tt sort()} method.
+
+
+\item  Define an iterative version of the {\tt findMax(arr,N)} method that is used in
+{\tt selectionSort()}. Its goal is to return the location (index) of
+the largest integer between {\tt arr[0]} and {\tt arr[N]}.
+
+\end{SSTUDY}
+
+\section{Example: Drawing (Recursive) Fractals}
+\label{sec-fractals}\label{pg-sec-fractals}
+\noindent A {\bf fractal} is a geometric shape that exhibits a
+recursive structure.  When it is divided into parts, each part is a
+\marginnote{Fractal patterns}
+smaller version of the whole.  Fractal patterns occur in many
+situations and places. For example, if you look at a graph of the Dow
+Jones Industrial Average (DJIA) over the past year, the graph for each
+day is similar to the graph of each month, which is similar to the
+graph of each year, and so on.  Each part is a reduced-scale version
+of the whole.  Fractals also occur throughout nature. If you look at a
+coastline from an airplane, the shape of each part of the coastline,
+no matter how small the scale, resembles the shape of the whole
+coastline.  If you look at a tree, each branch of the tree is similar
+in shape to the whole tree.
+
+So, fractal patterns are all around us.  Because of their
+self-similarity and divisibility, fractals are well-suited for
+recursive programming.  Drawing recursive patterns is also an
+excellent way to illustrate how to use parameters to create generality
+in method design.  In this section, we will develop two simple
+patterns and incorporate them into an applet.
+
+\subsection{Nested Squares}
+\noindent Earlier in this chapter, we developed a recursive definition
+for drawing a nested squares pattern (Fig.~12.2).
+Now let's develop a recursive method that actually draws the pattern.
+For this pattern, the base case is the drawing of the square.  The
+recursive case, if more divisions are desired, is the drawing of
+smaller patterns within the square:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Draw a square.
+If more divisions are desired
+    draw a smaller version of pattern within square.
+\end{lstlisting}
+\end{jjjlisting}
+
+An important consideration for this algorithm is to specify precisely
+what we mean by ``if more divisions are desired.'' In other words, how
+%\begin{marginalnote}\it How should we represent the problem?\end{marginalnote}
+\marginnote{How should we represent the\hfill\break problem?}
+exactly do we control the recursion?  In our earlier definition of the
+pattern, we used the length of the side to control the algorithm.  When
+$side \geq 5$, we recursed.
+
+Another more general way to do this is to describe the fractal
+structure in terms of its {\it levels}. For nested squares, the
+%\begin{marginalnote}\it Levels of recursion\end{marginalnote}
+\marginnote{Levels of recursion}
+level-zero pattern would be just the basic square shape
+(Fig.~12.21). A level-one pattern would be the basic
+\marginfig{chptr12/boxes2.eps}{Levels 0, 1, and 4 of the nested
+squares pattern.
+\label{fig-boxes2}\label{pg-fig-boxes2}}
+square shape plus an inner square, and so on.   The higher the level,
+the more subdividing we do.   Therefore, one way to control the
+recursion is to use a {\it level} parameter as the {\it recursion
+parameter}---as the parameter that controls the recursion:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Draw a square.
+If the level is greater than 0,
+    draw a smaller version of pattern within square.
+\end{lstlisting}
+\end{jjjlisting}
+
+What other parameters will we need for this method? If we're going to
+draw a rectangle, we'll need parameters for its {\it x-} and {\it
+y-}coordinates.  We'll also need a parameter for the length of sides
+of the square.  Another issue we need to decide is how much the length
+of the sides should change at each level.  Should length change by a
+fixed amount, by a fixed ratio, or by some other factor? In order to
+allow this kind of flexibility, let's use another parameter for this
+value.
+
+These design considerations suggest the method shown in
+Figure~\ref{fig-drawboxes}. Note that we must also provide a
+{\tt Graphics} parameter so the method can use the {\tt drawRect()} method
+to draw the square.  As we decided, the {\tt level} parameter controls
+the recursion.  Note that its value is decreased by 1 in the recursive
+call.  This will ensure that {\tt level} will eventually reach 0, and
+recursion will stop.
+
+\begin{figure}[hb!]
+\jjjprogstart
+\begin{jjjlisting}[26.5pc]
+\begin{lstlisting}
+/**
+ * drawBoxes()---recursively draws pattern of nested 
+ *  squares with top left corner of outer square at 
+ *  (locX, locY) and dimensions of length side.
+ * level (>= 0) is the recursion parameter (base: = 0)
+ * delta is used to adjust the length of the side.
+ */
+private void drawBoxes(Graphics g, int level,
+           int locX, int locY, int side, int delta) {
+  g.drawRect(locX, locY, side, side );
+  if (level > 0) {
+    int newLocX = locX + delta; int newLocY = locY + delta;
+    drawBoxes(g, level - 1, newLocX, newLocY,
+                                   side - 2 * delta, delta);
+  } // if
+} // drawBoxes()
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt drawBoxes()} method.
+\label{fig-drawboxes}\label{pg-fig-drawboxes}}
+\end{figure}
+
+Finally, note the use of the {\tt delta} parameter, which is used to
+change the length of the sides by a fixed amount, {\tt 2 * delta}, at
+each level.  It is also used to calculate the {\it x-} and {\it
+y-}coordinates for the location of the next level of boxes {\it (locX
++ delta, locY + delta)}. But {\tt delta}'s value remains constant
+through all the levels.  This will lead to a pattern where the ``gap''
+between nested squares is constant.
+
+
+\JavaTIP{EFFECTIVE DESIGN}{Levels of Recursion.}{Many recursive algorithms
+use a {\it level} parameter as the recursion parameter.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item Trace through the {\tt drawBoxes()} method and draw the
+level-four and level-five versions of the nested boxes pattern.
+Assume that the initial values for {\tt side} and {\tt delta} are 100
+and 5, respectively, and the initial coordinates for {\tt (locX,locY)}
+are (20,20).
+
+\item The pattern shown in Figure~12.23 can be drawn by using {\tt
+delta} as a fixed ratio of the length of the side, for example, 10
+percent.  Modify the {\tt drawBoxes()} method to use {\tt delta} in
+this way.
+
+\item Write an iterative version of the {\tt drawBoxes()} method.
+({\it Hint}: On each iteration, you must change the {\it x-} and {\it
+y-}coordinates of the square's location and the length of its side.)
+
+\marginfiglarge{chptr12/boxes3.eps}{This version of nested boxes can be drawn
+by using {\tt delta} as a fixed percentage of the length of the side.
+\label{fig-boxes3}\label{pg-fig-boxes3}}
+
+\end{SSTUDY}
+
+\subsection{The Sierpinski Gasket}
+\noindent Let's return now to the {\it Sierpinski gasket} pattern that we
+introduced at the start of this chapter.  This is a much more
+interesting fractal pattern (Fig.~\ref{fig-sierpinski}). The overall
+shape of the pattern is that of a triangle, but notice how the outer
+triangle is divided into three smaller triangles.  Then each of those
+triangles are divided into three smaller triangles.  If you continue
+this process of dividing and shrinking, you get the level-seven pattern
+shown here.
+
+\begin{figure}[hbt]
+\figa{chptr12/sierpinski2.eps}{Levels 0, 1, and 7 of the Sierpinski gasket
+fractal pattern.
+\label{fig-sierpinski}\label{pg-fig-sierpinski}}
+\end{figure}
+
+Let's develop a recursive method to draw this pattern.  If we follow
+the same strategy we used in the nested squares example, we get the
+following algorithm:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Base case:       Draw a triangle.
+Recursive Case:  If more divisions are desired,
+     draw three smaller gaskets within the triangle.
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent For this pattern the base case is the drawing of the
+basic triangle.  The recursive cases, if more divisions are desired,
+are the drawing of smaller gaskets within the triangle.  Again we will
+use a {\tt level} parameter to control the depth of the recursion.  The
+higher the level, the more divisions will be drawn.
+
+
+
+If we're going to draw a triangle shape, we need the coordinates of
+%\begin{marginalnote}\it What other parameters do we need?\end{marginalnote}
+\marginnote{What other parameters do we need?}
+its three vertices---that is, an {\it x-} and {\it y-}coordinate for each
+vertex.  Taken
+together, these design considerations suggest the method definition
+shown in Figure~\ref{fig-gasket}.
+
+\begin{figure}[tb]
+\jjjprogstart
+\begin{jjjlistingleft}[28pc]{-2pc}
+\begin{lstlisting}
+/**
+ * drawGasket()---recursively draws the Sierpinski gasket
+ *  pattern, with points (p1X, p1Y),(p2X, p2Y),(p3X, p3Y) 
+ *  representing the vertices of its enclosing triangle.
+ * level (>= 0) is the recursion parameter (base: = 0)
+ */
+private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
+                   int p2X, int p2Y, int p3X, int p3Y) {
+  g.drawLine(p1X, p1Y, p2X, p2Y);  // Draw a triangle
+  g.drawLine(p2X, p2Y, p3X, p3Y);
+  g.drawLine(p3X, p3Y, p1X, p1Y);
+  if (lev > 0) { // If more levels, draw 3 smaller gaskets
+    int q1X = (p1X + p2X) / 2;    int q1Y = (p1Y + p2Y) / 2;
+    int q2X = (p1X + p3X) / 2;    int q2Y = (p1Y + p3Y) / 2;
+    int q3X = (p2X + p3X) / 2;    int q3Y = (p2Y + p3Y) / 2;
+    drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+    drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+    drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+  } // if
+} // drawGasket()
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The {\tt drawGasket()} method.
+\label{fig-gasket}\label{pg-fig-gasket}}
+\end{figure}
+
+As we described earlier, we use the {\tt level} parameter
+as the recursion parameter for this method, which controls the
+%\begin{marginalnote}\it Levels of recursion\end{marginalnote}
+\marginnote{Levels of recursion}
+recursion.  Note that each of the three recursive calls decreases the
+{\tt level} by 1. This will ensure that eventually {\tt level} will
+equal 0, and recursion will stop.
+
+Note also how the three pairs of coordinates are used.  Drawing a
+triangle is simple.  Just draw three lines from {\tt (p1X,p1Y)} to
+{\tt (p2X,p2Y)}, from {\tt (p2X,p2Y)} to {\tt (p3X,p3Y)}, and from
+{\tt (p3X,p3Y)} back to {\tt (p1X, p1Y)}. The most complicated part of
+the method is calculating the vertices for the three inner gaskets.
+If you look at Figure~\ref{fig-sierpinski} again, you'll notice that
+each of the inner triangles uses one of the vertices of the main
+triangle, plus the {\it midpoints} of the two adjacent sides.  Thus,
+the triangle on the ``left'' uses the left vertex {\tt (p1X,p1Y)}, and
+the midpoints of the other two lines from {\tt (p1X,p1Y)} to {\tt
+(p2X,p2Y)} and from {\tt (p1X,p1Y)} to {\tt (p3X,p3Y)}.  As you might
+remember from high school math, the formula for computing the midpoint
+of the line segment $(x1,y1)$ to $(x2,y2)$ is
+%\begin{marginalnote}\it Midpoint of a line\end{marginalnote}
+\marginnote{Midpoint of a line}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+( (x1 + x2) / 2, (y1 + y2) / 2 )
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This formula is used repeatedly to calculate the
+vertices of the three smaller gaskets.
+
+
+\section{OBJECT-ORIENTED DESIGN:\\ Tail Recursion}
+%\addcontentsline{toc}{section}{\S~~~ Object-Oriented Design: Tail Recursion}
+\noindent Although the {\tt drawBoxes()} method is relatively simple to convert
+into an iterative version (see Self-Study Exercise 12.18), the same cannot be said for the
+{\tt drawGasket()} method.  It is clearly a case where the recursive
+approach makes the problem easier to solve.
+
+One difference between {\tt drawBoxes()} and {\tt drawGasket()} is
+that {\tt drawBoxes()} is an example of a tail-recursive method.   A
+method is {\bf tail recursive}\index{tail recursive} 
+\marginnote{Tail recursion}
+if all of its recursive calls occur as
+the last action performed in the method.  You have to be a bit careful
+%\begin{marginalnote}\it Tail recursion\end{marginalnote}
+about this definition.  The recursive call in a tail-recursive method
+has to be the last {\it executed} statement.  It needn't be the last
+statement appearing in the method's definition.
+
+For example, the following method will print ``Hello'' {\it N} times.   This
+method is tail recursive even though its last statement is not a
+recursive call:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void printHello(int N) {
+ if (N > 1) {
+   System.out.println("Hello");
+   printHello(N - 1); // The last executed statement
+ } else
+   System.out.println("Hello");
+} // printHello()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This method is tail recursive because the last statement
+that will be executed, in its recursive cases, is the recursive call.
+
+A tail-recursive method is relatively easy to convert into an
+iterative method.  The basic idea is to make the recursion parameter
+into a loop variable, taking care to make sure the bounds are equivalent.
+Thus, the following iterative method will print ``Hello'' {\it N} times:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void printHelloIterative(int N) {
+    for (int k = N; k > 0; k--)
+        System.out.println("Hello");
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent In this case, we use the parameter {\it N} to set the
+initial value of the loop variable, {\it k}, and we decrement {\it k}
+on each iteration.  This is equivalent to what happens when we
+decrement the recursion parameter in the recursive call.
+
+\JavaTIP{EFFECTIVE DESIGN}{Tail Recursion.}{Tail-recursive algorithms
+are relatively simple to convert into iterative algorithms that
+do the same thing.}
+
+As you can see, recursive methods that are not tail recursive are much
+more complex.  Just compare the {\tt drawGasket()} and
+{\tt drawBoxes()} methods.  Yet it is precisely for these nontail-recursive
+algorithms that recursion turns out to be most useful.  As you might
+expect, if you can't give a simple tail-recursive solution to a
+problem, the problem probably doesn't have a simple iterative solution
+either.   Thus, the problems where we most need recursion are those where
+we can't give a simple tail-recursive or a simple iterative solution.
+And there are a lot of such problems, especially when you get into
+nonlinear data structures such as trees and graphs.
+
+To gain some appreciation for this complexity, consider how difficult
+it would be to draw the Sierpinski gasket using an iterative
+approach.  We could start by developing an outer for loop to account
+for the different levels in the pattern:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k = lev; k > 0; k--) {
+ drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+ drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+ drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent But now each of the method calls within the body of this
+loop would have to be replaced by very complex loops.  That would be a
+daunting task.  So the lesson to be drawn from this observation is that
+recursion is most useful as a problem-solving technique for problems
+that don't yield to a simple iterative solution.
+
+\JavaTIP{EFFECTIVE DESIGN}{Recursion or Iteration.}{If you have
+difficulty designing an iterative solution to a problem, try
+developing a recursive solution to it.}
+
+\secEXRHone{Self-Study Exercises}
+\begin{SSTUDY}
+
+\item  Trace the {\tt drawGasket()} method for levels two and three.   Pick your
+own values for the three vertices.
+
+\item  Is the {\tt printReverse()} method, discussed earlier, tail recursive?
+Explain.
+
+\item  Is the {\tt countChar()} method, discussed earlier, tail recursive?
+Explain.
+
+\end{SSTUDY}
+
+%\end{objectorienteddesign}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, OOD: Recursion or Iteration}
+
+\section{OBJECT-ORIENTED DESIGN:  \\Recursion or Iteration?}
+
+\markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\, OOD: Recursion or Iteration}
+
+\noindent As we mentioned at the outset of this chapter, recursive
+algorithms require more computational overhead than iterative
+algorithms.  We're now in a good position to appreciate why this is
+so.
+
+A recursive algorithm incurs two kinds of overhead that are not
+incurred by an iterative algorithm: memory and CPU time.  Both of these
+are direct results of the fact that recursive algorithms do a lot of
+method calling.
+
+As we saw in our various traces, each time a method is called,
+%\begin{marginalnote}\it Method call overhead\end{marginalnote}
+\marginnote{Method call overhead}
+a representation of the method call is placed on the {\it method call
+stack}. These \mbox{representations} often take the form of a {\it block} of
+memory locations, which can be quite large.  The block must contain
+space for the method's local variables, including its
+parameters.  Also, unless the method is {\tt void}, the block must
+contain space for the method's return value.  In addition it must
+contain a reference to the calling method, so it will know where to go
+%\begin{marginalnote}\it Memory overhead\end{marginalnote}
+\marginnote{Memory overhead}
+when it is done.  Figure~\ref{fig-methodblock} shows what the method
+call block would look like for the {\tt search()} method.
+
+\begin{figure}[hb]
+\figa{chptr12/methodblock.eps}{A more detailed picture of the
+method call stack, showing two method blocks for {\tt search()} after
+two levels of recursion.
+\label{fig-methodblock}\label{pg-fig-methodblock}}
+\end{figure}
+
+In addition to the memory required, a method call also requires extra
+%\begin{marginalnote}\it CPU overhead\end{marginalnote}
+\marginnote{CPU overhead}
+CPU time.   Each time a method is called, Java must create a method
+call block, copy the method call arguments to the parameters in the
+block, create initial values for any local variables that are used by
+the method, and fill in the return address of the calling method.  All
+of this takes time, and in the case of a recursive method, these steps
+are repeated at each level of the recursion.
+
+Compare these memory and CPU requirements with what normally
+transpires for an iterative algorithm---an algorithm involving a
+loop.  The loop structure usually occurs entirely within a method, so
+it doesn't incur either the memory or CPU overhead involved in
+recursion.   Therefore, iterative algorithms are generally more
+efficient than recursive algorithms.  One useful guideline, then, is
+when runtime performance and efficiency are of prime importance, you
+should use iteration instead of recursion.
+
+\JavaTIP{EFFECTIVE DESIGN}{Iteration or Recursion.}{Use an iterative
+algorithm instead of a recursive algorithm whenever efficiency and
+memory usage are important design factors.}
+
+On the other hand, recursive algorithms are much easier to design than
+the corresponding iterative algorithms for many problems.  We tried to
+illustrate this point in our development of the Sierpinski gasket
+algorithm, but there are many other examples that we could have used.
+Given that programmer and designer time is the most expensive
+%\begin{marginalnote}\it Efficiency of development\end{marginalnote}
+\marginnote{Efficiency of development}
+resource involved in software development, a recursive solution may be
+easier to develop and maintain than a corresponding iterative
+solution.  And given the great cost of software development, a less
+efficient solution that is easier to develop, easier to understand,
+and easier to maintain may be preferable to a highly efficient
+algorithm that's difficult to understand.   For some problems then,
+such as the Sierpinski gasket, a recursive algorithm may provide the
+best solution.
+%%\end{table}
+
+\JavaTIP{EFFECTIVE DESIGN}{Keep It Simple.}{When all other factors
+are equal, choose the algorithm (recursive or iterative)
+that is easiest to understand, develop, and maintain.}
+
+One final point that's worth making is that some {\it optimizing}
+compilers are able to convert recursive methods into iterative
+methods when they compile the program.   The algorithms for doing this
+are well known.  They are often subjects for study in a data structures
+%\begin{marginalnote}\it Optimizing compiler\end{marginalnote}
+\marginnote{Optimizing compiler}
+course, so we won't go into them here.  The resulting runtime programs
+will be just as efficient, in CPU time and memory, as if you had
+written iterative methods.  The point is that if you have such a
+compiler, you really get the best of both worlds.  You get the
+advantage of using recursion as a problem-solving and software
+development approach, and the compiler takes care of producing an
+efficient object program.
+%\end{objectorienteddesign}
+
+\section*{{\color{cyan}Special Topic:} Exploring the Mandelbrot Set}
+
+\noindent The Mandelbrot set is one of the most fascinating fractals.
+It is named after its discover, IBM mathematician Benoit Mandelbrot.
+The Mandelbrot set itself is the black, heart-shaped image shown in
+Figure~12.27.  What makes the Mandelbrot set so interesting is that
+with the help of a Java applet you can explore the set as if you were
+taking a trip through outer space.  %%\\
+%%\hspace*{1pc}
+The most interesting regions to explore are those just along the
+boundary of the set.  For example, notice that the boundary contains
+numerous circular shapes, each of which is itself studded with
+circular shapes.  This is an example of the scaled self-similarity that
+we found to be so prevalent in recursive structures.  By continually
+expanding the regions around the boundary, you'll find an infinite
+recursion of fascinating images and shapes.  In some regions of the set
+you'll even find miniature replications of the set itself.  %%\\
+%%\hspace*{1pc}
+
+%\begin{figure}
+%\begin{graphic}
+\marginfig{chptr12/mandel.eps}{The Mandelbrot set.
+\label{fig-mandel}\label{pg-fig-mandel}}
+%\end{graphic}
+%\end{figure}
+
+The Mandelbrot set is generated by an {\it iterated function system}.
+The mathematics underlying this fascinating object is quite
+accessible, and there are a number of online tutorials that explain how
+the set is generated and how the pictures are produced.  Many of the
+Mandelbrot and fractal Web sites contain excellent Java applets that
+let you explore the Mandelbrot set as well as related sets.   %%\\
+%%\hspace*{1pc}
+An excellent place to start your exploration would be David Joyce's
+award-winning Web site,
+%%%REWhttp://aleph0.clarku.edu/djoyce/julia/wwwrefs.html
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://aleph0.clarku.edu/~djoyce/julia/
+\end{lstlisting}
+\end{jjjlisting}
+\newline which contains references to a number of other good sites.
+For a tutorial on how the various Mandelbrot set-generating Java
+programs work, see
+\begin{jjjlisting}
+\begin{lstlisting}[commentstyle=\color{black}]
+http://storm.shodor.org/mteach/
+\end{lstlisting}
+\end{jjjlisting}
+%\end{minipage}\bigskip
+%%}
+
+
+\section{From the Java Library: \\ javax.swing.JComboBox}
+
+\tBOXseven{A} {\tt JComboBox} is a Swing component that combines a text field and
+a drop-down list (Fig.~12.28).  It lets the user either
+type in a selection or choose a selection from a list that appears
+when the user requests it---a {\tt JComboBox}'s drop-down behavior is
+somewhat similar to a {\tt java.awt.Choice} box.
+
+%%\begin{figure}[tb]
+%%\figaleft{chptr12/jcombobox.eps}{A {\tt JComboBox} responds to action events and item events.
+%%\label{fig-jcombobox}\label{pg-fig-jcombobox}}
+%%\end{figure}
+
+\marginfig{chptr12/jcombobox.eps}{A {\tt JComboBox} responds to action events and item events.
+\label{fig-jcombobox}\label{pg-fig-jcombobox}}
+
+A {\tt JComboBox} can be used to represent a {\it drop-down menu}.
+When the user clicks on a {\tt JComboBox}, a list of options drops
+down, and the user can select a particular option that is stored in
+the box's internal state (Fig.~12.29).  The list of
+options associated with a {\tt JComboBox} can be built beforehand and
+inserted into the component in a constructor, or items can be inserted
+one at a time by repeatedly using its {\tt addItem()} method.
+
+As Figure~12.28 shows, either an array or a vector of items
+can be passed to a constructor method to initialize the box's menu.
+The items stored in a {\tt JComboBox} box are references to
+{\tt Object}s, most commonly {\tt String}s that represent the name of the
+menu item.  They are stored in the (zero indexed) order in which they
+are added.   The {\tt addItem()} method is used to add an individual
+{\tt Object} to a {\tt JComboBox}.  By default, the first item added
+to a {\tt JComboBox} will be the {\it selected} item until the user
+selects another item.
+
+When the user makes a selection in a {\tt JComboBox}, the item
+selected can be gotten either by its reference ({\tt
+getSelectedItem()}) or by its position within the menu ({\tt
+getSelectedIndex()}).  There are also methods to {\tt
+set\-SelectedItem()} and {\tt setSelectedIndex()} that let you select
+an individual item either by its reference or its position.  The {\tt
+addItemListener()} method is used to designate some object as the
+listener for the {\tt ItemEvent}s that are generated whenever the user
+selects a menu option.  Alternatively, the \mbox{\tt
+addActionListener()} method lets you handle action events, such as
+when the user types a value into the box.
+
+\subsection{A {\tt JComboBox} Example}
+
+\noindent As a simple example, let's design an applet interface that
+can be used to display the fractal patterns we developed earlier.  We
+want an interface that lets the user select from among the available
+patterns---we'll use the Sierpinski gasket and nested boxes for
+starters.  In addition, the user should also be able to select
+different levels for the drawings, from 0 to 9. We want to present
+these options in two menus, with one {\tt JComboBox} for each menu.
+
+The first step is to declare and instantiate the {\tt JComboBox}es
+as instance variables:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private String items[] = 
+    {"Sierpinski Gasket","Nested Boxes"};
+private JComboBox patterns = new JComboBox(items);
+private JComboBox levels = new JComboBox();
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that in this case we pass the constructor for the
+\marginfig{chptr12/comboscreen.eps}{Using a {\tt JComboBox} box.
+\label{fig-comboscreen}\label{pg-fig-comboscreen}}
+{\tt patterns} menu an entire array of items.  If we hadn't done it
+this way, we would add individual items to the combo box in the
+applet's {\tt init()} method.  In fact, that's how we'll initialize
+the {\tt levels} menu:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+for (int k=0; k < 10; k++)   // Add 10 levels
+    levels.addItem(k + "" );
+levels.setSelectedItem("4"); // Select default level
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent This loop would be placed in the applet's {\tt init()}
+method.  It adds strings representing levels 0 to 9 to the menu
+and initializes the box so that level four is  showing as the
+default option.
+
+Our next step is to designate the applet as the {\tt ItemListener} for
+both menus---that is, the applet is named as the object that will
+handle the events that occur in the {\tt JComboBox}es.  Then we add the
+{\tt JComboBox} component to the applet's window:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+controls.add(levels);    // Control panel for menus
+controls.add(patterns);
+                                // Add the controls
+getContentPane().add(controls, "North"); 
+                           // And the drawing panel
+getContentPane().add(canvas, "Center");  
+              // Register the menus with a listener
+levels.addItemListener(this);  
+patterns.addItemListener(this);
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Note that we use a separate {\tt controls} panel (a {\tt JPanel})
+for the two menus and a {\tt canvas} panel (another {\tt JPanel}) for
+the drawings.
+
+The next step is to implement the {\tt itemStateChanged()} method to
+handle the user's selections.  Whenever the user selects an item from
+a {\tt JCombo\-Box} menu, an {\tt ItemEvent} is generated.  In order
+to handle these events, the applet must implement the {\tt
+ItemListener} interface\index{ItemListener interface}, which consists
+of the single method {\tt itemStateChanged()}. This method is invoked
+automatically whenever the user selects an item from one of the {\tt
+JComboBox}es:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void itemStateChanged(ItemEvent e) {
+    canvas.setPattern(patterns.getSelectedIndex(), 
+                         levels.getSelectedIndex());
+    repaint();
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent The {\tt itemStateChanged()} method has the same general
+form as the {\tt actionPerformed()} method, except that its parameter
+is an \mbox{\tt ItemEvent}.  For this example, the program uses the
+{\tt get\-Selected\-Index()} method to get the selected pattern and the
+selected level by their respective item numbers within the menus.  It
+then passes these values along to the {\tt canvas} object, which takes
+care of the drawing.  Finally, the method invokes the {\tt repaint()}
+method.  Because the applet is a container, this will cause all of its
+components to be repainted as well.  
+
+Figure~\ref{fig-seqdiag} illustrates the sequence of events that
+occurs when an item is selected from a {\tt JComboBox}.  The complete
+implementation for the applet is given in
+Figure~\ref{fig-recursivepatterns}.
+
+\begin{figure}[tb]
+\figaright{chptr12/seqdiag.eps}{This UML sequence diagram shows the interaction between
+the various objects included in the action of selecting an item
+from a {\tt JComboBox}.
+\label{fig-seqdiag}
+\label{pg-fig-seqdiag}}
+\end{figure}
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlisting}[33pc]
+\begin{lstlisting}
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class RecursivePatterns extends JApplet implements ItemListener  {
+  private String choices[] = {"Sierpinski Gasket", "Nested Boxes"};
+  private JComboBox patterns = new JComboBox(choices); // Pattern choices
+  private JComboBox levels = new JComboBox();          // Level choices
+  private Canvas canvas = new Canvas();                // Drawing panel
+  private JPanel controls = new JPanel();
+
+  public void init() {
+    for (int k=0; k < 10; k++)            // Add 10 levels
+      levels.addItem(k + "" );
+    patterns.setSelectedItem(choices[0]); // Initialize menus
+    levels.setSelectedItem("4");
+
+    canvas.setBorder(BorderFactory.createTitledBorder("Drawing Canvas"));
+    controls.add(levels);         // Control panel for menus
+    controls.add(patterns);
+    getContentPane().add(controls,"North"); // Add controls
+    getContentPane().add(canvas,"Center");  // Add drawing panel
+    levels.addItemListener(this);   // Register menus with listener
+    patterns.addItemListener(this);
+    setSize(canvas.WIDTH,canvas.HEIGHT+controls.getSize().width);
+  } // init()
+
+  public void itemStateChanged(ItemEvent e) {
+    canvas.setPattern(patterns.getSelectedIndex(), 
+                                     levels.getSelectedIndex());
+    repaint();                             // Repaint the applet
+  } // itemStateChanged()
+} // RecursivePatterns
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt RecursivePatterns} applet.
+\label{fig-recursivepatterns}\label{pg-fig-recursivepatterns}}
+\end{figure}
+
+
+\begin{figure}[tb]
+\figaleft{chptr12/canvasnew.eps}{Design of a drawing {\tt Canvas} class.
+\label{fig-canvas}
+\label{pg-fig-canvas}}
+\end{figure}
+
+The actual drawing of the fractal patterns is handled by the {\tt
+canvas JPanel} component, whose design is shown in
+Figure~\ref{fig-canvas} and whose implementation is given in
+Figure~\ref{fig-canvaspanel}.  All of the drawing is done in the {\tt
+paintComponent()} method.  Because the {\tt canvas} is contained
+within the applet, the {\tt paintComponent()} method is called
+automatically whenever the applet repaints itself.  Notice how the
+{\tt switch} statement uses the pattern that
+\marginnote{Zero indexing}
+the user chose to call the corresponding drawing method.   You can see
+from this {\tt switch} statement that a {\tt JComboBox}'s items are
+{\it zero indexed}.
+
+\begin{figure}[h!]
+\jjjprogstart
+\begin{jjjlistingleft}[33pc]{-7pc}
+\begin{lstlisting}
+import javax.swing.*;
+import java.awt.*;
+
+public class Canvas extends JPanel {
+  private static final int GASKET = 0, BOXES = 1;
+  public static final int WIDTH=400, HEIGHT=400;
+  private final int HBOX=10, VBOX=50, BOXSIDE=200, BOXDELTA=10;
+  private final int gP1X = 10;  private final int gP1Y = 280; // Initial
+  private final int gP2X = 290; private final int gP2Y = 280; // gasket
+  private final int gP3X = 150; private final int gP3Y = 110; // points
+  private int pattern = 0 ;                      // Current pattern
+  private int level = 4;                         // Current level
+
+  public Canvas() {
+    setSize(WIDTH, HEIGHT);
+  }
+
+  public void setPattern(int pat, int lev) {
+    pattern = pat;
+    level = lev;
+  }
+\end{lstlisting}
+\end{jjjlistingleft}
+\jjjprogstop{The {\tt Canvas} class is a drawing panel, Part I.
+\label{fig-canvaspanel}\label{pg-fig-canvaspanel}}
+\end{figure}
+
+
+\begin{figure}[p]
+\addtocounter{figure}{-1}
+\jjjprogstart
+\begin{jjjlisting}[33pc]
+\begin{lstlisting}
+    public void paintComponent(Graphics g) {
+        g.setColor(getBackground());   // Redraw the panel's background
+        g.drawRect(0, 0, WIDTH, HEIGHT);
+        g.setColor(getForeground());
+        switch (pattern) {
+        case GASKET:
+            drawGasket(g, level, gP1X, gP1Y, gP2X, gP2Y, gP3X, gP3Y);
+            break;
+        case BOXES:
+            drawBoxes(g, level, HBOX, VBOX, BOXSIDE, BOXDELTA );
+            break;
+        } // switch
+    } // paintComponent()
+
+   /** drawGasket()---recursively draws the Sierpinski 
+    *  gasket pattern, with points (p1X, p1Y), (p2X, p2Y), (p3X, p3Y) 
+    *  representing the vertices of its enclosing triangle.
+    * level (>= 0) is the recursion parameter (base case: level  0)
+    */
+    private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
+                   int p2X, int p2Y, int p3X, int p3Y) {
+        g.drawLine(p1X, p1Y, p2X, p2Y);  // Draw a triangle
+        g.drawLine(p2X, p2Y, p3X, p3Y);
+        g.drawLine(p3X, p3Y, p1X, p1Y);
+        if (lev > 0) { // If more levels, draw 3 smaller gaskets
+            int q1X = (p1X + p2X) / 2;    int q1Y = (p1Y + p2Y) / 2;
+            int q2X = (p1X + p3X) / 2;    int q2Y = (p1Y + p3Y) / 2;
+            int q3X = (p2X + p3X) / 2;    int q3Y = (p2Y + p3Y) / 2;
+            drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+            drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+            drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+        }
+    } // drawGasket()
+   /** drawBoxes()---recursively draws pattern of nested squares 
+    *  with (locX, locY) the top left corner of outer the square and
+    *  side being the length square's side.
+    * level (>= 0) is the recursion parameter (base case: level  0)
+    * delta is used to adjust the length of the side.
+    */
+    private void drawBoxes(Graphics g, int level,
+           int locX, int locY, int side, int delta) {
+        g.drawRect(locX, locY, side, side );
+        if (level > 0) {
+            int newLocX = locX + delta; int newLocY = locY + delta;
+            drawBoxes(g, level - 1, newLocX, newLocY,
+                                          side - 2 * delta, delta);
+        }
+    } // drawBoxes()
+} // Canvas
+\end{lstlisting}
+\end{jjjlisting}
+\jjjprogstop{The {\tt Canvas} class, Part II.}
+\end{figure}
+\mbox{ }
+
+
+\pagebreak
+\secSMHleft{Chapter Summary}
+
+\secKTH{Technical Terms}
+
+\begin{KT}
+base case
+
+computational overhead
+
+head-and-tail algorithm
+
+iterative method
+
+last-in-first-out (LIFO)
+
+method call stack
+
+recursion parameter
+
+recursive case
+
+recursive definition
+
+recursive method
+
+self-similarity
+
+tail recursive
+
+\end{KT}
+
+
+\secSMHtwo{Summary of Important Points}
+
+\begin{SMBL}
+\item  A {\it recursive definition} is one that defines the
+{\it n}th case of a concept in terms of the $(n-1)$st
+case plus a limiting condition.   It is based on the idea of breaking a
+problem up into smaller, self-similar problems.
+
+\item  A {\it recursive\index{recursive method} method} is one that calls itself.
+It is usually defined in terms of a {\it base case} or limiting case,
+which stops the recursive process, and a recursive case, which breaks
+the method into a smaller, self-similar copy of itself.   A {\it
+recursion parameter} is generally used to control the recursion.
+
+\item  An iterative algorithm is one that uses some kind of loop
+as its control structure.  Any algorithm that can be done iteratively
+can also be done recursively, and vice versa.
+
+
+\item  Because method calling is relatively costly both in terms
+of memory used and CPU time involved, a recursive algorithm
+is generally less efficient than an iterative one that does the same
+thing.
+
+\item  In designing recursive algorithms, the {\it base case} defines
+a limit.  Each level of recursion should make progress toward
+the limit, and the algorithm should eventually reach the limit.
+The limit is usually expressed in terms of the {\it recursion parameter}.
+
+\item  A recursive method is {\it tail recursive} if and only if
+each of its recursive calls is the last action executed by the
+method.
+
+\item  A Swing {\tt JComboBox} component is used to represent
+a GUI drop-down menu.
+\end{SMBL}
+
+\secANSHleft
+
+\begin{ANS}
+
+\item The output produced by {\tt mystery(0)} would be 0 1 2 3 4 5 6.
+The output produced by {\tt mystery(100)} would be 100.
+
+\item  The output produced by {\tt mystery(5)} would be: 5 4 3, and so
+on.  In other words, this is an infinite recursion.  
+
+\item \mbox{ }
+\begin{jjjlisting}
+\begin{lstlisting}
+Definition: twoToN(N), N >= 0
+  1, if N == 0                   // Base case
+  2 * twoToN(N - 1),  N > 0      // Recursive case
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The function $x^n$ is known as the power function:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Definition: power(X,N), N >= 0
+  1, if N == 0                    // Base case
+  X * power(X, N - 1),  N > 0     // Recursive case
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Yes, the two definitions for nested boxes are equivalent.  Suppose
+the square starts out with a side of 20. The definition given in
+the exercise will also draw squares with sides of 20, 15, 10, 5.
+
+\item  A recursive definition for the pattern in Figure~12.4:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Draw a square with side, s.
+Inscribe a circle with diameter, s.
+If s > 5,
+  Draw a smaller version of same pattern. // Recursive case
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The {\tt printString2("hello")} method will print: ``olleh.''
+
+\item  A definition for {\tt countDown()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /** countDown(N) recursively prints a countdown 
+  *  beginning at N and ending at 1
+  * @param N >= 1
+  * Base case: N == 0
+  */
+void countDown(int N) {
+    if (N == 0)                     // Base case
+        System.out.println("blastoff");
+    else {
+        System.out.print(N + ", "); // Recursive case
+        countDown(N - 1);
+    }
+} // countDown()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A revised definition for {\tt countDown()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /** countDown(N) recursively prints a countdown  
+  *  beginning at N, counting every other number, 10 8 6 ...  
+  *  and ending at "blastoff"
+  * @param N >= 1
+  * Base case: N <= 0
+  */
+void countDown(int N) {
+    if (N <= 0)                     // Base case
+        System.out.println("blastoff");
+    else {
+        System.out.print(N + ", "); // Recursive case
+        countDown(N - 2 );
+    }
+} // countDown()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A method to sum the numbers from 1 to {\it N}.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+int sum(int N) {
+    if (N == 0)
+        return 0;
+    else
+        return N + sum(N-1);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  A method to change each blank within a string
+to two blanks.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+String addBlanks(String s) {
+  if (s.length() == 0)
+     return "";
+  else if (s.charAt(0) == ' ')
+     return ' ' + s.charAt(0) + addBlanks(s.substring(1));
+  else
+     return s.charAt(0) + addBlanks(s.substring(1));
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item A method to print out all possible outcomes for a chess player
+playing {\tt N} games. {\tt printOutcomes(str, N)} will print all
+outcomes for the next {\tt N} games given that results for previous
+games are stored in the string named {\tt str}. 
+\begin{jjjlisting}
+\begin{lstlisting}
+ public static void printOutcomes(String str, int N){
+     if (N = 1){ // Base case: win, lose, or draw one game
+         System.out.println(str + "W");
+         System.out.println(str + "L");
+         System.out.println(str + "D");
+     } else {  // Recursive case
+         printOutcomes(str + "W", N - 1);
+         printOutcomes(str + "L", N - 1);
+         printOutcomes(str + "D", N - 1);
+     } //else
+ }// printOutcomes()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  \mbox{ }
+\begin{jjjlisting}
+\begin{lstlisting}
+public static void main(String args[]) {
+  int numbers[] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+  Searcher searcher = new Searcher();
+  for (int k = 0; k <= 20; k++) {
+    int result = searcher.search(numbers, k);
+    if (result != -1)
+      System.out.println(k + " found at " + result);
+    else
+      System.out.println(k + " is not in the array ");
+  } // for
+} // main()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The {\tt sort()} method is used as a public interface to the
+recursive {\tt selectionSort()} method:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+/** sort(arr) sorts the int array, arr
+ *  Pre: arr is not null
+ *  Post: arr will be arranged so that arr[j] <= arr[k] 
+ *     for any j < k
+ */
+public void sort(int arr[]) {
+    selectionSort(arr, arr.length - 1);  
+             // Just call the recursive method
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  An iterative version of {\tt findMax()}:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+ /** findMax (arr,N) returns the index of the largest
+  *  value between arr[0] and arr[N], N >= 0.
+  *  Pre: 0 <= N <= arr.length -1
+  *  Post: arr[findMax()]>=arr[k] for k between 0 and N.
+  */
+private int findMax(int arr[], int N) {
+    int maxSoFar = 0;
+    for (int k = 0; k <= N; k++)
+        if (arr[k] > arr[maxSoFar])
+            maxSoFar = k;
+    return maxSoFar;
+} // findMax()
+\end{lstlisting}
+\end{jjjlisting}
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfiglarge{chptr12/boxes45.eps}{Levels four and five of the nested boxes pattern.
+\label{fig-boxes45}\label{pg-fig-boxes45}}
+%\end{figure}
+%\end{figure}
+
+\item  Levels four and five of the nested boxes  pattern
+are shown in Figure~12.34.
+
+
+
+\item  The following method will reduce the length of the side by {\tt delta}
+percent at each level of recursion.  The spacing between the boxes
+will vary by a constantly decreasing amount.
+
+\begin{jjjlisting}
+\begin{lstlisting}
+private void  drawBoxes(Graphics g, int level, int locX, 
+                   int locY, int side, int delta) {
+    g.drawRect(locX, locY, side, side );
+    if (level > 0) {
+      int dside = side * delta / 100; // Percent delta
+      int newLocX = locX + dside;
+      int newLocY = locY + dside;
+      drawBoxes(g, level - 1, newLocX, newLocY, 
+                         side - 2 * dside, delta);
+    }
+} // drawBoxes()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  \mbox{ }
+\begin{jjjlisting}
+\begin{lstlisting}
+private void drawBoxesIterative(Graphics g, int level,  
+            int locX, int locY, int side, int delta) {
+ for (int k = level; k >= 0; k--) {
+  g.drawRect(locX, locY, side, side );  // Draw a square
+  locX += delta;             // Calculate new location
+  locY += delta;
+  side -= 2 * delta;         // Calculate new side length
+ }
+} // drawBoxes()
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  The level two and three gaskets are shown in Figure~\ref{fig-sierpinski23}.
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{chptr12/sierpinski23.eps}{Levels two and three of the Sierpinski gasket.
+\label{fig-sierpinski23}\label{pg-fig-sierpinski23}}
+\end{figure}
+%\end{figure}
+
+\item  The {\tt printReverse()} method is not tail recursive because in that
+method the recursive call is not the last statement executed.
+
+\item  The {\tt countChar()} method is tail recursive.  The recursive calls
+are not the last statements in the method definition.  However, each of
+the recursive calls would be the last statement executed by the
+method.
+
+\end{ANS}
+
+\secEXRHtwoleft{Exercises}
+
+\begin{EXRtwo}
+
+\item  Explain the difference between the following pairs of terms:
+\begin{EXRtwoLL}
+\item  {\it Iteration} and {\it recursion}.
+\item  {\it Recursive method} and {\it recursive definition}.
+\item  {\it Base case} and {\it recursive case}.
+\item  {\it Head} and {\it tail}.
+\item  {\it Tail} and {\it nontail} recursive.
+\end{EXRtwoLL}
+
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming exercises, {\bf first} draw 
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+
+\item  Describe how the {\it method call stack}
+is used during a method call and return.
+
+\item  Why is a recursive algorithm generally less efficient
+than an iterative algorithm?
+
+\item  A tree, such as a maple tree or pine tree, has
+a recursive structure.   Describe how a tree's structure
+displays {\it self-similarity} and {\it divisibility}.
+
+\item  Write a recursive method to print each element
+of an array of {\tt double}.
+
+\item  Write a recursive method to print each element
+of an array of {\tt double} from the last to the first element.
+
+\item  Write a recursive method that will concatenate
+the elements of an array of {\tt String} into a
+single {\tt String} delimited by blanks.
+
+\item  Write a recursive method that is passed a single {\tt int}
+parameter, $N \geq 0$, and prints all the odd numbers between 1 and {\it N}.
+
+\item
+Write a recursive method that takes a single {\tt int} parameter \mbox{$N \geq 0$}
+and prints the sequence of even numbers between {\it N} down to 0.
+
+\item
+Write a recursive method that takes a single {\tt int} parameter $N \geq 0$
+and prints the multiples of 10 between 0 and {\it N}.
+
+\item  %%3
+Write a recursive method to print the following geometric \mbox{pattern:}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+#
+# #
+# # #
+# # # #
+# # # # #
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write recursive methods to print each of the following
+\mbox{patterns.}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+# # # # # # # #     # # # # # # # #
+  # # # # # # #     # # # # # # #
+    # # # # # #     # # # # # #
+      # # # # #     # # # # #
+        # # # #     # # # #
+          # # #     # # #
+            # #     # #
+              #     #
+\end{lstlisting}
+\end{jjjlisting}
+
+\item  Write a recursive method to print all multiples of {\it M} up
+to \break{\it M} * {\it N}.
+
+\item  Write a recursive method to compute the sum of grades stored in an array.
+
+
+\item  Write a recursive method to count the occurrences of
+a substring within a string.
+
+\item  Write a recursive method to remove the HTML tags
+from a string.
+
+\item  Implement a recursive version of the {\tt Caesar.decode()}
+method from Chapter~8.
+
+\item  The Fibonacci\index{Fibonacci sequence} sequence
+(named after the Italian mathematician Leonardo of Pisa, ca.  1200)
+consists of the numbers {\tt 0,1,1,2,3,5,8,13,\dots }  in which each number
+(except for the first two) is the sum of the two preceding
+numbers.  Write a recursive method {\tt fibonacci(N)} that prints the
+first {\it N} Fibonacci numbers.
+
+\item  Write a recursive method to rotate a {\tt String} by {\it N} characters
+to the right.  For example, {\tt rotateR("hello", 3)} should return
+``llohe.''
+
+\item  Write a recursive method to rotate a {\tt String} by {\it N} characters
+to the left.  For example, {\tt rotateL("hello", 3)} should return
+``lohel.''
+
+\item  Write a recursive method to convert a {\tt String} representing
+a binary number to its decimal equivalent.   For example,
+{\tt binTodecimal("101011")} should return the {\tt int} value 43.
+
+\item  A palindrome is a string that is equal to its reverse---``mom,'' ``i,'' 
+``radar'' and ``able was i ere i saw elba.'' Write a recursive
+{\tt boolean} method that determines whether its {\tt String}
+parameter is a palindrome.
+
+
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr12/btree.eps}{A level-four binary tree pattern.
+\label{fig-btree}\label{pg-fig-btree}}
+%\end{figure}
+%\end{figure}
+
+\item  {\bf Challenge: } Incorporate a {\tt drawBinaryTree()} method
+into the {\tt RecursivePatterns} program.  A level-one binary tree has
+two branches.  At each subsequent level, two smaller branches are grown
+from the endpoints of every existing branch.  The geometry is easier if
+you use 45-degree angles for the branches.  Figure~12.36
+shows a level-four binary tree drawn upside down.
+
+\item  {\bf Challenge: Towers of Hanoi.} According to
+legend, some Buddhist monks were given the task of moving 64
+golden disks from one diamond needle to another needle, using a third
+needle as a backup.  To begin with, the disks were stacked one on top of
+the other from largest to smallest (Fig.~12.37). The
+rules were that only one disk can be moved at a time and that
+a larger disk can never go on top of a smaller one.  The end of the
+world was supposed to occur when the monks finished the task!
+
+\hspace*{12pt}Write a recursive method,
+{\tt move(int N, char A, char B, char C)}, that will print out
+directions the monks can use to solve the towers of Hanoi problem.  For
+example, here's what it should output for the three-disk case,
+{\tt move(3, "A", "B", "C")}:
+%\begin{figure}
+%\begin{figure}[tb]
+\marginfig{chptr12/hanoi.eps}{The towers of Hanoi problem.  Move all
+the disks from needle A to needle B.~Only one disk can be moved at a
+time, and a larger disk can never go on top of a smaller one.
+\label{fig-hanoi}\label{pg-fig-hanoi}}
+%\end{figure}
+%\end{figure}
+
+\begin{jjjlisting}
+\begin{lstlisting}
+Move 1 disk from A to B.
+Move 1 disk from A to C.
+Move 1 disk from B to C.
+Move 1 disk from A to B.
+Move 1 disk from C to A.
+Move 1 disk from C to B.
+Move 1 disk from A to B.
+\end{lstlisting}
+\end{jjjlisting}
+
+\end{EXRtwo}
+%
