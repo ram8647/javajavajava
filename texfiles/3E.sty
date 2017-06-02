@@ -134,12 +134,12 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
 %%%RAM    \end{minipage}\hspace*{-13.5pc}%
 %%%RAM    }%
 
-\def\figascaled#1#2#3{%
+\def\figascaled#1#2#3#4{%
     \protect\begin{minipage}[t]{27pc}%
     \protect\vfill\centering\psfig{file=../#1,scale=#2}%
     \end{minipage}\hspace*{1pc}%
     \begin{minipage}[t]{12.5pc}%
-    \protect\vspace{-8pt}\caption{#3}%
+    \protect\vspace{-8pt}\caption{#3 \label{#4}}%
     \end{minipage}\hspace*{-13.5pc}%
     }%
 
@@ -171,10 +171,10 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
 %
 %
 %caption 12.5 for figure prog
-\def\figaprogb#1{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
+\def\figaprogb#1#2{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{27pc}{0.5pt}}%
     \end{minipage}\hspace*{1pc}%
-    \begin{minipage}[t]{12.5pc}\protect\vspace{-7pt}\caption{#1}\end{minipage}\hspace*{-13.5pc}}%
+    \begin{minipage}[t]{12.5pc}\protect\vspace{-7pt}\caption{#1 \label{#2}}\end{minipage}\hspace*{-13.5pc}}%
 %
 %caption 12.5 for figure prog left
 \def\figaprogbleft#1{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
@@ -279,38 +279,44 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \begin{minipage}[t]{35pc}\protect\caption{#1}\end{minipage}}%
 
 %margin fig
-\def\marginfig#1#2{\protect\marginpar{\addtocounter{figure}{1}\protect\begin{center}%
-%%\psfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:#1}
+\def\marginfig#1#2#3{\protect\marginpar{\protect\begin{center}%
 \psfig{file=../#1}
 \end{center}%
     \par\vspace{0pt}\protect\raggedright{
       \color{cyan}
 \rule[12pt]{12.5pc}{0.5pt}\hspace*{-12.5pc}%
-    \bf\small FIGURE \thefigure}%
-    \quad
+\captionof{figure}
+{#2 \label{#3}}}}}
+%    \bf\small FIGURE \thefigure}%
+%    \quad
 %%%%\color{black}
-\raggedright\small#2}}%
+%\raggedright\small
+%
 
-\def\marginfigscaled#1#2#3{\protect\marginpar{\addtocounter{figure}{1}\protect\begin{center}%
+\def\marginfigscaled#1#2#3#4{\protect\marginpar{\protect\begin{center}%
 %%\psfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:#1}
 \psfig{file=../#1,scale=#2}
 \end{center}%
     \par\vspace{0pt}\protect\raggedright{
       \color{cyan}
 \rule[12pt]{12.5pc}{0.5pt}\hspace*{-12.5pc}%
-    \bf\small FIGURE \thefigure}%
-    \quad
+\captionof{figure}
+{#3 \label{#4}}}}}
+%    \bf\small FIGURE \thefigure}%
+%    \quad
 %%%%\color{black}
-\raggedright\small#3}}%
+%\raggedright\small#3}}%
 
 
 %margin fig piu' spazio sotto all'art
-\def\marginfiglarge#1#2{\protect\marginpar{\addtocounter{figure}{1}\protect\begin{center}%
+\def\marginfiglarge#1#2#3{\protect\marginpar{\protect\begin{center}%
 %%    \psfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:#1}\end{center}%
     \psfig{file=../#1}\end{center}%
     \par\vspace{6pt}\protect\raggedright{\color{cyan}\rule[12pt]{12.5pc}{0.5pt}\hspace*{-12.5pc}%
-    \bf\small FIGURE \thefigure}%
-    \quad\color{black}\raggedright\small#2}}%
+\captionof{figure}
+{#2 \label{#3}}}}}
+%    \bf\small FIGURE \thefigure}%
+%    \quad\color{black}\raggedright\small#2}}%
 
 \def\marginnote#1{\marginpar{\it\vspace*{-7.4pt}#1}}%
 \def\splarge{\fontdimen2\font=1.3\fontdimen2\font}%----------allarga

@@ -121,9 +121,8 @@ languages, the first element of an array has index 0.
 (This is the same convention we used for {\tt String}s.)
 
 \begin{figure}[h!]
-\figa{chptr09/8f1.eps}{An array of 15 integers named {\tt arr}.
-\label{fig-intarray}
-\label{pg-fig-intarray}}
+\figa{chptr09/8f1.eps}{An array of 15 integers named {\tt arr}.}
+{fig-intarray}
 \end{figure}
 Figure~\ref{fig-intarray} shows an array named {\tt arr} that
 contains 15 {\tt int} elements.  
@@ -333,9 +332,8 @@ six objects, because the array itself is a separate object.
 In (a), the array variable is declared.  In (b), the array
 is instantiated, creating an array of five {\tt null}
 references.  In (c), the five {\tt Strings} are created
-and assigned to the array.
-\label{fig-arrayobjs}
-\label{pg-fig-arrayobjs}}
+and assigned to the array.}
+{fig-arrayobjs}
 \end{figure}
 %\end{figure}
 
@@ -360,9 +358,8 @@ its elements require four {\tt new} statements.
 
 %\begin{figure}
 %\begin{graphic}
-\marginfig{chptr09/p407f1.eps}{An array of {\tt Student}s.
-\label{fig-studarray}
-\label{pg-fig-studarray}}
+\marginfig{chptr09/p407f1.eps}{An array of {\tt Student}s.}
+{fig-studarray}
 %\end{graphic}
 %\end{figure}
 The following sequence of statements would lead to a null pointer
@@ -420,9 +417,8 @@ school[2] = student3;
 %\begin{figure}
 %\begin{graphic}
 \marginfig{chptr09/p408f1.eps}{Arrays of objects store references to
-the objects, not the objects themselves.
-\label{fig-arrayalloc}
-\label{pg-fig-arrayalloc}}
+the objects, not the objects themselves.}
+{fig-arrayalloc}
 %\end{graphic}
 %\end{figure}
 
@@ -593,33 +589,11 @@ public class PrintArrays {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{A program that displays two arrays. Its output
-is shown in Figure~9.6. 
-\label{fig-initarrays}\label{pg-fig-initarrays}}
+is shown in Figure~\hyperref[fig:printarraysout]{9.6}}
+{fig-initarrays}
 \end{figure} 
-
-\noindent example, the elements of \mbox{\tt intArr} have not been given initial
-\marginpar{
-\vspace*{-10pc}
-\small
-{\color{cyan}\rule{12.5pc}{1pt}}\\[2pt]
-\begin{tabular}{cc}
-\hspace*{18pt}Ints\hspace*{18pt}    &      \hspace*{18pt}Reals\hspace*{18pt}  \\[4pt]
-0       &      \hphantom{0}1.1  \\
-0       &      \hphantom{0}2.2  \\
-0       &      \hphantom{0}3.3  \\
-0       &      \hphantom{0}4.4  \\
-0       &      \hphantom{0}5.5  \\
-0       &      \hphantom{0}6.6  \\
-0       &      \hphantom{0}7.7  \\
-0       &      \hphantom{0}8.8  \\
-0       &      \hphantom{0}9.9  \\
-0       &      10.1  \\
-\end{tabular}
-\captionmargin{Output of the {\tt PrintArrays} program.
-\label{fig-printarraysout}}
-\normalsize
-}
-values whereas the elements of \mbox{\tt realArr} have been
+\noindent example, the elements of \mbox{\tt intArr} have not been
+given initial values whereas the elements of \mbox{\tt realArr} have been
 initialized.  Note the use of the integer constant
 \mbox{\tt ARRSIZE} to store the arrays' size.  By using the constant
 in this way, we do not have to use the literal value {\tt 10} anywhere
@@ -627,10 +601,12 @@ in the program, thereby making it easier to read and to modify the
 program.  If we want to change the size of the array that the program
 handles, we can just change the value of {\tt ARRSIZE}. This is an
 example
-%\begin{marginalnote}Maintainability Principle\end{marginalnote}
 \marginnote{Maintainability principle}
+%\begin{marginalnote}Maintainability Principle\end{marginalnote}
 of the maintainability
 principle\index{Maintainability Principle}.
+
+
 
 \JavaTIP{EFFECTIVE DESIGN}{Symbolic Constants.}{Using symbolic
 constants (final variables) instead of literal values makes the
@@ -638,8 +614,10 @@ program easier to read and to maintain.}
 
 \noindent Note the use of the {\tt static} qualifier throughout the
 {\tt PrintArrays} class. This enables us to refer to the array
-and the other variables from within the {\tt main()} method. If
-{\tt intArr} were not declared {\tt static}, we would get the
+and the other variables from within the {\tt main()} method. 
+\phantomsection 
+\label{fig:printarraysout}
+ If {\tt intArr} were not declared {\tt static}, we would get the
 compiler error {\tt attempt to make static use of a non-static variable.}
 This use of {\tt static} is justified mainly as a coding convenience
 rather than a principle of object-oriented design. The only examples
@@ -647,6 +625,32 @@ we've seen so far in which static elements were a necessary design
 element were the use of static elements in the {\tt Math} class---{\tt Math.PI} 
 and {\tt Math.sqrt()}---and the use of static
 final variables in {\tt TwoPlayerGame}---{\tt TwoPlayerGame.PLAYER\_ONE}.
+
+\marginpar{
+\vspace*{-5pc}
+%\small
+{\color{cyan}\rule{12.5pc}{1pt}}
+\begin{tabular}{cc} 
+ \hspace*{18pt}Ints\hspace*{18pt}    &      \hspace*{18pt}Reals\hspace*{18pt}  \\[4pt]
+ 0       &      \hphantom{0}1.1  \\ 
+ 0       &      \hphantom{0}2.2  \\ 
+ 0       &      \hphantom{0}3.3  \\ 
+ 0       &      \hphantom{0}4.4  \\ 
+ 0       &      \hphantom{0}5.5  \\ 
+ 0       &      \hphantom{0}6.6  \\ 
+ 0       &      \hphantom{0}7.7  \\ 
+ 0       &      \hphantom{0}8.8  \\ 
+ 0       &      \hphantom{0}9.9  \\ 
+ 0       &      10.1  \\ 
+ \end{tabular}
+ \addtocounter{figure}{1}
+{\color{cyan}\rule[12pt]{12.5pc}{1pt}\hspace*{-12.6pc}
+\noindent \bf \small\raggedright FIGURE \thefigure} \raggedright \quad
+Output of the {\tt PrintArrays} program. 
+}
+
+
+
 
 
 For large arrays, it is not always feasible to initialize them in an
@@ -663,7 +667,6 @@ should be used only for relatively small arrays.}
 \noindent The example in Figure~\ref{fig-squares100} creates an array of 50
 integers and then fills the elements with the values 1, 4, 9, 16, and
 so on.  It then prints the entire array.
-
 \begin{figure}[h!]
 \jjjprogstart
 \begin{jjjlisting}
@@ -685,26 +688,9 @@ public class Squares {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{A program with an array that stores the squares of the first 50 integers.
-Its output is shown in Figure~9.8.
-\label{fig-squares100}\label{pg-fig-squares100}}
+Its output is shown in Figure~\hyperref[fig-squaresout]{9.8}.}
+{fig-squares100}
 \end{figure}
-\marginpar{
-\vspace*{-10pc}
-\small
-{\color{cyan}\rule{12.5pc}{1pt}}\\[2pt]
-\it 1 4 9 16 25 \\
-36 49 64 81 100\\
-121 144 169 196 225\\
-256 289 324 361 400\\
-441 484 529 576 625\\
-676 729 784 841 900\\
-961 1024 1089 1156 1225\\
-1296 1369 1444 1521 1600\\
-1681 1764 1849 1936 2025\\
-2116 2209 2304 2401 2500 \rm\\[-4pt]
-\captionmargin{Output of the {\tt Squares} program.
-\label{fig-squaresout}}
-}
 
 
 This example illustrates some important points about the use of
@@ -719,11 +705,35 @@ intArr[k] = (k+1) * (k+1);
 \end{lstlisting}
 \end{jjjlisting}
 
+\phantomsection 
+\label{fig-squaresout}
 \noindent The use of the variable {\it k} in this assignment
 statement allows us to vary the location that is assigned on each
-iteration of the for loop.  Note that in this example, {\it k} occurs as
+iteration of the for loop. 
+ Note that in this example, {\it k} occurs as
 the array index on the left-hand side of this expression, while
 {\it k+1} occurs on the right-hand side as the value to be squared.  The
+\marginpar{
+\vspace*{-10pc}
+\small
+{\color{cyan}\rule{12.5pc}{1pt}}\\[2pt]
+\it 1 4 9 16 25 \\
+36 49 64 81 100\\
+121 144 169 196 225\\
+256 289 324 361 400\\
+441 484 529 576 625\\
+676 729 784 841 900\\
+961 1024 1089 1156 1225\\
+1296 1369 1444 1521 1600\\
+1681 1764 1849 1936 2025\\
+2116 2209 2304 2401 2500 \rm\\[4pt]
+ \addtocounter{figure}{1}
+{\color{cyan}\rule[12pt]{12.5pc}{1pt}\hspace*{-12.6pc}
+\noindent \bf \small\raggedright FIGURE \thefigure} \raggedright \quad
+Output of the {\tt Squares} program. 
+%\captionmargin{Output of the {\tt Squares} program.
+%
+}
 reason for this is that arrays are indexed starting at 0 but we want
 our table of squares to begin with the square of 1. So the square of
 some number {\it n+1} will always be stored in the array whose index
@@ -824,9 +834,8 @@ we encounter the letter while processing the string:
 \end{jjjlisting}
 
 A UML diagram for the {\tt LetterFreq} class is given in Figure~9.9 and
-\marginfig{chptr09/letfrequml.eps}{UML for {\tt LetterFreq}.
-\label{fig-letfrequml}
-\label{pg-fig-letfrequml}}
+\marginfig{chptr09/letfrequml.eps}{UML for {\tt LetterFreq}.}
+{fig-letfrequml}
 the class definition is given
 \begin{figure}[tb]
 \jjjprogstart
@@ -852,8 +861,8 @@ public class LetterFreq {
 } //LetterFreq
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt LetterFreq} class definition.
-\label{fig-letfreq}}
+\jjjprogstop{The {\tt LetterFreq} class definition.}
+{fig-letfreq}
 \end{figure}
 in Figure~\ref{fig-letfreq}. Note that we will have to make a minor
 modification to this class later in this chapter to enable us to sort
@@ -872,9 +881,8 @@ class should also have two methods: a method to count the frequencies
 of the {\tt 26} letters in a given string and a method that prints out
 the frequency 
 \marginfig{chptr09/anafrequml.eps}{UML for {\tt
-AnalyzeFreq}.
-\label{fig-anafrequml}
-\label{pg-fig-anafrequml}}
+AnalyzeFreq}.}
+{fig-anafrequml}
 of each letter to the console window.  The UML diagram for the class
 is given in Figure~9.11.
 
@@ -981,8 +989,8 @@ public class AnalyzeFreq {
 } //AnalyzeFreq
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt AnalyzeFreq} class definition.
-\label{fig-anafreq}}
+\jjjprogstop{The {\tt AnalyzeFreq} class definition.}
+{fig-anafreq}
 \end{figure}
 \noindent given in Figure~\ref{fig-anafreq}. We will modify this class later in
 the chapter to be able to sort the array after counting.  The
@@ -1013,7 +1021,7 @@ characters of typical English text to test the new {\tt main()} method
 
 
 \section{Array Algorithms: Sorting}
-\label{sec-sort}\label{pg-sec-sort}
+\label{sec-sort}
 \noindent {\bf Sorting} an array is the process of arranging its elements in
 ascending or descending order.   Sorting algorithms are among the most
 widely used algorithms.  Any time large amounts of data are maintained,
@@ -1176,8 +1184,8 @@ public class Sort {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{Source code for  the {\tt insertionSort()} method.
-Note in {\tt main()} how an integer array is passed to the method.
-\label{fig-bubblemeth}\label{pg-fig-bubblemeth}}
+Note in {\tt main()} how an integer array is passed to the method.}
+{fig-bubblemeth}
 \end{figure}
 
 Second, note how empty brackets ({\tt []}) are used to
@@ -1498,9 +1506,9 @@ integer array, which is passed as the method's parameter.  If the key
 is found in the array, its location is returned.  If it is not found,
 then $-1$ is returned to indicate failure.
 
-\marginfig{chptr09/p430f1.eps}{The {\tt Search} class.
-\label{fig-p430f1}
-\label{pg-fig-p430f1}}
+\marginfig{chptr09/p430f1.eps}{The {\tt Search} class.}
+{fig-p430f1}
+
 
 The {\tt Search} class (Figs.~9.15 and \ref{fig-search})
 provides the Java implementation of the {\tt sequentialSearch()} method.
@@ -1543,8 +1551,8 @@ public class Search {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{The {\tt Search} class contains both a {\tt sequentialSearch()}
-and a {\tt binarySearch()}.
-\label{fig-search}\label{pg-fig-search}}
+and a {\tt binarySearch()}.}
+{fig-search}
 \end{figure}
 
 \JavaTIP[false]{EFFECTIVE DESIGN}{Sentinel Return Value.}{Like Java's
@@ -1665,9 +1673,9 @@ After checking location 0, the new value for {\tt high} will become
 $-1$, which makes the condition \verb|low <= high | false.  So the
 search will terminate.
 
-\marginfig{chptr09/p432f1.eps}{The {\tt TestSearch} class.\\
-\label{fig-p432f1}
-\label{pg-fig-p432f1}}
+\marginfig{chptr09/p432f1.eps}{The {\tt TestSearch} class. \\ }
+{fig-p432f1}
+
 
 The {\tt TestSearch} class (Figs.~9.17 and \ref{fig-testsearch})
 provides a  program that can be used to test two search methods.
@@ -1726,8 +1734,8 @@ public class TestSearch {
 } // TestSearch
 \end{lstlisting}
 \end{jjjlistingleft}
-\jjjprogstop{The {\tt TestSearch} class.
-\label{fig-testsearch}\label{pg-fig-testsearch}}
+\jjjprogstop{The {\tt TestSearch} class.}
+{fig-testsearch}
 \end{figure}
 
 
@@ -1800,8 +1808,8 @@ if we view this array as a two-dimensional table, consisting of
 %%\figaleft{chptr09/8f14.eps}{A two-dimensional array with 13 rows
 \figa{chptr09/8f14.eps}{A two-dimensional array with 13 rows
 and 32 columns.  To represent 12 months of the year, we can simply
-ignore row 0 and column 0.
-\label{fig-rainfall}\label{pg-fig-rainfall}}
+ignore row 0 and column 0.}
+{fig-rainfall}
 \end{figure}
 
 As Figure~\ref{fig-rainfall} shows, the very first element of this
@@ -2108,8 +2116,8 @@ Figure~\ref{fig-twodrow} helps to clarify this point.
 \begin{figure}[h!]
 %%\figaleft{chptr09/8f15.eps}{Referencing individual elements and
 \figa{chptr09/8f15.eps}{Referencing individual elements and
-array elements in a two-dimensional array.
-\label{fig-twodrow}\label{pg-fig-twodrow}}
+array elements in a two-dimensional array.}
+{fig-twodrow}
 \end{figure}
 
 It's important to note that deciding whether to use brackets when
@@ -2137,8 +2145,7 @@ applies to all parameters, including array parameters.}
 \noindent The {\tt Rainfall} class (Figs.~9.21 and \ref{fig-rainfallclass})
 \begin{figure}[htb]
 \figa{chptr09/p440f1.eps}{The {\tt Rainfall} class.}
-\label{fig-p440f1}
-\label{pg-fig-p440f1}
+{fig-p440f1}
 \end{figure}
 \begin{figure}[p!]
 \jjjprogstart
@@ -2198,8 +2205,8 @@ public class Rainfall {
 }//Rainfall
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Definition of the {\tt Rainfall} class.
-\label{fig-rainfallclass}\label{pg-fig-rainfallclass}}
+\jjjprogstop{Definition of the {\tt Rainfall} class.}
+{fig-rainfallclass}
 \end{figure}
 shows how we can test our array algorithms.  It creates the {\tt
 rainfall} array in the {\tt main()} method.  It then initializes the
@@ -2388,9 +2395,8 @@ public abstract interface Comparable {
 
 \noindent By implementing {\tt compareTo()}, a class
 \marginfig{chptr09/p443f1.eps}{Java wrapper classes, such as
-{\tt Integer} and {\tt Double}, implement the {\tt Comparable} interface.
-\label{fig-p443f1}
-\label{pg-fig-p443f1}}
+{\tt Integer} and {\tt Double}, implement the {\tt Comparable} interface.}
+{fig-p443f1}
 can impose an order on its objects. The {\tt Comparable}
 interface is implemented by all of Java's wrapper classes---that is,
 by {\tt Integer}, {\tt Double}, {\tt Float}, {\tt Long}, and so on
@@ -2467,9 +2473,8 @@ of {\tt Comparable}s.
 
 The {\tt TestSort} class (Figs.~9.25 and ~\ref{fig-testsort}) provides
 an example of how to use the polymorphic {\tt sort()} method.
-\marginfig{chptr09/p445f1.eps}{The {\tt TestSort()} class.
-\label{fig-p445f1}
-\label{pg-fig-p445f1}}
+\marginfig{chptr09/p445f1.eps}{The {\tt TestSort()} class.}
+{fig-p445f1}
 
 It contains three methods: The {\tt sort()} method that we just
 described; a polymorphic {\tt print()} method, which can be used to
@@ -2521,9 +2526,8 @@ public class TestSort {
 \end{lstlisting}
 \end{jjjlistingleft}
 \jjjprogstop{{\tt TestSort} uses the polymorphic {\tt sort()} method
-to sort either {\tt Integer}s or {\tt Float}s. 
-\label{fig-testsort}
-\label{pg-fig-testsort}}
+to sort either {\tt Integer}s or {\tt Float}s. }
+{fig-testsort}
 \end{figure}
 
 
@@ -2566,9 +2570,9 @@ java.util.Arrays.sort(fArr);
 Java's class and method library, saves real-word programmers lots of
 effort.
 
-\marginfig{chptr09/p446f1.eps}{The {\tt java.util.Vector} class.
-\label{fig-p446f1}
-\label{pg-fig-p446f1}}
+\marginfig{chptr09/p446f1.eps}{The {\tt java.util.Vector} class.}
+{fig-p446f1}
+
 
 \secEXRHone{Self-Study Exercises}
 \begin{SSTUDY}
@@ -2592,7 +2596,7 @@ use of the {\tt sort()} method of the previous exercise.
 
 
 \section{From the Java Library: java.util.Vector}
-\label{sec-vectors}\label{pg-sec-vectors}
+\label{sec-vectors}
 \WWWjava
 
 The {\tt java.util.Vector} class implements an array of objects that
@@ -2646,8 +2650,8 @@ public class VectorDemo {
 }// VectorDemo
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Demonstration of the {\tt Vector} class.  
-\label{fig-vectordemo}\label{pg-fig-vectordemo}}
+\jjjprogstop{Demonstration of the {\tt Vector} class.  }
+{fig-vectordemo}
 \end{figure}
 
 Once all the integers have been inserted, the {\tt printVector()}
@@ -2760,9 +2764,8 @@ they can be referenced directly by {\tt ComputerGame} subclasses, but
 as {\tt protected} variables, they remain hidden from all other
 classes.
 
-\marginfig{chptr09/computergame.eps}{The {\tt ComputerGame} class.
-\label{fig-computergame}
-\label{pg-fig-computergame}}
+\marginfig{chptr09/computergame.eps}{The {\tt ComputerGame} class.}
+{fig-computergame}
 The {\tt ComputerGame(int)} constructor allows the number of players
 to be set when the game is constructed.  The default constructor sets
 the number of players to one. The constructors create an array of
@@ -2854,9 +2857,8 @@ public abstract class ComputerGame {
 } //ComputerGame
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Implementation of the {\tt ComputerGame} class.
-\label{fig-gamesource}
-\label{pg-fig-gamesource}}
+\jjjprogstop{Implementation of the {\tt ComputerGame} class.}
+{fig-gamesource}
 \end{figure}
 
 \noindent There are several points worth noting about this
@@ -2921,9 +2923,9 @@ instead have to define it in each subclass.
 methods allow us to implement methods that can be applied to
 yet-to-be-defined subclasses.}
 
-\marginfigscaled{chptr09/wordguess.eps}{0.9}{The {\tt WordGuess} class.
-\label{fig-wordguess}
-\label{pg-fig-wordguess}}
+\marginfigscaled{chptr09/wordguess.eps}{0.9}{The {\tt WordGuess} class.}
+{fig-wordguess}
+
 \subsection{The {\tt WordGuess} and {\tt WordGuesser} Classes}
 
 We will assume here that you are familiar with the {\tt WordGuess}
@@ -3041,9 +3043,8 @@ of the interaction generated by this {\tt play()} method:
 a human. 
 
 \marginfig{chptr09/wordguesser.eps}{The {\tt WordGuesser} class
-extends {\tt Player}.
-\label{fig-wordguesser}
-\label{pg-fig-wordguesser}}
+extends {\tt Player}.}
+{fig-wordguesser}
 
 In our new design, the {\tt WordGuesser} class is a subclass of {\tt
 Player} (Figure~9.33).  The {\tt WordGuesser} class itself requires
@@ -3091,9 +3092,8 @@ public abstract class Player  {
 } // Player
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Implementation of the {\tt Player} class.
-\label{fig-player}
-\label{pg-fig-player}}
+\jjjprogstop{Implementation of the {\tt Player} class.}
+{fig-player}
 \end{figure}
 
 What gives {\tt Player} its utility is the fact that it encapsulates
@@ -3178,9 +3178,8 @@ were to click on the rightmost {\em L} button, the GUI would ignore
 that move, because it is illegal.
 
 \begin{figure}[h!]
-\figascaled{chptr09/captureGUI.eps}{0.8}{The Sliding Tile Puzzle.
-\label{fig-capture}
-\label{pg-fig-capture}}
+\figascaled{chptr09/captureGUI.eps}{0.8}{The Sliding Tile Puzzle.}
+{fig-capture}
 \end{figure}
 
 \subsection{The {\tt GUIPlayableGame} Interface}
@@ -3215,9 +3214,9 @@ game should also update its representation of the game's state to
 reflect that the tile array has changed. And it should somehow make
 communicate the game's state to the GUI.
 \marginfig{chptr09/GUIplayable.eps}{The {\tt GUIPlayableGame} interface
-extends the {\tt IGame} interface.
-\label{fig-GUIplayble}
-\label{pg-fig-GUIplayable}}
+extends the {\tt IGame} interface.}
+{fig-GUIplayable}
+
 
 Because it is impossible to know in advance just what form of data a
 game's moves might take, we will use Java {\tt String}s to communicate
@@ -3276,9 +3275,8 @@ class-level declarations:
 \end{jjjlisting}
 
 \marginfig{chptr09/slidingtilepuzzle.eps}{The {\tt SlidingTilePuzzle} is
-a {\tt ComputerGame} that implements the {\tt GUIPlayableGame} interface.
-\label{fig-slidingpuzzle}
-\label{pg-fig-slidingpuzzle}}
+a {\tt ComputerGame} that implements the {\tt GUIPlayableGame} interface.}
+{fig-slidingpuzzle}
 \noindent Note how we initialize the {\tt puzzle} array with the
 initial configuration of seven characters. Taken together, these
 statements initialize the puzzle's state.
@@ -3409,9 +3407,8 @@ public class SlidingTilePuzzle extends ComputerGame
 } //SlidingTilePuzzle
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Implementation of the {\tt SlidingTilePuzzle} class.
-\label{fig-puzzlecode}
-\label{pg-fig-puzzlecode}}
+\jjjprogstop{Implementation of the {\tt SlidingTilePuzzle} class.}
+{fig-puzzlecode}
 \end{figure}
 
 \pagebreak
@@ -3422,9 +3419,8 @@ puzzle. We will model the GUI itself after those we designed in
 Chapter~4. 
 
 Figure~9.39 provides a summary of the design. As an implementor of the
-\marginfig{chptr09/slidingGUI.eps}{The {\tt SlidingGUI} class.
-\label{fig-slidingGUI}
-\label{pg-fig-slidingGUI}}
+\marginfig{chptr09/slidingGUI.eps}{The {\tt SlidingGUI} class.}
+{fig-slidingGUI}
 {\tt ActionListener} interface, {\tt SlidingGUI} implements the {\tt
 actionPerformed()} method, which is where the code that controls the
 puzzle is located.  The main data structure is an array of seven {\tt
@@ -3529,9 +3525,8 @@ public class SlidingGUI extends JFrame implements ActionListener {
 } // SlidingGUI
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Implementation of the {\tt SlidingGUI} class.
-\label{fig-GUIsource}
-\label{pg-fig-GUIsource}}
+\jjjprogstop{Implementation of the {\tt SlidingGUI} class.}
+{fig-GUIsource}
 \end{figure}
 
 The most important method in the GUI is the {\tt actionPerformed()}

@@ -80,9 +80,8 @@ goal is to introduce the
 %\begin{figure}
 %\begin{graphic}
 %\begin{figure}[tb]
-\marginfig{chptr07/stringclass.eps}{The {\tt java.lang.String} class.
-\label{fig-p349f1}
-\label{pg-fig-p349f1}}
+\marginfig{chptr07/stringclass.eps}{The {\tt java.lang.String} class.}
+{fig-p349f1}
 %\end{figure}
 %\end{graphic}
 %\end{figure}
@@ -155,16 +154,16 @@ String name = new String();
 
 \noindent Java will create a {\tt String} object and make {\tt name}
 \marginfig{chptr07/p349f2.eps}{An empty string is a {\tt String} object
-with value ``'' and count 0.\break
-\label{fig-emptystring}\label{pg-fig-emptystring}}
-the reference to it.  Figure~7.2 shows a hypothetical representation
+with value ``'' and count 0.\break}
+{fig-emptystring}
+the reference to it.  Figure~\ref{fig-emptystring} shows a hypothetical representation
 of a {\tt String} object. In addition to storing the sequence of
 characters that make up the string, Java also stores an integer value
 representing the number of characters in the string.  We have chosen
 to represent these two elements as the private instance variables,
 {\tt value}, for the sequence of characters, and {\tt count} for the
 number of characters. In fact, we don't know exactly how Java stores
-the sequence of characters. That information is hidden. As Figure~7.2
+the sequence of characters. That information is hidden. As Figure~\ref{fig-emptystring}
 illustrates, when we use the default constructor, the value of the is
 the empty string and its count is 0.
 
@@ -186,12 +185,12 @@ String} objects, both storing the word ``Hello''.
 
 Note that in the first of the preceding statements, we used the
 literal string ``Hello'' in the constructor.  When Java encounters a
-\marginfig{chptr07/p349f3.eps}{The literal {\tt String} ``Socrates.''\break
-\label{fig-literalstr}\label{pg-fig-literalstr}}
+\marginfig{chptr07/p349f3.eps}{The literal {\tt String} ``Socrates.''\break}
+{fig-literalstr}
 new literal string in a program, it constructs an object for it.  For
 example, if your program contained the literal ``Socrates,'' Java
 would create an object for it and treat the literal itself as a
-reference to the object (Fig.~7.3).
+reference to the object (Fig.~\ref{fig-literalstr}).
 
 We often use a string literal to assign a value to a {\tt String}
 variable: 
@@ -206,7 +205,7 @@ s = "Socrates";// s now refers to "Socrates" object
 \noindent In this case, the reference variable {\it s} is initially
 {\tt null}---that is, it has no referent, no object, to refer to.
 However, after the assignment statement, {\it s} would refer to the
-literal object ``Socrates,'' which is depicted in Figure~7.3. Given
+literal object ``Socrates,'' which is depicted in Figure~\ref{fig-literalstr}. Given
 these two statements, we still have only one object, the {\tt String}
 object containing the word ``Socrates.''.  But now we have two
 references to it: the literal string ``Socrates,'' and the reference
@@ -216,9 +215,9 @@ Assignment statements can also be used as initializers when declaring
 a {\tt String} variable:
 \marginfig{chptr07/p350f1.eps}{The variables {\tt name1}, {\tt name2},
 and {\tt name3} serve as references to the literal {\tt String}
-objects ``Socrates'' and ``''.
-\label{fig-literalrefs}
-\label{pg-fig-literalrefs}}
+objects ``Socrates'' and ``''.}
+{fig-literalrefs}
+
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -229,7 +228,7 @@ String name3 = "Socrates";
 \end{jjjlisting}
 
 \noindent In this example, Java does not construct new {\tt String}
-objects.  Instead, as Figure~7.4 shows, it simply makes the variables
+objects.  Instead, as Figure~\ref{fig-literalrefs} shows, it simply makes the variables
 {\tt name1}, {\tt name2}, and {\tt name3} serve as references to the
 same objects that are referred to by the literal strings ``'' and
 ``Socrates.'' This is a direct consequence of Java's policy of
@@ -244,12 +243,12 @@ to that object.
 
 Finally, consider the following declarations, which do invoke the
 {\tt String} constructors:
-\marginfig{chptr07/p351f1.eps}{Together with the objects in Figure~7.4, there
+\marginfig{chptr07/p351f1.eps}{Together with the objects in Figure~\ref{fig-literalrefs}, there
 are now four different {\tt String} objects with
 eight different references to them, including the literals ``Socrates''
-\break and ``''.
-\label{fig-strobjects}
-\label{pg-fig-strobjects}}
+\break and ``''.}
+{fig-strobjects}
+
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -259,7 +258,7 @@ String name6 = name4;
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent In this case, as shown in Figure~7.5,  Java creates 
+\noindent In this case, as shown in Figure~\ref{fig-strobjects},  Java creates 
 two new objects and sets {\tt name4} to refer to the first and {\tt
 name5} to refer to the second.  It gives {\tt name4} the empty string
 as its value, and it gives {\tt name5} ``Socrates'' as its value.  But
@@ -281,7 +280,7 @@ assigning it an initial value.}
 
 \subsection{Concatenating Strings }
 \noindent Another way to build a {\tt String} object is to concatenate
-two other strings. Recall from Chapter~2 that there are two ways to
+two other strings. Recall from Chapter~\ref{chapter-objects} that there are two ways to
 perform string concatenation in Java: We can use the {\tt concat()}
 method or the concatenation operator, $+$.
 
@@ -419,9 +418,8 @@ String string4 = string2 + " "
 The position of a particular character in a string is called its {\bf
 \marginfig{chptr07/7f5.eps}{The string ``Socrates''
 has eight characters, indexed from 0 to 7. This is an example
-of {\it zero indexing}.
-\label{fig-zeroindex}
-\label{pg-fig-zeroindex}}
+of {\it zero indexing}.}
+{fig-zeroindex}
 string index}. All {\tt String}s in Java are {\bf zero
 indexed}\index{zero indexed}---that is, the index of the first
 character is zero.  (Remember, zero indexing is contrasted with {\bf
@@ -429,7 +427,7 @@ unit indexing}, in which we start counting at 1.)  For example, in
 ``Socrates,'' the letter {\it S} occurs at index 0, the letter {\it o}
 occurs at index 1, {\it r} occurs at index 3, and so on.  Thus, the
 {\tt String} ``Socrates'' contains eight characters indexed from 0 to
-7 (Fig.~7\mbox{.}6).  Zero indexing is customary in programming
+7 (Fig.~\ref{fig-zeroindex}).  Zero indexing is customary in programming
 languages.  We will see other examples of this when we talk about
 arrays and vectors.
 
@@ -595,13 +593,12 @@ contains two occurrences of {\it o}, {\tt indexOf()} and
 %\begin{figure}
 %\begin{graphic}
 %\begin{figure}[tb]
-\marginfig{chptr07/7f6.eps}{The indexing of the ``Hello World'' string.
-\label{fig-helloindex}
-\label{pg-fig-helloindex}}
+\marginfig{chptr07/7f6.eps}{The indexing of the ``Hello World'' string.}
+{fig-helloindex}
 %\end{figure}
 %\end{graphic}
 %\end{figure}
-As Figure~7.7 shows, the first {\it o} in ``Hello World''
+As Figure~\ref{fig-helloindex} shows, the first {\it o} in ``Hello World''
 occurs at index 4, the value returned by {\tt indexOf()}. The second
 {\it o} occurs at index 7, which is the value returned by
 {\tt lastIndexOf()}.
@@ -780,9 +777,8 @@ public String keywordSearch(String s, String keyword) {
 } // keywordSearch()
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt key\-word\-Search()} method.
-\label{fig-keywordsearch}
-\label{pg-fig-keywordsearch}}
+\jjjprogstop{The {\tt key\-word\-Search()} method.}
+{fig-keywordsearch}
 \end{figure}
 
 \subsection*{Testing and Debugging}
@@ -868,9 +864,8 @@ memory-consuming operation, this algorithm is somewhat wasteful of
 Java's resources.  
 \marginfig{chptr07/p359f1.eps}{\small Evaluating {\tt resultStr =
 resultStr + ptr + " "} creates an orphan object that must be garbage
-collected.
-\label{fig-orphan}
-\label{pg-fig-orphan}}
+collected.}
+{fig-orphan}
 
 Of course, except for the inefficiency of doing it this way, no real
 harm is done by this algorithm used in the {\tt keywordSearch()}
@@ -933,9 +928,8 @@ public String keywordSearch(String s, String keyword) {
 \end{jjjlisting}
 
 \noindent We declare {\tt resultStr} as a {\tt StringBuffer}
-\marginfig{chptr07/p360f1.eps}{The {\tt java.lang.StringBuffer} class.
-\label{fig-p360f1}
-\label{pg-fig-p360f1}}
+\marginfig{chptr07/p360f1.eps}{The {\tt java.lang.StringBuffer} class.}
+{fig-p360f1}
 instead of a {\tt String}. Then, instead of concatenating the {\tt
 ptr} and reassigning the {\tt resultStr}, we {\tt append()} the {\tt
 ptr} to the {\tt resultStr} for each occurrence of a
@@ -1305,9 +1299,8 @@ public int countChar(String str, char ch) {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{A method to count the occurrence of a particular
-character in a string.
-\label{fig-countchar}
-\label{pg-fig-countchar}}
+character in a string.}
+{fig-countchar}
 \end{figure}
 
 Begin by initializing the local variable, {\tt counter}, to
@@ -1592,15 +1585,15 @@ in the {\tt Object} class, ``equals'' means ``identical.''  Two
 {\tt Object}s are equal only if their names are references to the same
 object.
 \marginfig{chptr07/7f11.eps}{Venus is the morning star, so ``Venus''
-and ``the morning star'' are two references to the same object.
-\label{fig-venus}\label{pg-fig-venus}}
+and ``the morning star'' are two references to the same object.}
+{fig-venus}
 
 This is like the old story of the morning star and the evening star,
 which were thought to be different objects before it was discovered
 that both were just the planet Venus.  After the discovery, it was
 clear that ``the morning star'' and ``the evening star'' and ``Venus'' were
 just three different references to one and the same object
-(Fig.~7.12).
+(Fig.~\ref{fig-venus}).
 
 We can create an analogous situation in Java by using the following
 {\tt JButton} definitions:
@@ -1619,9 +1612,8 @@ would be {\tt true} because {\it b2} and {\it b3} are just two
 names for the same object (Fig.~7.13). So, in this case,
 \marginfig{chptr07/7f12.eps}{For most objects, equality means identity.
 JButtons {\tt b2} and {\tt b3} are identical (and, hence, equal), but
-JButtons {\tt b1} and {\tt b2} are not identical (and, hence, unequal).
-\label{fig-buttons}
-\label{pg-fig-buttons}}
+JButtons {\tt b1} and {\tt b2} are not identical (and, hence, unequal).}
+{fig-buttons}
 ``equals'' really means ``identical.''
 
 Moreover, in Java, when it is used to compare two objects, the equality operator
@@ -1676,9 +1668,8 @@ public class TestEquals {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{The {\tt TestEquals} program tests Java's default
-{\tt equals()} method, which is defined in the {\tt Object} class.
-\label{fig-equals}
-\label{pg-fig-equals}}
+{\tt equals()} method, which is defined in the {\tt Object} class.}
+{fig-equals}
 \end{figure}
 and {\tt isIdentical()} to perform the comparisons and print the
 results. This program will produce the following output:
@@ -1819,9 +1810,8 @@ public class TestStringEquals {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{Program illustrating the difference between
-string equality and identity.
-\label{fig-equals2}
-\label{pg-fig-equals2}}
+string equality and identity.}
+{fig-equals2}
 \end{figure}
 
 \secEXRHone{Self-Study Exercises}
@@ -1891,11 +1881,10 @@ including blank spaces, tabs, and line feeds, serve as the delimiters.
 For the password example, the colon character serves as a delimiter.
 
 Java's {\tt java.util.StringTokenizer}\index{StringTokenizer class} class
-\marginfig{chptr07/p377f1.eps}{The {\tt java.util.StringTokenizer} class.
-\label{fig-p377f1}
-\label{pg-fig-p377f1}}
+\marginfig{chptr07/p377f1.eps}{The {\tt java.util.StringTokenizer} class.}
+{fig-p377f1}
 is specially designed for breaking strings into their tokens
-(Fig.~7.17). When instantiated with a {\tt String} parameter, a {\tt
+(Fig.~\ref{fig-p377f1}). When instantiated with a {\tt String} parameter, a {\tt
 StringTokenizer} breaks the string into tokens, using white space as
 delimiters.  For example, if we instantiated a {\tt StringTokenizer}
 as in the code
@@ -1985,20 +1974,19 @@ be able to select and control the font that is used.  Even a simple
 drawing task, such as being able to center a message in a panel,
 requires that we know the font's dimensions and be able to manipulate
 \marginfig{chptr07/fontmethods.eps}{Methods to access the {\tt Font} and
-{\tt FontMetrics} objects associated with each {\tt Graphics} context.
-\label{fig-fontmethods}
-\label{pg-fig-fontmethods}}
+{\tt FontMetrics} objects associated with each {\tt Graphics} context.}
+{fig-fontmethods}
 them.  In this section, we learn how to work with Java's fonts and
 font control methods.
 
 Each graphics context has an associated {\tt Font} and {\tt
 FontMetrics} object, and the {\tt Graphics} class
-(Fig.~7.18) provides several methods to access them.
+(Fig.~\ref{fig-fontmethods}) provides several methods to access them.
 A {\tt FontMetrics} is an object that encapsulates important data
 about a font, such as its height and width.  Java assigns a default
 font to each {\tt Graphics} object.  For example, this is the font
 used by the {\tt drawString()} method, which we used in our very first
-Java programs back in Chapter~1.  The particular font used is system
+Java programs back in Chapter~\ref{ch:intro2}.  The particular font used is system
 dependent, but to override the default one can simply invoke the {\tt
 setFont()} method:
 
@@ -2022,9 +2010,8 @@ to be specified.
 
 %\begin{figure}
 %\begin{graphic}
-\marginfig{chptr07/font.eps}{The {\tt Font} class.
-\label{fig-font}
-\label{pg-fig-font}}
+\marginfig{chptr07/font.eps}{The {\tt Font} class.}
+{fig-font}
 %\end{graphic}
 %\end{figure}
 
@@ -2117,8 +2104,8 @@ these properties, we will use the {\tt FontMetrics} class.
 %\begin{figure}
 %\begin{figure}[tb]
 \marginfig{chptr07/fontmetrics.eps}{An illustration of the various font
-measurements.
-\label{fig-fontmetrics}\label{pg-fig-fontmetrics}}
+measurements.}
+{fig-fontmetrics}
 %\end{figure}
 %\end{figure}
 
@@ -2153,9 +2140,9 @@ an individual character is known as its {\it advance}.
 
 
 
-The {\tt FontMetrics} class (Fig.~7.21) provides methods
-\marginfig{chptr07/fontmetrics2.eps}{The {\tt FontMetrics} class.
-\label{pg-fig-fontmetrics2}}
+The {\tt FontMetrics} class (Fig.~\ref{fig-fontmetrics2}) provides methods
+\marginfig{chptr07/fontmetrics2.eps}{The {\tt FontMetrics} class.}
+{fig-fontmetrics2}
 for accessing a font's properties.  These can be useful to control the
 layout of text on a GUI.  For example, when drawing multiple lines of
 text, the {\tt getHeight()} method is useful for determining how much
@@ -2213,9 +2200,8 @@ System.out.println("width = " + d.width +
 
 \noindent Note the redundancy built into the {\tt Dimension} class.  
 For example, in addition to being able to set a {\tt Dimension}'s
-\marginfig{chptr07/dimension.eps}{The {\tt Dimension} class.
-\label{fig-dimension}
-\label{pg-fig-dimension}}
+\marginfig{chptr07/dimension.eps}{The {\tt Dimension} class.}
+{fig-dimension}
 instance variables directly, public access methods are provided.
 Also, by defining more than one version of some access methods, the
 class achieves a higher level of flexibility.  The same can be said
@@ -2297,8 +2283,8 @@ public static void main(String args[]) {
 } // CenterText
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt CenterText} application.
-\label{fig-centertext}\label{pg-fig-centertext}}
+\jjjprogstop{The {\tt CenterText} application.}
+{fig-centertext}
 \end{figure}
 
 \JavaTIP{PROGRAMMING TIP}{Generality.}{By using a component's size and
@@ -2462,9 +2448,8 @@ it is best to use default fonts.
 \begin{figure}[h]
 \figa{chptr07/p392f1.eps}{Answer to Exercise 7.4.
 Note that {\it s1} is {\tt null} because it has not been instantiated
-and has not been assigned a literal value.
-\label{fig-strobjects3}
-\label{pg-fig-strobjects3}}
+and has not been assigned a literal value.}
+{fig-strobjects3}
 \end{figure}
 %\end{figure}
 

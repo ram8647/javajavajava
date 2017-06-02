@@ -244,17 +244,17 @@
 %%  think the problem is that many figures float to the next page.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-\def\figa#1#2{%
+\def\figa#1#2#3{%
   \ifodd \thepage {
     \protect\begin{minipage}[t]{27pc}%
     \protect\vfill\centering\psfig{file=../#1}%
     \end{minipage}\hspace*{1pc}%
     \begin{minipage}[t]{12.5pc}%
-    \protect\vspace{-8pt}\caption{#2}%
+    \protect\vspace{-8pt}\caption{#2 \label{#3}}%
     \end{minipage}\hspace*{-13.5pc}%
    } \else {
     \hspace*{-13.5pc}\parbox[t]{12.5pc}{%
-    \protect\vspace{-8pt}\caption{#2}%
+    \protect\vspace{-8pt}\caption{#2  \label{#3}}%
     }\hspace*{1pc}%
     \protect\parbox[t]{27pc}{%
     \protect\vfill\centering\psfig{file=../#1}%
@@ -292,10 +292,10 @@
     \begin{minipage}{26pc}%
     \protect}
 %
-\def\jjjprogstop#1{
+\def\jjjprogstop#1#2{
     \end{minipage}
     \vspace{-7pt plus2pt minus2pt}
-    {\color{cyan}\caption{#1}}
+    {\color{cyan}\caption{#1 \label{#2}}}
 }
 %
 
