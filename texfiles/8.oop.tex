@@ -1023,16 +1023,16 @@ this chapter.
 
 \section{Example: A Toggle Button}
 \label{sec-toggle}
-\label{pg-sec-toggle}
+
 
 \noindent The ability to extend an existing class is one of the most
 \marginnote{Reusing code} powerful features of object-oriented
 programming.  It allows objects to reuse code defined in the
 superclasses without having to redefine or recompile the code.  As we
-saw in Chapter~4, a programmer-defined applet, such as {\tt
-GreeterApplet}, uses the {\tt public} methods defined for {\tt
-JApplet}s, {\tt JPanel}s, {\tt Container}s, {\tt Component}s, and {\tt
-Object}s simply because it is a subclass of {\tt JApplet}
+saw in Chapter~4, a programmer-defined JFrame, such as {\tt
+GreeterGUI}, uses the {\tt public} methods defined for {\tt
+JFrame}s, {\tt Frame}s,  {\tt Window}s, {\tt Container}s, {\tt Component}s, and {\tt
+Object}s simply because it is a subclass of {\tt JFrame}
 (Fig.~4.11).  By the same token, it can use all of the {\tt public}
 and {\tt protected} instance variables and constants defined in these
 classes by simply referring to them in its own code.
@@ -1042,7 +1042,7 @@ to extend and customize the functionality of a Java library class. As
 we saw in Chapter~4, a {\tt JButton} is a GUI component that can be
 associated with a particular action by implementing the {\tt
 ActionListener} interface.  For example, we used a {\tt JButton} in
-the {\tt GreeterApplet} to generate a greeting to the user.
+the {\tt GreeterGUI} to generate a greeting to the user.
 
 In this section, we will design a more sophisticated button. 
 We will call it a  {\tt ToggleButton} and define it as a {\tt JButton} subclass that
@@ -1123,7 +1123,7 @@ first statement in the {\tt ToggleButton()} constructor.
 By passing {\tt l1} to the super constructor we are making the first string
 that the user gives us the default label for our {\tt ToggleButton}.
 This will be the label that appears on the button when it is first
-displayed in the applet.
+displayed in a {\tt Component}.
 
 Notice also in the {\tt ToggleButton()} constructor that the {\tt
 ToggleButton} is designated as its own {\tt ActionListener}, so
@@ -1181,59 +1181,65 @@ its own independent action.}
 \end{figure}
 In this design, {\tt lightSwitch} has two listeners that respond to
 its events: the {\tt lightSwitch} itself, as a result of the {\tt
-actionPerformed()} method in its class, and the {\tt ToggleApplet}, as
+actionPerformed()} method in its class, and the {\tt ToggleFrame}, as
 a result of {\tt actionPerformed()} method in this class.
 
-The implementation of this design is given by {\tt ToggleApplet}, an
-applet that uses a {\tt ToggleButton} (Fig.~\ref{fig-toggletest}).
-Like the applet we designed in Chapter~4, this applet extends the {\tt
-JApplet} class and implements the {\tt ActionListener} interface.  In
+The implementation of this design is given by {\tt ToggleFrame}, a
+program that uses a {\tt ToggleButton} (Fig.~\ref{fig-toggletest}).
+Like the GUI we designed in Chapter~4, this program extends the {\tt
+JFrame} class and implements the {\tt ActionListener} interface.  In
 this example we use a {\tt ToggleButton} to simulate a light switch.
-Note that we assign the applet itself as an {\tt ActionListener} for
+Note that we assign the program itself as an {\tt ActionListener} for
 the {\tt lightSwitch}, so that
 
 \begin{figure}[tb]
 \jjjprogstart
 \begin{jjjlisting}
 \begin{lstlisting}
-import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ToggleApplet extends JApplet 
+public class ToggleFrame extends JFrame
                             implements ActionListener {
   private ToggleButton lightSwitch;  
 
-  public void init() {
+  public ToggleFrame() {
     lightSwitch = new ToggleButton ("off","on");
     getContentPane().add(lightSwitch);
     lightSwitch.addActionListener(this);
   } // init()
 
   public void actionPerformed(ActionEvent e)  {
-    showStatus("The light is " + lightSwitch.getText());
+    setTitle("The light is " + lightSwitch.getText());
   } // actionPerformed()
-} // ToggleApplet
+
+   public static void main(String args[]) 
+   {  
+      JFrame f = new ToggleFrame();
+      f.setSize(200,200);
+      f.setVisible(true);
+   }
+} // ToggleFrame
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{Definition of the {\tt ToggleApplet} class.}
+\jjjprogstop{Definition of the {\tt ToggleFrame} class.}
 {fig-toggletest}
 \end{figure}
 
-When {\tt lightSwitch} is clicked, the applet displays the message,
-``The light is on,'' or ``The light is off,'' in the applet's status
+When {\tt lightSwitch} is clicked, the program displays the message,
+``The light is on,'' or ``The light is off,'' in the program's title
 bar (Fig.~8.12). This is a somewhat trivial action but it illustrates
 that a {\tt ToggleButton} both toggles its own label {\it and} carries
 out some associated action.
 
 %\begin{figure}
 \begin{figure}[h!]
-\figaleft{chptr04/4f23.eps}{When clicked, {\tt ToggleApplet}
+\figaleft{chptr04/4f23.eps}{When clicked, {\tt ToggleFrame}
 button causes ``The light is on'' or ``The light is off'' to appear in
-the applet's status bar.
-\label{fig-toggledump}
-\label{pg-fig-toggledump}}
+the window's title bar.
+} {fig-toggledump}
+
 \end{figure}
 %\end{figure}
 
@@ -1260,11 +1266,11 @@ that a {\tt JButton} does, plus it can toggle its own label.}
 \item  Write a code segment (not a whole method) to swap
 two boolean variables, {\tt b1} and {\tt b2}.
 
-\item  Suppose you are designing an applet that plays a
+\item  Suppose you are designing an GUI that plays a
 card game, and you want a single button that can
 be used both to deal the cards and to collect the cards.
 Write a code segment that creates this type of button,
-adds it to the applet, and designates the applet as its
+adds it to the JFrame, and designates the JFrame as its
 {\tt ActionListener}.
 
 \end{SSTUDY}
@@ -1841,8 +1847,8 @@ off by it.
 \begin{figure}[h!]
 \figaleft{chptr08/twoplayergame.eps}{{\tt TwoPlayerGame} is the
 superclass for {\tt OneRowNim} and other two player games.
-\label{fig-twoplayergame}
-\label{pg-fig-twoplayergame}}
+} {fig-twoplayergame}
+
 \end{figure}
 
 To begin with, notice that we have introduced two Java interfaces into
@@ -2489,7 +2495,7 @@ between 1 and 3, or between 1 and the total number of sticks left, if
 there are fewer than 3 sticks.  (We will leave the task of defining
 {\tt NimPlayer}, a good player, as an exercise.)
 \marginfig{chptr08/nimplayer.eps}{Design of the {\tt NimPlayerBad} class.}
-{fig-nimplayer}
+{fig-nimplayerbad}
 
 As an implementer of the {\tt IPlayer} interface, {\tt NimPlayerBad}
 will implement the {\tt makeAMove()} method. This method will contain
@@ -2775,8 +2781,8 @@ by two different {\tt IPlayer}s.
 \begin{figure}[h]
 \figaright{chptr08/wordguess.eps}{Design of the {\tt WordGuess}
 class as part of {\tt TwoPlayerGame} hierarchy.
-\label{fig-wordguessuml}
-\label{pg-fig-wordguessuml}}
+} {fig-wordguessuml}
+
 \end{figure}
 
 Let's call the game class {\tt WordGuess}. Following the design of
@@ -2860,7 +2866,7 @@ public class WordGuess extends TwoPlayerGame implements CLUIPlayableGame {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{The {\tt WordGuess} class, Part I.}
-{fig-wordguess}
+{fig-wordguess-oop}
 \end{figure}
 
 
@@ -2931,12 +2937,12 @@ public class WordGuess extends TwoPlayerGame implements CLUIPlayableGame {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{The {\tt WordGuess} class, continued.}
-{fig-wordguess2}
+{fig-wordguess2-oop}
 \end{figure}
 
 Let's turn now to the details of the {\tt WordGuess} class, whose
-source code is shown in Figures~\ref{fig-wordguess} and
-\ref{fig-wordguess2}.  The game needs to have a supply of words from
+source code is shown in Figures~\ref{fig-wordguess-oop} and
+\ref{fig-wordguess2-oop}.  The game needs to have a supply of words from
 which it can choose a secret word to present to the players.  The {\tt
 getSecretWord()} method will take care of this task. It calculates a
 random number and then uses that number, together with a {\tt switch}
@@ -2991,7 +2997,7 @@ already been determined in the superclass or in the interfaces.  This
 greatly simplifies the development process.
 
 Let's now discuss the details of {\tt WordGuesser} class
-(Fig.~\ref{fig-wordguesser}). Note that the constructor takes a {\tt
+(Fig.~\ref{fig-wordguesser-oop}). Note that the constructor takes a {\tt
 WordGuess} parameter. This allows {\tt WordGuesser} to be passed a
 reference to the game, which accesses the game's {\tt public}
 methods, such as {\tt getPreviousGuesses()}.  The {\tt toString()}
@@ -3029,7 +3035,7 @@ public class WordGuesser implements IPlayer {
 \end{lstlisting}
 \end{jjjlisting}
 \jjjprogstop{The {\tt WordGuesser} class.}
-{fig-wordguesser}
+{fig-wordguesser-oop}
 \end{figure}
 
 \section{Principles Of Object-Oriented Design}
@@ -3373,7 +3379,7 @@ a class and \rule{40pt}{0.5pt}  an interface.
 \item  Instance variables and instance methods that are declared
  \rule{40pt}{0.5pt}  or \rule{40pt}{0.5pt}  are inherited by the subclasses.
 \item  An object can refer to itself by using the \rule{40pt}{0.5pt} keyword.
-\item  If an applet intends to handle {\tt ActionEvent}s, it must
+\item  If a GUI class intends to handle {\tt ActionEvent}s, it must
 implement the \rule{40pt}{0.5pt} interface.
 \item   A \rule{40pt}{0.5pt} method is one 
 that  does different things depending upon the object that invokes it.
@@ -3442,7 +3448,7 @@ initial shift of 1, your method should return ``Igopt.''
 \noindent Write a method that converts its {\tt String}
 parameter so that letters are written in blocks five characters long.
 
-\item  Design and implement an applet that lets the user type a document
+\item  Design and implement an GUI that lets the user type a document
 into a {\tt TextArea} and then provides the following analysis of the
 document: the number of words in the document, the number of
 characters in the document,~and the percentage of words that have more

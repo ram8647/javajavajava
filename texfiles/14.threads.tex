@@ -5,7 +5,7 @@
 \setcounter{chapter}{13}
 \chapter{Threads and Concurrent Programming}
 \label{chapter-threads}
-\label{pg-chapter-threads}
+
 
 
 \CObegin
@@ -151,8 +151,8 @@ be handled differently on Unix, Windows, and Macintosh systems.
 %\begin{figure}
 \begin{figure}[tb]
 \figaleft{chptr14/13f1.eps}{Each thread gets a slice of the CPU's time.
-\label{fig-timeslicing}
-\label{pg-fig-timeslicing}}
+} {fig-timeslicing}
+
 \end{figure}
 %\end{figure}
 
@@ -719,8 +719,8 @@ in the design of multithreaded programs.
 
 \begin{figure}[b]
 \figaleft{chptr14/13f9.eps}{A depiction of a thread's life cycle.
-\label{fig-lifecycle}
-\label{pg-fig-lifecycle}}
+} {fig-lifecycle}
+
 \end{figure}
 
 \section{Thread States and Life Cycle}
@@ -1084,8 +1084,8 @@ GUI and {\tt dotty} are combined into a single thread of execution
 \begin{figure}[h!]
 \figaleft{chptr14/13f6.eps}{A single-threaded execution of random
 dot drawing.
-\label{fig-dottytrace}
-\label{pg-fig-dottytrace}}
+} {fig-dottytrace}
+
 \end{figure}
 When the user clicks the Draw button, the GUI's {\tt
 actionPerformed()} method is invoked.  It then invokes {\tt Dotty}'s
@@ -1327,8 +1327,8 @@ actions are done by one thread.
 \begin{figure}[h!]
 \figaleft{chptr14/13f8.eps}{Two independent threads: one for drawing,
 the other for the GUI.
-\label{fig-threadedtrace}
-\label{pg-fig-threadedtrace}}
+} {fig-threadedtrace}
+
 \end{figure}
 
 The trade-off involved in this design is that it will take
@@ -2365,34 +2365,34 @@ a wall or paddle, it emits a pong sound.
 
 \subsection{A Multithreaded Design}
 
-Let's develop a multithreaded applet to play the game of Pong.
+Let's develop a multithreaded GUI to play the game of Pong.
 \marginfig{chptr14/pongscreensmall.eps}{The UI for Pong.}
 {fig-pongscreen}
 
 Figure~14.29 shows how the game's GUI should appear.  There
-are three objects involved in this program: the applet, which serves
+are three objects involved in this program: the frame, which serves
 as the GUI, the ball, which is represented as a blue circle in the
-applet, and the paddle, which is represented by a red rectangle along
-the right edge of the applet. What cannot be seen in this figure is 
+program, and the paddle, which is represented by a red rectangle along
+the right edge of the frame. What cannot be seen in this figure is 
 that the ball moves autonomously, bouncing off the walls and paddle.
 The paddle's motion is controlled by the user by pressing the up- and
 down-arrow keys on the keyboard. 
 
 We will develop class definitions for the ball, paddle, and the
-applet. Following the example of our dot-drawing program earlier in
+frame. Following the example of our dot-drawing program earlier in
 the Chapter, we will employ two independent threads, one for the GUI
 and one for the ball.  Because the user will control the movements of
-the paddle, the applet will employ a listener object to listen for and
+the paddle, the frame will employ a listener object to listen for and
 respond to the user's key presses. 
 
 Figure~\ref{fig-pongdesign} provides an overview of the
-object-oriented design of the Pong program. The {\tt PongApplet} class
+object-oriented design of the Pong program. The {\tt PongFrame} class
 is the main class. It uses instances of the {\tt Ball} and {\tt
-Paddle} classes.  {\tt PongApplet} is a subclass of {\tt JApplet} and
+Paddle} classes.  {\tt PongFrame} is a subclass of {\tt JFrame} and
 \begin{figure}[h!]
-\figaleft{chptr14/pongdesign.eps}{Design of the Pong program.
-\label{fig-pongdesign}
-\label{pg-fig-pongdesign}}
+\figaleft{chptr14/pongdesign-sm.png}{Design of the Pong program.
+} {fig-pongdesign}
+
 \end{figure}
 implements the {\tt KeyListener} interface. This is another of the
 several event handlers provided in the {\tt java.awt} library. This
@@ -2400,38 +2400,38 @@ one handles {\tt KeyEvent}s and the {\tt KeyListener} interface
 consists of three abstract methods: {\tt keyPressed()}, {\tt
 keyTyped()}, and {\tt keyReleased()}, all of which are associated with
 the act of pressing a key on the keyboard. All three of these
-methods are implemented in the {\tt PongApplet} class.  A key-typed
+methods are implemented in the {\tt PongFrame} class.  A key-typed
 event occurs when a key is pressed down. A key-release event occurs
 when a key that has been pressed down is released.  A key-press event
 is a combination of both of these events.
 
 The {\tt Ball} class is a {\tt Thread} subclass. Its data and methods
-are designed mainly to keep track of its motion within the applet's
+are designed mainly to keep track of its motion within the program's
 drawing panel. The design strategy employed here leaves the drawing of
-the ball up to the applet. The {\tt Ball} thread itself just 
-handles the movement within the applet's drawing panel.  Note that the {\tt
-Ball()} constructor takes a reference to the {\tt PongApplet}. As we
+the ball up to the frame. The {\tt Ball} thread itself just 
+handles the movement within the program's drawing panel.  Note that the {\tt
+Ball()} constructor takes a reference to the {\tt PongFrame}. As we
 will see, the {\tt Ball} uses this reference to set the dimensions of
-the applet's drawing panel. Also, as the {\tt Ball} moves, it will
-repeatedly call the applet's {\tt repaint()} method to draw the ball.
+the frame's drawing panel. Also, as the {\tt Ball} moves, it will
+repeatedly call the frame's {\tt repaint()} method to draw the ball.
 
 The {\tt Paddle} class is responsible for moving the paddle up and
 down along the drawing panel's right edge. Its public methods, {\tt
-moveUP()} and {\tt moveDown()},  will be called by the applet in
+moveUP()} and {\tt moveDown()},  will be called by the frame in
 response to the user pressing the up and down arrows on the
-keyboard.  Because the applet needs to know where to draw the applet,
+keyboard.  Because the frame needs to know where to draw the paddle,
 the paddle class contains several public methods, {\tt getX()}, {\tt
 getY()}, and {\tt resetLocation()}, whose tasks are to report the
-paddle's location or to adjust its location in case the applet
+paddle's location or to adjust its location in case the frame
 is resized.
 
-The {\tt PongApplet} controls the overall activity of the program.
+The {\tt PongFrame} controls the overall activity of the program.
 Note in particular its {\tt ballHitsPaddle()} method. This method has
 the task of determining when the ball and paddle come in contact as
-the ball continuously moves around in the applet's drawing panel.  As
+the ball continuously moves around in the frame's drawing panel.  As
 in the {\tt ThreadedDotty} example earlier in the chapter, it is
-necessary for the {\tt Ball} and the the applet to be implemented as
-separated threads so that the applet can be responsive to the user's
+necessary for the {\tt Ball} and the the frame to be implemented as
+separated threads so that the frame can be responsive to the user's
 key presses.
 
 \subsection{Implementation of the Pong Program}
@@ -2449,17 +2449,17 @@ public class Paddle {
     private static final int BORDER = 0;
     private int gameAreaHeight;
     private int locationX, locationY;
-    private PongApplet applet;
+    private PongFrame frame;
 
-    public Paddle (PongApplet a) {
-       applet = a;
-       gameAreaHeight  = a.getHeight();
-       locationX = a.getWidth()-WIDTH;
+    public Paddle (PongFrame f) {
+       frame = f;
+       gameAreaHeight  = f.getHeight();
+       locationX = f.getWidth()-WIDTH;
        locationY = gameAreaHeight/2;
     } // Paddle()
     public void resetLocation() {
-       gameAreaHeight  = applet.getHeight();
-       locationX = applet.getWidth()-WIDTH;
+       gameAreaHeight  = frame.getHeight();
+       locationX = frame.getWidth()-WIDTH;
     }
     public int getX() {
          return locationX;
@@ -2484,7 +2484,7 @@ public class Paddle {
 
 Class constants, {\tt HEIGHT} and {\tt WIDTH} are used to
 define the size of the {\tt Paddle}, which is represented on
-the applet as a simple rectangle. The applet will use the
+the frame as a simple rectangle. The frame will use the
 {\tt Graphics.fillRect()} method  to draw the paddle:
 
 \begin{jjjlisting}[28pc]
@@ -2493,7 +2493,7 @@ g.fillRect(pad.getX(),pad.getY(),Paddle.WIDTH,Paddle.HEIGHT);
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent Note how the applet uses the paddle's {\tt getX()}
+\noindent Note how the frame uses the paddle's {\tt getX()}
 and {\tt getY()} methods to get the paddle's current location. 
 
 
@@ -2502,14 +2502,14 @@ the paddle's movement. {\tt DELTA} represents the number of pixels
 that the paddle moves on each move up or down, and {\tt BORDER} is
 used with {\tt gameAreaHeight} to keep the paddle within the
 drawing area.  The {\tt moveUp()} and {\tt moveDown()} methods are
-called by the applet each time the user presses an up- or down-arrow key.
+called by the frame each time the user presses an up- or down-arrow key.
 They simply change the paddle's location by {\tt DELTA} pixels up or
 down.
 
 \pagebreak
 The {\tt Ball} class (Fig.~\ref{fig-ball}) uses the class constant
 {\tt SIZE} to determine the size of the oval that represents the ball,
-drawn by the applet as follows:
+drawn by the frame as follows:
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -2517,7 +2517,7 @@ g.fillOval(ball.getX(),ball.getY(),ball.SIZE,ball.SIZE);
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent As with the paddle, the applet uses the
+\noindent As with the paddle, the frame uses the
 ball's {\tt getX()} and {\tt getY()} method to determine the ball's
 current location.
 
@@ -2530,14 +2530,14 @@ import java.awt.Toolkit;
 
 public class Ball extends Thread {
   public static final int SIZE = 10;   // Diameter of the ball
-  private PongApplet applet;           // Reference to the applet
+  private PongFrame frame;           // Reference to the frame
   private int topWall, bottomWall, leftWall, rightWall;  // Boundaries
   private int locationX, locationY;     // Current location of the ball
   private int directionX = 1, directionY = 1; //x- and y-direction (1 or -1)
   private Toolkit kit = Toolkit.getDefaultToolkit(); //For beep() method
 
-  public Ball(PongApplet app) {
-    applet = app;
+  public Ball(PongFrame f) {
+    frame = f;
     locationX = leftWall + 1;                // Set initial location
     locationY = bottomWall/2;
   } // Ball()
@@ -2548,13 +2548,13 @@ public class Ball extends Thread {
     return locationY;
   } // getY()
   public void move() {
-    rightWall = applet.getWidth() - SIZE;   // Define bouncing region
+    rightWall = frame.getWidth() - SIZE;   // Define bouncing region
     leftWall = topWall = 0;                 // And location of walls
-    bottomWall = applet.getHeight() - SIZE;
+    bottomWall = frame.getHeight() - SIZE;
     locationX = locationX + directionX; // Calculate a new location
     locationY = locationY + directionY;
 
-    if (applet.ballHitsPaddle()){
+    if (frame.ballHitsPaddle()){
       directionX = -1;   //  move toward left wall
       kit.beep();
     } //if ball hits paddle
@@ -2573,7 +2573,7 @@ public class Ball extends Thread {
   public void run() {
     while (true) {
       move();                // Move
-      applet.repaint();
+      frame.repaint();
       try {  sleep(15);
       } catch (InterruptedException e) {}
     } // while
@@ -2591,11 +2591,11 @@ repeatedly moves the ball, draws the ball, and then sleeps for a brief
 interval (to slow down the speed of the ball's apparent motion).  The
 {\tt run()} method itself is quite simple because it consists of a
 short loop.  We will deal with the details of how the ball is painted
-on the applet when we discuss the applet itself.
+on the frame when we discuss the frame itself.
 
 The most complex method in the {\tt Ball} class is the {\tt move()}
 method. This is the method that controls the ball's movement within
-the boundaries of the applet's drawing area. This method begins
+the boundaries of the frame's drawing area. This method begins
 by moving the ball by one pixel left, right, up, or down by adjusting
 the values of its {\tt locationX} and {\tt locationY} coordinates:
 
@@ -2618,15 +2618,15 @@ a horizontal or vertical wall. When the ball touches the right wall,
 having missed the paddle, it passes through the right wall and
 re-emerges from the left wall going in the same direction.
 
-Note how the applet method, {\tt ballHitsPaddle()} is used to
+Note how the frame method, {\tt ballHitsPaddle()} is used to
 determine whether the ball has hit the paddle. This is necessary
-because only the applet knows the locations of both the ball and the
+because only the frame knows the locations of both the ball and the
 paddle.
 
 \subsection{The {\tt KeyListener} Interface}
 
-The implementation of the {\tt PongApplet} class is shown in
-figure~\ref{fig-pongapplet}. The applet's main task is to manage the
+The implementation of the {\tt PongFrame} class is shown in
+figure~\ref{fig-pongapplet}. The frame's main task is to manage the
 drawing of the ball and paddle and to handle the user's key presses.
 Handling keyboard events is a simple matter of implementing the {\tt
 KeyListener} interface. This works in much the same way as the {\tt
@@ -2643,18 +2643,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PongApplet extends JApplet implements KeyListener {
+public class PongFrame extends JFrame implements KeyListener {
      private Ball ball;
      private Paddle pad;
 
-     public void init() {
+     public PongFrame() {
          setBackground(Color.white);
          addKeyListener(this);
          pad = new Paddle(this);  // Create the paddle
          ball = new Ball(this);      // Create the ball
          ball.start();
-         requestFocus();  // Required to receive key events
-     } // init()
+     } // PongFrame()
 
      public void paint (Graphics g ) {
           g.setColor(getBackground());   // Erase the drawing area
@@ -2683,10 +2682,14 @@ public class PongApplet extends JApplet implements KeyListener {
      } // keyReleased()
      public void keyTyped(KeyEvent e) {}     // Unused
      public void keyReleased( KeyEvent e) {} // Unused
-} // PongApplet
+     public static void main(String[] args) {
+       PongFrame f = new PongFrame();
+       f.setSize(400,400);
+       f.setVisible(true);
+} // PongFrame
 \end{lstlisting}
 \end{jjjlistingleft}
-\jjjprogstop{Definition of the {\tt PongApplet} class.}
+\jjjprogstop{Definition of the {\tt PongFrame} class.}
 {fig-pongapplet}
 \end{figure}
 
@@ -2723,7 +2726,7 @@ called.
 
 Note that even though we are not using the {\tt keyPressed()} and {\tt
 keyReleased()} methods in this program, it is still necessary to
-provide implementations for these methods in the applet.  In order to
+provide implementations for these methods in the frame.  In order to
 implement an interface, such as the {\tt KeyListener} interface, you
 must implement {\em all} the abstract methods in the interface.  That
 is why we provide trivial implementations of both the {\tt
@@ -2733,25 +2736,26 @@ keyPressed()} and {\tt keyReleased()} methods.
 
 Computer animation is accomplished by repeatedly drawing, erasing, and
 re-drawing an object at different locations on the drawing panel.  The
-applet's {\tt paint()} method is used for drawing the ball and the
+frame's {\tt paint()} method is used for drawing the ball and the
 paddle at their current locations.  The {\tt paint()} method is never
-called directly. Rather, it is called automatically after the {\tt init()}
-method, when the applet is started. It is then invoked indirectly by
+called directly. Rather, it is called automatically after the
+constructor 
+method {\tt PongFrame()}, when the program is started. It is then invoked indirectly by
 the program by calling the {\tt repaint()} method, which is called in
 the {\tt run()} method of the {\tt Ball} class.  The reason that {\tt
 paint()} is called indirectly is because Java needs to pass it the
-applet's current {\tt Graphics} object. Recall that in Java all
+frame's current {\tt Graphics} object. Recall that in Java all
 drawing is done using a {\tt Graphics} object.
 
 In order to animate the bouncing ball, we first erase the current
 image of the ball, then we draw the ball in its new location. We also
 draw the paddle in its current location. These steps are carried out
-in the applet's {\tt paint()} method. First, the drawing area is
+in the frame's {\tt paint()} method. First, the drawing area is
 cleared by painting its rectangle in the background color.  Then the
 ball and paddle are painted at their current locations. Note that
 before painting the paddle, we first call its {\tt resetLocation()}
 method. This causes the paddle to be relocated in case the user has
-resized the applet's drawing area.  There is no need to do this for
+resized the frame's drawing area.  There is no need to do this for
 the ball because the ball's drawing area is updated within the {\tt
 Ball.move()} method every time the ball is moved.
 
@@ -2784,7 +2788,7 @@ must be carefully designed in order to work effectively.
 \secEXRHone{Self-Study Exercise}
 \begin{SSTUDY}
 
-\item Modify the {\tt PongApplet} program so that it contains a second
+\item Modify the {\tt PongFrame} program so that it contains a second
 ball that starts at a different location from the first ball.
 
 \end{SSTUDY}
@@ -3039,7 +3043,7 @@ changes to the original version:
 \begin{enumerate}
 \item A new {\tt Ball()} constructor that has parameters to
 set the initial location and direction of the ball.
-\item The {\tt PongApplet} should create a new {\tt Ball}
+\item The {\tt PongFrame} should create a new {\tt Ball}
 instance, start it, and draw it.
 \end{enumerate}
 
@@ -3156,9 +3160,9 @@ implement the {\tt Runnable} interface.  That way it can be added to
 any user interface.  One of its constructors should take a {\tt String}
 argument that lets the user set the banner's message.
 
-\item {\bf Challenge: } Create a slide show applet, which repeatedly
+\item {\bf Challenge: } Create a slide show program, which repeatedly
 cycles through an array of images.  The action of displaying the
-images should be a separate thread.  The applet thread should handle
+images should be a separate thread.  The frame thread should handle
 the user interface.  Give the user some controls that let it pause,
 stop, start, speed up, and slow down the images.
 
@@ -3168,7 +3172,7 @@ across the screen, with each horse having a different vertical
 coordinate.  If you don't have good horse images to use, just
 make each horse a colored polygon or some other shape.  Have the
 horses implement the {\tt Drawable} interface, which we introduced
-in Chapter~8.
+in Chapter~{chapter-inheritance}.
 
 \item  {\bf Challenge:} Create a multithreaded digital clock application.
 One thread should keep time in an endless while loop. The other

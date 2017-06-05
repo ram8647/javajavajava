@@ -5,7 +5,7 @@
 \setcounter{SSTUDYcount}{1}
 \chapter{Control Structures}
 \label{chapter-loops}
-\label{pg-chapter-loops}
+
 
 \CObegin
 \secCOBH{Objectives}
@@ -240,8 +240,8 @@ contained in curly brackets, \verb|{|\dots\verb|}|.
 %\begin{figure}
 \begin{figure}[tb]
 \figaright{chptr06/6f1.eps}{Flowchart of the {\tt for} statement.
-\label{fig-forloop}
-\label{pg-fig-forloop}}
+} {fig-forloop}
+
 \end{figure}
 %\end{figure}
 
@@ -878,7 +878,7 @@ public class CarLoan {
 \jjjprogstop{The {\tt CarLoan} application.}
 {fig-carloan}
 \end{figure}
-
+%$
 \newpage
 \section{Graphics Example: Drawing a Checkerboard}
 
@@ -909,40 +909,47 @@ CheckerBoard} class. The details of its design are described in the
 next section.
 
 Because the purpose of this example is to focus on how we use loops
-and drawing methods, we will employ a very simple applet interface,
+and drawing methods, we will employ a very simple JFrame interface,
 whose implementation is given in Figure~\ref{fig-checkerapplet}.  As
 \begin{figure}[h]
 \jjjprogstart
 \begin{jjjlisting}
 \begin{lstlisting}
 import java.awt.*;
-import java.applet.*;
 import javax.swing.*;
 
-public class CheckerBoardApplet extends JApplet {
+public class CheckerBoardFrame extends JFrame {
    private CheckerBoard theBoard;
 
-   public void init() {
+   public CheckerBoardFrame() {
        theBoard = new CheckerBoard();
    }
    public  void paint(Graphics g) {
+       super.paint(g);
        theBoard.draw(g);
    } // paint()
-} // CheckerBoardApplet
+
+   public static void main(String[] args){
+        CheckerBoardFrame c = new CheckerBoardFrame();
+        c.setSize(500,500);
+        c.setVisible(true);
+    }
+} // CheckerBoardFrame
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt Chek\-er\-Board\-Applet} class.}
+\jjjprogstop{The {\tt Check\-er\-Board\-Frame} class.}
 {fig-checkerapplet}
 \end{figure}
-shown there, the applet simply creates a {\tt CheckerBoard} instance
-in its {\tt init()} method, and then invokes the {\tt CheckerBoard}'s
+shown there, the program simply creates a {\tt CheckerBoard} instance
+in its {\tt CheckerBoardFrame()} constructor, and then invokes the {\tt CheckerBoard}'s
 {\tt draw} method in its {\tt paint()} method. The reason we invoke
 the {\tt draw()} method in {\tt paint()} is because we need to have
-access to the applet's {\tt Graphics} context, which is passed as an
-argument to the {\tt draw()} method. Recall that the {\tt init()} and
-then the {\tt paint()} methods are invoked automatically by the
-browser or appletviewer when an applet is started.  Thus, the action
-taken by this applet is simply to draw a visual representation of the
+access to the JFrame's {\tt Graphics} context, which is passed as an
+argument to the {\tt draw()} method. Recall that the {\tt
+  main()} method is invoked when CheckerBoardFrame is run,and
+then the {\tt paint()} methods are invoked automatically by calling 
+the {\tt setVisible(true)} method in {\tt main()}.  Thus, the action
+taken by this program is simply to draw a visual representation of the
 checkerboard.
 
 
@@ -950,7 +957,7 @@ checkerboard.
 \marginfig{chptr06/checkeruml.eps}{Design of the {\tt CheckerBoard}
 class.}
 {fig-checkeruml}
-\noindent Because the applet will invoke its {\tt draw()} method, this
+\noindent Because the program will invoke its {\tt draw()} method, this
 method must be part of the {\tt CheckerBoard}'s interface.  Hence, it
 must be declared {\tt public}.  The task of drawing a checkerboard
 involves two distinct subtasks: (1) drawing the board itself, which
@@ -968,7 +975,7 @@ Before gettinginto the details of the {\tt drawBoard} and {\tt
 drawCheckers()} methods, we must first discuss {\tt CheckerBoard}'s
 several instance variables.  The first two variables {\tt LEFT\_X} and
 {\tt UPPER\_Y}, give the absolute position of the upper left corner of
-the checkerboard on the applet's drawing panel. The {\tt SQ\_SIDE}
+the checkerboard on the JFrame's drawing panel. The {\tt SQ\_SIDE}
 variable gives the size of the checkerboard's individual squares.
 {\tt N\_ROWS} and {\tt N\_COLS} give the number of rows and columns in
 the checkerboard (typically, 8 by 8). All of these variables are
@@ -994,7 +1001,7 @@ Figure~\ref{fig-checkerclass}. Note how simple its {\tt draw()} method
 is.  As we noted earlier, in order to using Java's drawing commands,
 it is necessary to have a reference to a {\tt Graphics} object. This
 is passed to the {\tt draw()} method when the {\tt draw()} method is
-invoked in the applet.  Because the {\tt draw()} method delegates the
+invoked in the program.  Because the {\tt draw()} method delegates the
 details of the drawing algorithm to its helper methods, {\tt
 drawBoard()} and {\tt drawCheckers()}, it has to pass them a reference
 to the {\tt Graphics} object.
@@ -1107,8 +1114,8 @@ height, which are equal for the squares of a checkerboard.
 \begin{figure}[hbt]
 \figaleft{chptr06/checkerlayout.eps}{Calculating the
 locations of the checkerboard squares.
-\label{fig-checkerlayout}
-\label{pg-fig-checkerlayout}}
+} {fig-checkerlayout}
+
 \end{figure}
 %\end{figure}
 
@@ -1467,8 +1474,8 @@ Figure~\ref{fig-dowhileflow}.
 \begin{figure}[t]
 \figaleft{chptr06/6f4.eps}{Flowchart of the {\tt do-while} statement
 and {\tt do-while} structure.
-\label{fig-dowhileflow}
-\label{pg-fig-dowhileflow}}
+} {fig-dowhileflow}
+
 \end{figure}
 %\end{figure}
 
@@ -3155,7 +3162,7 @@ public int getAndValidatePizzaPrice() { // Uses KeyboardReader
 } // getAndValidatePizzaPrice()
 \end{lstlisting}
 \end{jjjlisting}
-
+ %$
 
 \item  For each of the following problems, decide whether
 a counting loop structure, a {\tt while} structure, or a
@@ -3601,14 +3608,14 @@ low, an intelligent second guess would be 75.  And so on. If we
 continue to divide the range in half, we'll eventually get down to one
 number. Because you can divide 100 seven times (50, 25, 12, 6, 3, 1,
 0), it will take at most seven guesses to guess a number between 1 and
-100. Write a Java applet that lets the user input a positive integer,
+100. Write a Java Swing program that lets the user input a positive integer,
 {\it N}, and then reports how many guesses it would take to guess a
 number between 1 and {\it N}.
 
 \item  Suppose you determine that the fire extinguisher in your
 kitchen loses {\it X} percent of its foam every day. How long before
 it drops below a certain threshold ({\it Y} percent), at which point
-it is no longer serviceable?  Write a Java applet that lets the user
+it is no longer serviceable?  Write a Java Swing program that lets the user
 input the values {\it X} and {\it Y} and then reports how many weeks
 the fire extinguisher will last.
 
@@ -3642,7 +3649,7 @@ square roots of different numbers. Uses {\tt Math.sqrt()} to determine
 when to terminate the guessing.
 
 \item  Your employer is developing encryption software and wants you
-to develop a Java applet that will display all of the primes less than
+to develop a Java Swing Program that will display all of the primes less than
 {\it N}, where {\it N} is a number to be entered by the user. In
 addition to displaying the primes themselves, provide a count of how
 many there are. 

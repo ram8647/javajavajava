@@ -5,7 +5,7 @@
 \setcounter{SSTUDYcount}{1}
 \chapter{Methods: Communicating with Objects}
 \label{chapter-methods}
-\label{pg-chapter-methods}
+
 
 \CObegin
 \secCOBH{Objectives}
@@ -471,7 +471,7 @@ the parameter of {\tt takeSticks()} interact.
 before calling {\tt takeSticks(3)}. (b) Just before executing the body
 of {\tt takeSticks(3)}. (c) Just after executing the body of {\tt
 takeSticks(3)}. (d) After flow of control leaves {\tt takeSticks()}.}
-\label{fig-parameps}
+{fig-parameps}
 \end{figure}
 
 Executing the first two statements of {\tt main()} creates the
@@ -1125,7 +1125,7 @@ if player one has the next turn.
 
 \section{Passing a Value and Passing a Reference}
 \label{sec-passby}
-\label{pg-sec-passby}
+
 
 \noindent The effect of passing arguments to a method differs depending on
 whether you are passing a value of primitive type\index{primitive
@@ -1199,7 +1199,7 @@ in {\tt PrimitiveCall} (a) Just
 before calling {\tt myMethod(k) in main}. (b) Just before executing the body
 of {\tt myMethod()}. (c) Just after executing the body of {\tt
 myMethod()}. (d) After flow of control returns to {\tt main()}.}
-\label{fig-vparameps}
+{fig-vparameps}
 \end{figure}
 \noindent In contrast to this, when an argument of a reference type
 is passed to a method, a copy of the reference to the object itself is
@@ -1333,7 +1333,7 @@ enable us to write programs that take more interesting actions.
 
 \subsection{The Simple If Statement}
 \label{sec-if}
-\label{pg-sec-if}
+
 \noindent A {\bf selection} control structure, allows a program 
 to select between two or more alternative paths of execution. The if
 statement is the most basic selection control
@@ -1501,7 +1501,7 @@ used to group statements in the if clause.}
 
 \subsection{The {\tt if-else} Statement}
 \label{sec-ifelse}
-\label{pg-sec-ifelse}
+
 \noindent A second version of the if statement incorporates an {\tt
 else} clause into the structure.  This allows us to execute either of
 two separate statements (simple or compound) as the result of one
@@ -1555,7 +1555,7 @@ interpretation is shown in Figure~\ref{fig-ifelsechart}.
 
 \subsection{The Nested if/else Multiway Selection Structure}
 \label{sec-multi}
-\label{pg-sec-multi}
+
 \noindent The statements that one inserts in place of {\it statement1} and {\it
 statement2} in the if-else statement can be any executable statement,
 %\begin{marginalnote}\it Multiple alternatives\end{marginalnote}
@@ -1574,7 +1574,7 @@ want to select one and only one option from several alternatives.
 \begin{figure}[tb]
 \figaleft{chptr03/multi.eps}{Flowchart of a nested if-else statement.
 %%\figa{chptr03/multi.eps}{Flowchart of a nested if-else statement.
-\label{fig-multiway}}
+} {fig-multiway}
 \end{figure}
 %\end{figure}
 
@@ -1822,7 +1822,7 @@ the algorithm will simply return the value $0$.
 \figaleft{chptr03/whileflow.eps}{Flowchart of the while statement and while
 %%%\figa{chptr03/whileflow.eps}{Flowchart of the while statement and while
 structure.
-\label{fig-whileflow}}
+} {fig-whileflow}
 \end{figure}
 
 
@@ -2378,9 +2378,9 @@ appropriate {\tt toString()} method.
 \markright{{\color{cyan}SECTION\,\,\arabic{section}\,\,$\bullet$}\,\,Drawing and Graphical Methods}
 
 We used a  {\tt Graphics} object in the previous chapter to draw
-rectangles and ovals in an applet window. The {\tt Graphics} class
+rectangles and ovals in a JFrame window. The {\tt Graphics} class
 also possesses a method for drawing a line segment. 
-Problems involving drawing pictures in an applet window using a 
+Problems involving drawing pictures in an JFrame window using a 
 series of line segments can be a source of examples of defining 
 useful methods and also of making good use of loops.
 
@@ -2402,19 +2402,19 @@ vertical line segment that is 50 pixels long and is 10 pixels
 from the left edge of the drawing area, that is, a line
 segment from the point $(10,10)$ to the point $(10,60)$.
 
-Consider the problem of creating an applet program with a
+Consider the problem of creating an Swing program with a
 method called {\tt drawSticks()} to draw any specified 
 number of vertical line segments.
-This method might be useful for an applet user interface
+This method might be useful for an graphical user interface
 to the {\tt OneRowNim} game to draw the number of sticks 
 at a given point in a game.  Suppose that this method must have an
 {\tt int} parameter to specify the number of vertical lines to draw
 and two {\tt int} parameters to specify the location of
 the top endpoint of the left most line segment.  The  {\tt drawSticks()}
 method will need to use a {\tt Graphics} object connected to the
-applet window for drawing the line segment.  The only such 
+JFrame window for drawing the line segment.  The only such 
 {\tt Graphics} object available is the parameter in  the {\tt paint()}
-method of an applet.  Thus the method must have a {\tt Graphics}
+method of the Canvas.  Thus the method must have a {\tt Graphics}
 parameter and it will be called in the {\tt paint()} method
 using the {\tt Graphics} object there
 as an argument. Thus the header of the method should look like:
@@ -2437,20 +2437,20 @@ Figure~\ref{fig-drawsticksprog}.
 \jjjprogstart
 \begin{jjjlisting}
 \begin{lstlisting}
-/** DrawLineApplet   demonstrates some graphics commands.
+/** DrawLineCanvas   demonstrates some graphics commands.
  *It draws a set of 12 vertical lines and a set of 7 lines.
  */
 import java.awt.*;
-import java.applet.*;
+import javax.swing.JFrame;
 
-public class DrawSticksApplet extends Applet
+public class DrawSticksCanvas extends Canvas
   /** drawSticks(g,x,y,num) will draw num vertical line
    * segments.  The line segments are 10 pixels apart and
    * 50 pixels long. The top endpoint of the left most
    *line segment is at the point (x,y).
    */
   public void drawSticks(Graphics g, int x, int y, int num)
-  { int k = 0;
+  {   int k = 0;
       while (k < num)
       {   g.drawLine(x, y, x, y + 50);
           x = x + 10;
@@ -2463,10 +2463,19 @@ public class DrawSticksApplet extends Applet
       g.setColor(Color.cyan);
       drawSticks(g, 25, 125, 7);
   } // paint()
-} // DrawSticksApplet
+
+    // every java program needs a main to run!
+    public static void main(String[] args){
+        DrawSticksCanvas c = new DrawSticksCanvas();
+        JFrame f = new JFrame();
+        f.add(c);
+        f.setSize(400,200);
+        f.setVisible(true);
+    }
+} // DrawSticksCanvas
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{An applet program with a method for drawing a set of sticks.}
+\jjjprogstop{A Swing program with a method for drawing a set of sticks.}
 {fig-drawsticksprog}
 \end{figure}
 
@@ -2482,33 +2491,14 @@ lines with $(25,25)$ the top point of the left-most line.  The second call to
 changing the color of {\tt g} before passing it as an argument to 
 {\tt drawSticks()} changes the drawing color.
 
-To run this applet, one needs the following HTML document, which specifies
-the applet code as {\tt  DrawSticksApplet.class}:
 
-\begin{jjjlisting}
-\begin{lstlisting}
-<HTML>
-<HEAD>
-<TITLE> Draw Sticks Web Page</TITLE>
-</HEAD>
-<BODY>
-<H2> DrawSticksApplet will appear below.</H2>
-<APPLET CODE = "DrawSticksApplet.class" 
-              WIDTH = 400 HEIGHT = 200>
-</APPLET>
-</BODY>
-</HTML>
-\end{lstlisting}
-\end{jjjlisting}
-
-\noindent An image of the {\tt DrawSticksApplet} as it appears in a browser window
-is shown in Figure~3.20.
+\noindent An image of the {\tt DrawSticksCanvas} as it appears in a window
+is shown in Figure~\ref{fig-drawstickseps}.
 
 \begin{figure}[tbh]
-\figaleftscaled{chptr03/drawsticks.eps}{0.70}{The DrawSticksApplet as displayed in a
-%%\figa{chptr03/drawsticks.eps}{The DrawSticksApplet as displayed in a
-browser window.}
-\label{fig-drawstickseps}
+\figaleftscaled{chptr03/drawsticks.eps}{0.70}{The DrawSticksCanvas as displayed in a
+Java window.}
+{fig-drawstickseps}
 \end{figure}
 
 As we have seen in this example, defining methods with parameters to

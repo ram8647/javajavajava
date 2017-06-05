@@ -16,7 +16,7 @@
 \item  Know how to use a simple command-line interface.
 \item  Be able to program and use a simple Graphical User Interface (GUI).
 \item  Understand the concept of event-driven programming.
-\item  Know how to program and use a Java applet.
+\item  Know how to program and use a Java Swing program.
 \end{COBL}
 
 \secCOLH{Outline}
@@ -93,8 +93,8 @@ between the user interface and the computational object.
 \figaright{chptr04/userinter.eps}
 {The user interface transmits data back and forth between the user
 and the program's computational objects.
-\label{fig-ui}
-\label{pg-fig-ui}}
+} {fig-ui}
+
 \end{figure}
 
 In this chapter we focus our attention on the user interface side of
@@ -131,8 +131,8 @@ environment, as in Figure~\ref{fig-console}.
 \begin{figure}[h]
 \figaleft{chptr04/console.eps}
 {The Java console window.
-\label{fig-console}
-\label{pg-fig-console}}
+} {fig-console}
+
 \end{figure}
 
 In Chapter~3 we described how to use the {\tt System.out.print()} and
@@ -152,8 +152,8 @@ output device, such as a printer or a file.
 \begin{figure}[h]
 \figaleft{chptr04/streams.eps}
 {Input and output streams.
-\label{fig-streams}
-\label{pg-fig-streams}}
+} {fig-streams}
+
 \end{figure}
 
 Each Java program has three standard streams available to it at
@@ -184,8 +184,8 @@ supposed to be deleted.
 \begin{figure}[h]
 \figaright{chptr04/buffrdr.eps}
 {The {\tt Buf\-fer\-ed\-Read\-er} class.
-\label{fig-buffrdr}
-\label{pg-fig-buffrdr}}
+} {fig-buffrdr}
+
 \end{figure}
 
 Figure~\ref{fig-buffrdr} provides a UML diagram of the {\tt
@@ -636,7 +636,7 @@ you to show off your work to others, which might help motivate further
 interest in learning to program.
 
 In this and subsequent sections, we will develop an extensible GUI
-model that can be used with either a Java application or applet.  By
+model that can be used with either a Java application or an applet.  By
 {\em extensible} we mean a model that can be easily adapted and used
 in a wide variety of programs.  GUI programming involves a
 computational model known as {\bf event-driven programming}, which
@@ -769,8 +769,8 @@ Java class hierarchy.
 %%%%\figaleft{chptr04/swing1.eps}
 {Top-level Swing and AWT classes. [NOTE: REDRAW JWindow
 is a subclass of Window.]
-\label{fig-swing1}
-\label{pg-fig-swing1}}
+} {fig-swing1}
+
 \end{figure}
 
 A {\bf top-level container} is a GUI container that cannot be added to
@@ -780,18 +780,18 @@ Figure~\ref{fig-swing1} is a class hierarchy that shows the
 relationships among some of the top-level Swing and AWT classes.  For
 example, the {\tt javax.swing.JFrame} class, which represents a
 top-level window, is a subclass of {\tt java.awt.Frame}, and the {\tt
-javax.swing.JApplet} is a subclass of {\tt java.applet.Applet}.  We
-can see from this figure that a {\tt JApplet} {\it isa} {\tt Applet}
-and an {\tt Applet} {\it isa} {\tt Panel} and a {\tt Panel} {\it isa}
+javax.swing.JPanel} is a subclass of {\tt java.awt.Panel}.  We
+can see from this figure that a {\tt JFrame} {\it isa} {\tt Frame}
+and an {\tt Frame} {\it isa} {\tt Window} and a {\tt Window} {\it isa}
 {\tt Container}.  These subclass/superclass relationships are created
 in their respective class definitions by using the {\tt extends}
 keyword as follows:
 
 \begin{jjjlisting}
 \begin{lstlisting}
- public class JApplet extends Applet { ... }
- public class Applet extends Panel { ... }
- public class Panel extends Container { ... }
+ public class JFrame extends Frame { ... }
+ public class Frame extends Window { ... }
+ public class Window extends Container { ... }
 \end{lstlisting}
 \end{jjjlisting}
 
@@ -812,8 +812,7 @@ All GUI programs must be contained inside some kind of top-level
 container.  Swing provides three top-level container classes: {\tt
 JFrame}, {\tt JApplet} and {\tt JDialog}.  For our basic GUI, we will
 use a {\tt JFrame} as the top-level window for stand alone
-applications.  We will use a {\tt JApplet} as the top-level window for
-Java applets.
+applications.  
 
 A {\tt JFrame} encapsulates the basic functionality of a top-level
 \marginnote{Content pane}
@@ -827,8 +826,8 @@ size or closes it.
 %%%\figa{chptr04/framecapture.eps}
 \figaleft{chptr04/framecapture.eps}
 {A simple window.
-\label{fig-framecapture}
-\label{pg-fig-framecapture}}
+} {fig-framecapture}
+
 \end{figure}
 
 Figure~\ref{fig-framecapture} shows a simple top-level window as it
@@ -928,8 +927,8 @@ to what type of actions to take.
 %%%\figa{chptr04/swing2.eps}
 \figaleft{chptr04/swing2.eps}
 {Swing components.
-\label{fig-swing2}
-\label{pg-fig-swing2}}
+} {fig-swing2}
+
 \end{figure}
 
 Let's begin by creating a simple user interface, one that enables us
@@ -958,8 +957,8 @@ components:
 \begin{figure}[tb]
 \figaright{chptr04/swingmeth.eps}
 {Public methods and constructors for basic Swing components.
-\label{fig-constructors}
-\label{pg-fig-constructors}}
+} {fig-constructors}
+
 \end{figure}
 
 Figure~\ref{fig-constructors} shows some of the constructors and
@@ -1026,8 +1025,8 @@ its north, south, east, and west borders
 %%%\figa{chptr04/border.eps}   %%%RAM See figure 9-22, p 465 in 2E
 \figaleft{chptr04/border.eps}
 {Arrangement of components in a border layout.
-\label{fig-borderlayout}
-\label{pg-fig-borderlayout}}
+} {fig-borderlayout}
+
 \end{figure}
 
 
@@ -1130,8 +1129,8 @@ clicks  the {\tt JButton}.
 %%%\figa{chptr04/eventhier.eps}   %%%RAM See figure 4-17, p 185 in 2E
 \figaleft{chptr04/eventhier.eps}   %%%RAM See figure 4-17, p 185 in 2E
 {Java's event hierarchy.
-\label{fig-eventhier}
-\label{pg-fig-eventhier}}
+} {fig-eventhier}
+
 \end{figure}
 
 When the user clicks the {\tt JButton}, Java will create an {\tt
@@ -1470,130 +1469,6 @@ public class GreeterApplication
 prefer, this same {\tt main()} method can be incorporated directly
 into the {\tt GreeterGUI} class.
 
-\subsection{Using the GUI in a Java Applet}
-
-Using our GUI with a Java applet is just as easy as using it
-with an application. The only difference is that we instantiate
-{\tt GreeterGUI} in the applet's {\tt init()} method rather than
-in a {\tt main()} method:
-
-\begin{jjjlisting}
-\begin{lstlisting}
-import javax.swing.*;
-
-public class GreeterApplet extends JApplet 
-{
-    public void init() 
-    {
-        new GreeterGUI("Greeter");
-    }
-}
-\end{lstlisting}
-\end{jjjlisting}
-
-\noindent When this applet is run from a browser, it will open a
-separate top-level window that is identical to the window opened by
-the application. Unlike the other applets we've seen, the GUI will not
-be embedded directly in the Web page, because it is not possible to
-add a {\tt JFrame}, which our {\tt GreeterGUI} is, to a {\tt
-JApplet}. The rule is you cannot add one top-level window to another
-top-level window.
-
-\JavaRule{Top-level Windows.}{Top-level Java windows cannot contain
-other top-level windows as components. }
-
-It is a relatively simple matter to modify {\tt GreeterGUI} so that it
-can be embedded directly in the applet window. The main change we have
-to make is to define the GUI as a subclass of {\tt JPanel} rather than
-as a subclass of {\tt JFrame}.  Figure~\ref{fig-guipanel} presents a full
-implementation of the revised class, which we name {\tt GreeterGUIPanel}.
-
-\begin{figure}[htb]
-\jjjprogstart
-\begin{jjjlisting}
-\begin{lstlisting}
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
-public class GreeterGUIPanel extends JPanel 
-                     implements ActionListener 
-{ private JTextArea display;
-  private JTextField inField;
-  private JButton goButton;
-  private Greeter greeter;
-	    
-  public GreeterGUIPanel() 
-  {   greeter = new Greeter();  
-      buildGUI();
-  } // GUIPanel()
-  private void buildGUI() 
-  { display = new JTextArea(10,30);
-    inField = new JTextField(10);
-    goButton = new JButton("Click here for a greeting!");
-    goButton.addActionListener(this);
-    JPanel inputPanel = new JPanel();
-    inputPanel.add(new JLabel("Input your name here: "));
-    inputPanel.add(inField);
-    inputPanel.add(goButton);
-    add("Center", display);
-    add("South", inputPanel);
-  } //buildGUI()
-  public void actionPerformed(ActionEvent e) 
-  {   if (e.getSource() == goButton) 
-      {   String name = inField.getText();
-          display.append(greeter.greet(name) + "\n");
-      } // if
-  } // actionPeformed()
-} // GreeterGUIPanel
-\end{lstlisting}
-\end{jjjlisting}
-\jjjprogstop{Definition of the {\tt GreeterGUIPanel} class.}
-{fig-guipanel}
-\end{figure}
-
-The revised {\tt GreeterGUIPanel} class requires the following two
-changes:
-
-\begin{itemize}
-\item Unlike {\tt JFrame}s, {\tt JPanel}s do not have titles and does not have 
-a {\tt pack()}  method. Therefore we modify the constructor
-method to the simpler form shown here.
-
-\item Unlike {\tt JFrame}s, {\tt JPanel}s do not use a content pane. Swing
-components are added directly to the {\tt JPanel}. This simplifies the
-{\tt buildGUI()} method. 
-
-\end{itemize}
-
-Given these changes, we would then change the applet's {\tt init()} method
-to the following:
-
-\begin{jjjlisting}
-\begin{lstlisting}
-import javax.swing.*;
-
-public class GreeterPanelApplet extends JApplet 
-{   public void init() 
-    {    getContentPane().add(new GreeterGUIPanel());
-    }
-}
-\end{lstlisting}
-\end{jjjlisting}
-
-\noindent Note that because a {\tt JApplet} has a content pane,
-we add the {\tt GreeterGUIPanel} to the content pane rather than
-to the applet itself.  The result would be the applet 
-shown in Figure~\ref{fig-greeterapplet}.
-
-\begin{figure}[tb]
-%%%\figaleft{chptr04/greeterapplet.eps}  
-\figaleftscaled{chptr04/greeterapplet.eps}{0.75}  
-{The Greeter applet. This version is embedded directly in the 
-Web page.
-\label{fig-greeterapplet}
-\label{pg-fig-greeterapplet}}
-\end{figure}
 
 \section{Case Study: The One Row Nim Game }
 
@@ -2595,15 +2470,15 @@ a class and \rule{40pt}{0.5pt}  an interface.
 \item  An object can refer to itself by using the \rule{40pt}{0.5pt} keyword.
 \item  The {\tt JButton}, {\tt JTextField}, and {\tt JComponent} classes
 are defined in the  \rule{40pt}{0.5pt} package.
-\item  Java applets utilize a form of control known as \rule{40pt}{0.5pt}  programming.
-\item  When the user clicks on an applet's {\tt JButton}, an
+\item  Java GUIs utilize a form of control known as \rule{40pt}{0.5pt}  programming.
+\item  When the user clicks on a program's {\tt JButton}, an
   \rule{40pt}{0.5pt} will automatically be generated.
 \item  Two kinds of objects that generate {\tt ActionEvent}s are \rule{40pt}{0.5pt} and
 \rule{40pt}{0.5pt}\,.
 \item  {\tt JButton}s, {\tt JTextField}s, and
 {\tt JLabel}s are all subclasses of \rule{40pt}{0.5pt}\,.
-\item  The {\tt JApplet} class is a subclass of  \rule{40pt}{0.5pt}\,.
-\item  If an applet intends to handle {\tt ActionEvent}s, it must
+\item  The {\tt JFrame} class is a subclass of  \rule{40pt}{0.5pt}\,.
+\item  If java class intends to handle {\tt ActionEvent}s, it must
 implement the \rule{40pt}{0.5pt} interface.
 \item  When an applet is started, its  \rule{40pt}{0.5pt} method is called
 automatically.
@@ -2644,7 +2519,7 @@ http://java.sun.com/j2se/1.5.0/docs/api/
 
 \noindent List the signatures of all its constructors.
 
-\item  Suppose we want to set the text in our applet's {\tt JTextField}.
+\item  Suppose we want to set the text in our program's {\tt JTextField}.
 What method should we use and where is this method defined? ({\it Hint}:
 Look up the documentation for {\tt JTextField}. If no appropriate
 method is defined there, see if it is inherited from a superclass.)
@@ -2657,12 +2532,12 @@ method is defined there, see if it is inherited from a superclass.)
 
 \item  Does a {\tt JButton} have an {\tt add()} method? Explain.
 
-\item  Suppose you type the URL for a ``Hello World'' applet
+\item  Suppose you type the URL for a ``Hello, World!'' applet
 into your browser.  Describe what happens---that is, describe the
-processing that takes place in order for the applet to display ``Hello
-World'' in your browser.
+processing that takes place in order for the applet to display ``Hello,
+World!'' in your browser.
 
-\item  Suppose you have an applet containing a {\tt JButton}
+\item  Suppose you have a program containing a {\tt JButton}
 named {\tt button}. Describe what happens, in terms of
 Java's event handling model, when the user clicks  the
 button.
@@ -2673,21 +2548,21 @@ is a subclass of {\tt Object}, the {\tt toString()} method can be used
 by any object.   Show how you would invoke this method for a {\tt JButton}
 object named {\tt button}.
 
-\item  The  applet that follows contains a semantic error in
-its {\tt init()} method.  The error will cause the
+\item  The  JFrame that follows contains a semantic error in
+its {\tt SomeFrame()} constructor.  The error will cause the
 {\tt actionPerformed()} method never to display ``Clicked''
 even though the user clicks the button in the
-applet.  Why?  ({\it Hint}: Think scope!)
+JFrame.  Why?  ({\it Hint}: Think scope!)
 
 \begin{jjjlisting}
 \begin{lstlisting}
-public class SomeApplet extends JApplet 
+public class SomeFrame extends JFrame
                         implements ActionListener
 {
      // Declare instance variables
     private JButton button;
 
-    public void init()
+    public JFrame()
     {   
        // Instantiate the instance variable
         JButton button = new JButton("Click me");
@@ -2700,21 +2575,21 @@ public class SomeApplet extends JApplet
         if (e.getSource() == button)
            System.out.println("Clicked");
     } // actionPerformed()
-} // SomeApplet
+} // SomeFrame
 \end{lstlisting}
 \end{jjjlisting}
 
-\item  What would be output by the following applet?
+\item  What would be output by the following program?
 
 \begin{jjjlisting}
 \begin{lstlisting}
-public class SomeApplet extends JApplet
+public class SomeFrame2 extends JFrame
 {
   // Declare instance variables
   private JButton button;
   private JTextField field;
 
-  public void init()
+  public SomeFrame()
   { 
     // Instantiate instance variables
     button = new JButton("Click me");
@@ -2723,7 +2598,12 @@ public class SomeApplet extends JApplet
     add(field);
     System.out.println(field.getText() + button.getText());
   } // init()
-} // SomeApplet
+  public static void main(String[] args) {
+     SomeFrame2 frame = new SomeFrame2();
+     frame.setSize(400,400);
+     frame.setVisible(true);
+  }
+} // SomeFrame2
 }
 \end{lstlisting}
 \end{jjjlisting}
