@@ -9,8 +9,7 @@
 \setcounter{chapter}{0}
 \setcounter{SSTUDYcount}{1}
 \chapter{Java Program Design and Development}
-\label{chapter-intro2}
-\label{pg-chapter-intro2}
+\label{ch:intro2}
 
 \CObegin
 \secCOBH{Objectives}
@@ -26,8 +25,8 @@
        a \\program.
 \item  Understand how a Java program is translated into
        machine language.
-\item  Understand the difference between a Java application
-       and a Java \\applet.
+\item  Understand the difference between a Java console application
+       and a Java \\Swing application.
 \item  Know how to edit, compile, and run Java programs.
 \end{COBL}
 
@@ -59,8 +58,8 @@ riddle, consider the question ``What is black and white and read all
 over?''  The answer, of course, is a newspaper.  Following the design
 phase, we then focus on the steps involved in coding a Java program,
 including the process of editing, compiling, and running a
-program. Because Java programs come in two varieties, applications and
-applets, we describe how the coding process differs for these two
+program. Because Java programs can be text based applications or
+window based graphical applications, we describe how the coding process differs for these two
 varieties.
 
 Next we begin to familiarize ourselves with Java's extensive class
@@ -103,7 +102,7 @@ the program into Java.  In the {\em testing} phase we test the
 program's performance to make sure it is correct, recoding it or
 redesigning it as necessary.
 
-Figure~\ref{fig-progdev} gives a more detailed overview of the program
+Figure~\ref{fig:progdev} gives a more detailed overview of the program
 development process, focusing most of the attention on the design
 phase of the software life cycle. It shows that designing an
 object-oriented program is a matter of asking the right questions
@@ -123,9 +122,8 @@ into its variables and methods.
 %\begin{graphic}
 %\figa{CHPTR01:1f7.eps}
 \figa{chptr01/progdev.eps}%
-{An overview of the program development process.
-\label{fig-progdev}
-\label{pg-fig-progdev}}
+{An overview of the program development process.}
+{fig:progdev}
 %\end{graphic}
 \end{figure}
 %\epsfig{file=ch1-java/figures/progdev.eps}
@@ -141,7 +139,7 @@ these design decisions.
 \section{Designing a Riddle Program}
 
 The first step in the program-development process is making sure you
-understand the problem (Fig. \ref{fig-progdev}).  Thus, we begin by
+understand the problem (Fig. \ref{fig:progdev}).  Thus, we begin by
 developing a detailed specification, which should address three basic
 questions:
 
@@ -254,16 +252,16 @@ Figure~\ref{fig:specs}.
 \item getAnswer(): A method to return a riddle's answer
 \end{BSE}
 \end{BL}
-}\figaprogb{Design specification for the {\tt Riddle} class.
+}\figaprogb{Design specification for the {\tt Riddle} class.}
 %%}\figaprogbleft{Design specification for the {\tt Riddle} class.
-\label{fig:specs}}
+{fig:specs}
 \end{figure}
 
 The role of the {\tt Riddle} object is to model an ordinary
 \marginnote{What is the object's role?}
 riddle. Because a riddle is defined in terms of its question and
 answer, our {\tt Riddle} object will need some way to store these two
-pieces of information. As we learned in Chapter~0, an instance
+pieces of information. As we learned in Chapter~\ref{chapter-intro}, an instance
 variable is a named memory location that belongs to an object. The
 fact that the memory location is named, makes it easy to retrieve the
 data stored there by invoking the variable's name. For example, to
@@ -293,7 +291,7 @@ means of setting the values of its question and answer variables and a
 means of retrieving each value separately.
 
 Each of the actions we have identified will be encapsulated in a Java
-method. As you recall from Chapter~0, a method is a named section of
+method. As you recall from Chapter~\ref{chapter-intro}, a method is a named section of
 code that can be {\em invoked}, or called upon, to perform a
 particular action. In the object-oriented approach, calling a method
 (method invocation) is the means by which interaction occurs among
@@ -331,10 +329,9 @@ hide most of the details of its implementation.}
 \pagebreak
 Taken together, these various design decisions lead to the
 \marginfig{chptr01/riddleuml.eps}%
-{A UML class diagram representing the  {\tt Riddle} class.
-\label{fig-riddleuml}
-\label{pg-fig-riddleuml}}
-specification shown in Figure~1.3. As our discussion has illustrated,
+{A UML class diagram representing the  {\tt Riddle} class.}
+{fig:ruml}
+specification shown in Figure~\ref{fig:ruml}. As our discussion has illustrated,
 we arrived at the decisions by asking and answering the right
 questions. In most classes the attributes (variables) are
 private. This is represented by a minus sign ($-$). In this example,
@@ -491,7 +488,7 @@ the program. In this way, small errors are caught before moving on to
 the next stage.
 
 The code for the {\tt Riddle} class is shown in
-Figure~\ref{fig-riddleclass}. Even though we have not yet begun
+Figure~\ref{fig:riddleclass}. Even though we have not yet begun
 learning the details of the Java language, you can easily pick out the
 key parts in this program: the instance variables {\tt question} and
 {\tt answer} of type {\tt String}, which are used to store the
@@ -533,9 +530,8 @@ public class Riddle extends Object  // Class header
 } // Riddle class                  // End class body
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt Riddle} class definition.
-\label{fig-riddleclass}
-\label{pg-fig-riddleclass}}
+\jjjprogstop{The {\tt Riddle} class definition.}
+{fig:riddleclass}
 \end{figure}
 
 \subsection{Syntax and Semantics}
@@ -602,7 +598,7 @@ precise in learning Java's syntax and semantics.
 
 \noindent Coding, testing, and revising a program is an 
 repetitive process, one that may require you to repeat the different
-program-development stages shown in (Fig.~\ref{fig-progdev}).
+program-development stages shown in (Fig.~\ref{fig:progdev}).
 According to the stepwise-refinement principle, the process of
 developing a program should proceed in small, incremental steps, where
 the solution becomes more refined at each step.  However, no matter
@@ -728,8 +724,8 @@ which will be explained in greater detail in later sections.
 The program we will study is a Java version of the traditional
 HelloWorld program---''traditional'' because practically every
 introductory programming text begins with it. When it is run, the
-HelloWorld program (Fig.~\ref{fig-helloworld}) just displays the
-greeting ``Hello World!'' on the console.
+HelloWorld program (Fig.~\ref{fig:helloworld}) just displays the
+greeting ``Hello, World!'' on the console.
 
 %% proglist ch1/helloapplication/HelloWorld.java
 \begin{figure}[hb]
@@ -739,11 +735,11 @@ greeting ``Hello World!'' on the console.
   /*
    * File: HelloWorld.java
    * Author: Java Java Java
-   * Description: Prints Hello World greeting.
+   * Description: Prints Hello, World! greeting.
    */
  public class HelloWorld extends Object // Class header
  {                                   // Start class body
-   private String greeting = "Hello World!";  
+   private String greeting = "Hello, World!";  
    public void greet()               // Method definition
    {                                 // Start method body
        System.out.println(greeting); //  Output statement
@@ -757,9 +753,8 @@ greeting ``Hello World!'' on the console.
  }  // HelloWorld                  // End class body
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt HelloWorld} application program.
-\label{fig-helloworld}
-\label{pg-fig-helloworld}}
+\jjjprogstop{The {\tt HelloWorld} application program.}
+{fig:helloworld}
 \end{figure}
 
 
@@ -865,19 +860,18 @@ structure, makes the program easier to read and understand.
 braces.  Use a comment to mark the end of a block of code.}
 
 \subsection{Keywords and Identifiers}
-\label{sec-keywords}
-\label{pg-sec-keywords}
+\label{subsec:keywords}
 
-\noindent The Java language contains 48 predefined {\it keywords} (Table~1.1).
+\noindent The Java language contains 48 predefined {\it keywords} (Table~\ref{tab:keywords}).
 These are words that have special meaning in the language and whose
 use is reserved for special purposes. For example, the keywords used
-in the HelloWorld program (Fig.~\ref{fig-helloworld}) are: {\tt
+in the HelloWorld program (Fig.~\ref{fig:helloworld}) are: {\tt
 class}, {\tt extends}, {\tt private}, {\tt public}, {\tt static}, and
 {\tt void}. 
 
 \begin{table}[htb]
 %\hphantom{\caption{Java keywords}}
-\TBT{0pc}{Java keywords.\label{tab-keywords}}
+{\caption{Java keywords.\label{tab:keywords}}}
 %\begin{tabular}{l}
 {\color{cyan}\rule{27pc}{1pt}}\par\vspace{-10pt}
 \begin{verbatim}
@@ -943,8 +937,8 @@ readable.
 purpose of the class, variable, or method.}
 
 \subsection{Data Types and Variables}
-\label{sec-primitives}
-\label{pg-sec-primitives}
+\label{subsec:primitives}
+
 
 \noindent A computer program wouldn't be very useful if it couldn't
 manipulate different kinds of data, such as numbers and strings.  The
@@ -965,33 +959,32 @@ boolean type with values true and false.  The names of the primitive
 types are keywords like {\tt int} for one integer type, {\tt double}
 for one real number type, and {\tt boolean}.
 
-As we noted in Chapter~0, a variable is a named storage location that
+As we noted in Chapter~\ref{chapter-intro}, a variable is a named storage location that
 can store a value of a particular type. Practically speaking, you can
 think of a variable as a special container into which you can place
-values, but only values of a certain type (Fig.~1.6). For
+values, but only values of a certain type (Fig.~\ref{fig:vars}). For
 example, an {\tt int} variable can store values like 5 or -100. A {\tt
 String} variable can store values like ``Hello''.  (Actually, this is
 not the full story, which is a little more complicated, but we will
-get to that in Chapter~2.)
+get to that in Chapter~\ref{chapter-objects}.)
 
 In the {\tt HelloWorld} class, the instance variable {\tt greeting}
-\marginfig{chptr01/vars.eps}{Variables are like {\it typed} containers.
-\label{fig-vars}
-\label{pg-fig-vars}}
+\marginfig{chptr01/vars.eps}{Variables are like {\it typed} containers.}
+{fig:vars}
 (line 8) stores a value of type {\tt String}. In the {\tt main()}
 method, the variable {\tt helloworld} is assigned 
 a {\tt HelloWorld} object (line 16).
 
 A {\bf literal value} is an actual value of some type that occurs in a
 program. For example, a string enclosed in double quotes, such as
-"Hello World!", is known as a {\tt String} literal. A number such as
+"Hello, World!", is known as a {\tt String} literal. A number such as
 45.2 would be an example of a literal of type {\tt double}, and -72
 would be an example of a literal of type {\tt int}.  Our HelloWorld
 program contains just a single literal value, the "HelloWorld!" {\tt
 String}.
 
 \subsection{Statements}
-\label{sec-statements}
+\label{subsec:statements}
 
 A Java program is a collection of statements. A {\bf statement} is a
 \marginnote{Executing a program}
@@ -1066,13 +1059,12 @@ assign (store) that value to (in) the variable on the left hand
 side. Here are some simple examples:
 \marginfig{chptr01/assign.eps}{This illustrates how the state of the 
 variables {\tt num1} and {\tt num2} changes over the course of
-the three assignments, (a), (b), (c), given in the text.
-\label{fig-assign}
-\label{pg-fig-assign}}
+the three assignments, (a), (b), (c), given in the text.}
+{fig:assign}
 
 \begin{jjjlisting}
 \begin{lstlisting}
-greeting = "Hello World";
+greeting = "Hello, World";
 num1 = 50;        // (a) Assign 50 to num1
 num2 = 10 + 15;   // (b) Assign 25 to num2
 num1 = num2;      // (c) Copy num2's value (25) into num1
@@ -1080,13 +1072,13 @@ num1 = num2;      // (c) Copy num2's value (25) into num1
 \end{jjjlisting}
 
 \noindent In the first case, the value on the right hand 
-side is the string literal "Hello World!", which gets stored in {\tt
+side is the string literal "Hello, World!", which gets stored in {\tt
 greeting}. Of course, {\tt greeting} has to be the right type of
 container--in this case, a {\tt String} variable.  In the next case,
 the value on the right hand side is 50. So that is the value that gets
 stored in {\tt num1}, assuming that {\tt num1} is an {\tt int}
 variable. The situation after this assignment is shown in the top
-drawing in Figure~1.7.  In the third case, the value on
+drawing in Figure~\ref{fig:assign}.  In the third case, the value on
 the right hand side is 25, which is determined by adding 10 and 15. So
 the value that gets assigned to {\tt num2} is 25. After this
 assignment we have the situation shown in the middle drawing in the
@@ -1116,10 +1108,9 @@ executing this statement. The effect of this statement is to copy
 the value stored in {\it num2} into {\it num1}, as illustrated
 \marginfig{chptr01/assign2.eps}{In the 
 assignment {\it num1 = num2;},  {\it num2}'s
-value is copied into {\it num1}.
-\label{fig-assign2}
-\label{pg-fig-assign2}}
-in Figure~1.8.
+value is copied into {\it num1}.}
+{fig:assign2}
+in Figure~\ref{fig:assign2}.
 
 Java has many other kinds of statements and we will be learning about
 these in subsequent examples. The following examples from the {\tt
@@ -1144,7 +1135,7 @@ extends from lines 10 through 12. The body of the {\tt main()} method
 is a block that extends from lines 14 to 19.
 
 \subsection{Expressions and Operators}
-\label{sec-expressions}
+\label{subsec:expressions}
 
 \noindent The manipulation of data in a program is done by using some
 kind of {\em expression} that specifies the action.  An {\bf
@@ -1257,7 +1248,7 @@ class, {\tt HelloWorld}. And the last part declares that {\tt
 HelloWorld} is a subclass of the {\tt Object} class. We call this
 part of the definition the class's pedigree.
 
-As you recall from Chapter~0, the {\tt Object} class is the top class
+As you recall from Chapter~\ref{chapter-intro}, the {\tt Object} class is the top class
 of the entire Java hierarchy. By declaring that {\tt HelloWorld
 extends Object}, we are saying that {\tt HelloWorld} is a direct {\em
 subclass} of {\tt Object}.  In fact, it is not necessary to declare
@@ -1273,10 +1264,10 @@ the objects of the class.  This is where the object's attributes and
 actions are defined. 
 
 \subsection{Declaring an Instance Variable}
-\label{sec-vardecl}
+\label{subsec:vardecl}
 
 There are generally two kinds of elements declared and defined in the
-class body: variables and methods. As we described in Chapter~0, an
+class body: variables and methods. As we described in Chapter~\ref{chapter-intro}, an
 instance variable is a variable that belongs to each object, or
 instance, of the class. That is, each instance of a class has its own
 copies of the class's instance variables.  The {\tt HelloWorld} class
@@ -1285,7 +1276,7 @@ follows:
 
 \begin{jjjlisting}
 \begin{lstlisting}
-private String greeting = "Hello World!"; 
+private String greeting = "Hello, World!"; 
 \end{lstlisting}
 \end{jjjlisting}
 
@@ -1314,7 +1305,7 @@ is used in a {\tt println()} statement.
 
 The last part of the declaration is an optional initializer
 expression. In this example, we use it to assign an initial value,
-``Hello World!,'' to the {\tt greeting} variable.  
+``Hello, World!,'' to the {\tt greeting} variable.  
 
 \subsection{Defining an Instance Method}
 
@@ -1351,7 +1342,7 @@ means that they don't return any kind of value. Void methods just
 execute the sequence of statements given in their bodies.  For an
 example of a method that does return a value, take a look again at the
 declaration of the {\tt getQuestion()} method in the {\tt Riddle}
-class, which returns a {\tt String} (Fig.~\ref{fig-riddleclass}).
+class, which returns a {\tt String} (Fig.~\ref{fig:riddleclass}).
 
 The method's name follows the method's return type. This is the name
 that is used when the method is called. For example, the {\tt greet()}
@@ -1364,7 +1355,7 @@ such as the {\tt greet()} method, do not have parameters, because they
 are not passed any information. For an example of a method that does
 have parameters, see the {\tt Riddle()} constructor, which contains
 parameters for the riddle's question and answer
-(Fig.~\ref{fig-riddleclass}).  
+(Fig.~\ref{fig:riddleclass}).  
 
 The last part of method definition is its body, which contains a
 sequence of executable statements. An {\bf executable statement} is a
@@ -1436,7 +1427,7 @@ to call the {\tt greet()} method. However, because the {\tt greet()}
 method is an instance method that belongs to a {\tt HelloWorld}
 object, we first need to create a {\tt HelloWorld} instance. This is
 what happens in the body of the {\tt main()} method
-(Fig.~\ref{fig-helloworld}).
+(Fig.~\ref{fig:helloworld}).
 
 The {\tt main()} method contains three statements:
 
@@ -1460,7 +1451,7 @@ statement, we call the {\tt greet()} method, which will print ``Hello
 World!'' on the console.
 
 If you look back at the {\tt HelloWorld} program in
-Figure~\ref{fig-helloworld} you won't find a definition of a
+Figure~\ref{fig:helloworld} you won't find a definition of a
 \marginnote{Default constructor}
 constructor method.  This is not an error because Java will provide a
 default constructor if a class does not contain a constructor
@@ -1476,7 +1467,7 @@ public HelloWorld() {  }  // Default constructor
 
 \noindent For most of the classes we design, we will design our
 own constructors, just as we did in the {\tt Riddle} class
-(Fig.~\ref{fig-riddleclass}).  We will use constructors to assign
+(Fig.~\ref{fig:riddleclass}).  We will use constructors to assign
 initial values to an object's instance variables or to perform other
 kinds of tasks that are needed when an object is created. Because the
 {\tt HelloWorld} object doesn't require any startup tasks, we can make
@@ -1488,63 +1479,75 @@ object-oriented program is a collection of interacting objects.
 Although we create just a single {\tt HelloWorld} object in the {\tt
 main()} method, there are two other objects used in the program. One
 is the {\tt greeting}, which is a {\tt String} object consisting of
-the string ``Hello World!''.  The other is the {\tt System.out}
+the string ``Hello, World!''.  The other is the {\tt System.out}
 object, which is a special Java system object used for printing.
 	
-\subsection{Java Applets}
+\subsection{Java JFrames}
 
-A Java {\bf applet} is a program that is executed by a Web browser and
-whose output is embedded within a Web
-page. Figure~\ref{fig-helloapplet} shows a Java applet named {\tt
-HelloWorldApplet}. This program does more or less the same thing as
-%% proglist ch1/helloapplet/HelloWorld.java
+Java cann run a program in a {\bf JFrame} so that the output 
+and interaction occurs in a Window (or Frame). Figure~\ref{fig:hellojframe} shows a Java program named {\tt
+HelloWorldSwing}. This program does more or less the same thing as
+%% proglist ch1/hellojframe/HelloWorldSwing.java
 \begin{figure}[h!]
 \jjjprogstart
 \begin{jjjlisting}
 \begin{lstlisting}
-  /** HelloWorldApplet program */
-import java.applet.Applet; // Import class names
-import java.awt.Graphics;
+ /** File: HelloWorldSwing program */
 
-public class HelloWorldApplet extends Applet// Class header
-{                      // Start of body
-     public void paint(Graphics g)   // The paint method
-     {
-         g.drawString("Hello World!",10,10);
-     }  // End of paint
-}  // End of HelloWorld
+import javax.swing.JFrame; // Import class names
+import java.awt.Graphics;
+import java.awt.Canvas;
+
+public class HelloWorldCanvas extends Canvas // Class header
+{                                            
+    // Start of body
+    public void paint(Graphics g)           
+        // The paint method
+    {
+        g.drawString("Hello, World!", 10, 10);
+    }  // End of paint
+
+    public static void main(String[] args){
+        HelloWorldCanvas c = new HelloWorldCanvas();
+        JFrame f = new JFrame();
+        f.add(c);
+        f.setSize(150,50);
+        f.setVisible(true);
+    }
+}  // End of HelloWorldCanvas
+
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{{\tt Hello\-World\-Applet} program.
-\label{fig-helloapplet}
-\label{pg-fig-helloapplet}}
+\jjjprogstop{{\tt Hello\-World\-Canvas} program.}
+{fig:hellojframe}
 \end{figure}
-the {\tt HelloWorld} application---it displays the ``Hello World!'' 
+the {\tt HelloWorld} application---it displays the ``Hello, World!'' 
 greeting. The difference is that it displays the greeting within
-a Web page rather than directly on the console. 
+a Window rather than directly on the console. 
 
-As in the case of the {\tt HelloWorld} application program, {\tt
-Hello\-World\-Applet} consists of a class definition.  It contains a
+As in the case of the {\tt HelloWorld} console application program, {\tt
+Hello\-World\-Canvas} consists of a class definition.  It contains a
 single method definition, the {\tt paint()} method, which
 contains a single executable statement:
 
 \begin{jjjlisting}
 \begin{lstlisting}
-g.drawString("Hello World!",10,10);
+g.drawString("Hello, World!",10,10);
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent This statement displays the ``Hello World!'' message directly 
-on a Web page. The {\tt drawString()} method is one of the many
+\noindent This statement displays the ``Hello, World!'' message
+directly in a Window. 
+The {\tt drawString()} method is one of the many
 drawing and painting methods defined in the {\tt Graphics} class.
-Every Java applet comes with its own {\tt Graphics} object, which is
+Every Java Canvas comes with its own {\tt Graphics} object, which is
 referred to here simply as {\tt g}. Thus, we are using that object's
-{\tt drawString()} method to draw on the applet window. Don't worry
+{\tt drawString()} method to draw on the window. Don't worry
 if this seems a bit mysterious now. We'll explain it more fully when
 we take up graphics examples again.
 
 
-The {\tt HelloWorldApplet} also contains some elements, such as the
+The {\tt HelloWorldSwing} also contains some elements, such as the
 {\tt import} statements, that we did not find in the {\tt HelloWorld}
 application. We will now discuss those features.
 
@@ -1554,8 +1557,8 @@ application. We will now discuss those features.
 Recall that the {\tt HelloWorld} application program used two
 pre-defined classes, the {\tt String} and the {\tt System}
 classes. Both of these classes are basic language classes in Java.
-The {\tt HelloWorldApplet} program also uses pre-defined classes, such
-as {\tt Applet} and {\tt Graphics}. However, these two classes are not
+The {\tt HelloWorldSwing} program also uses pre-defined classes, such
+as {\tt JFrame} and {\tt Graphics}. However, these two classes are not
 part of Java's basic language classes.  To understand the difference
 between these classes, it will be necessary to talk briefly about
 how the Java class library is organized.
@@ -1621,9 +1624,9 @@ shorter and more readable.
 
 The {\tt import} statement doesn't actually load classes into the
 program. It just makes their abbreviated names available.  For
-example, the import statements in {\tt HelloWorldApplet} allow us to
-refer to the {\tt Applet} and {\tt Graphics} classes by their
-abbreviated names (Fig.~\ref{fig-helloapplet}).
+example, the import statements in {\tt HelloWorldSwing} allow us to
+refer to the {\tt JFrame}, {\tt Canvas}, and {\tt Graphics} classes by their
+abbreviated names (Fig.~\ref{fig:hellojframe}).
 
 The {\tt import} statement takes two possible forms:
 $$
@@ -1639,7 +1642,7 @@ $$
 by its abbreviated name. The second form, which uses the asterisk as a
 wildcard characters ('*'), allows all the classes in the specified
 package to be known by their short names. The {\tt import} statements
-in {\tt HelloWorldApplet} are examples of the first form. The
+in {\tt HelloWorldSwing} are examples of the first form. The
 following example,
 
 \begin{jjjlisting}
@@ -1653,14 +1656,13 @@ be referred to by their class names alone. In fact, this particular
 {\tt import} statement is implicit in every Java program.
 
 \subsection{Qualified Names in Java}
-\label{sec-qualifiednames}
-\label{pg-sec-qualifiednames}
+\label{subsec:qualifiednames}
 
 \noindent In the previous subsections we have seen several
 examples of names in Java programs that used {\it dot notation}.  A
 {\bf qualified name} is a name that is separated into parts using
 Java's dot notation. Examples include package names, such as {\tt
-java.awt}, class names, such as {\tt java.applet.Applet}, and
+java.awt}, class names, such as {\tt javax.swing.JFrame}, and
 even method names, such as {\tt helloworld.greet()}.
 
 Just as in our natural language, the meaning of a name within a Java
@@ -1722,10 +1724,11 @@ the class, method, variable, or package being referred to.}
 Running a Java Program}
 
 \noindent In this section we discuss the nuts and bolts of 
-how to compile and run a Java program. Because Java programs come in
-two different varieties, applications and applets, the process differs
-slightly for each variety.  We have already discussed some of the main
-language features of Java applications and applets, so in this section
+how to compile and run a Java program. Because we are exploring two 
+different varieties of Java programs, console applications and Swing
+applications, 
+the process differs slightly for each variety.  We have already discussed some of the main
+language features of console and Swing applications, so in this section
 we focus more on features of the programming environment itself.
 Because we do not assume any particular programming environment in
 this book, our discussion will be somewhat generic.  However,
@@ -1740,10 +1743,10 @@ run a Java program.  The following description will be based on the
 software development environment provided by Sun Microsystems, the
 company that developed Java. It is currently known as the {\it Java2
 Platform, Standard Edition 5.0 (J2SE 5.0)}. Versions of J2SE are
-available for various platforms, including Unix, Windows, and
-Macintosh computers.  Free downloads are available at Sun's Web site
+available for various platforms, including Linux, Windows, and
+macOS computers.  Free downloads are available at Sun's Web site
 at {\tt http://java.sun.com/j2se/}. (For more details about the J2SE,
-see Appendix~B.)
+see Appendix~\ref{appendix-jdk}.)
 
 In some cases, the individual programs that make up the J2SE are
 available in a single program development environment, known as an
@@ -1753,14 +1756,14 @@ IDE.  Each of these provides a complete development package for
 editing, compiling, and running Java applications and applets on
 a variety of platforms, including Linux and Windows.
 
-Figure~\ref{fig-compile} illustrates the process involved in creating
+Figure~\ref{fig:compile} illustrates the process involved in creating
 and running a Java program.  The discussion that follows here assumes
 \begin{figure}[tb]
 \figaleft{chptr01/compile.eps}{Editing, compiling, and running
 %%%\figa{chptr01/compile.eps}{Editing, compiling, and running
 {\tt HelloWorld.java}.
-\label{fig-compile}
-\label{pg-fig-compile}}
+\label{fig:compile}}
+
 \end{figure}
 that you are using the J2SE as your development environment to edit,
 compile and run the example program.  If you are using some other
@@ -1775,9 +1778,10 @@ programs in that environment.
 
 \noindent Any text editor may be used to edit the program by
 merely typing the program and making corrections as needed.  Popular
-Unix and Linux editors include {\tt vi} and {\tt emacs}. Macintosh
-editors include {\tt SimpleText} and {\tt BBEdit}, and an editor like
-{\tt WinEdit} or {\tt NotePad} are available for Windows.  
+Unix and Linux editors include {\tt vim} and {\tt emacs}. These
+editors are also available on macOS and Windows. However, free macOS
+editors include {\tt TextMate} and {\tt TextWrangler}, and Windows has
+{\tt Notepad++} for free.  
 
 As we have seen, a Java program consists of one or more class
 definitions.  We will follow the convention of placing each class
@@ -1793,7 +1797,7 @@ file named {\tt ClassName.java}. Otherwise an error will result.}
 
 \noindent For example, in the case of our {\tt HelloWorld} application program, 
 the file must be named {\tt HelloWorld.java}, and for {\tt
-HelloWorldApplet}, it must be named {\tt HelloWorldApplet.java}.
+HelloWorldSwing}, it must be named {\tt HelloWorldSwing.java}.
 Because Java is {\em case sensitive}, which means that Java pays
 attention to whether a letter is typed uppercase or lowercase, it
 would be an error if the file containing the {\tt HelloWorld} class
@@ -1835,7 +1839,7 @@ javac HelloWorld.java
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent As Figure~\ref{fig-compile} illustrates, if the 
+\noindent As Figure~\ref{fig:compile} illustrates, if the 
 {\tt HelloWorld.java} program does not contain errors, the result of
 this command is the creation of a Java bytecode file named {\tt
 HelloWorld.class}---a file that has the same prefix as the source file
@@ -1868,89 +1872,41 @@ On Macintosh systems, or within an IDE, which do not typically
 have a command line interface, you would select the compile and run
 commands from a menu.  Once the code is compiled, the run command will
 cause the JVM to be loaded and the bytecode to be interpreted.  The
-``HelloWorld!''  output would appear in a text-based window that
+``Hello, World!''  output would appear in a text-based window that
 automatically pops up on your computer screen.  In any case,
 regardless of the system you use, running the {\tt HelloWorld}
-application program will cause the ``HelloWorld'' message to be
-displayed on some kind of standard output device (Fig.~1.11).
-\marginfig{chptr01/1f4.eps}{Running the {\tt HelloWorld.java} application
-program.
-\label{fig-stdout}
-\label{pg-fig-stdout}}
+console application program will cause the ``Hello, World!'' message to be
+displayed on some kind of standard output device (Fig.~\ref{fig:stdout}).
+\marginfigscaled{chptr01/1f4.png}{0.5}{Compiling and Running the {\tt HelloWorld.java} console application
+program.}
+{fig:stdout}
 
-\subsection{Running a Java Applet}
-\label{sec-applet}
 
-To run a Java applet, you need to use either a Web browser or the
-SDK's {\tt appletviewer}, a stripped-down Web browser for running
-applets. The Web browser (or appletviewer) uses an HTML (HyperText
-Markup Language) document to locate the applet's bytecode files on the
-Web (or directly on your computer's hard drive). The HTML file must
-contain an {\tt <applet>} tag, as shown in Figure~\ref{fig-applettag},
-which tells the browser where to locate the applet's bytecode.  (See
-Appendix B for more details about the appletviewer and the {\tt
-<applet>} tag).
+\subsection{Running a Java Swing Program}
+\label{subsec:swing}
 
-\begin{figure}[hb]
-\jjjprogstart
-\begin{jjjlisting}[27pc]
-\begin{lstlisting}
-<html>
-...
-<applet code="HelloWorldApplet.class" width= 200 height=200>
-</applet>
-...
-</html>
-\end{lstlisting}
-\end{jjjlisting}
-\jjjprogstop{An example of an HTML file containing an {\tt <applet>} tag.
-This specification will run the Java program named {\tt 
-HelloWorldApplet.class}.
-\label{fig-applettag}
-\label{pg-fig-applettag}}
-\end{figure}
+When you run a  Java Swing Program, there is typically no console
+output. You only see your output in the Window (JFrame) that your
+Graphics are displayed in. This makes automated testing more difficult
+since you need to visually inspect that the program is working correctly.
 
-If the applet tag is correctly specified, the Web browser (or
-appletviewer) will locate the Java bytecode file on the Web (or
-on your system's hard drive). It will then load the
-JVM, which will load the applet's code into memory and interpret
-and execute it.
-
-The code in Figure~\ref{fig-applettag} would be placed in a file named
-with an {\tt .html} suffix to indicate that it is an HTML file.  The
-name of the file in this case is not important, but let's suppose we
-give it the name {\tt Hello.html}.  What is important is that the {\tt
-<applet>} tag\index{applet tag} be specified correctly, designating
-the name of the Java bytecode that should be executed, for example,
-{\tt HelloWorldApplet.class}. It is also necessary that the HTML file
-be stored in the same directory or folder as the class file.  (There
-are ways to get around this, but we'll deal with those later.)
-
-Given the correctly coded HTML file, {\tt Hello.html},
-the {\tt appletviewer} can be used to load and run the applet
-by typing the following command on the command line:
-
+When you run
 
 \begin{jjjlisting}
 \begin{lstlisting}
-appletviewer Hello.html
+java HelloWorldSwing
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent If you are using a Web browser to run the 
-applet, you would use the browser's menu to load {\tt Hello.html} into
-the browser, either across the Internet by supplying its {\it URL
-(Uniform Resource Locator)} or from your local disk by supplying the
-HTML file's full path name. (You can use the browser's {\it Open File}
-command to located the HTML file.)  In any case, the appletviewer or
-the browser will load the program's bytecode into the computer's main
-memory and then verify, interpret, and execute the program.  The
-result, as shown in Figure~1.13, is that the ``Hello world!'' message
-will be displayed within the browser or appletviewer window.
+\noindent A window will open, and you won't be able to type in the
+console until you close the window, quit the program, or type ctl-c to
+send a kill signal to the Swing program. The
+result of running, as shown in Figure~\ref{fig:hello}, is that the ``Hello, World!'' message
+will be displayed within it's own window.
 
 \vspace*{2pc}
 \section{From the Java Library: System and \\PrintStream}
-\label{pg-sec-systemclass}
+\label{sec:systemclass}
 \WWWjava 
 Java comes with a library of classes that can be used to perform
 common tasks. The Java class library is organized into a set
@@ -1971,10 +1927,10 @@ interface is a {\it Graphical User Interface (GUI)}, which uses
 buttons, text fields, and other graphical components for input and
 output. Java applets use GUIs as do many Java applications.  Because
 we want to be able to write programs that generate output, this
-\marginfig{chptr01/1f6.eps}{Running
-{\tt HelloWorldApplet.java} applet.
-\label{fig-hello}
-\label{pg-fig-hello}}
+\marginfig{chptr01/1f6.png}{Running
+{\tt HelloWorldSwing.java} graphical program.}
+{fig:hello}
+
 section describes how Java handles simple console output.
 
 In Java, any source or destination for I/O is considered a {\it
@@ -1993,11 +1949,11 @@ to the console. For example, the following {\tt println()} statement
 
 \begin{jjjlisting}
 \begin{lstlisting}
-System.out.println("Hello World");
+System.out.println("Hello, World");
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent prints the message ``Hello World'' on the
+\noindent prints the message ``Hello, World'' on the
 Java console.  Let's now examine this statement more carefully to see
 how it makes use of the Java I/O classes.
 
@@ -2005,15 +1961,14 @@ The {\tt java.io.PrintStream} class is Java's printing expert, so to
 speak. It contains a variety of {\tt print()} and {\tt println()}
 methods that can be used to print all of the various types of data we
 find in a Java program.  A partial definition of {\tt PrintStream} is
-shown in Figure~1.14. Note
+shown in Figure~\ref{fig:printstreamUML}. Note
 %\begin{figure}[tb]
 %\begin{graphic}
 %%\marginfig{CHPTR01:printstreamUML.eps}
 \marginfig{chptr01/printstr.eps}
 %\begin{fig}
-{A UML class diagram of the {\tt PrintStream} class.
-\label{fig-printstreamUML}
-\label{pg-fig-printstreamUML}}
+{A UML class diagram of the {\tt PrintStream} class.}
+{fig:printstreamUML}
 %\figa
 %\end{fig}
 %}
@@ -2064,9 +2019,9 @@ goodbye
 %%\marginfig{CHPTR01:systemUML.eps}%
 \marginfig{chptr01/systemum.eps}%
 %\begin{fig}
-{The {\tt System} class.
-\label{fig-systemUML}
-\label{pg-fig-systemUML}}
+{The {\tt System} class.}
+{fig:systemUML}
+
 %\figa
 %\end{fig}
 %}
@@ -2078,7 +2033,7 @@ let's use it to ``sing'' a version of ``Old MacDonald Had a
 Farm.'' As you might guess, this program will simply consist of a
 sequence of {\tt System.out.println()} statements each of which prints a
 line of the verse.  The complete Java application program is shown in
-Figure~\ref{fig-oldmac}.
+Figure~\ref{fig:oldmac}.
 
 \begin{figure}[h]
 \jjjprogstart
@@ -2102,9 +2057,9 @@ public class OldMacDonald
 }  // End of OldMacDonald
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt Old\-Mac\-Donald.java} class.
-\label{fig-oldmac}
-\label{pg-fig-oldmac}}
+\jjjprogstop{The {\tt Old\-Mac\-Donald.java} class.}
+{fig:oldmac}
+
 \end{figure}
 
 This example illustrates the importance of using the Java class
@@ -2593,9 +2548,9 @@ its perimeter. Draw a UML diagram to represent this triangle.
 
 \item Try to give the Java class definition for the class described in
 \marginfig{chptr01/umlexerc.eps}%
-{The {\tt Person} class.
-\label{fig-person}
-\label{pg-person}}
+{The {\tt Person} class.}
+{fig:person}
+
 the UML diagram shown in Figure~1.17.
 
 \end{EXRtwo}
