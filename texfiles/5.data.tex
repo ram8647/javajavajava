@@ -495,8 +495,7 @@ human thinking and perception.
 %\end{BOXfive}%
 
 \subsection{Using Booleans in OneRowNim}
-
-\noindent Now that we have introduced the {\tt boolean}
+Now that we have introduced the {\tt boolean}
 data type, let's use it to improve the {\tt OneRowNim} class, the
 latest version of which, from Chapter~3, is given in
 Figure~\ref{fig-ornclass}.  Previously we used an {\tt int} variable,
@@ -551,6 +550,48 @@ else
 
 \noindent The remaining changes are shown in Figure~\ref{fig-newonerow}.
 There are only two instance methods that need revision to accommodate
+the use of {\tt boolean} variables. The {\tt takeSticks()} method
+contains two revisions. The first uses the boolean OR operator to test
+whether a move is valid:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public boolean takeSticks(int num)
+{   if (num < 1 || num > 3 || num > nSticks) 
+        return false;                // Error
+    else                             // Valid move
+    {   nSticks = nSticks - num;
+        onePlaysNext = !onePlaysNext;
+        return true;
+    } //else
+} // takeSticks()
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent It also uses the boolean NOT operator to toggle 
+the value of {\tt onePlaysNext}, to switch to the other player's turn:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+onePlaysNext = !onePlaysNext;
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Finally, the {\tt getPlayer()} method now uses a
+if/else statement to return either 1 or 2 depending on who's
+turn it is:
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public int getPlayer()
+{   if (onePlaysNext) 
+        return 1;
+    else return 2;
+} // getPlayer()
+\end{lstlisting}
+\end{jjjlisting}
+
+
 \begin{figure}[h!]
 \jjjprogstart
 \begin{jjjlisting}
@@ -605,48 +646,6 @@ public class OneRowNim
 variable to keep track of who's turn it is.}
 {fig-newonerow}
 \end{figure}
-the use of {\tt boolean} variables. The {\tt takeSticks()} method
-contains two revisions. The first uses the boolean OR operator to test
-whether a move is valid:
-
-\begin{jjjlisting}
-\begin{lstlisting}
-public boolean takeSticks(int num)
-{   if (num < 1 || num > 3 || num > nSticks) 
-        return false;                // Error
-    else                             // Valid move
-    {   nSticks = nSticks - num;
-        onePlaysNext = !onePlaysNext;
-        return true;
-    } //else
-} // takeSticks()
-\end{lstlisting}
-\end{jjjlisting}
-
-\noindent It also uses the boolean NOT operator to toggle 
-the value of {\tt onePlaysNext}, to switch to the other player's turn:
-
-\begin{jjjlisting}
-\begin{lstlisting}
-onePlaysNext = !onePlaysNext;
-\end{lstlisting}
-\end{jjjlisting}
-
-\noindent Finally, the {\tt getPlayer()} method now uses a
-if/else statement to return either 1 or 2 depending on who's
-turn it is:
-
-\begin{jjjlisting}
-\begin{lstlisting}
-public int getPlayer()
-{   if (onePlaysNext) 
-        return 1;
-    else return 2;
-} // getPlayer()
-\end{lstlisting}
-\end{jjjlisting}
-
-
 
 
 \section{Numeric Data and Operators}

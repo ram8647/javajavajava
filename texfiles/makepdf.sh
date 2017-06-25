@@ -1,4 +1,4 @@
-pdflatex -output-directory .. jjj-os
+pdflatex -shell-escape -output-directory .. jjj-os
 cd ..
 makeindex jjj-os
 cd -
