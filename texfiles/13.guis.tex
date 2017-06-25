@@ -5,7 +5,7 @@
 \setcounter{chapter}{12}
 \chapter{Graphical User Interfaces}
 \label{chapter-guis}
-\label{pg-chapter-guis}
+
 
 \CObegin
 \secCOBH{Objectives}
@@ -125,17 +125,17 @@ more efficient and more portable than corresponding AWT components.
 \figa{chptr13/p472f1.eps}{Swing classes, part 1: Relationship between
 the AWT and the top-level Swing windows. REVISION: {\tt JWindow}
 extends {\tt Window}.}
-{fig-swing1}
+{fig-swing1-guis}
 
 \end{figure}
 %\end{figure}
 
-Figures~\ref{fig-swing1} and \ref{fig-swing2} show the relationship
+Figures~\ref{fig-swing1-guis} and \ref{fig-swing2-guis} show the relationship
 between AWT and Swing classes. The top-level Swing classes---the {\tt
 JApplet}, {\tt JDialog}, {\tt JFrame}, and {\tt JWindow}---are direct
 subclasses of their corresponding AWT counterparts. These are the
 top-level GUI windows. The remaining Swing components
-(Fig.~\ref{fig-swing2}) are subclasses of {\tt java.awt.Component}
+(Fig.~\ref{fig-swing2-guis}) are subclasses of {\tt java.awt.Component}
 and {\tt java.awt.Container}.  As you can see, the names of Swing and
 AWT components are very similar. Swing components that have
 corresponding AWT components have names that begin with ``J.''
@@ -150,8 +150,8 @@ the AWT.
 \begin{figure}[tb]
 \figaleft{chptr13/p473f1.eps}{Swing classes, part 2: Swing GUI components are
 derived from the {\tt JComponent} class.
-\label{fig-swing2}
-\label{pg-fig-swing2}}
+} {fig-swing2-guis}
+
 \end{figure}
 %\end{figure}
 
@@ -350,7 +350,7 @@ the following argument:
 %\begin{figure}[tb]
 \marginfig{chptr13/9f4.eps}{The same Java application using the
 Motif, Windows, and Metal look and feel.
-\label{fig-lafs}\label{pg-fig-lafs}}
+} {fig-lafs}
 %\end{figure}
 %\end{figure}
 shows how the simple application would appear under the
@@ -478,8 +478,8 @@ on a {\tt JButton}.}
 and events that take place when a button is clicked. The vertical
 lines represent time lines, with time running from top to bottom. The
 arrows between lines represent messages passing between objects.
-\label{fig-p479f1}
-\label{pg-fig-p479f1}}
+} {fig-p479f1}
+
 \end{figure}
 %\end{figure}
 
@@ -563,7 +563,7 @@ written GUIs that handled {\tt ActionEvent}s for {\tt JButton}s and
 In viewing Table~13.1, it's important to remember that the
 classes listed there are arranged in a hierarchy.  This will affect the
 events that a particular object can generate.  For example, a
-{\tt JButton} is a {\tt JComponent} (Fig.~\ref{fig-swing2}), so in addition
+{\tt JButton} is a {\tt JComponent} (Fig.~\ref{fig-swing2-guis}), so in addition
 to generating {\tt ActionEvent}s when the user clicks on it, it can
 also generate {\tt MouseEvent}s when the user moves the mouse over
 it.   Similarly, because a {\tt JTextField} is also a {\tt JComponent},
@@ -728,7 +728,7 @@ First, let's choose Swing components for each of the four interface
 %\begin{marginalnote}\it Which components do we need?\end{marginalnote}
 \marginnote{Which components do we need?}
 tasks of input, output, control, and guidance.  For each component, it
-might be useful to refer back to Figure~\ref{fig-swing2} to note its
+might be useful to refer back to Figure~\ref{fig-swing2-guis} to note its
 location in the Swing hierarchy.
 
 \begin{BL}
@@ -770,7 +770,7 @@ component would be a {\tt JApplet}.  For Java applications, you would
 typically use a {\tt JFrame} as the top-level window.  Both of these
 classes are subclasses of {\tt Container}, so they are suitable for
 holding the components that make up the interface
-(Fig.~\ref{fig-swing1}).
+(Fig.~\ref{fig-swing1-guis}).
 
 
 Also, as noted earlier, {\tt JApplet}s and {\tt JFrame}s are both
@@ -791,8 +791,8 @@ as well as easy to use.
 \figaleft{chptr13/9f6.eps}{A design and layout for the Metric
 Converter GUI.~The {\it containment hierarchy} (also called a {\it widget
 hierarchy}) shows the containment relationships among the components.
-\label{fig-metricgui}
-\label{pg-fig-metricgui}}
+} {fig-metricgui}
+
 \end{figure}
 %\end{figure}
 
@@ -1194,8 +1194,8 @@ frame's layout, the entire panel is inserted just after the text area.
 \begin{figure}[tb]
 \figaright{chptr13/9f9.eps}{A widget hierarchy showing the
 containment relationships among the components.
-\label{fig-metricgui2}
-\label{pg-fig-metricgui2}}
+} {fig-metricgui2}
+
 \end{figure}
 %\end{figure}
 
@@ -1208,7 +1208,7 @@ class (Fig.~13.15). The {\tt KeyPad} will be a subclass of {\tt
 JPanel} and will handle its own {\tt ActionEvent}s.  As we saw in
 Chapter~4, a {\tt JPanel} is a generic container.  It is a subclass of
 {\tt Container} via the {\tt JComponent} class
-(Fig.~\ref{fig-swing2}).  Its main purpose is to contain and organize
+(Fig.~\ref{fig-swing2-guis}).  Its main purpose is to contain and organize
 \marginfig{chptr13/p490f1.eps}{A {\tt KeyPad} is a {\tt JPanel} of {\tt JButton}s that handles its
 own action events.}
 {fig-p490f1}
@@ -1303,8 +1303,8 @@ itself when it creates the {\tt KeyPad} object. The {\tt KeyPad}
 object can then invoke the {\tt keypressCallback()} method whenever
 a keypad button is pressed, and the {\tt Converter} can display the
 result of the keypress.
-\label{fig-p493f1}
-\label{pg-fig-p493f1}}
+} {fig-p493f1}
+
 \end{figure}
 
 \begin{jjjlisting}
@@ -1689,11 +1689,11 @@ its container.
 \subsection{The {\tt BorderLayout} Manager}
 \noindent One way to fix these problems is to use a {\tt BorderLayout} to divide
 the frame into five areas: north, south, east, west, and center, as
-shown in Figure~\ref{fig-borderlayout}. The {\tt BorderLayout} class contains two constructors:
+shown in Figure~\ref{fig-borderlayout-guis}. The {\tt BorderLayout} class contains two constructors:
 \marginfig{chptr13/9f14.eps}{Arrangement
 of components in  a border
 layout.  The relative size of the areas will vary.}
-{fig-borderlayout}
+{fig-borderlayout-guis}
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -1944,7 +1944,7 @@ private String optionLabels[] = {"Credit Card",
 instantiation and initialization of the buttons:
 \marginfigvspace{-76pt}{chptr13/9f18.eps}{Borders around containers help make
 them stand out more.
-\label{fig-acmescreen}\label{pg-fig-acmescreen}}
+} {fig-acmescreen}
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -1978,7 +1978,7 @@ for(int k = 0; k < options.length; k++) {
 options[0].setSelected(true); // Set first button 'on'
 \end{lstlisting}
 \end{jjjlisting}
-
+%$
 \noindent Radio buttons also generate {\tt ItemEvent}s, so they too
 must be registered with an {\tt ItemListener}. Note that the
 first button is set on, which represents a default payment
@@ -2240,7 +2240,7 @@ public class OrderApplet extends JApplet
 \jjjprogstop{The {\tt OrderApplet} class, Part I.}
 {fig-orderapplet}
 \end{figure}
-
+%$
 \begin{figure}[p]
 \addtocounter{figure}{-1}
 \jjjprogstart
@@ -3043,9 +3043,9 @@ object.
 
 \item  A component can indeed be registered with more than one listener.  For
 example, the {\tt ToggleButton} that we defined in
-Chapter 4 has two listeners. The first is the button
+Chapter~\ref{chapter-io} has two listeners. The first is the button
 itself, which takes care of toggling the button's label. The second is the
-applet in which the button is used, which takes care of handling
+frame in which the button is used, which takes care of handling
 whatever action the button is associated with.
 
 \item  Some components can have two different kinds of listeners.  For
@@ -3182,8 +3182,8 @@ to change the standard look and feel of a Swing {\tt JButton}.
 design of a {\tt JButton} and the design of an AWT {\tt Button}.
 Why is MVC superior?
 
-\item  Suppose you have an applet that contains a \mbox{\tt JButton}
-and a {\tt JLabel}. Each time the button is clicked, the applet
+\item  Suppose you have a GUI that contains a \mbox{\tt JButton}
+and a {\tt JLabel}. Each time the button is clicked, the GUI
 rearranges the letters in the label. Using Java's event model as a
 basis, explain the sequence of events that happens in order for this
 action to take place.

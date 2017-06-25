@@ -6,7 +6,7 @@
 
 \chapter{Sockets and Networking}
 \label{chapter-sockets}
-\label{pg-chapter-sockets}
+
 
 \CObegin
 \secCOBH{Objectives}
@@ -15,7 +15,7 @@
 \begin{COBL}
 \item  Understand some basics about networks.
 \item  Know how to use Java's {\tt URL} class
-to download network resources from an applet or application.
+to download network resources from a GUI or console application.
 \item  Be able to design networking applications,
 using the client/server model.
 \item  Understand how to use Java's {\tt Socket}
@@ -28,7 +28,7 @@ and {\tt ServerSocket} classes.
 \item {An Overview of Networks}
 \item {Using Network Resources from an Applet}
 \item {From the Java Library: {\tt java.net.URL}}
-\item {The Slide Show Applet}
+\item {The Slide Show Program}
 \item {Using Network Resources from an Application}
 \item {Client/Server Communication via {\tt Socket}s}
 \item {Case Study: Generic Client/Server Classes}
@@ -82,7 +82,7 @@ transmitting information from computer to computer.
 %\begin{figure}
 \begin{figure}[h]
 \figaleft{chptr15/15f1.eps}{Star, bus, and ring topologies.
-\label{fig-topology1}\label{pg-fig-topology1}}
+} {fig-topology1}
 \end{figure}
 %\end{figure}
 
@@ -132,7 +132,7 @@ countries of the world, is like a worldwide internet.
 \begin{figure}[thb]
 \figaleft{chptr15/15f3.eps}{An internet is a collection of distinct
 networks joined together by routers.
-\label{fig-internet}\label{pg-fig-internet}}
+} {fig-internet}
 \end{figure}
 
 
@@ -392,7 +392,7 @@ network programming.
 %\begin{figure}
 \begin{figure}[h]
 \figaleft{chptr15/p825f1.eps}{The {\tt java.net} package.
-\label{fig-nethier}\label{pg-fig-nethier}}
+} {fig-nethier}
 \end{figure}
 %\end{figure}
 
@@ -417,16 +417,17 @@ Internet packets.
 \marginfig{chptr15/15f8.eps}{An applet that continuously displays
 slides downloaded from the Web.}
 {fig-slideshow}
-\section{Using Network Resources from an Applet}
-\noindent Suppose you want to write an applet that will automatically display a
-slide show consisting of images or documents that you've prepared and
-stored on your Web site.   Perhaps you can use such an applet to give
-people who visit your site a tour of your campus
-(Fig.~15.8). Or perhaps a company might use such an
-applet to advertise its products.  In addition to making the slide show
+\section{Using Multimedia Network Resources for a Graphical Program}
+\noindent Suppose you want to write an graphical program that will display a
+catalog consisting of images or documents that you've prepared and
+stored on your Web site.   Perhaps you can use such a program to give
+people who visit your site a downloadable tour of your campus as a
+slide show
+(Fig.~15.8). Or perhaps a company might use such a
+program to advertise its products.  In addition to making the catalog
 available through its main Web site, you can imagine it running
 \marginnote{Problem statement}
-continuously on a computer kiosk in the company's lobby.
+continuously as a slide show on a computer kiosk in the company's lobby.
 
 
 In order to solve this problem we have to be able to download and
@@ -511,7 +512,7 @@ the {\tt openStream()} method.  This method will open an {\tt
 %\begin{marginalnote}\it URLs and streams\end{marginalnote}
 InputStream}, which you can then use to read the associated URL data
 the same way you would read a file.  This method is especially useful
-for writing Java applications (rather than applets).  As you might
+for writing Java applications (in addition to applets).  As you might
 guess, downloading Web resources is particularly easy from a Java
 \marginnote{URLs and streams}
 applet.  Now let's search around for other methods that we can use.
@@ -572,12 +573,77 @@ try {
 \end{lstlisting}
 \end{jjjlistingleft}
 
-\noindent So, it looks as if we've found the methods we need to
-implement our slide show applet.   We'll use the {\tt URL()}
+\noindent So, if applets were still in fashion, then these would be the methods we need to
+implement our slide show. For an application, to load an image you need to
+declare the { \tt ImageRef } and the call to read the image url is different:
+
+\begin{jjjlistingleft}[30.5pc]{-4.5pc}
+\begin{lstlisting}
+URL url;
+Image imageRef; 
+try {
+  url = new 
+   URL("http://www.cs.trincoll.edu/~ram/jjj/slideshow/slide0.gif") ;
+  imgRef = javax.imageio.ImageIO.read(url);
+} catch (MalformedURLException e) {
+    System.out.println( "Malformed URL: " + url.toString()) ;
+}
+\end{lstlisting}
+\end{jjjlistingleft}
+
+\noindent For sound we need the {\tt javax.sound.sampled}
+package. After constructing the URL, we need to set up an {\tt
+  AudioInputStream}, put the format of the stream into a
+{\tt DataLine.info } object, and then get the line as a {\tt Clip},
+which we can then use to play the sound. The {\tt AudioSystem } class
+is used heavily for this.
+
+\begin{jjjlistingleft}[30.5pc]{-4.5pc}
+\begin{lstlisting}
+Clip clip; URL url = null;
+try {
+    url = new 
+    URL("http://cooplogic.com/cheyney/sound/liftMusic.wav");
+    AudioInputStream audio =
+	AudioSystem.getAudioInputStream(url); // get stream from url
+    DataLine.Info info = 
+        new DataLine.Info(Clip.class, audio.getFormat()); // info needed for line
+    if (!AudioSystem.isLineSupported(info)) {
+	System.err.println("Audio file not supported: " + info);
+	return;
+    }
+    try {
+	clip = (Clip) AudioSystem.getLine(info); // the clip does the work
+	clip.open(audio); // open the stream.
+	clip.start(); // start the stream on a separate thread.
+	// loop until clip has finished
+	while (clip.getFramePosition() < clip.getFrameLength()) {
+	    try {
+		Thread.sleep(10);
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	}
+    } catch (LineUnavailableException ex) {
+	ex.printStackTrace();
+    }  
+} catch (MalformedURLException e) {
+    System.out.println("Malformed URL: " + url.toString()) ;
+} catch (UnsupportedAudioFileException ae) {
+    System.out.println("not supported: " + ae) ;
+} catch (IOException ioex) {
+    ioex.printStackTrace();
+}
+\end{lstlisting}
+\end{jjjlistingleft}
+
+
+
+   We'll use the {\tt URL()}
 %\begin{marginalnote}\it What methods can we use?\end{marginalnote}
 \marginnote{What methods can we use?}
 constructor to create a URL from a {\tt String}, and we'll use
-the {\tt Applet.getImage(URL)} method to retrieve the images
+the {\tt javax.imageio.ImageIO.read(url)} method to retrieve the images
 from the Web.
 %%%\end{javalibrary}
 %%%\begin{textblock}{1}(-0.75,4)
@@ -586,7 +652,7 @@ from the Web.
 %%%\end{textblock}
 
 
-\section{The Slide Show Applet}
+\section{The Slide Show Program}
 \subsection*{Problem Specification}
 \noindent Let's suppose our slide show will repeatedly display a set of images
 named ``slide0.gif,'' ``slide1.gif,'' and ``slide2.gif.'' Suppose these
@@ -606,10 +672,10 @@ http://www.cs.trincoll.edu/~ramjjj/slideshow/slide2.gif
 images, leaving about 5 seconds between each slide.
 
 \subsection*{User Interface Design}
-\noindent The user interface for this applet doesn't contain any GUI
-components.  It just needs to display an image every 5 seconds.   It can
-use a simple {\tt paint()} method to display an image each time it is
-repainted:
+\noindent The user interface for this program is graphical, but it
+doesn't contain any GUI components.  It just needs to display an image
+every 5 seconds.   It can use a simple {\tt paint()} method to display
+an image each time it is repainted:
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -623,16 +689,16 @@ public void paint(Graphics g) {
 \noindent The assumption here is that the {\tt currentImage} instance
 variable will be set initially to {\tt null}. Each time an image is
 downloaded, it will be set to refer to that image.   Because
-{\tt paint()} is called before the applet starts downloading the images, it
-\marginfig{chptr15/p830f1.eps}{The {\tt SlideShow- Applet} downloads and displays the images.}
+{\tt paint()} is called before the program starts downloading the images, it
+\marginfig{chptr15/p830f1.eps}{The {\tt SlideShow- Frame} downloads and displays the images.}
 {fig-p830f1}
 is necessary to guard against attempting to draw a {\tt null} image,
 which would lead to an exception.
 
 \subsection*{Problem Decomposition}
-\noindent One problem we face with this applet is getting it to pause between
-\marginfigvspace{15pt}{chptr15/p830f2.eps}{The {\tt Timer} class delays the applet thread between each slide.
-\label{fig-p830f2}\label{pg-fig-p830f2}}
+\noindent One problem we face with this program is getting it to pause between
+\marginfigvspace{15pt}{chptr15/p830f2.eps}{The {\tt Timer} class delays the frame thread between each slide.
+} {fig-p830f2}
 each slide.  One way to do this is to set up a loop that does nothing
 for about 5 seconds:
 
@@ -649,18 +715,19 @@ loop.  Another problem with this loop is that we don't really know how many
 iterations to do to approximate 5 seconds of idleness.
 
 A much better design would be to use a separate timer thread, which
-can {\tt sleep()} for 5 seconds between each slide.  So our program
+can {\tt sleep()} for 5 seconds between each slide. So our program
 will have two classes: one to download and display the slides and one
-to serve as a timer (Figs.~15.10 and 15.11).
+to serve as a timer (Figs.~15.10 and 15.11). ( Java Swing has a
+Timer class that works a little bit differently, see the javadoc for a description.)
 
 \begin{BL}
-\item  {\tt SlideShowApplet}---This {\tt JApplet}  subclass
+\item  {\tt SlideShowFrame}---This {\tt JFrame}  subclass
 will take care of downloading and displaying the images and starting
 the timer thread.
 
 \item  {\tt Timer}---This class will implement the
 {\tt Runnable} interface so that it can run as a separate thread.  It will
-repeatedly sleep for 5 seconds and then tell the applet to display the
+repeatedly sleep for 5 seconds and then tell the frame to display the
 next side.
 \end{BL}
 
@@ -668,7 +735,7 @@ next side.
 thread that sleeps for a brief period on each iteration is a better
 way to introduce a delay into an algorithm.}
 
-\subsection{The {\tt SlideShowApplet} class}
+\subsection{The {\tt SlideShowFrame} class}
 \noindent What should we do with the images we download? Should we repeatedly
 download and display them, or should we just download them once and
 store them in memory? The second of these alternatives seems more
@@ -686,7 +753,7 @@ it.  To help us with this task, let's use a {\tt nextImg} variable as
 an array index to keep track of the next image.  Even though it isn't
 absolutely necessary, we could use a third variable here,
 {\tt currentImage}, to keep track of the current image being
-displayed.  Thus, our applet needs the following instance variables:
+displayed.  Thus, our frame needs the following instance variables:
 
 \begin{jjjlisting}
 \begin{lstlisting}
@@ -706,7 +773,7 @@ do is to update both {\tt currentImage} and {\tt nextImg}.  This
 method should be designed so that it can be called by the {\tt Timer}
 thread whenever it is time to display the next slide, so it should be
 a {\tt public} method.   It can be a {\tt void} method with no
-parameters, because the applet already contains all the necessary information
+parameters, because the frame already contains all the necessary information
 to display the next slide.  Thus, there's no need for information
 to be passed back and forth between {\tt Timer} and this method:
 
@@ -733,21 +800,22 @@ Finally, the method calls {\tt repaint()} to display the image.
 ({\tt x \% N}) is useful for cycling repeatedly through the values
 $0, 1, \ldots, N-1$.}
 
-\noindent The applet's {\tt init()} method will have two tasks:
+\noindent The frame's constructor, {\tt SlideShowFrame()} method will have two tasks:
 
 \begin{BL}
 \item  Download and store the images in {\tt slide[]}.
 \item  Start the {\tt Timer} thread.
 \end{BL}
 
-\noindent As we discussed, downloading Web resources requires
-the use of the {\tt getImage()} method. Here we just place these
+\noindent As we discussed, downloading Web resources for an 
+application requires
+the use of the {\tt javax.imageio.ImageIO.read()} method. Here we just place these
 method calls in a loop:
 
 \begin{jjjlisting}
 \begin{lstlisting}
 for (int k=0; k < NIMGS; k++) 
-    slide[k] = getImage(getCodeBase(), 
+    slide[k] = javax.imageio.ImageIO.read(getCodeBase(), 
                  "gifs/demo" + k + ".gif");
 \end{lstlisting}
 \end{jjjlisting}
@@ -777,7 +845,7 @@ timer.start();
 \end{jjjlisting}
 
 \noindent Note that {\tt Timer} is passed a reference to
-{\tt this} applet.  This enables {\tt Timer} to call the applet's
+{\tt this} frame.  This enables {\tt Timer} to call the frame's
 {\tt nextSlide()} method every 5 seconds.   This programming technique is
 known as {\it callback} and the {\tt nextSlide()} method is an example
 of a {\bf callback method}\index{callback method} (Fig.~15.12).
@@ -788,9 +856,9 @@ a reference to the other object.  The first object uses the reference
 to call one of the public methods of the other object.}
 
 \noindent This completes our design and development
-of {\tt SlideShowApplet}, which is shown in Figure~\ref{fig-slideapplet}.
+of {\tt SlideShowFrame}, which is shown in Figure~\ref{fig-slideframe}.
 \marginfig{chptr15/p832f1.eps}{{\tt Timer} uses the {\tt nextSlide()}
-method to {\it call back} the applet to remind it to switch to the
+method to {\it call back} the frame to remind it to switch to the
 next slide.}{fig-p832f1}
 
 \begin{figure}[h]
@@ -799,9 +867,10 @@ next slide.}{fig-p832f1}
 \begin{lstlisting}
 import java.awt.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.net.*;
 
-public class SlideShowApplet extends JApplet  {
+public class SlideShowFrame extends JFrame  {
     public static final int WIDTH=300, HEIGHT=200;
     private static final int NIMGS = 3;
     private Image[] slide = new Image[NIMGS];
@@ -821,19 +890,19 @@ public class SlideShowApplet extends JApplet  {
         repaint();
     }// nextSlide()
 
-    public void init() {
+    public SlideShowFrame() {
         for (int k=0; k < NIMGS; k++) 
-            slide[k] = getImage(getCodeBase(), 
+            slide[k] = ImageIO.read(getCodeBase(), 
                              "gifs/demo" + k + ".gif");
         Thread timer = new Thread(new Timer(this));
         timer.start();
         setSize( WIDTH, HEIGHT );
-    }// init()
-}// SlideShowApplet
+    }// constructor
+}// SlideShowFrame
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt SlideShowApplet} class.}
-{fig-slideapplet}
+\jjjprogstop{The {\tt SlideShowFrame} class.}
+{fig-slideframe}
 \end{figure}
 
 \subsection{The {\tt Timer} Class}
@@ -844,13 +913,13 @@ must implement the {\tt run()} method.   Recall that we never directly
 call a thread's {\tt run()} method.  Instead, we call its {\tt start()}
 method, which automatically calls {\tt run()}.  This particular thread
 has a very simple and singular function.  It should call the
-{\tt SlideShowApplet.nextSlide()} method and then sleep for 5 seconds.
+{\tt SlideShowFrame.nextSlide()} method and then sleep for 5 seconds.
 So its main algorithm will be:
 
 \begin{jjjlisting}
 \begin{lstlisting}
 while (true) {
-    applet.nextSlide();
+    frame.nextSlide();
     sleep( 5000 );
 }
 \end{lstlisting}
@@ -860,10 +929,10 @@ while (true) {
 {\tt Interrupted\-Excep\-tion}. This means that we'll have to
 embed this while loop in a {\tt try/catch} block.
 
-To call the applet's {\tt nextSlide()} method, we also need a
-reference to the {\tt SlideShowApplet}, so we need to give it a
+To call the frame's {\tt nextSlide()} method, we also need a
+reference to the {\tt SlideShowFrame}, so we need to give it a
 reference, such as an instance variable, as well as a constructor that
-allows the applet to pass {\tt Timer} a reference to itself.
+allows the frame to pass {\tt Timer} a reference to itself.
 
 Given these design decisions, the complete implementation of
 {\tt Timer} is shown in Figure~\ref{fig-timerthread}. To see how it works,
@@ -874,16 +943,16 @@ download it from the {\it Java, Java, Java} Web site and run it.
 \begin{jjjlisting}
 \begin{lstlisting}
 public class Timer implements Runnable {
-    private SlideShowApplet applet;
+    private SlideShowFrame frame;
 
-    public Timer( SlideShowApplet app ) {
-        applet = app;
+    public Timer( SlideShowFrame app ) {
+        frame = app;
     }
 
     public void run() {
         try {
             while ( true ) {
-                applet.nextSlide();
+                frame.nextSlide();
                 Thread.sleep( 5000 );
             }
         } catch (InterruptedException e) {
@@ -901,26 +970,17 @@ public class Timer implements Runnable {
 \begin{SSTUDY}
 
 \item  Describe the design changes you would make to 
-{\tt SlideShow\-Applet} if you wanted to play a soundtrack along with
+{\tt SlideShow\-Frame} if you wanted to play a soundtrack along with
 your slides.  Assume that the sounds are stored in a sequence of
 files, ``sound0.au,'' sound1.au,'' and so forth, on your Web site.
 \end{SSTUDY}
 
-\section{Using Network Resources from an \\Application}
-\noindent The {\tt SlideShowApplet} illustrates the ease of downloading Web
-resources from an applet.  However, applets have limited use in this
-\mbox{regard,} because they come with rather severe security restrictions that
-would make them a poor choice for most networking applications (see
-%\begin{marginalnote}\it Applet restrictions\end{marginalnote}
-\marginnote{Applet restrictions}
-Section~\ref{sec-security}). For example, applets cannot save
-files that they download, because they cannot access the host computer's
-file system.  Similarly, an applet can only download files from the
-same host from which it was downloaded.  This wouldn't be a problem for
-the slide show applet, since we can simply store the slides in the
-same directory as the applet itself.  So, we want to learn how to
-download Web resources from a Java application.  The next example
-illustrates a solution to this problem.
+\section{Adding Text Network Resources for an \\Application}
+\noindent The {\tt SlideShowFrame} illustrates the use of multimedia
+resources from the web. However, much of the files we may want to
+retrieve are text based, and we want to be able to use these resources
+side-by-side with the available multimedia. The next application
+describes how to do just this.
 
 \subsection*{Problem Specification}
 \noindent Suppose a realtor asks you to write a Java application that will
@@ -951,7 +1011,7 @@ lovelyColonial
 \end{jjjlisting}
 
 \subsection{Downloading a Text File from the Web}
-\noindent This application requires us to solve three new problems:
+\noindent This application requires us to solve two new problems:
 
 \begin{NL}
 \item  How do we download a text file of names that we want to use as
@@ -960,14 +1020,11 @@ menu items?
 \item  How do we download and display an image file?
 \end{NL}
 
-\noindent The third problem is very similar to the problem we solved
-in {\tt SlideShowApplet}, but here we can't use the {\tt Applet.getImage()}
-method.   However, as we shall see, we can find a Java library method
-to perform this task for us. Therefore, the most challenging part of this program is the task of
+\noindent The {\tt SlideShowFrame} solves the problem of downloading and displaying an image file.   So, the most challenging part of this program is the task of
 \marginnote{Understanding the problem} 
-downloading a Web file and using its data in the program.
+downloading a Web text file and using its data in the program.
 
-For this program we must make use of two types of data downloaded from
+For this program we must make use of two types of text data downloaded from
 the Web.  The first will be the names of the image and document files.
 We'll want to read these names and use them as menu items that the
 user can select.  Second, once the user has selected a house to view,
@@ -976,7 +1033,7 @@ house.  Downloading the text is basically the same as downloading the
 file of names.  The only difference is that we need to display this
 text in a {\tt JTextArea}.  Downloading the image file can be handled
 in more or less the same way that it was handled in the {\tt
-SlideShowApplet}--- by using a special Java method to download and
+SlideShowFrame}--- by using a special Java method to download and
 display the image file.
 
 Clearly, the problems of downloading a file from the Web and reading a
@@ -1094,7 +1151,7 @@ while (line != null) {
 \begin{figure}[tb]
 \figaright{chptr15/15f11.eps}{User interface design for the real
 estate application.
-\label{fig-realestategui}\label{pg-fig-realestategui}}
+} {fig-realestategui}
 \end{figure}
 
 \noindent The interface for this application is very important.  It
@@ -1377,7 +1434,7 @@ private void showCurrentSelection() {
     readTextIntoDisplay(url);          
                          // Create url and download image
     url = new URL(baseURL + choice + ".gif"); 
-    currentImage = Toolkit.getDefaultToolkit().getImage(url);
+    currentImage = ImageIO.read(url);
     Toolkit.getDefaultToolkit().beep(); // Beep user
     repaint();
   } catch (MalformedURLException e) {
@@ -1493,7 +1550,7 @@ public class RealEstateViewer extends JFrame
       readTextIntoDisplay(url); // Download and display text file
       url = new URL(baseURL + choice + ".gif");     // Create URL
                                                 // Download image
-      currentImage = Toolkit.getDefaultToolkit().getImage(url);
+      currentImage = ImageIO.read(url);
       Toolkit.getDefaultToolkit().beep();       // Alert the user
       repaint();
     } catch (MalformedURLException e) {
@@ -1525,7 +1582,7 @@ public class RealEstateViewer extends JFrame
 
 \subsection{Reusing Code}
 \noindent As in other examples we have developed, our discovery and use of the
-{\tt Toolkit.getImage()} method and other classes from the Java class
+{\tt javax.imageio.ImageIO.read()} method and other classes from the Java class
 library illustrate an important principle of object-oriented
 programming.
 
@@ -1542,7 +1599,7 @@ order to gain access to the methods you need.
 
 Of course, knowing what classes exist in the libraries is something
 that comes with experience.  There's no way that a novice Java
-programmer would know about, say, the {\tt Toolkit.getImage()} method.
+programmer would know about, say, the {\tt ImageIO.read()} method.
 However, one skill or habit that you should try to develop is
 always to ask yourself the question: ``Is there a method that will do
 what I'm trying to do here?''  That question should be the first
@@ -2022,7 +2079,7 @@ programs.}
 
 \begin{figure}[ht]
 \figaleft{chptr15/p852f1.eps}{Design of the {\tt EchoServer} class.
-\label{fig-p852f1}\label{pg-fig-p852f1}}
+} {fig-p852f1}
 \end{figure}
 
 %%\marginfig{chptr15/p852f1.eps}{Design of the {\tt EchoServer} class.
@@ -3052,7 +3109,7 @@ string value is displayed on the Web page (Fig.~\ref{fig-jspscreen}).
 
 \begin{figure}[tb]
 \figaright{chptr15/jspscreen.eps}{A screen shot of a JSP.
-\label{fig-jspscreen}\label{pg-fig-jspscreen}}
+} {fig-jspscreen}
 \end{figure}
 
 In the second case, a {\em scriptlet} of Java code uses the {\tt
@@ -3652,19 +3709,20 @@ Buy button.
 \end{ANSBL}
 
 
-\item  To play sounds along with slides in the {\tt SlideShowApplet},
+\item  To play sounds along with slides in the {\tt SlideShowFrame},
 you would make the following modifications to the code:
-
+%%%%%% FIXME add AudioSystem and Clip code here
 \begin{jjjlisting}
 \begin{lstlisting}
-private URL soundURL[] = new URL[NIMGS];
+private Clip soundClip[] = new Clip[NIMGS];
+private Clip currentClip = null;
 \end{lstlisting}
 \end{jjjlisting}
 
 \noindent Declare an array of {\tt URL}s to store the URLs of
 the audio files you want to play.
 
-\hspace*{1pc}Assign URLs to the array at the same time
+\hspace*{1pc}Assign Clips to the array at the same time
 you input the images:
 
 \begin{jjjlisting}
@@ -3673,10 +3731,30 @@ for (int k=0; k < NIMGS; k++) {
   url = 
    new URL( "http://www.cs.trincoll.edu/~ram/jjj/slide" + 
                                               k + ".gif");
-  slide[k] = getImage( url );
-  soundURL[k] = 
+  slide[k] = imageIO.read( url );
+  URL soundURL = 
    new URL("http://www.cs.trincoll.edu/~ram/jjj/sound" +
                                                k + ".au");
+  AudioInputStream audio =
+		AudioSystem.getAudioInputStream(url); 
+  DataLine.Info info = new DataLine.Info(Clip.class, 
+						   audio.getFormat()); 
+  soundClip[k] = (Clip) AudioSystem.getLine(info);
+}
+\end{lstlisting}
+\end{jjjlisting}
+
+\noindent Change the nextSlide() code to the following
+
+\begin{jjjlisting}
+\begin{lstlisting}
+public void nextSlide() {
+    currentClip.stop(); // stop sound playback
+    currentClip = soundClip[nextImg]; // get next soundClip
+    currentClip.setFramePosition(0); // start clip at beginning
+    currentImage = slide[nextImg]; 
+    nextImg = ( nextImg + 1) % NIMGS; 
+    repaint ();
 }
 \end{lstlisting}
 \end{jjjlisting}
@@ -3689,7 +3767,7 @@ the corresponding sound by using the URL from the array:
 public void paint(Graphics g) {
     if (currentImage != null) {
         g.drawImage(currentImage,10,10,this);
-        play( soundURL[currentImage] );
+        currentClip.start();
     }
 }
 \end{lstlisting}
@@ -3758,7 +3836,7 @@ and a token ring network.
 \item  Describe one or two circumstances under which
 a {\tt Connect\-Exception} would be thrown.
 
-\item  Modify the {\tt SlideShowApplet} so that it plays
+\item  Modify the {\tt SlideShowFrame} so that it plays
 an audio file along with each slide.
 
 \item  Design and implement a Java applet that downloads

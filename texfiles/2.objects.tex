@@ -367,35 +367,46 @@ return values. The {\tt length()} method return an {\tt int} value,
 and the {\tt concat()} method returned a {\tt String}.  It is also
 very common for classes to define instance methods that perform
 actions but do not return a value. The {\tt Graphics} object, {\tt g},
-that appears in Chapter~1's {\tt HelloWorldApplet} is one
+that appears in Chapter~1's {\tt HelloWorldSwing} is one
 example. The program is reproduced in Figure~\ref{fig-helloworld2}
-%% proglist ch1/helloapplet/HelloWorld.java
+%% proglist ch1/hellojframe/HelloWorldSwing.java
 \begin{figure}[h!]
 \jjjprogstart
 \begin{jjjlisting}
 \begin{lstlisting}
-  /*
-   * HelloWorldApplet program
-   */
-import java.applet.Applet;    // Import the Applet class
-import java.awt.Graphics;     //  and the Graphics class
+ /** File: HelloWorldSwing program */
 
-public class HelloWorldApplet extends Applet //Class header
-{                                 // Start of body
-   public void paint(Graphics g)  // The paint method
-   {
-     g.drawString("Hello World",10,10);
-   }  // End of paint
-}  // End of HelloWorld
+import javax.swing.JFrame; // Import class names
+import java.awt.Graphics;
+import java.awt.Canvas;
+
+public class HelloWorldCanvas extends Canvas // Class header
+{                                            
+    // Start of body
+    public void paint(Graphics g)           
+        // The paint method
+    {
+        g.drawString("Hello, World!", 10, 10);
+    }  // End of paint
+
+    public static void main(String[] args){
+        HelloWorldCanvas c = new HelloWorldCanvas();
+        JFrame f = new JFrame();
+        f.add(c);
+        f.setSize(150,50);
+        f.setVisible(true);
+    }
+}  // End of HelloWorldCanvas
+
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{{\tt HelloWorldApplet} program.}
+\jjjprogstop{{\tt Hello\-World\-Canvas} program source code.}
 {fig-helloworld2}
 \end{figure}
 
 At this point we will not worry about the language features that
-enable the {\tt paint()} method to draw on the applet window when the
-applet is executed by a Web browser.  We will focus instead on the
+enable the {\tt paint()} method to draw on the Java Swing window.  
+We will focus instead on the
 information needed to make good use of the {\tt g.drawString()}
 method.  The first thing you should know is that, when the {\tt
 paint()} method is executed, its parameter, {\tt g}, refers to an
@@ -408,11 +419,11 @@ We already know that the statement
 
 \begin{jjjlisting}
 \begin{lstlisting} 
-g.drawString("Hello World",10,10);   
+g.drawString("Hello, World!",10,10);   
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent displays the {\tt String} ``Hello World'' in the applet window.  More
+\noindent displays the {\tt String} ``Hello, World!'' in the program window.  More
 generally, if {\tt str} is a literal {\tt String} value or a reference
 to a {\tt String} object and {\tt x} and {\tt y} are literal {\tt int}
 values or {\tt int} variables then
@@ -423,10 +434,10 @@ g.drawString(str,x,y)
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent displays the {\tt String str} from left to right in the applet window
+\noindent displays the {\tt String str} from left to right in the program window
 beginning at a point which is {\tt x} pixels from the left edge of the
-window and {\tt y} pixels down from the top edge of the window. In an
-applet window, the point with coordinates (0,0) is at the top-left
+window and {\tt y} pixels down from the top edge of the window. In a
+graphics window, the point with coordinates (0,0) is at the top-left
 corner. The horizontal axis grows positively from left to right. The
 vertical axis grows positively from top to bottom (Fig.~2.6). 
 \marginfig{chptr02/drawxy.eps}{Coordinate system of a Java window.}
@@ -439,26 +450,26 @@ usual $x$ and $y$ coordinate system used in mathematics where
 increasing the $y$ value designates a higher point.  
 
 With this information about {\tt g.drawString()}, we can calculate
-where to display any message in the applet window.  For example, if we
+where to display any message in the program window.  For example, if we
 wish to display the message ``Welcome to Java'' 25 pixels below where
-``Hello World'' is displayed we could use the statements
+``Hello, World!'' is displayed we could use the statements
 
 \begin{jjjlisting}
 \begin{lstlisting}
-g.drawString("Hello World",10,10);
+g.drawString("Hello, World!",10,10);
 g.drawString("Welcome to Java",10,35);
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent in the body of {\tt HelloWorldApplet}'s {\tt paint()} method.  
+\noindent in the body of {\tt HelloWorldCanvas}'s {\tt paint()} method.  
 The result of these statements would appear as shown in
 Figure~\ref{fig-drawstr}.
 
 \begin{figure}[h]
-\figascaled{chptr02/drawstr.eps}{0.75}{``Hello World'' is drawn
-%%\figaleft{chptr02/drawstr.eps}{``Hello World'' is drawn
+\figascaled{chptr02/drawstr.eps}{0.75}{``Hello, World!'' is drawn
+%%\figaleft{chptr02/drawstr.eps}{``Hello, World!'' is drawn
 at coordinate (10, 10) and ``Welcome to Java'' at
-(10, 35) on the applet window.}
+(10, 35) on the JFrame.}
 {fig-drawstr}
 \end{figure}
 
@@ -498,7 +509,7 @@ method also takes the same four arguments.
 
 A {\tt Graphics} object stores a single color for use in drawing
 shapes or displaying strings with {\tt drawString()}.  If we wish to
-draw an interesting scene in the applet window, we need to understand
+draw an interesting scene in the JFrame, we need to understand
 how to use colors.
 
 For a given {\tt Graphics} object, such as {\tt g}, the {\tt
@@ -527,9 +538,9 @@ program.
 \end{center}
 
 To demonstrate how the new {\tt Graphics} methods can be used for
-creating more interesting applets, let's develop a plan for displaying
-the two messages, ``Hello World'' and ``Welcome to Java'', on an
-applet, but this time we will draw the first inside a colored
+creating more interesting graphical programs, let's develop a plan for displaying
+the two messages, ``Hello, World!'' and ``Welcome to Java.'', on an
+JFrame, but this time we will draw the first inside a colored
 rectangle and the second inside a colored oval. For the rectangle,
 let's use the {\tt drawRect()} method to create its border.  We can
 choose some arbitrary colors, say, cyan for filling the rectangle,
@@ -549,7 +560,7 @@ enclosing rectangles dimensions.
 
 All that remains is to choose the location and dimensions of the
 rectangles.  We could specify one rectangle as having its upper left
-corner 25 pixels to the right of the left edge of the applet window
+corner 25 pixels to the right of the left edge of the JFrame
 and 25 pixels down from the top edge.  A medium sized rectangle could
 have a width of 140 pixels and a height of 40 pixels.  The statement
 \begin{jjjlisting}
@@ -566,11 +577,11 @@ edge of the rectangle would have coordinates \mbox{\tt x = 50} and
 
 \begin{jjjlisting}
 \begin{lstlisting}
-g.drawString("Hello World", 50, 50);
+g.drawString("Hello, World!", 50, 50);
 \end{lstlisting}
 \end{jjjlisting}
 
-\noindent will display ``Hello World'' inside the rectangle. We can
+\noindent will display ``Hello, World!'' inside the rectangle. We can
 use similar planning to locate the oval and its enclosed message.
 
 Thus, we now have sufficient information to finish the {\tt paint()}
@@ -581,52 +592,63 @@ in Figure~\ref{fig-hw2appletclass}. Note how we repeatedly use the {\tt
 \begin{jjjlisting}
 \begin{lstlisting}
 import java.awt.*;
-import java.applet.*;
+import javax.swing.JFrame;
 
-public class HelloWorldGraphic  extends Applet 
-{ public void paint(Graphics g) 
-  { g.setColor(Color.cyan);      // Set color
-    g.fillRect(25, 25, 140, 40); // Fill rectangle
-    g.setColor(Color.blue);      // Set color
-    g.drawRect(25, 25, 140, 40); // Outline rectangle
-    g.setColor(Color.black);     // Set color
-    g.drawString("Hello World", 50, 50); // Display string
-    g.setColor(Color.yellow);          
-    g.fillOval(25, 75, 140, 40); // Fill oval
-    g.setColor(Color.red);
-    g.drawOval(25, 75, 140, 40); // Outline oval
-    g.setColor(Color.black);
-    g.drawString("Welcome to Java", 50, 100);
-  }//paint()
+public class HelloWorldGraphic  extends Canvas 
+{ 
+    // called after setVisible(true)
+    public void paint(Graphics g) { 
+        g.setColor(Color.cyan);      // Set color
+        g.fillRect(25, 25, 140, 40); // Fill rectangle
+        g.setColor(Color.blue);      // Set color
+        g.drawRect(25, 25, 140, 40); // Outline rectangle
+        g.setColor(Color.black);     // Set color
+        g.drawString("Hello, World!", 50, 50); // Display string
+        g.setColor(Color.yellow);          
+        g.fillOval(25, 75, 140, 40); // Fill oval
+        g.setColor(Color.red);
+        g.drawOval(25, 75, 140, 40); // Outline oval
+        g.setColor(Color.black);
+        g.drawString("Welcome to Java", 50, 100);
+    }//paint()
+
+   // the program
+    public static void main(String[] args){
+        HelloWorldCanvas c = new HelloWorldCanvas();
+        JFrame f = new JFrame();
+        f.add(c);
+        f.setSize(150,50);
+        f.setVisible(true);
+    }
 } //HelloWorldGraphic
 \end{lstlisting}
 \end{jjjlisting}
-\jjjprogstop{The {\tt Hello\-World\-Graphic} class is an
-applet that shows how to use color and drawing methods.}
+\jjjprogstop{The {\tt Hello\-World\-Graphic} class is a Java
+Swing program that shows how to use color and drawing methods.}
 {fig-hw2appletclass}
 \end{figure}
 g.setColor()} method to change {\tt g}'s current color before drawing
 each element of our picture. 
 
-Figure~\ref{fig-drawrect} shows what this applet looks like when run
-in a browser.  To experiment with this applet, download its sourcecode
-and its corresponding HTML file from the book's Web site and compile
-and run it on your computer. If you've forgotten how to run an applet,
-review Section~\ref{sec-applet}. Additional drawing capabilities will
+%%%FIXME don't reference applets anymore
+Figure~\ref{fig-drawrect} shows what this program looks like.  
+To experiment with this Java Swing application, download its sourcecode
+from the book's Web site and compile
+and run it on your computer. Additional drawing capabilities will
 be explored throughout the text in sections that can either be covered
 or skipped.
 
 \begin{figure}[!bht]
 \figaleftscaled{chptr02/drawrect.eps}{0.8}{This is how the {\tt HelloWorldGraphic}
 %%\figa{chptr02/drawrect.eps}{This is how the {\tt HelloWorldGraphic}
-applet will look when run in a browser.
-\label{fig-drawrect}
-\label{pg-fig-drawrect}}
+program will look when run.
+} {fig-drawrect}
+
 \end{figure}
 
 \section{Class Definition}
 \label{sec-classdef}
-\label{pg-sec-classdef}
+
 \noindent To program in Java the main thing you do is write class definitions
 \marginnote{The class as template}
 for the various objects that will make up the program.  A class
@@ -777,8 +799,8 @@ interaction between two types of objects: a {\tt RiddleUser} and one
 between the {\tt RiddleUser} and {\tt Riddle} classes.  The {\tt
 Riddle\-User} class will {\em use} one or more objects of the {\tt
 Riddle} class.
-\label{fig-p63f2}
-\label{pg-fig-p63f2}}
+} {fig-p63f2}
+
 \end{figure}
 %\end{figure}
 or more {\tt Riddles}. Note that we characterize the relationship
@@ -1136,7 +1158,7 @@ that were defined in the {\tt Riddle(String q, String a)} constructor
 Java handles each type of variable differently.
 
 A declaration for a variable at class level must follow the rules for
-declaring variables that were described in Section~\ref{sec-vardecl}
+declaring variables that were described in Section~\ref{subsec:vardecl}
 with the added restriction that they should be modified by one of the
 access modifiers {\tt public}, {\tt private}, or {\tt protected}.  The
 rules associated with these access modifiers are:
@@ -1618,7 +1640,7 @@ and last name.  Write only the headers for these methods.
 %\subsubsection{Flow of Control: Method Call and Return} PROMOTED TO SUBSECTION
 \subsection{Flow of Control: Method Call and Return}
 \label{sec-methodcall}
-\label{pg-sec-methodcall}
+
 
 \noindent A program's {\bf flow of control} is the order
 in which its statements are executed. In an object-oriented program,
@@ -1905,7 +1927,7 @@ Chapter 11 is devoted to exceptions and we will avoid their use, as far as
 possible, until that time.
 
 There is an alternate way to handle keyboard input in the Java 2
-Platform Standard Edition 5.0 (J2SE 5.0). A {\tt Scanner} class has
+Platform Standard Edition 5.0 (Java SE 5.0). A {\tt Scanner} class has
 been added to the {\tt java.util} package which permits keyboard input
 without forcing the programmer to handle exceptions.  We introduce the
 {\tt Scanner} class in the next subsection and then describe how a

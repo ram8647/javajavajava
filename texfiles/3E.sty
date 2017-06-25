@@ -70,6 +70,11 @@
   \setlength{\TPVertModule}{1pc}%
   \textblockorigin{1in}{1in}% start everything near the top-left corner
 
+\usepackage{titlesec}
+\titlespacing*{\subsection}{0pt}{1.0ex plus 0.2ex minus 0.5ex}{1ex plus
+  0.2ex minus 0.5ex}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FONTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -143,9 +148,9 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \end{minipage}\hspace*{-13.5pc}%
     }%
 
-\def\figaleft#1#2{%
+\def\figaleft#1#2#3{%
     \hspace*{-13.5pc}\parbox[t]{12.5pc}{%
-    \protect\vspace{-8pt}\caption{#2}%
+    \protect\vspace{-8pt}\caption{#2 \label{#3}}%
     }\hspace*{1pc}%
     \protect\parbox[t]{27pc}{%
     \protect\vfill\centering\psfig{file=../#1}%
@@ -153,9 +158,9 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
   }%
 %
 
-\def\figaleftscaled#1#2#3{%
+\def\figaleftscaled#1#2#3#4{%
     \hspace*{-13.5pc}\parbox[t]{12.5pc}{%
-    \protect\vspace{-8pt}\caption{#3}%
+    \protect\vspace{-8pt}\caption{#3 \label{#4}}%
     }\hspace*{1pc}%
     \protect\parbox[t]{27pc}{%
     \protect\vfill\centering\psfig{file=../#1,scale=#2}%
@@ -177,10 +182,10 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \begin{minipage}[t]{12.5pc}\protect\vspace{-7pt}\caption{#1 \label{#2}}\end{minipage}\hspace*{-13.5pc}}%
 %
 %caption 12.5 for figure prog left
-\def\figaprogbleft#1{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
+\def\figaprogbleft#1#2{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{27pc}{0.5pt}}%
     \end{minipage}\hspace*{-40.5pc}%
-    \begin{minipage}[t]{12.5pc}\protect\vspace{-7pt}\caption{#1}\end{minipage}}%
+    \begin{minipage}[t]{12.5pc}\protect\vspace{-7pt}\caption{#1 \label{#2}}\end{minipage}}%
 %
 %figure 27 prog caption bottom 12.5 (no spec)
 \def\figaproganospec#1{\small\baselineskip11pt\begin{minipage}[b]{27pc}%
@@ -189,10 +194,10 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \protect}
 %
 %caption 12.5 for figure prog caption bottom no spec left
-\def\figaprogbleftnospec#1{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
+\def\figaprogbleftnospec#1#2{\end{minipage}\par{\color{cyanten}\rule[-1pt]{27pc}{1.5pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{27pc}{0.5pt}}%
     \end{minipage}\hspace*{-41pc}%
-    \begin{minipage}[b]{12.5pc}\protect\vspace{-7pt}\caption{#1}\end{minipage}}%
+    \begin{minipage}[b]{12.5pc}\protect\vspace{-7pt}\caption{#1 \label{#2}}\end{minipage}}%
 %
 %figure 40.5 prog caption 27 after left
 \def\figbprogaleft#1{\small\baselineskip11pt\hspace*{-13.5pc}\begin{minipage}[t]{40.5pc}%
@@ -201,12 +206,12 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \hspace*{6pt}\begin{minipage}{39.5pc}%
     \protect}
 %
-\def\figbleftstrict#1#2{\noindent%
+\def\figbleftstrict#1#2#3{\noindent%
     \protect\hspace*{-13.5pc}\begin{minipage}[t]{40.5pc}%
 %%    \protect\hfill\psfig{file=e2kl-D1:PH-e2kl:Morelli:0333700MOREL:#1}%
     \protect\hfill\psfig{file=../#1}%
     \end{minipage}\par\vspace{-8pt}\begin{minipage}[t]{27pc}%
-    \protect\caption{#2}%
+    \protect\caption{#2 \label{#3}}%
     \end{minipage}%
     }%
 %
@@ -219,10 +224,10 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \quad\color{black}\raggedright\small#3}}%
 %
 %caption 27 after left
-\def\figbprogbleft#1{\end{minipage}\par{\color{cyanten}\rule[-2pt]{40.5pc}{3pt}}\par\vspace*{-11pt}%
+\def\figbprogbleft#1#2{\end{minipage}\par{\color{cyanten}\rule[-2pt]{40.5pc}{3pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{40.5pc}{0.5pt}}%
     \end{minipage}\par%
-    \begin{minipage}[t]{27pc}\protect\caption{#1}\end{minipage}}%
+    \begin{minipage}[t]{27pc}\protect\caption{#1 \label{#2}}\end{minipage}}%
 %
 %
 %figure 40.5 prog caption 27 after
@@ -233,10 +238,10 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \protect}
 %
 %caption 27 after
-\def\figbprogb#1{\end{minipage}\par{\color{cyanten}\rule[-2pt]{40.5pc}{3pt}}\par\vspace*{-11pt}%
+\def\figbprogb#1#2{\end{minipage}\par{\color{cyanten}\rule[-2pt]{40.5pc}{3pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{40.5pc}{0.5pt}}%
     \end{minipage}\par%
-    \begin{minipage}[t]{27pc}\protect\caption{#1}\end{minipage}}%
+    \begin{minipage}[t]{27pc}\protect\caption{#1 \label{#2}}\end{minipage}}%
 %
 %
 %figure 35 prog caption 27 after left
@@ -248,10 +253,10 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
 %
 %
 %caption 27 after left
-\def\figbprogblefttwo#1{\end{minipage}\par{\color{cyanten}\rule[-2pt]{35pc}{3pt}}\par\vspace*{-11pt}%
+\def\figbprogblefttwo#1#2{\end{minipage}\par{\color{cyanten}\rule[-2pt]{35pc}{3pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{35pc}{0.5pt}}%
     \end{minipage}\par%
-    \begin{minipage}[t]{27pc}\protect\caption{#1}\end{minipage}}%
+    \begin{minipage}[t]{27pc}\protect\caption{#1 \label{#2}}\end{minipage}}%
 %
 %
 %
@@ -266,17 +271,17 @@ SECTION\ #1\hspace*{5pt}$\bullet$\hspace*{5pt}}}%
     \protect}
 %
 %caption 27 after
-\def\figbprogbtwo#1{\end{minipage}\par{\color{cyanten}\rule[-2pt]{35pc}{3pt}}\par\vspace*{-11pt}%
+\def\figbprogbtwo#1#2{\end{minipage}\par{\color{cyanten}\rule[-2pt]{35pc}{3pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{35pc}{0.5pt}}%
     \end{minipage}\par%
-    \begin{minipage}[t]{27pc}\protect\caption{#1}\end{minipage}}%
+    \begin{minipage}[t]{27pc}\protect\caption{#1 \label{#2}}\end{minipage}}%
 %
 %
 %caption 35pc after
-\def\figbprogbtwolong#1{\end{minipage}\par{\color{cyanten}\rule[-2pt]{35pc}{3pt}}\par\vspace*{-11pt}%
+\def\figbprogbtwolong#1#2{\end{minipage}\par{\color{cyanten}\rule[-2pt]{35pc}{3pt}}\par\vspace*{-11pt}%
     {\color{cyan}\rule[-1.5pt]{35pc}{0.5pt}}%
     \end{minipage}\par%
-    \begin{minipage}[t]{35pc}\protect\caption{#1}\end{minipage}}%
+    \begin{minipage}[t]{35pc}\protect\caption{#1 \label{#2}}\end{minipage}}%
 
 %margin fig
 \def\marginfig#1#2#3{\protect\marginpar{\protect\begin{center}%
