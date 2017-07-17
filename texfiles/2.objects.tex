@@ -81,7 +81,7 @@ these classes, the {\tt String} and {\tt Graphics} classes.
 
 Strings are very useful objects in Java and in all computer programs.
 %%\marginfig{chptr02/strclass.eps}{The {\tt String} class.
-\marginfig{chptr02/stringuml.eps}{A partial representation of the 
+\marginfig{chptr02/stringuml-smaller.png}{A partial representation of the 
 {\tt String} class.}
 {fig-strclass}
 They are used for inputting and outputting all types of
@@ -141,7 +141,7 @@ String str; // Declare a String variable named str
 \end{jjjlisting}
 
 \noindent We then create a {\tt String} object by using
-\marginfig{chptr02/hello.eps}{A {\tt String}
+\marginfig{chptr02/hello-smaller.png}{A {\tt String}
 object stores a sequence of characters and
 a {\tt count} giving the number of characters.}
 {fig-str1}
@@ -177,7 +177,7 @@ that contains the empty string as its value.  The {\bf empty string}
 has the literal value "" -- that is, a pair of double quotes that
 contain no characters. Because the empty string has no characters,
 the {\tt count} variable stores a zero (Fig.~2.3).
-\marginfig{chptr02/emptystr.eps}{The empty string has a value of "" and a 
+\marginfig{chptr02/emptystr-smaller.png}{The empty string has a value of "" and a 
 %% its length is 0 (Fig.~\ref{fig-emptystr}).
 its length is 0.}
 {fig-emptystr}
@@ -393,7 +393,7 @@ public class HelloWorldCanvas extends Canvas // Class header
         HelloWorldCanvas c = new HelloWorldCanvas();
         JFrame f = new JFrame();
         f.add(c);
-        f.setSize(150,50);
+        f.setSize(150,90);
         f.setVisible(true);
     }
 }  // End of HelloWorldCanvas
@@ -466,7 +466,7 @@ The result of these statements would appear as shown in
 Figure~\ref{fig-drawstr}.
 
 \begin{figure}[h]
-\figascaled{chptr02/drawstr.eps}{0.75}{``Hello, World!'' is drawn
+\figascaled{chptr02/drawstr.png}{0.75}{``Hello, World!'' is drawn
 %%\figaleft{chptr02/drawstr.eps}{``Hello, World!'' is drawn
 at coordinate (10, 10) and ``Welcome to Java'' at
 (10, 35) on the JFrame.}
@@ -488,7 +488,7 @@ and the second just draws the outline of the rectangle.  Using the
 {\tt Graphics} object, {\tt g}, each of these is called in the same
 way as the {\tt drawString()} method from the previous example.  
 Each of these methods takes four {\tt int} arguments, which specify 
-\marginfig{chptr02/graphics.eps}{Some of the drawing methods in
+\marginfig{chptr02/graphics-smaller.png}{Some of the drawing methods in
 the {\tt Graphics} class.}
 {fig-graphics}
 the rectangle's location and size. Thus, a call to {\tt fillRect()}
@@ -614,10 +614,10 @@ public class HelloWorldGraphic  extends Canvas
 
    // the program
     public static void main(String[] args){
-        HelloWorldCanvas c = new HelloWorldCanvas();
+        HelloWorldGraphic c = new HelloWorldGraphic();
         JFrame f = new JFrame();
         f.add(c);
-        f.setSize(150,50);
+        f.setSize(200,200);
         f.setVisible(true);
     }
 } //HelloWorldGraphic
@@ -639,7 +639,7 @@ be explored throughout the text in sections that can either be covered
 or skipped.
 
 \begin{figure}[!bht]
-\figaleftscaled{chptr02/drawrect.eps}{0.8}{This is how the {\tt HelloWorldGraphic}
+\figaleftscaled{chptr02/drawrect.png}{0.8}{This is how the {\tt HelloWorldGraphic}
 %%\figa{chptr02/drawrect.eps}{This is how the {\tt HelloWorldGraphic}
 program will look when run.
 } {fig-drawrect}
@@ -674,13 +674,15 @@ questions:
 \end{NL}
 \end{minipage}
 
-\marginfig{chptr02/riddle.eps}{The {\tt Riddle} class.}
-{fig-riddle}
 \subsection{The {\tt Riddle} Class}
+
 
 \noindent Recall our definition of the {\tt Riddle} class from
 Chapter~1, which is summarized in the UML diagram in Figure~2.11. A
-{\tt Riddle} has two attributes, {\tt question} and {\tt answer}. Each
+{\tt Riddle} has two attributes, {\tt question} and {\tt answer}.
+\marginfig{chptr02/riddleuml-smaller.png}{The {\tt Riddle} class.}
+{fig-riddle}
+Each
 of these variables stores a string of characters, which Java treats as
 data of type {\tt String}.  The {\tt Riddle} class contains three
 methods.  The {\tt Riddle()} constructor method assigns initial values
@@ -688,6 +690,9 @@ methods.  The {\tt Riddle()} constructor method assigns initial values
 variables.  The {\tt getQuestion()} and {\tt getAnswer()} methods
 return the data stored in {\tt question} ands {\tt answer}
 respectively.
+
+
+
 
 The instance variables {\tt question} and {\tt answer} are designated
 as {\tt private} ($-$), but the {\tt Riddle()}, {\tt getQuestion()}
@@ -768,21 +773,21 @@ the {\tt Riddle} class itself or in a second class named something
 like {\tt RiddleUser}.  
 
 One advantage of using a second class is that it gets us in the
-\marginnote{User interface}
-habit of thinking about the need for a separate class to serve as a
+\marginnote{User interface} habit of thinking about the need for a separate class to serve as a
 user interface, with a separate set of tasks from the {\tt Riddle}
 class. A {\bf user interface} is an object or class that handles the
 interaction between a program's user and the rest of the program's
-computational tasks. This concept is illustrated in Figure~2.13. Note
+computational tasks.
+\marginfig{chptr02/ui-smaller.png}{The user interfaces handles interaction
+between the user and the rest of the program.}
+{fig-userint}
+ This concept is illustrated in Figure~2.13. Note
 that we use the general term {\it computational object} to distinguish
 the rest of the program's computations from the user interface.
 Obviously, the exact nature of the computation will vary from program
 to program, just as will the details of the user interface.  The
 computation done by our {\tt Riddle} class is just the storing and
 displaying of a riddle's question and answer.
-\marginfig{chptr02/ui.eps}{The user interfaces handles interaction
-between the user and the rest of the program.}
-{fig-userint}
 
 
 By separating user interface tasks from riddle tasks this design
@@ -794,7 +799,7 @@ Figure~\ref{fig-p63f2}, this particular Java program will involve
 interaction between two types of objects: a {\tt RiddleUser} and one
 %\begin{figure}
 \begin{figure}[h!]
-\figaleft{chptr02/riddleuser.eps}{This UML class diagram represents an {\em association}
+\figaleft{chptr02/riddleuser-smaller.png}{This UML class diagram represents an {\em association}
 %%\figa{chptr02/riddleuser.eps}{This UML class diagram represents an {\em association}
 between the {\tt RiddleUser} and {\tt Riddle} classes.  The {\tt
 Riddle\-User} class will {\em use} one or more objects of the {\tt
@@ -1073,7 +1078,7 @@ action.
 
 %%%Figure~2.14 is a UML class diagram that summarizes this
 Figure~2.16 is a UML class diagram that summarizes this
-\marginfig{chptr02/onerow3.eps}{A UML class diagram for  {\tt OneRowNim}.}
+\marginfig{chptr02/onerow3-smaller.png}{A UML class diagram for  {\tt OneRowNim}.}
 {fig-ornuml}
 design of the {\tt OneRowNim} class.  Note that the methods are
 declared public ($+$) and will thereby form the interface for a {\tt
@@ -1099,7 +1104,7 @@ the {\tt public} modifier.  Because the class {\tt OneRowNim} has not
 been described as having any relationship to any other Java class, its
 header can omit the {\tt extends} clause so it will be a direct
 subclass of {\tt Object} (Figure~2.17).
-\marginfig{chptr02/onerow1.eps}{By default, {\tt OneRowNim} is a 
+\marginfig{chptr02/onerow1-smaller.png}{By default, {\tt OneRowNim} is a 
 subclass of {\tt Object}.}
 {fig-pedigree}
 Thus, the class header for {\tt OneRowNim} will look like:
@@ -1915,7 +1920,7 @@ the return or enter key to signal the end of a piece of requested data. Java has
 special class, {\tt BufferedReader}, that uses an input stream 
 and has a method that collects characters until it reads the character or
 characters that correspond to hitting the return or enter key. A second 
-\marginfig{chptr02/scanneruml.eps}
+\marginfig{chptr02/scanneruml-smaller.png}
 {The {\tt Scanner} class, with a
 partial list of its public methods.}
 {fig-scanneruml}
@@ -2095,7 +2100,7 @@ handling exceptions.
 
 \subsection{Keyboard Input with the {\tt KeyboardReader} Class} 
 
-\marginfig{chptr02/kbreaderuml.eps}
+\marginfig{chptr02/kbreaderuml-smaller.png}
 {A UML class diagram of the {\tt KeyboardReader} class.}
 {fig-kbreaderuml}
 If you are using an older version of Java that does not have the {\tt

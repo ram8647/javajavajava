@@ -4,9 +4,9 @@
  * Description: Draws a message inside a rectangle.
  */
 import java.awt.*;
-import java.applet.*;
+import javax.swing.JFrame;
 
-public class HelloWorldGraphic  extends Applet 
+public class HelloWorldGraphic  extends Canvas 
 {   public void paint(Graphics g) 
     {   g.setColor(Color.cyan);              // Set color
         g.fillRect(25, 25, 140, 40);         // Fill rectangle
@@ -21,4 +21,13 @@ public class HelloWorldGraphic  extends Applet
         g.setColor(Color.black);
         g.drawString("Welcome to Java", 50, 100);
     } // paint()
+
+    // the program
+    public static void main(String[] args){
+        HelloWorldGraphic c = new HelloWorldGraphic();
+        JFrame f = new JFrame();
+        f.add(c);
+        f.setSize(200,200);
+        f.setVisible(true);
+    }
 } // HelloWorldGraphic
