@@ -1,0 +1,523 @@
+<section xml:id="a-command-line-interface">
+<title>A Command-Line Interface</title>
+
+
+<introduction>
+<p>
+A command-line interface is perhaps the simplest, and most
+old-fashioned, way to design the interaction between a user and a
+program. According to this approach, user input is taken from the
+keyboard, and the program's output is displayed on some kind of
+console (Fig. <xref ref="fig-command-line"></xref>).
+</p>
+<figure xml:id="fig-command-line" >
+<caption>A command-line user interface.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+The command-line approach might also be called <em>console
+interface</em>. In the early days of computers, before we had
+graphics-based computer monitors capable of displaying multiple
+windows, the console was the entire computer display. For today's
+computers the console might be a window provided by your programming
+environment, as in <xref ref="fig-console">Figure</xref>.
+</p>
+<figure xml:id="fig-console" >
+<caption>The Java console window.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+In Chapter<nbsp/>3 we described how to use the <c>System.out.print()</c> and
+<c>System.out.println()</c> methods to output strings to the console.
+That takes care of the output side of command-line interface. The more
+challenging task is managing the input-side of the interface.
+</p>
+
+<p>
+In Java, input and output is handled by objects that are called
+<term>streams</term>. You can think of a stream as a kind of pipe through
+which data flow (Fig. <xref ref="fig-streams"></xref>). An <term>input stream</term>
+\marginpar{Streams}
+carries data from some kind of input device, such as a keyboard or
+network connection or a file, to the program's main memory. An <em>output stream</em> carries data from the program's memory to some kind of
+output device, such as a printer or a file.
+</p>
+<figure xml:id="fig-streams" >
+<caption>Input and output streams.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+Each Java program has three standard streams available to it at
+startup: <c>System.in</c>, <c>System.out</c>, and <c>System.err</c>.
+<c>System.in</c> is a predefined input stream that is typically
+associated with the keyboard (Fig. <xref ref="fig-streams"></xref>). That is, it
+carries data from the keyboard to the program. <c>System.out</c> and
+<c>System.err</c> are both output streams typically associated with the
+console. They both carry data from the program to the console. The
+difference is simply that <c>System.out</c> is used for normal program
+output and <c>System.err</c> is used to output error messages.
+</p>
+</introduction>
+
+
+<subsection>
+<title>Using a <c>BufferedReader</c> to Input Strings from the Keyboard</title>
+<p>
+We will use a <c>BufferedReader</c> object to handle data input from
+the keyboard. As its name implies, the <c>BufferedReader</c> class
+performs buffered input. A <term>buffer</term> is a portion of main memory
+where input is held until it is needed by the program. Using a
+\marginpar{Buffered input} buffer between the keyboard and the
+program allows you to use the Backspace key to delete a
+character. When you hit the Enter key, any characters that you deleted
+will be ignored when the program retrieves characters from the input
+buffer. If the user's input were not buffered in this way, it would
+contain every keystroke, including the Backspaces, and then it would
+be up to the program to eliminate the characters that were
+supposed to be deleted.
+</p>
+<figure xml:id="fig-buffrdr" >
+<caption>The <c>BufferedReader</c> class.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+<xref ref="fig-buffrdr">Figure</xref> provides a UML diagram of the <c>BufferedReader</c> class and shows its relationship to other the classes
+that will be used for keyboard input . Note that along with <c>InputStreamReader</c>, <c>BufferedReader</c> is one of several subclasses
+of the <c>Reader</c> class. As the diagram shows, <c>BufferedReader</c>
+has two important methods. Its constructor method takes a <c>Reader</c>
+parameter, which means that when we create a <c>BufferedReader</c> we
+must provide it with a reference to some kind of <c>Reader</c> object.
+To perform keyboard input, we want to provide a reference to an
+object that can read <c>System.in</c>, the standard input stream.
+As the figure shows, <c>InputStreamReader</c> has a constructor
+that allows it to read an <c>InputStream</c>. Therefore, to
+construct a <c>BufferedReader</c> that will read <c>System.in</c>
+we use the following statement:
+</p>
+<pre>
+BufferedReader input = new BufferedReader
+   (new InputStreamReader (System.in));
+</pre>
+<p>
+In this statement we are actually creating two objects.
+We first create an <c>InputStreamReader</c>, giving it a reference to
+<c>System.in</c>. We then pass that object to a <c>BufferedReader</c>.
+The result is a cooperation between two objects that enables us to do
+buffered reading of the keyboard.
+</p>
+
+<p>
+By creating a <c>BufferedReader</c> in this way, whenever we use its
+<c>readLine()</c> method, it will read a line of characters from the
+keyboard. For example, having created a <c>BufferedReader</c> named
+<c>input</c>, the following code segment will read one line of input
+and assign it to the <c>String</c> variable named <c>inputString</c>.
+</p>
+<pre>
+String inputString = input.readLine();
+</pre>
+<p>
+When the program encounters the <c>readLine()</c> expression,
+\marginpar{Keyboard input}
+it will wait for the user to hit the Enter key. It will then input
+whatever the user typed, minus any characters that were Backspaced
+over, into the <c>String</c> variable.
+</p>
+<principle>
+<title>Keyboard Input</title>
+<p>
+The <c>BufferedReader.readLine()</c> method
+allows the user to backspace over errors during keyboard input.
+</p>
+</principle>
+</subsection>
+
+
+<subsection>
+<title>Inputting Numbers from the Keyboard</title>
+<p>
+As the previous section showed, we can use a <c>BufferedReader</c>
+object to input <c>String</c>s from the keyboard. In Java, all keyboard
+input is represented as <c>String</c>s. However, what if we want to
+input numbers? The answer is that we have to extract numbers from the
+input strings. To do this, Java provides us two special classes,
+known as wrapper classes: <c>Integer</c> and <c>Double</c>.
+</p>
+
+<p>
+A <term>wrapper class</term> contains methods for converting primitive
+\marginpar{Wrapper classes}
+data into objects and for converting data from one type to another.
+The <c>Integer</c> class contains the <c>parseInt()</c>
+method, which extracts an <c>int</c> from its <c>String</c> argument.
+For example, in the following usage, the string "55" is converted
+into the number 55:
+</p>
+<pre>
+int m = Integer.parseInt("55");
+</pre>
+<p>
+Similarly, the <c>Double</c> class contains the
+<c>parseDouble()</c> method, which extracts a <c>double</c> value from
+its parameter. In this example, the number 55.2 is extracted from the
+string "55.2":
+</p>
+<pre>
+double num = Double.parseDouble("55.2");
+</pre>
+<p>
+If we are writing a program that requires us to input numbers
+from the keyboard, then assuming we have created a <c>BufferedReader</c> object named <c>input</c>, we can use these methods in
+combination with the <c>readLine()</c> method, to input and process
+numbers. For example, this code segment calculates a runner's race
+pace:
+</p>
+<pre>
+String inputString = new String();  
+System.out.println("How many total miles did you run? ");  
+inputString = input.readLine();   // Input a String}
+double miles = Double.parseDouble(inputString); // Convert
+System.out.println("How many minutes did it take you? ");  
+inputString = input.readLine();   // Input another String
+double minutes = Double.parseDouble(inString);  // Convert
+System.out.println("Your average pace was " + 
+                   minutes/miles + " minutes per mile");
+</pre>
+<p>
+Notice how we included prompts in this example
+so that the user knows what type of input is expected. Designing
+appropriate prompts is an important aspect of designing a good user
+interface.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Prompting</title>
+<p>
+In a well-designed user interface,
+prompts should be used to guide the user through the input process.
+</p>
+</principle>
+</subsection>
+
+
+<subsection>
+<title>Designing a Keyboard Reader Class</title>
+<p>
+Now that we have introduced the library classes and methods that we
+will use for command-line input, lets design a class to encapsulate
+these functions. We want a class that will use a <c>BufferedReader</c>
+to read any kind of data<mdash/>strings, integers, or real numbers<mdash/>from
+keyboard. We also want this class to hide some of the messy details
+involved in performing keyboard input.
+</p>
+<figure xml:id="fig-keybrdrdr" >
+<caption>Design of the <c>KeyboardReader</c> class.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+<xref ref="fig-keybrdrdr">Figure</xref> presents the design of <c>KeyboardReader</c>
+class. Note that instances of this class will use a <c>BufferedReader</c> object to perform the actual keyboard input. That's
+why we need a private instance variable of type <c>BufferedReader</c>. The constructor method will create a <c>BufferedReader</c>, which will then be used whenever a read operation is
+requested. Note that the <c>KeyboardReader()</c> has five public
+methods. The <c>getKeyboardInput()</c> method returns a <c>String</c>. This is the method we will call when we just want to get the
+string that the user typed from the keyboard. The <c>getKeyboardInteger()</c> method returns an <c>int</c> value. This is the
+method we will call when we want an integer from the
+keyboard. Similarly, the <c>getKeyboardDouble()</c> method returns a
+<c>double</c>. This is the method we will call when we want to input a
+floating point value from the keyboard. Finally, the <c>prompt()</c>
+and <c>display()</c> methods will be used to perform two other
+important tasks of a user interface: that of prompting the user and
+that of displaying the program's output.
+</p>
+
+<p>
+The following code segment illustrates how we will use a <c>KeyboardReader</c> object to input an integer:
+</p>
+<pre>
+KeyboardReader cmdline = new KeyboardReader(); 
+int m = cmdline.getKeyboardInteger();
+</pre>
+<p>
+All we need to do is create an instance of
+the <c>KeyboardReader</c> and ask it to get an integer for us. This
+greatly simplifies the work we would have to do when we want to
+perform keyboard input.
+</p>
+
+<p>
+Note that <xref ref="fig-keybrdrdr">Figure</xref> lists a private method named <c>readKeyboard()</c> in the <c>KeyboardReader</c> class. This is the method
+that does the actual work of reading data from the keyboard. Because
+it is private, it can only be called by the other methods in <c>KeyboardReader</c>. It cannot be called by other classes. The reason we
+\marginpar{Private helper method}
+make it private is to hide it, and the messy details of performing
+keyboard input, from other classes.
+</p>
+
+<p>
+One of those messy details is the fact that whenever I/O is performed,
+it is possible for things to go wrong. The possibility of errors
+occurring applies to all forms of I/O, not just keyboard I/O. For
+example, when a program is trying to read a file, the file might be
+missing. Or when trying to download a web page, the Internet
+connection might malfunction.
+</p>
+
+<p>
+Because these types of external errors are possible, Java requires
+that whenever a program performs certain types of I/O, it must watch
+out for certain kinds of error conditions, known as <em>exceptions</em>.
+Exceptions are covered in Chapter<nbsp/>11, so we will not attempt to cover
+\marginpar{I/O exceptions} them here. Instead, we will design the
+<c>readKeyboard()</c> method to take care of this detail for us.
+</p>
+<principle>
+<title>Exceptions</title>
+<p>
+Java I/O methods require that programs
+check for certain error conditions during input.
+</p>
+</principle>
+<p>
+<xref ref="fig-keybrdrdrclass">Figure</xref> gives the full implementation (for
+now) of the <c>KeyboardReader</c> class. Lets go through it line by
+</p>
+<figure xml:id="fig-keybrdrdrclass" >
+<caption>Definition of the <c>KeyboardReader</c> class.</caption>
+<pre>
+import java.io.*;
+
+public class KeyboardReader 
+{   private BufferedReader reader;
+
+    public KeyboardReader() {
+        reader = new BufferedReader
+           (new InputStreamReader(System.in));
+    }
+    public String getKeyboardInput() 
+    {   return readKeyboard();
+    }
+    public int getKeyboardInteger() 
+    {   return Integer.parseInt(readKeyboard());
+    }
+    public double getKeyboardDouble() 
+    {   return Double.parseDouble(readKeyboard());
+    }
+    public void prompt(String s) 
+    {   System.out.print(s);
+    }
+    public void display(String s) 
+    {   System.out.print(s);
+    }
+    private String readKeyboard() 
+    {   String line = "";
+        try 
+        {  line = reader.readLine();
+        } catch (IOException e) 
+        {  e.printStackTrace();
+        }
+        return line;
+    }}
+</pre>
+
+</figure>
+<p>
+line. The first thing to notice is the use of the <c>import</c>
+statement. Recall that importing a Java package enables us to refer to
+elements in the package by their short names (<c>BufferedReader</c>),
+rather than by their fully qualified names (<c>java.io.BufferedReader</c>).
+</p>
+
+<p>
+Next notice how we create a <c>BufferedReader</c> object in
+the <c>KeyboardReader()</c> constructor:
+</p>
+<pre>
+reader = new BufferedReader 
+    (new InputStreamReader (System.in));
+</pre>
+<p>
+The resulting <c>reader</c> object will persist as long
+as our <c>KeyboardReader</c> object exists and can be used for
+all subsequent input operations.
+</p>
+
+<p>
+Next notice the definition of the <c>readKeyboard()</c> method. It
+calls the inherited <c>readLine()</c> method to input a line from the
+keyboard and then it returns the line. Note, however, how the call to
+the <c>readLine()</c> method is embedded in a <c>try...catch</c> block.
+This is one way to handle the possibility that an exception might
+occur during the input operation. Java requires that our program do
+something to address the possibility of an I/O exception, and as we
+will learn in Chapter<nbsp/>11, there are other designs that we might have
+used here. The primary advantage of doing it this way is that we can
+hide this language detail from the rest of the program. The rest of
+the program<mdash/>and any other programs that use the <c>KeyboardReader</c>
+class<mdash/>will not have to worry about this exception issue. They can
+just ask the <c>KeyboardReader</c> to get them a string or an integer
+and it will deliver the goods.
+</p>
+
+<p>
+Next, notice how the public input methods are defined. The <c>getKeyboardInput()</c> method just returns the line that it gets by
+calling <c>readKeyboard()</c>. The <c>getKeyboardInteger()</c> method
+also calls <c>readKeyboard()</c>, but instead of just returning the
+line, it extracts an integer from it and returns the integer. The <c>getKeyboardDouble()</c> method works the same way.
+</p>
+
+<p>
+Finally, notice how the public output methods are defined. Both the
+<c>prompt()</c> and <c>display()</c> methods take a single <c>String</c>
+parameter and do exactly the same thing<ndash/>they merely print their
+string. So why do we have two methods when one will suffice? The
+answer is that these methods encapsulate important and distinct
+user-interface functions<mdash/>prompting the user and displaying
+output<mdash/>that just happen to be implemented in exactly the same way in
+this case. As we will see when we design our GUI interface, we will
+use completely different objects to prompt the user and display
+output. So, despite their similarities, it is important that we
+distinguish the task of prompting the user from the more general task
+of displaying output.
+</p>
+</subsection>
+
+
+<subsection>
+<title>Designing a Command-Line Interface</title>
+<p>
+Now that we have defined a special class for performing keyboard
+input, we now show how it can be used as a user interface in
+cooperation with the other objects that make up a program. As
+described in <xref ref="fig-ui">Figure</xref>, the user interface will serve as an
+intermediary between the user and some type of computational object.
+Although our command-line interface should work with any application,
+no matter how complex, we begin with a very simple computational
+problem. This will allow us to focus on the user interface.
+</p>
+
+<p>
+Let's design a program that prompts the user for his or her name and
+then says hello. Thus, the program's I/O should look like this:
+</p>
+<pre>
+Hi, please input your name here > Kim
+  Hi Kim, nice to meet you.
+</pre>
+<p>
+In the design we use there will be two primary objects involved. One
+will serve as the user interface. This will be our <c>KeyboardReader</c>. A second object will serve as the computational
+object. In this case it will <q>compute</q> an appropriate greeting. It
+will serve contain the <c>main()</c> method and will encapsulate the
+algorithm for this application. It will use a <c>KeyboardReader</c> to
+handle its I/O needs.
+</p>
+
+<p>
+The main advantage of this division of labor is that it enables us to
+use the <c>KeyboardReader</c>, as is, with virtually any Java
+application. Moreover, despite its simplicity, our computational
+object in this example can serve as a template for future
+programs.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Modularity</title>
+<p>
+By designing the user interface
+as a self-contained module, we can use it with just about any application.
+</p>
+</principle>
+<p>
+<xref ref="fig-greeter">Figure</xref> provides the details the design we wish to
+implement. Note that <c>GreeterApp</c> contains an instance variable
+for a <c>KeyboardReader</c>. This will enable it to use the <c>KeyboardReader</c> whenever it needs to perform keyboard input. By giving
+<c>GreeterApp</c> a <c>main()</c> method, we allow it to be the main
+class for our application. Its <c>run()</c> method will contain the
+algorithm that controls the application, and its <c>greet()</c> method
+will handle the task of greeting the user.
+</p>
+<figure xml:id="fig-greeter" >
+<caption>Using <c>KeyboardReader</c> as the user interface.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+The full implementation of the <c>GreeterApp</c> class is shown in
+<xref ref="fig-greeterapp">Figure</xref>. It begins by declaring an instance
+</p>
+<figure xml:id="fig-greeterapp" >
+<caption>Definition of the <c>GreeterApp</c> class.</caption>
+<pre>
+public class GreeterApp 
+{   private KeyboardReader reader;
+
+    public GreeterApp() 
+    {   reader = new KeyboardReader();
+    } // GreeterApp()
+    public void run() 
+    {   String name = "";
+        reader.prompt("Please input your name here > ");
+        name = reader.getKeyboardInput();
+        reader.display(greet(name) + "\n");
+    } // run()
+    public String greet(String name) 
+    {   return "Hi " + name + " nice to meet you.";
+    } // greet()
+    public static void main(String args[]) 
+    {   GreeterApp app = new GreeterApp();
+        app.run();
+    }} // GreaterApp
+</pre>
+
+</figure>
+<p>
+variable for the <c>KeyboardReader</c>, which is instantiated in the
+constructor method. This gives <c>GreeterApp</c> a way to refer
+directly to the user interface whenever it needs keyboard input. The
+<c>run()</c> method encapsulates the application's algorithm. Notice
+how it uses the <c>KeyboardReader</c> to prompt the user, to input the
+user's name, and then to display the greeting. Finally, the <c>main()</c> method serves to create an instance of the computational
+object and calls its <c>run()</c> method.
+</p>
+
+<p>
+To re-cap, we have designed a simple command-line interface that can be
+used, with minor changes, for virtually any programming task in
+subsequent chapters. Before moving on, it may be helpful to touch on
+some of the important object-oriented principles that went into our
+design.
+<ul>
+<li><p>Divide-and-conquer: We see the usefulness of dividing a program
+into separate objects, one to handle the computations required by the
+application, and one to handle the user interface.</p></li>
+<li><p>Encapsulation: The classes we designed encapsulate just the
+information and behavior that is necessary to perform their specific
+roles.</p></li>
+<li><p>Information hiding: We use a private method to hide certain
+messy implementation details from other parts of the program.</p></li>
+<li><p>Generality and Extensibility: We have developed a design that
+is general enough that it can be extended to other applications.</p></li>
+</ul>
+</p>
+
+<p>
+\secEXRHone{Self-Study Exercises}
+<ol>
+<li><p>Java's <c>Math</c> class has a static method that will
+generate a random number between 0 and 0.99999999<mdash/>that is, 
+between 0 and 1, not including 1. By using simple arithmetic,
+we can generate random numbers between any two values. For example,
+the following statement assigns a random integer between 1 and 100
+to the variable:
+<pre>
+secretNumber = 1 + (int)(Math.random() * 100);
+</pre>
+Given this statement, design and implement an application that will 
+play the following guessing game with the user. The computer generates
+a random number between 1 and 100 and then lets the user guess the
+number, telling the user when the guess is too high or too low. Note
+that for this problem, the user will have to input integers at the
+keyboard.</p></li>
+</ol>
+
+</p>
+</subsection>
+
+</section>

@@ -1,0 +1,331 @@
+<section xml:id="client-server-communicationvias">
+<title>Client/Server Communication via <c>Socket</c>s</title>
+
+
+<introduction>
+<p>
+\RHright{Client/Server Communication via <c>Socket</c>s}
+As we said earlier, many networking applications are based on the
+client/ server model. According to this model, a task is viewed as a
+service that can be requested by clients and handled by servers. In
+this section, we develop a simple client/server framework based on a
+<em>socket</em> connection between the client and the server.
+</p>
+
+<p>
+A <term>socket</term><idx><h>socket</h></idx> is a simple communication channel through which two
+programs communicate over a network. A socket supports two-way
+communication between a client and a server, using a well-established
+protocol. The protocol simply prescribes rules and behavior that both
+the server and client must follow in order to establish two-way
+communication.
+</p>
+
+<p>
+According to this protocol, a server program creates a socket at a
+\marginpar{Sockets and ports}
+certain port and waits until a client requests a connection. A <em>port</em><idx><h>port</h></idx> is a particular address or entry point on the host
+computer, which typically has hundreds of potential ports. It is
+usually represented as a simple integer value. For example, the
+standard port for an HTTP (Web) server is 80. Once the connection is
+established, the server creates input and output streams to the socket
+and begins sending messages to and receiving messages from the client.
+Either the client or the server can close the connection, but it's
+usually done by the client.
+</p>
+<principle>
+<title>DEBUGGING TIP:Reserved Port Numbers</title>
+<p>
+Port numbers below 1024
+are reserved for system use and should not be used by an application
+program.
+</p>
+</principle>
+<p>
+To help clarify this protocol, think of some service performed by a
+human using a telephone connection. The <q>server</q> waits for the
+\marginpar{Client/server protocol}
+phone to ring. When it rings, the server picks it up and begins
+communicating with the client. A socket, combined with input
+and output streams, is something like a two-way phone connection.
+</p>
+
+<p>
+From the client's side, the protocol goes as follows: The client
+creates a socket and attempts to make a connection to the server. The
+client has to know the server's URL and the port at which the service
+exists. Once a connection has been established, the client creates
+input and output streams to the socket and begins exchanging messages
+with the server. The client can close the connection when the service
+is completed.
+</p>
+
+<p>
+Think again of the telephone analogy. A human client picks up the
+phone and dials the number of a particular service. This is analogous
+to the client program creating a socket and making a connection to a
+server. Once the service agent answers the phone, two-way
+communication between the client and the server can begin.
+</p>
+
+<p>
+<xref ref="fig-clientserverpict">Figure</xref> provides a view of the client/server
+connection. Note that a socket has two channels. Once a connection
+\marginpar{Sockets and channels}
+has been established between a client and a server, a single two-way
+channel exists between them. The client's output stream is connected
+to the server's input stream. The server's output stream is connected
+to the client's input stream.
+</p>
+<principle>
+<title>PROGRAMMING TIP:Socket Streams</title>
+<p>
+Each socket has two
+streams, one for input and one for output.
+</p>
+</principle>
+  <figure xml:id="fig-clientserverpict" >
+<caption>A socket is a two-channel communication link.</caption>
+<image width="73%" source=".." />
+</figure>
+</introduction>
+
+
+<subsection>
+<title>The Server Protocol</title>
+<p>
+Let's now see how a client/server application would be coded in Java.
+The template in <xref ref="fig-serverpro">Figure</xref> shows the code that is
+necessary on the server side. The first step the server takes is to
+create a <c>ServerSocket</c>. The first argument to the
+<c>ServerSocket()</c> method is the port at which the service will
+reside. The second argument specifies the number of clients that can
+be backlogged, waiting on the server, before a client will be refused
+service. If more than one client at a time should request service,
+Java would establish and manage a waiting list, turning away clients
+when the list is full.
+</p>
+
+<p>
+The next step is to wait for a client request. The <c>accept()</c>
+\marginpar{Waiting for client requests}
+method will <em>block</em> until a connection is established. The Java
+system is responsible for waking the server when a client request
+is received.
+</p>
+<figure xml:id="fig-serverpro" >
+<caption>Template for the server protocol.</caption>
+<pre>
+Socket socket;    // Reference to the socket
+ServerSocket port;// The port where the server will listen
+try {
+    port = new ServerSocket(10001, 5); // Create a port
+    socket = port.accept();  // Wait for client to call
+
+ // Communicate with the client
+
+    socket.close();} catch (IOException e) {
+    e.printStackTrace();}
+</pre>
+
+</figure>
+<p>
+Once a connection is established, the server can begin communicating
+with the client. As we have suggested, a socket connection is like
+a two-way telephone conversation. Both the client and server can
+<q>talk</q> back and forth to each other. The details of this step
+are not shown here. As we will see, the two-way conversation
+is managed by connecting both an input and an output stream to
+the socket.
+</p>
+
+<p>
+Once the conversation between client and server is finished<mdash/>once
+the server has delivered the requested service<mdash/>the server can close
+the connection by calling <c>close()</c>. Thus, there are four steps
+involved on the server side:
+<ul>
+<li><p>Create a <c>ServerSocket</c> and establish a port number.</p></li>
+<li><p>Listen for and accept a connection from a client.</p></li>
+<li><p>Converse with the client.</p></li>
+<li><p>Close the socket.</p></li>
+</ul>
+</p>
+
+<p>
+What distinguishes the server from the client is that
+the server establishes the port and accepts the connection.
+</p>
+</subsection>
+
+
+<subsection>
+<title>The Client Protocol</title>
+<p>
+The client protocol (Fig. <xref ref="fig-clientpro"></xref>) is just as easy to
+implement. Indeed, on the client side there are only three steps involved.
+The first step is to request a connection to the server. This is done
+\marginpar{Initiating a request}
+in the <c>Socket()</c> constructor by supplying the server's URL and
+port number. Once the connection is established, the client can carry
+out two-way communication with the server. This step is not shown
+here. Finally, when the client is finished, it can simply <c>close()</c>
+the connection. Thus, from the client side, the protocol involves just
+three steps:
+<ul>
+<li><p>Open a socket connection to the server, given its address.</p></li>
+<li><p>Converse with the server.</p></li>
+<li><p>Close the connection.</p></li>
+</ul>
+</p>
+
+<p>
+What distinguishes the client from the server is that the
+client initiates the two-way connection by requesting the service.
+</p>
+<figure xml:id="fig-clientpro" >
+<caption>Template for the client protocol.</caption>
+<pre>
+Socket connection;     // Reference to the socket
+try {                  // Request a connection
+  connection = new Socket("java.cs.trincoll.edu", 10001);
+
+   // Carry on a two-way communication
+
+    connection.close();   // Close the socket} catch (IOException e ) {
+    e.printStackTrace();}
+</pre>
+
+</figure>
+</subsection>
+
+
+<subsection>
+<title>A Two-Way Stream Connection</title>
+<p>
+Now that we have seen how to establish a socket connection between a
+client and server, let's look at the actual two-way communication that
+takes place. Because this part of the process will be exactly the same
+for both client and server, we develop a single set of methods,
+<c>writeToSocket()</c> and <c>readFromSocket()</c>, that may be called by
+either.
+</p>
+
+<p>
+The <c>writeToSocket()</c> method takes two parameters, the
+\marginpar{Output routine}<c>Socket</c> and a <c>String</c>, which will be sent to the
+process on the other end of the socket:
+</p>
+<pre>
+protected void writeToSocket(Socket sock, String str) 
+                             throws IOException {
+    oStream = sock.getOutputStream();
+    for (int k = 0; k &lt; str.length(); k++)
+        oStream.write(str.charAt(k));}// writeToSocket()
+</pre>
+<p>
+If <c>writeToSocket()</c> is called by the server, then
+the string will be sent to the client. If it is called by the client,
+the string will be sent to the server.
+</p>
+
+<p>
+The method is declared <c>protected</c> because we will define it in a
+\marginpar{Protected methods}
+superclass so that it can be inherited and used by both the client and
+server classes. Note also that the method declares that it throws an
+<c>IOException</c>. Because there's no way to fix an <c>IOException</c>,
+we'll just let this exception be handled elsewhere, rather than
+handling it within the method.
+</p>
+
+<p>
+In order to write to a socket we need only get the socket's
+<c>OutputStream</c> and then write to it. For this example, <c>oStream</c> is
+an instance variable of the client/server superclass. We use the
+<c>Socket.getOutputStream()</c> method to get a reference to the socket's
+output stream. Note that we are not creating a new output stream
+here. We are just getting a reference to an existing stream, which was
+created when the socket connection was accepted. Note also that we do
+not close the output stream before exiting the method. This is
+important. If you close the stream, you will lose the ability to
+communicate through the socket.
+</p>
+<principle>
+<title>Socket Streams</title>
+<p>
+When a socket is created,
+it automatically creates its own streams. To use one you just need
+to get a reference to it.
+</p>
+</principle>
+  
+<principle>
+<title>DEBUGGING TIP:Socket Streams</title>
+<p>
+After writing to or reading
+from a socket I/O stream, do not close the stream. That would make the
+socket unusable for subsequent I/O.
+</p>
+</principle>
+<p>
+Given the reference to the socket's output stream, we simply write
+each character of the string using the <c>OutputStream.write()</c>
+method. This method writes a single <c>byte</c>. Therefore, the input
+stream on the other side of the socket must read bytes and convert
+them back into characters.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Designing a Protocol</title>
+<p>
+In designing two-way
+communication between a client and a server, you are designing a
+protocol that each side must use. Failure to design and implement a
+clear protocol will cause the communication to break down.
+</p>
+</principle>
+<p>
+The <c>readFromSocket()</c> method takes a <c>Socket</c> parameter
+\marginpar{Input routine}
+and returns a <c>String</c>:
+</p>
+<pre>
+protected String readFromSocket(Socket sock) 
+                                throws IOException {
+    iStream = sock.getInputStream();
+    String str="";
+    char c;
+    while (  ( c = (char) iStream.read() ) != '\n')
+        str = str + c + "";
+    return str;}
+</pre>
+<p>
+It uses the <c>Socket.getInputStream()</c> method to obtain a
+reference to the socket's input stream, which has already been
+created. So here again it is important that you don't close the
+stream in this method. A socket's input and output streams will be
+closed automatically when the socket connection itself is closed.
+</p>
+
+<p>
+The <c>InputStream.read()</c> method reads a single byte at a time from
+the input stream until an end-of-line character is received. For this
+particular application, the client and server will both read and write
+one line of characters at a time. Note the use of the cast operator
+<c>(char)</c> in the <c>read()</c> statement. Because <c>byte</c>s are
+being read, they must be converted to <c>char</c> before they can be
+compared to the end-of-line character or concatenated to the
+<c>String</c>. When the read loop encounters an end-of-line character, it
+terminates and returns the <c>String</c> that was input.
+</p>
+<principle>
+<title>DEBUGGING TIP:Bytes and Chars</title>
+<p>
+It is a syntax error to compare
+a <c>byte</c> and a <c>char</c>. One must be converted to the other using
+an explicit cast operator.
+</p>
+</principle>
+</subsection>
+
+</section>

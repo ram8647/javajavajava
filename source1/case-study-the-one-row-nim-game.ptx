@@ -1,0 +1,485 @@
+<section xml:id="case-study-the-one-row-nim-game">
+<title>Case Study: The One Row Nim Game</title>
+
+
+<introduction>
+<p>
+In this section, we show how to develop alternative interfaces for our
+case study game of One Row Nim that was developed in the two previous
+chapters. As you recall, the One Row Nim game starts with, say, 21
+sticks on a table. Players take turns picking up 1, 2 or 3 sticks,
+and the player to pick up the last stick loses. We wish to
+develop an application program so that the user of the program
+can play this game against the computer, that is, against the program.
+</p>
+
+<p>
+As in our other examples in this chapter, our design will divide this
+problem into two primary objects: a computational object, in this case
+<c>OneRowNim</c>, and a user interface object, for which we will
+use either a <c>KeyboardReader</c> or a <c>OneRowNimGUI</c>. One goal of
+our design was to develop the <c>OneRowNim</c> class so that it can be
+used, without changes, with either a command-line interface or a GUI.
+<image width="73%" source="chptr04" />
+</p>
+
+<p>
+Recall that we designed the <c>OneRowNim</c> class to maintain the state of
+the game and to provide methods that enforce the rules of the
+game. Thus, we know that after each legal move, the number of sticks will
+decline, until it is 0 or less, which indicates that the game is over.
+Also, an instance of <c>OneRowNim</c> keeps track of whose turn it is and
+can determine if the game is over and who the winner is when the
+game is over. Finally, the game ensures that players cannot cheat, either
+by taking too few or too many sticks on one turn.
+Figure<nbsp/>4.23 shows the UML diagram of the <c>OneRowNim</c>
+class as described at the end of the previous chapter.
+</p>
+</introduction>
+
+
+<subsection>
+<title>A Command-line Interface to <c>OneRowNim</c></title>
+<p>
+Let's now focus on connecting a <c>OneRowNim</c> instance with a <c>KeyboardReader</c> instance, the command-line interface we developed at the
+beginning of this chapter. To do so requires no changes to <c>KeyboardReader</c> (Fig. <xref ref="fig-keybrdrdr"></xref>). Unlike in the greeter
+example, we will use a third object to serve as the main program. As
+shown in <xref ref="fig-ornapp">Figure</xref>, the <c>OneRowNimApp</c> class
+will contain the <c>run()</c> method that controls the game's progress.
+<c>OneRowNimApp</c> will use the <c>KeyboardReader</c> object to prompt
+the user, to display the program's output, and to perform input from
+the keyboard. It will use the <c>OneRowNim</c> object to keep track of
+the game.
+</p>
+
+<p>
+In fact, the main challenge for this part of our problem is designing
+\marginpar{Loop algorithm}
+the <c>run()</c> method, which will use a loop algorithm to play the
+game. The user and the computer will repeatedly take turns picking up
+sticks until the game is over. The game is over when there are no more
+sticks to pick up. Thus, we can use the game's state<mdash/>the number of
+sticks left<mdash/>as our loop's entry condition. We will repeat the loop
+while there are more than 0 sticks remaining.
+</p>
+
+<p>
+The following pseudocode describes the remaining details of our
+algorithm. We refer to the <c>OneRowNim</c> instance as the <c>game</c> object,
+and we refer to the <c>KeyboardReader</c> instance as the <c>reader</c>
+object. We use the notation <c>game:get the number of sticks left</c> to
+indicate that we are sending a message to the <c>game</c> object.
+</p>
+<pre>
+Create a game object with 21 sticks
+ Create a reader object
+ sticksLeft = game:get the number of sticks left
+ reader:display the rules of the game 
+ while (game: the game is not over)       
+     whoseMove = game: find out whose turn it is
+     if (whoseMove == user)
+         game: user chooses number of sticks to take
+     else
+         game: computer chooses number of sticks to take 
+     sticksLeft = game: get the number of sticks left
+     reader: report the number of sticks left
+ // At this point the game is over.
+ if game: the user is the winner
+        reader: report that the user wins
+ else 
+       reader: report that the computer wins
+</pre>
+<p>
+In this algorithm, the initializations we perform consist
+of creating the game and reader objects and initializing <c>sticksLeft</c>. We use a while loop structure to control the game. The
+loop's entry condition is that the 'the game is not over'. This is a
+piece of information that comes directly from the game object. As
+long as the game is not over, the body of the loop will be
+executed. Note that in the loop's body, either the player or the
+computer makes a move. Again, it is up to the game object to determine
+whose move it is. Following the move we ask the game how many sticks
+are left and we use the reader object to report this.
+</p>
+
+<p>
+Note that the loop structure has the three necessary elements. The
+\marginpar{Loop structure: Initializer, entry condition, updater}
+initializer in this case is the creation of a <c>OneRowNim</c>
+object. We know that this will cause the game to have 21 sticks and
+it will be the user's move. The loop-entry condition is that the
+game is not over, which is based on the fact that there are still
+sticks remaining to be picked up. But again, this knowledge is kept by
+the game object. Finally, we have an updater that consists of either
+the computer or the user picking up some sticks. This in turn changes
+the value of <c>sticksLeft</c> on each iteration, moving us ever closer
+to the condition that there are no sticks left, at which point
+the game will be over.
+</p>
+
+<p>
+Note that we have left out of this algorithm the details of the user's
+moves and computer's moves. These are the kinds of actions that are
+good to put into separate methods, where we can worry about checking
+whether the user made a legal move and other such details.
+</p>
+
+<p>
+<xref ref="fig-ornapp">Figure</xref> provides the implementation of the <c>OneRowNimApp</c> application. It uses a <c>KeyboardReader</c> as a
+command-line interface and a <c>OneRowNim</c> instance as it computational
+object. Thus, it has private instance variables for each of these
+objects, which are instantiated in the constructor method.
+The algorithm we just described has been placed in the <c>run()</c>
+method, which is called from <c>main()</c> after the application is
+instantiated. The use of the boolean method <c>gameOver()</c> to control
+the loop makes this code segment easier to understand. Also, it
+leaves it up to the game object to determine when the game is over.
+From an object-oriented design perspective, this is an appropriate
+\marginpar{Division of labor}
+division of responsibility. If you doubt this, imagine what could go
+wrong if this determination was left up to the user interface. A
+user-interface programmer might end up, mistakenly, implementing the
+wrong rule for the game being over. A similar point applies to the
+<c>getWinner()</c> method. This determination rests with the game, not
+the user interface. If left up to the user interface, it is possible
+that a programming mistake could lead to the loss of the game's
+integrity.
+</p>
+<figure xml:id="fig-ornapp" >
+<caption>Definition of <c>OneRowNimApp</c>, a command-line interface
+to the <c>OneRowNim</c>.</caption>
+\[31pc]
+<pre>
+public class OneRowNimApp 
+{ private KeyboardReader reader;
+  private OneRowNim game;
+
+  public OneRowNimApp() 
+  { reader = new KeyboardReader();
+    game = new OneRowNim(21);
+  } //OneRowNim()
+    
+  public void run() 
+  { int sticksLeft = game.getSticks();
+    reader.display("Let's play One Row Nim. You go first.\n");
+    reader.display("There are " + sticksLeft + 
+                                       " sticks left.\n");
+    reader.display("You can pick up 1, 2, or 3 at a time\n.");
+    while (game.gameOver() == false)       
+    { if (game.getPlayer() == 1)  userMove();
+      else computerMove();
+      sticksLeft = game.getSticks();
+      reader.display("There are " + sticksLeft + 
+                                      " sticks left.\n");
+    } // while
+    if (game.getWinner() == 1) 
+      reader.display("Game over. You win. Nice game.\n");
+    else  reader.display("Game over. I win. Nice game.\n");
+  } //run()
+    
+  private void userMove() 
+  { reader.prompt("Do you take 1, 2, or 3 sticks?: ");
+    int userTakes = reader.getKeyboardInteger();
+    if (game.takeSticks(userTakes)) 
+    { reader.display("You take " + userTakes + ".\n");
+    } else 
+    { reader.display("You can't take " + userTakes + 
+                                          ". Try again\n");
+    } // else
+  } //userMove()
+    
+  private void computerMove() 
+  { game.takeAway(1);  // Temporary strategy.
+    reader.display("I take 1 stick. ");
+  } //computerMove()
+    
+  public static void main(String args[]) 
+  { OneRowNimApp app = new OneRowNimApp();
+    app.run();
+  } //main()} // OneRowNimApp
+</pre>
+
+</figure>
+<p>
+The <c>run()</c> method calls <c>userMove()</c> and <c>computerMove()</c>
+to perform the specific set of actions associated with each type of
+move. The <c>userMove()</c> method uses the <c>KeyboardReader()</c> to
+prompt the user and input his or her move. It then passes the user's
+choice to <c>game.takeSticks()</c>. Note how it checks the return value
+to determine whether the move was legal or not and provides an
+appropriate response through the interface.
+</p>
+
+<p>
+Finally, note how we use private methods to implement the actions
+associated with the user's and computer's moves. Because these private
+methods are not part of the object's interface and because they can
+only be used within the object themselves, they are in a sense
+secondary to the object's public instance methods. We sometimes refer
+to them as <term>helper methods</term>. This division of labor allows us to
+organize all of the details associated with the moves into a single
+module. The <c>computerMove()</c> method uses a temporary strategy
+of taking a single stick and passes the
+number <m>1</m> to <c>game.takeSticks()</c>. Finally, <c>computerMove()</c>
+reports its choice through the interface. After we have covered
+operators of the <c>int</c> data type in the next chapter, we will be able
+to describe better strategies for the computer to make a move.
+</p>
+
+<p>
+This example shows how simple and straightforward it is to use our
+<c>KeyboardReader</c> user interface. In fact, for this problem, our
+interface didn't require any changes. Although there might be occasions
+where we will want to extend the functionality of <c>KeyboardReader</c>, it can be used without changes for a wide variety of
+problems in subsequent chapters.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Code Reuse</title>
+<p>
+A well-designed user interface
+can be used with many computational objects.
+</p>
+</principle>
+</subsection>
+
+
+<subsection>
+<title>A GUI for <c>OneRowNim</c></title>
+<p>
+The first task is designing a GUI for the <c>OneRowNim</c> is to
+decide how to use input, output, and control components to interact
+with the user. Following the design we used in the GUI for our greeter
+application, we can use a <c>JTextField</c> for the user's input and a
+<c>JTextArea</c> for the game's output. Thus, we will use the <c>JTextArea</c> to report on the progress of the game and to display any
+error messages that arise. As in the greeter example, we can use both
+the <c>JTextField</c> and <c>JButton</c> as control elements and a <c>JLabel</c> as a prompt for the input text field. For the most part then,
+the use of GUI components will remain the same as in our previous
+example. This is as we would expect. The relationship between the user
+and the interface are pretty similar in both this and the previous
+application.
+</p>
+
+<p>
+In contrast, the relationship between the interface and the game are
+quite different from what we saw in the greeter application. As in
+the previous application, the GUI will still need a reference to its
+associated computational object, in this case the game:
+</p>
+<pre>
+private OneRowNim game;
+    ...
+    game = new OneRowNim();
+</pre>
+<p>
+The biggest difference between this GUI and the one we used
+with the greeter application occurs in the details of the interaction
+between the GUI and the game. These details are the responsibility of
+the <c>actionPerformed()</c> method, whose actions depend on the actual
+progress of the individual game.
+</p>
+
+<p>
+Unlike in the command-line version, there is no need to use a loop
+construct in the <c>actionPerformed()</c> method. Instead, because we
+\marginpar{Java's event loop}
+are using event-driven programming here, we will rely on Java's event
+loop to move the game from one turn to another.
+</p>
+
+<p>
+As in the greeter example, the <c>actionPerformed()</c> method will be
+called automatically whenever the <c>JButton</c> is clicked.
+It is the responsibility
+of the GUI to ensure that it is the user's turn whenever this action
+occurs. Therefore, we design <c>actionPerformed()</c> so that each time
+it is called, it first performs the user's move and then, assuming the
+game is not over and an error did not occur on the user's move, it
+performs the computer's move. Thus, the basic algorithm is as
+follows:
+</p>
+<pre>
+Let the user move.
+    If game:game is not over and computer turn
+       let the computer move.
+    Game: how many sticks are left.
+    display: report how many sticks are left
+    If game:game is over
+        Stop accepting moves.
+        Report the winner.
+</pre>
+<p>
+After the user's move, it is possible that the user
+picked up the last stick, which means that the game would be over. In
+that case, the computer would not get a move. Or, the user could have
+made an error. In that case it would still be the user's move. These
+possibilities have to be considered in the algorithm before the
+computer gets to move. As the pseudocode shows, it is the <c>OneRowNim</c> object's responsibility to keep track of whether the
+game is over and whose turn it is.
+</p>
+<figure xml:id="fig-orngui" >
+<caption>The <c>OneRowNimGUI</c> class.</caption>
+<pre>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class OneRowNimGUI extends JFrame implements ActionListener
+{ private JTextArea display;
+  private JTextField inField;
+  private JButton goButton;
+  private OneRowNim game;
+      
+  public OneRowNimGUI(String title) 
+  { game = new OneRowNim(21);  
+    buildGUI();
+    setTitle(title);
+    pack();
+    setVisible(true);
+  } // OneRowNimGUI()
+  private void buildGUI() 
+  { Container contentPane = getContentPane();
+    contentPane.setLayout(new BorderLayout());
+    display = new JTextArea(20,30);
+    display.setText("Let's play Take Away. There are " + game.getSticks() + 
+      " sticks.\n" + "Pick up 1,2, or 3 at a time.\n" + "You go first.\n");
+    inField = new JTextField(10);
+    goButton = new JButton("Take Sticks");
+    goButton.addActionListener(this);
+    JPanel inputPanel = new JPanel();
+    inputPanel.add(new JLabel("How many sticks do you take: "));
+    inputPanel.add(inField);
+    inputPanel.add(goButton);
+    contentPane.add("Center", display);
+    contentPane.add("South", inputPanel);
+  } // buildGUI
+  private void userMove()
+  { int userTakes = Integer.parseInt(inField.getText());
+    if (game.takeSticks(userTakes)) 
+      display.append("You take " + userTakes + ".\n");
+    else display.append("You can't take " + userTakes + ". Try again\n");
+  }// userMove()
+  private void computerMove() 
+  { if (game.gameOver()) return;
+    if (game.getPlayer() == 2) 
+    {   game.takeSticks(1); // Temporary strategy
+      display.append("I take one stick. ");
+    } // if
+  } // computerMove()
+  private void endGame()
+  { goButton.setEnabled(false);  // Disable button and textfield
+    inField.setEnabled(false);
+    if (game.getWinner() == 1)
+      display.append("Game over. You win. Nice game.\n");
+    else  display.append("Game over. I win. Nice game.\n");
+  } // endGame()
+  public void actionPerformed(ActionEvent e) 
+  { if (e.getSource() == goButton) 
+    { userMove();
+      computerMove();
+      int sticksLeft = game.getSticks();
+      display.append("There are " + sticksLeft + " sticks left.\n");
+      if (game.gameOver()) endGame();
+    } // if
+  } // actionPerformed()} // OneRowNimGUI
+</pre>
+
+</figure>
+<p>
+<xref ref="fig-orngui">Figure</xref> shows the complete implementation of the
+<c>OneRowNimGUI</c> class. In terms of its instance variables,
+constructor, and its <c>buildGUI()</c> method, there are only a few
+minor differences between this GUI and the <c>GreeterGUI</c>
+(Fig. <xref ref="fig-simplegui"></xref>). This GUI has instance variables
+for its <c>JTextField</c>, <c>JTextArea</c>, and <c>JButton</c>, as
+well as one for <c>OneRowNim</c> instance, its computational object. It
+needs to be able to refer to these objects throughout the class.
+Hence we give them class scope.
+</p>
+
+<p>
+The constructor method plays the same role here as in the previous
+GUI: It creates an instance of the computational object, builds the
+GUI's layout, and then displays the interface on the console.
+</p>
+
+<p>
+All of the changes in the <c>buildGUI()</c> method have to do with
+application-specific details, such as the text we use as the prompt
+and the <c>goButton</c>'s label. One new method we use here is the
+<c>setText()</c> method. Unlike the <c>append()</c> method, which is
+used to add text to the existing text in a <c>JTextArea</c>, the <c>setText()</c> method replaces the text in a <c>JTextArea</c> or a <c>JTextField</c>.
+</p>
+
+<p>
+Next let's consider the private <c>userMove()</c> and <c>computerMove()</c> methods. Their roles are very similar to the
+corresponding methods in the command-line interface: They encapsulate
+the details involved in performing the players' moves. The primary
+difference here is that for the user move we input the user's choice
+from a <c>JTextField</c> rather than from the keyboard. We use <c>getText()</c> to retrieve the user's input from the <c>JTextField</c> and
+we use <c>Integer.parseInt()</c> to convert to an <c>int</c> value:
+</p>
+<pre>
+int userTakes = Integer.parseInt(inField.getText());
+</pre>
+<p>
+Another difference is that we use a <c>JTextField</c> to display
+the program's messages to the user.
+</p>
+
+<p>
+As we have noted, the main differences between this and the <c>GreeterGUI</c> occur in the <c>actionPerformed()</c> method. Note there
+how we use <c>OneRowNim</c>'s public methods, <c>getPlayer(),
+gameOver()</c> and <c>getWinner()</c> to control the interaction with the
+user.
+</p>
+
+<p>
+One issue that differs substantially from the command-line interface is:
+How do we handle the end of the game? Because we are using Java's
+built-in event loop, the GUI will continue to respond to user's events,
+unless we stop it from doing so. One way to do this is to disable the
+<c>JButton</c> and the <c>JTextField</c>. By disabling a control element,
+we render it unable to respond to events. To do this we use the
+<c>setEnabled()</c> method, passing it the value <c>false</c> to, in
+effect, <q>turn off</q> that component:
+</p>
+<pre>
+if (game.gameOver()) 
+{  goButton.setEnabled(false);  // End the game
+   inField.setEnabled(false);
+   ...}
+</pre>
+<p>
+Although it doesn't apply in this situation, the <c>setEnabled()</c>
+method can be used repeatedly in a GUI to turn components on and off
+as the context of the interaction dictates.
+</p>
+
+<p>
+This example shows how simple and straightforward it can be to build a
+GUI for just about any application. One main design issue is
+\marginpar{GUI input, output, and control}
+deciding what kinds of input, output, and control elements to use. For
+most applications, we can use <c>JTextField</c>, <c>JTextArea</c>, <c>JLabel</c>, and <c>JButton</c> as the GUI's basic elements. A second
+design issue concerns the development of the <c>actionPerformed()</c>
+method, which must be designed in an application-specific way. Here
+we apply what we've learned regarding Java's event-programming model:
+We designate one or more of our elements to serve as an <c>ActionListener</c> and we design algorithms to handle the action events
+that occur on that element.
+</p>
+
+<p>
+Of course, for some applications we may need two <c>JTextField</c>s to
+handle input. At some point, we also might want to introduce <c>JMenu</c>s and other advanced GUI elements. Some of these options will be
+introduced in upcoming chapters. Others will be covered in Chapter<nbsp/>13,
+which provides a more comprehensive view of Java's GUI capabilities.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:GUI Design</title>
+<p>
+A well-designed GUI makes appropriate
+use of input, output, and control elements.
+</p>
+</principle>
+</subsection>
+
+</section>

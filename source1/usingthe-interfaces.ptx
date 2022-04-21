@@ -1,0 +1,235 @@
+<section xml:id="usingthe-interfaces">
+<title>Using the <c>Set</c> and <c>Map</c> Interfaces</title>
+
+
+<introduction>
+<p>
+The <c>Set</c> and <c>Map</c> interfaces are similar to the <c>List</c>
+interface in that there are multiple classes in the collections framework
+that implement them.
+</p>
+</introduction>
+
+
+<subsection xml:id="fig-libset">
+<title>Using the <c>Set</c> Interface</title>
+<p>
+The <c>Set</c> interface is modeled after the <em>set theory</em>
+principles taught in mathematics. In mathematics, sets are groups of
+elements with a clearly defined algorithm for deciding if any given
+element is in any given set. Elements can be added to sets and can be
+removed from sets. Sets cannot have duplicate elements; if an element
+is added to a set that already contains an element equal to it, the
+new set still has a single such element. The elements of a set have
+no natural order; two sets that have the same elements listed in
+different orders are considered to be the same set.
+</p>
+
+<p>
+In computer science and in Java, data structures that model sets are
+designed for large collections of data. Such data structures have a
+method that determines if an object is in a given set with an
+efficient algorithm. For large data sets, using such a method is much
+faster than iterating through a list. Sometimes, you may or may not be
+able to list the elements of a set data structure in some natural
+<image width="73%" source="chptr16" />
+order, depending on how the data structure is implemented. An
+incomplete listing of the methods of the <c>Set&lt;E&gt;</c> interface is
+given in the UML diagram in Figure<nbsp/>16.32.
+</p>
+
+<p>
+<c>TreeSet&lt;E&gt;</c> and <c>HashSet&lt;E&gt;</c> are two classes in the
+collections framework that implement the <c>Set&lt;E&gt;</c> interface. They
+both provide fast operations to check whether an element is in a set.
+They also provide quick insertion of an element into the set or
+removal of an element from a set. For large sets<mdash/>those having at
+least several thousand elements<mdash/>where there are large numbers of
+insertions, deletions, and tests for whether elements are in a set,
+linked lists would be much slower.
+</p>
+
+<p>
+When using the <c>Set&lt;E&gt;</c> interface for a user-defined class <c>E</c>, you will likely want to override the definition of the <c>equals()</c> method from the <c>Object</c> class in <c>E</c> because that
+\marginpar{Overriding methods}
+method is used when computing the value of <c>aSet.contains(anElement)</c>. When using the <c>TreeSet&lt;E&gt;</c> class for a
+user defined class <c>E</c>, you should implement the <c>compareTo()</c>
+method of the <c>Comparable</c> interface because it is used to order
+the elements of <c>E</c>. In the next section, we will discuss the
+specific manner in which elements are ordered. Finally, when using
+the <c>HashSet&lt;E&gt;</c> class for a user defined class <c>E</c>, you
+should override the <c>hashCode()</c> method of the <c>Object</c> class
+because it is used <c>HashSet&lt;E&gt;</c>. <em>Hash codes</em> are indexes
+that are computed from the particular object that is being stored in
+the <c>HashSet</c>. Given an object's hash code, the object can
+be retrieved directly, as we do with object's stored in an array.
+However, we will not discuss hash codes in any detail in this text.
+</p>
+</subsection>
+
+
+<subsection>
+<title>Problem Statement</title>
+<p>
+Let's think about a simple example for using a set data
+structure. Suppose that a programmer is developing an application for
+a large company for maintaining a <em>no<ndash/>call</em> list. The programmer
+has decided to use the <c>TreeSet&lt;E&gt;</c> data structure to store
+objects of the <c>PhoneRecord</c> class that was defined earlier in
+this chapter and will use methods of the <c>Set&lt;E&gt;</c> interface to
+manipulate the data.
+</p>
+<sidebyside>A <c>TreeSet</c> seems to be an appropriate structure for this problem,
+since
+<ul>
+A large amount of data will be involved.
+<li><p>{The company wants the <c>PhoneRecord</c> data stored in 
+alphabetical order.}
+ The main use of the data will be to test whether names are in the set.</p></li>
+</ul></sidebyside>
+<p>
+The programmer might write a short method like that in
+<xref ref="fig-settest">Figure</xref> to demonstrate how the <c>Set&lt;E&gt;</c> and <c>TreeSet&lt;E&gt;</c> structures will be used.
+</p>
+<figure xml:id="fig-settest" >
+<caption>A method that demonstrates use of the interface <c>Set&lt;E&gt;</c>
+and the class <c>TreeSet&lt;E&gt;</c>.</caption>
+<pre>
+public static void testSet() {
+  Set&lt;PhoneRecord> theSet = new TreeSet&lt;PhoneRecord>();
+  // new HashSet&lt;PhoneRecord>(); could also be used.
+  theSet.add(new PhoneRecord("Roger M", "090-997-2918"));
+  theSet.add(new PhoneRecord("Jane M", "090-997-1987"));
+  theSet.add(new PhoneRecord("Stacy K", "090-997-9188"));
+  theSet.add(new PhoneRecord("Gary G", "201-119-8765"));
+  theSet.add(new PhoneRecord("Jane M", "090-987-6543"));
+
+  System.out.println("Testing TreeSet and Set");
+  PhoneRecord ph1 =
+      new PhoneRecord("Roger M", "090-997-2918");
+  PhoneRecord ph2 =
+      new PhoneRecord("Mary Q", "090-242-3344");
+  System.out.print("Roger M contained in theSet is ");
+  System.out.println(theSet.contains(ph1));
+  System.out.print("Mary Q contained in theSet is ");
+  System.out.println(theSet.contains(ph2));
+  for (PhoneRecord pr : theSet)
+      System.out.println(pr);} // testSet
+</pre>
+
+</figure>
+<p>
+In order for the <c>testSet()</c> method to work as we would like, we
+need to have the <c>PhoneRecord</c> class implement the <c>Comparable</c> interface and to override the <c>equals()</c> method. For
+this example, it is reasonable to assume that the <c>name</c> field of
+<c>PhoneRecord</c> objects should be unique so that it can be used to
+decide if two <c>PhoneRecord</c> objects are equal. The <c>name</c>
+field of <c>PhoneRecord</c> can also be used to define the other two
+methods discussed above. Thus, add the following code to the <c>PhoneRecord</c> class.
+</p>
+<pre>
+public boolean equals(Object ob){
+    return name.equals(((PhoneRecord)ob).getName());} //equals()
+
+public int compareTo(Object ob){
+   return name.compareTo(((PhoneRecord)ob).getName());} // compareTo()
+
+public int hashCode(){
+    return name.hashCode();} // hashCode()
+</pre>
+<p>
+The output of the <c>TestSet()</c> method is listed below:
+</p>
+<pre>
+Testing TreeSet and Set
+            Roger M is contained in theSet is true
+            Mary Q is contained in theSet is false
+            Gary G 201-119-8765
+            Jane M 090-997-1987
+            Roger M 090-997-2918
+            Stacy K 090-997-9188
+</pre>
+<p>
+Notice that <c>Jane M</c><c>PhoneRecord</c> appears only once in the
+listing of elements in the set.
+</p>
+</subsection>
+
+
+<subsection xml:id="fig-libmap">
+<title>Using the <c>Map&lt;K,V&gt;</c> Interface</title>
+<p>
+The <c>Map&lt;K,V&gt;</c> interface is modeled after looking up definitions
+for words in a dictionary. In computer science, maps are considered to
+be a collection of pairs of elements. A pair consists of a <term>key</term>
+that corresponds to a word being looked up and a <term>value</term>
+corresponding to the definition of the word. Pairs can be added to
+maps and can be removed from maps. Maps cannot
+<image width="73%" source="chptr16" />
+have distinct pairs with the same keys; if you attempt to add a pair
+to a map that already contains a pair with the same key, the second
+pair will replace the first. An incomplete listing of the methods of
+the <c>Map&lt;K,V&gt;</c> interface is given in the UML diagram in
+Figure<nbsp/>16.34. <c>TreeMap&lt;K,V&gt;</c> and <c>HashMap&lt;K,V&gt;</c> are two
+classes in the collections framework that implement the <c>Map&lt;K,V&gt;</c>
+interface.
+</p>
+
+<p>
+Let's now consider a simple example of using a map data
+structure. Suppose that our programmer has been hired by a large
+company to develop an application that maintains an electronic phone
+list for company employees. The programmer has decided to use the
+<c>TreeMap&lt;E&gt;</c> data structure to store pairs of names and telephone
+numbers and will use methods of the <c>Map&lt;V,K&gt;</c> interface to
+manipulate the data.
+</p>
+<sidebyside>A <c>TreeMap</c> seems like an appropriate data
+structure for this problem, since
+<ul>
+A large amount of data will be involved.
+<li><p>{The company wants the <c>PhoneRecord</c> data stored in 
+alphabetical order.}
+ The main use of the data will be to use names to access 
+telephone numbers.</p></li>
+</ul></sidebyside>
+<p>
+The programmer might write a short method like that in
+<xref ref="fig-maptest">Figure</xref> to demonstrate how the <c>Map&lt;K,V&gt;</c> and
+<c>TreeMap&lt;K,V&gt;</c> structures will be used.
+</p>
+<figure xml:id="fig-maptest" >
+<caption>A method that demonstrates use of the interface <c>Map&lt;K,V&gt;</c>
+and the class <c>TreeMap&lt;K,V&gt;</c>.</caption>
+<pre>
+public static void testMap() {
+  Map&lt;String, String> theMap =
+     new TreeMap&lt;String,String>();
+  // new HashMap&lt;K,V&gt;(); could also be used
+  theMap.put("Roger M", "090-997-2918");
+  theMap.put("Jane M", "090-997-1987");
+  theMap.put("Stacy K", "090-997-9188");
+  theMap.put("Gary G", "201-119-8765");
+  theMap.put("Jane M", "090-233-0000");
+  System.out.println("Testing TreeMap and Map");
+  System.out.print("Stacy K has phone ");
+  System.out.print(theMap.get("Stacy K");
+  System.out.print("Jane M has phone ");
+  System.out.print(theMap.get("Jane M");} // testList
+</pre>
+
+</figure>
+<p>
+The output for this test program is:
+</p>
+<pre>
+Stacy K has phone 090-997-9188
+        Jane M has phone 090-233-0000
+</pre>
+<p>
+Notice the the second phone number for <c>Jane M</c> is the one that
+is stored in the data structure.
+</p>
+</subsection>
+
+</section>

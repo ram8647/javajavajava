@@ -1,0 +1,207 @@
+<section xml:id="sec-throws">
+<title>Creating and Throwing Your Own 
+ Exceptions</title>
+<p>
+Like other Java classes, the <c>Exception</c> class can be extended to
+handle cases that are not already covered by Java's built-in
+exceptions. Exceptions that you define will be handled the same way
+by the Java interpreter, but you will have to <c>throw</c> them
+yourself.
+</p>
+
+<p>
+For example, Figure<nbsp/>10.20 shows the design of an exception
+that can be used for validating that an integer is less than or equal
+to a certain maximum value. It would be coded as follows:
+</p>
+<pre>
+/**
+  *  IntOutOfRangeException reports an exception when 
+  *    an integer exceeds its bound.
+  */
+public class IntOutOfRangeException extends Exception {
+
+    public IntOutOfRangeException (int Bound) {
+      super("The input value exceeds the bound " + Bound);
+    }}
+</pre>
+<p>
+The class extends <c>Exception</c> and consists entirely of
+a constructor method that calls the superclass constructor.
+The argument passed to the superclass constructor is the message
+that will be returned by <c>getMessage()</c> when an instance of
+this exception is created.
+</p>
+
+<p>
+Now let's consider an example where this new exception will be
+thrown. Suppose we wish to constrain the <c>IntField</c> class that we
+developed previously (Fig.<nbsp/>10.14) so that it will only
+accept numbers that are less than a certain bound. First, let's
+modify <c>IntField</c> so that its bound can be set when an
+instance is created. We want its bound to be an instance
+variable with some initial value, and we want to provide a
+constructor that can be used to override the default
+(Fig.<nbsp/>10.21).
+<image width="73%" source="chptr10" />
+</p>
+
+<p>
+This leads to the following revision of <c>IntField</c>:
+</p>
+<pre>
+public class IntField extends JTextField {
+    private int bound = Integer.MAX_VALUE;
+
+    public IntField(int size, int max) {
+        super(size);
+        bound = max;
+    }
+   // The rest of the class is unchanged for now} // IntField
+</pre>
+<p>
+Our new constructor has the signature <c>IntField(int,int)</c>, which doesn't duplicate any of <c>JTextField</c>'s
+constructors. This is good design, because in extending a class, we want to be
+careful about the effect that our definitions have on the original
+methods in the superclass. Superclass methods should be overridden by
+design, not by accident. If a method
+is redefined inadvertently, it might not function as expected by users
+of the subclass.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Extending a Class</title>
+<p>
+When extending a class,
+care must taken to ensure that the superclass's methods are
+not inadvertently overridden. A superclass method should only be
+overridden by design, not by accident.
+</p>
+</principle>
+<p>
+Note how we have handled the problem of setting the default value of
+the <c>bound</c>. <c>Integer.MAX_VALUE</c> is a class constant that
+sets the maximum value for the <c>int</c> type. It's an appropriate
+value to use, because any valid <c>int</c> that the user types should
+be less than or equal to <c>MAX_VALUE</c>. Given these changes to
+<c>IntField</c>, let's now incorporate our new exception into its
+<c>getInt()</c> method (Fig. <xref ref="fig-intfield2"></xref>).
+</p>
+
+<p>
+This new version of <c>getInt()</c> throws an exception if the integer
+entered by the user is greater than the <c>IntField</c>'s
+<c>bound</c>. Here again, it is difficult to handle this exception
+appropriately in this method. The method would either have to return
+an erroneous value<mdash/>because it must return something<mdash/>or it must
+terminate. Neither is an acceptable alternative. It is far better to
+throw the exception to the calling method.
+</p>
+<figure xml:id="fig-intfield2" >
+<caption>The revised <c>IntField</c> class containing the
+revised <c>getInt()</c> method.</caption>
+<pre>
+import javax.swing.*;
+
+public class IntField extends JTextField {
+    private int bound = Integer.MAX_VALUE;
+
+    public IntField (int size) {
+        super(size);
+    }
+
+    public IntField(int size, int max) {
+        super(size);
+        bound = max;
+    }
+
+    public int getInt() throws NumberFormatException, 
+                               IntOutOfRangeException {
+        int num = Integer.parseInt(getText());
+        if (num > bound)
+            throw new IntOutOfRangeException(bound);
+        return num;
+    } // getInt()
+} // IntField
+</pre>
+
+</figure>
+<p>
+The <c>IntFieldTester</c> class (Fig. <xref ref="fig-intbound"></xref>) has the
+design and functionality shown in <xref ref="fig-numformat">Figure</xref>. It provides
+a simple GUI interface to test the <c>IntField</c> class. It prompts
+the user to type an integer that is less than 100, and then it
+echoes the user's input. Note how the exception is handled in the
+<c>actionPerformed()</c> method. If an exception is thrown in <c>IntField.getInt()</c>, the <c>actionPerformed()</c> method pops up an
+error dialog, and the erroneous input is not used. Instead, the user is
+given another chance to enter a valid integer.
+</p>
+<figure xml:id="fig-intbound" >
+<caption>An application that uses an <c>IntField</c> object to process integers.</caption>
+<pre>
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class IntFieldTester extends JPanel 
+                                       implements ActionListener  {
+  public static final int WIDTH = 300, HEIGHT = 300;
+  private JLabel prompt = new JLabel("Input an integer &lt;= 100: ");
+  private IntField intField = new IntField(12, 100);
+  private int userInt;
+  private String message = "Hello";
+
+  public IntFieldTester() {
+    add(prompt);
+    intField.addActionListener(this);
+    add(intField);
+    setSize(WIDTH, HEIGHT);
+  } // IntFieldTester()
+
+  public void paintComponent( Graphics g ) {
+    g.setColor(getBackground());            // Clear the panel
+    g.fillRect(0, 0, WIDTH, HEIGHT);
+    g.setColor(getForeground());
+    g.drawString(message, 10, 70);
+  } // paintComponent()
+
+  public void actionPerformed(ActionEvent evt) {
+    try {
+      userInt = intField.getInt();
+      message = "You input " + userInt + " Thank you.";
+    } catch (NumberFormatException e) {
+      JOptionPane.showMessageDialog(this,
+       "The input must be an integer.  Please reenter.");
+    } catch (IntOutOfRangeException e) {
+      JOptionPane.showMessageDialog(this, e.getMessage());
+    } finally {
+      repaint();
+    }
+  } // actionPerformed()
+
+  public static void main(String args[]) {
+    JFrame f = new JFrame("IntField Tester");
+    IntFieldTester panel = new IntFieldTester();
+    f.getContentPane().add(panel);
+    f.setSize(panel.WIDTH, panel.HEIGHT);
+    f.setVisible(true);
+    f.addWindowListener(new WindowAdapter() { 
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);   // Quit the application
+      }
+    });
+  } // main()} // IntFieldTester
+</pre>
+
+</figure>
+<p>
+\secEXRHone{Self-Study Exercises}
+<ol>
+<li><p>Define a new <c>Exception</c> named <c>FieldIsEmptyException</c>,
+which is meant to be thrown if the user forgets to enter
+a value into a <c>IntField</c>.</p></li>
+<li><p>Modify the <c>IntField.getInt()</c> method so that it throws and catches
+the <c>FieldIsEmptyException</c>.</p></li>
+</ol>
+
+</p>
+</section>

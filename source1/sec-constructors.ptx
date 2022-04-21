@@ -1,0 +1,344 @@
+<section xml:id="sec-constructors">
+<title>Constructor Methods</title>
+
+
+<introduction>
+<p>
+In the previous section, we looked at several examples of
+mutator methods that change the values of private instance variables
+of an object. It is possible to define mutator methods to set the
+initial values of instance variables after an object is created, but
+initial values can also be set by constructors.
+</p>
+
+<p>
+As you recall from Chapter 0, a <em>constructor<idx><h>constructor</h></idx></em>
+method is used to create an
+\marginpar{Constructor names}
+instance (or object) of a class and to assign initial values to
+instance variables. A constructor declaration looks just like a
+method definition except it must have the same name as the class, and
+it cannot declare a result type. Unlike the class level variables and
+methods of a class, constructors are not considered members of the
+class. Therefore, they are not inherited by a class's subclasses.
+Access to constructors is governed by the access modifiers <c>public</c> and <c>private</c>. Here is a simple constructor for our <c>OneRowNim</c> class:
+</p>
+<pre>
+public OneRowNim()
+{   nSticks = 7;
+    player = 1;}
+</pre>
+<p>
+This constructor merely sets the initial values of the instance
+\marginpar{Constructing an object}
+variables, <c>nSticks</c> and <c>player</c>. In our current version of
+<c>OneRowNim</c> these variables are given initial values by using
+initializer statements when they are first declared:
+</p>
+<pre>
+private int nSticks = 7;
+ private int player = 1;
+</pre>
+<p>
+So we now have two ways to initialize a class's instance
+\marginpar{Initializing variables}
+variables. In the <c>OneRowNim</c> class it doesn't really matter which
+way we do it. However, the constructor provides more flexibility
+because it allows the state of the object to be initialized at runtime. Of
+course, it would be somewhat redundant (though permissible) to
+initialize the same variable twice, once when it is declared and again
+in the constructor, so we should choose one or the other way to do
+this. For now, let's stick with initializing the instance variables
+when they are declared.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Constructors</title>
+<p>
+Constructors provide a flexible way
+to initialize an object's instance variables when the object is created.
+</p>
+</principle>
+<p>
+A constructor cannot return a value and, therefore, its
+\marginpar{Constructors can't return a value}
+declaration cannot include a return type. Because they cannot return
+values, constructors cannot be invoked by a regular method
+invocation. Instead, constructors are invoked as part of an
+<em>instance creation expression</em> when instance objects are created. An
+instance creation expression involves the keyword <c>new</c> followed
+by the constructor invocation:
+</p>
+<pre>
+OneRowNim game // Declare
+    = new OneRowNim(); // and instantiate game1
+OneRowNim game2 // Declare
+    = new OneRowNim(); // and instantiate game2
+</pre>
+<p>
+Note here that we have combined variable declaration and
+instantiation into a single statement, whereas in some previous examples we
+used separate declaration and instantiation statements. Either way is
+acceptable.
+</p>
+<principle>
+<title>Constructors</title>
+<p>
+Constructors cannot return a
+value. Therefore, no return type should be declared when the
+constructor is defined.
+</p>
+</principle>
+  
+<principle>
+<title>DEBUGGING TIP:When to Use Return</title>
+<p>
+All method definitions
+except constructors must declare a return type.
+</p>
+</principle>
+<p>
+Constructors should be used to perform the necessary initialization
+operations during object creation. In the case of a <c>OneRowNim</c>
+object, what initializations could be performed?
+\marginpar{State initialization}
+One initialization that would seem appropriate is to initialize the
+initial number of sticks to a number specified. In order to do this,
+we would need a constructor with a single <c>int</c> parameter:
+</p>
+<pre>
+public OneRowNim(int sticks)
+{   nSticks = sticks;}
+</pre>
+<p>
+Now that we have this constructor we can use it
+when we create instances of <c>OneRowNim</c>:
+</p>
+<pre>
+OneRowNim game1 = new OneRowNim(21);
+OneRowNim game2 = new OneRowNim(13);
+</pre>
+<p>
+The effect of these statements is the same as if we
+had used the <c>setSticks()</c> method that was discussed briefly on
+<xref ref="meth-setsticks">page</xref>. The difference is that we can now set
+the number of sticks when we create the object.
+</p>
+
+<p>
+Should we keep the preceding constructor, or keep the <c>setSticks()</c> method or keep both in our class definition? The
+constructor can only be invoked as part of a <c>new</c> statement when
+the object is created but the <c>setSticks()</c> method could be called
+anytime we want. In many cases, having redundant methods for doing the
+same task in different ways would be an asset, because it allows for
+more flexibility in how the class could be used. However, for a game
+like One Row Nim, a major concern is that the two instance variables
+get changed only in a manner consistent with the rules for One Row
+Nim. The best way to guarantee this is to have <c>takeSticks()</c> as
+the only method that changes the instance variables <c>nSticks</c> and
+<c>player</c>. The only time that it should be possible to set the
+number of sticks for a game is when a constructor is used to create a
+new instance of <c>OneRowNim</c>.
+</p>
+
+<p>
+\secEXRHone{Self-Study Exercises}
+<ol>
+<li><p>What's wrong with the following
+constructor definition?
+<pre>
+public void OneRowNim(int sticks)
+{   nSticks = sticks;}
+</pre></p></li>
+<li><p>Change the <c>OneRowNim(int sticks)</c> constructor so
+that it sets the number of sticks and also have it also set player two
+as the player who takes the first turn.</p></li>
+</ol>
+
+</p>
+</introduction>
+
+
+<subsection xml:id="sec-defaultconstructors">
+<title>Default Constructors</title>
+<p>
+As we noted in Chapter 2, Java automatically provides a
+<em>default constructor</em> when a class does not contain a constructor.
+</p>
+<principle>
+<title>Default Constructor</title>
+<p>
+If a class contains no
+constructor declarations, Java will automatically supply a default
+constructor<idx><h>constructor default</h></idx>. The default constructor takes
+no parameters. If the class is <c>public</c>, the default constructor
+will also be <c>public</c> and, hence, accessible to other objects.
+</p>
+</principle>
+<p>
+The default constructor's role is simply to create an
+instance (an object) of that class. It takes no parameters. In
+terms of what it does, the default constructor for <c>OneRowNim</c>
+would be equivalent to a <c>public</c> constructor method with an
+empty body:
+</p>
+<pre>
+public OneRowNim() { }
+</pre>
+<p>
+This explains why the following statement
+was valid when a class definition of <c>OneRowNim</c> contained no
+explicit definition of a constructor:
+</p>
+<pre>
+OneRowNim game = new OneRowNim();
+</pre>
+</subsection>
+
+
+<subsection>
+<title>Constructor Overloading and Method Signatures</title>
+<p>
+It is often quite useful to have more than one constructor for
+\marginpar{Flexible design}
+a given class. For example, consider the following two <c>OneRowNim</c> constructors:
+</p>
+<pre>
+public OneRowNim() {} // Constructor #1
+
+public OneRowNim(int sticks)   // Constructor #2
+{   nSticks = sticks;}
+</pre>
+<p>
+The first is an explicit representation
+of the default constructor. The second is the constructor we defined
+earlier to initialize the number of sticks in a <c>OneRowNim</c>
+object. Having multiple constructors lends flexibility to the design
+of a class. In this case, the first constructor merely accepts <c>OneRowNim</c>'s default initial state. The second enables the user to
+initialize the number of sticks to something other than the default
+value.
+</p>
+
+<p>
+In Java, as in some other programming languages, when two different
+\marginpar{Method overloading}
+methods have the same name, it is known as <term>method overloading</term>.
+In this case, <c>OneRowNim</c> is used as the name for two distinct
+constructor methods. What distinguishes one constructor from another
+is its <em>signature</em>, which consists of its name together with the
+number and types of formal parameters it takes. Thus, our <c>OneRowNim</c> constructors have the following distinct signatures:
+</p>
+<pre>
+OneRowNim()
+OneRowNim(int)
+</pre>
+<p>
+Both have the same name, but the first takes no
+parameters, whereas the second takes a single <c>int</c> parameter.
+</p>
+
+<p>
+The same point applies
+\marginpar{Methods are known by their 
+signatures}
+to methods in general. Two methods can have the same name as long as
+they have distinct signatures. A <term>method signature</term> consists of
+its name, and the number, types, and order of its formal parameters.
+A class may not contain two methods with the same signature, but it
+may contain several methods with the same name, provided each has a
+distinct signature.
+</p>
+<principle>
+<title>Method Signature</title>
+<p>
+A <term>method signature</term>
+consists of the method's name, plus the number, types, and order of
+its formal parameters. A class may not contain two methods with the
+same signature.
+</p>
+</principle>
+<p>
+There is no limit to the amount of overloading
+that can be done in designing constructors and methods. The only
+restriction is that each method have a distinct signature. For
+example, suppose in addition to the two constructors we have already
+defined, we want a constructor that would let us set both the number
+of sticks and the player who starts first. The following constructor
+will do what we want:
+</p>
+<pre>
+public OneRowNim(int sticks, int starter)
+{   nSticks = sticks; // Set the number of sticks
+    player = starter; // Set who starts}
+</pre>
+<p>
+When calling this constructor, we would have
+to take care to pass the number of sticks as the value of the first
+argument and either 1 or 2 as the value of the second argument:
+</p>
+<pre>
+OneRowNim game3 = new OneRowNim(14, 2);
+OneRowNim game4 = new OneRowNim(31, 1);
+</pre>
+<p>
+If we mistakenly reversed 14 and 2 in the first
+of these statements, we would end up with a <c>OneRowNim</c> game that
+starts with 2 sticks and has player 14 as the player with the first
+move.
+</p>
+
+<p>
+We have now defined three constructor methods for the <c>OneRowNim</c>
+class. Each constructor has the name <c>OneRowNim</c>, but each has a
+distinct signature:
+</p>
+<pre>
+OneRowNim()
+OneRowNim(int)
+OneRowNim(int, int)
+</pre>
+</subsection>
+
+
+<subsection>
+<title>Constructor Invocation</title>
+<p>
+A constructor method is invoked only as part of a <c>new</c>
+expression when an instance object is first created. Each of
+\marginpar{A constructor is invoked once to create an object}
+these is a valid invocation of a <c>OneRowNim</c> constructor:
+</p>
+<pre>
+// Default constructor
+OneRowNim game1 = new OneRowNim();   
+                  // Sets number of sticks
+OneRowNim game2 = new OneRowNim(21); 
+                  // Sets both instance variables
+OneRowNim game3 = new OneRowNim(19, 2);
+</pre>
+<p>
+The following constructor invocations are invalid because there are no
+matching constructor definitions:
+</p>
+<pre>
+// No matching constructors
+OneRowNim game4 = new OneRowNim("21");  
+OneRowNim game5 = new OneRowNim(12, 2, 5);
+</pre>
+<p>
+In the first case, there is no constructor method that takes
+a <c>String</c> parameter, so there's no matching constructor. In the
+second case, there is no constructor that takes three <c>int</c>
+arguments. In both cases, the Java compiler would complain that there
+is no constructor method that matches the invocation.
+</p>
+<principle>
+<title>DEBUGGING TIP:Method Call</title>
+<p>
+The signature of
+the method call<mdash/>its name and the number, types, and order of its
+arguments<mdash/>must exactly match the signature of the method definition.
+</p>
+</principle>
+</subsection>
+
+</section>

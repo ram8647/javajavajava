@@ -1,0 +1,76 @@
+<section>
+<title>{Special Topic:} The LISP Language</title>
+<p>
+One of the very earliest computer languages, and the one
+that's most often associated with artificial intelligence (AI), is
+LISP, which stands for <em>LIS</em>t <em>P</em>rocessor. LISP has been, and
+still is, used to build programs for human learning, natural language
+processing, chess playing, human vision processing, and a wide range
+of other applications.
+</p>
+
+<p>
+The earliest (pure) versions of LISP had no control structures and the
+only data structure they contained was the list structure. Repetition
+in the language was done by recursion. Lists are used for everything
+in LISP, including LISP programs themselves. LISP's unique syntax is
+simple. A LISP program consists of symbols, such as <em>5</em> and <em>x</em>, and lists of symbols, such as <em>(5)</em>, \mbox{(1 2 3 4 5)} ,
+and <em>((this 5) (that 10))</em>, where a list is anything enclosed
+within parentheses. The null list is represented by <c>()</c>.
+</p>
+
+<p>
+Programs in LISP are like mathematical functions. For example, here's
+a definition of a function that computes the square of two numbers:
+</p>
+<pre>
+(define (square x) (* x x) )
+</pre>
+<p>
+The expression <em>(square x)</em> is a list giving the name of
+the function and its parameter. The expression <em>(* x x)</em> gives
+the body of the function.
+</p>
+
+<p>
+LISP uses <em>prefix notation</em>, in which the operator is the first
+symbol in the expression, as in <em>(* x x)</em>. This is equivalent to
+<em>(x * x)</em> in Java's <em>infix notation</em>, where the operator
+occurs between the two operands. To run this program, you would
+simply input an expression like <em>(square 25)</em> to the LISP
+interpreter, and it would evaluate it to 625.
+</p>
+
+<p>
+LISP provides three basic list operators. The expression <em>(car
+x)</em> returns the first element of the (nonempty) list x. The
+expression <em>(cdr x)</em> returns the tail of the list <em>x</em>.
+Finally, <em>(cons z x)</em> constructs a list by making <em>z</em> the head
+of the list and <em>x</em> its tail. For example, if <em>x</em> is the list
+<em>(1 3 5)</em>, then <em>(car x)</em> is 1, <em>(cdr x)</em> is <em>(3 5)</em>,
+and <em>(cons 7 x)</em> is <em>(7 1 3 5)</em>.
+</p>
+
+<p>
+Given these basic list operators, it is practically trivial to define
+a stack in LISP:
+</p>
+<pre>
+(define (push x stack) (cons x stack))        
+(define (pop stack)(setf stack (cdr stack))(car stack))
+</pre>
+<p>
+The push operation creates a new stack by forming the <em>cons</em>
+of the element <em>x</em> and the previous version of the
+stack. The pop operation returns the <em>car</em> of the stack but
+first changes the stack (using <c>setf</c>) to the tail of the original
+stack.
+</p>
+
+<p>
+These simple examples show that you can do an awful lot of computation
+using just a simple list structure. The success of LISP, particularly
+its success as an AI language, shows the great power and generality
+inherent in recursion and lists.
+</p>
+</section>

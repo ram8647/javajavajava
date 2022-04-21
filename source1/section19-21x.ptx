@@ -1,0 +1,135 @@
+<section>
+<title>The Java Compiler: <c>javac</c></title>
+
+
+<introduction>
+<p>
+The Java compiler (<c>javac</c>) translates Java source files into Java
+bytecode. A Java source file must have the <c>.java</c> extension. The
+<c>javac</c> compiler will create a bytecode file with the same name
+but with the <c>.class</c> extension. The <c>javac</c> command takes
+the following form:
+</p>
+
+<p>
+<c>javac</c> 
+[ <em>options</em> ] 
+<em>sourcefiles</em> 
+[ <em>files</em> ]
+</p>
+
+<p>
+The brackets in this expression indicate optional parts of
+the command. Thus, <em>options</em> is an optional list of command-line options
+(including the <c>-classpath</c> option), and
+<em>files</em> is an optional list of files, each of which contains a
+list of Java source files. The <em>files</em> option would be used if
+you were compiling a very large collection of files, too large to list
+each file individually on the command line.
+</p>
+
+<p>
+Most of the time you would simply list the <em>sourcefiles</em> you are
+compiling immediately after the word <c>javac</c>, as in the
+following example:
+</p>
+<pre>
+javac MyAppletClass.java MyHelperClass.java
+</pre>
+<p>
+Given this command, <c>javac</c> will read class
+definitions contained in <c>MyAppletClass.java</c> and <c>MyHelperClass.java</c>
+in the current working directory
+and translate them into bytecode files named <c>MyAppletClass.class</c> and
+<c>MyHelperClass.class</c>.
+</p>
+
+<p>
+If a Java source file contains inner classes, these would be compiled
+into separate class files. For example, if <c>MyAppletClass.java</c>
+contained an inner class named <c>Inner</c>, <c>javac</c> would compile
+the code for the inner class into a file named <c>MyAppletClass$Inner.class</c>.
+</p>
+
+<p>
+If you are writing a program that involves several classes, it is not
+necessary to list each individual class on the command line. You must
+list the main class<mdash/>that is, the class where execution will begin.
+The compiler will perform a search for all the other classes used in
+the main class. For example, if <c>MyAppletClass</c> uses an instance
+of <c>MyHelperClass</c>, you can compile both classes with the following
+command:
+</p>
+<pre>
+javac MyAppletClass.java
+</pre>
+<p>
+In this case, <c>javac</c> will perform a search for
+the definition of <c>MyHelperClass</c>.
+</p>
+</introduction>
+
+
+<subsection>
+<title>How Java Searches for Class Definitions</title>
+<p>
+When compiling a file, <c>javac</c> needs a definition for every class
+or interface that's used in the source file. For example, if you are
+creating a subclass of <c>java.applet.Applet</c>, <c>javac</c> will need
+definitions for all of <c>Applet</c>'s superclasses, including <c>Panel</c>, <c>Container</c>, and <c>Component</c>. The definitions for
+these classes are contained in the <c>java.awt</c> package. Here's how
+<c>javac</c> will search for these classes.
+</p>
+
+<p>
+<c>Javac</c> will first search among its library files for
+definitions of classes, such as <c>Applet</c>
+and <c>Panel</c>. Next, <c>javac</c> will search among the files and
+directories listed on the user's <em>class path</em>. The class path is a
+\marginpar{The Classpath}
+system variable that lists all the user directories and files that
+should be searched when compiling a user's program.
+JDK no longer requires a class path variable. The class path can
+be set either by using the environment variable CLASSPATH or by using
+the <c>-classpath</c> option when invoking <c>javac</c>.
+By default, JDK will check in the current working directory
+for user classes. It doesn't require that the CLASSPATH variable be set. If this variable
+<term>is</term> set, it must include the current directory.
+The preferred way to set the classpath is by using <c>-classpath</c> option.
+For example,
+</p>
+<pre>
+javac -classpath ../source:. MyApplet.java
+</pre>
+<p>
+will tell <c>javac</c> to search in both the current directory (.)
+and in the <c>../source</c> directory for user source files. Because the
+details for setting the CLASSPATH variable are system dependent, it's best to
+consult the online installation documentation to see exactly how this is done on
+your system.
+</p>
+
+<p>
+During a successful search, <c>javac</c> may find a source file, a
+class file, or both. If it finds a class file but not source file,
+<c>javac</c> will use the class file. This would be the case for Java
+library code. If <c>javac</c> finds a source file but not a class file,
+it will compile the source and use the resulting class file. This
+would be the case for the first compilation of one of your source
+programs. If <c>javac</c> finds both a source and a class file, it
+determines whether the class file is up-to-date. If so, it uses it. If
+not, it compiles the source and uses the resulting class file. This
+would be the case for all subsequent compilations of one of your
+source programs.
+</p>
+
+<p>
+As noted earlier, if your application or applet uses several source
+files, you need only provide <c>javac</c> with the name of the main
+application or applet file. It will find and compile all the source
+files, as long as they are located in a directory that's listed in the
+class path.
+</p>
+</subsection>
+
+</section>

@@ -1,0 +1,118 @@
+<section>
+<title>Nested Top-Level Versus Member Classes</title>
+<p>
+The <c>Converter</c> class (Figure<nbsp/>F<ndash/>1) shows the
+differences between a nested top-level class and a member class. The
+program is a somewhat contrived example that performs various kinds of
+</p>
+<figure xml:id="fig-converter" >
+<caption>A Java application containing a top-level nested class.</caption>
+<pre>
+public class Converter {
+  private static final double INCH_PER_METER = 39.37;
+  private final double LBS_PER_KG = 2.2;
+
+  public static class Distance { // Nested Top-level class
+    public double metersToInches(double meters) {
+      return meters * INCH_PER_METER;
+    }
+  } // Distance
+
+  public class Weight {          // Member class
+    public double kgsToPounds(double kg) {
+      return kg * LBS_PER_KG;
+    }
+  } //Weight} //Converter
+
+public class ConverterUser {
+  public static void main(String args[]) {
+    Converter.Distance distance = new Converter.Distance();
+    Converter converter = new Converter();
+    Converter.Weight weight = converter.new Weight();
+    System.out.println( "5 m = " + distance.metersToInches(5) + " in");
+    System.out.println( "5 kg = " + weight.kgsToPounds(5) + " lbs");
+  }} // ConverterUser
+</pre>
+
+</figure>
+<p>
+metric conversions. The outer <c>Converter</c> class serves as a
+container for the inner classes, <c>Distance</c> and <c>Weight</c>,
+which perform specific conversions.
+</p>
+
+<p>
+The <c>Distance</c> class is declared <c>static</c>, so it is a
+top-level class. It is contained in the <c>Converter</c> class
+itself. Note the syntax used in <c>ConverterUser.main()</c> to create
+an instance of the <c>Distance</c> class:
+</p>
+<pre>
+Converter.Distance distance = new Converter.Distance();
+</pre>
+<p>
+A fully qualified name is used to refer to the <c>static</c>
+inner class via its containing class.
+</p>
+
+<p>
+The <c>Weight</c> class is not declared <c>static</c>. It is, therefore,
+associated with <em>instances</em> of the <c>Converter</c> class. Note
+the syntax used to create an instance of the <c>Weight</c> class:
+</p>
+<pre>
+Converter converter = new Converter();
+Converter.Weight weight = converter.new Weight();
+</pre>
+<p>
+Before you can create an instance of <c>Weight</c>, you
+have to declare an instance of <c>Converter</c>. In this example, we
+have used two statements to create the <c>weight</c> object,
+which requires using the temporary variable, <c>converter</c>,
+as a reference to the <c>Converter</c> object. We could also
+have done this with a single statement by using the following
+syntax:
+</p>
+<pre>
+Converter.Weight weight = new Converter().new Weight();
+</pre>
+<p>
+Note that in either case
+the qualified name <c>Converter.Weight</c> must be used to access the
+inner class from the <c>ConverterUser</c> class.
+</p>
+
+<p>
+There are a couple of other noteworthy features in this example.
+First, an inner top-level class is really just a programming
+convenience. It behaves just like any other top-level class in Java.
+One restriction on top-level inner classes is that they can only be
+contained within other top-level classes, although they can be nested
+one within the other. For example, we could nest additional converter
+classes within the <c>Distance</c> class. Java provides special syntax
+for referring to such nested classes.
+</p>
+
+<p>
+Unlike a top-level class, a member class is nested within an instance
+of its containing class. Because of this, it can refer to instance
+variables (<c>LBS_PER_KG</c>) and instance methods of its containing
+class, even to those declared <c>private</c>. By contrast, a top-level
+inner class can only refer to class variables (<c>INCH_PER_METER</c>)<mdash/>that
+is, to variables that are declared <c>static</c>. So you would
+use a member class if it were necessary to refer to instances of the
+containing class.
+</p>
+
+<p>
+There are many other subtle points associated with member classes,
+including special language syntax that can be used to refer to
+nested member classes and rules that govern inheritance and scope
+of member classes. For these details you should consult the
+<em>Java Language Specification</em>, which can be accessed online
+at
+</p>
+<pre>
+http://java.sun.com/docs/books/jls/html/index.html
+</pre>
+</section>

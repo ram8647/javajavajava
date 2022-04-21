@@ -1,0 +1,390 @@
+<section xml:id="objectorienteddesign-the-list-abstract-data-type-adt">
+<title>OBJECT-ORIENTED DESIGN:  
+The List Abstract Data Type (ADT)</title>
+
+
+<introduction>
+<p>
+The <c>PhoneList</c> example from the previous section
+illustrates the basic concepts of the linked list. Keep in mind that
+there are other implementations that could have been described. For
+example, some linked lists use a reference to both the first and last
+elements of the list. Some lists use nodes that have two pointers,
+one to the next node and one to the previous node. This enables
+traversals in two directions<mdash/>front to back and back to front<mdash/>as
+well as making it easier to remove nodes from the list. The example
+we showed was intended mainly to illustrate the basic techniques
+involved in list processing.
+</p>
+
+<p>
+Also, the <c>PhoneList</c> example is limited to a particular type of
+\marginpar{A generic list structure}
+data<mdash/>namely, a <c>PhoneListNode</c>. Let's develop a more general
+linked list class and a more general node class that can be used to
+store and process lists of any kind of data.
+</p>
+
+<p>
+An <term>Abstract Data Type (ADT)</term><idx><h>Abstract Data Type (ADT)</h></idx>
+involves two components: the data
+that are being stored and manipulated and the methods and operations
+that can be performed on those data. For example, an <c>int</c> is an
+ADT.<nbsp/>The data are the integers ranging from some
+<c>MININT</c> to some <c>MAXINT</c>. The operations are the various integer
+operations: addition, subtraction, multiplication, and division.
+These operations prescribe the ways that <c>int</c>s can be used. There
+are no other ways to manipulate integers.
+</p>
+
+<p>
+Moreover, in designing an ADT, it's important to hide the
+implementation of the operations from the users of the operations.
+\marginpar{Information hiding}
+Thus, our programs have used all of these integer operations on <c>int</c>s, but we have no real idea how they are implemented<mdash/>that is,
+what exact algorithm they use.
+</p>
+
+<p>
+Objects can be designed as ADTs, because we can easily
+distinguish an object's use from its implementation. Thus, the
+<c>private</c> parts of an object<mdash/>its instance variables and private
+methods<mdash/>are hidden from the user while the object's interface<mdash/>its
+<c>public</c> methods<mdash/>are available. As with the integer
+operators, the object's public methods prescribe just how the object
+can be used.
+</p>
+
+<p>
+So let's design a list ADT. We want it to be able to store any kind of
+data, and we want to prescribe the operations that can be performed on
+those data<mdash/>the insert, delete, and so on. Also, we want to design
+\marginpar{Design specifications}
+the ADT so that it can be extended to create more specialized
+kinds of lists.
+</p>
+</introduction>
+
+
+<subsection xml:id="fig-listnode">
+<title>The <c>Node</c> Class</title>
+<principle>
+<title>EFFECTIVE DESIGN:Generalizing a Type</title>
+<p>
+An effective strategy
+for designing a list abstract data type is to start with a specific
+list and generalize it. The result should be a more abstract version
+of the original list.
+</p>
+</principle>
+<p>
+Our approach will be to generalize the classes we created in the <c>PhoneList</c> example. Thus, the <c>PhoneListNode</c> will become a
+generic <c>Node</c> that can store any kind of data
+(Fig.<nbsp/>16<ndash/>13). Some of the changes are merely name changes.
+Thus, wherever we had <c>PhoneListNode</c>, we now have just <c>Node</c>.
+The link access methods have not changed significantly. What has
+<image width="73%" source="chptr16" />
+changed is that instead of instance variables for the name, phone
+number, and so on, we now have just a single data reference to an <c>Object</c>. This is as general as you can get, because, as we pointed out
+earlier, <c>data</c> can refer to any object, even to
+primitive data.
+</p>
+
+<p>
+The implementation of the <c>Node</c> class is shown in
+<xref ref="fig-nodeclass">Figure</xref>. Note that the data access methods, <c></c>
+</p>
+<figure xml:id="fig-nodeclass" >
+<caption>The <c>Node</c> class is a more abstract version of
+the <c>Phone- ListNode</c> class.</caption>
+<pre>
+public class Node {
+   private Object data;        // Stores any kind of data
+   private Node next;
+
+   public Node(Object obj) {  // Constructor
+      data = obj;
+      next = null;
+   }                               // Data access methods
+   public void setData(Object obj) {
+      data = obj;
+   }
+   public Object getData() {
+      return data;
+   }
+   public String toString() {
+      return data.toString();
+   }                               // Link access methods
+   public void setNext( Node nextPtr ) {
+      next = nextPtr;
+   }
+   public Node getNext() {
+      return next;
+   }} // Node
+</pre>
+
+</figure>
+<p>
+getData()} and <c>setData()</c>, use references to <c>Object</c> for
+their parameter and return type. Note also how we've defined the <c>toString()</c> method. It just invokes <c>data.toString()</c>. Because
+<c>toString()</c> is defined in <c>Object</c>, every type of data will
+have this method. And because <c>toString()</c> is frequently
+overridden in defining new objects, it is useful here.
+</p>
+</subsection>
+
+
+<subsection>
+<title>The <c>List</c> Class</title>
+<p>
+Let's now generalize the <c>PhoneList</c> class
+(Fig.<nbsp/>16<ndash/>15). The <c>List</c> class will still contain a
+reference to the <c>head</c> of the list, which will now be a list of
+<c>Node</c>s. It will still define its constructor, its
+\marginfigvspace{-90pt}{chptr16/listuml.eps}{The <c>List</c> class
+contains a pointer to the
+head of the list and public methods to insert and remove
+objects from both the front and rear of the list.}{fig-listuml}<c>isEmpty()</c> method, and its <c>print()</c> method in the same way as in the
+<c>PhoneList</c>.
+</p>
+
+<p>
+However, in designing a generic <c>List</c> class, we want to design
+some new methods, particularly because we want to use this class as the
+basis for more specialized lists. The <c>PhoneList.insert()</c> method
+was used to insert nodes at the end of a list. In addition to this
+method, let's design a method that inserts at the head of the
+list. Also, <c>PhoneList</c> had a method to remove nodes by
+name. However, now that we have generalized our data, we don't know if
+the list's <c>Object</c>s have a name field, so we'll scrap this method
+in favor of two new methods that remove a node from the beginning or
+end of the list, respectively.
+</p>
+<figure xml:id="fig-listadt" >
+<caption>The <c>List</c> ADT.</caption>
+\[32pc]
+<pre>
+public class List {
+  private Node head;
+  public List() { head = null; }
+  public boolean isEmpty() { return head == null; }
+  public void print() {
+    if (isEmpty())
+      System.out.println("List is empty");
+    Node current = head;
+    while (current != null) {
+      System.out.println(current.toString());
+      current = current.getNext();
+    }
+  } // print()
+  public void insertAtFront(Object obj) {
+    Node newnode =  new Node(obj);
+    newnode.setNext(head);
+    head = newnode;
+  }
+  public void insertAtRear(Object obj) {
+    if (isEmpty())
+      head = new Node(obj);
+    else {
+      Node current = head;              // Start at head of list
+      while (current.getNext() != null) // Find the end of the list
+        current = current.getNext();
+        current.setNext(new Node(obj));  // Create and insert newNode
+      }
+  } // insertAtRear()
+  public Object removeFirst() {
+    if (isEmpty())              // Empty List
+       return null;
+    Node first = head;
+    head = head.getNext();
+    return first.getData();
+  } // removeFirst()
+  public Object removeLast() {
+    if (isEmpty())  // empty list
+       return null;
+    Node current = head;
+    if (current.getNext() == null) {// Singleton list
+       head = null;
+       return current.getData();
+    }
+    Node previous = null;           // All other cases
+    while (current.getNext() != null) {
+      previous = current;
+      current = current.getNext();
+    }
+    previous.setNext(null);
+    return current.getData();
+  } // removeLast()} // List
+</pre>
+
+</figure>
+<p>
+We already know the basic strategies for implementing these
+new methods, which are shown in the definition in
+<xref ref="fig-listadt">Figure</xref>.
+We have renamed the <c>insertAtRear()</c> method,
+which otherwise is very similar to the <c>PhoneList.\-insert()</c>
+method. The key change is that now its parameter must be an
+<c>Object</c>, because we want to be able to insert any kind of object into
+our list. At the same time, our list consists of <c>Node</c>s, so we
+have to use the <c>Object</c> to create a <c>Node</c> in our insert
+methods:
+</p>
+<pre>
+head = new Node(obj);
+</pre>
+<p>
+Recall that the <c>Node</c> constructor takes an <c>Object</c>
+argument and simply assigns it to the <c>data</c> reference. So when we
+insert an <c>Object</c> into the list, we make a new <c>Node</c> and set
+its <c>data</c> variable to point to that <c>Object</c>. Note that
+we check whether the list is empty <em>before</em> traversing to the last node.
+</p>
+
+<p>
+The new <c>insertAtFront()</c> method (Fig. <xref ref="fig-listadt"></xref>) is
+simple to implement, since no traversal of the list is necessary. You
+just need to create a new <c>Node</c> with the <c>Object</c> as its
+data element and then link the new node into the head of the list:
+</p>
+<pre>
+Node newnode = new Node(obj);
+newnode.setNext(head);
+head = newnode;
+</pre>
+<p>
+See <xref ref="fig-insertions">Figure</xref>a for a graphical
+representation of this
+type of insertion.
+</p>
+
+<p>
+The new <c>removeFirst()</c> method is also quite simple to implement.
+In this case, you want to return a reference to the <c>Object</c> that's
+stored in the first node, but you need to adjust <c>head</c> so that it
+points to whatever the previous <c>head.next</c> was pointing to before
+the removal. This requires the use of a temporary variable, as shown
+in the method.
+</p>
+
+<p>
+The new <c>removeLast()</c> method is a bit more complicated. It
+handles three cases: (1) The empty list case, (2) the single node
+list, and (3) all other lists. If the list is empty, it returns <c>null</c>. Obviously, it shouldn't even be called in this case. In
+designing subclasses of <c>List</c> we will first invoke <c>isEmpty()</c> before attempting to remove a node.
+</p>
+
+<p>
+If the list contains a single node, we treat it as a special case and
+set <c>head</c> to <c>null</c>, thus resulting in an empty list. In the
+typical case, case 3, we traverse the list to find the last node,
+again using the strategy of maintaining both a <c>previous</c> and a
+<c>current</c> pointer. When we find the last node, we must adjust
+<c>previous.next</c> so that it no longer points to<nbsp/>it.
+</p>
+</subsection>
+
+
+<subsection>
+<title>Testing the List ADT</title>
+<p>
+Testing the list ADT follows the same strategy used in the
+<c>PhoneList</c> example. However, one of the things we want to test is that
+\marginpar{Heterogeneous lists}
+we can indeed create lists of heterogeneous types<mdash/>lists that include
+<c>Integer</c>s mixed with <c>Float</c>s, mixed with other types of
+objects. The <c>main()</c> method in <xref ref="fig-testlistadt">Figure</xref>
+illustrates this feature.
+</p>
+<figure xml:id="fig-testlistadt" >
+<caption>A series of tests for the <c>List</c> ADT.</caption>
+\[27pc]
+<pre>
+public static void main( String argv[] ) {
+         // Create list and insert heterogeneous nodes
+  List list = new List();
+  list.insertAtFront(new PhoneRecord("Roger M", "997-0020"));
+  list.insertAtFront(new Integer(8647));
+  list.insertAtFront(new String("Hello, World!"));
+  list.insertAtRear(new PhoneRecord("Jane M", "997-2101"));
+  list.insertAtRear(new PhoneRecord("Stacy K", "997-2517"));
+
+         // Print the list
+  System.out.println("Generic List");
+  list.print();
+         // Remove objects and print resulting list
+  Object o;
+  o = list.removeLast();
+  System.out.println(" Removed " + o.toString());
+  System.out.println("Generic List:");
+  list.print();
+  o = list.removeLast();
+  System.out.println(" Removed " + o.toString());
+  System.out.println("Generic List:");
+  list.print();
+  o = list.removeFirst();
+  System.out.println(" Removed " +o.toString());
+  System.out.println("Generic List:");
+  list.print();} // main()
+</pre>
+
+</figure>
+<principle>
+<title>EFFECTIVE DESIGN:The <c>List</c> ADT</title>
+<p>
+One advantage of defining
+a <c>List</c> ADT is that it lets you avoid having to write the
+relatively difficult list-processing algorithms each time you need a
+list structure.
+</p>
+</principle>
+<p>
+The list we create here involves various types of data. The <c>PhoneRecord</c> class is a scaled-down version of the <c>PhoneListNode</c> we used in the previous example
+(Fig. <xref ref="fig-phonerecorduml"></xref>). Its definition is shown in
+<xref ref="fig-phonerecord">Figure</xref>. Note how we use an <c>Object</c>
+reference to remove objects from the list in <c>main()</c>. We use the
+<c>Object.toString()</c> method to display the object that was removed.
+</p>
+<figure xml:id="fig-phonerecorduml" >
+<caption>The <c>PhoneRecord</c> class
+stores data for a phone directory.</caption>
+<image width="73%" source=".." />
+</figure>
+<figure xml:id="fig-phonerecord" >
+<caption>A <c>PhoneRecord</c> class.</caption>
+<pre>
+public class PhoneRecord {
+     private String name;
+     private String phone;
+
+     public PhoneRecord(String s1, String s2) {
+         name = s1;
+         phone = s2;
+     }
+     public String toString() {
+         return name + " " + phone;
+     }
+     public String getName( ) {
+         return name;
+     }
+     public String getPhone( ) {
+         return phone;
+     }} // PhoneRecord
+</pre>
+
+</figure>
+<p>
+\secEXRHone{Self-Study Exercises}
+<ol>
+<li><p>Trace through the <c>main()</c> 
+method line by line and predict its
+output.</p></li>
+<li><p>Design a test of the <c>List</c> program that shows that
+it is possible to insert new elements into a list after
+some or all of its previous nodes have been removed.</p></li>
+</ol>
+
+</p>
+</subsection>
+
+</section>

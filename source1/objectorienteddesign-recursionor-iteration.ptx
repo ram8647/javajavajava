@@ -1,0 +1,105 @@
+<section xml:id="objectorienteddesign-recursionor-iteration">
+<title>OBJECT-ORIENTED DESIGN:  
+Recursion or Iteration?</title>
+<p>
+As we mentioned at the outset of this chapter, recursive
+algorithms require more computational overhead than iterative
+algorithms. We're now in a good position to appreciate why this is
+so.
+</p>
+
+<p>
+A recursive algorithm incurs two kinds of overhead that are not
+incurred by an iterative algorithm: memory and CPU time. Both of these
+are direct results of the fact that recursive algorithms do a lot of
+method calling.
+</p>
+
+<p>
+As we saw in our various traces, each time a method is called,
+\marginpar{Method call overhead}
+a representation of the method call is placed on the <em>method call
+stack</em>. These \mbox{representations} often take the form of a <em>block</em> of
+memory locations, which can be quite large. The block must contain
+space for the method's local variables, including its
+parameters. Also, unless the method is <c>void</c>, the block must
+contain space for the method's return value. In addition it must
+contain a reference to the calling method, so it will know where to go
+\marginpar{Memory overhead}
+when it is done. <xref ref="fig-methodblock">Figure</xref> shows what the method
+call block would look like for the <c>search()</c> method.
+</p>
+<figure xml:id="fig-methodblock" >
+<caption>A more detailed picture of the
+method call stack, showing two method blocks for <c>search()</c> after
+two levels of recursion.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+In addition to the memory required, a method call also requires extra
+\marginpar{CPU overhead}
+CPU time. Each time a method is called, Java must create a method
+call block, copy the method call arguments to the parameters in the
+block, create initial values for any local variables that are used by
+the method, and fill in the return address of the calling method. All
+of this takes time, and in the case of a recursive method, these steps
+are repeated at each level of the recursion.
+</p>
+
+<p>
+Compare these memory and CPU requirements with what normally
+transpires for an iterative algorithm<mdash/>an algorithm involving a
+loop. The loop structure usually occurs entirely within a method, so
+it doesn't incur either the memory or CPU overhead involved in
+recursion. Therefore, iterative algorithms are generally more
+efficient than recursive algorithms. One useful guideline, then, is
+when runtime performance and efficiency are of prime importance, you
+should use iteration instead of recursion.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Iteration or Recursion</title>
+<p>
+Use an iterative
+algorithm instead of a recursive algorithm whenever efficiency and
+memory usage are important design factors.
+</p>
+</principle>
+<p>
+On the other hand, recursive algorithms are much easier to design than
+the corresponding iterative algorithms for many problems. We tried to
+illustrate this point in our development of the Sierpinski gasket
+algorithm, but there are many other examples that we could have used.
+Given that programmer and designer time is the most expensive
+\marginpar{Efficiency of development}
+resource involved in software development, a recursive solution may be
+easier to develop and maintain than a corresponding iterative
+solution. And given the great cost of software development, a less
+efficient solution that is easier to develop, easier to understand,
+and easier to maintain may be preferable to a highly efficient
+algorithm that's difficult to understand. For some problems then,
+such as the Sierpinski gasket, a recursive algorithm may provide the
+best solution.
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Keep It Simple</title>
+<p>
+When all other factors
+are equal, choose the algorithm (recursive or iterative)
+that is easiest to understand, develop, and maintain.
+</p>
+</principle>
+<p>
+One final point that's worth making is that some <em>optimizing</em>
+compilers are able to convert recursive methods into iterative
+methods when they compile the program. The algorithms for doing this
+are well known. They are often subjects for study in a data structures
+\marginpar{Optimizing compiler}
+course, so we won't go into them here. The resulting runtime programs
+will be just as efficient, in CPU time and memory, as if you had
+written iterative methods. The point is that if you have such a
+compiler, you really get the best of both worlds. You get the
+advantage of using recursion as a problem-solving and software
+development approach, and the compiler takes care of producing an
+efficient object program.
+</p>
+</section>

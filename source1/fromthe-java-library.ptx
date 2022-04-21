@@ -1,0 +1,86 @@
+<section xml:id="fromthe-java-library">
+<title>From the Java Library 
+ <c>javax.swing.JFileChooser</c></title>
+<p>
+\marginpar{
+    \psfig{file=../commonart/www_dg.eps}
+
+    <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
+</p>
+
+<p>
+\tBOXseven{The}<c>javax.swing.JFileChooser</c> class is useful for dealing
+with files and directories in a GUI environment. You are probably
+already familiar with <c>JFileChooser</c>s, although you may not have
+known them by that name. A <c>JFileChooser</c> provides a dialog box
+that enables the user to select a file and a directory when opening or
+saving a file. <xref ref="fig-opendialog">Figure</xref> shows an example.
+</p>
+
+<p>
+A <c>JFileChooser</c> is designed primarily to be used in conjunction
+with menu-based programs. The <c>JFileChooser</c> class
+(Fig.<nbsp/>11.29) contains methods that support the <em>Open
+File</em> and <em>Save As</em> options which often appear in GUI applications
+either in a menu or attached to buttons. In this section we
+<image width="73%" source="chptr11" />
+provide the basics for using a <c>JFileChooser</c>. Options for opening
+a file or saving a file can be added to the kind of GUI applications that
+we encountered earlier in the text by using buttons.
+In Chapter<nbsp/>13, we will discuss the use of <c>JMenu</c>s which will
+provide a more natural means of using the <c>JFileChooser</c> dialogs.
+</p>
+
+<p>
+A <c>JFileChooser</c> is not itself the dialog window, but rather the
+object that manages the dialog. After creating a <c>JFileChooser</c>
+instance, its <c>showOpenDialog()</c> or <c>showSaveDialog()</c> methods
+are used to open a dialog window. Note that these methods require a
+<c>Component</c> parameter, usually a <c>JFrame</c> or a
+<c>JApplet</c>. Thus, <c>JFileChooser</c>s can be used only in GUI
+applications and applets.
+</p>
+
+<p>
+To illustrate how to use a <c>JFileChooser</c>, let's consider the case
+where the user has selected an <em>Open File</em> menu item or clicked a
+button labeled <em>Open File</em>. In this case, executing the
+following code will cause an <q>Open File</q> dialog to appear:
+</p>
+<pre>
+JFileChooser chooser = new JFileChooser();
+int result = chooser.showOpenDialog(this);
+
+if (result == JFileChooser.APPROVE_OPTION) {
+    File file = chooser.getSelectedFile();
+    // Insert code here to read data from file
+    String fileName = file.getName();
+    display.setText("You selected " + fileName);} else
+    display.setText("You cancelled the file dialog");
+</pre>
+<p>
+We begin by creating a <c>JFileChooser</c> and then
+\marginpar{Opening a file}
+telling it to <c>showOpenDialog()</c>. If we were saving a file rather
+than opening one, we would tell it to <c>showSaveDialog()</c>. In
+either case, a dialog window will pop up on the screen. The dialog
+assists the user in navigating through the file system and selecting a
+file (Fig. <xref ref="fig-opendialog"></xref>).
+</p>
+<figure xml:id="fig-opendialog" >
+<caption>The <em>Open File</em> dialog window.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+The dialog contains two buttons, one labeled Open and
+the other labeled Cancel. If the user selects a file, that choice
+will correspond to <c>APPROVE_OPTION</c>. If the user cancels the
+dialog, that will correspond to <c>CANCEL_OPTION</c>. After
+opening a dialog, the code should check which option resulted. In
+this case, if the user opened a file, the code gets a reference to the
+file and then simply uses that to print the file's path name to a
+text area named <c>display</c>. In an actual application, code would be
+inserted at that spot which uses the file reference to read data from
+the file.
+</p>
+</section>

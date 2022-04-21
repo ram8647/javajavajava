@@ -1,0 +1,324 @@
+<section xml:id="sec-classdef">
+<title>Class Definition</title>
+
+
+<introduction>
+<p>
+To program in Java the main thing you do is write class definitions
+\marginpar{The class as template}
+for the various objects that will make up the program. A class
+definition <em>encapsulates</em> its objects' data and behavior. Once a
+class has been defined, it serves as a <em>template</em>, or blueprint,
+for creating individual <em>objects</em> or instances of the class.
+</p>
+
+<p>
+A class definition contains two types of elements: variables and
+methods. <em>Variables</em> are used to store the
+\marginpar{Variables and methods}
+object's information. <em>Methods</em> are used to process the
+information. To design an object you need to answer five basic
+questions:
+</p>
+<sidebyside>\begin{NL}
+\item  What role will the object perform in the program?
+\item  What data or information will it need?
+\item  What actions will it take?
+\item  What interface will it present to other objects?
+\item  What information will it hide from other objects?
+\end{NL}</sidebyside>
+<p>
+<image width="73%" source="chptr02" />
+</p>
+</introduction>
+
+
+<subsection>
+<title>The <c>Riddle</c> Class</title>
+<p>
+Recall our definition of the <c>Riddle</c> class from
+Chapter<nbsp/>1, which is summarized in the UML diagram in Figure<nbsp/>2.11. A
+<c>Riddle</c> has two attributes, <c>question</c> and <c>answer</c>. Each
+of these variables stores a string of characters, which Java treats as
+data of type <c>String</c>. The <c>Riddle</c> class contains three
+methods. The <c>Riddle()</c> constructor method assigns initial values
+(<c>q</c> and <c>a</c>) to its <c>question</c> and <c>answer</c>
+variables. The <c>getQuestion()</c> and <c>getAnswer()</c> methods
+return the data stored in <c>question</c> ands <c>answer</c>
+respectively.
+</p>
+
+<p>
+The instance variables <c>question</c> and <c>answer</c> are designated
+as <c>private</c> (<m>-</m>), but the <c>Riddle()</c>, <c>getQuestion()</c>
+and <c>getAnswer()</c> methods are designated as <c>public</c>
+(<m>+</m>). These designations follow two important object-oriented design
+conventions, whose justification will become apparent as we
+discuss the <c>Riddle</c> class:
+</p>
+<principle>
+<title>EFFECTIVE DESIGN:Private Variables</title>
+<p>
+Instance variables are
+usually declared <c>private</c> so that they cannot be directly
+accessed by other \mbox{objects.}
+</p>
+</principle>
+  
+<principle>
+<title>EFFECTIVE DESIGN:Public Methods</title>
+<p>
+An object's <c>public</c>
+methods can be used by other objects to interact with the object. The
+<c>public</c> methods and variables of an object make up its <term>interface</term>.
+</p>
+</principle>
+<p>
+<xref ref="fig-riddleclass2">Figure</xref> shows the Java class definition that
+corresponds to the design given in the UML diagram. It contains the
+</p>
+<figure xml:id="fig-riddleclass2" >
+<caption>Definition of the <c>Riddle</c> class.</caption>
+<pre>
+public class Riddle
+{ private String question; //Instance variables
+  private String answer;
+
+  public Riddle(String q, String a) // Constructor
+  { question = q;
+    answer = a;
+  } // Riddle constructor
+
+  public String getQuestion() // Instance method
+  { return question;
+  } // getQuestion()
+
+  public String getAnswer() // Instance method
+  { return answer;
+  } //getAnswer()} //Riddle class
+</pre>
+
+</figure>
+<p>
+two <c>private</c> instance variables and defines the three <c>public</c> methods listed in the UML diagram. In a Java class definition,
+access to a class element, such as a variable or a method, is
+controlled by labeling it with either the <c>private</c>, or <c>public</c> access modifier. An <term>access modifier</term> is a declaration
+\marginpar{Access modifier}
+that controls access to a class or one of its elements. Note also
+that the <c>Riddle</c> class itself is declared <c>public</c>. This
+lets other classes have access to the class and to its public
+variables and methods.
+</p>
+
+<p>
+Recall that a class is like a blueprint or a cookie cutter. The <c>Riddle</c> class defines the type of information (attributes) that each
+individual <c>Riddle</c> has, but it doesn't contain any actual values.
+It defines the methods (operations) that each <c>Riddle</c> can
+perform, but it doesn't actually perform the methods. In short, a
+class serves as a template, providing a detailed blueprint of the
+\marginpar{Class as blueprint}
+objects (or instances) of that class.
+</p>
+</subsection>
+
+
+<subsection xml:id="fig-userint">
+<title>The <c>RiddleUser</c> Class</title>
+<p>
+Now that we have defined the <c>Riddle</c> class, we can
+test that it works correctly by creating <c>Riddle</c> objects
+and <q>asking</q> them to tell us their riddles. To do this we need
+to define a <c>main()</c> method, which can be defined either within
+the <c>Riddle</c> class itself or in a second class named something
+like <c>RiddleUser</c>.
+</p>
+
+<p>
+One advantage of using a second class is that it gets us in the
+\marginpar{User interface}
+habit of thinking about the need for a separate class to serve as a
+user interface, with a separate set of tasks from the <c>Riddle</c>
+class. A <term>user interface</term> is an object or class that handles the
+interaction between a program's user and the rest of the program's
+computational tasks. This concept is illustrated in Figure<nbsp/>2.13. Note
+that we use the general term <em>computational object</em> to distinguish
+the rest of the program's computations from the user interface.
+Obviously, the exact nature of the computation will vary from program
+to program, just as will the details of the user interface. The
+computation done by our <c>Riddle</c> class is just the storing and
+displaying of a riddle's question and answer.
+<image width="73%" source="chptr02" /> By separating user interface tasks from riddle tasks this design
+employs the divide-and-conquer principle: the <c>RiddleUser</c> class
+will create <c>Riddle</c> objects and handle interactions with the
+user, and the <c>Riddle</c> class will handle the storing and
+transmission of riddle information. Thus, as shown in
+<xref ref="fig-p63f2">Figure</xref>, this particular Java program will involve
+interaction between two types of objects: a <c>RiddleUser</c> and one
+</p>
+<figure xml:id="fig-p63f2" >
+<caption>This UML class diagram represents an <em>association</em>
+between the <c>RiddleUser</c> and <c>Riddle</c> classes.  The <c>RiddleUser</c> class will <em>use</em> one or more objects of the <c>Riddle</c> class.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+or more <c>Riddles</c>. Note that we characterize the relationship
+between <c>Riddle</c> and <c>RiddleUser</c> with a one-way arrow labeled
+<q>Uses.</q> This is because the <c>RiddleUser</c> will create an
+instance of <c>Riddle</c> and use its methods to display (for the user)
+a riddle.
+</p>
+
+<p>
+Because almost all of our programs will involve some form of a user
+interface, we can generalize this design approach and follow it
+throughout the book. One way to think about this approach is as a
+division of labor between a user interface class and a second <em>computational</em> class, which performs whatever computations are needed
+by the particular program. In this case the computations are the simple
+<c>Riddle</c> methods that we have defined. In subsequent programs the
+computations will become more complex, which will make all the more
+clear that they should be separated from the user interface.
+</p>
+</subsection>
+
+
+<subsection>
+<title>Object Instantiation: Creating <c>Riddle</c> Instances</title>
+<p>
+<xref ref="fig-riddleuser">Figure</xref> shows the complete definition of the
+<c>RiddleUser</c> class, which serves as a very simple user
+interface. It creates two <c>Riddle</c> objects, named <c>riddle1</c>
+and <c>riddle2</c>. It then asks each object to request each riddle's
+question and answer and displays them on the console.
+</p>
+<figure xml:id="fig-riddleuser" >
+<caption>The <c>RiddleUser</c> class.</caption>
+\[27pc]
+<pre>
+public class RiddleUser
+{
+  public static void main(String argv[])
+  { Riddle riddle1 = new Riddle(
+      "What is black and white and red all over?",
+      "An embarrassed zebra.");
+    Riddle riddle2 = new Riddle(
+      "What is black and white and read all over?",
+      "A newspaper.");
+    System.out.println("Here are two riddles:");
+    System.out.println(riddle1.getQuestion());
+    System.out.println(riddle2.getQuestion());
+    System.out.println("The answer to the first riddle is:");
+    System.out.println(riddle1.getAnswer());
+    System.out.println("The answer to the second is:");
+    System.out.println(riddle2.getAnswer());
+  } // main()} // RiddleUser
+</pre>
+
+</figure>
+<p>
+Let's now discuss the statements that make up <c>RiddleUser</c>'s
+<c>main()</c> method. The following statements use the <c>Riddle()</c>
+constructor to create, or <em>instantiate</em>, two instances of the <c>Riddle</c> class:
+</p>
+<pre>
+Riddle riddle1 = new Riddle(
+     "What is black and white and red all over?",
+     "An embarrassed zebra.");
+Riddle riddle2 = new Riddle(
+    "What is black and white and read all over?",
+     "A newspaper.");
+</pre>
+<p>
+Note how the constructor gives each object a pair
+of <c>String</c>s that serve as the values of their two instance
+variables. Each object has its own <c>question</c> and its own <c>answer</c>, and each object has its own unique name, <c>riddle1</c> and
+<c>riddle2</c>.
+</p>
+</subsection>
+
+
+<subsection>
+<title>Interacting with <c>Riddle</c>s</title>
+<p>
+Once we have created <c>Riddle</c> instances with values
+assigned to their <c>question</c> and <c>answer</c> instance variables,
+we can ask each riddle to tell us either of its values. The following
+expression is an example of a <em>method call</em>:
+</p>
+<pre>
+riddle1.getQuestion()
+</pre>
+<p>
+Calling (or invoking) a method is a means of executing its code.
+\marginpar{Method call}
+The above method call just gets the <c>String</c> value that is stored
+in the <c>question</c> instance variable of <c>riddle1</c>.
+</p>
+<principle>
+<title>PROGRAMMING TIP:Method Call versus Method Definition</title>
+<p>
+Don't
+confuse method calls with method definitions. The definition specifies
+the method's actions. The method call takes those actions.
+</p>
+</principle>
+<p>
+If we want to display the value of <c>riddle1</c>'s <c>question</c>,
+we can embed this method call within a <c>println()</c> statement
+</p>
+<pre>
+System.out.println(riddle1.getQuestion());
+</pre>
+<p>
+This tells the <c>System.out</c> object to execute its
+<c>println()</c> method, which displays the string given to it by <c>riddle1</c>
+on the console. Thus, the output produced by this statement will be
+</p>
+<pre>
+What is black and white and red all over?
+</pre>
+</subsection>
+
+
+<subsection xml:id="sect-mantra">
+<title>Define, Create, Use</title>
+<p>
+As our Riddle example illustrates, writing a Java program is a
+matter of three basic steps:
+<ul>
+<li><p>Define one or more classes (class definition).</p></li>
+<li><p>Create objects as instances of the classes (object instantiation).</p></li>
+<li><p>Use the objects to do tasks (object use).</p></li>
+</ul>
+</p>
+
+<p>
+The Java class definition determines what
+information will be stored in each object and what methods each object
+can perform. Instantiation creates an instance and associates a name
+with it in the program. The object's methods can then be called as a
+way of getting the object to perform certain tasks.
+</p>
+
+<p>
+\secEXRHone{Self-Study Exercises}
+<ol>
+<li><p>Identify the following elements in the <c>Riddle</c> class
+(Fig. <xref ref="fig-riddleclass2"></xref>):
+<ul>
+<li><p>The name of the class.</p></li>
+<li><p>The names of two instance variables.</p></li>
+<li><p>The names of three methods.</p></li>
+</ul></p></li>
+<li><p>Identify the following elements in the <c>RiddleUser</c> class
+(Fig. <xref ref="fig-riddleuser"></xref>):
+<ul>
+<li><p>The names of two <c>Riddle</c> instances.</p></li>
+<li><p>All six method calls of the <c>Riddle</c> objects in the program.</p></li>
+<li><p>Two examples of qualified names.</p></li>
+</ul></p></li>
+</ol>
+
+</p>
+</subsection>
+
+</section>

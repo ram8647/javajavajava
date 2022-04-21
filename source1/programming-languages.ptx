@@ -1,0 +1,151 @@
+<section xml:id="programming-languages">
+<title>Programming Languages</title>
+<p>
+Most computer programs today are written in a <em>high-level
+language<idx><h>high-level language</h></idx></em>, such as Java, C, C++, or
+FORTRAN. A programming language is considered high level if its
+statements resemble English-language statements. For example, all of
+the languages just mentioned have some form of an <q>if</q> statement,
+which says, <q>if some condition holds, then take some action.</q>
+</p>
+
+<p>
+Computer scientists have invented hundreds of high-level programming
+languages, although relatively few of these have been put to practical
+use. Some of the widely used languages have special features that
+make them suitable for one type of programming application or another.
+COBOL (COmmon Business-Oriented Language), for example, is still
+widely used in commercial applications. FORTRAN (FORmula TRANslator)
+is still preferred by some engineers and scientists. C and C++ are
+still the primary languages used by operating system programmers.
+</p>
+
+<p>
+In addition to having features that make them suitable for certain
+types of applications, high-level languages use symbols and notation
+that make them easily readable by humans. For example, arithmetic
+operations in Java make use of familiar operators such as <q><m>+</m></q> and
+<q><m>-</m></q> and <q>/</q>, so that arithmetic expressions look more or less the
+way they do in algebra. So, to take the average of two numbers, you
+might use the expression
+</p>
+<pre>
+(a + b) / 2
+</pre>
+<p>
+The problem is that computers cannot directly understand such
+expressions. In order for a computer to run a program, the program
+must first be translated into the computer's <em>machine
+language<idx><h>machine language</h></idx></em>, which is the language
+understood by its CPU or microprocessor. Each type of microprocessor
+has its own particular machine language. That's why when you buy
+software it runs either on a Macintosh, which uses the Power-PC chip,
+or on a Windows machine, which uses the Pentium chip, but not on both.
+\marginpar{Platform independence}
+When a program can run on just one type of chip, it is known as
+<em>platform dependent<idx><h>platform independence</h></idx></em>.
+</p>
+
+<p>
+In general, machine languages are based on the <em>binary code</em>, a
+two-valued system that is well suited for electronic devices. In a
+binary representation scheme, everything is represented as a sequence
+of 1's and 0's, which corresponds closely to the computer's electronic
+<q>on</q> and <q>off</q> states. For example, in binary code, the number 13
+would be represented as 1101. Similarly, a particular address in the
+computer's memory might be represented as 01100011, and an instruction
+in the computer's instruction set might be represented as 001100.
+</p>
+
+<p>
+The instructions that make up a computer's machine language are very
+simple and basic. For example, a typical machine language might
+include instructions for ADD, SUBTRACT, DIVIDE, and MULTIPLY, but it
+wouldn't contain an instruction for AVERAGE. In most cases, a single
+instruction, called an <em>opcode</em>, carries out a single machine
+operation on one or more pieces of data, called its <em>operands</em>.
+Therefore, the process of averaging two numbers would have to be
+broken down into two or more steps. A machine language instruction
+itself might have something similar to the following format, in which
+an opcode is followed by several operands, which refer to the
+locations in the computer's primary memory where the data are stored.
+The following instruction says ADD the number in LOCATION1 to the
+number in LOCATION2 and store the result in LOCATION3:
+</p>
+<tabular>
+<row><cell>\multicolumn{4}{l}{
+\rule[0pt]{21.1pc}{1pt}}</cell></row>
+<row><cell>{Opcode}</cell><cell>{Operand 1}</cell><cell>{Operand 2}</cell><cell>{Operand 3}</cell></row>
+<row><cell>[-4pt]\multicolumn{4}{l}{
+\rule[0pt]{21.1pc}{0.5pt}}</cell></row>
+<row><cell><c>011110</c></cell><cell><c>110110</c></cell><cell><c>111100</c></cell><cell><c>111101</c></cell></row>
+<row><cell>(ADD)</cell><cell>(LOCATION 1)</cell><cell>(LOCATION 2)</cell><cell>(LOCATION 3)</cell></row>
+<row><cell>[-4pt]\multicolumn{4}{l}{
+\rule[0pt]{21.1pc}{1pt}}</cell></row>
+<row><cell>[-12pt]</cell></row>
+</tabular>
+<p>
+\endUNTB
+</p>
+
+<p>
+Given the primitive nature of machine language, an
+expression like <m>(a + b)/2</m> would have to be translated
+into a sequence of several machine language instructions that, in
+binary code, might look as follows:
+</p>
+<pre>
+011110110110111100111101
+              000101000100010001001101
+              001000010001010101111011
+</pre>
+<p>
+In the early days of computing, before high-level languages were
+developed, computers had to be programmed directly in their machine
+languages, an extremely tedious and error-prone process. Imagine how
+\mbox{difficult} it would be to detect an error that consisted of putting a 0
+in the preceding program where a 1 should occur!
+</p>
+
+<p>
+Fortunately, we no longer have to worry about machine languages,
+because special programs can be used to translate a high-level or <em>source code<idx><h>source code</h></idx></em> program into machine language code or
+<em>object code<idx><h>object code</h></idx></em>, which is the only code that can
+be <em>executed</em> or run by the computer. In general, a program that translates
+source code to object code is known as a <em>translator<idx><h>translator</h></idx></em> (Fig. <xref ref="fig-translator"></xref>). Thus, with
+suitable translation software for Java or C++ we can write programs as
+if the computer could understand Java or C++ directly.
+</p>
+<figure xml:id="fig-translator" >
+<caption>Translator software translates high-level
+<em>source code</em> to machine language <em>object code</em>.</caption>
+<image width="73%" source=".." />
+</figure>
+<p>
+Source code translators come in two varieties. An <em>interpreter<idx><h>interpreter</h></idx></em> translates a single line of source
+code directly into machine language and executes the code before going
+on to the next line of source code. A <em>compiler<idx><h>compiler</h></idx></em>
+translates the entire source code program into <em>executable</em> object
+code, which means that the object code can then be run directly
+without further translation.
+</p>
+
+<p>
+There are advantages and disadvantages to both approaches.
+Interpreted programs generally run less efficiently than compiled
+programs, because they must translate and execute each line of the
+program before proceeding to the next line. If a line of code is
+repeated, an interpreter would have to translate the line each time it
+is encountered. By contrast, once compiled, an object program is just
+executed without any need for further translation. It is also much
+easier to refine compiled code to make it run more efficiently. But
+interpreters are generally quicker and easier to develop and provide
+somewhat better error messages when things go wrong. Some languages
+that you may have heard of, such as BASIC, LISP, and Perl, are mostly
+used in interpreted form, although compilers are also available for
+these languages. Programs written in COBOL, FORTRAN, C, C++, and
+Pascal are compiled. As we will see in the next section, Java
+programs use both compilation and interpretation in their translation
+process.
+</p>
+</section>
