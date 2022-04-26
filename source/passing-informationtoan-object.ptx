@@ -1,0 +1,469 @@
+<section xml:id="passing-informationtoan-object">
+  <title>Passing Information to an Object</title>
+  <introduction>
+    <p>
+      One convention of object-oriented programming is to provide <c>public</c> methods to
+      <em>set</em> and <em>get</em>
+      the values of some of its <c>private</c> instance variables.
+      Methods that set or modify an object's instance variables are called
+      <term>mutator methods</term>.
+      Methods that get or retrieve the value of an instance variable are called
+      <term>accessor methods</term>.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Accessor and Mutator
+      Methods</title>
+      <p>
+        An <term>accessor method</term>
+            <idx><h>accessor method</h></idx>
+        is a public method used to <term>get</term>
+        the value of an object's instance variable.
+        Such methods are often named <term>getVarName()</term>
+        where <term>VarName</term>
+        is the name of the variable that's being accessed.
+        A <term>mutator method</term>
+            <idx><h>mutator method</h></idx>
+        is a public method used to modify the value of one or more instance variables.
+        The special type of mutator method that <term>sets</term>
+        or assigns a variable a specified value is often called
+        <term>setVarName()</term>.
+      </p>
+    </principle>
+    <p>
+      It is up to the designer of the class to determine which private variables require accessor and mutator methods.
+      If you were designing a <c>BankAccount</c> class,
+      you might want a public <c>getAccountNumber()</c> method,
+      so that clients could retrieve information about their bank accounts,
+      but you would probably not want a public
+<c>getAccountPassword()</c> method or a public <c>setAccountBalance()</c> method.
+    </p>
+    <p>
+      In the remainder of this section,
+      we will be concerned with mutator methods.
+      We defined three mutator methods named <c>takeOne()</c>,
+<c>takeTwo()</c>, and <c>takeThree</c> as part of the <c>OneRowNim</c> class in the previous chapter.
+      All three of these method change the values of the instance variables <c>nSticks</c> and <c>player</c>. All three methods have very similar bodies.
+      The definition of the <c>takeOne()</c> is:
+    </p>
+<pre>
+public void takeOne()
+{   nSticks = nSticks - 1;
+    player = 3 - player;
+ }
+</pre>
+    <p>
+      The only difference in the bodies of the other two methods is that they subtract 2 and 3 from <c>nSticks</c> instead of 1.
+      Instead of having three,
+      virtually identical methods, It would be a more efficient design to define a single method where the number to be subtracted from <c>nSticks</c> would be supplied as an argument when the method is called.
+      In order to be able to handle such an argument,
+      we must design a new method that uses a
+      <em>parameter</em> to handle the argument.
+    </p>
+    <p>
+      A <term>formal parameter</term>,
+      or more simply, <term>parameter</term>,
+      is a variable used to pass \marginpar{Formal parameter} information into a method when the method is invoked.
+      The <em>type</em> and <em>variable name</em>
+      of the formal parameter must appear in the
+      <em>formal parameter list</em>
+      that follows the method's name in the method header.
+      The formal parameter is used to hold a value that it is passed while the method is executing.
+    </p>
+    <principle>
+      <title>Formal Parameter</title>
+      <p>
+        A <term>formal parameter</term>
+            <idx><h>formal parameter</h></idx>
+        is a variable that serves as a storage location for information that is passed to a method.
+        To specify a formal parameter,
+        you must provide a type identifier followed by variable identifier,
+        and you must place this declaration inside the parentheses that follow the method's name.
+      </p>
+    </principle>
+    <p>
+      Consider the following definition for a <c>takeSticks()</c> method:
+    </p>
+<pre>
+public void takeSticks(int num)
+{    nSticks = nSticks - num;
+     player = 3 - player;}
+</pre>
+    <p>
+      Notice that executing the body of <c>takeSticks()</c> when the parameter <c>num</c> stores the value 1 accomplishes precisely the same task as executing <c>takeOne()</c>. If, instead,
+      a value of 2 or 3 is stored in <c>num</c>, then calling the method acts like <c>takeTwo()</c> or <c>takeThree()</c> respectively.
+      Thus, using parameters enables us to design methods that are more general in what they do,
+      which is an important principle of good program design.
+    </p>
+    <p>
+      Another example of a mutator method is one in which define a <em>set method</em>
+      to allow the starting number of sticks to be set for an instance of <c>OneRowNim</c>. For this,
+      we could define:
+    </p>
+<pre>
+public void setSticks(int sticks)
+{    nSticks = sticks;} // setSticks()
+</pre>
+    <p>
+      As we will see in <xref ref="sec-constructors">Section</xref>,
+      we can also define a constructor method that can be used,
+      when the game is created,
+      to set the initial value of <c>nSticks</c>. It is often desirable to have more than one method that sets the values of an objects' instance variables.
+    </p>
+    <p>
+      If a method uses more than one parameter,
+      use a comma to separate the individual parameter declarations in the method header.
+      For example,
+      if we wanted a method for <c>OneRowNim</c> that specified both the number of sticks for the start of a game and which player takes a turn first,
+      it could be defined:
+    </p>
+<pre>
+public void setGame(int sticks, int starter)
+{   nSticks = sticks;
+    player = starter; } // setGame()
+</pre>
+    <p>
+      \subsubsection*{The Scope of Parameters, Variables, and Methods}
+    </p>
+    <p>
+      The bodies of the mutator methods in the previous section make use of both instance variables and parameters.
+      It is important to note that there is a difference in where these two types of variables can be used.
+      The <term>scope</term>
+          <idx><h>scope</h></idx>
+      of a variable \marginpar{Scope} or method refers to where it can be used in a program.
+    </p>
+    <p>
+      A parameter's scope
+          <idx><h>parameter scope</h></idx>
+      is limited to the body of the method in which it is declared.
+      Variables that are declared in the body of a method have scope which extends from the point where they are declared to the end of the block of code in which they are declared.
+      Parameters are local variables which are declared in the parameter list of a method's header and which have initial values specified by the arguments in a method call.
+      The scope of a parameter is the same as the scope of a variable declared at the very beginning of the body of a method. \marginpar{Local scope} Once the flow of execution leaves a method,
+      its parameters and other local variables cease to exist.
+      The scope of local variables is referred to as <term>local scope</term>.
+          <idx><h>local scope</h></idx>
+    </p>
+    <principle>
+      <title>Scope</title>
+      <p>
+        Local variables, that is,
+        parameters and variables declared in the body of a method,
+        have <term>local scope</term>
+            <idx><h>local scope</h></idx>
+        which extends from the point at which they are defined to the end of the block of code in which they are defined.
+        In particular,
+        the scope of a parameter is the entire body of the method in which it is declared.
+      </p>
+    </principle>
+    <p>
+      By contrast, instance variables, class variables,
+      and all methods have scope that extends throughout the entire class,
+      that is, <term>class scope</term>.
+      They can be used in the body of any method and in the expressions that assign initial values to class level variables.
+      There are two restrictions to remember.
+      First, instance variables and instance methods cannot be used in the body of a class method,
+      one modified with <c>static</c>, unless an instance of the class is created there and then the dot notation of qualified names must be used to \marginpar{Class scope} refer to the variable or method.
+      This is because class methods are called without reference to a particular instance of the class.
+      The
+<c>main()</c> method of the <c>OneRowNim</c> class that we defined in the previous chapter is an example of such a class method.
+      In that case,
+      to test the instance methods of <c>OneRowNim</c> we first created an instance of <c>OneRowNim</c> and used it to call its instance methods:
+    </p>
+<pre>
+OneRowNim game = new OneRowNim(); // Create instance
+game.report();   // Call an instance method
+</pre>
+    <p>
+      The second restriction involved in class scope is that one class level variable can be used in the expression that initializes a second class level variable only if the first is declared before the second.
+      There is no similar restriction on methods.
+    </p>
+    <principle>
+      <title>Scope</title>
+      <p>
+        Class level variables, that is,
+        instance variables and class variables have <term>class scope</term>,
+            <idx><h>class scope</h></idx>
+        which extends throughout the class.
+        Methods also have class scope.
+      </p>
+    </principle>
+    <p>
+      Except for the restrictions noted above,
+      methods and class level variables can be referred to within the same class by their simple names,
+      with just the method
+      (or variable)
+      name itself, \marginpar{Simple vs. qualified names} rather than by their qualified names,
+      with the dot operator.
+      Thus, in
+<c>OneRowNim</c>, we can refer to <c>nSticks</c> and <c>report()</c> in the bodies of other instance methods.
+      In a class method,
+      such as
+<c>main()</c>, we would have to create an instance of <c>OneRowNim</c> with a name like <c>game</c> and refer to <c>game.report()</c>.
+    </p>
+    <principle>
+      <title>Qualified Names</title>
+      <p>
+        Within the same class,
+        references to class methods or class variables can be made in terms of simple names.
+        Within the bodies of instance methods,
+        references to instance variables and references to other instance methods can also be made in terms of simple names.
+        However, within the bodies of class methods, qualified
+            <idx><h>qualified name</h></idx>
+        names, or dot notation,
+        must be used to refer to instance methods or instance variables just like how they are referred to in other classes.
+      </p>
+    </principle>
+    <principle>
+      <title>DEBUGGING TIP:Scope Error</title>
+      <p>
+        It would be a syntax error to refer to a method's parameters or other local variables from outside the method.
+      </p>
+    </principle>
+  </introduction>
+  <subsection>
+    <title>Arguments and Parameters</title>
+    <p>
+      The new class definition for <c>OneRowNim</c> is given in <xref ref="fig-ornclass2">Figure</xref>.
+      Note that now that we have a
+    </p>
+    <figure xml:id="fig-ornclass2">
+      <caption>The <c>OneRowNim</c> class definition with <c>takeSticks()</c> method.</caption>
+      \[26.5pc]
+<pre>
+public class OneRowNim
+{ private int nSticks = 7; // Start with 7 sticks
+  private int player = 1;  //Player 1 plays first
+  public void takeSticks(int num)
+  { nSticks = nSticks - num;
+    player = 3 - player;
+  }  // takeSticks()
+  public void report()
+  { System.out.println("Number of sticks left: " + nSticks);
+    System.out.println("Next turn by player " + player);
+  }   // report()} //OneRowNim1 class
+</pre>
+    </figure>
+    <p>
+      single method, <c>takeSticks()</c>, that can be used to take away a variable number of sticks,
+      we have removed the three methods we wrote in the previous chapter, <c>takeOne()</c>, <c>takeTwo()</c>, and <c>takeThree()</c>, from <c>OneRowNim</c>. Using a single method,
+      with a parameter, is clearly a better design.
+      To see this,
+      just imagine what we would have to do if we didn't use a parameter and we wanted to be able to take away four sticks,
+      or five, or more.
+      If we didn't have parameters,
+      we'd have to write a separate method for each case,
+      which is clearly a bad idea.
+      Using parameters in this way leads to a more general useful method and thus is an example of the generality principle.
+    </p>
+    <p>
+      Now let's consider how we would create a <c>OneRowNim</c> instance and use the new method in the <c>main()</c> method or in a different class.
+      If we want to have an instance of <c>OneRowNim</c> object to remove 3 sticks on the first move by using the <c>takeSticks()</c> method,
+      we need to pass the <c>int</c> value 3 to the method.
+      In order to effect this action,
+      we would use the following statements:
+    </p>
+<pre>
+OneRowNim game = new OneRowNim();
+game.takeSticks(3);
+</pre>
+    <p>
+      Because the definition of <c>takeSticks()</c> includes a single <c>int</c> parameter,
+      we must supply a single <c>int</c> value
+      (such as 3),
+      when we invoke it.
+      When the method is invoked,
+      its formal parameter (<c>num</c>) will be set to the value we supply (3).
+      The value we supply does not have to be a literal <c>int</c> value.
+      We can supply any expression or variable that evaluates to an <c>int</c> value.
+      For example:
+    </p>
+<pre>
+int val = 7 - 5;
+game.takeSticks(val);
+</pre>
+    <p>
+      In this case,
+      the value being passed to <c>takeSticks()</c> is 2, the value that <c>val</c> has at the time the method call is made.
+    </p>
+    <p>
+      It would be an error to try to pass a value that was not a
+<c>int</c> to <c>takeSticks()</c>. For example,
+      each of the following invocations of <c>takeSticks()</c> results in a syntax error:
+    </p>
+<pre>
+game.takeSticks();     // no argument is supplied
+game.takeSticks("3");  // "3" is a String, not an int
+game.takeSticks(int);  // int not is an int value
+</pre>
+    <p>
+      As you recall from Chapter 0, the value that is passed to a method when it is invoked is called \marginpar{Parameter vs. argument} an argument.
+      Even though the terms argument and parameter
+          <idx><h>parameter</h></idx>
+      are sometimes used interchangeably,
+      it will be useful to observe a distinction.
+      We will use the term <em>parameter</em>
+      to refer to the formal parameter<mdash/>the variable used to pass data to a method<mdash/>that occurs in the method definition.
+      We use the term <em>argument</em>
+      to refer to the actual value that is supplied when the method is invoked.
+    </p>
+    <principle>
+      <title>DEBUGGING TIP:Type Error</title>
+      <p>
+        It would be a syntax error to use an argument whose type doesn't match the type of its corresponding \mbox{parameter.}
+      </p>
+    </principle>
+    <p>
+      The distinction between parameter and argument is related \marginpar{Defining vs. calling a method} to the difference between <em>defining</em>
+      a method and <em>invoking</em> a method.
+      Defining a method is a matter of writing a method definition, such as
+    </p>
+<pre>
+public void printStr(String s)
+{   System.out.println(s);}
+</pre>
+    <p>
+      This definition defines a method that takes a single <c>String</c> parameter, <c>s</c>, and simply prints the value of its parameter.
+      On the other hand,
+      invoking a method is a matter of \marginpar{Invoking a method} writing a method call statement, such as
+    </p>
+<pre>
+printStr("HelloWorld");
+</pre>
+    <p>
+      This statement calls the <c>printStr()</c> method and passes it the string
+      <q>HelloWorld</q>. This notation assumes that the call to the instance method <c>printStr()</c> is made within the body of another instance method of the same class.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Passing an <c>int</c> value to a <c>OneRowNim</c> method</title>
+    <p>
+      To get a clearer picture of the interaction that takes place when we invoke <c>takeSticks()</c> and pass it an <c>int</c> value,
+      let's write a
+<c>main()</c> method to test our new version of <c>OneRowNim</c>.
+    </p>
+    <p>
+      Our first version of <c>main()</c> is shown in <xref ref="fig-testorn1">Figure</xref>.
+      We will use it to trace how the parameter
+    </p>
+    <figure xml:id="fig-testorn1">
+      <caption>A <c>main()</c> method to test the <c>takeSticks()</c> method.</caption>
+<pre>
+public static void main (String argv[])
+{  OneRowNim game;        // Declare a OneRowNim object
+   game = new OneRowNim(); // Instantiate the references
+   game.takeSticks(3);     // remove 3 sticks} // main()
+</pre>
+    </figure>
+    <p>
+      of <c>takeSticks()</c> interacts with the instance variables <c>nSticks</c> and <c>player</c>. The statements in the <c>main()</c> program simply create an instance of <c>OneRowNim</c> that is referenced by
+<c>game</c> and invoke the <c>setSticks()</c> method with an argument of<nbsp/>3.
+    </p>
+    <p>
+      To get a clearer understanding of how a parameter works,
+      it will be instructive to trace through the code in <c>main()</c>. Figure<nbsp/>3.3 displays how the states of the instance variables of <c>game</c> and the parameter of <c>takeSticks()</c> interact.
+    </p>
+    <figure xml:id="fig-parameps">
+      <caption>Tracing the state of <c>game</c>(a) Just
+      before calling <c>takeSticks(3)</c>. (b) Just before executing the body
+      of <c>takeSticks(3)</c>. (c) Just after executing the body of <c>takeSticks(3)</c>. (d) After flow of control leaves <c>takeSticks()</c>.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      Executing the first two statements of <c>main()</c> creates the instance <c>game</c> of <c>OneRowNim</c>. Figure<nbsp/>3.3(a) shows the initial state of <c>game</c>. When the <c>takeSticks(3)</c> method call is made,
+      a parameter
+      (which is a local variable)
+      named
+<c>num</c> is created and the value 3 is stored in it.
+      The state of the instance variables and the parameter are shown in (b).
+      Then the body of <c>takeSticks()</c> is executed.
+      The new state of <c>game</c> is shown in (c).
+      After the flow of control leaves the body of <c>takeSticks()</c> and returns to <c>main()</c>, the memory location which stored the value of the parameter <c>num</c> is released for other uses.
+      The state of <c>game</c> at this point is shown in (d).
+      Notice that the value of <c>nSticks</c> has been reduced to 4.
+    </p>
+  </subsection>
+  <subsection xml:id="self-study-exercisesA12">
+    <title>Passing keyboard input to <c>takeSticks()</c></title>
+    <p>
+      To complete this section,
+      let's modify our <c>main()</c> method in <xref ref="fig-testorn1">Figure</xref>
+      so that it prompts the user to input an integer from the keyboard and then uses a Scanner object,
+      introduced in the previous chapter, to read the integer.
+      That integer will then be used as the argument in a call to <c>takeSticks()</c>. These modifications have been incorporated into the revised version of the
+<c>main()</c> method shown in <xref ref="fig-testorn2">Figure</xref>.
+      If we now run
+    </p>
+    <figure xml:id="fig-testorn2">
+      <caption>A <c>main()</c> method with keyboard input for <c>OneRowNim</c>.</caption>
+<pre>
+import java.util.Scanner;
+public static void main (String argv[])
+{ Scanner sc;             // Declare a Scanner variable
+  sc = Scanner.create(System.in); // Instantiate it
+  OneRowNim game;         // Declare a OneRowNim variable
+  game = new OneRowNim(); // Instantiate it
+  game.report();          // Report state of game
+  System.out.println("Input 1, 2, or 3 and hit enter:");
+  int num = sc.nextInt(); // Read an int from keyboard
+  game.takeSticks(num);   // Use the value read
+  game.report();          // Report state of game} // main()
+</pre>
+    </figure>
+    <p>
+      this program the following output will be generated in the console window before waiting for keyboard input:
+    </p>
+<pre>
+Number of sticks left: 7
+Next turn by player 1
+Input 1, 2, or 3 and hit enter:
+</pre>
+    <p>
+      If the user then inputs a 2 from the keyboard,
+      that input will be read and the <c>takeSticks()</c> method will remove 2 sticks.
+      The output in the console window will now look like:
+    </p>
+<pre>
+Number of sticks left: 7
+Next turn by player 1
+Input 1, 2, or 3 and hit enter:2
+Number of sticks left: 5
+Next turn by player 2
+</pre>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            Explain the difference between a
+            <em>method declaration</em>
+            and a <em>method invocation</em>.
+              <idx><h>method invocation</h></idx>
+          </p>
+        </li>
+        <li>
+          <p>
+            Explain the difference between a
+            <em>formal parameter</em>
+            and an <em>argument</em>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Modify the <c>OneRowNim</c> class of <xref ref="fig-testorn2">Figure</xref>
+            by adding two instance variables of type <c>String</c> to store names of the two players.
+            Choose names for the instance variables that would be appropriate for storing names for player one and player two.
+            Write a method named <c>setNames()</c> with two string parameters which assigns the first parameter to the instance variable that you created for the name of player one.
+            The second parameter should be assigned to the other new instance variable.
+          </p>
+        </li>
+        <li>
+          <p>
+            Write a statement that calls the <c>setName()</c> method of the previous exercise and sets the name of player one of <c>game</c> to
+            <q>Xena</q>
+            and sets the name of player two to
+            <q>Yogi</q>.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

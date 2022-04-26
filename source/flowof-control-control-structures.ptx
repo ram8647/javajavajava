@@ -1,0 +1,521 @@
+<section xml:id="flowof-control-control-structures">
+  <title>Flow of Control: Control Structures</title>
+  <introduction>
+    <p>
+      We have been ignoring a couple of problems with the definition of the <c>OneRowNim</c> class.
+      One problem is that we would describe a One Row Nim game as two players taking turns until there are no more sticks.
+      An object using <c>OneRowNim</c> would need a way to repeatedly execute a group of statements.
+      One command in Java that controls the repetition of a block of statements is called a <em>while loop</em>.
+      We will consider it later in this section.
+    </p>
+    <p>
+      A second problem is with the definition of <c>takeSticks()</c>:
+    </p>
+<pre>
+public void takeSticks(int num)
+  {   nSticks - num;
+      player = 3 - player;
+  }
+</pre>
+    <p>
+      It is possible to call this method with an argument greater than 3 or less than 1.
+      The call <c>game.takeSticks(5)</c> will remove 5 sticks even though the rules of One Row Nim say that you must remove 1, 2, or 3.
+      While one might assume that the user interface should prevent the user from breaking this rule,
+      it is a far better design if it was dealt with in <c>OneRowNim</c>. To do this we need a Java structure that executes different statements depending on whether the parameter is greater than 3, less than 1, or between 1 and 3.
+      The Java <em>if-else</em> statement has this capability.
+      A fuller treatment of control structures appears in Chapter 6, but in this section,
+      we will briefly introduce a couple of simple control structures.
+      This will enable us to write programs that take more interesting actions.
+    </p>
+  </introduction>
+  <subsection xml:id="sec-if">
+    <title>The Simple If Statement</title>
+    <p>
+      A <term>selection</term> control structure,
+      allows a program to select between two or more alternative paths of execution.
+      The if statement is the most basic selection control structure in Java.
+      Most programming languages have its equivalent. \marginpar{Simple <c>if</c> statement}
+    </p>
+    <principle>
+      <title>If Statement</title>
+      <p>
+        The <term>if statement</term> has the following syntax:
+      </p>
+      <p>
+        <m>\matrix{ \hspace{1.1in}\mbox{if} \amp ( \; \textit{boolean\;expression} \; ) \cr \hspace{1.1in}\;\;\;\; \amp \textit{contained statement} \; ; \cr}</m>
+      </p>
+    </principle>
+    <p>
+      The statement contained in the if statement can be any valid Java statement,
+      including a compound statement.
+      (Recall from Chapter 1 that a compound statement is a set of statements contained within curly braces.)
+      The <c>boolean expression</c> is an expression that is either <c>true</c> or <c>false</c>. We have seen examples of boolean expressions that involve <c>int</c> variables, <c>int</c> values,
+      and the inequality or equality operators.
+      A method call to a method with a <c>boolean</c> result type is another example of a <c>boolean</c> expression.
+      Given this description of if statement syntax,
+      the following are examples of valid if statements:
+    </p>
+<pre>
+if (true) System.out.println("Hello");
+if (nSticks &lt;= 0) System.out.println("game is over");
+</pre>
+    <p>
+      For readability,
+      we usually write an if statement with its contained statement indented on the next line:
+    </p>
+<pre>
+if (true)
+      System.out.println("Hello");
+  if (nSticks &lt;= 0)
+      System.out.println("game is over");
+</pre>
+    <p>
+      The following are all examples of syntax errors involving the if statement:
+    </p>
+<pre>
+if true                   // Parentheses are missing
+    System.out.println("Hello");
+if (nSticks &lt;= 0) return   // Semicolon missing
+if ("true") return;  // "true" is not a boolean
+if (true) "Hello";    // "Hello" is  not a statement
+</pre>
+    <p>
+      Semantically, the if statement
+          <idx><h>if statement</h></idx>
+      has the following interpretation: First,
+      the boolean condition is evaluated.
+      If it is true, then the contained statement is executed;
+      if it is false, then the contained statement is not executed.
+      This is shown in Figure<nbsp/>3.11.
+      The flowchart clearly shows that program flow will take <image width="73%" source="chptr03"/> one or the other of the alternative paths coming out of the diamond-shaped boolean condition box.
+      The branch through the rectangular statement box will be taken when the boolean condition is true;
+      otherwise the statement will be skipped.
+    </p>
+    <p>
+      As another example,
+      consider the definition of a <c>getPlayerString()</c> method for the <c>OneRowNim</c> class:
+    </p>
+<pre>
+public String getPlayerString()
+{
+  if (player == 1)
+    return "Player One"; // Exit the method
+  if (player == 2)
+    return "Player Two"; // Exit the method
+  return "Player error";   // Exit the method}
+</pre>
+    <p>
+      The flowchart in <xref ref="fig-getplayerflow">Figure</xref>
+      shows the program flow of the entire <c>getPlayerString()</c> method.
+      It is important to note
+    </p>
+    <figure xml:id="fig-getplayerflow">
+      <caption>Flowchart of the <c>getPlayerString()</c> method.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      that when a <c>return</c>
+          <idx><h>return statement</h></idx>
+      statement is executed in a method,
+      control is returned immediately to the calling method.
+      Thus, if <c>player == 1 </c> is true,
+      the string
+      <q>Player One</q>
+      is returned to the calling method and the <c>getPlayerString()</c> method exits at this point.
+      If it is false,
+      then <c>player == 2</c> should be true
+      (if we have a consistent state)
+      and the string
+      <q>Player Two</q>
+      should be returned and the method exited.
+      Thus, if we have a consistent state <mdash/>that is,
+      if <c>player</c> has value 1 or 2<mdash/>then the third <c>return</c> statement should never be reached.
+    </p>
+    <p>
+      The following example shows the more common case where the statement contained in an if statement can be a compound statement: \marginpar{Compound statement}
+    </p>
+<pre>
+if (player == 1)
+{   String s = "Player One";
+    System.out.print (s);
+    System.out.println (" plays next");
+    System.out.println (" The game is not over");}
+</pre>
+    <p>
+      If <c>player == 1</c> is true,
+      then all four statements in the contained compound statement will be executed.
+      Note here that \marginpar{Local scope} we are declaring the local variable, <c>s</c>, in this block.
+      Its scope would extend only to the end of the block.
+      Note also that when we use a compound statement,
+      the compound statement itself is not followed by a semicolon because it is already enclosed in braces.
+    </p>
+    <p>
+      A common programming error is to forget the braces around the compound statement.
+      Merely indenting the statements following the if clause doesn't alter the logic of the if statement.
+      For example,
+      the following if statement still has only one statement in its if clause:
+    </p>
+<pre>
+if (condition1)
+  System.out.println("One");
+  System.out.println("Two"); //Not part of if statement
+</pre>
+    <p>
+      This segment will always print
+      <q>Two</q>
+      because the second <c>println()</c> is not part of the if statement.
+      To include it in the if statement,
+      you must enclose both <c>println()</c> statements within braces:
+    </p>
+<pre>
+if (condition1)
+{  System.out.println("One");
+   System.out.println("Two");}
+</pre>
+    <principle>
+      <title>DEBUGGING TIP:Indentation</title>
+      <p>
+        Indentation can improve the readability of a program but doesn't affect its logic.
+        Braces must be used to group statements in the if clause.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="sec-ifelse">
+    <title>The <c>if-else</c>Statement</title>
+    <p>
+      A second version of the if statement incorporates an <c>else</c> clause into the structure.
+      This allows us to execute either of two separate statements
+      (simple or compound)
+      as the result of one boolean expression.
+      For example, the statement
+    </p>
+<pre>
+if (player == 1)
+    System.out.println("Player One");
+else
+    System.out.println("Player Two");
+</pre>
+    <p>
+      will print
+      <q>Player One</q>
+      if <c>player == 1</c> is true.
+      Otherwise, it will print
+      <q>Player Two</q>.
+    </p>
+    <principle>
+      <title>If-else Statement</title>
+      <p>
+        The <term>if-else statement</term>
+        has the following syntax:
+      </p>
+      <p>
+        <m>\matrix{ \hspace{1.1in}\texttt{if} \amp ( \; \textit{boolean\;expression } \; ) \cr \hspace{1.1in}\;\;\;\;\;\;\; \amp \textit{statement1 } \; ; \cr \hspace{1.1in}\;\;\texttt{else } \amp \cr \hspace{1.1in}\;\;\;\;\;\;\; \amp \textit{statement2 } \; ; \cr}</m>
+      </p>
+    </principle>
+    <p>
+      As in the case of the simple if statement,
+      the \marginpar{If-else syntax} keyword <c>if</c> is followed by a parenthesized
+      <em>boolean expression</em>,
+      which is followed by <em>statement1</em>,
+      which may be either simple or compound.
+      If <em>statement1</em> is a simple statement,
+      then it is followed by a semicolon.
+      The <em>else clause</em> follows immediately after <em>statement1</em>.
+      It begins with the keyword <c>else</c>, which is followed by <em>statement2</em>,
+      which can also be either a simple or compound statement.
+      Note that there is no boolean expression following the <c>else</c> keyword.
+      In an if-else statement,
+      the boolean expression following the keyword <c>if</c> goes with both the if and else clauses.
+    </p>
+    <p>
+      Semantically, the if-else statement
+          <idx><h>if-else statement</h></idx>
+      has the following interpretation: If the
+      <em>boolean expression</em> is true,
+      execute <em>statement1</em>;
+      otherwise execute <em>statement2</em>.
+      This <image width="73%" source="chptr03"/> interpretation is shown in <xref ref="fig-ifelsechart">Figure</xref>.
+    </p>
+  </subsection>
+  <subsection xml:id="sec-multi">
+    <title>The Nested if/else Multiway Selection Structure</title>
+    <p>
+      The statements that one inserts in place of
+      <em>statement1</em> and <em>statement2</em>
+      in the if-else statement can be any executable statement,
+      including another if statement or if-else statement.
+      In other words,
+      it is possible to embed one or more if-else statements inside another if-else statement,
+      thereby creating a <em>nested
+          <idx><h>nested if-else</h></idx>
+      </em> control structure.
+      As with most things,
+      making a control structure too complex isn't a good idea,
+      but there is a standard nested if-else control structure that is very useful.
+      It is known as <em>multiway selection
+          <idx><h>multiway selection</h></idx>
+      </em>.
+      As shown in <xref ref="fig-multiway">Figure</xref>,
+      the multiway structure is used when you want to select one and only one option from several alternatives.
+    </p>
+    <figure xml:id="fig-multiway">
+      <caption>Flowchart of a nested if-else statement.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      Suppose we have an <c>int</c> variable <c>num</c> that will contain one of the values <m>1</m>,
+      <m>2</m>,
+      or <m>3</m> unless there has been an error assigning a value to it.
+      Suppose that we want to write code that will write out the English word for the value in <c>num</c>. In the example shown in <xref ref="fig-multiway">Figure</xref>
+      there are three alternatives plus an error state.
+      Here is the Java code for this example:
+    </p>
+<pre>
+if (num == 1)
+   System.out.println("One");
+else if (num == 2)
+   System.out.println("Two");
+else if (num == 3)
+   System.out.println("Three");
+else
+   System.out.println("Error: Unknown value");
+</pre>
+    <p>
+      Note that the multiway structure has a single entry point and that only one of the four possible alternatives is \marginpar{Multiple alternatives} executed.
+      The code will print exactly one of the strings.
+    </p>
+    <p>
+      We will have many occasions to use the if-else structure.
+      Although it does not represent a significant change,
+      we could rewrite our <c>takeStick()</c> method to make use of the if-else instead of the somewhat obscure statement :
+    </p>
+<pre>
+player = 3 - player;
+</pre>
+    <p>
+      to change the value of player from <m>1</m> to <m>2</m> or vice versa:
+    </p>
+<pre>
+public String takeSticks(int num)
+{   nSticks = nSticks - num;
+  if (player == 1)
+    player = 2;   // From 1 to 2
+  else
+    player = 1;   // From 2 to 1}
+</pre>
+    <p>
+      In some respects this version of <c>takeSticks()</c> involves four lines of code instead of one but is simpler to understand.
+      The <c>if</c>-statement tests whether the value of <c>player</c> is <m>1</m>.
+      If it is, the value is changed to <m>2</m>.
+      If the value of <c>player</c> is not <m>1</m>,
+      then the value must be <m>2</m> and so the value is changed to <m>1</m>.
+      Both versions of the code will give precisely the same result,
+      a programmer could choose to write the code either way.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            Consider the following method with
+<c>boolean</c> parameter.
+<pre>
+public String getStatus(boolean isDone)
+{   if (isDone)
+        return "Done";
+    else
+        return "Not Done";}
+</pre>Draw a flowchart for the if-else version of the \marginpar{Flowchart symbols}<c>getStatus()</c> method,
+            using the figures in this section as a guide.
+            The if-else structure should be drawn exactly as shown in Figure<nbsp/>3.11.
+            It should have a single entry point that leads directly to the top of a diamond-shaped box that contains a boolean condition.
+            There should be two branches coming out of the condition box.
+            The one going to the right is the true case,
+            and the one going to the left is the false case.
+            Each of these branches should contain one rectangular box,
+            which contains the statements that would be executed in that case.
+            The left and right branches should be connected by a circular symbol that is aligned directly under the diamond box whose conditions it connects.
+            There should be a single exit arrow pointing directly down.
+          </p>
+        </li>
+        <li>
+          <p>
+            Identify the error in the following statements:
+<pre>
+if (isHeavy == true)
+    System.out.println("Heavy");
+else ;
+    System.out.println("Light");
+if (isLong == true)
+    System.out.println("Long")
+else
+    System.out.println("Short");
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            Suppose we have an <c> int</c> instance variable named <c>player</c> in some class describing a three person game.
+            Write a method named
+<c>getPlayerName()</c> that returns a <c>String</c>. It should return
+            <q>Ann</q>,
+            <q>Bill</q>,
+            <q>Cal</q>, or
+            <q>Error</q>
+            when the value of <c>player</c> is respectively 1, 2, 3, or any other value.
+          </p>
+        </li>
+        <li>
+          <p>
+            How does a parameter for a primitive type differ from a parameter for a reference type?
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection xml:id="self-study-exerciseN12">
+    <title>The While Structure</title>
+    <p>
+      A <term>repetition structure</term>
+      is a control structure that repeats a statement or sequence of statements in a controlled way.
+      Repetition structures are also referred to as
+      <term>loop structures</term>.
+      Many types of programming tasks require a repetition structure.
+      Consider some examples.
+      <ul>
+        <li>
+          <p>
+            You want to add up the squares of the numbers from 1 to 100.
+          </p>
+        </li>
+        <li>
+          <p>
+            You want to compute compound interest on an amount of money in a savings account with a fixed interest rate if it is kept there for <m>30</m> years.
+          </p>
+        </li>
+        <li>
+          <p>
+            A computer security employee wants to try every possible password in order to break into an account of a suspected spy.
+          </p>
+        </li>
+        <li>
+          <p>
+            You want to have players input moves for a turn in a game until the game is over.
+            Our <c>OneRowNim</c> is such an example.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      We will study several different repetition structures of Java in depth in Chapter 6.
+      We will briefly consider the while statement here so as to be able to define methods that are more powerful and more interesting.
+      Let us write a method that solves a slight generalization of the first problem above.
+      We will use the while statement to sum the squares of integers from <m>1</m> to a number specified as a parameter of the method.
+      Thus, the method call <c>sumSquares(3)</c> should return the value <m>14</m> since <m>1*1 + 2*2 + 3*3 = 1 + 4 + 9 = 14</m>.
+    </p>
+<pre>
+public int sumSquares(int max)
+{ int num = 1;
+  int sum = 0;
+  while (num &lt;=  max) { // While num &lt;= max
+    sum = sum + num*num; // Add square to sum
+    num = num + 1;       // Add 1 to num
+  } //while
+  return sum;           // Return the sum}
+</pre>
+    <p>
+      Note that in this example,
+      the variable <c>num</c> gets assigned an initial value of <m>1</m> before the <c>while</c> statement.
+      Note also that the <c>boolean</c> expression <c>num &lt; max</c> in parentheses after <c>while</c> states the condition for which we wish to continue summing squares.
+      Finally note that the last statement in the block following the <c>boolean</c> expression adds <m>1</m> to <c>num</c><ndash/>that is,
+      this variable is updated at the end of the block.
+    </p>
+    <p>
+      The <term>while statement</term>
+          <idx><h>while statement</h></idx>
+      is a loop statement in which the loop entry condition occurs before the loop body.
+      It has the following general form:
+    </p>
+    <principle>
+      <title>While Statement</title>
+      <p>
+        The <term>while statement</term> has the following syntax:
+      </p>
+      <p>
+        <m>\matrix{ \hspace{1.1in}\texttt{while} \amp ( \; \textit{loop\;entry\;condition } \; ) \cr \hspace{1.1in}\;\;\;\;\;\;\; \amp \textit{loop body } \; ; \cr}</m>
+      </p>
+    </principle>
+    <p>
+      When the <c>while</c> statement is executed,
+      the loop entry condition is evaluated and if this evaluates to <c>false</c>, execution continues at the statement immediately after the loop body.
+      If the loop entry condition evaluates to <c>true</c>, the loop body is executed and then the entry condition is evaluated again.
+      The loop body continues to be executed until the loop entry condition evaluates to <c>false</c>.
+    </p>
+    <p>
+      To have a <c>while</c> statement accomplish a task,
+      the variable or variables in the loop entry condition must be initialized correctly before the
+<c>while</c> statement and these variables must be correctly updated at the end of the loop body.
+      We can refer to the initializer statement followed by a <c>while</c> statement as a
+      <term>while structure</term>.
+      We can restate the above guidelines as a design principle:
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Loop Structure</title>
+      <p>
+        A properly designed while structure must include an initializer,
+        a loop entry condition, and an updater.
+        The updater should guarantee that the loop entry condition eventually fails,
+        thereby allowing the loop to terminate.
+      </p>
+    </principle>
+    <p>
+      In pseudocode, the <em>while structure</em>
+          <idx><h>while structure</h></idx>
+      would take the following form:
+    </p>
+<pre>
+InitializerStatements;         // Initializer
+while (loop entry condition) { // Bound test
+     Statements;                // Loop body
+     UpdaterStatements;         // Updater}
+</pre>
+    <p>
+      As its form suggests,
+      the while structure is designed so that on some conditions the loop body will never be executed.
+      Because it tests for the loop entry condition before the loop body,
+      it is possible that the loop body is never executed.
+      We might say that it is designed to perform 0 or more iterations.
+    </p>
+    <p>
+      For example,
+      if the method call <c>sumSquares(-3)</c> is executed,
+      the loop body will be skipped,
+      because the loop entry condition <c>num
+&lt;= max</c> is false to begin with.
+      No iterations will be performed,
+      and the algorithm will simply return the value <m>0</m>.
+    </p>
+    <figure xml:id="fig-whileflow">
+      <caption>Flowchart of the while statement and while
+      structure.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      Note also that in the while statement the bound test is preceded by initializer statements,
+      and the loop body contains updater statements.
+      The semantics of the while structure are shown in <xref ref="fig-whileflow">Figure</xref>.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Modify the definition of the
+<c>sumSquares()</c> method to define a method named <c>sumCubes()</c> that sums the cubes of integers from a minimum value up to a maximum value and returns that sum.  <c>sumCubes()</c> should have two parameters that will store the minimum and maximum values.
+            Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2 + 3*3*3 = 8 + 27 = 35</m>.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

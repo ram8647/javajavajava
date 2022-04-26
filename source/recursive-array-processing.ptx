@@ -1,0 +1,376 @@
+<section xml:id="recursive-array-processing">
+  <title>Recursive Array Processing</title>
+  <introduction>
+    <p>
+      Like strings, arrays also have a recursive structure.
+      Just as each substring of a string is similar to the string as a whole,
+      each portion of an array is similar to the array as a whole.
+      Similarly, just as a string can be divided into a head and a tail,
+      an array can be divided into its <em>head</em>,
+      the first element, and its <em>tail</em>,
+      <image width="73%" source="chptr12"/> the rest of its elements (Fig.<nbsp/>12.14).
+      Because the tail of an array is itself an array,
+      it satisfies the self-similarity principle.
+      Therefore, arrays have all the appropriate characteristics that make them excellent candidates for recursive processing.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Recursive Sequential Search</title>
+    <p>
+      Let's start by developing a recursive version of the sequential search algorithm that we discussed in Chapter<nbsp/>9.
+      Recall that the sequential search method takes two parameters: \marginpar{Method design} the array being searched and the <em>key</em>,
+      or target value, being searched for.
+      If the key is found in the array,
+      the method returns its index.
+      If the key is not found, the method returns <m>-1</m>,
+      thereby indicating that the key was not contained in the array.
+      The iterative version of this method has the following general form:
+    </p>
+<pre>
+/**
+  * Performs a sequential search of an integer array
+  * @param arr is the array of integers
+  * @param key is the element being searched for
+  * @return the key's index is returned if the key is
+  *  found otherwise -1 is returned
+  * Pre:  arr is not null
+  * Post: either -1 or the key's index is returned
+  */
+public int sequentialSearch(int arr[], int key) {
+    return -1;           // failure if this is reached}
+</pre>
+    <p>
+      If we divide the array into its head and tail,
+      then one way to describe a recursive search algorithm is as follows:
+    </p>
+<pre>
+If the array is empty, return -1
+If the array's head matches the key, return its index
+If the array's head doesn't match the key,
+ return the result of searching the tail of the array
+</pre>
+    <p>
+      This algorithm clearly resembles the approach we used in recursive string processing: Perform some operation on the head of the array and recurse on the tail of the array.
+    </p>
+    <p>
+      The challenge in developing this algorithm is not so much knowing what \marginpar{How do we represent head and tail?} to do but knowing how to represent concepts like the head and the tail of the array.
+      For strings,
+      we had methods such as <c>s.charAt(0)</c> to represent the head of the string and <c>s.substring(1)</c> to represent the string's tail.
+      For an array named <c>arr</c>, the expression
+<c>arr[0]</c> represents the head of the array.
+      Unfortunately,
+      we have no method comparable to the <c>substring()</c> method for strings that lets us represent the tail of the array.
+    </p>
+    <p>
+      To help us out of this dilemma,
+      we can use an integer parameter to represent the head of the array.
+      Let's have the <c>int</c> parameter,
+      <em>head</em>, represent the current head of the array (Fig.
+      <xref ref="fig-headtail2"></xref>).
+      Then <m>head+1</m> represents the start of the tail,
+      and <c>arr.length-1</c> represents the end of the tail.
+      Our method will always be passed a reference to the whole array,
+      but it will restrict the search to the portion of the array starting at <em>head</em>.
+      If we let <em>head</em> vary from 0 to <c>arr.length</c> on each recursive call,
+      the method will recurse through the array in head/tail fashion,
+      searching for the key.
+      The method will stop when <c>head =
+arr.length</c>.
+    </p>
+    <figure xml:id="fig-headtail2">
+      <caption>A
+      parameter, <em>head</em>, can represent the head of some portion of the array.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <principle>
+      <title>PROGRAMMING TIP:Subarray Parameter</title>
+      <p>
+        For methods that take an array argument,
+        an <c>int</c> parameter can be used to designate the portion of the array that should be processed in the method.
+      </p>
+    </principle>
+    <figure xml:id="fig-rsearch">
+      <caption>The recursive search method takes three parameters.  The
+      <em>head</em> parameter points to the beginning of that portion of the
+      array that is being searched.</caption>
+<pre>
+/**
+   * search(arr,head,key)---Recursively search arr for key
+   *  starting at head
+   * Pre:  arr != null and 0 &lt;= head &lt;= arr.length
+   * Post: if arr[k] == key for k, 0 &lt;= k &lt; arr.length,
+   *       return k else return -1
+   */
+private int search(int arr[], int head, int key)  {
+ if (head == arr.length) // Base: empty list - failure
+   return -1;
+ else if (arr[head] == key) // Base: key found---success
+   return head;
+ else               // Recursive: search the tail
+   return search(arr, head + 1, key);}
+</pre>
+    </figure>
+    <p>
+      This leads to the definition for recursive search shown in <xref ref="fig-rsearch">Figure</xref>.
+      Note that the recursive search method takes three parameters:
+      the array to be searched, <c>arr</c>, the <c>key</c> being sought,
+      and an integer <c>head</c> that gives the starting location for the search.
+      The algorithm is bounded when <c>head =
+arr.length</c>. In effect,
+      this is like saying the recursion should stop when we have reached a tail that contains 0 elements.
+      This underscores the point we made earlier about the importance of parameters in designing recursive methods.
+      Here the <em>head</em> parameter serves as the
+      <em>recursion parameter</em>.
+          <idx><h>recursion parameter</h></idx>
+      \marginpar{Recursion parameter} It controls the progress of the recursion.
+    </p>
+    <p>
+      Note also that for the search algorithm we need two base cases.
+      One represents the successful case,
+      where the key is found in the array.
+      The other represents the unsuccessful case,
+      which comes about after we have looked at every possible head in the array and not found the key.
+      This case will arise through exhaustion<mdash/>that is,
+      when we have exhausted all possible locations for the key.
+    </p>
+    <principle>
+      <title>DEBUGGING TIP:Recursive Search</title>
+      <p>
+        For the recursive search method to work properly,
+        it must be called with the correct value for the
+        <term>head</term> parameter.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="self-study-exerciseR30">
+    <title>Information Hiding</title>
+    <p>
+      Note that in order to use the <c>search()</c> method,
+      you would have to know that you must supply a value of 0 as the argument for the
+      <em>head</em> parameter.
+      This is not only awkward but also impractical.
+      After all, if we want to search an array,
+      we just want to pass two arguments,
+      the array and the key we're searching for.
+      It's \marginpar{Design issue} unreasonable to expect users of a method to know that they also have to pass 0 as the head in order to get the recursion started.
+      This design is also prone to error,
+      because it's quite easy for a mistake to be made when the method is called.
+    </p>
+    <p>
+      For this reason,
+      it is customary to provide a nonrecursive interface to the recursive method.
+      The interface hides the fact that a recursive algorithm is being used,
+      but this is exactly the kind of implementation detail that should be hidden from the user.
+      This is an example of the principle of information hiding that we introduced in Chapter<nbsp/>0.
+      A more \marginpar{Hide implementation details} appropriate design would make the recursive method a <c>private</c> method that's called by the public method,
+      as shown <xref ref="fig-searcher">Figure</xref>
+      and implemented in the <c>Searcher</c> class (Fig.
+      <xref ref="fig-searcherclass"></xref>).
+    </p>
+    <figure xml:id="fig-searcher">
+      <caption>The public <c>search()</c> method serves
+      as an interface to the private recursive method, <c>search()</c>.
+      Note that the methods have different signatures.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <figure xml:id="fig-searcherclass">
+      <caption>Information hiding principle: The <c>public</c><c>search()</c>
+      method calls the <c>private</c>, recursive <c>search()</c>, thereby hiding the
+      fact that a recursive algorithm is used.</caption>
+<pre>
+public class Searcher {
+  /**
+   * search(arr,key) -- searches arr for key.
+   * Pre:  arr != null and 0 &lt;= head &lt;= arr.length
+   * Post: if arr[k] == key for k,  0 &lt;= k &lt; arr.length,
+   *       return k,  else return -1
+   */
+  public int search(int arr[], int key) {
+    return search(arr, 0, key); // Call recursive search
+  }
+  /**
+   * search(arr, head, key) -- Recursively search arr for key
+   *  starting at head
+   * Pre:  arr != null and 0 &lt;= head &lt;= arr.length
+   * Post: if arr[k] == key for k,  0 &lt;= k &lt; arr.length, return k
+   *       else return -1
+   */
+  private int search(int arr[], int head, int key)  {
+    if (head == arr.length)   // Base case: empty list - failure
+      return -1;
+    else if (arr[head] == key)// Base case: key found -- success
+      return head;
+    else                      // Recursive case: search the tail
+        return search(arr, head + 1, key);
+  } // search()
+  public static void main(String args[]) {
+    int numbers[] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+    Searcher searcher = new Searcher();
+    for (int k = 0; k &lt;= 20; k++) {
+        int result = searcher.search(numbers, k);
+        if (result != -1)
+          System.out.println(k + " found at " + result);
+        else
+          System.out.println(k + " is not in the array ");
+    } // for
+  } // main()} // Searcher
+</pre>
+    </figure>
+    <principle>
+      <title>EFFECTIVE DESIGN:Information Hiding</title>
+      <p>
+        Unnecessary implementation details,
+        such as whether a method uses a recursive or iterative algorithm,
+        should be hidden within the class.
+        Users of a class or method should be shown only those details that they need to know.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Write a <c>main()</c> method for the <c>Searcher</c> class to conduct the following test of <c>search()</c>. Create an <c>int</c> array of ten elements,
+            initialize its elements to the even numbers from 0 to 18,
+            and then use a for loop to search the array for each of the numbers from 0 to 20.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection xml:id="self-study-exercisesD30">
+    <title>Recursive Selection Sort</title>
+    <p>
+      Next we want you to think back to Chapter<nbsp/>9,
+      where we introduced the selection sort algorithm.
+      To review the concept, suppose you have a deck of 52 cards.
+      Lay them out on a table, face up,
+      one card next to the other.
+      Starting at the last card,
+      look through the deck,
+      from \marginpar{Sorting a deck of cards} last to first,
+      find the largest card and exchange it with the last card.
+      Then go through the deck again starting at the next to the last card,
+      find the next largest card, and exchange it with the next to the last card.
+      Go to the next card, and so on.
+      If you repeat this process 51 times,
+      the deck will be completely sorted.
+    </p>
+    <principle>
+      <title>DEBUGGING TIP:Off-by-One Error</title>
+      <p>
+        Sorting algorithms are particularly susceptible to an off-by-one error.
+        To sort an array with <term>N</term> elements,
+        you generally need to make <m>N-1</m> passes.
+      </p>
+    </principle>
+    <p>
+      Let's design a recursive version of this algorithm.
+      The algorithm we just described is like a head-and-tail algorithm in reverse,
+      where the last card in the deck is like the head,
+      and the cards before it are like the tail.
+      After each pass or recursion,
+      the last card will be in its proper location,
+      and the cards before it will represent the unsorted portion of the deck.
+      If we use parameter to represent <em>last</em>,
+      then it will be moved one card to the left at each level of the recursion.
+    </p>
+    <figure xml:id="fig-selectsort">
+      <caption>Selection sort: Using a head-and-tail
+      algorithm in reverse to sort an integer array.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      <xref ref="fig-selectsort">Figure</xref>
+      illustrates this process for an array of integers.
+      The base case is reached when the <em>last</em>
+      parameter is pointing to the first element in the array.
+      An array with one element in it is already sorted.
+      It needs no rearranging.
+      The recursive case involves searching an ever-smaller portion of the array.
+      This is represented in our design by moving <em>last</em>
+      down one element to the left.
+    </p>
+    <p>
+      <xref ref="fig-selectionsort">Figure</xref>
+      provides a partial implementation of selection sort for an array of <c>int</c>. In this definition,
+      the array is one parameter.
+      The second parameter, <c>int last</c>, defines that portion of the array,
+      from right to left, that is yet to be sorted.
+      On the first call to this method,
+      <em>last</em> will be
+<c>arr.length  -  1</c>. On the second,
+      it will be <c>arr.length  -  2</c>, and so on.
+      When <em>last</em> gets to be 0, the array will be sorted.
+      Thus, in terms of the card deck analogy,
+      <em>last</em> represents the last card in the unsorted portion of the deck.
+    </p>
+    <figure xml:id="fig-selectionsort">
+      <caption>The <c>selection-</c><c>Sort()</c> method uses the <c>findMax()</c>
+      and <c>swap()</c> methods to help it sort an array.</caption>
+<pre>
+/**
+  * selectionSort(arr,last)--Recursively sort arr starting
+  *   at last element
+  * Pre:  arr != null and 0 &lt;= last &lt; arr.length
+  * Post: arr will be arranged so that arr[j] &lt;= arr[k],
+  *   for any j &lt; k
+  */
+private void selectionSort(int arr[], int last) {
+ if (last > 0) {
+   int maxLoc = findMax (arr, last);// Find the largest
+   swap(arr, last, maxLoc);         // Swap it with last
+   selectionSort(arr, last - 1);    // Move down the array
+ }} // selectionSort()
+</pre>
+    </figure>
+    <p>
+      Note how simply the <c>selectionSort()</c> method can be coded.
+      Of course, this is because we have used separate methods to handle the \marginpar{Task decomposition} tasks of finding the largest element and swapping the last element and the largest.
+      This not only makes sense in terms of the divide-and-conquer principle,
+      but we also already defined a <c>swap()</c> method in Chapter<nbsp/>9.
+      So here is a good example of reusing code:
+    </p>
+<pre>
+/**
+  * swap(arr, el1 el2) swaps el1 and el2 in the array, arr
+  * Pre: arr is non null, 0 &lt;= el1 &lt; arr.length,
+                          0 &lt;= el2 &lt; arr.length
+  * Post: the locations of el1 and el2 are swapped in arr
+  */
+private void swap(int arr[], int el1, int el2)  {
+ int temp = arr[el1]; // Assign the first element to temp
+ arr[el1] = arr[el2]; // Overwrite first with second
+ arr[el2] = temp;     // Overwrite second with first(temp)} // swap()
+</pre>
+    <p>
+      The definition of the <c>findMax()</c> method is left as a self-study exercise.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:Method Decomposition</title>
+      <p>
+        A task can be simplified by breaking it up into simpler subtasks,
+        especially if you already have methods for solving one or more of the subtasks.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            As in the case of the <c>search()</c> method,
+            we need to provide a public interface to the recursive <c>selectionSort()</c> method.
+            We want to enable the user to sort an array just by calling <c>sort(arr)</c>, where <c>arr</c> is the name of the array to be sorted.
+            Define the <c>sort()</c> method.
+          </p>
+        </li>
+        <li>
+          <p>
+            Define an iterative version of the <c>findMax(arr,N)</c> method that is used in
+<c>selectionSort()</c>. Its goal is to return the location (index) of the largest integer between <c>arr[0]</c> and <c>arr[N]</c>.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

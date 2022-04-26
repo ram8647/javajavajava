@@ -1,0 +1,800 @@
+<section xml:id="drawing-linesand-defining-graphical-methods-optional">
+  <title>Drawing Lines and Defining Graphical Methods (Optional)</title>
+  <p>
+    We used a <c>Graphics</c> object in the previous chapter to draw rectangles and ovals in a JFrame window.
+    The <c>Graphics</c> class also possesses a method for drawing a line segment.
+    Problems involving drawing pictures in an JFrame window using a series of line segments can be a source of examples of defining useful methods and also of making good use of loops.
+  </p>
+  <p>
+    The <c>Graphics</c> class has a public instance method with the header:
+  </p>
+<pre>
+public  void  drawLine(int x1, int y1, int x2, int y2)
+</pre>
+  <p>
+    The method call <c>g.drawLine(x1, y1, x2, y2)</c> draws a line from the point <m>(x1,y1)</m> to <m>(x2,y2)</m> where <m>(x,y)</m> refers to a point that is <m>x</m> pixels from the left edge of the area that <c>g</c> is drawing in and <m>y</m> pixels from the top edge.
+    Thus <c>g.drawLine(10, 10, 10, 60)</c> draws a vertical line segment that is 50 pixels long and is 10 pixels from the left edge of the drawing area, that is,
+    a line segment from the point <m>(10,10)</m> to the point <m>(10,60)</m>.
+  </p>
+  <p>
+    Consider the problem of creating an Swing program with a method called <c>drawSticks()</c> to draw any specified number of vertical line segments.
+    This method might be useful for an graphical user interface to the <c>OneRowNim</c> game to draw the number of sticks at a given point in a game.
+    Suppose that this method must have an
+<c>int</c> parameter to specify the number of vertical lines to draw and two <c>int</c> parameters to specify the location of the top endpoint of the left most line segment.
+    The <c>drawSticks()</c> method will need to use a <c>Graphics</c> object connected to the JFrame window for drawing the line segment.
+    The only such
+<c>Graphics</c> object available is the parameter in the <c>paint()</c> method of the Canvas.
+    Thus the method must have a <c>Graphics</c> parameter and it will be called in the <c>paint()</c> method using the <c>Graphics</c> object there as an argument.
+    Thus the header of the method should look like:
+  </p>
+<pre>
+public void drawSticks(Graphics g,int x,int y,int num)
+</pre>
+  <p>
+    The length of the line segments and and the distance between them are not specified by parameters so we need to choose some fixed values for these quantities.
+    Let us assume that the line segments are 10 pixels apart and 50 pixels long.
+    We now have enough information to complete the definition of an applet to solve this problem.
+    Such a class definition is reproduced in <xref ref="fig-drawsticksprog">Figure</xref>.
+  </p>
+  <figure xml:id="fig-drawsticksprog">
+    <caption>A Swing Class with a method for drawing a set of sticks.</caption>
+<pre>
+/** DrawLineCanvas   demonstrates some graphics commands.
+ *It draws a set of 12 vertical lines and a set of 7 lines.
+ */
+import java.awt.*;
+import javax.swing.JFrame;
+public class DrawSticksCanvas extends Canvas
+  /** drawSticks(g,x,y,num) will draw num vertical line
+   * segments.  The line segments are 10 pixels apart and
+   * 50 pixels long. The top endpoint of the left most
+   *line segment is at the point (x,y).
+   */
+  public void drawSticks(Graphics g, int x, int y, int num)
+  {   int k = 0;
+      while (k &lt; num)
+      {   g.drawLine(x, y, x, y + 50);
+          x = x + 10;
+          k = k + 1;
+      } // while
+  } // drawSticks()
+  public void paint(Graphics g)
+  {   drawSticks(g, 25, 25, 12);
+      g.setColor(Color.cyan);
+      drawSticks(g, 25, 125, 7);
+  } // paint()
+   } // DrawSticksCanvas
+</pre>
+  </figure>
+  <p>
+    Note that the body of <c>drawSticks()</c> uses a while-loop to draw the lines and declares and initializes a local variable to zero to use for counting the number of lines drawn.
+    The statement <c>g.drawLine(x, y, x, y + 50);</c> draws a vertical line which is <m>50</m> pixels long.
+    Increasing the value of <m>x</m> by <m>10</m> each time through the loop moves the next line <m>10</m> pixels to the right.
+  </p>
+  <p>
+    The first call to <c>drawSticks()</c> in the <c>paint()</c> method draws <m>12</m> lines with <m>(25,25)</m> the top point of the left-most line.
+    The second call to
+<c>drawSticks()</c> will draw <m>7</m> cyan sticks <m>100</m> pixels lower.
+    Note that changing the color of <c>g</c> before passing it as an argument to
+<c>drawSticks()</c> changes the drawing color.
+  </p>
+  <p>
+    An image of the <c>DrawSticksCanvas</c> as it appears in a window is shown in <xref ref="fig-drawstickseps">Figure</xref>.
+  </p>
+  <p>
+    \marginfigscaled{chptr03/drawsticks.png}{0.70}{The DrawSticksCanvas as displayed in a Java window.}{fig-drawstickseps}
+  </p>
+  <p>
+    As we have seen in this example,
+    defining methods with parameters to draw an object makes the code reusable and makes it possible to draw a complex scene by calling a collection of simpler methods.
+    It is a typical use of the divide-and-conquer principle.
+    The while-loop can be useful in drawing almost any geometrically symmetric object.
+  </p>
+  <p>
+    \secSMHleft{Chapter Summary} \secKTH{Technical Terms} \begin{KT} accessor method
+  </p>
+  <p>
+    class scope
+  </p>
+  <p>
+    formal parameter
+  </p>
+  <p>
+    if statement
+  </p>
+  <p>
+    if/else statement
+  </p>
+  <p>
+    inherit
+  </p>
+  <p>
+    local scope
+  </p>
+  <p>
+    loop structure
+  </p>
+  <p>
+    method overloading
+  </p>
+  <p>
+    method signature
+  </p>
+  <p>
+    mutator method
+  </p>
+  <p>
+    multiway selection
+  </p>
+  <p>
+    override
+  </p>
+  <p>
+    polymorphism
+  </p>
+  <p>
+    repetition structure
+  </p>
+  <p>
+    scope
+  </p>
+  <p>
+    selection
+  </p>
+  <p>
+    side effect
+  </p>
+  <p>
+    while statement
+  </p>
+  <p>
+    while structure \end{KT}
+  </p>
+  <p>
+    \secSMHtwo{Summary of Important Points}
+    <ul>
+      <li>
+        <p>
+          A <em>formal parameter
+            <idx><h>parameter</h></idx>
+          </em> is a variable in a method declaration.
+          It always consists of a type followed by a variable identifier.
+          An <em>argument</em> is a value that is passed to a method via a formal parameter when the method is invoked.
+          A method's <em>parameters</em> constrain the type of information that can be passed to a method.
+        </p>
+      </li>
+      <li>
+        <p>
+          When an argument of primitive type is passed to a method,
+          it cannot be modified within the method.
+          When an argument of reference type is passed to a method,
+          the object it refers to can be modified within the method.
+        </p>
+      </li>
+      <li>
+        <p>
+          Except for <c>void</c> methods,
+          a <em>method invocation</em> or <em>method call</em>
+          is an expression which has a value of a certain type.
+          For example, <c>nim.getSticks()</c> returns a <c>int</c> value.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <em>signature
+            <idx><h>signature</h></idx>
+          </em> of a method consists of its name,
+          and the number, types, and order of its formal parameters.
+          A class may not contain more than one method with the same signature.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>constructor
+            <idx><h>constructor</h></idx>
+          </em> is a method that is invoked when an object is created.
+          If a class does not contain a constructor method,
+          the Java compiler supplies a <em>default constructor</em>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Restricting access to certain portions of a class is a form of
+          <em>information hiding<idx><h>Information Hiding Principle</h></idx>
+          </em>.
+          Generally, instance variables are hidden by declaring them
+<c>private</c>. The class's <c>public</c> methods make up its interface.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <em>if statement</em> executes a statement only if its boolean condition is true.
+          The <em>if-else statement</em> executes one or the other of its statements depending on the value of its boolean condition.
+          <em>Multiway selection</em> allows one and only one of several choices to be selected depending on the value of its boolean condition.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>while</c> statement is used for coding loop structures that repeatedly execute a block of code while a boolean condition is satisfied.
+        </p>
+      </li>
+    </ul>
+  </p>
+  <p>
+    { \rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+    height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secANSHleft}{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+    height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secKTH}[1]{{ #1} } \newcommand{\secLREXRH}[1]{{ { \uppercase{#1}}} } \def\endpracticedesign{ {\rule[0pt]{27pc}{0.5pt}} } \newcommand{\secHsix}[1]{{#1} } \newcommand{\secHfive}[2]{{ \rule[16pt]{27pc}{0.5pt} }\newcommand{\secBXsixHone}[1]{{#1} } \newcommand{\secBXsixBTHleft}[1]{ {\rule[0pt]{44.45pc}{2pt}} \marginpar{ }\newcommand{\secBXsevenHone}[1]{{#1} }\newcommand{\secCOBH}[1] {{\uppercase{#1}} }\newcommand{\secCOLH}[1] {{\uppercase{#1}} }\newcommand{\secSMH}[1]{ {\rule[0pt]{40.5pc}{1pt}} \epsfig{file=../commonart/eoc2text.eps,
+    height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{#1} } } } \newcommand{\secSMHleft}[1]{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+    height=4pt,width=40.5pc,clip=} \marginpar{ \uppercase{#1} } } \newcommand{\secSMHtwo}[1]{{ #1} }\newcommand{\secEXRHone}[1]{{\uppercase{#1}} } \newcounter{EXRLLcount} { \marginpar{{From the Java Library} #1} } {\begin{minipage}{26pc}}{\end{minipage}} \rule[0pt]{27pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1} } \begin{minipage}[t]{#2} { \end{minipage} } \rule[0pt]{40pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1}
+    <ul>
+      <li>
+        <p>
+          A <em>method declaration</em> defines the method by specifying its name,
+          qualifiers, return type, formal parameters, and its algorithm,
+          thereby associating a name with a segment of executable code.
+          A <em>method invocation</em> calls or uses a defined method.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>formal parameter</em> is a variable in the method declaration,
+          whose purpose is to store a value while the method is running.
+          An <em>argument</em> is a value that is passed to a method in place of a formal parameter.
+        </p>
+      </li>
+      <li>
+        <p>
+          The following code declares two instance variables for names of players and defines a <c>setName()</c> method:
+<pre>
+private String nameOne = "Player One";
+private String nameTwo = "Player Two";
+public void setNames(String name1, String name2)
+{    nameOne = name1;
+     nameTwo = name2;}
+</pre>Of course,
+          there are many other appropriate names for the variables and parameters and other initial assignments.
+        </p>
+      </li>
+      <li>
+        <p>
+          A method call that sets the names of the players of <c>game1</c> is:
+<pre>
+game1.setNames("Xena","Yogi");
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          A constructor cannot have a return type, such as void.
+        </p>
+      </li>
+      <li>
+        <p>
+          One definition for the method is:
+<pre>
+public OneRowNim(int sticks)
+{    nSticks = sticks;
+     player = 2;}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          The following would be displayed on the screen:
+<pre>
+1
+   20
+   false
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          One definition for the method is:
+<pre>
+public int getMoves()
+{   return nMoves;}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          One definition for the method is:
+<pre>
+public boolean playerOneIsNext()
+{   return (player == 1);}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          See Figure<nbsp/>3.21. \marginfiglarge{chptr03/isdone.eps}{Flowchart of the if-else version of the
+<c>getStatus()</c> method.}{fig-getstateifelse}
+        </p>
+      </li>
+      <li>
+        <p>
+          <pre>
+if (isHeavy == true)
+     System.out.println("Heavy") ;
+else ;  // Error (remove this semicolon)
+     System.out.println("Light");
+if (isLong == true)
+     System.out.println("Long")
+else   // Error (end line above with semicolon)
+     System.out.println("Short");
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          <pre>
+public String getPlayerName()
+{    if (player == 1)
+         return "Ann";
+     else if (player == 2)
+         return "Bill";
+     else if (player == 3)
+         return "Cal";
+     else
+         return "Error";}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          When passing an argument for a primitive type,
+          a copy of the argument's value is passed.
+          The actual argument cannot be changed inside the method.
+          When passing a reference to an object,
+          the object can be changed within the method.
+        </p>
+      </li>
+      <li>
+        <p>
+          <pre>
+public int sumCubes(int min, int max)
+{
+    int num = min;
+    int sum = 0;
+    while (num &lt;=  max) { // While num &lt;= max
+        sum = sum + num*num*num; // Add cube of num to sum
+        num = num + 1;       // Add 1 to num
+    } //while
+    return sum;           // Return the sum}
+</pre>
+        </p>
+      </li>
+    </ul>
+  </p>
+  <ol>
+    <li>
+      <p>
+        Fill in the blanks in each of the following sentences:
+        <ol>
+          an example of \rule{30pt}{0.5pt} .
+          <li>
+            <p>
+              Methods with the same name are distinguished by their \rule{30pt}{0.5pt} . \marginpar{<term>Note:</term>
+              For programming exercises,
+              <term>first</term> draw a UML class diagram describing all classes and their inheritance relationships and/or associations.}
+            </p>
+          </li>
+          <li>
+            <p>
+              A method that is invoked when an object is created is known as a \rule{30pt}{0.5pt} method.
+            </p>
+          </li>
+          <li>
+            <p>
+              A method whose purpose is to provide access to an object's instance variables is known as an \rule{30pt}{0.5pt} method.
+            </p>
+          </li>
+          <li>
+            <p>
+              A <c>boolean</c> value is an example of a \rule{30pt}{0.5pt} type.
+            </p>
+          </li>
+          <li>
+            <p>
+              A <c>OneRowNim</c> variable is an example of a \rule{30pt}{0.5pt} type.
+            </p>
+          </li>
+          <li>
+            <p>
+              A method's parameters have \rule{30pt}{0.5pt} scope.
+            </p>
+          </li>
+          <li>
+            <p>
+              A class's instance variables have \rule{30pt}{0.5pt} scope.
+            </p>
+          </li>
+          <li>
+            <p>
+              Generally, a class's instance variables should have \rule{30pt}{0.5pt} access.
+            </p>
+          </li>
+          <li>
+            <p>
+              The methods that make up an object's interface should have \rule{30pt}{0.5pt} access.
+            </p>
+          </li>
+          <li>
+            <p>
+              A method that returns no value should be declared \rule{30pt}{0.5pt} .
+            </p>
+          </li>
+          <li>
+            <p>
+              Java's if statement and if-else statement are both examples of \rule{30pt}{0.5pt} control structures.
+            </p>
+          </li>
+          <li>
+            <p>
+              An expression that evaluates to either <c>true</c> or <c>false</c> is known as a \rule{30pt}{0.5pt} .
+            </p>
+          </li>
+          <li>
+            <p>
+              In an if-else statement, an else clause matches \rule{30pt}{0.5pt} .
+            </p>
+          </li>
+          <li>
+            <p>
+              The ability to use a superclass method in a subclass is due to Java's \rule{30pt}{0.5pt} mechanism.
+            </p>
+          </li>
+          <li>
+            <p>
+              The process of redefining a superclass method in a subclass is known as \rule{30pt}{0.5pt} the method.
+            </p>
+          </li>
+        </ol>
+      </p>
+      concepts:
+      <ol>
+        Parameter and <em>argument</em>. Method definition and <em>method invocation</em>. Local scope and <em>class scope</em>. Primitive type and <em>reference type</em>. Access method and <em>constructor method</em>.
+      </ol>
+    </li>
+    <li>
+      <p>
+        Translate each of the following into Java code:
+        <ol>
+          <li>
+            <p>
+              If b1 is true, then print
+              <q>one</q>; otherwise, print
+              <q>two</q>.
+            </p>
+          </li>
+          <li>
+            <p>
+              If b1 is false and if b2 is true, then print
+              <q>one</q>; otherwise, print
+              <q>two</q>.
+            </p>
+          </li>
+          <li>
+            <p>
+              If b1 is false and if b2 is true, then print
+              <q>one</q>; otherwise, print
+              <q>two</q>, or print
+              <q>three</q>.
+            </p>
+          </li>
+        </ol>
+      </p>
+    </li>
+    <li>
+      <p>
+        Identify and fix the syntax errors in each of the following:
+        <ol>
+          <li>
+            <p>
+              <pre>
+if (isWalking == true) ;
+    System.out.println("Walking");
+else
+    System.out.println("Not walking");
+</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <pre>
+if (isWalking)
+     System.out.println("Walking")
+else
+     System.out.println("Not walking");
+</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <pre>
+if (isWalking)
+     System.out.println("Walking");
+else
+     System.out.println("Not walking")
+</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <pre>
+if (isWalking = false)
+     System.out.println("Walking");
+else
+     System.out.println("Not walking");
+</pre>
+            </p>
+          </li>
+        </ol>
+      </p>
+    </li>
+    <li>
+      <p>
+        For each of the following,
+        suppose that <c>isWalking</c> is <c>true</c> and <c>isTalking</c> is <c>false</c>(first draw a flowchart for each statement and then determine what would be printed by each statement):
+        <ol>
+          <li>
+            <p>
+              <pre>
+if (isWalking == false)
+     System.out.println("One");
+     System.out.println("Two");
+</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <pre>
+if (isWalking == true)
+     System.out.println("One");
+     System.out.println("Two");
+</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <pre>
+if (isWalking == false)
+{
+     System.out.println("One");
+     System.out.println("Two");}
+</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <pre>
+if (isWalking == false)
+     if (isTalking == true)
+         System.out.println("One");
+     else
+         System.out.println("Two");
+else
+     System.out.println("Three");
+</pre>
+            </p>
+          </li>
+        </ol>
+      </p>
+    </li>
+    <li>
+      <p>
+        Show what the output would be if the following version of
+<c>main()</c> were executed:
+<pre>
+public static void main(String argv[])
+{
+     System.out.println("main() is starting");
+     OneRowNim game1;
+     game1  = new OneRowNim(21);
+     OneRowNim game2;
+     game2 = new OneRowNim(8);
+     game1.takeSticks(3);
+     game2.takeSticks(2);
+     game1.takeSticks(1);
+     game1.report();
+     game2.report();
+     System.out.println("main() is finished");}
+</pre>
+      </p>
+    </li>
+    <li>
+      <p>
+        Determine the output of the following program:
+<pre>
+public class Mystery
+{
+     public String myMethod(String s)
+     {
+         return("Hello" + s);
+     }
+     public static void main(String argv[])
+     {
+         Mystery mystery = new Mystery();
+         System.out.println( mystery.myMethod(" dolly");
+     }}
+</pre>
+      </p>
+    </li>
+    <li>
+      <p>
+        Write a <c>boolean</c> method<mdash/>a method that returns a <c>boolean</c><mdash/>that takes an <c>int</c> parameter and converts the integers 0 and 1 into <c>false</c> and <c>true</c>, respectively.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define an <c>int</c> method that takes a <c>boolean</c> parameter.
+        If the parameter's value is <c>false</c>, the method should return 0;
+        otherwise, it should return<nbsp/>1.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define a <c>void</c> method named <c>hello</c> that takes a single <c>boolean</c> parameter.
+        The method should print
+        <q>Hello</q>
+        if its parameter is true; otherwise, it should print
+        <q>Goodbye</q>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define a method named <c>hello</c> that takes a single <c>boolean</c> parameter.
+        The method should return
+        <q>Hello</q>
+        if its parameter is true; otherwise it should return
+        <q>Goodbye</q>. Note the difference between this method and the one in the previous exercise.
+        This one returns a <c>String</c>. That one was a <c>void</c> method.
+      </p>
+    </li>
+    <li>
+      <p>
+        Write a method named <c>hello</c> that takes a single <c>String</c> parameter.
+        The method should return a <c>String</c> that consists of the word
+        <q>Hello</q>
+        concatenated with the value of its parameter.
+        For example,
+        if you call this method with the expression
+<c>hello("dolly")</c>, it should return
+        <q>hello dolly</q>. If you call it with <c>hello("young lovers wherever you are")</c>, it should return
+        <q>hello young lovers wherever you are</q>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define a void method named <c>day1</c> that prints
+        <q>a partridge in a pear tree</q>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Write a Java application program called <c>TwelveDays</c> that prints the Christmas carol
+        <q>Twelve Days of Christmas.</q>
+        For this version,
+        write a void method named <c>intro()</c> that takes a single
+<c>String</c> parameter that gives the day of the verse and prints the intro to the song.
+        For example, <c>intro("first")</c> should print,
+        <q>On the first day of Christmas my true love gave to me</q>. Then write methods <c>day1()</c>, <c>day2()</c>, and so on,
+        each of which prints its version of the verse.
+        Then write a <c>main()</c> method that calls the other methods to print the whole song.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define a <c>void</c> method named <c>verse</c> that takes two <c>String</c> parameters and returns a verse of the Christmas carol
+        <q>Twelve Days of Christmas.</q>
+        For example,
+        if you call this method with <c>verse("first", "a  partridge in a pear tree")</c>, it should return,
+        <q>On the first day of Christmas my true love gave to me,
+        a partridge in a pear tree</q>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define a <c>void</c> method named <c>permute</c>, which takes three <c>String</c> parameters and prints out all possible arrangements of the three strings.
+        For example,
+        if you called
+<c>permute("a", "b", "c")</c>, it would produce the following output:
+        abc, acb, bac, bca, cab, cba,
+        with each permutation on a separate line.
+      </p>
+    </li>
+    <li>
+      <p>
+        Design a method that can produce limericks given a bunch of rhyming words.
+        That is, create a limerick template that will take any five words or phrases and produce a limerick.
+        For example,
+        if you call
+<pre>
+limerick("Jones","stones","rained","pained","bones");
+</pre>your method might print (something better than)
+<pre>
+There once a person named Jones
+Who had a great liking for stones,
+But whenever it rained,
+Jones' expression was pained,
+Because stones weren't good for the bones.
+</pre>For each of the following exercises,
+        write a complete Java application program:
+      </p>
+    </li>
+    <li xml:id="additional-exercises">
+      <p>
+        Define a class named <c>Donor</c> that has two instance variables,
+        the donor's name and rating,
+        both of which are
+<c>String</c> s.
+        The name can be any string,
+        but the rating should be one of the following values:
+        <q>high,</q>
+        <q>medium,</q>
+        or
+        <q>none.</q>
+        Write the following methods for this class:
+        a constructor, <c>Donor(String,String)</c>, that allows you to set both the donor's name and rating;
+        and access methods to set and get both the name and rating of a donor.
+        Challenge.
+        Define a <c>CopyMonitor</c> class that solves the following problem.
+        A company needs a monitor program to keep track of when a particular copy machine needs service.
+        The device has two important (boolean) variables:
+        its toner level
+        (too low or not)
+        and whether it has printed more than 100,000 pages since its last servicing
+        (it either has or has not).
+        The servicing rule that the company uses is that service is needed when either 100,000 pages have been printed or the toner is too low.
+        Your program should contain a method that reports either
+        <q>service needed</q>
+        or
+        <q>service not needed</q>
+        based on the machine's state.
+        (Pretend that the machine has other methods that keep track of toner level and page count.)
+        Challenge.
+        Design and write an <c>OldMacdonald</c> class that sings several verses of
+        <q>Old MacDonald Had a Farm.</q>
+        Use methods to generalize the verses.
+        For example,
+        write a method named <c>eieio()</c> to
+        <q>sing</q>
+        the \mbox{``E I E I O''} part of the verse.
+        Write another method with the signature <c>hadAnX(String s)</c>, which sings the
+        <q>had a duck</q>
+        part of the verse,
+        and a method <c>withA(String sound)</c> to sing the
+        <q>with a quack quack here</q>
+        part of the verse.
+        Test your class by writing a <c>main()</c> method. \secEXRHone{Additional Exercises}
+      </p>
+    </li>
+    <li>
+      <p>
+        Suppose you have an <c>Object A</c>, with public methods
+<c>a()</c>, <c>b()</c>, and private method <c>c()</c>. And suppose you have a subclass of <c>A</c> named <c>B</c> with methods named
+<c>b()</c>, <c>c()</c> and <c>d()</c>. Draw a UML diagram showing the relationship between these two classes.
+        Explain the inheritance relationships between them and identify those methods that would be considered polymorphic.
+      </p>
+    </li>
+    <li>
+      <p>
+        Consider the definition of the class <c>C</c>. Define a subclass of <c>C</c> named <c>B</c> that overrides method <c>m1()</c> so that it returns the difference between <c>m</c> and <c>n</c> instead of their sum.
+<pre>
+public class C {
+         private int m;
+         private int n;
+         public C(int mIn, int nIn) {
+             m = mIn;
+             n = nIn;
+         }
+         public int m1() {
+             return m+n;
+         }
+     }
+</pre>
+      </p>
+    </li>
+  </ol>
+</section>

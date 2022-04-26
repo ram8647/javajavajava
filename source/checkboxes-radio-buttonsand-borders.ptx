@@ -1,0 +1,475 @@
+<section xml:id="checkboxes-radio-buttonsand-borders">
+  <title>Checkboxes, Radio Buttons, and Borders</title>
+  <introduction>
+    <p>
+      Suppose you are the software developer for your own software business \marginpar{Problem statement} specializing in computer games.
+      You want to develop an applet-based order form that customers can use to order software over the Web.
+      At the moment you have three software titles<mdash/>a chess game,
+      a checkers game, and a crossword puzzle game.
+      The assumption is that the user will choose one or more of these titles from some kind of menu.
+      The user must also indicate a payment option<mdash/>either E-cash,
+      credit card, or debit card.
+      These options are mutually exclusive<mdash/>the user can choose one and only one.
+    </p>
+    <p>
+      Let's design an applet interface for this program.
+      Unlike the previous problem where the input was a numeric value,
+      in this problem the input will be the user's selection from some kind of menu.
+      The result will be the creation of an order.
+      Let's suppose that this part \marginpar{Interface design} of the task happens behind the scenes<mdash/>that is,
+      we don't have to worry about creating an actual order.
+      The output the user sees will simply be an acknowledgment that the order was successfully submitted.
+    </p>
+    <p>
+      There are several kinds of controls needed for this interface.
+      First, \marginpar{What components do we need?} a conventional way to have users indicate their purchase decisions is to have them click a Submit button.
+      They should also have the option to cancel the transaction at any time.
+    </p>
+    <p>
+      In addition to these button controls,
+      a couple of menus must be presented,
+      one for the software titles, and one for the payment choices.
+      Swing and AWT libraries provide many options for building menus.
+    </p>
+    <p>
+      One key requirement for this interface is the mutually exclusive payment options.
+      A conventional way to handle this kind of selection is with a <c>JRadioButton</c><mdash/>a button that belongs to a group of mutually exclusive alternatives.
+      Only one button from the group may be selected at one time.
+      The selection of software titles could be handled by a collection of checkboxes.
+      A <c>JCheckbox</c> is a button that can be selected and deselected and that always displays its current state to the user.
+      Using a checkbox will make it obvious to the user exactly what software has been selected.
+    </p>
+    <p>
+      To complete the design,
+      let's use a <c>JTextArea</c> again to serve as something of a printed order form.
+      It will confirm the user's order and display other messages needed during the transaction.
+    </p>
+    <p>
+      Given these decisions,
+      we arrive at the design shown in <xref ref="fig-acmegui">Figure</xref>.
+      In this case,
+      our design uses a <c>JPanel</c>
+    </p>
+    <figure xml:id="fig-acmegui">
+      <caption>A design for an online order form
+      interface.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      as the main container, instead of using the top window itself.
+      The reason for this decision is that we want to use Swing <c>Borders</c> around the various <c>JPanel</c> s to enhance the overall visual appeal of the design.
+      The borders will have titles that help explain the purpose of the various panels.
+    </p>
+    <p>
+      Note that the top-level window in this case is a <c>JApplet</c>. By default \marginpar{What top-level windows do we use?} it will have a border layout.
+      For the main <c>JPanel</c> we are using a
+      <m>3 \times 1</m> <c>GridLayout</c>. The components in the main panel are the <c>JTextArea</c> and two other <c>JPanel</c> s.
+      The <c>GridLayout</c> will take care of sizing these so they are all of equal size.
+    </p>
+    <p>
+      The center panel, which uses a flow layout,
+      contains panels for the checkboxes and \marginpar{Component layout} the radio buttons.
+      These elements are grouped within their own panels.
+      Again, we can put a border around them in the final implementation (Fig.<nbsp/>13.26).
+      The button panels use a
+<c>BoxLayout</c>, which we will discuss later. \marginpar{Containment hierarchy} This design leads to the most complex containment hierarchy thus far.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Checkbox and Radio Button Arrays</title>
+    <p>
+      Because we will need three checkboxes, one for each title,
+      and three \marginpar{What data structures do we need?} radio buttons,
+      one for each payment option,
+      it will be useful again to use arrays to store both the buttons and their titles:
+    </p>
+    <p>
+      \[26.5pc]
+    </p>
+<pre>
+private ButtonGroup optGroup = new ButtonGroup();
+private JCheckBox titles[] = new JCheckBox[NTITLES];
+private JRadioButton options[] = new JRadioButton[NOPTIONS];
+private String titleLabels[] =
+    {"Chess Master - \<m>59.95", "Checkers Pro - \</m>39.95",
+                           "Crossword Maker - \$19.95"};
+private String optionLabels[] = {"Credit Card",
+             "Debit Card", "E-cash"};
+</pre>
+    <p>
+      Again, the advantage of this design is that it simplifies the instantiation and initialization of the buttons: \marginfigvspace{-76pt}{chptr13/9f18.eps}{Borders around containers help make them stand out more.}{fig-acmescreen}
+    </p>
+<pre>
+for(int k = 0; k &lt; titles.length; k++) {
+    titles[k] = new JCheckBox(titleLabels[k]);
+    titles[k].addItemListener(this);
+    choicePanel.add(titles[k]);}
+</pre>
+    <p>
+      The only difference between this array of checkboxes and the keypad array of buttons that we used in the <c>Converter</c> program is that checkboxes generate <c>ItemEvent</c> s instead
+<c>ActionEvent</c> s.
+      Therefore, each checkbox must be registered with an
+<c>ItemListener</c>
+      (and, of course,
+      the applet itself must implement the
+<c>ItemListener</c> interface).
+      We'll show how <c>ItemEvent</c> s are handled later.
+    </p>
+    <p>
+      The code for instantiating and initializing the radio buttons is almost the same:
+    </p>
+<pre>
+for(int k = 0; k &lt; options.length; k++) {
+    options[k] = new JRadioButton(optionLabels[k]);
+    options[k].addItemListener(this);
+    optionPanel.add(options[k]);
+    optGroup.add(options[k] );}
+options[0].setSelected(true); // Set first button 'on'
+</pre>
+    <p>
+      Radio buttons also generate <c>ItemEvent</c> s, so they too must be registered with an <c>ItemListener</c>. Note that the first button is set on,
+      which represents a default payment option for the user.
+    </p>
+    <p>
+      The difference between checkboxes and radio buttons is that radio buttons must be added to a <c>ButtonGroup</c><mdash/>here named <c>optGroup</c><mdash/>in order to enforce mutual exclusion among them.
+      A <c>ButtonGroup</c> is an object whose sole task is to enforce mutual exclusion among its members.
+      Whenever you click one radio button,
+      the
+<c>ButtonGroup</c> will automatically be notified of this event and will turn off whatever other button was turned on.
+      As <xref ref="fig-p504f1">Figure</xref> illustrates,
+      radio buttons are monitored by two different objects,
+      a <c>ButtonGroup</c>, which manages the radio buttons' states,
+      and an <c>ItemListener</c>, which listens for clicks on the buttons and takes appropriate actions.
+    </p>
+    <figure xml:id="fig-p504f1">
+      <caption>The <c>ButtonGroup</c> object tracks each radio button's
+      state, ensuring that only one is selected at a time. The <c>ItemListener</c>
+      listens for events on each button.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      Note the effective division of labor in the design of \marginpar{Divide and conquer} the various objects to which a radio button belongs.
+      The
+<c>optionPanel</c> is a GUI component (a <c>JPanel</c>) that contains the button within the visual interface.
+      Its role is to help manage the graphical aspects of the button's behavior.
+      The <c>ButtonGroup</c> is just an <c>Object</c>, not a GUI component.
+      Its task is to monitor the button's relationship to the other buttons in the group.
+      Each object has a clearly delineated task.
+    </p>
+    <p>
+      This division of labor is a key feature of object-oriented design.
+      It is clearly preferable to giving one object broad responsibilities.
+      For example,
+      a less effective design might have given the task of managing a group of buttons to the <c>JPanel</c> that contains them.
+      However, this would lead to all kinds of problems,
+      not least of which is the fact that not everything in the container belongs to the same button group.
+      So a clear division of labor is a much preferable design.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Division of Labor</title>
+      <p>
+        In good object-oriented design,
+        objects are specialists (experts) for very narrow, clearly defined tasks.
+        If there's a new task that needs doing,
+        design a new object to do it.
+      </p>
+    </principle>
+  </subsection>
+  <subsection>
+    <title>Swing Borders</title>
+    <p>
+      The Swing <c>Border</c> and <c>BorderFactory</c> classes can place borders around virtually any GUI element.
+      Using borders is an effective way to make the grouping of components more apparent.
+      Borders can have titles,
+      which enhance the GUI's ability to guide and inform the user.
+      They can also have a wide range of styles and colors,
+      thereby helping to improve the GUI's overall appearance.
+    </p>
+    <p>
+      A border occupies some space around the edge of a
+<c>JComponent</c>. For the Acme Software Titles interface,
+      we place titled borders around four of the panels (Fig.<nbsp/>13.26).
+      The border on the main panel serves to identify the company again.
+      The one around the button panel serves to group the two control buttons.
+      The borders around both the checkbox and the radio button menus help to set them apart from other elements of the display and help identify the purpose of the buttons.
+    </p>
+    <p>
+      Attaching a titled border to a component<mdash/>in this case to a
+<c>JPanel</c><mdash/>is very simple.
+      It takes one statement:
+    </p>
+<pre>
+choicePanel.setBorder(
+       BorderFactory.createTitledBorder("Titles"));
+</pre>
+    <p>
+      The <c>setBorder()</c> method is defined in <c>JComponent</c>, is inherited by all Swing components,
+      and takes a <c>Border</c> argument.
+      In this case,
+      we use the <c>BorderFactory</c> class to create a border and assign it a title.
+      There are several versions of the static
+<c>createTitledBorder()</c> method.
+      This version lets us specify the border's title.
+      It uses default values for type of border (etched), the title's position
+      (sitting on the top line),
+      justification (left), and for font's type and color.
+    </p>
+    <p>
+      As you would expect,
+      the <c>Border</c> and <c>BorderFactory</c> classes contain methods that let you exert significant control over the border's look and feel.
+      You can even design and create your own custom borders.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-nestedbox">
+    <title>The <c>BoxLayout</c>Manager</title>
+    <p>
+      Another type of layout to use is the <c>BoxLayout</c>. This can be associated with any container,
+      and it comes as the default with the Swing <c>Box</c> container.
+      We use it in this example to arrange the checkboxes and radio buttons (Fig.
+      <xref ref="fig-acmegui"></xref>).
+    </p>
+    <p>
+      A <c>BoxLayout</c> is like a one-dimensional grid layout.
+      It allows multiple components to be arranged either vertically or horizontally in a row.
+      The layout will not wrap around,
+      as does the
+<c>FlowLayout</c>. Unlike the <c>GridLayout</c>, the <c>BoxLayout</c> does not force all its components to be the same size.
+      Instead, it tries to use each component's preferred width
+      (or height)
+      in arranging them horizontally
+      (or vertically). (Every Swing component has a preferred size that is used by the various layout managers in determining the component's actual size in the interface.) The <c>BoxLayout</c> manager also tries to align its components' heights
+      (for horizontal layouts)
+      or widths
+      (for vertical layouts).
+    </p>
+    <p>
+      Once again, to set the layout manager for a container you use the
+<c>setLayout()</c> method:
+    </p>
+<pre>
+choicePanel.setLayout(new
+             BoxLayout(choicePanel,BoxLayout.Y_AXIS));
+</pre>
+    <p>
+      The <c>BoxLayout()</c> constructor has two parameters.
+      The first is a reference to the container that's being managed,
+      and the second is a constant that determines whether horizontal (<em>x</em>-axis) or vertical (<em>y</em>-axis) alignment is used.
+    </p>
+    <p>
+      One nice feature of the <c>BoxLayout</c> is that it can be used in combinations to imitate the look of the very complicated
+<c>GridBoxLayout</c>. For example,
+      <xref ref="fig-nestedbox">Figure</xref>
+      shows an example with two panels (Panel1 and Panel2) arranged horizontally within an outer box (Panel0),
+      each containing four components arranged <image width="73%" source="chptr13"/> vertically.
+      The three panels all use the <c>BoxLayout</c>.
+    </p>
+  </subsection>
+  <subsection>
+    <title>The <c>ItemListener</c>Interface</title>
+    <p>
+      In this section, we will describe how to handle menu selections.
+      Whenever the user makes a menu selection,
+      or clicks a check box or radio button,
+      an <c>ItemEvent</c> is generated. <c>ItemEvent</c> s are associated with items that make up menus,
+      including
+<c>JPopupMenu</c> s, <c>JCheckboxes</c>, <c>JRadioButton</c> s, and other types of menus.
+      Item events are handled by the <c>ItemListener</c> interface,
+      which consists of a single method,
+      the <c>itemStateChanged()</c> method:
+    </p>
+<pre>
+public void itemStateChanged(ItemEvent e) {
+  display.setText("Your order so far (Payment by: ");
+  for (int k = 0; k &lt; options.length; k++ )
+    if (options[k].isSelected())
+      display.append(options[k].getText() + ")\n");
+  for (int k = 0; k &lt; titles.length; k++ )
+    if (titles[k].isSelected())
+      display.append("\t" + titles[k].getText() + "\n");} // itemStateChanged()
+</pre>
+    <p>
+      This version of the method handles item changes for both the checkbox menu and the radio buttons menu.
+      The code uses two consecutive for loops.
+      The first iterates through the <c>options</c> menu
+      (radio buttons)
+      to determine what payment option the user has selected.
+      Since only one option can be selected,
+      only one title will be appended to the display.
+      The second loop iterates through the titles menu (checkboxes) and appends each title the user selected to the display.
+      This way the complete status of the user's order is displayed after every selection.
+      The <c>isSelected()</c> method is used to determine if a checkbox or radio button is selected or not.
+    </p>
+    <p>
+      In this example,
+      we have no real need to identify the item that caused the event.
+      No matter what item the user selected,
+      we want to display the entire state of the order.
+      However, like the \mbox{ActionEvent} class,
+      the \mbox{ItemEvent} class contains methods that can retrieve the item that caused the event:
+    </p>
+<pre>
+getItem();  // Returns a menu item within a menu
+</pre>
+    <p>
+      The <c>getItem()</c> method is the <c>ItemListener</c>'s analogue to the <c>ActionEvent</c>'s <c>getSource()</c> method.
+      It enables you to obtain the object that generated the event but returns a representation of the item that was selected or deselected.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-p507f1">
+    <title>The <c>OrderApplet</c></title>
+    <p>
+      The design of the <c>OrderApplet</c> is summarized in Figure<nbsp/>13.29 and its complete implementation is given in <xref ref="fig-orderapplet">Figure</xref>.
+      There are several important points to make about this program.
+      First, five <c>JPanel</c> s are used to organize the components into logical and visual groupings.
+      This conforms to the design shown in <xref ref="fig-acmegui">Figure</xref>.
+      <image width="73%" source="chptr13"/>
+    </p>
+    <figure xml:id="fig-orderapplet">
+      <caption>The <c>OrderApplet</c> class, Part I.</caption>
+      \[28pc]
+<pre>
+import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+import java.awt.event.*;
+public class OrderApplet extends JApplet
+                     implements ItemListener, ActionListener {
+  private final int NTITLES = 3, NOPTIONS = 3;
+  private JPanel mainPanel = new JPanel(),
+                 centerPanel = new JPanel(),
+                 choicePanel = new JPanel(),
+                 optionPanel = new JPanel(),
+                 buttonPanel = new JPanel();
+  private ButtonGroup optGroup = new ButtonGroup();
+  private JCheckBox titles[] = new JCheckBox[NTITLES];
+  private JRadioButton options[] = new JRadioButton[NOPTIONS];
+  private String titleLabels[] =
+    {"Chess Master - \<m>59.95", "Checkers Pro - \</m>39.95",
+                                "Crossword Maker - \$19.95"};
+  private String optionLabels[] = {"Credit Card",
+                                    "Debit Card", "E-cash"};
+  private JTextArea display = new JTextArea(7, 25);
+  private JButton submit = new JButton("Submit Order"),
+                  cancel = new JButton("Cancel");
+  public void init() {
+    mainPanel.setBorder(BorderFactory.createTitledBorder(
+                                   "Acme Software Titles"));
+    mainPanel.setLayout(new GridLayout(3, 1, 1, 1));
+    cancel.addActionListener(this);
+    submit.addActionListener(this);
+    initChoices();
+    initOptions();
+    buttonPanel.setBorder(BorderFactory.createTitledBorder(
+                                              "Order Today"));
+    buttonPanel.add(cancel);
+    buttonPanel.add(submit);
+    centerPanel.add(choicePanel);
+    centerPanel.add(optionPanel);
+    mainPanel.add( display);
+    mainPanel.add(centerPanel);
+    mainPanel.add( buttonPanel);
+    getContentPane().add(mainPanel);
+    setSize(400,400);
+  } // init()
+</pre>
+    </figure>
+    <figure xml:id="fig_orderappletpart2cont">
+      <caption><em>(continued)</em> The <c>OrderApplet</c> class, Part II.</caption>
+<pre>
+private void initChoices() {
+    choicePanel.setBorder(
+             BorderFactory.createTitledBorder("Titles"));
+    choicePanel.setLayout(
+            new BoxLayout(choicePanel, BoxLayout.Y_AXIS));
+    for (int k = 0; k &lt; titles.length; k++) {
+      titles[k] = new JCheckBox(titleLabels[k]);
+      titles[k].addItemListener(this);
+      choicePanel.add(titles[k]);
+    }
+  } // initChoices()
+  private void initOptions() {
+    optionPanel.setBorder(
+             BorderFactory.createTitledBorder("Payment By"));
+    optionPanel.setLayout(
+             new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
+    for (int k = 0; k &lt; options.length; k++) {
+      options[k] = new JRadioButton(optionLabels[k]);
+      options[k].addItemListener(this);
+      optionPanel.add(options[k]);
+      optGroup.add(options[k]);
+    }
+    options[0].setSelected(true);
+  } // initOptions()
+  public void itemStateChanged(ItemEvent e) {
+    display.setText("Your order so far (Payment by: ");
+    for (int k = 0; k &lt; options.length; k++ )
+      if (options[k].isSelected())
+        display.append(options[k].getText() + ")\n");
+    for (int k = 0; k &lt; titles.length; k++ )
+      if (titles[k].isSelected())
+        display.append("\t" + titles[k].getText() + "\n");
+  } // itemStateChanged()
+  public void actionPerformed(ActionEvent e){
+    String label = submit.getText();
+    if (e.getSource() == submit) {
+      if (label.equals("Submit Order")) {
+        display.append(
+        "Thank you. Press 'Confirm' to submit your order!\n");
+        submit.setText("Confirm Order");
+      } else {
+        display.append(
+         "Thank you. You will receive your order tomorrow!\n");
+        submit.setText("Submit Order");
+      }
+    } else
+      display.setText(
+        "Thank you. Maybe we can serve you next time!\n");
+  } // actionPerformed()} // OrderApplet
+</pre>
+    </figure>
+    <p>
+      Second, note the use of titled borders around the four internal panels.
+      These help reinforce that the components within the border are related by function.
+    </p>
+    <p>
+      The applet <c>init()</c> method is used to initialize the interface.
+      This involves setting the layouts for the various containers and filling the containers with their components.
+      Because their initializations are relatively long,
+      the checkboxes and radio buttons are initialized in separate methods,
+      the <c>initChoices()</c> and <c>initOptions()</c> methods,
+      respectively.
+    </p>
+    <p>
+      Finally, note how the <c>actionPerformed()</c> method creates a mock order form in the display area.
+      This allows the user to review the order before it is submitted.
+      Also note that the algorithm used for submittal requires the user to confirm an order before it is actually submitted.
+      The first time the user clicks the Submit button,
+      the button's label is changed to,
+      <q>Confirm Order,</q>
+      and the user is prompted in the display area to click the \mbox{Confirm} button to submit the order.
+      This design allows the interface to catch inadvertent button clicks.
+    </p>
+    <p>
+      A user interface should anticipate errors by the user.
+      When a program involves an action that can't be undone<mdash/>such as placing an order<mdash/>the program should make sure the user really wants to take the action before carrying it out.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Anticipate the User</title>
+      <p>
+        A well-designed interface should make it difficult for the user to make errors and should make it easy to recover from mistakes when they do happen.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            What's your favorite interface horror story?
+            How would you have remedied the problem?
+            The interface needn't be a computer interface.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

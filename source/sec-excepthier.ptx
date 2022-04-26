@@ -1,0 +1,295 @@
+<section xml:id="sec-excepthier">
+  <title>Java's Exception Hierarchy</title>
+  <introduction>
+    <figure xml:id="fig-excepthier">
+      <caption>Part of Java's exception hierarchy.  All
+      subclasses of <c>RuntimeException</c> are known as <em>unchecked</em> exceptions.
+      Java programs are not required to catch these exceptions.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      The Java class library contains a number of predefined exceptions,
+      some of which are shown in <xref ref="fig-excepthier">Figure</xref>.
+      The most general type of exception, <c>java.lang.Exception</c>, is located in the <c>java.lang</c> package,
+      but most of its subclasses are contained in other packages.
+      Some of the various <c>IOException</c> classes are contained in the <c>java.io</c> package,
+      while others are contained in the <c>java.net</c>\marginpar{Exception hierarchy} package.
+      In general, exception classes are placed in the package that contains the methods that throw those exceptions.
+    </p>
+    <p>
+      Each of the classes in <xref ref="fig-excepthier">Figure</xref>
+      identifies a particular type of exception,
+      and each is a subclass of the <c>Exception</c> class.
+      Obviously a subclass defines a more specific exception than its superclass.
+      Thus, both <c>ArrayIndexOutOfBoundsException</c> and <c>StringIndexOutOfBoundsException</c> are more specific than <c>IndexOutOfBoundsException</c>.
+    </p>
+    <table>
+      \TBT{0pc}{Some of Java's important exceptions.}
+      <tabular>
+        <row>
+          <cell>\multicolumn{2}{l}{\rule{38.5pc}{1pt}}</cell>
+        </row>
+        <row>
+          <cell><term>Class</term></cell>
+          <cell><term>Description</term></cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{2}{l}{\rule{38.5pc}{0.5pt}}</cell>
+        </row>
+        <row>
+          <cell><c>ArithmeticException</c></cell>
+          <cell>Division by zero or some other kind of arithmetic problem\cr
+<c>ArrayIndexOutOfBoundsException</c></cell>
+          <cell>An array index is less than zero or greater\cr</cell>
+          <cell><nbsp/><nbsp/> than or equal to the array's length\cr
+<c>FileNotFoundException</c></cell>
+          <cell>Reference to a file that cannot be found\cr
+<c>IllegalArgumentException</c></cell>
+          <cell>Calling a method with an improper argument\cr
+<c>IndexOutOfBoundsException</c></cell>
+          <cell>An array or string index is out of bounds\cr
+<c>NullPointerException</c></cell>
+          <cell>Reference to an object that has not been instantiated\cr
+<c>NumberFormatException</c></cell>
+          <cell>Use of an illegal number format, such as when calling a method\cr
+<c>StringIndexOutOfBoundsException</c>\hspace{12pt}</cell>
+          <cell>A <c>String</c> index is less than zero or greater than\cr</cell>
+          <cell><nbsp/><nbsp/> or equal to the <c>String</c>'s length</cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{2}{l}{\rule{38.5pc}{1pt}}</cell>
+        </row>
+      </tabular>
+      \endTB
+    </table>
+    <p>
+      Table<nbsp/>10.1 gives a brief summary of some of the most important exceptions.
+      You've undoubtedly encountered some of these exceptions,
+      because they are thrown by methods we have used repeatedly in programming examples.
+      Table<nbsp/>10.2 summarizes the exceptions raised by some of the methods we've used most frequently.
+    </p>
+    <table>
+      \TBT{-9pc}{Some of Java's important exceptions by method.}
+      \hspace{-9.5pc}
+      <tabular>
+        <row>
+          <cell>\multicolumn{4}{l}{\rule{38.5pc}{1pt}}</cell>
+        </row>
+        <row>
+          <cell><term>Class</term></cell>
+          <cell><term>Method</term></cell>
+          <cell><term>Exception Raised</term></cell>
+          <cell><term>Description</term></cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{4}{l}{\rule{38.5pc}{0.5pt}}</cell>
+        </row>
+        <row>
+          <cell><c>Double</c></cell>
+          <cell><c>valueOf(String)</c></cell>
+          <cell><c>NumberFormatException</c></cell>
+          <cell>The <c>String</c> is not a <c>double</c>\cr
+<c>Integer</c></cell>
+          <cell><c>parseInt(String)</c></cell>
+          <cell><c>NumberFormatException</c></cell>
+          <cell>The <c>String</c> is not a <c>int</c>\cr
+<c>String</c></cell>
+          <cell><c>String(String)</c></cell>
+          <cell><c>NullPointerException</c></cell>
+          <cell>The <c>String</c> is <c>null</c>\cr</cell>
+          <cell><c>indexOf(String)</c></cell>
+          <cell><c>NullPointerException</c></cell>
+          <cell>The <c>String</c> is <c>null</c>\cr</cell>
+          <cell><c>lastIndexOf(String)</c></cell>
+          <cell><c>NullPointerException</c></cell>
+          <cell>The <c>String</c> is <c>null</c>\cr</cell>
+          <cell><c>charAt(int)</c></cell>
+          <cell><c>StringIndexOutOfBoundsException</c></cell>
+          <cell>The <c>int</c> is not a valid index\cr</cell>
+          <cell><c>substring(int)</c></cell>
+          <cell><c>StringIndexOutOfBoundsException</c></cell>
+          <cell>The <c>int</c> is not a valid index\cr</cell>
+          <cell><c>substring(int,int)</c></cell>
+          <cell><c>StringIndexOutOfBoundsException</c></cell>
+          <cell>An <c>int</c> is not a valid index</cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{4}{l}{\rule{38.5pc}{1pt}}</cell>
+        </row>
+      </tabular>
+      \endTB
+    </table>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+    </p>
+    <ol>
+      <li>
+        <p>
+          What type of exception would be thrown for the following statements?
+        </p>
+        <ol>
+          Integer.parseInt("26.2"); String s; s.indexOf('a'); String s = "hello"; s.charAt(5);
+        </ol>
+      </li>
+    </ol>
+  </introduction>
+  <subsection>
+    <title>Checked and Unchecked Exceptions</title>
+    <introduction>
+      <p>
+        Java's exception hierarchy is divided into two types of exceptions.
+        A <term>checked exception</term>
+            <idx><h>checked exception</h></idx>
+        is one that can be analyzed by the Java \marginpar{Checked exceptions} compiler.
+        Checked exceptions are thrown by methods such as the <c>BufferedReader.readLine()</c> method,
+        in which there is a substantial likelihood that something might go wrong.
+        When the compiler encounters one of these method calls,
+        it checks whether the program either handles or declares the exception.
+        Compile-time checking for these exceptions is \mbox{designed} to reduce the number of exceptions that are not properly handled within a program.
+        This improves the security of Java programs.
+      </p>
+      <principle>
+        <title>Checked Exceptions</title>
+        <p>
+          A checked exception,
+          such as an <c>IOException</c>, must either be handled or declared within the program.
+        </p>
+      </principle>
+    </introduction>
+    <subsubsection>
+      <title>The <c>throws</c>Clause</title>
+      <p>
+        The <c>IOException</c>, which we encountered in Chapter<nbsp/>4 , is a checked exception.
+        The Java compiler knows that
+<c>readLine()</c> is a method that can throw an <c>IOException</c>. A method that contains an expression that might throw a checked exception must either handle the exception or declare it.
+        Otherwise, the compiler would generate a syntax error.
+        The simplest way to avoid such a syntax error is to
+        <em>declare the exception</em>, \marginpar{Declaring an exception} in our case that means qualifying the method header with the expression
+<c>throws IOException</c>.
+      </p>
+      <p>
+        In general, any method that contains an expression that might throw a checked expression must declare the exception.
+        However, because one method can call another method,
+        declaring exceptions can get a little tricky.
+        If a method calls another method that contains an expression that might throw an unchecked exception,
+        then both methods must have a <c>throws</c> clause.
+        For example, consider the following program:
+      </p>
+<pre>
+import java.io.*;
+public class Example {
+    BufferedReader input = new BufferedReader
+            (new InputStreamReader(System.in));
+    public void doRead() throws IOException {
+        // May throw IOException
+        String inputString = input.readLine();
+    }
+    public static void main(String argv[])
+                        throws IOException {
+        Example ex = new Example();
+        ex.doRead();
+    }}
+</pre>
+      <p>
+        In this case,
+        the <c>doRead()</c> method contains a
+<c>readLine()</c> expression,
+        which might throw an <c>IOException</c>. Therefore,
+        the <c>doRead()</c> method must declare that it <c>throws
+IOException</c>. However,
+        because <c>doRead()</c> is called by <c>main()</c>, the <c>main()</c> method must also declare the <c>IOException</c>.
+      </p>
+      <principle>
+        <title>Where to Use <c>throws</c></title>
+        <p>
+          Unless a checked exception,
+          such as an <c>IOException</c>, is caught and handled by a method,
+          it must be declared with a <c>throws</c> clause within the method and within any method that calls that method.
+        </p>
+      </principle>
+      <p>
+        The alternative approach would be to <em>catch</em>
+        the <c>IOException</c> within the body of the method.
+        We will discuss this approach in the next section.
+      </p>
+    </subsubsection>
+    <subsubsection>
+      <title>Unchecked Exceptions</title>
+      <p>
+        An <term>unchecked exception</term>
+            <idx><h>unchecked exception</h></idx>
+        is any exception belonging to a subclass of <c>RuntimeException</c>(Fig.
+        <xref ref="fig-excepthier"></xref>).
+        Unchecked exceptions are not checked by the compiler.
+        The possibility that some statement or expression will lead to an <c>ArithmeticException</c> or
+<c>NullPointerException</c> is extremely difficult to detect at compile time.
+        The designers of Java decided that forcing programmers to declare such exceptions would not significantly improve the correctness of Java programs.
+      </p>
+      <p>
+        Therefore, unchecked exceptions do not have to be handled within a program.
+        And they do not have to be declared in a <c>throws</c>\marginpar{Runtime (unchecked) exceptions} clause.
+        As shown in the chapter's early divide-by-zero exception example,
+        unchecked exceptions are handled by Java's default exception handlers,
+        unless your program takes specific steps to handle them directly.
+        In many cases leaving the handling of such exceptions up to Java may be the best course of action,
+        as we will see <xref ref="sec-robust">Section</xref>.
+      </p>
+      <principle>
+        <title>Unchecked Exceptions</title>
+        <p>
+          An unchecked exception<mdash/>one belonging to some subclass of
+<c>RunTimeException</c><mdash/>does not have to be caught within your program.
+        </p>
+      </principle>
+    </subsubsection>
+  </subsection>
+  <subsection xml:id="self-study-exerciseO26">
+    <title>The <c>Exception</c>Class</title>
+    <p>
+      The <c>java.lang.Exception</c> class itself is very simple,
+      consisting of just two constructor methods (Fig.<nbsp/>10.5).
+      The <c>Throwable</c> class,
+      from which <c>Exception</c> is derived,
+      is the root class of Java's exception and error hierarchy.
+      It contains definitions for the <c>getMessage()</c> and <c>printStackTrace()</c> methods,
+      which are two methods that we will use frequently in our error-handling routines.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise} <image width="73%" source="chptr10"/>
+    </p>
+    <ol>
+      <li>
+        <p>
+          Which of the following are examples of unchecked \mbox{exceptions?}
+        </p>
+        <ol>
+          <li>
+            <p>
+              IOException
+            </p>
+          </li>
+          <li>
+            <p>
+              IndexOutOfBoundsException
+            </p>
+          </li>
+          <li>
+            <p>
+              NullPointerException
+            </p>
+          </li>
+          <li>
+            <p>
+              ClassNotFoundException
+            </p>
+          </li>
+          <li>
+            <p>
+              NumberFormatException
+            </p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </subsection>
+</section>

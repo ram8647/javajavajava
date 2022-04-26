@@ -1,0 +1,371 @@
+<section xml:id="containersand-layout-managers">
+  <title>Containers and Layout Managers</title>
+  <introduction>
+    <p>
+      A <c>Container</c> is a component that can contain other components.
+      Because containers can contain other containers,
+      it is possible to create a hierarchical arrangement of components,
+      as we did in the second version of our <c>Converter</c> interface.
+      In its present form,
+      the hierarchy for <c>Converter</c> consists of a <c>JFrame</c> as the top-level container (Fig.
+      <xref ref="fig-metricgui2"></xref>).
+      Contained within the frame is a <c>KeyPad</c>
+      (subclass of <c>JPanel</c>),
+      which contains 12 <c>JButton</c> s.
+      Most GUIs will have a similar kind of containment hierarchy.
+    </p>
+    <p>
+      <image width="73%" source="chptr13"/>
+    </p>
+    <p>
+      A <c>Container</c> is a relatively simple object whose main task is primarily to hold its components in a particular order.
+      It has methods to add and remove components (Fig.<nbsp/>13.20).
+      As you can see from these methods,
+      a container keeps track of the order of its elements,
+      and it is possible to refer to a component by its index order.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Layout Managers</title>
+    <p>
+      The hard work of organizing and managing the elements within a container is the task of the layout manager.
+      Among other tasks, the layout manager determines
+      <ul>
+        <li>
+          <p>
+            The overall size of the container.
+          </p>
+        </li>
+        <li>
+          <p>
+            The size of each element in the container.
+          </p>
+        </li>
+        <li>
+          <p>
+            The spacing between elements.
+          </p>
+        </li>
+        <li>
+          <p>
+            The positioning of the elements.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      Although it is possible to manage your own layouts, it is not easy to do.
+      For most applications you are much better off by learning to use one of the AWT's built-in layouts.
+      Table<nbsp/>13.3 gives a brief summary of the available layouts.
+      We will show examples of <c>FlowLayout</c>, <c>GridLayout</c>, and <c>BorderLayout</c>. Some of the widely used Swing containers have a default layout manager assigned to them (Table<nbsp/>13.4).
+    </p>
+    <table>
+      \TBT{-8pc}{Some of Java's AWT and Swing layout managers.}
+      \hspace{-8.5pc}
+      <tabular>
+        <row>
+          <cell>\multicolumn{2}{l}{\rule{35pc}{1pt}}</cell>
+        </row>
+        <row>
+          <cell>{Manager}</cell>
+          <cell>{Description}</cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{2}{l}{\rule{35pc}{0.5pt}}</cell>
+        </row>
+        <row>
+          <cell><c>java.awt.BorderLayout</c></cell>
+          <cell>Arranges elements along the north, south, east, west,\cr</cell>
+          <cell>and in the center of the container.\cr
+<c>java.swing.BoxLayout</c></cell>
+          <cell>Arranges elements in a single row or single column.\cr
+<c>java.awt.CardLayout</c></cell>
+          <cell>Arranges elements like a stack of cards, with one visible at a time.\cr
+<c>java.awt.FlowLayout</c></cell>
+          <cell>Arranges elements left to right across the container.\cr
+<c>java.awt.GridBagLayout</c></cell>
+          <cell>Arranges elements in a grid of variably sized cells (complicated).\cr
+<c>java.awt.GridLayout</c></cell>
+          <cell>Arranges elements into a two-dimensional grid of equally sized cells.\cr
+<c>java.swing.OverlayLayout</c></cell>
+          <cell>Arranges elements on top of each other.</cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{2}{l}{\rule{35pc}{1pt}}</cell>
+        </row>
+      </tabular>
+      \endTB
+    </table>
+    <p>
+      To override the default layout for any of the <c>JApplet</c>,
+<c>JDialog</c>, <c>JFrame</c>, and <c>JWindow</c> containers,
+      you must remember to use the \mbox{getContentPane()} . The correct statement is
+    </p>
+<pre>
+getContentPane().setLayout(new FlowLayout());
+</pre>
+    <principle>
+      <title>DEBUGGING TIP:Content Pane</title>
+      <p>
+        Attempting to add a component directly to a <c>JApplet</c> or a <c>JFrame</c> will cause an exception.
+        For these top-level containers,
+        components must be added to their content panes.
+      </p>
+    </principle>
+    <table>
+      \TBT{4pc}{Default layouts for some of the common
+      \hspace{4pc}Swing containers.}
+      \hspace{3.5pc}
+      <tabular>
+        <row>
+          <cell>\multicolumn{2}{l}{\rule{18pc}{1pt}}</cell>
+        </row>
+        <row>
+          <cell>{Container}</cell>
+          <cell>{Layout Manager}</cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{2}{l}{\rule{18pc}{0.5pt}}</cell>
+        </row>
+        <row>
+          <cell><c>JApplet</c></cell>
+          <cell><c>BorderLayout</c>(on its content pane) \cr
+<c>JBox</c></cell>
+          <cell><c>BoxLayout</c>\cr
+<c>JDialog</c></cell>
+          <cell><c>BorderLayout</c>(on its content pane) \cr
+<c>JFrame</c></cell>
+          <cell><c>BorderLayout</c>(on its content pane) \cr
+<c>JPanel</c></cell>
+          <cell><c>FlowLayout</c>\cr
+<c>JWindow</c></cell>
+          <cell><c>BorderLayout</c>(on its content pane)</cell>
+        </row>
+        <row>
+          <cell>[-4pt]\multicolumn{2}{l}{\rule{18pc}{1pt}}</cell>
+        </row>
+      </tabular>
+      \endTB
+    </table>
+  </subsection>
+  <subsection xml:id="fig-convertscreen3">
+    <title>The <c>GridLayout</c>Manager</title>
+    <p>
+      It is simple to remedy the layout problem that affected the keypad in the most recent version of the <c>Converter</c> program.
+      The problem was caused by the fact that as a subclass of <c>JPanel</c>, the <c>KeyPad</c> uses a default <c>FlowLayout</c>, which causes its buttons to be arranged in a row.
+      A more appropriate layout for a numeric keypad would be a two-dimensional grid,
+      which is exactly the kind of layout supplied by the <c>java.awt.GridLayout</c>. Therefore,
+      to fix this problem,
+      we need only set the keypad's layout to a <c>GridLayout</c>. This takes a single statement,
+      which should be added to the beginning of the <c>KeyPad()</c> constructor:
+    </p>
+<pre>
+setLayout(new GridLayout(4,3,1,1));
+</pre>
+    <p>
+      This statement creates a <c>GridLayout</c> object and assigns it as the layout manager for the keypad.
+      It will ensure that the keypad will have four rows and three columns of buttons (Fig.
+      <xref ref="fig-convertscreen3"></xref>).
+      The last two arguments in the constructor affect the relative spacing between the rows and the columns.
+      The higher the number, the larger the spacing.
+      As components are added to the keypad,
+      they will automatically be arranged by the manager into a <m>4 \times 3</m> grid.
+      <image width="73%" source="chptr13"/> Note that for a <c>JPanel</c>, the <c>setLayout()</c> method applies to the panel itself.
+      Unlike the top-level containers,
+      such as
+<c>JFrame</c>, other containers don't have content panes.
+      The same point would apply when adding components to a <c>JPanel</c>: They are added directly to the panel,
+      not to a content pane.
+      Confusion over this point could be the source of bugs in your programs.
+    </p>
+    <principle>
+      <title>DEBUGGING TIP:Content Pane</title>
+      <p>
+        Top-level containers,
+        such as
+<c>JFrame</c>, are the only ones that use a content pane.
+        For other containers,
+        such as <c>JPanel</c>, components are added directly to the container itself.
+      </p>
+    </principle>
+    <p>
+      As its name suggests,
+      the <c>GridLayout</c> layout manager arranges components in a two-dimensional grid.
+      When components are added to the container,
+      the layout manager starts inserting elements into the grid at the first cell in the first row and continues left to right across row 1, then row 2, and so on.
+      If there are not enough components to fill all cells of the grid,
+      the remaining cells are left blank.
+      If an attempt is made to add too many components to the grid,
+      the layout manager will try to extend the grid in some reasonable way in order to accommodate the components.
+      However, despite its effort in such cases,
+      it usually fails to achieve a completely appropriate layout.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:Grid Layouts</title>
+      <p>
+        Make sure the number of components added to a <c>GridLayout</c> is equal to the number of rows times the number of columns.
+      </p>
+    </principle>
+  </subsection>
+  <subsection>
+    <title>GUI Design Critique</title>
+    <p>
+      Although the layout in Figure<nbsp/>13.21 is much improved,
+      there are still some deficiencies.
+      One problem is that the <c>convert</c> button seems to be misplaced.
+      It would seem to make more sense if it were grouped with the keypad rather than with the input text field.
+    </p>
+    <p>
+      A more serious problem results from the fact that we are still using a
+<c>FlowLayout</c> for the program's main window,
+      the
+<c>JFrame</c>. Among all of Java's layouts, <c>FlowLayout</c> gives you the least amount of control over the arrangement of the components.
+      Also,
+<c>FlowLayout</c> is most sensitive to changes in the size and shape of its container.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-borderlayout-guis">
+    <title>The <c>BorderLayout</c>Manager</title>
+    <p>
+      One way to fix these problems is to use a <c>BorderLayout</c> to divide the frame into five areas:
+      north, south, east, west, and center,
+      as shown in <xref ref="fig-borderlayout-guis">Figure</xref>.
+      The <c>BorderLayout</c> class contains two constructors:
+      <image width="73%" source="chptr13"/>
+    </p>
+<pre>
+public BorderLayout();
+public BorderLayout(int hgap, int vgap);
+</pre>
+    <p>
+      The two parameters in the second version of the constructor allow you to insert spacing between the areas.
+    </p>
+    <p>
+      Components are added to a <c>BorderLayout</c> by using the <c>add(Component, String)</c> method found in the <c>Container</c> class.
+      For example,
+      to set the application window to a border layout and to add the keypad to its east area,
+      we would use the following statements:
+    </p>
+<pre>
+getContentPane().setLayout(new BorderLayout(2, 2));
+getContentPane().add(keypad,"East");
+</pre>
+    <p>
+      In this version of the <c>add()</c> method,
+      the second parameter must be a capitalized <c>String</c> with one of the names,
+      <q>North,</q>
+      <q>South,</q>
+      <q>East,</q>
+      <q>West,</q>
+      or
+      <q>Center.</q>
+      The order in which components are added does not matter.
+    </p>
+    <p>
+      One limitation of the <c>BorderLayout</c> is that only one component \marginpar{Containment hierarchy} can be added to each area.
+      That means that if you want to add several components to an area,
+      you must first enclose them within a
+<c>JPanel</c> and then add the entire panel to the area.
+      For example,
+      let's create a panel to contain the prompt and the text field and place it at the north edge of the frame:
+    </p>
+<pre>
+JPanel inputPanel = new JPanel(); // Create panel
+inputPanel.add(prompt);              // Add label
+inputPanel.add(input);           // Add textfield
+                    // Add the panel to the frame
+getContentPane().add(inputPanel,"North");
+</pre>
+    <p>
+      The same point would apply if we want to group the keypad with the convert button and place them at the east edge.
+      There are several ways these elements could be grouped.
+      In this example,
+      we give the panel a border layout and put the keypad in the center and the convert button at the south edge:
+    </p>
+<pre>
+JPanel controlPanel= new JPanel(new BorderLayout(0,0));
+controlPanel.add(keypad,"Center");
+controlPanel.add(convert, "South");
+                    // Add the panel to the frame
+getContentPane.add(controlPanel,"East");
+</pre>
+    <p>
+      Given these details about the <c>BorderLayout</c>, a more appropriate design for the converter application is shown in <xref ref="fig-metricgui3">Figure</xref>.
+      Notice that the border layout for the top-level <c>JFrame</c> uses only the center, north,
+      and east areas.
+      Similarly, the border layout for the control panel uses just the center and south areas.
+    </p>
+    <figure xml:id="fig-metricgui3">
+      <caption>A border layout design for the metric
+      converter program. The dotted lines show the panels.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      In a <c>BorderLayout</c>, when one
+      (or more)
+      border area is not used,
+      then one or more of the other areas will be extended to fill the unused area.
+      For example,
+      if <c>West</c> is not used,
+      then <c>North</c>,
+<c>South</c>, and <c>Center</c> will extend to the left edge of the
+<c>Container</c>. If <c>North</c> is not used,
+      then <c>West</c>, <c>East,</c> and
+<c>Center</c> will extend to the top edge.
+      This is true for all areas except
+<c>Center</c>. If <c>Center</c> is unused,
+      it is left blank.
+    </p>
+    <p>
+      <xref ref="fig-convertscreen5">Figure</xref>
+      shows the results we get when we incorporate these <image width="73%" source="chptr13"/> \caption{The metric converter,
+      showing its appearance when a border design is used. } changes into the program.
+      The only changes to the program itself occur in the constructor method,
+      which in its revised form is defined as follows:
+    </p>
+<pre>
+public Converter() {
+  getContentPane().setLayout(new BorderLayout());
+  keypad = new KeyPad(this);
+  JPanel inputPanel = new JPanel(); // Input panel
+  inputPanel.add(prompt);
+  inputPanel.add(input);
+  getContentPane().add(inputPanel,"North");
+  JPanel controlPanel= new JPanel(new BorderLayout(0,0));
+                                  // Control panel
+  controlPanel.add(keypad, "Center");
+  controlPanel.add(convert, "South");
+  getContentPane().add(controlPanel, "East");
+                                 // Output display
+  getContentPane().add(display,"Center");
+  display.setLineWrap(true);
+  display.setEditable(false);
+  convert.addActionListener(this);
+  input.addActionListener(this);} // Converter()
+</pre>
+    <p>
+      This layout divides the interface into three main panels,
+      an input panel, display panel,
+      and control panel, and gives each panel its own layout.
+      In addition, the control panel contains the keypad panel.
+      Thus, the containment hierarchy for this design is much more complex than in our original design.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            The border layout for the top window uses the north, center,
+            and east regions.
+            What other combinations of areas might be used for these three components?
+          </p>
+        </li>
+        <li>
+          <p>
+            Why wouldn't a flow layout be appropriate for the control panel?
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

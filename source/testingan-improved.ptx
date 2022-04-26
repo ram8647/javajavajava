@@ -1,0 +1,185 @@
+<section xml:id="testingan-improved">
+  <title>Testing an Improved <c>OneRowNim</c></title>
+  <p>
+    Let's use the control structures that we have discussed to improve the definition of the <c>takeSticks()</c> method of <c>OneRowNim</c>. We noted earlier that our current definition allows <m>4</m> or more sticks to be removed from <c>nSticks</c> even though the rules of One Row Nim indicate that a player must take one,
+    two, or three sticks on a turn.
+    We can use <c>if-else</c> statements to make certain that no more than <m>3</m> sticks get removed.
+  </p>
+  <p>
+    What should happen if the method <c>takeSticks()</c> is called with an argument that does not represent a legal number of sticks to remove?
+    In this case,
+    it would probably make sense to remove no sticks at all and to keep the value of <c>player</c> the same so that the player whose turn it is does not change.
+    In addition,
+    it would be nice if the method could signal that an illegal move has been attempted.
+    This can be accomplished if we redefine <c>takeSticks()</c> to return a <c>boolean</c> value.
+    Let's have a return value of <c>true</c> represent the case that a valid number of sticks have been removed and the player to play next has been changed.
+    A return of <c>false</c> will indicate that an illegal move has been attempted.
+    Making these changes to the <c>takeSticks()</c> method will yield a method definition that looks like:
+  </p>
+<pre>
+public boolean takeSticks(int num)
+{   if (num &lt; 1) {
+       return false; // Error
+    } else if ( num > 3) {
+       return false; // Error
+    } else {
+       nSticks = nSticks - num;
+       player = 3 - player;
+       return true;
+    } //else} //takeSticks
+</pre>
+  <p>
+    Notice that the new definition of the <c>takeSticks()</c> method has a boolean return type.
+    Also notice that the <c>if/else</c> multiway structure is used to handle the three cases of the parameter <c>num</c> being less than one,
+    more than three, or a valid number.
+  </p>
+  <p>
+    Let us add one more method to the <c>OneRowNim</c> class.
+    Let's define a method called <c>getWinner()</c> that will return the number of the winning player if the game is over.
+    Recall that the player who takes the last stick loses,
+    so after that last play,
+    the player whose turn it is to play next is the winner.
+    However, we should be concerned about what value to return if the game is not over when the method is called.
+    A common strategy is to have a method return a special value to indicate that it is in a state in which it cannot return the value requested.
+    Returning a <m>0</m> value is a good way to indicate that the game is not over so a winner cannot be identified.
+    With this information,
+    the {if/else} statement can be used in the definition of
+<c>getWinner()</c>.
+  </p>
+<pre>
+public int getWinner()
+{   if (nSticks &lt; 1)
+        return player;
+    else
+        return 0;} // getWinner()
+</pre>
+  <p>
+    We now have the final version
+    (for this chapter)
+    of the <c>OneRowNim</c> class whose implementation is given in <xref ref="fig-ornclass">Figure</xref>.
+    We have turned a very simple class into one that contains quite a few elements.
+    Compared to our first version
+    (in Chapter<nbsp/>1),
+    this Chapter's version of <c>OneRowNim</c> presents an interface
+    (to other objects)
+    that is easy and convenient to use.
+    The constructor methods with parameters provide an easy way to create a
+<c>OneRowNim</c> instance with any number of sticks.
+    The use of <c>private</c> instance variables and a single,
+    carefully designed mutator method, <c>takeSticks()</c>, prevents other objects from tampering with the state of a <c>OneRowNim</c> object's state.
+    The other methods provide a flexible way to find out the state of a <c>OneRowNim</c> object.
+    The complete implementation of this <c>OneRowNim</c> is shown in <xref ref="fig-ornclass">Figure</xref>.
+  </p>
+  <figure xml:id="fig-ornclass">
+    <caption>The <c>OneRowNim</c> class with improved methods.</caption>
+<pre>
+public class OneRowNim
+{   private int nSticks = 7;
+    private int player = 1;
+    public OneRowNim()
+    {
+    } // OneRowNim() constructor
+    public OneRowNim(int sticks)
+    {   nSticks = sticks;
+    }  // OneRowNim() constructor2
+    public OneRowNim(int sticks, int starter)
+    {   nSticks = sticks;
+        player = starter;
+    }  // OneRowNim() constructor3
+    public boolean takeSticks(int num)
+    {   if (num &lt; 1) return false;       // Error
+        else if ( num > 3) return false; // Error
+        else              // this is a valid move
+        {   nSticks = nSticks - num;
+            player = 3 - player;
+            return true;
+        } // else
+    } // takeSticks()
+    public int getSticks()
+    {   return nSticks;
+    } // getSticks()
+    public int getPlayer()
+    {   return player;
+    } // getPlayer()
+    public boolean gameOver()
+    {   return (nSticks &lt;= 0);
+    } // gameOver()
+    public int getWinner()
+    {   if (nSticks &lt; 1) return getPlayer();
+        else return 0;  //game is not over
+    } // getWinner()
+    public void report()
+    {   System.out.println("Number of sticks left: " +
+                                             getSticks());
+        System.out.println("Next turn by player " +
+                                             getPlayer());
+    }   // report()} // OneRowNim class
+</pre>
+  </figure>
+  <p>
+    Let's use a while statement to test the new methods of the class.
+    A pseudocode description of how a game is played might look like:
+  </p>
+<pre>
+Choose the initial number of sticks for the game
+  while the game is not over
+  {   Report the state of the game
+      Process the next move
+  }
+  Report the state of the game
+  Report who the winner is
+</pre>
+  <p>
+    Translating this pseudocode into Java code in a <c>main()</c> method in a separate class gives us the class shown in <xref ref="fig-tornclass">Figure</xref>.
+    We will use the <c>Scanner</c> class
+  </p>
+  <figure xml:id="fig-tornclass">
+    <caption>The <c>TestOneRowNim</c> class with a while loop.</caption>
+<pre>
+import java.util.Scanner;
+public class TestOneRowNim
+{
+  public static void main(String argv[])
+  { Scanner sc = Scanner.create(System.in);
+    OneRowNim game = new OneRowNim(11);
+    while(game.gameOver() == false)
+    {   game.report();  // Prompt the user
+      System.out.print("Input 1, 2, or 3: ");
+      int sticks = sc.nextInt(); // Get move
+      game.takeSticks(sticks);   // Do move
+      System.out.println();
+    } // while
+    game.report();  // The game is now over
+    System.out.print("Game won by player ");
+    System.out.println(game.getWinner());
+ } // main()} // TestOneRowNim
+</pre>
+  </figure>
+  <p>
+    introduced in the previous chapter to get moves from the keyboard for both players.
+    Before each move <c>game.report()</c> describes the state of the game before the user is prompted to input a move for one of the players.
+    A reader interested in seeing the lengthy output to the console when the {TestOneRowNim} class is run is encouraged to actually run the program.
+  </p>
+  <p>
+    Note that the return value of the <c>takeSticks()</c> method is ignored in this test program.
+    We will make use of the return value in test programs in the next chapter when better user interfaces are developed for <c>OneRowNim</c>. Note,
+    however, that taken together,
+    the public methods for <c>OneRowNim</c> provide other objects with an interface that they can use to communicate with individual <c>OneRowNim</c> objects.
+  </p>
+  <principle>
+    <title>EFFECTIVE DESIGN:Interfaces</title>
+    <p>
+      Well-designed objects provide a useful public interface and protect the object's private elements from other objects.
+    </p>
+  </principle>
+  <p>
+    To reiterate a point made at the outset,
+    object-oriented programming \marginpar{Object-oriented design} is a process of constructing objects that will interact with each other.
+    Object-oriented programs must ensure that the objects themselves are well designed in terms of their ability to carry out their designated functions.
+    Good design in this sense requires careful selection of instance variables and careful design of methods to ensure that the object can carry out its assigned tasks.
+    However, equal care must be taken to ensure that the interactions that take place among objects are constrained in ways that make sense for that particular program.
+    This aspect of designing objects comes into play in designing the methods<mdash/>constructor,
+    accessor,
+    and mutator<mdash/>that make up the object's interface.
+  </p>
+</section>

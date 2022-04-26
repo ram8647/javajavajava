@@ -1,0 +1,583 @@
+<section xml:id="adding-text-network-resourcesforan-application">
+  <title>Adding Text Network Resources for an
+  Application</title>
+  <introduction>
+    <p>
+      The <c>SlideShowFrame</c> illustrates the use of multimedia resources from the web.
+      However, much of the files we may want to retrieve are text based,
+      and we want to be able to use these resources side-by-side with the available multimedia.
+      The next application describes how to do just this.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Problem Specification</title>
+    <p>
+      Suppose a realtor asks you to write a Java application that will allow customers to view pictures and descriptions of homes from \marginpar{Problem statement} an online database.
+      The application should allow the customer to select a home and should then display both an image of the home and a text description of its features,
+      such as square footage, asking price, and so on.
+    </p>
+    <p>
+      Suppose that the database of image and text files is kept at a fixed location on the Web,
+      but the names of the files themselves may change.
+      This will enable the company to change the database as it sells the homes.
+      The company will provide a text file that contains the names of the files for the current selection of homes to input into the program.
+      To simplify matters,
+      both image and text files have the same name but different extensions<mdash/>for example, <c>ranch.txt</c> and <c>ranch.gif</c>. The data file will store just the names of the files,
+      one per line,
+      giving it the following format:
+    </p>
+<pre>
+beautifulCape
+handsomeRanch
+lovelyColonial
+</pre>
+  </subsection>
+  <subsection>
+    <title>Downloading a Text File from the Web</title>
+    <p>
+      This application requires us to solve two new problems:
+    </p>
+    <p>
+      \begin{NL} \item How do we download a text file of names that we want to use as menu items? \item How do we download a text file and display it in a <c>JTextArea</c>? \item How do we download and display an image file? \end{NL}
+    </p>
+    <p>
+      The <c>SlideShowFrame</c> solves the problem of downloading and displaying an image file.
+      So, the most challenging part of this program is the task of \marginpar{Understanding the problem} downloading a Web text file and using its data in the program.
+    </p>
+    <p>
+      For this program we must make use of two types of text data downloaded from the Web.
+      The first will be the names of the image and document files.
+      We'll want to read these names and use them as menu items that the user can select.
+      Second, once the user has selected a house to view,
+      we must download and display an image and a text description of the house.
+      Downloading the text is basically the same as downloading the file of names.
+      The only difference is that we need to display this text in a <c>JTextArea</c>. Downloading the image file can be handled in more or less the same way that it was handled in the <c>SlideShowFrame</c><mdash/> by using a special Java method to download and display the image file.
+    </p>
+    <p>
+      Clearly, the problems of downloading a file from the Web and reading a file from the disk are quite similar.
+      Recall that we used streams to handle the I/O operation when reading disk files.
+      The various <c>InputStream</c> and <c>OutputStream</c> classes contained the <c>read()</c> and <c>write()</c> methods needed for I/O.<nbsp/>The situation is the same for downloading Web files.
+    </p>
+    <p>
+      Recall that the <c>URL</c> class contains the <c>openStream()</c> method,
+      which opens an <c>InputStream</c> to the resource associated with the <c>URL</c>. Once the stream has been opened,
+      you can read data from the stream just as if it were coming from a file.
+      The program \marginpar{File download algorithm} doesn't care whether the data are coming from a file on the Internet or a file on the disk.
+      It just reads data from the stream.
+      So, to download a data file from the Internet,
+      regardless of whether it's a text file, image file, audio file,
+      or whatever, you would use the following general algorithm:
+    </p>
+<pre>
+URL url;
+InputStream data;
+try {
+    url = new URL(fileURL);          // Create a URL
+    data = url.openStream(); // Open a stream to URL
+  // READ THE FILE INTO MEMORY} // Read dat
+    data.close();                     // Close the stream} catch (MalformedURLException e) { // Thrown by URL()
+    System.out.println(e.getMessage());} catch( IOException e ) {
+    System.out.println(e.getMessage());}
+</pre>
+    <p>
+      The algorithm consists of four basic steps:
+      <ul>
+        <li>
+          <p>
+            Create a <c>URL</c> instance.
+          </p>
+        </li>
+        <li>
+          <p>
+            Open an <c>InputStream</c> to it.
+          </p>
+        </li>
+        <li>
+          <p>
+            Read the data.
+          </p>
+        </li>
+        <li>
+          <p>
+            Close the stream.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      Step 3 of this algorithm<mdash/>read the data<mdash/>involves many lines of code and has,
+      therefore,
+      been left as a subtask suitable for encapsulation within a method.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Reading the Data</title>
+    <p>
+      As we saw in the previous chapter,
+      the algorithm for step 3 will \marginpar{Text or binary data?} depend on the file's data.
+      If it's a text file, we would like to read one line at a time,
+      storing the input in a <c>String</c>. If it's an image or an audio file,
+      we would read one <c>byte</c> at a time.
+    </p>
+    <p>
+      Because our data are contained in a text file,
+      we want to read one \marginpar{What library methods can we use?} line at a time.
+      The <c>BufferedReader</c> class contains a
+<c>readLine()</c> method that returns either a <c>String</c> storing the line or the value <c>null</c> when it reaches the end of file.
+      The following method shows how you would read a text file into the program's <c>JTextArea</c>, which is named <c>display</c>:
+    </p>
+<pre>
+private void readTextIntoDisplay(URL url)
+                                     throws IOException {
+  BufferedReader data
+    = new BufferedReader(
+               new InputStreamReader(url.openStream()));
+  display.setText("");            // Reset the text area
+  String line = data.readLine();
+  while (line != null)  {       // Read each line
+    display.append(line + "\n");// Add to display
+    line = data.readLine();
+  }
+  data.close();}// readTextIntoDisplay()
+</pre>
+    <p>
+      The method is passed the file's URL and it uses the
+<c>URL.openStream()</c> method to open the input stream.
+      Note that the method throws \mbox{IOException} , which means that \marginpar{I/O exceptions} any I/O exceptions that get raised will be handled by the calling method.
+    </p>
+    <p>
+      In this example,
+      the input algorithm reads each line of the file and adds it to the <c>display</c>. For our real estate application,
+      the same basic algorithm can be used to read the names of the data files and store them in a menu from which a user makes selections.
+      For example,
+      if we use a <c>JComboBox</c> menu named <c>homeChoice</c>, we would simply add each line to it:
+    </p>
+<pre>
+String line = data.readLine();
+while (line != null) {
+    homeChoice.addItem(line);
+    line = data.readLine();}
+</pre>
+  </subsection>
+  <subsection xml:id="fig-p838f1">
+    <title>Interface Design</title>
+    <figure xml:id="fig-realestategui">
+      <caption>User interface design for the real
+      estate application.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      The interface for this application is very important.
+      It should provide some means to display a text file and an image.
+      The text file can be displayed in a <c>JTextArea</c>, and the image can be drawn on a <c>JPanel</c>.
+    </p>
+    <p>
+      Next, let's consider the types of controls a user might need.
+      The customer should be allowed to select a home to view from a menu of options.
+      Because the program will have the list of available homes,
+      it can provide the options in a <c>JComboBox</c> pull-down menu.
+    </p>
+    <p>
+      To create an appropriate layout,
+      we want to make sure that the controls, the image,
+      and <c>JTextArea</c> all have their own region of the application's window.
+      This suggests a <c>BorderLayout</c>, which is the default layout for a <c>JFrame</c>. We can put the <c>JComboBox</c> menu at the
+      <q>North</q>
+      border, and the image and text on the
+      <q>West</q>
+      and
+      <q>East</q>
+      borders, respectively.
+      <xref ref="fig-realestategui">Figure</xref>
+      illustrates these various design decisions.
+      <image width="73%" source="chptr15"/>
+    </p>
+  </subsection>
+  <subsection>
+    <title>Problem Decomposition: <c>RealEstateViewer</c></title>
+    <p>
+      The task of downloading and displaying information from the Internet is best handled by two separate classes: One to perform the downloading and user interface tasks and the other to take care of displaying the image.
+    </p>
+    <p>
+      The task of downloading the image and text files from the Web can be handled by the program's main class,
+      the <c>RealEstateViewer</c>, which will also handle the user interface (Fig.<nbsp/>15.16).
+      As the application's top-level window, <c>RealEstateViewer</c> will is subclass of <c>JFrame</c>. Because its controls will include a <c>JComboBox</c>, it must implement the <c>itemStateChanged()</c> method of the <c>ItemListener</c> interface.
+    </p>
+    <p>
+      What components and other instance variables will we need for this class?
+      According to our interface design,
+      it will need a <c>JComboBox</c>, a <c>JTextArea</c>, and the <c>ImagePanel</c>. Because it will be downloading images,
+      it will need an <c>Image</c> variable.
+    </p>
+    <figure xml:id="fig-realviewer1">
+      <caption>The <c>RealEstateViewer</c>, Version 1.</caption>
+<pre>
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+public class RealEstateViewer extends JFrame
+                                implements ItemListener {
+  public static final int WIDTH=400,HEIGHT=200;
+  private final String dataFileURL =
+    "http://java.trincoll.edu/&#126;jjjava/homes/homes.txt";
+  private final String baseURL =
+    "http://java.trincoll.edu/&#126;jjjava/homes/";
+  private JTextArea display = new JTextArea(20,20);
+  private JComboBox homeChoice = new JComboBox();
+  private ImagePanel imagePanel = new ImagePanel(this);
+  public Image currentImage = null;
+  public RealEstateViewer () { }      // Stub Constructor
+                            // ItemListener interface
+  public void itemStateChanged(ItemEvent evt) { } // Stub
+  public static void main(String args[]) {
+    RealEstateViewer viewer = new RealEstateViewer();
+    viewer.setSize(viewer.WIDTH,viewer.HEIGHT);
+    viewer.setVisible(true);
+    viewer.addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);  // Quit the application
+      }
+    });
+  }// main()}// RealEstateViewer
+</pre>
+    </figure>
+    <p>
+      The constants used by this application include the URL string for the data file.
+      Also, because all the images and data files will start with the same prefix,
+    </p>
+<pre>
+http://java.trincoll.edu/&#126;jjjava/homes/
+</pre>
+    <p>
+      we should make this a constant in the program.
+      These preliminary decisions lead to the initial version of <c>RealEstateViewer</c> shown in <xref ref="fig-realviewer1">Figure</xref>.
+      Note that the <c>main()</c> method merely creates an instance of the application and shows it.
+      Note also that the <c>currentImage</c> variable is declared <c>public</c>. This will let the <c>ImagePanel</c> have direct access to <c>currentImage</c> whenever it needs to display a new image.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-p839f1">
+    <title>The <c>ImagePanel</c>Class</title>
+    <p>
+      We'll use a second class,
+      the <c>ImagePanel</c>, to handle displaying the image (Figs.<nbsp/>15.18 <image width="73%" source="chptr15"/> and <xref ref="fig-imagepanel"></xref>).
+      The reason we use a separate class for this task is that we want the image to appear in its own panel
+      (which appears on the West border of the main window).
+      In addition to its constructor,
+      the only method needed in this class is the <c>paintComponent()</c> method.
+      This method will be called automatically whenever the main window is repainted.
+      Its task is simply to get the current image from its parent frame and display it.
+      Note that a reference to the parent frame is passed to the object in its constructor.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Method Decomposition</title>
+    <p>
+      The stub methods listed in the initial version of
+<c>RealEstateViewer</c>(Fig.
+      <xref ref="fig-realviewer1"></xref>) outline the main tasks required by the application.
+      Some of these methods are very simple and even trivial to implement.
+      Others should be broken up into subtasks.
+    </p>
+    <figure xml:id="fig-imagepanel">
+      <caption>The <c>ImagePanel</c> class.</caption>
+<pre>
+import javax.swing.*;
+import java.awt.*;
+public class ImagePanel extends JPanel {
+    private RealEstateViewer frame;
+    public ImagePanel(RealEstateViewer parent) {
+        frame = parent;
+    }
+    public void paintComponent(Graphics g) {
+        if (frame.currentImage != null)
+            g.drawImage(frame.currentImage, 0, 0, this);
+    }}// ImagePanel
+</pre>
+    </figure>
+    <p>
+      The constructor method should be responsible for creating the user interface,
+      most of which will involve the routine tasks of registering a listener for the <c>homeChoice</c> menu and setting up an appropriate layout that implements the design we developed for the user interface:
+    </p>
+<pre>
+public RealEstateViewer () {
+    super("Home Viewer Application");// Set window title
+    homeChoice.addItemListener( this);
+    this.getContentPane().add("North",homeChoice);
+    this.getContentPane().add("East",display);
+    this.getContentPane().add("Center",imagePanel);
+    display.setLineWrap(true);
+    initHomeChoices();      // Set up choice box
+    showCurrentSelection(); // Display current home}
+</pre>
+    <p>
+      Note the last two statements of the method.
+      The first sets up the <c>JComboBox</c> by reading its contents from a file stored in the company's database.
+      Because that task will require several statements,
+      we define it as a separate method,
+<c>initHomeChoices()</c>, and defer its development for now.
+      Similarly, the task of displaying the current menu choice has been organized into the <c>showCurrentSelection()</c> method,
+      whose development we also defer for now.
+    </p>
+    <p>
+      The <c>itemStateChanged()</c> method is called automatically when the \marginpar{ItemListener} user selects a home from the <c>JComboBox</c> menu.
+      Its task is to download and display information about the current menu selection.
+      To do this, it can simply call the <c>showCurrentSelection()</c> method:
+    </p>
+<pre>
+public void itemStateChanged(ItemEvent evt) {
+    showCurrentSelection();}
+</pre>
+  </subsection>
+  <subsection>
+    <title>Downloading the Menu Items</title>
+    <p>
+      Recall that according to our specification,
+      the real estate firm stores its current listing of homes in a text file,
+      one home per line.
+      The <c>initHomeChoices()</c> method downloads the text and uses its contents to set up the items in the <c>homeChoice</c><c>JComboBox</c> menu:
+    </p>
+<pre>
+private void initHomeChoices() {
+  try {
+    URL url = new URL(dataFileURL);
+    BufferedReader data = new BufferedReader(
+        new InputStreamReader(url.openStream()));
+    String line = data.readLine();
+    while (line != null) {
+      homeChoice.addItem(line);
+      line = data.readLine();
+    }
+    data.close();
+  } catch (MalformedURLException e) {
+    System.out.println( "ERROR: " + e.getMessage());
+  } catch (IOException e) {
+    System.out.println( "ERROR: " + e.getMessage());
+  }}// initHomeChoices()
+</pre>
+    <p>
+      It uses the algorithm we developed earlier for downloading a text file.
+      Each line of the text file represents a menu item, so,
+      as each line is read by <c>readLine(data)</c>, it is added to the
+<c>JComboBox</c> menu.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Downloading and Displaying Home Information</title>
+    <p>
+      The <c>showCurrentSelection()</c> method is responsible for downloading and displaying images and text files whenever the user selects a home to view.
+      Recall that our specification called for using the name of the menu item as a basis for constructing the name of its corresponding text file and image file.
+      Therefore, the basic algorithm we need is
+      <ul>
+        <li>
+          <p>
+            Get the user's home choice.
+          </p>
+        </li>
+        <li>
+          <p>
+            Create a URL for the associated text file.
+          </p>
+        </li>
+        <li>
+          <p>
+            Download and display the associated text file.
+          </p>
+        </li>
+        <li>
+          <p>
+            Create a URL for the associated GIF file.
+          </p>
+        </li>
+        <li>
+          <p>
+            Download and display the image.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      Because downloading a text document requires stream processing,
+      we should handle that in a separate method.
+      The task of downloading an image file is also a good candidate for a separate \marginpar{Method decomposition} method.
+      Both of these methods will use a URL, so we can leave that task up to <c>showCurrentSelection()</c> itself.
+      The
+<c>showCurrentSelection()</c> method will create the URLs and then invoke the appropriate methods to download and display the resources:
+    </p>
+    <p>
+      \[28pc]
+    </p>
+<pre>
+private void showCurrentSelection() {
+  URL url = null;
+                              // Get user's choice
+  String choice = homeChoice.getSelectedItem().toString();
+  try {                   // Create url and download file
+    url = new URL(baseURL + choice + ".txt");
+    readTextIntoDisplay(url);
+                         // Create url and download image
+    url = new URL(baseURL + choice + ".gif");
+    currentImage = ImageIO.read(url);
+    Toolkit.getDefaultToolkit().beep(); // Beep user
+    repaint();
+  } catch (MalformedURLException e) {
+    System.out.println( "ERROR: " + e.getMessage()) ;
+  } catch (IOException e) {
+    System.out.println("ERROR: " + e.getMessage()) ;
+  } // Try/catch block} // showCurrentSelection()
+</pre>
+    <p>
+      Note that we have also elected to handle both the
+<c>MalformedURLException</c> and <c>IOException</c> in this method.
+      The advantage of this design is that it separates exception handling from the normal algorithm and organizes it into one method.
+      Finally, note how string concatenation is used to build the URL specifications,
+      each of which consists of three parts:
+      the <c>baseURL</c>, the user's <c>choice</c>, and the file extension.
+    </p>
+    <p>
+      The task of reading the text file and displaying its contents has been encapsulated into the <c>readTextIntoDisplay()</c> method.
+      This
+<c>private</c> utility method performs a standard file-reading algorithm using the <c>readLine()</c> method that we developed earlier.
+      <xref ref="fig-realestatescreen">Figure</xref>
+      provides a view of the program's appearance as it is displaying information to a user.
+      <xref ref="fig-realestateclass">Figure</xref>
+      provides the complete implementation of this program.
+    </p>
+    <figure xml:id="fig-realestatescreen">
+      <caption>The <c>RealEstate- Viewer</c> program
+      downloads images and documents over the Web.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <figure xml:id="fig-realestateclass">
+      <caption>The <c>RealEstateViewer</c> class, Part I.</caption>
+<pre>
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+public class RealEstateViewer extends JFrame
+                                implements ItemListener {
+  public static final int WIDTH=400,HEIGHT=200;
+  private final String dataFileURL =
+    "http://java.trincoll.edu/&#126;jjjava/homes/homes.txt";
+  private final String baseURL =
+    "http://java.trincoll.edu/&#126;jjjava/homes/";
+  private JTextArea display = new JTextArea(20,20);
+  private JComboBox homeChoice = new JComboBox();
+  private ImagePanel imagePanel = new ImagePanel(this);
+  public Image currentImage = null;
+  public RealEstateViewer () {
+    super("Home Viewer Application"); // Set window title
+    homeChoice.addItemListener( this);
+    this.getContentPane().add("North",homeChoice);
+    this.getContentPane().add("East",display);
+    this.getContentPane().add("Center",imagePanel);
+    display.setLineWrap(true);
+    initHomeChoices();        // Set up the choice box
+    showCurrentSelection();   // Display the current home
+  } // RealEstateViewer()
+  private void initHomeChoices() {
+    try {
+      URL url = new URL(dataFileURL);
+      BufferedReader data = new BufferedReader(
+               new InputStreamReader(url.openStream()));
+      String line = data.readLine();
+      while (line != null) {
+        homeChoice.addItem(line);
+        line = data.readLine();
+      } data.close();
+    } catch (MalformedURLException e) {
+        System.out.println("ERROR: " + e.getMessage()) ;
+    } catch (IOException e) {
+        System.out.println("ERROR: " + e.getMessage()) ;
+    }
+  }// initHomeChoices()
+</pre>
+    </figure>
+    <figure xml:id="fig_realestateviewercont">
+      <caption><em>(continued)</em><c>RealEstateViewer</c>, Part II.</caption>
+      \[30pc]
+<pre>
+private void readTextIntoDisplay(URL url) throws IOException {
+    BufferedReader data
+      = new BufferedReader(
+                      new InputStreamReader(url.openStream()));
+    display.setText("");            // Reset the text area
+    String line = data.readLine();
+    while (line != null)  {         // Read each line
+      display.append(line + "\n");  // And add it to the display
+      line = data.readLine();
+    } data.close();
+  }// readTextIntoDisplay()
+  private void showCurrentSelection() {
+    URL url = null;                          // Get user's choice
+    String choice = homeChoice.getSelectedItem().toString();
+    try {
+      url = new URL(baseURL + choice + ".txt") ;    // Create URL
+      readTextIntoDisplay(url); // Download and display text file
+      url = new URL(baseURL + choice + ".gif");     // Create URL
+                                                // Download image
+      currentImage = ImageIO.read(url);
+      Toolkit.getDefaultToolkit().beep();       // Alert the user
+      repaint();
+    } catch (MalformedURLException e) {
+        System.out.println( "ERROR: " + e.getMessage()) ;
+    } catch (IOException e) {
+        System.out.println("ERROR: " + e.getMessage()) ;
+    }
+  }// showCurrentSelection()
+  public void itemStateChanged(ItemEvent evt) {
+    showCurrentSelection();
+  } // itemStateChanged()
+  public static void main(String args[]) {
+    RealEstateViewer viewer = new RealEstateViewer();
+    viewer.setSize(viewer.WIDTH,viewer.HEIGHT);
+    viewer.setVisible(true);
+    viewer.addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);    // Quit the application
+      }
+    });
+  }// main()}// RealEstateViewer
+</pre>
+    </figure>
+  </subsection>
+  <subsection>
+    <title>Reusing Code</title>
+    <p>
+      As in other examples we have developed,
+      our discovery and use of the
+<c>javax.imageio.ImageIO.read()</c> method and other classes from the Java class library illustrate an important principle of object-oriented programming.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Code Reuse</title>
+      <p>
+        Before writing code to perform a particular task,
+        search the available libraries to see if there is already code that performs that task.
+      </p>
+    </principle>
+    <p>
+      An important step in designing object-oriented programs is making appropriate use of existing classes and methods.
+      In some cases,
+      you want to directly instantiate a class and use its methods to perform the desired tasks.
+      In other cases,
+      it is necessary to create a subclass (inheritance) or implement an interface (inheritance) in order to gain access to the methods you need.
+    </p>
+    <p>
+      Of course, knowing what classes exist in the libraries is something that comes with experience.
+      There's no way that a novice Java programmer would know about, say,
+      the <c>ImageIO.read()</c> method.
+      However, one skill or habit that you should try to develop is always to ask yourself the question:
+      <q>Is there a method that will do what I'm trying to do here?</q>
+      That question should be the first question on your search through the libraries and reference books.
+    </p>
+<pre>
+http://java.sun.com/j2se/1.5.0/docs/api/
+</pre>
+    <p>
+      \RHrightsec{15.6}{Client/Server Communication via <c>Socket</c> s}
+    </p>
+  </subsection>
+</section>

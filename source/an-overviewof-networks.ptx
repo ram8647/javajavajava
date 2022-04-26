@@ -1,0 +1,402 @@
+<section xml:id="an-overviewof-networks">
+  <title>An Overview of Networks</title>
+  <introduction>
+    <p>
+      Networking is a broad and complex topic.
+      In a typical computer science curriculum,
+      it is covered in one or more upper-level courses.
+      Nevertheless,
+      in this chapter you can learn enough about networking to be able to use network resources and to design simple Java networking applications.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Network Size and Topology</title>
+    <p>
+      Computer networks come in a variety of sizes and shapes.
+      A <em>local area network (LAN)</em>
+      is usually a privately owned network located within a single office or a single organization.
+      Your campus network would be an example of a LAN.<nbsp/>A
+      <em>wide area network (WAN)</em>
+      spans a wide geographical distance like a country or a continent.
+      It may use a combination of public, private,
+      and leased communication devices.
+      Some of the large commercial networks,
+      such as MCI and Sprint, are examples of WANs.
+    </p>
+    <p>
+      The computers that make up a network can be arranged in a variety of
+      <em>topologies</em>, or shapes,
+      some of the most common of which are shown in <xref ref="fig-topology1">Figures</xref>
+      and <xref ref="fig-topology2"></xref>.
+      As you would expect,
+      different topologies use different techniques for \marginpar{Network topology} transmitting information from computer to computer.
+    </p>
+    <figure xml:id="fig-topology1">
+      <caption>Star, bus, and ring topologies.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      In a star network (Fig.
+      <xref ref="fig-topology1"></xref>),
+      a central computer functions as a hub,
+      with every other computer in the network connected to the hub.
+      Each computer can communicate with the others but only through the hub.
+      The bus topology doesn't have a hub computer.
+      Instead, each node looks at each message sent on the bus to find those that are addressed to it.
+      In sending a message,
+      a node waits until the bus is free and then transmits the message.
+    </p>
+    <p>
+      A ring network (Fig.
+      <xref ref="fig-topology1"></xref>) also has no host,
+      and the computers are connected in a loop,
+      through which they exchange information.
+      The tree topology (Fig.
+      <xref ref="fig-topology2"></xref>) is organized into a hierarchy,
+      with each level
+      (trunk of the tree, major branch of the tree)
+      controlled by a hub.
+      The fully connected mesh network directly connects all points to all points,
+      eliminating the
+      <q>middleman.</q>
+      Here there is no need to go through one or more other computers in order to communicate with a particular computer in the network.
+    </p>
+    <p>
+      Network topologies differ quite a bit in the expense of the wiring they require,
+      their efficiency,
+      their susceptibility to failure,
+      and the types of protocols they use.
+      These differences are beyond the scope of this chapter.
+    </p>
+    <figure xml:id="fig-topology2">
+      <caption>Tree and fully connected mesh topologies.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+  </subsection>
+  <subsection xml:id="self-study-exercisesA36">
+    <title>Internets</title>
+    <p>
+      An <term>internet</term>
+          <idx><h>internet</h></idx>
+      (lowercase <em>i</em>) is a collection of two or more distinct networks,
+      joined by devices called <term>routers</term>
+          <idx><h>routers</h></idx>
+      (Fig.
+      <xref ref="fig-internet"></xref>).
+      An internet is like a meeting of the \marginpar{An internet vs. the Internet} United Nations.
+      Each country sends a delegation,
+      all of whose members speak that country's language.
+      A national delegation is like a single computer network.
+      Language interpreters take on the task of translating one language to another so that any two delegations, say,
+      the United States and China, can communicate.
+      The routers play a similar translation role within an internet.
+      The UN conference,
+      composed of communicating delegations from all the different countries of the world,
+      is like a worldwide internet.
+    </p>
+    <figure xml:id="fig-internet">
+      <caption>An internet is a collection of distinct
+      networks joined together by routers.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      The United Nations is an apt analogy for the <term>Internet</term>
+          <idx><h>Internet</h></idx>
+      (uppercase <em>I</em>),
+      which is an example of a particular worldwide internet.
+      Internets, in the generic sense,
+      shouldn't be confused with the Internet.
+      It's quite likely that your campus LAN is itself composed of several,
+      smaller networks,
+      each of which uses its own
+      <q>language.</q>
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            In a network of ten computers,
+            which topology would require the most cables?
+          </p>
+        </li>
+        <li>
+          <p>
+            Which topology would be most resistant to having one of its computers crash?
+          </p>
+        </li>
+        <li>
+          <p>
+            Which topology would be least resistant to having one of its computers crash?
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection>
+    <title>Network Protocols</title>
+    <introduction>
+      <p>
+        A <term>protocol</term>
+            <idx><h>protocol</h></idx>
+        is a set of rules that governs the communication of information.
+        For example,
+        the <term>World Wide Web </term>is based on the <em>HyperText</em>
+        <term>Transfer Protocol (HTTP)</term>.
+        HTTP describes how information isto be exchanged between a Web browser,
+        such as Internet Explorer or \marginpar{Network protocols} Netscape Navigator,
+        and a Web server,
+        which stores an individual's or company's Web pages.
+        Web pages are encoded in the <em>HyperText Markup Language (HTML)</em>.
+        Among other things, the HTTP protocol can interpret HTML pages.
+      </p>
+      <p>
+        Similarly, the <term>Simple Mail Transfer Protocol (SMTP)</term>
+        is a set of rules that governs the transfer of <em>e-mail</em>.
+        And the <term>File Transfer Protocol (FTP)</term>
+        is the protocol that governs the transfer of files across the Internet.
+      </p>
+    </introduction>
+    <subsubsection xml:id="self-study-exerciseN36">
+      <title>Application Protocols</title>
+      <p>
+        These three examples<mdash/>HTTP, SMTP, and FTP<mdash/>are examples of application protocols.
+        They are relatively high-level protocols that support and govern a particular network application,
+        such as e-mail or WWW access.
+        Among the things they determine how we address different computers on the network.
+        For example,
+        the HTTP protocol specifies Web addresses by using a
+        <term>Uniform Resource Locator (URL)</term>.
+            <idx><h>Uniform Resource Locator (URL)</h></idx>
+        A URL specifies three necessary bits of information: The method used to transfer information (e.g., HTTP or FTP), the address of the host computer (e.g., <c>www.prenhall.com</c>), and the path describing where the file is located on the host ( <c>/morelli/index.html</c>):
+      </p>
+<pre>
+METHOD://HOST/PATH
+HTTP://www.prenhall.com/morelli/index.html
+</pre>
+      <p>
+        Similarly, an e-mail address is specified by the SMTP protocol to consist of a local mailbox address (<c>George.W.Bush</c>) followed by the address of the computer (<c>mail.whitehouse.gov</c>):
+      </p>
+<pre>
+LOCAL_MAILBOX@COMPUTER
+George.W.Bush@mail.whitehouse.gov
+</pre>
+      <p>
+        Another good example of an application protocol is the Internet's
+        <em>Domain Name System (DNS)</em>,
+        which is the system that governs how names,
+        such as <c>whitehouse.gov</c> and <c>java.trincoll.edu</c>, can \marginpar{Internet domain names} be translated into numeric addresses.
+        In the DNS, each host computer on the Internet is identified with a unique host name<mdash/>for example,
+<c>mail</c>, <c>java</c><mdash/>which is usually made up by the network administrator whose job it is to manage an organization's network.
+        The DNS divides the entire Internet into a hierarchy of
+        <em>domains</em> and <em>subdomains</em>.
+        The generic domains are names like <c>com</c>,
+<c>edu</c>, and <c>mil</c>, which refer to the type of organization<mdash/> commercial,
+        educational, and military, respectively.
+        In addition to these there are country domains,
+        such as <c>fr</c>, <c>au</c>, and <c>nz</c>, for France, Australia,
+        and New Zealand.
+        Finally, individuals and organizations can buy their own
+        <term>domain names</term>,
+            <idx><h>domain names</h></idx>
+        such as <c>whitehouse</c>, <c>microsoft</c>, and <c>trincoll</c>.
+      </p>
+      <p>
+        What makes the whole system work is that certain computers within the network are designated as DNS servers.
+        It is their role to translate names such as <c>java.trincoll.edu</c> to numeric addresses whenever they are requested to do so by clients such as the SMTP or the HTTP server.
+        Also, the DNS servers must communicate among themselves to make sure that their databases of names and addresses are up-to-date.
+      </p>
+      <p>
+        \secEXRHone{Self-Study Exercise}
+        <ol>
+          <li>
+            <p>
+              What's the URL of the Web server at Prentice Hall?
+              Identify its component parts<mdash/>host name,
+              domain name, Internet domain.
+            </p>
+          </li>
+        </ol>
+      </p>
+    </subsubsection>
+  </subsection>
+  <subsection xml:id="fig-clientserverapp">
+    <title>Client/Server Applications</title>
+    <p>
+      The HTTP, FTP, SMTP, and DNS protocols are examples of
+      <em>client/server protocols</em>,
+          <idx><h>client/server protocols</h></idx>
+      and the applications they support are examples of client/server applications.
+      In general, a client/server application is one in which the task at hand has been divided into two subtasks,
+      one performed by the <term>client</term>
+          <idx><h>client</h></idx>
+      and one performed by the <term>server</term>
+          <idx><h>server</h></idx>
+      (Fig.<nbsp/>15.4).
+      <image width="73%" source="chptr15"/> For example, in the HTTP case,
+      the Web browser plays the role of a client by requesting a Web page from a Web (HTTP) server.
+      A Web server is just a computer that runs HTTP software<mdash/>a program that implements the HTTP protocol.
+      For e-mail, the program you use to read your e-mail<mdash/>Eudora, Pine,
+      or Outlook<mdash/>is an e-mail client.
+      It requests certain services,
+      such as send mail or get mail,
+      from an e-mail (SMTP) server,
+      which is simply a computer that runs SMTP software.
+      In the FTP case,
+      to transfer a program from one computer to another,
+      you would use an FTP client, such as Fetch.
+      Finally, in the DNS case,
+      the DNS servers handle requests for name to address translations that come from HTTP, FTP, and SMTP servers,
+      acting in this case like clients.
+    </p>
+    <p>
+      So we can say that a client/server application is one that observes the following protocol:
+    </p>
+<pre>
+Server: Set up a service on a particular host computer.
+Client: Contact the server and request the service.
+Server: Accept a request from a client and provide the service.
+</pre>
+    <p>
+      As these examples illustrate,
+      many Internet applications are designed as client/server applications.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Divide and Conquer</title>
+      <p>
+        The client/server protocol is an example of the effective use of the divide-and-conquer strategy.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Lots of our everyday interactions fit into the client/server model.
+            Suppose you are the client in the following services:
+            <ul>
+              <li>
+                <p>
+                  Buying a piece of software at a bookstore.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Buying a piece of software over the phone.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Buying a piece of software over the Internet.
+                </p>
+              </li>
+            </ul>
+          </p>
+          Identify the server and then describe the basic protocol.
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection xml:id="fig-levels">
+    <title>Lower Level Network Protocols</title>
+    <p>
+      Modern computer networks, such as the Internet,
+      are organized into a number of levels of software and hardware.
+      Each level has its own collection of protocols (Fig.<nbsp/>15.5).
+      <image width="73%" source="chptr15"/> The application level,
+      which contains the HTTP, FTP, SMTP, and DNS protocols,
+      is the highest level.
+      Underlying the application-level protocols are various
+      <em>transmission protocols</em>,
+      such as the <em>Transfer Control Protocol (TCP)</em>
+      and the <em>User Datagram Protocol (UDP)</em>.
+      These protocols govern the transfer of large blocks of information,
+      or <term>packets</term>,
+          <idx><h>packets</h></idx>
+      between networked computers.
+      All of the applications we mentioned<mdash/>WWW, e-mail,
+      and file transfer<mdash/> involve \marginpar{Packet transfer} data transmission and,
+      therefore, rely on one or more of the transmission protocols.
+    </p>
+    <p>
+      At the very lowest end of this hierarchy of protocols are those that govern the transmission of bits or electronic pulses over wires and those that govern the delivery of data from node to node.
+      Most of these protocols are built right into the hardware<mdash/>the wires,
+      connectors, transmission devices<mdash/>that networks use.
+      On top of these are protocols,
+      such as the <term>ethernet protocol</term>
+          <idx><h>ethernet protocol</h></idx>
+      and <em>token ring protocol</em>,
+      that govern the delivery of packets ofinformation on a local area network.
+      These too may be built right into the network hardware.
+    </p>
+    <p>
+      As you might expect,
+      these lower level protocols are vastly different \marginpar{Disparate protocols} from each other.
+      An ethernet network cannot talk directly to a token ring network.
+      How can we connect such disparate networks together?
+      Think again of our United Nations analogy.
+      How do we get French-speaking networks to communicate with English-speaking networks?
+      The answer supplied by the Internet is to use the
+      <term>Internetworking Protocol (IP)</term>,
+          <idx><h>Internetworking Protocol (IP)</h></idx>
+      which governs the task of translating one network protocol to a common format (Fig.
+      <xref ref="fig-ipprotocol"></xref>).
+    </p>
+    <p>
+      To push the UN analogy a bit further,
+      the Internet's IP is like a \marginpar{The Internet protocol} universal language built into the routers that transmit data between disparate networks.
+      On one end of a transmission,
+      a router takes a French packet of information received from one of the delegates in its network.
+      The router translates the French packet into an IP packet,
+      which it then sends on through the network to its destination.
+      When the IP packet gets close to its destination,
+      another router takes it and translates it into an English packet before sending it on to its destination on its network.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-slideshow">
+    <title>The <c>java.net</c>Package</title>
+    <figure xml:id="fig-ipprotocol">
+      <caption>Routers between individual networks use the
+      IP protocol to translate one network protocol to another.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      As we have seen,
+      networks are glued together by a vast array of protocols.
+      Most of these protocols are implemented in software that runs on general-purpose computers.
+      You can install software on your personal computer to turn it into a Web server,
+      an FTP server, or an e-mail server.
+      Some of the lower level protocols are implemented in software that runs on special-purpose computers,
+      the routers.
+      Still other protocols, such as the ethernet protocol,
+      are implemented directly in hardware.
+    </p>
+    <p>
+      Fortunately,
+      we don't have to worry about the details of even the highest level protocols in order to write client/server applications in Java.
+      The <c>java.net</c>(Fig.
+      <xref ref="fig-nethier"></xref>) package supplies a powerful and easy-to-use set of classes that supports network programming.
+    </p>
+    <figure xml:id="fig-nethier">
+      <caption>The <c>java.net</c> package.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      The <c>java.net.URL</c> class provides a representation of the \marginpar{java.net.*} Internet's Uniform Resource Locator that we described earlier.
+      We'll show how to use its methods to download WWW pages.
+      We'll also look at an example that uses a URL and an input stream so that files stored on the Web can be used as input files to a Java applet or application program.
+    </p>
+    <p>
+      The <c>Socket</c> and <c>ServerSocket</c> classes provide methods that let us develop our own networking applications.
+      They enable us to make a direct connection to an Internet host,
+      and read and write data through \mbox{InputStream} s and <c>OutputStream</c> s.
+      As we will see,
+      this is no more difficult than reading and writing data to and from files.
+      The <c>DatagramPacket</c> and <c>DatagramSocket</c> classes provide support for even lower-level networking applications,
+      based on Internet packets.
+    </p>
+    <p>
+      <image width="73%" source="chptr15"/>
+    </p>
+  </subsection>
+</section>
