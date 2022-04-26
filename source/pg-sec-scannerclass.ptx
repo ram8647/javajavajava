@@ -1,0 +1,772 @@
+<section xml:id="pg-sec-scannerclass">
+  <title>From the Java Library: <c>java.util.Scanner</c></title>
+  <introduction>
+    <p>
+      If we wish to write useful interactive programs,
+      we must be able to receive information from the user as well as send information to him or her.
+      We saw, in the previous chapter,
+      that output from a program can be sent to the console window by simply using the <c>System.out.print()</c> and <c>System.out.println()</c> statements.
+      In this section we describe two simple ways that Java can handle keyboard input.
+      Receiving input from the keyboard,
+      together with sending output to the console window,
+      creates one of the standard user interfaces for programs.
+    </p>
+    <p>
+      Recall, that in Java,
+      any source or destination for I/O is considered a stream of bytes or characters.
+      To perform keyboard input,
+      we will extract characters from <c>System.in</c>, the input stream connected to the keyboard.
+      Getting keyboard input from <c>System.in</c> involves two complications that are not present in dealing with <c>System.out.println()</c>. First,
+      normal keyboard input data requested of a user consists of a sequence of characters or digits which represent a word,
+      phrase, integer, or real number.
+      Normally, an entire sequence of characters typed by the user will represent data to be stored in a single variable with the user hitting the return or enter key to signal the end of a piece of requested data.
+      Java has a special class, <c>BufferedReader</c>, that uses an input stream and has a method that collects characters until it reads the character or characters that correspond to hitting the return or enter key.
+      A second <image width="73%" source="chptr02"/> complication for reading input involves the problem of how to handle receiving data that is not in the same format as expected.
+      The
+<c>BufferedReader</c> class handles this problem by using certain <em>exceptions</em>,
+      a special kind of error message,
+      that must be handled by the programmer.
+      Chapter 11 is devoted to exceptions and we will avoid their use,
+      as far as possible, until that time.
+    </p>
+    <p>
+      There is an alternate way to handle keyboard input in the Java 2 Platform Standard Edition 5.0 (Java SE 5.0).
+      A <c>Scanner</c> class has been added to the <c>java.util</c> package which permits keyboard input without forcing the programmer to handle exceptions.
+      We introduce the
+<c>Scanner</c> class in the next subsection and then describe how a user defined class introduced in Chapter<nbsp/>4 can function in an equivalent fashion to permit simple keyboard input.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Keyboard Input with the <c>Scanner</c>Class</title>
+    <p>
+      A partial definition of <c>Scanner</c> is shown in Figure<nbsp/>2.25.
+      Note that the <c>Scanner</c> methods listed are but a small subset of the public methods of this class.
+      The Scanner class is in the <c>java.util</c> package so classes that use it should import it with the following statement:
+    </p>
+<pre>
+import java.util.Scanner;
+</pre>
+    <p>
+      The <c>Scanner</c> class is designed to be a very flexible way to recognize chunks of data that fit specified patterns from any input stream.
+      To use the <c>Scanner</c> class for keyboard input,
+      we must create a <c>Scanner</c> instance and associate it with <c>System.in</c>. The class has a constructor for this purpose,
+      so the statement
+    </p>
+<pre>
+Scanner sc = new Scanner(System.in);
+</pre>
+    <p>
+      declares and instantiates an object that can be used for keyboard input.
+      After we create a <c>Scanner</c> object,
+      we can make a call to <c>nextInt()</c>,
+<c>nextDouble()</c>, or <c>next()</c> to read,
+      respectively,
+      an integer, real number, or string from the keyboard.
+      The program in <xref ref="fig-scannerprog">Figure</xref>
+      demonstrates how an integer would be read and used.
+      When the <c>nextInt()</c>
+    </p>
+    <figure xml:id="fig-scannerprog">
+      <caption>A very brief program with a Scanner object used for keyboard input</caption>
+<pre>
+import java.util.Scanner;
+public class TestScanner
+{
+  public static void main(String[] args)
+  {               // Create Scanner object
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Input an integer:"); // Prompt
+    int num = sc.nextInt();         // Read an integer
+    System.out.println(num + " squared = " + num*num);
+  } //main()} // TestScanner class
+</pre>
+    </figure>
+    <p>
+      method is executed,
+      no further statements are executed until an <c>int</c> value is returned by the method.
+      Normally this does not happen until the user has typed in the digits of an integer and hit the return or enter key.
+      Thus executing the <c>main()</c> method of the <c>TestScanner</c> class will result in the output
+    </p>
+<pre>
+Input an integer:
+</pre>
+    <p>
+      to the console window and the program will wait for the user to type in an integer and hit the return or enter key.
+      After this has been done the output will look something like:
+    </p>
+<pre>
+Input an integer:123
+123 squared = 15129
+</pre>
+    <p>
+      Keyboard input of real numbers and strings are handled in a similar manner.
+    </p>
+    <p>
+      Keyboard input will allow us to create examples of command line interfaces for interactive programs.
+      For example, the code
+    </p>
+<pre>
+Scanner sc = new Scanner(System.in);
+Riddle riddle = new Riddle(
+  "What is black and white and red all over?",
+  "An embarrassed zebra.");
+System.out.println("Here is a riddle:");
+System.out.println(riddle.getQuestion());
+System.out.print("To see the answer, ");  // Prompt
+System.out.println("type a letter and enter.");
+String str = sc.next();         // Wait for input
+System.out.println(riddle.getAnswer());
+</pre>
+    <p>
+      will display a riddle question and prompt the user to type a letter and to hit the enter key to see the answer.
+      In the next chapter,
+      we will develop new methods for the <c>OneRowNim</c> class that will be able to use <c>int</c> values input from the keyboard for the next move.
+    </p>
+    <p>
+      We must mention that,
+      since the <c>Scanner</c> class is designed as a flexible tool for recognizing chunks of data from any input stream,
+      it has some properties that may be unexpected and not totally compatible with simple keyboard input.
+      A <c>Scanner</c> object has a set of character strings that separate or <term>delimit</term>
+      the chunks of data that it is looking for.
+      By default, this set of delimiters consists of any non-empty sequence of
+      <em>white space</em> characters,
+      that is, the space, tab, return, and newline characters.
+      This will allow a user to input several integers separated by spaces before hitting the enter key.
+      This might be handled by code like:
+    </p>
+<pre>
+System.out.print("Input two integers and an enter:");
+int num1 = sc.nextInt();
+int num2 = sc.nextInt();
+</pre>
+    <p>
+      White space as delimiters also means that the <c>next()</c> method cannot return an empty string nor can it return a string that contains any spaces.
+      For example, consider the code:
+    </p>
+<pre>
+System.out.print("Input the first president of the USA:");
+String str = sc.next();
+</pre>
+    <p>
+      If one types "George Washington" and hits the enter key,
+      the string
+<c>str</c> will store only "George". In order to get a <c>Scanner</c> object to read strings that contain spaces,
+      we must use the <c>useDelimiter()</c> method to define the set of delimiters as just that character string generated by hitting the enter key.
+      For example, for some Windows operating systems, the statement
+    </p>
+<pre>
+sc = sc.useDelimiter("\r\n");
+</pre>
+    <p>
+      will result in the <c>next()</c> method returning the entire string of characters input from the keyboard up to but not including those generated by hitting the enter key.
+    </p>
+    <p>
+      You should also be aware that just because we can use a <c>Scanner</c> object to write Java code that ignores exceptions does not mean that exceptions will not be generated by keyboard input.
+      If the user enters letters rather than digits for the <c>nextInt()</c> method to process,
+      the program will be terminated with an error message.
+    </p>
+    <p>
+      It must be stressed that the strategy for handling keyboard input outlined above is a temporary strategy until the topic of exceptions is covered in Chapter<nbsp/>11.
+      Real software applications that use keyboard input should carefully handle the possibility that a user will enter something unexpected.
+      In Java, this can only be done by handling exceptions.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-kbreaderuml">
+    <title>Keyboard Input with the <c>KeyboardReader</c>Class</title>
+    <p>
+      <image width="73%" source="chptr02"/> If you are using an older version of Java that does not have the <c>Scanner</c> class,
+      a user-defined class can be used instead.
+      A <c>KeyboardReader</c> class that uses the <c>BufferedReader</c> class will be developed in Chapter<nbsp/>4.
+      It has methods that read data from the keyboard in a manner very similar to those of the <c>Scanner</c> class.
+      A partial list of its public methods is given in the UML class diagram shown in Figure<nbsp/>2.27.
+      To use the <c>KeyboardReader</c> class for keyboard input,
+      copy the source code <c>KeyboardReader.java</c> from Chapter<nbsp/>4 into the same directory as the source code of your current Java class
+      (and add it to your current project if you are using a integrated development environment).
+    </p>
+    <p>
+      To use a <c>KeyboardReader</c> object,
+      we need to create an instance of the class with a constructor.
+      Then calling one of the three methods will return an <c>int</c>, <c>double</c>, or <c>String</c> when data is input from the keyboard.
+      Any of the three methods of a <c>KeyboardReader</c> object will attempt to process the entire string input from the keyboard up to the point that the enter key is hit.
+      That is, the character or characters generated by hitting the return or enter key is the delimiter used by <c>KeyboardReader</c>. The <c>TestKeyboardReader</c> class definition in <xref ref="fig-kbreaderprog">Figure</xref>
+    </p>
+    <figure xml:id="fig-kbreaderprog">
+      <caption>A very brief program with a KeyboardReader object used for keyboard input.</caption>
+<pre>
+public class TestKeyboardReader
+{
+  public static void main(String[] args)
+  {             // Create KeyboardReader object
+    KeyboardReader kb = new KeyboardReader();
+    System.out.print("Input an integer:"); // Prompt
+    int num = kb.getKeyboardInteger(); // Read an integer
+    System.out.println(num + " squared = " + num*num);
+  } //main()} // TestKeyboardReader class
+</pre>
+    </figure>
+    <p>
+      reads an integer from the keyboard and squares it just like the <c>TestScanner</c> class.
+      In the remainder of the text,
+      any time the <c>Scanner</c> class is used for keyboard input,
+      the same program can be run using the <c>KeyboardReader</c> class after making the obvious substitutions.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            Modify the <c>main()</c> method of the <c>TestScanner</c> class so that it reads a real number from the keyboard rather than an integer.
+          </p>
+        </li>
+      </ol>
+    </p>
+    <p>
+      \secSMH{Chapter Summary} \secKTH{Technical Terms} \begin{KT}
+    </p>
+    <p>
+      access modifier
+    </p>
+    <p>
+      class-level variable
+    </p>
+    <p>
+      default value
+    </p>
+    <p>
+      delimiter
+    </p>
+    <p>
+      empty string
+    </p>
+    <p>
+      flow of control
+    </p>
+    <p>
+      interface
+    </p>
+    <p>
+      local variable
+    </p>
+    <p>
+      method call and return
+    </p>
+    <p>
+      null pointer
+    </p>
+    <p>
+      null pointer exception
+    </p>
+    <p>
+      pointer
+    </p>
+    <p>
+      reference
+    </p>
+    <p>
+      reference variable
+    </p>
+    <p>
+      static modifier
+    </p>
+    <p>
+      user interface \end{KT}
+    </p>
+    <p>
+      \secSMHtwo{Summary of Important Points}
+      <ul>
+        <li>
+          <p>
+            Dot notation is used to refer to an object's public elements.
+          </p>
+        </li>
+        <li>
+          <p>
+            Designing a class is a matter of deciding what role it will play and what information and actions it will have.
+          </p>
+        </li>
+        <li>
+          <p>
+            Writing a Java program is a matter of defining one or more classes.
+            A class definition serves as a template for creating instance of the class.
+          </p>
+        </li>
+        <li>
+          <p>
+            Classes typically contain two kinds of elements, variables and methods.
+            An object's state is defined by its instance variables.
+          </p>
+        </li>
+        <li>
+          <p>
+            Class elements that are declared <c>public</c> can be accessed by other objects.
+            Elements that are declared <c>private</c> are hidden from other objects.
+          </p>
+        </li>
+        <li>
+          <p>
+            A class's instance variables are usually declared <c>private</c> so they cannot be accessed directly by other objects.
+          </p>
+        </li>
+        <li>
+          <p>
+            An object's public instance methods can be called by other objects.
+            Thus, they make up the object's interface with other objects.
+          </p>
+        </li>
+        <li>
+          <p>
+            Object instantiation is the process of creating an object,
+            using the <c>new</c> operator in conjunction with a constructor method.
+          </p>
+        </li>
+        <li>
+          <p>
+            A class definition consists of a header and a body.
+            The header gives the class a name,
+            specifies its accessibility (<c>public</c>), and its place in the Java class hierarchy (<c>extends
+Object</c>).
+            The class body contains declarations of the class's variables and definitions of its methods.
+          </p>
+        </li>
+        <li>
+          <p>
+            By default, a newly defined class is consider a subclass of <c>Object</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Class elements that are declared <c>static</c>, such as the
+<c>main()</c> method,
+            are associated with the class
+            (not with its instances).
+          </p>
+        </li>
+        <li>
+          <p>
+            A Java application program must contain a <c>main()</c> method,
+            which is where it begins execution.
+          </p>
+        </li>
+        <li>
+          <p>
+            Methods that are used solely for the internal operations of the class should be declared <c>private</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            An instance variable declaration reserves memory for the instance variable within the object,
+            associates a name and a type with the location,
+            and specifies its accessibility.
+          </p>
+        </li>
+        <li>
+          <p>
+            A method definition consists of two parts:
+            a header, which names the method and provides other general information about it,
+            and a body, which contains its executable statements.
+          </p>
+        </li>
+        <li>
+          <p>
+            Declaring a variable creates a name for an object but does not create the object itself.
+            An object is created by using the <c>new</c> operator and a constructor method.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      \secANSHleft
+      <ul>
+        <li>
+          <p>
+            The Java code fragment prints out the following:
+<pre>
+The singing king.
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            For the <c>Riddle</c> class (Fig.
+            <xref ref="fig-riddleclass2"></xref>), \begin{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            The name of the class: <c>Riddle</c>
+          </p>
+        </li>
+        <li>
+          <p>
+            The names of two instance variables: <c>question</c>, <c>answer</c>
+          </p>
+        </li>
+        <li>
+          <p>
+            The names of three methods: <c>Riddle()</c>, <c>getQuestion()</c>,
+     <c>getAnswer()</c>\end{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            For <c>RiddleUser</c> class (Fig.
+            <xref ref="fig-riddleuser"></xref>), \begin{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            The names of two <c>Riddle</c> instances: <c>riddle1</c>,
+     <c>riddle2</c>
+          </p>
+        </li>
+        <li>
+          <p>
+            All six method calls of the <c>Riddle</c> objects in the program:
+<pre>
+Riddle("What is black and white and red all over?",
+                            "An embarrassed zebra.")
+Riddle("What is black and white and read all over?",
+                                     "A newspaper.")
+riddle1.getQuestion()
+riddle1.getAnswer()
+riddle2.getQuestion()
+riddle2.getAnswer()
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            Qualified names: <c>riddle1.getQuestion()</c> and  <c>riddle1.getAnswer()</c>\end{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            Definition of new instance variable in the <c>Riddle</c> class:
+<pre>
+private String hint = "This riddle is to easy for a hint";
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            The header for a <c>getHint()</c> method of the <c>Riddle</c> class,
+            which should be a <c>public</c> method,
+            is:
+<pre>
+public String getHint();
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            The header for a <c>setHint()</c> method of the <c>Riddle</c> class is:
+<pre>
+public void setHint(String aHint);
+</pre>The result type is <c>void</c>. Although the identifier used for the parameter is arbitrary,
+            it is a good practice to make it descriptive,
+            by referring in some way to the <c>hint</c> instance variable.
+          </p>
+        </li>
+        <li>
+          <p>
+            The partial definition of the <c>Student</c> class is given below.
+<pre>
+public class Student
+{  private String firstName;
+   private String lastName;
+   private int studentID;
+   public void setStudent(String fName, String lName,
+                                              int anID);
+   public int getStudentID();
+   public String getStudentName();}
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            A main method that reads and squares a real number is given below. \[27pc]
+<pre>
+public static void main(String[] args)
+{               // Create Scanner object
+  Scanner sc = Scanner.create(System.in);
+  System.out.print("Input a real number:");    // Prompt
+  double realNum= sc.nextDouble();      // Read a double
+  System.out.println(num + " squared = " + realNum*realNum);} //main()
+</pre>
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      \marginpar{<term>Note:</term> For programming exercises,
+      <term>first</term> draw a UML class diagram describing all classes and their inheritance relationships and/or associations.}
+    </p>
+    <ol>
+      <li>
+        <p>
+          Consider the transaction of asking your professor for your grade in your computer science course.
+          Identify the objects in this transaction and the types of messages that would be passed among them.
+        </p>
+      </li>
+      <li>
+        <p>
+          Now suppose the professor in the previous exercise decides to automate the transaction of looking up a student's grade and has asked you to design a program to perform this task.
+          The program should let a student type in his or her name and ID number and the program then should display his or her grades for the semester,
+          with a final average.
+          Suppose there are five quiz grades, three exams,
+          and two programming exercise grades.
+          Identify the objects in this program and the type of messages that would be passed among them.
+          (<em>Hint</em>: The grades themselves are just data values,
+          not objects.)
+        </p>
+      </li>
+      <li>
+        <p>
+          In the <c>RiddleUser</c> class (Fig.
+          <xref ref="fig-riddleuser"></xref>),
+          give two examples of object instantiation and explain what is being done.
+        </p>
+      </li>
+      <li>
+        <p>
+          Explain the difference between a method definition and a method call.
+          Give an example of each from the <c>Riddle</c> and <c>RiddleUser</c> examples discussed in this chapter.
+        </p>
+      </li>
+      <li>
+        <p>
+          In the <c>RiddleUser</c> class (Fig.
+          <xref ref="fig-riddleuser"></xref>),
+          identify three examples of method calls and explain what is being done.
+        </p>
+      </li>
+      <li>
+        <p>
+          Describe how the slogan
+          <q>define, create, manipulate</q>
+          applies to the <c>Riddle</c> example.
+        </p>
+      </li>
+      <li>
+        <p>
+          An identifier is the name for a \rule{30pt}{0.5pt} , \rule{30pt}{0.5pt} , or a \rule{30pt}{0.5pt} .
+        </p>
+      </li>
+      <li>
+        <p>
+          Which of the following would be valid identifiers?
+<pre>
+int  74ElmStreet  Big_N     L$&amp;%#   boolean  Boolean  _number
+Int  public       Private   Joe     j1       2*K      big numb
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          Explain the difference between a <c>class variable</c> and an <c>instance variable</c>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Identify the syntax error
+          (if any)
+          in each declaration.
+          Remember that some parts of an instance variable declaration are optional.
+        </p>
+        <ol>
+          public boolean isEven ; Private boolean isEven ; private boolean isOdd public boolean is Odd ; string S ; public String boolean ; private boolean even = 0; private String s = helloWorld ;
+        </ol>
+      </li>
+      <li>
+        <p>
+          Write declarations for each of the following instance variables.
+          <ol>
+            <li>
+              <p>
+                A <c>private boolean</c> variable named <c>bool</c> that has an initial value of <c>true</c>.
+              </p>
+            </li>
+            <li>
+              <p>
+                A <c>public String</c> variable named <c>str</c> that has an initial value of "hello".
+              </p>
+            </li>
+            <li>
+              <p>
+                A <c>private int</c> variable named <c>nEmployees</c> that is not assigned an initial value.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Identify the syntax error
+          (if any)
+          in each method header:
+          <ol>
+            public String boolean() private void String () private void myMethod private myMethod() public static void Main (String argv[])
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Identify the syntax error
+          (if any)
+          in each assignment statement.
+          Assume that the following variables have been declared:
+<pre>
+public int m;
+public boolean b;
+public String s;
+</pre>
+          <ol>
+            m = "86" ; m = 86 ; m = true ; s = 1295 ; s = "1295" ; b = "true" ; b = false
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Given the following definition of the <c>NumberAdder</c> class,
+          add statements to its <c>main()</c> method to create two instances of this class,
+          named <c>adder1</c> and <c>adder2</c>. Then add statements to set <c>adder1</c>'s numbers to 10 and 15,
+          and <c>adder2</c>'s numbers to 100 and 200.
+          Then add statements to print their respective sums.
+<pre>
+public class NumberAdder
+{
+    private int num1;
+    private int num2;
+    public void setNums(int n1, int n2)
+    {
+      num1 = n1;
+      num2 = n2;
+    }
+    public int getSum()
+    {
+      return num1 + num2 ;
+    }
+    public static void main(String args[])
+    {
+    }}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          For the <c>NumberAdder</c> class in the previous exercise,
+          what are the names of its instance variables and instance methods?
+          Identify three expressions that occur in the program and explain what they do.
+          Identify two assignment statements and explain what they do.
+        </p>
+      </li>
+      <li>
+        <p>
+          Explain the difference between each of the following pairs of concepts.
+          <ol>
+            <li>
+              <p>
+                A method definition and a method call.
+              </p>
+            </li>
+            <li>
+              <p>
+                Declaring a variable of reference type and creating an instance.
+              </p>
+            </li>
+            <li>
+              <p>
+                A variable of reference type and a variable of primitive type.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Define a Java class named <c>NumberCruncher</c> that has a single <c>int</c> variable as its only instance variable.
+          Then define methods that perform the following operations on its number:
+          get, double, triple, square, and cube.
+          Set the initial value of the number with a constructor as was done with the instance variables in the <c>Riddle</c> class.
+        </p>
+      </li>
+      <li>
+        <p>
+          Write a <c>main()</c> method and add it to the
+<c>NumberCruncher</c> class defined in the previous problem.
+          Use it to create a <c>NumberCruncher</c> instance,
+          with a certain initial value,
+          and then get it to report its double, triple, square, and cube.
+        </p>
+      </li>
+      <li>
+        <p>
+          Write a Java class definition for a <c>Cube</c> object,
+          that has an integer attribute for the length of its side.
+          The object should be capable of reporting its surface area and volume.
+          The surface area of a cube is six times the area of any side.
+          The volume is calculated by cubing the side.
+        </p>
+      </li>
+      <li xml:id="uml-exercises">
+        <p>
+          Write a Java class definition for a <c>CubeUser</c> object that will use the <c>Cube</c> object defined in the previous exercise.
+          This class should create three <c>Cube</c> instances,
+          each with a different side,
+          and then report their respective surface areas and volumes.
+          Challenge: Modify your solution to the previous exercise so that it lets the user input the side of the cube.
+          Follow the example shown in this chapter's
+          <q>From the Java Library</q>
+          section.
+          Challenge: Define a Java class that represents an address book entry, <c>Entry</c>, which consists of a name,
+          address, and phone number,
+          all represented as <c>String</c> s.
+          For the class's interface,
+          define methods to set and get the values of each of its instance variables.
+          Thus, for the <c>name</c> variable,
+          it should have a <c>setName()</c> and a <c>getName()</c> method. \secEXRHone{UML Exercises}
+        </p>
+      </li>
+      <li>
+        <p>
+          Draw a UML class diagram to represent the following class hierarchy: There are two types of languages,
+          natural languages and programming languages.
+          The natural languages include Chinese, English, French,
+          and German.
+          The programming languages include Java, Smalltalk and C++, which are object-oriented languages, FORTRAN, COBOL, Pascal,
+          and C, which are imperative languages, Lisp and ML, which are functional languages,
+          and Prolog, which is a logic language.
+        </p>
+      </li>
+      <li>
+        <p>
+          Draw a UML class diagram to represent different kinds of automobiles,
+          including trucks, sedans,
+          wagons, SUVs, and the names and manufacturers of some popular models in each category.
+        </p>
+      </li>
+      <li>
+        <p>
+          Draw a UML object diagram of a triangle with attributes for three sides,
+          containing the values 3, 4, and 5.
+        </p>
+      </li>
+      <li>
+        <p>
+          Suppose you are writing a Java program to implement an electronic address book.
+          Your design is to have two classes,
+          one to represent the user interface and one to represent the address book.
+          Draw a UML diagram to depict this relationship.
+          See <xref ref="fig-p63f2">Figure</xref>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Draw an UML object diagram to depict the relationship between an applet,
+          which serves as a user interface,
+          and three <c>Triangle</c> s, named <c>t1</c>, <c>t2</c>, and <c>t3</c>.
+        </p>
+      </li>
+    </ol>
+  </subsection>
+</section>

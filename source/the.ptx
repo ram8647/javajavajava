@@ -1,0 +1,243 @@
+<section xml:id="the">
+  <title>The <c>appletviewer</c></title>
+  <introduction>
+    <p>
+      The <c>appletviewer</c> tool lets you run Java applets without using a Web browser.
+      This command takes the following form:
+    </p>
+    <p>
+<c>appletviewer</c>[ <em>threads flag</em>
+      ] [ <em>options</em> ] url <ellipsis/>
+    </p>
+    <p>
+      The optional <em>threads flag</em>
+      tells Java which of the various threading options to use.
+      This is system dependent.
+      For details on this feature and the command line
+      <em>options</em>, refer to Sun's Web site.
+    </p>
+    <p>
+      The appletviewer will connect to one or more HTML documents specified by their
+      <em>Uniform Resource Locators (URLs)</em>.
+      It will display each applet referenced in those documents in a separate window.
+      Some example commands would be
+    </p>
+<pre>
+appletviewer http://www.domain.edu/&#126;account/myapplet.html
+appletviewer myapplet.html
+</pre>
+    <p>
+      In the first case, the document's full path name is given.
+      In the second case,
+      since no host computer is mentioned, <c>appletviewer</c> will assume that the applet is located on the local host and will search the class path for <c>myapplet.html</c>. \marginpar{AppletViewer tags}
+    </p>
+    <p>
+      Once <c>appletviewer</c> retrieves the HTML document,
+      it will find the applet by looking for either the <c>object</c>, <c>embed</c>, or <c>applet</c> tags within the document.
+      The <c>appletviewer</c> ignores all other HTML tags.
+      It just runs the applet.
+      If it cannot find one of these tags,
+      the appletviewer will do nothing.
+      If it does locate an applet, it starts a runtime environment,
+      loads the applet,
+      and then runs the applet's <c>init()</c> method.
+      The applet's <c>init()</c> must have the following method signature:
+    </p>
+<pre>
+public void init()
+</pre>
+  </introduction>
+  <subsection>
+    <title>The <c>applet</c>Tag</title>
+    <p>
+      The <c>applet</c> tag is the original HTML 3.2 tag used for embedding applets within an HTML document.
+      If this tag is used, the applet will be run by the browser,
+      using the browser's own implementation of the Java Runtime Environment (JRE).
+    </p>
+    <p>
+      \fontdimen2\font=0.7\fontdimen2\font Note, however,
+      that if your applet uses the latest Java language features and the browser is not using the latest version of JRE, the applet may not run correctly.
+      For example,
+      this might happen if your applet makes use of Swing features that are not yet supported in the browser's implementation of the JRE.<nbsp/>In that case,
+      your applet won't run under that browser.\fontdimen2\font=1.429\fontdimen2\font
+    </p>
+    <p>
+      To ensure that the applet runs with the latest version of the JRE<mdash/>the one provided by Sun Microsystems<mdash/>you can also use the <c>object</c> or the <c>embed</c> tags.
+      These tags are used to load the appropriate version of the JRE into the browser as a <em>plugin</em> module.
+      A plugin is a helper program that extends the browser's functionality.
+    </p>
+    <p>
+      The <c>applet</c> tag takes the following form:
+    </p>
+<pre>
+&lt;applet
+    code="yourAppletClass.class"
+    object="serializedObjectOrJavaBean"
+    codebase="classFileDirectory"
+    width="pixelWidth"
+    height="pixelHeight"
+>
+   &lt;param name="..." value="...">
+    ...
+   alternate-text
+&lt;/applet>
+</pre>
+    <p>
+      You would use only the <c>code</c> or <c>object</c> attribute,
+      not both.
+      For the programs in this book,
+      you should always use the
+<c>code</c> tag.
+      The <c>code</c> tag specifies where the program will begin execution<mdash/>that is,
+      in the applet class.
+    </p>
+    <p>
+      The optional <c>codebase</c> attribute is used to specify a relative path to the applet.
+      It may be omitted if the applet's class file is in the same directory as the HTML document.
+    </p>
+    <p>
+      The <c>width</c> and <c>height</c> attributes specify the initial dimensions of the applet's window.
+      The values specified in the applet tag can be overridden in the applet itself by using the <c>setSize()</c> method,
+      which the applet inherits from the <c>java.awt.Component</c> class.
+    </p>
+    <p>
+      The <c>param</c> tags are used to specify arguments that can be retrieved when the applet starts running
+      (usually in the applet's <c>init()</c> method).
+      The methods for retrieving parameters are defined in the <c>java.applet.Applet</c> class.
+    </p>
+    <p>
+      Finally, the <c>alternative-text</c> portion of the applet tag provides text that would be displayed on the Web page if the appletviewer or browser is unable to locate the applet.
+    </p>
+    <p>
+      Here's a simple example of an applet tag:
+    </p>
+<pre>
+&lt;applet
+    code="HelloWorldApplet.class"
+    codebase="classfiles"
+    width="200"
+    height="200"
+>
+    &lt;param name="author" value="Java Java Java">
+    &lt;param name="date" value="May 1999">
+    Sorry, your browser does not seem to be able to
+    locate the HelloWorldApplet.
+&lt;/applet>
+</pre>
+    <p>
+      In this case,
+      the applet's code is stored in a file name <c>HelloWorldApplet.class</c>, which is stored in the <c>classfiles</c> subdirectory<mdash/>that is,
+      a subdirectory of the directory containing the HTML file.
+      The applet's window will be <m>200 \times 200</m> pixels.
+      And the applet is passed the name of the program's author and date it was written.
+      Finally, if the applet cannot be located, the
+      <q>Sorry <ellipsis/></q>
+      message will be displayed instead.
+    </p>
+  </subsection>
+  <subsection>
+    <title>The <c>object</c>Tag</title>
+    <p>
+      The <c>object</c> tag is the HTML 4.0 tag for embedding applets and multimedia objects in an HTML document.
+      It is also an Internet Explorer (IE) 4.x extension to HTML.<nbsp/>It allows IE to run a Java applet using the latest JRE plugin from Sun.
+      The <c>object</c> tag takes the following form:
+    </p>
+<pre>
+&lt;object
+    classid="name of the plugin program"
+    codebase="url for the plugin program"
+    width="pixelWidth"
+    height="pixelHeight"
+>
+    &lt;param name="code" value="yourClass.class">
+    &lt;param name="codebase" value="classFileDirectory">
+     ...
+    alternate-text
+&lt;/object>
+</pre>
+    <p>
+      Note that parameters are used to specify your applet's code and codebase.
+      In effect, these are parameters to the plugin module.
+      An example tag that corresponds to the <c>applet</c> tag for the <c>HelloWorldApplet</c> might be as follows:
+    </p>
+<pre>
+&lt;object
+    classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+    codebase="http://java.sun.com/products/plugin/"
+    width="200"
+    height="200"
+>
+    &lt;param name="code" value="HelloWorldApplet.class">
+    &lt;param name="codebase" value="classfiles">
+    &lt;param name="author" value="Java Java Java">
+    &lt;param name="date" value="May 1999">
+    Sorry, your browser does not seem to be able to
+    locate the HelloWorldApplet.
+&lt;/object>
+</pre>
+    <p>
+      If the browser has an older version of the plug in than shown in the <c>codebase</c> attribute,
+      the user will be prompted to download the newer version.
+      If the browser has the same or newer version, that version will run.
+      In theory Netscape 6 should also work the same as IE. For further details on how to use the <c>object</c> tag,
+      see Sun's plugin site at:
+    </p>
+<pre>
+http://java.sun.com/products/plugin/
+</pre>
+  </subsection>
+  <subsection>
+    <title>The <c>embed</c>Tag</title>
+    <p>
+      The embed tag is Netscape's version of the <c>applet</c> and <c>object</c> tags.
+      It is included as an extension to HTML 3.2.
+      It can be used to allow a Netscape 4.x browser to run a Java applet using the latest Java plugin from Sun.
+      It takes the following form:
+    </p>
+<pre>
+&lt;embed
+    type="Type of program"
+    code="yourAppletClass.class"
+    codebase="classFileDirectory"
+    pluginspage="location of plugin file on the web"
+    width="pixelWidth"
+    height="pixelHeight"
+>
+    &lt;noembed>
+    Alternative text
+    &lt;/noembed>
+&lt;/embed>
+</pre>
+    <p>
+      The <c>type</c> and <c>pluginspage</c> attributes are not used by the appletviewer,
+      but they are necessary for browsers.
+      They would just be ignored by the appletviewer.
+    </p>
+    <p>
+      For example,
+      an <c>embed</c> tag for <c>HelloWorldApplet</c> would be as follows:
+    </p>
+<pre>
+&lt;EMBED
+    type="application/x-java-applet;version=1.4"
+    width="200"
+    height="200"
+    code="HelloWorldApplet.class"
+    codebase="classfiles"
+    pluginspage="http://java.sun.com/products/plugin/"
+ >
+   &lt;NOEMBED>
+       Sorry.  This page won't be able to run this applet.
+   &lt;/NOEMBED>
+&lt;/EMBED>
+</pre>
+    <p>
+      It may be possible to combine the <c>applet</c>, <c>embed</c>, and <c>object</c> tags in the same HTML file.
+      Sun provides much more information,
+      as well as demo programs on its plugin website:
+    </p>
+<pre>
+http://java.sun.com/products/plugin/
+</pre>
+  </subsection>
+</section>

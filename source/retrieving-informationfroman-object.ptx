@@ -1,0 +1,234 @@
+<section xml:id="retrieving-informationfroman-object">
+  <title>Retrieving Information from an Object</title>
+  <introduction>
+    <p>
+      The modifications we've made to the <c>OneRowNim</c> class allow us to set the instance variables of a <c>OneRowNim</c> object with a constructor,
+      but there is no way for us to retrieve their values other than to use the <c>report()</c> method to write a message to the console.
+      We will want to be able to ask a <c>OneRowNim</c> object to provide us with the number of sticks remaining and who plays next when we develop a graphical user interface for <c>OneRowNim</c> in the next chapter.
+      We declared <c>nSticks</c> and <c>player</c> as <c>private</c> variables,
+      so we cannot access them directly.
+      Therefore, we will need accessor methods to <em>get</em>
+      the values of each of the instance variables.
+      Consider the following method definitions:
+    </p>
+<pre>
+public int getSticks()
+{   return nSticks;}
+public int getPlayer()
+{   return player;}
+</pre>
+    <p>
+      Recall that a method's <em>ResultType</em>
+      is specified just in front of the <em>MethodName</em>.
+      We want the two methods to return
+<c>int</c> values that represent <c>OneRowNim</c>'s instance variables.
+      Therefore, their result types are both declared <c>int</c>.
+    </p>
+    <p>
+      Before we discuss how the value that is returned by a method is used when the method is called,
+      let's consider one more method definition.
+      Many methods that return a value do a computation rather than simply returning the value of an instance variable.
+      For example,
+      suppose we wish to define a method for the <c>OneRowNim</c> class that will notify the user of an instance of the class whether the game is over.
+      Thus we want a method that, when called,
+      returns a <c>true</c> or <c>false</c> depending on whether or not all the sticks have been taken.
+<c>gameOver()</c> is a descriptive name of such a method and the method should have a <c>boolean</c> result type.
+      This method should return
+<c>true</c> when the instance variable <c>nSticks</c> no longer contains a positive <c>int</c> value.
+      Thus we can define:
+    </p>
+<pre>
+public boolean gameOver()
+{   return (nSticks &lt;= 0);}
+</pre>
+    <p>
+      The expression <c>(nSticks &lt;= 0)</c> evaluates to a <c>false</c> value if <c>nSticks</c> stores a positive value and it evaluates to
+<c>true</c> otherwise.
+      Thus the value returned is precisely what is required.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Invoking a Method That Returns a Value</title>
+    <p>
+      When we invoke a method that returns a value,
+      the invocation \marginpar{Retrieving information} expression takes on,
+      or is replaced by, the value that is returned.
+      For example, if we execute the statements
+    </p>
+<pre>
+OneRowNim game1 = new OneRowNim(11);
+int sticksLeft = game1.getSticks();
+</pre>
+    <p>
+      the expression <c>game1.getSticks()</c> will take on the value 11 after the <c>getSticks()</c> method is finished executing.
+      At that point,
+      the second statement above can be treated as if expression \mbox{game1.getSticks()} is replaced with the value 11,
+      which is assigned to <c>sticksLeft</c>. In effect,
+      the second statement is equivalent to the following statement:
+    </p>
+<pre>
+int sticksLeft = 11;
+</pre>
+    <principle>
+      <title>Evaluating Method Calls</title>
+      <p>
+        A nonvoid method call is an expression that has a value of a particular type.
+        After the method is executed,
+        the method call expression becomes the value returned.
+      </p>
+    </principle>
+    <p>
+      We can use a value returned by a method call the same way we use a literal value of the same type.
+      It can be assigned to variables,
+      be part of a numerical expression,
+      or be an argument of another method.
+      All of the following statements involve valid calls of methods that return values:
+    </p>
+<pre>
+int fewerSticks = game1.getSticks() - 1;
+boolean done = game1.gameOver();
+System.out.println(game1.getPlayer());
+game1.getSticks();
+</pre>
+    <p>
+      In each statement,
+      the method call can be replaced with the value it returns.
+      Notice that the last statement is valid but does nothing useful.
+      In Java and some other languages like C and C++, methods that return a value can simply be called without making use of the value returned.
+      This may be useful to do if the method changes the state of instance variables or sends a message to another object or an output device.
+      The method <c>getSticks()</c> does nothing but return the value of <c>nSticks</c>, so simply calling the method accomplishes nothing.
+    </p>
+  </subsection>
+  <subsection xml:id="self-study-exercisesC12">
+    <title>An Expanded <c>OneRowNim</c>Class</title>
+    <p>
+      Let's add the new methods that return values to our
+<c>OneRowNim</c> class.
+      We might note that the <c>report()</c> method from the previous chapter displays the values of <c>nSticks</c> and
+<c>player</c> in the console window which now could be done by using the methods <c>getSticks()</c> and <c>getPlayer()</c> with <c>System.out.println()</c>. However,
+      calling <c>report()</c> is an easy way to display the values of both instance variables but it cannot provide access to either variable as an <c>int</c> value. \marginpar{Redundancy and flexibility} So let's keep all three methods in our class definition.
+      The inconvenience of a small amount of redundancy is outweighed by the added flexibility of being able to call all three methods.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Using Redundancy</title>
+      <p>
+        Incorporating some redundancy into a class,
+        such as providing more than one way to access the value of an instance variable,
+        makes the class more widely usable.
+      </p>
+    </principle>
+    <p>
+      <xref ref="fig-ornuml2">Figure</xref>
+      provides a UML class diagram of the expanded <c>OneRowNim</c> class.
+    </p>
+    <table xml:id="fig-ornuml2">
+      <caption>A UML class diagram for the expanded <c>OneRowNim</c>.</caption>
+      <tabular>
+        <row bottom="minor">
+          <cell></cell>
+        </row>
+        <row>
+          <cell>OneRowNim</cell>
+        </row>
+        <row bottom="minor">
+          <cell></cell>
+        </row>
+        <row>
+          <cell><m>-</m> nSticks: int</cell>
+        </row>
+        <row>
+          <cell><m>-</m> player: int</cell>
+        </row>
+        <row bottom="minor">
+          <cell></cell>
+        </row>
+        <row>
+          <cell><m>+</m> OneRowNim()</cell>
+        </row>
+        <row>
+          <cell><m>+</m> OneRowNim(in sticks:int)</cell>
+        </row>
+        <row>
+          <cell><m>+</m> OneRowNim(in sticks:int,in starter:int)</cell>
+        </row>
+        <row>
+          <cell><m>+</m> takeSticks(in num:int)</cell>
+        </row>
+        <row>
+          <cell><m>+</m> getSticks():int</cell>
+        </row>
+        <row>
+          <cell><m>+</m> getPlayer():int</cell>
+        </row>
+        <row>
+          <cell><m>+</m> gameOver():boolean</cell>
+        </row>
+        <row>
+          <cell><m>+</m> report()</cell>
+        </row>
+        <row bottom="minor">
+          <cell></cell>
+        </row>
+      </tabular>
+    </table>
+    <p>
+      Let's also consider a new <c>main()</c> method to test the new methods of the class.
+      A very short list of statements that call each of the three new methods returning values is given in the <c>main()</c> method in <xref ref="fig-testorn3">Figure</xref>
+    </p>
+    <figure xml:id="fig-testorn3">
+      <caption>A <c>main()</c> method that tests the new methods for <c>OneRowNim</c></caption>
+<pre>
+public static void main(String[] args)
+{ OneRowNim game = new OneRowNim(13,2);
+  game.takeSticks(2);
+  System.out.print("The game is over is: ");
+  System.out.println(game.gameOver());
+  System.out.print("The next turn is by player: ");
+  System.out.println(game.getPlayer());
+  System.out.print("Sticks remaining: ");
+  System.out.println(game.getSticks());} //main()
+</pre>
+    </figure>
+    <p>
+      The output to the console when this program is run will be:
+    </p>
+<pre>
+The game is over is: false
+  The next turn is by player: 1
+  Sticks remaining: 11
+</pre>
+    <p>
+      Note that the constructor sets <c>player</c> to 2, so
+<c>player</c> stores the value 1 after one turn.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            What would these segments of Java code display on the screen?
+<pre>
+OneRowNim myGame = new OneRowNim(10,2);
+System.out.println(myGame.getPlayer());
+System.out.println(2 * myGame.getSticks());
+System.out.println(myGame.gameOver());
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            Suppose that an <c>int</c> instance variable named <c>nMoves</c> is added to the <c>OneRowNim</c> class that counts the number of moves taken in a One Row Nim game.
+            Write a Java method for the <c>OneRowNim</c> class to <em>get</em>
+            the value stored in <c>nMoves</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Write a method for the <c>OneRowNim</c> class called <c>playerOneGoesNext()</c> that returns a <c>boolean</c> value.
+            The value returned should be true if and only if player one has the next turn.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

@@ -1,0 +1,139 @@
+<section xml:id="localand-anonymous-inner-classes">
+  <title>Local and Anonymous Inner Classes</title>
+  <introduction>
+    <p>
+      In this next example, <c>ConverterFrame</c>, a local class is used to create an <c>ActionEvent</c> handler for the application's two buttons (Fig.<nbsp/>F<ndash/>2).
+    </p>
+    <figure xml:id="fig-converterframe">
+      <caption>The use of a local class as an <c>ActionListener</c>
+      adapter.</caption>
+<pre>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class ConverterFrame extends JFrame {
+  private Converter converter = new Converter();       // Reference to app
+  private JTextField inField = new JTextField(8);
+  private JTextField outField = new JTextField(8);
+  private JButton metersToInch;
+  private JButton kgsToLbs;
+  public ConverterFrame() {
+    metersToInch = createJButton("Meters To Inches");
+    kgsToLbs = createJButton("Kilos To Pounds");
+    getContentPane().setLayout( new FlowLayout() );
+    getContentPane().add(inField);
+    getContentPane().add(outField);
+    getContentPane().add(metersToInch);
+    getContentPane().add(kgsToLbs);
+  } // ConverterFram()
+  private JButton createJButton(String s) { // A method to create a JButton
+    JButton jbutton = new JButton(s);
+    class ButtonListener implements ActionListener { // Local class
+      public void actionPerformed(ActionEvent e) {
+        double inValue = Double.valueOf(inField.getText()).doubleValue();
+        JButton button = (JButton) e.getSource();
+        if (button.getText().equals("Meters To Inches"))
+          outField.setText(""+ converter.new Distance().metersToInches(inValue));
+        else
+          outField.setText(""+ converter.new Weight().kgsToPounds(inValue));
+      } // actionPerformed()
+    } // ButtonListener
+    ActionListener listener = new ButtonListener(); // Create a listener
+    jbutton.addActionListener(listener);      // Register buttons with listener
+    return jbutton;
+  } // createJButton()
+  public static void main(String args[]) {
+    ConverterFrame frame = new ConverterFrame();
+    frame.setSize(200,200);
+    frame.setVisible(true);
+  } // main()} // ConverterFrame
+</pre>
+    </figure>
+    <p>
+      As we have seen, Java's event-handling model uses predefined interfaces,
+      such as the <c>ActionListener</c> interface,
+      to handle events.
+      When a separate class is defined to implement an interface,
+      it is sometimes called an <em>adapter</em> class.
+      Rather than defining adapter classes as top-level classes,
+      it is often more convenient to define them as local or anonymous classes.
+    </p>
+    <p>
+      The key feature of the <c>ConverterFrame</c> program is the <c>createJButton()</c> method.
+      This method is used instead of the <c>JButton()</c> constructor to create buttons and to create action listeners for the buttons.
+      It takes a single <c>String</c> parameter for the button's label.
+      It begins by instantiating a new <c>JButton</c>, a reference to which is passed back as the method's <c>return</c> value.
+      After creating an instance button,
+      a local inner class named <c>ButtonListener</c> is defined.
+    </p>
+    <p>
+      The local class merely implements the <c>ActionListener</c> interface by defining the <c>actionPerformed</c> method.
+      Note how <c>actionPerformed()</c> uses the containing class's <c>converter</c> variable to acquire access to the <c>metersToInches()</c> and <c>kgsToPounds()</c> methods,
+      which are inner class methods of the <c>Converter</c> class (Fig.<nbsp/>F<ndash/>1).
+      A local class can use instance variables,
+      such as <c>converter</c>, that are defined in its containing class.
+    </p>
+    <p>
+      After defining the local inner class,
+      the <c>createJButton()</c> method creates an instance of the class (<c>listener</c>) and registers it as the button's action listener.
+      When a separate object is created to serve as listener in this way,
+      it is called an <em>adapter</em>.
+      It implements a listener interface and thereby serves as adapter between the event and the object that generated the event.
+      Any action events that occur on any buttons created with this method will be handled by this adapter.
+      In other words,
+      for any buttons created by the <c>createJButton()</c> method,
+      a listener object is created and assigned as the button's event listener.
+      By using local classes,
+      the code for doing this is much more compact and efficient.
+    </p>
+    <p>
+      Local classes have some important restrictions.
+      Although an instance of a local class can use fields and methods defined within the class itself or inherited from its superclasses,
+      it cannot use local variables and parameters defined within its scope unless these are declared <c>final</c>. The reason for this restriction is that <c>final</c> variables receive special handling by the Java compiler.
+      Because the compiler knows that the variable's value won't change,
+      it can replace uses of the variable with their values at compile time.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Anonymous Inner Classes</title>
+    <p>
+      An anonymous inner class is just a local class without a name.
+      Instead of using two separate statements to define and instantiate the local class, Java provides syntax that let's you do it in one expression.
+      The following code illustrates how this is done:
+    </p>
+<pre>
+private JButton createJButton(String s) { // A method to create a JButton
+  JButton jbutton = new JButton(s);
+  jbutton.addActionListener( new  ActionListener() {     // Anonymous class
+    public void actionPerformed(ActionEvent e) {
+      double inValue = Double.valueOf(inField.getText()).doubleValue();
+      JButton button = (JButton) e.getSource();
+      if (button.getLabel().equals("Meters To Inches"))
+        outField.setText("" + converter.new Distance().metersToInches(inValue));
+      else
+        outField.setText("" + converter.new Weight().kgsToPounds(inValue));
+      } // actionPerformed()
+  }); // ActionListener
+  return jbutton;} // createJButton()
+</pre>
+    <p>
+      Note that the body of the class definition is put right after the <c>new</c> operator.
+      The result is that we still create an instance of the adapter object,
+      but we define it on the fly.
+      If the name following <c>new</c> is a class name, Java will define the anonymous class as a subclass of the named class.
+      If the name following <c>new</c> is an interface,
+      the anonymous class will implement the interface.
+      In this example,
+      the anonymous class is an implementation of the <c>ActionListener</c> interface.
+    </p>
+    <p>
+      Local and anonymous classes provide an elegant and convenient way to implement adapter classes that are intended to be used once and have relatively short and simple implementations.
+      The choice of local versus anonymous should largely depend on whether you need more than one instance of the class.
+      If so, or if it's important that the class have a name for some other reason (readability),
+      then you should use a local class.
+      Otherwise, use an anonymous class.
+      As in all design decisions of this nature,
+      you should use whichever approach or style makes your code more readable and more understandable.
+    </p>
+  </subsection>
+</section>

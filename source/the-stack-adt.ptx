@@ -1,0 +1,175 @@
+<section xml:id="the-stack-adt">
+  <title>The Stack ADT</title>
+  <introduction>
+    <p>
+      A <term>stack</term>
+          <idx><h>stack</h></idx>
+      is a special type of list that allows insertions and removals to be performed only to the front of the list.
+      Therefore, it enforces <em>last-in<ndash/>first-out (LIFO)</em><idx><h>last-in<ndash/>first-out (LIFO)</h></idx> behavior on the list.
+      Think of a stack of dishes at the salad bar.
+      When you put a dish on the stack,
+      it goes onto the top of the stack.
+      When you remove a dish from the stack,
+      it comes from the top of the stack (Fig.
+      <xref ref="fig-stack"></xref>).
+    </p>
+    <figure xml:id="fig-stack">
+      <caption>A stack is a list that permits
+      insertions and removals only at its top.</caption>
+      <image width="73%" source=".."/>
+    </figure>
+    <p>
+      The stack operations are conventionally called <term>push</term>,
+          <idx><h>push</h></idx>
+      for insert, and <term>pop</term>,
+          <idx><h>pop</h></idx>
+      for remove, respectively.
+      Thus, the stack ADT stores a list of data and supports the following operations:
+      <ul>
+        <li>
+          <p>
+            Push<mdash/>inserts an object onto the top of the stack.
+          </p>
+        </li>
+        <li>
+          <p>
+            Pop<mdash/>removes the top object from the stack.
+          </p>
+        </li>
+        <li>
+          <p>
+            Empty<mdash/>returns <c>true</c> if the stack is empty.
+          </p>
+        </li>
+        <li>
+          <p>
+            Peek<mdash/>retrieves the top object without removing it.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      Stacks are useful for a number of important computing tasks.
+      For \marginpar{Stack applications} example,
+      during program execution, method call and return happens in a LIFO fashion.
+      The last method called is the first method exited.
+      Therefore, a stack structure known as the <em>run-time stack</em>
+      is used to manage method calls during program execution.
+      When a method is called, an activation block is created,
+      which includes the method's parameters,
+      local variables, and return address.
+      The activation block is pushed onto the stack.
+      When that method call returns,
+      the return address is retrieved from the activation block and the whole block is popped off the stack.
+      The
+<c>Exception.printStackTrace()</c> method uses the run-time stack to print a trace of the method calls that led to an exception.
+    </p>
+  </introduction>
+  <subsection xml:id="fig-stackuml">
+    <title>The <c>Stack</c>Class</title>
+    <p>
+      Given our general definition of <c>List</c> and <c>Node</c>, it is practically trivial to define the stack ADT as a subclass of <c>List</c>(Fig.<nbsp/>16<ndash/>21).
+      As a subclass of <c>List</c>, a <c>Stack</c> will inherit all of the public and protected methods defined in
+<c>List</c>. Therefore,
+      we can simply use the <c>insertAtFront()</c> and
+<c>removeFirst()</c> methods for the push and pop operations,
+      <image width="73%" source="chptr16"/> respectively (Fig.
+      <xref ref="fig-stackadt"></xref>).
+      Because the <c>isEmpty()</c> method is defined in <c>List</c>, there's no need to override it in
+    </p>
+    <figure xml:id="fig-stackadt">
+      <caption>The <c>Stack</c>ADT.</caption>
+<pre>
+public class Stack extends List {
+     public Stack() {
+         super();          // Initialize the list
+     }
+     public void push( Object obj ) {
+         insertAtFront( obj );
+     }
+     public Object pop() {
+         return removeFirst();
+     }} // Stack
+</pre>
+    </figure>
+    <p>
+<c>Stack</c>. In effect,
+      the <c>push()</c> and <c>pop()</c> methods merely rename the <c>insertAtFront()</c> and <c>removeFirst()</c> methods.
+      Note that the <c>Stack()</c> constructor calls the superclass constructor.
+      This is necessary so that the list can be initialized.
+    </p>
+    <p>
+      Do we have to make any changes to the <c>List</c> class in order to use it this way?
+      Yes.
+      We want to change the declaration of <c>head</c> from <c>private</c> to <c>protected</c>, so it can be accessed in the
+<c>Stack</c> class.
+      And we want to declare <c>List</c>'s <c>public</c> access methods,
+      such as <c>insertAtFront()</c> and <c>removeFirst()</c>, as <c>protected</c>. That will allow them to be used in <c>Stack</c>, and in any classes that extend <c>List</c>, but not by other classes.
+      This is essential.
+      Unless we do this we haven't really restricted the stack operations to push and pop and,
+      therefore, we haven't really defined a stack ADT. Remember,
+      an ADT defines the data and the operations on the data.
+      A stack ADT must restrict access to the data to just the push and pop operations.
+    </p>
+    <principle>
+      <title>Protected Elements</title>
+      <p>
+        An object's <c>protected</c> elements are hidden from all other objects except instances of the same class or its subclasses.
+      </p>
+    </principle>
+    <principle>
+      <title>EFFECTIVE DESIGN:Information Hiding</title>
+      <p>
+        Use the
+<c>private</c> and <c>protected</c> qualifiers to hide an ADT's implementation details from other objects.
+        Use <c>public</c> to define the ADT's interface.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Define the <c>peek()</c> method for the
+<c>Stack</c> class.
+            It should take no parameters and return an <c>Object</c>. It should return the
+<c>Object</c> on the top of the stack.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection>
+    <title>Testing the <c>Stack</c>Class</title>
+    <p>
+      Now let's test our <c>stack</c> class by using a <c>stack</c> to reverse the letters in a <c>String</c>. The algorithm is this: Starting at the front of the <c>String</c>, push \marginpar{Reversing a string} each letter onto the stack until you reach the end of the
+<c>String</c>. Then pop letters off the stack and concatenate them,
+      left to right,
+      into another <c>String</c>, until the stack is empty (Fig.
+      <xref ref="fig-stackadttest"></xref>).
+    </p>
+    <p>
+      Note that because our <c>Node</c> s store <c>Object</c> s, we must convert each <c>char</c> into a <c>Character</c>, using the wrapper class.
+      Note also that we can use the <c>toString()</c> method to convert from <c>Object</c> to <c>String</c> as we are popping the stack.
+    </p>
+    <figure xml:id="fig-stackadttest">
+      <caption>A method to test the <c>Stack</c>ADT, which is used
+      here to reverse a String of letters.</caption>
+<pre>
+public static void main( String argv[] ) {
+     Stack stack = new Stack();
+     String string = "Hello this is a test string";
+     System.out.println("String: " + string);
+     for (int k = 0; k &lt; string.length(); k++)
+         stack.push(new Character( string.charAt(k)));
+     Object o = null;
+     String reversed = "";
+     while (!stack.isEmpty()) {
+         o  = stack.pop();
+         reversed = reversed + o.toString();
+     }
+     System.out.println("Reversed String: " + reversed);} // main()
+</pre>
+    </figure>
+  </subsection>
+</section>

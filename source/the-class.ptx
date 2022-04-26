@@ -1,0 +1,167 @@
+<section xml:id="the-class">
+  <title>The <c>File</c>Class</title>
+  <introduction>
+    <p>
+      As we've seen,
+      an attempt to create a <c>FileReader</c> stream may throw a <c>FileNotFoundException</c>. The way this happens is if the user provides a name for a file that either doesn't exist or isn't located where its name says it should be located.
+      The question that needs to be considered: Is there any way we can detect these kinds of errors before attempting to read the file?
+    </p>
+    <p>
+      The <c>java.io.File</c> class provides methods that we can use for this <image width="73%" source="chptr11"/> task.
+      The <c>File</c> class provides a representation of the computer's file and directory information in a platform-independent manner.
+      As you know, a file is a collection of data,
+      whereas a <term>directory</term>
+          <idx><h>directory</h></idx>
+      is a collection of files.
+      (To be exact,
+      a directory is a file that stores its files' names and attributes,
+      not the files themselves.)
+      In this section,
+      we will provide details about the <c>File</c> class and how to use the methods available in the class.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Names and Paths</title>
+    <p>
+      In order to correctly specify a file's location,
+      it is necessary to know a little about how files are stored on your computer's disk drive.
+      File systems are organized into a hierarchy.
+      A <term>path</term>
+          <idx><h>path</h></idx>
+      is a description of a file's location in the hierarchy.
+      For example,
+      consider the hierarchy of files in Figure<nbsp/>11.15.
+      Assume that your Java program is named <c>MyClass.class</c>. When a program is running,
+      the program's directory is considered the
+      <em>current directory</em>.
+      Any files located in the current directory can be referred to by name alone<mdash/>for example, <c>MyClass.java</c>. To refer to a file located in a subdirectory of the \marginpar{The file hierarchy} current directory,
+      you need to provide the name of the subdirectory and the file: <c>datafiles/data.txt</c>. In this case,
+      we are assuming a Unix file system,
+      so we are using the <c>/</c> as the separator between the name of the directory (<c>datafiles</c>) and the name of the file (<c>data.txt</c>).
+      This is an example of a <term>relative path name</term>,
+      because we are specifying a file in relation to the current directory.
+    </p>
+    <p>
+      Alternatively, a file can be specified by its
+      <term>absolute path name</term>.
+          <idx><h>absolute path name</h></idx>
+      This would be a name whose path starts at the root directory of the file system.
+      For example,
+    </p>
+<pre>
+/root/java/examples/datafiles/data.txt
+</pre>
+    <p>
+      would be the absolute path name for the file named <c>data.txt</c> on a Unix system.
+      When you supply the name of a file to one of the stream constructors,
+      you are actually providing a <em>path</em> name.
+      If the path consists of just a name,
+      such as <c>data.txt</c>, Java assumes that the file is located in the same directory as the program itself.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-fileuml-files">
+    <title>Validating File Names</title>
+    <p>
+      Before reading a file it is often necessary to determine that the file's name is a valid one and that the file can be read.
+      The <c>File</c> class (Fig.<nbsp/>11.16) provides platform-independent methods for dealing with files and directories.
+      It contains methods that list the contents of directories,
+      determine a file's attributes,
+      and rename and delete files.
+      <image width="73%" source="chptr11"/> Note the several <c>static</c> constants provided.
+      These allow path names to be specified in a platform-independent way.
+      For example, on a Unix system,
+      the <c>File.separator</c> character will be the
+<c>/</c> and on a Windows system it will be the <c>\,backslash</c>. <c>File.separator</c> will be initialized to the appropriate separator for the particular system being used.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:File Separators</title>
+      <p>
+        To help make your programs platform independent,
+        use the <c>File.separator</c> constant instead of a literal value whenever you are specifying a path name.
+      </p>
+    </principle>
+    <p>
+      As an example of how you might use some of <c>File</c>'s methods,
+      let's write a method that tests whether the file name entered by the user is the name of a valid,
+      readable file.
+    </p>
+    <p>
+      A file might be unreadable for a number of reasons.
+      It might be owned by \marginpar{Method design} another user and readable only by that user.
+      Or it might be designated as not readable by its owner.
+      We'll pass the method the name of the file (a <c>String</c>), and the method will return <c>true</c> if a readable file with that name exists.
+      Otherwise, the method will throw an exception and return <c>false</c>:
+    </p>
+<pre>
+private boolean isReadableFile(String fileName) {
+  try {
+    File file = new File(fileName);
+    if (!file.exists())
+        throw (new FileNotFoundException("No such File:"
+                                     + fileName));
+    if (!file.canRead())
+        throw (new IOException("File not readable: "
+                                     + fileName));
+    return true;
+  } catch (FileNotFoundException e) {
+    System.out.println("IOERROR: File NOT Found: "
+                             + fileName + "\n");
+    return false;
+  } catch (IOException e) {
+    System.out.println("IOERROR: " + e.getMessage() + "\n");
+    return false;
+  }} // isReadableFile
+</pre>
+    <p>
+      The method simply creates a <c>File</c> instance and uses its <c>exists()</c> and <c>canRead()</c> methods to check whether its name is valid.
+      If either condition fails, an exception is thrown.
+      The method handles its own exceptions,
+      printing an error message and returning false in each case.
+    </p>
+    <p>
+      Before attempting to write data to a file,
+      we might want to check that the file has been given an appropriate name.
+      For example, if the user leaves the file name blank,
+      we should not write data to the file.
+      Also, a file might be designated as unwriteable in order to protect it from being inadvertently overwritten.
+      We should check that the file is writeable before attempting to write to it:
+    </p>
+<pre>
+private boolean isWriteableFile(String fileName) {
+  try {
+    File file = new File (fileName);
+    if (fileName.length() == 0)
+        throw (new IOException("Invalid file name: "
+                                     + fileName));
+    if (file.exists() AmPaMp !file.canWrite())
+         throw (new IOException(
+            "IOERROR: File not writeable: " + fileName));
+    return true;
+  } catch (IOException e) {
+    display.setText("IOERROR: " + e.getMessage() + "\n");
+    return false;
+  }} // isWriteableFile()
+</pre>
+    <p>
+      The first check in this code tests that the user has not forgotten to provide a name for the output file.
+      It is unlikely that the user wants to name the file with the empty string.
+      We use the <c>exists()</c> method to test whether the user is attempting to write to an existing file.
+      If so, we use the <c>canWrite()</c> method to test whether the file is writeable.
+      Both kinds of errors result in
+<c>IOException</c> s.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            The other methods of the <c>File</c> class are just as easy to use as the ones we have illustrated in this section.
+            Write a method that takes the name of a file as its single parameter and prints the following information about the file:
+            its absolute path, its length,
+            and whether it is a directory or a file.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

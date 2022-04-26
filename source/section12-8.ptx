@@ -1,0 +1,120 @@
+<section>
+  <title>Using File Data in Programs</title>
+  <p>
+    This chapter's examples have provided explicit details for several ways of writing data to files and reading data from files.
+    In actual programs,
+    deciding if and how files might be useful in the program are worked out as part of the design process.
+    Choosing between text files, binary files,
+    and reading and writing objects is part of this process.
+  </p>
+  <p>
+    To illustrate how we can apply what we've learned about file I/O, let's modify the <c>WordGuess</c> class
+    (which is listed in Fig.<nbsp/>8.27)
+    so that it reads a list of possible words for players to guess from a file.
+    The Chapter<nbsp/>8 \marginpar{modifying <c>WordGuess</c>} version of the class contains a method, <c>getSecretWord()</c>, which uses a <c>switch</c> statement to randomly choose and return a word from a fixed list of ten words.
+    Reading the words from a text file would allow a user to modify the list of possible words by adding or changing words without needing to recompile the program.
+  </p>
+  <p>
+    Let's modify the <c>WordGuess</c> class in three ways:
+    <ol>
+      <li>
+        <p>
+          adding two new instance variables,
+          an array of type <c>String</c> and a variable to store the size of the array;
+        </p>
+      </li>
+      <li>
+        <p>
+          adding code at the beginning of the class's constructor to read words from the file and store them in the array;
+        </p>
+      </li>
+      <li>
+        <p>
+          rewrite the <c>getSecretWord()</c> method so that it randomly chooses a word from the array.
+        </p>
+      </li>
+    </ol>
+  </p>
+  <p>
+    Let us first choose descriptive names for \marginpar{New instance variables} declaring the two new instance variables:
+  </p>
+<pre>
+private String[] wordArray;
+    private int arraySize;
+</pre>
+  <p>
+    Note that it will be useful to store the number of words in the file in its first line so that this information can be used to allocate memory for the array.
+    For example,
+    let us assume the text file will be named <c>secretwords.txt</c>, it will be located in the same directory as the <c>WordGuess</c> class,
+    it will have the number of words in the file as its first line,
+    and it will have \marginpar{Format for the text file} a single word per line after that.
+    Thus, a small file might look like:
+  </p>
+<pre>
+3
+    STREAMS
+    CONDUIT
+    DIALOGS
+</pre>
+  <p>
+    We can use the body of the <c>readTextFile()</c> method of the <c>TextIO</c> class as a model for the Java code that needs to be added to the <c>WordGuess</c>\marginpar{Code to add to constructor} constructor.
+    Pseudocode for this code will look like:
+  </p>
+<pre>
+Use file name to open a  BufferedReader stream
+    Read first line and convert to an integer
+    Store the integer as the size of the array
+    Allocate memory for the array
+    Read second line of file
+    While a word is read
+       Store the word in the next array element
+       Read next line of file
+    Close the BufferedReader stream
+</pre>
+  <p>
+    When this pseudocode is translated into Java and inserted into a
+<c>try-catch</c> statement we get the code fragment in <xref ref="fig-wordguessfile">Figure</xref>.
+  </p>
+  <figure xml:id="fig-wordguessfile">
+    <caption>Code added at beginning of the <c>WordGuess</c> constructor.</caption>
+<pre>
+try{
+        FileReader fr = new FileReader("secretwords.txt");
+        BufferedReader inStream
+            = new BufferedReader(fr);
+        String line = inStream.readLine();
+        arraySize = Integer.parseInt(line);
+        wordArray = new String[arraySize];
+        line = inStream.readLine();
+        int k = 0;
+        while((line != null) AmPaMp (k &lt; arraySize)){
+            wordArray[k] = line;
+            line = inStream.readLine();
+            k++;
+        }//while
+        inStream.close();
+    } catch(FileNotFoundException e){
+        e.printStackTrace();
+    } catch(IOException e){
+        e.printStackTrace();
+    } //catch
+</pre>
+  </figure>
+  <p>
+    The new <c>getSecretWord()</c> method merely needs to generate a \marginpar{New code for <c>getSecretWord</c>} random array index and return the corresponding array element:
+  </p>
+<pre>
+private String getSecretWord(){
+        int num = (int)(Math.random()*arraySize);
+        return wordArray[num];
+    } //getSecretWord()
+</pre>
+  <p>
+    The only other modification that is needed for to complete new
+<c>WordGuess</c> class is to add an initial <c>import java.io.*;</c> statement so that the file IO classes can be accessed.
+  </p>
+  <p>
+    The earlier examples in this chapter can be used as models to enhance numerous practical applications.
+    GUI applications that involve a user's choice to load data from a file or save data in a file should make use of the <c>JFileChooser</c> dialogs to initiate the file operations.
+  </p>
+</section>
