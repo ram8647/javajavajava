@@ -1,0 +1,357 @@
+<section xml:id="playing-one-row-nim-overthe-network">
+  <title>Playing One Row Nim Over the Network</title>
+  <introduction>
+    <p>
+      In the previous section we developed and tested a generic echo service.
+      It is based on a common root class, <c>ClientServer</c>, which is a subclass of
+<c>Thread</c>. Both <c>EchoServer</c> and <c>EchoClient</c> extend the root class,
+      and each implements its own version of <c>run()</c>. In this section,
+      we will generalize this design so that it can support a wide range of services.
+      To illustrate the effectiveness of the design,
+      we will use it as the basis for a program that plays One Row Nim over the Internet.
+    </p>
+    <p>
+      In order to generalize our design,
+      we begin by identifying those elements that are common to all \marginpar{Designing for extensibility} servers and clients and what is particular to the echo service and client.
+      Clearly, the general server and client protocols that are defined here in their respective <c>run()</c> methods,
+      are something that all servers and clients have in common.
+      What differs from one application to another is the particular service provided and requested,
+      as detailed in their respective <c>provideService()</c> and <c>requestService()</c> methods.
+      In this example, the service that is provided will be One Row Nim.
+      The clients that use this service will be (human) players of the game.
+    </p>
+    <figure xml:id="fig-p858f1">
+      <caption>Class hierarchy for a generic client/server application.</caption>
+      <image width="73%" source="chptr15/p858f1.png"/>
+    </figure>
+    <p>
+      Therefore, the way to generalize this application is to define the \marginpar{Abstract service methods}<c>run()</c> method in the generic <c>Server</c> and <c>Client</c> classes.
+      The overall design of the One Row Nim service will now consist of five classes organized into the hierarchy shown in <xref ref="fig-p858f1">Figure</xref>.
+      At the root of the hierarchy is the <c>ClientServer</c> class,
+      which contains nothing but I/O methods used by both clients and servers.
+      The abstract <c>Server</c> and <c>Client</c> classes contain implementations of the <c>Thread.run()</c> method,
+      which defines the basic protocols for servers and clients,
+      respectively.
+      The details of the particular service are encoded in the <c>provideService()</c> and
+<c>requestService()</c> methods.
+      Because the <c>run()</c> methods defined in <c>Client</c> and <c>Server</c> call <c>provideService()</c> and <c>requestService()</c>, respectively,
+      these methods must be declared as <c>abstract</c> methods in the <c>Server</c> and <c>Client</c> classes.
+      Any class that contains an \mbox{abstract} method must itself be declared <c>abstract</c>.
+    </p>
+    <p>
+      Note that we have left the <c>readFromSocket()</c> and <c>writeToSocket()</c> methods in the <c>ClientServer</c> class.
+      These methods are written in a general way and can be used,
+      without change, by a wide range of clients and servers.
+      If necessary, they can also be overridden by a client or server.
+      In fact, as we will see,
+      the
+<c>NimServer</c> class does override the <c>writeToSocket()</c> method.
+      Similarly, note that the <c>readFromKeyboard()</c> method is defined in the <c>Client</c> superclass.
+      This is a general method that can be used by a large variety of clients,
+      so it is best if they don't have to redefine it themselves.
+    </p>
+    <p>
+      These design decisions lead to the definitions of <c>Server</c> and
+<c>Client</c> shown in <xref ref="fig-serverclass">Figures</xref>
+      and <xref ref="fig-clientclass"></xref>, respectively.
+      Note that <c>provideService()</c> and <c>requestService()</c> are left unimplemented.
+      Subclasses of <c>Server</c>, such as <c>NimServer</c>, and subclasses of <c>Client</c>, such as <c>NimClient</c>, can implement <c>provideService()</c> and <c>requestService()</c> in a way that is appropriate for the particular service they are providing.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Polymorphism</title>
+      <p>
+        Defining a method as
+<c>abstract</c> within a superclass,
+        and implementing it in various ways in subclasses,
+        is an example of polymorphism.
+        Polymorphism is a powerful object-oriented design technique.
+      </p>
+    </principle>
+    <figure xml:id="fig-serverclass">
+      <caption>The abstract <c>Server</c> class.</caption>
+      \[27pc]
+<pre>
+import java.net.*;
+import java.io.*;
+public abstract class Server extends ClientServer {
+  protected ServerSocket port;
+  protected Socket socket;
+  public Server(int portNum, int nBacklog)  {
+    try {
+      port = new ServerSocket (portNum, nBacklog);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch
+  }// Server()
+  public void run() {
+    try {
+      System.out.println("Server at " +
+                       InetAddress.getLocalHost() +
+                       " waiting for connections ");
+      while (true) {
+        socket = port.accept();
+        System.out.println("Accepted a connection from "
+                                + socket.getInetAddress());
+        provideService(socket);
+        socket.close();
+        System.out.println("Closed the connection\n");
+      }// while
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch
+  }// run()
+ // Implemented in subclass
+ protected abstract void provideService(Socket socket);  }// Server
+</pre>
+    </figure>
+    <figure xml:id="fig-clientclass">
+      <caption>The abstract <c>Client</c> class.</caption>
+<pre>
+import java.net.*;
+import java.io.*;
+public abstract class Client extends ClientServer {
+  protected Socket socket;
+  public Client(String url, int port) {
+    try {
+      socket = new Socket(url,port);
+      System.out.println("CLIENT: connected to " + url +
+                                              ":" + port);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    } // try/catch block
+  }// Client()
+  public void run() {
+    try {
+      requestService(socket);
+      socket.close();
+      System.out.println("CLIENT: connection closed");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+    } // try/catch block
+  }// run()
+  // Implemented in subclass
+  protected abstract void requestService(Socket socket)
+                                      throws IOException;
+  protected String readFromKeyboard() throws IOException {
+    BufferedReader input = new BufferedReader
+                     (new InputStreamReader(System.in));
+    System.out.print("INPUT: ");
+    String line = input.readLine();
+    return line;
+  }// readFromKeyboard()}// Client
+</pre>
+    </figure>
+  </introduction>
+  <subsection>
+    <title>The <c>NimServer</c>Class</title>
+    <p>
+      Given the abstract definition of the <c>Server</c> class,
+      defining a new service is simply a matter of extending <c>Server</c> and \marginpar{Extensibility} implementing the <c>provideService()</c> method in the new subclass.
+      We will name the subclass <c>NimServer</c>.
+    </p>
+    <figure xml:id="fig-nimserverclass">
+      <caption>The  <c>NimServer</c> class.</caption>
+      \[29pc]
+<pre>
+import java.net.*;
+import java.io.*;
+public class NimServer extends Server {
+  public NimServer(int port, int backlog) {
+    super(port, backlog);
+  }
+  protected void provideService (Socket socket) {
+    OneRowNim nim = new OneRowNim();
+    try {
+      writeToSocket(socket, "Hi Nim player. You're Player 1 and I'm Player 2. " +
+           nim.reportGameState()  + " " + nim.getGamePrompt() + "\n");
+      play(nim, socket);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } // try/catch
+  } // provideService()
+  private void play(OneRowNim nim, Socket socket) throws IOException {
+    NimPlayer computerPlayer = new NimPlayer(nim);
+    nim.addComputerPlayer(computerPlayer);
+    String str="", response="";
+    int userTakes = 0, computerTakes = 0;
+    do {
+      str = readFromSocket(socket);
+      boolean legalMove = false;
+      do {
+        userTakes = Integer.parseInt(str);
+        if (nim.takeSticks(userTakes)) {
+          legalMove = true;
+          nim.changePlayer();
+          response = nim.reportGameState() + " ";
+          if (!nim.gameOver()) {
+            computerTakes = Integer.parseInt(computerPlayer.makeAMove(""));
+            response = response + " My turn. I take " + computerTakes + " sticks. ";
+            nim.takeSticks(computerTakes);
+            nim.changePlayer();
+            response = response + nim.reportGameState() + " ";
+            if (!nim.gameOver())
+               response = response + nim.getGamePrompt();
+          } // if not game over
+          writeToSocket(socket, response);
+        } else {
+           writeToSocket(socket, "That's an illegal move. Try again.\n");
+           str = readFromSocket(socket);
+        } // if user takes
+      } while (!legalMove);
+    }  while (!nim.gameOver());
+  } // play
+  // Overriding writeToSocket to remove \n from str
+  protected void writeToSocket(Socket soc, String str) throws IOException {
+    StringBuffer sb = new StringBuffer();
+    for (int k = 0; k &lt; str.length(); k++)
+      if (str.charAt(k) != '\n')
+        sb.append(str.charAt(k));
+    super.writeToSocket(soc, sb.toString() + "\n");
+  }
+  public static void main(String args[]) {
+    NimServer server = new NimServer(10001,5);
+    server.start();
+  } // main()} // NimServer
+</pre>
+    </figure>
+    <p>
+      <xref ref="fig-nimserverclass">Figure</xref>
+      provides a definition of the <c>NimServer</c> subclass.
+      Note how its implementation of <c>provideService()</c> uses an instance of the <c>OneRowNim</c> class from Chapter<nbsp/>8.
+      Also, the <c>play()</c> method,
+      which encapsulates the game-playing algorithm,
+      uses an instance of <c>NimPlayer</c>, also from Chapter<nbsp/>8.
+      You might recall that <c>OneRowNim</c> is a <c>TwoPlayerGame</c> and <c>NimPlayer</c> defines methods that allow a computer to play an optimal game of One Row Nim.
+      In this example,
+      the server acts as one of the players and use a <c>NimPlayer</c> to manage its playing strategy.
+      Thus, clients that connect to <c>NimServer</c> will be faced by a computer that plays an optimal game.
+    </p>
+    <p>
+      If you compare the details of the <c>NimServer</c>'s <c>play()</c> method with the <c>play()</c> method from the implementation of <c>OneRowNim</c>, you will see that they are very similar.
+      In this implementation,
+      we use public methods of the <c>OneRowNim</c> object to manage the playing of the game.
+      Thus, <c>addComputerPlayer()</c> adds an instance of <c>NimPlayer</c> to the game.
+      The <c>takeSticks()</c>,
+<c>changePlayer()</c>, and <c>gameOver()</c> methods are used to manage the moves made by both itself and the client.
+      And the <c>getGamePrompt()</c> and <c>reportGameState()</c> methods are used to manage the interaction and communication with the client.
+      Note also that whenever it is the server's turn to move,
+      it uses the <c>NimPlayer</c>'s <c>makeAMove()</c> method to determine the optimal move to make.
+    </p>
+    <p>
+      Although the programming logic employed in the <c>play()</c> method looks somewhat complex,
+      it is very similar to the logic employed in the Chapter<nbsp/>8 version of the game.
+      The main difference here is that the server uses the <c>writeToSocket()</c> and <c>readFromSocket()</c> methods to manage the communication with the client.
+      In this regard,
+      this instance of <c>provideService()</c> is no different than the <c>provideService()</c> method we used in the <c>EchoServer</c> class.
+    </p>
+    <p>
+      Finally, note that <c>NimServer</c> provides an implementation of the \marginpar{Overriding a method}<c>writeToSocket()</c> method.
+      This method is implemented in the <c>ClientServer()</c> class and is inherited by <c>NimServer</c>. However,
+      the default implementation assumes that the client will use the a carriage return (<c><c>\n</c></c>) to determine the end of a particular message in the socket.
+      Because <c>OneRowNim</c>'s methods, <c>getGamePrompt()</c> and <c>reportGameState()</c>, contain embedded carriage returns,
+      it is necessary to filter these.
+      The new version of <c>writeToSocket()</c> performs this filtering and calls the default method (<c>super.writeToSocket()</c>, after it has finished its filtering task.
+    </p>
+  </subsection>
+  <subsection>
+    <title>The <c>NimClient</c>Class</title>
+    <p>
+      The <c>NimClient</c> class is even easier to implement.
+      As its task is simply to manage the communication between the human user and the <c>NimServer</c>, it is very similar to the <c>requestService()</c> method we used in <c>EchoClient</c>. The relationship between the abstract <c>Client</c> class (Fig.
+      <xref ref="fig-clientclass"></xref>) and its extension in <c>NimClient</c>(Fig.
+      <xref ref="fig-nimclientclass"></xref>) is very similar to the relationship between <c>Server</c> and <c>NimServer</c>. The<nbsp/><c>requestService()</c> method is called by <c>Client.run()</c>. It is implemented in <c>NimClient</c>. In this way,
+      the <c>Client</c> class can serve as a superclass for any number of clients. \marginpar{Creating new clients} New clients for new services can be derived from <c>Client</c> by simply implementing their own <c>requestService()</c> method.
+    </p>
+    <figure xml:id="fig-nimclientclass">
+      <caption>The derived <c>NimClient</c> class.</caption>
+      \[34pc]
+<pre>
+import java.net.*;
+import java.io.*;
+public class NimClient extends Client {
+  private KeyboardReader kb = new KeyboardReader();
+  public NimClient( String url, int port) {
+    super(url,port);
+  }
+  protected void requestService(Socket socket) throws IOException {
+    String servStr = readFromSocket(socket);    // Get server's response
+    kb.prompt("NIM SERVER: " + servStr +"\n");  // Report server's response
+    if ( servStr.substring(0,6).equals("Hi Nim") ) {
+      String userStr = "";
+      do {
+        userStr = kb.getKeyboardInput();        // Get user's move
+        writeToSocket(socket, userStr + "\n");  // Send it to server
+        servStr = readFromSocket(socket);       // Read server's response
+        kb.prompt("NIM SERVER: " + servStr + "\n");  // Report response
+      } while(servStr.indexOf("Game over!") == -1); // Until game over
+    }
+  }// requestService()
+  public static void main(String args[]) {
+    NimClient client = new NimClient("localhost", 10001);
+    client.start();
+  } // main()} // NimClient
+</pre>
+    </figure>
+    <principle>
+      <title>EFFECTIVE DESIGN:Inheritance</title>
+      <p>
+        By placing as much functionality as possible into a generic client/server superclass,
+        you can simplify the creation of new services.
+        This is an effective use of Java's inheritance mechanism.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="self-study-exerciseQ36">
+    <title>Testing the Nim Service</title>
+    <p>
+      Testing the One Row Nim service will be no different than testing the Echo service.
+      To test the service,
+      you want to run both <c>NimServer</c> and <c>NimClient</c> at the same time and preferably on different computers.
+      As they are presently coded,
+      you will have to modify the <c>main()</c> methods of both <c>NimServer</c> and <c>NimClient</c> to provide the correct URL and port for your environment.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            The design of the client/server hierarchy makes it easy to create a new service by extending both the <c>Server</c> and
+<c>Client</c> classes.
+            Describe how you would implement a scramble service with this model.
+            A scramble service can be used by people trying to solve the daily scramble puzzles found in many newspapers.
+            Given a string of letters,
+            the scramble service will return a string containing all possible letter combinations.
+            For example, given
+            <q>cat,</q>
+            the scramble service will return
+            <q>act atc cat cta tac tca.</q>
+          </p>
+        </li>
+        <li>
+          <p>
+            Describe what happens when each of the following errors is introduced into the <c>EchoClient</c> or <c>EchoServer</c> programs:
+            <ul>
+              <li>
+                <p>
+                  Specify the wrong host name when running <c>EchoClient</c>.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Specify the wrong port number when running <c>EchoClient</c>.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Remove the reference to <c>\n</c> in the <c>writeToSocket()</c> call in <c>requestService()</c>.
+                </p>
+              </li>
+            </ul>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

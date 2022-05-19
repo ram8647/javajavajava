@@ -1,0 +1,119 @@
+<section xml:id="the-adt">
+  <title>The {Queue} ADT</title>
+  <introduction>
+    <p>
+      A <term>queue</term>
+          <idx><h>queue</h></idx>
+      is a special type of list that limits insertions to the end of the list and removals to the front of the list.
+      Therefore, it enforces <term>first-in<ndash/>first-out (FIFO)</term><idx><h>first-in<ndash/>first-out (FIFO)</h></idx> behavior on the list.
+      Think of the waiting line at the salad bar.
+      You enter the line at the rear and you leave the line at the front (Fig.
+      <xref ref="fig-queue"></xref>).
+    </p>
+    <sidebyside>
+      The queue operations are conventionally called <em>enqueue</em><idx><h>enqueue</h></idx>, for insert, and <term>dequeue</term><idx><h>dequeue</h></idx>,
+      for remove, respectively.  Thus, the queue ADT stores a list of data
+      and supports the following operations:
+      <ul>
+        <li>
+          <p>
+            Enqueue<mdash/>insert an object onto the rear of the list.
+          </p>
+        </li>
+        <li>
+          <p>
+            Dequeue<mdash/>remove the object at the front of the list.
+          </p>
+        </li>
+        <li>
+          <p>
+            Empty<mdash/>return true if the queue is empty.
+          </p>
+        </li>
+      </ul>
+    </sidebyside>
+    <p>
+      Queues are useful for a number of computing tasks.
+      For example, the ready, waiting,
+      and blocked queues used by the CPU scheduler all use a FIFO protocol.
+      Queues are also useful in implementing certain kinds of simulations.
+      For example,
+      the waiting line at a bank or a bakery can be modeled using a queue.
+    </p>
+    <figure xml:id="fig-queue">
+      <caption>A queue is a list that permits insertions
+      at the rear and removals at the front only.</caption>
+      <image width="73%" source="chptr16/queue.png"/>
+    </figure>
+  </introduction>
+  <subsection xml:id="fig-queueuml">
+    <title>The <c>Queue</c>Class</title>
+    <p>
+      The <c>Queue</c> class is also trivial to derive from <c>List</c>(Fig.<nbsp/>16.25).
+      Here we just restrict operations to the <c>insertAtRear()</c> and <c>removeFirst()</c> methods (Fig.
+      <xref ref="fig-queueadt"></xref>).
+      To test the methods of this class,
+      we replace the <c>push()</c> and <c>pop()</c> operations of the last example to <c>enqueue()</c> and <c>dequeue()</c>, respectively (Fig.
+      <xref ref="fig-queueadttest"></xref>).
+      In this case,
+      the letters of the test string will come out of the queue in the same order they went in<mdash/>FIFO.
+    </p>
+    <p>
+      <image width="73%" source="chptr16/queueuml.png"/>
+    </p>
+    <figure xml:id="fig-queueadt">
+      <caption>The <c>Queue</c>ADT.</caption>
+<pre>
+public class Queue extends List {
+     public Queue() {
+         super();          // Initialize the list
+     }
+     public void enqueue(Object obj) {
+         insertAtRear( obj );
+     }
+     public Object dequeue() {
+         return removeFirst();
+     }}// Queue
+</pre>
+    </figure>
+    <figure xml:id="fig-queueadttest">
+      <caption>A method to test the <c>Queue</c>ADT. Letters inserted
+      in a queue come out in the same order they went in.</caption>
+<pre>
+public static void main(String argv[]) {
+     Queue queue = new Queue();
+     String string = "Hello this is a test string";
+     System.out.println("String: " + string);
+     for (int k = 0; k &lt; string.length(); k++)
+         queue.enqueue( new Character(string.charAt(k)));
+     System.out.println("The current queue:");
+     queue.print();
+     Object o = null;
+     System.out.println("Dequeuing:");
+     while (!queue.isEmpty()) {
+         o  = queue.dequeue();
+         System.out.print( o.toString() );
+     }} // main()
+</pre>
+    </figure>
+    <principle>
+      <title>EFFECTIVE DESIGN:ADTs</title>
+      <p>
+        ADTs encapsulate and manage the difficult tasks involved in manipulating the data structure.
+        But because of their extensibility,
+        they can be used in a wide range of applications.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Define a <c>peekLast()</c> method for the <c>Queue</c> class.
+            It should take no parameters and return an <c>Object</c>. It should return a reference to the <c>Object</c> stored in the last <c>Node</c> of the list without removing<nbsp/>it.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

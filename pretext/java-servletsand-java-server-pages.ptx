@@ -1,0 +1,872 @@
+<section xml:id="java-servletsand-java-server-pages">
+  <title>Java Servlets and Java Server Pages</title>
+  <introduction>
+    <p>
+      In this chapter we have been discussing the client/server model of computing.
+      Thus far we have learned how to implement client/server applications using socket connections between programs running on different computers.
+      Because it requires the programmer to directly create and manage the socket protocol,
+      this socket-level approach is a low-level approach.
+      It is important to know about sockets and how they are used,
+      but most client/server applications are programmed at a much higher level by using Java library classes.
+    </p>
+    <p>
+      Our focus in this section will be to give you a brief sense of how Java programs can be integrated into the Web pages.
+      We will discuss two approaches:
+      <em>Java Server Pages (JSP)</em>
+      and <em>Java servlets</em>.
+      As Web-based approaches,
+      both of these require the use of HTML (HyperText Markup Language) code,
+      the language that is used for coding Web pages.
+      This means that in order to write your own servlets and JSPs you would really have to learn a little about HTML code.
+      Fortunately,
+      learning HTML code is not difficult and although it doesn't fit within the scope of this book,
+      you can easily find books or Web sites that cover basic HTML coding.
+      Moreover, in order for servlets and JSPs to work,
+      they must be associated with a Web server that is specially configured to understand Java code.
+      At the end of this section we will provide links to a Web site where you can learn more about HTML and about how to set up your own JSPs and servlets.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Java Server Pages</title>
+    <p>
+      A Java Server Page (JSP) is a Web page that contains small snippets of Java code.
+      The simple example discussed here was downloaded from on online tutorial at
+    </p>
+<pre>
+http://developer.apple.com/internet/java/tomcat1.html
+</pre>
+    <p>
+      The Java code on a JSP embedded within <c>&lt;% ... %&gt;</c> brackets and interspersed among a page's HTML tags.
+      The Java code can extend over one or more lines.
+      <xref ref="fig-jspcode">Figure</xref>
+      shows the complete sourcecode for a simple JSP.
+    </p>
+    <figure xml:id="fig-jspcode">
+      <caption>A simple JavaServer Page (JSP).</caption>
+<pre>
+&lt;html>&lt;head>&lt;title>Very Simple JSP Example&lt;/title>&lt;/head>
+&lt;body bgcolor="white">
+&lt;h1>Very Basic JSP&lt;/h1>
+Current time: &lt;%= new java.util.Date() %&gt;
+&lt;br>&lt;br>
+Reload this page to watch the greeting change.
+&lt;br>&lt;br>&lt;b>
+&lt;!-- including lines of Java code in an HTML page -->
+&lt;%
+   int um = (int)( Math.random() * 5 );
+   switch ( um )
+   {
+      case 0: out.println("Welcome"); break;
+      case 1: out.println("Bienvenidos"); break;
+      case 2: out.println("Bienvenue"); break;
+      case 3: out.println("Bienvenuti"); break;
+      case 4: out.println("Willkommen"); break;
+      default: out.println("Huh? " + um);
+   }
+   out.println("&lt;br>");
+%&gt;
+&lt;/b>
+&lt;/body>
+&lt;/html>
+</pre>
+    </figure>
+    <p>
+      In this example we see two uses of Java code.
+      In the first case,
+      a JSP expression tag is used to display the current date on the Web page:
+    </p>
+<pre>
+Current time: &lt;%= new java.util.Date() %&gt;
+</pre>
+    <p>
+      A JSP expression element begins with <c>&lt;%=</c> and ends with <c>%&gt;</c>. The expression contained within the tag is evaluated,
+      converted into a Java <c>String</c> and inserted into the Web page.
+      In this case the <c>Date</c> object is evaluated and its string value is displayed on the Web page (Fig.
+      <xref ref="fig-jspscreen"></xref>).
+    </p>
+    <figure xml:id="fig-jspscreen">
+      <caption>A screen shot of a JSP.</caption>
+      <image width="73%" source="chptr15/jspscreen.png"/>
+    </figure>
+    <p>
+      In the second case, a <em>scriptlet</em>
+      of Java code uses the <c>Math.random()</c> method to display a random greeting on the Web page.
+      A <term>scriptlet</term> extends over several lines and is contained within the
+<c>&lt;%...%&gt;</c> tag (Fig.
+      <xref ref="fig-jspcode"></xref>).
+      Note the use of the output statement, <c>out.println()</c>. The <c>out</c> object is a built-in output stream.
+      Anything written to <c>out</c> will be transmitted as part of the HTML code that is sent to the Web page.
+      In this case,
+      one of the greetings is displayed each time the page is reloaded.
+    </p>
+    <p>
+      Obviously, this simple example only scratches the surface of what you can do with JSP. If you want to learn more about JSP, there are many helpful online tutorials available,
+      such as <c>http://www.jsptut.com/</c>. However,
+      remember that in order to experiment with JSP, it will be necessary to have access to a JSP-aware Web server either on your own computer or on one provided by your service provider.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Java Servlets</title>
+    <p>
+      A Java <em>servlet</em> is another high-level approach to developing client/server applications.
+      A <term>servlet</term> is a Java program that runs on a Web server and processes Web pages using the HyperText Transfer Protocol (HTTP).
+      In a Web application, the browser serves as the client.
+    </p>
+    <p>
+      Many URLs that we access on the web are pure HTML files that are simply transmitted back to the browser by the Web server.
+      For example,
+      the URL for a simple HTML document on the author's Web site is:
+    </p>
+<pre>
+http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
+</pre>
+    <p>
+      If you type that URL into a Web browser,
+      the Web server at
+<c>www.cs.trincoll.edu</c> would transmit the following text file to your browser,
+      which would then render and display the document.
+    </p>
+<pre>
+&lt;HTML>
+&lt;HEAD>
+   &lt;TITLE>Very Simple HTML Document&lt;/TITLE>
+&lt;/HEAD>
+&lt;BODY>
+    &lt;CENTER>&lt;H1>Hello&lt;/H1>&lt;/CENTER>
+&lt;/BODY>
+&lt;/HTML>
+</pre>
+    <p>
+      If we want the server to do some processing and submit the results of that processing to the browser,
+      we could use a Java servlet.
+      A servlet can perform some processing task and return the results of that task to the browser in the form of an HTML document.
+    </p>
+    <p>
+      The difference between a Java servlet and a Java applet is that \marginpar{Servlets vs.
+      Applets} an applet performs all of its processing on the client side of the client/server connection.
+      A servlet performs its processing on the server side.
+      When you load a Java applet into a browser,
+      the Web server downloads the applet's bytecode into the browser.
+      The browser then runs the byte code, assuming, of course,
+      it is equipped with a plugin for the Java Virtual Machine (JVM).
+      When you access a Java servlet from a browser,
+      the Web server performs some computation and transmits just the results to the browser.
+    </p>
+    <p>
+      There are several advantages of servlets over applets.
+      First, servlets cut down significantly on the amount of data that has to be transmitted to the browser.
+      Second, because the servlet returns an HTML-encoded page,
+      there are many fewer platform-related problems.
+      All browsers can interpret HTML code,
+      but not all browsers have the right plugins for interpreting Java applets.
+      Third, servlets are not subject to the same security and privacy restrictions as Java applets, which,
+      as we saw earlier in the chapter,
+      must be run as untrusted code.
+      Finally, Java servlets can directly access large databases and other resources that are stored on the server.
+      Access to such resources via an applet would be very difficult and inefficient.
+    </p>
+    <p>
+      So, servlets have many advantages over applets.
+      Because of these advantages they have quickly become an industry standard for developing client/server applications on the Web.
+    </p>
+  </subsection>
+  <subsection>
+    <title>A Simple Servlet Example</title>
+    <p>
+      To illustrate the difference between a Java servlet and a simple HTML page,
+      <xref ref="fig-hiservlet">Figure</xref>
+      shows a servlet that creates a Web page that says
+      <q>Hello.</q>
+      As you can see, a servlet is a Java program.
+      In addition to libraries that you are already familiar with,
+      such as <c>java.io</c>, it also imports names from two new libraries: <c>javax.servlet</c> and <c>javax.servlet.http</c>. The program defines a single class,
+      the <c>HelloServlet</c> class,
+      which is a subclass of <c>HttpServlet</c>, the standard superclass for all Java servlets.
+    </p>
+    <figure xml:id="fig-hiservlet">
+      <caption>A simple Java servlet.</caption>
+<pre>
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class HelloServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+    {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("&lt;HTML>");
+        out.println("&lt;HEAD>");
+        out.println("&lt;TITLE>Simple Servlet&lt;/TITLE>");
+        out.println("&lt;/HEAD>");
+        out.println("&lt;BODY>");
+        out.println("&lt;H1> Hi, from a Java Servlet.&lt;/H1>");
+        out.println("&lt;/BODY>");
+        out.println("&lt;/HTML>");
+    }}
+</pre>
+    </figure>
+    <p>
+      The servlet defines the <c>doGet()</c> method.
+      This is a method that is defined in the <c>HttpServlet</c> superclass.
+      Our <c>HelloServlet</c> is overriding that method.
+      In general, Web browsers make two types of requests when they request a Web page,
+      a <term>get</term> or a <term>post</term>.
+      We won't go into the differences between these requests.
+      The result in either case is that the Web server will respond to the request by transmitting some text data to the browser.
+      When a browser makes a get request,
+      the server will automatically call the servlet's <c>doGet()</c> method.
+      That's why we have to override it.
+      The <c>HttpServlet</c> class also has a default <c>doPost()</c> method,
+      which is called automatically to handle <em>post</em> requests.
+    </p>
+    <p>
+      Note the two parameters in the <c>doGet()</c> method:
+      the <c>HttpServletRequest</c> and the <c>HttpServletResponse</c>. The <c>doPost()</c> method has the same two parameters.
+      These are the objects that are used to hold the data that are communicated between the client and the server.
+      When the client (browser) makes a get request,
+      the <c>HttpServletRequest</c> objects hold the data contained in the request.
+      These data might include data that a user has typed into an HTML form.
+      We will see an example of how to extract these data in the next section.
+    </p>
+    <p>
+      The <c>HttpServletResponse</c> object is where the servlet will write its response.
+      As you can see from examining the code,
+      the <c>HttpServletResponse</c> object has an associated output stream,
+      a <c>PrintWriter</c>, and it is a simple matter to write text to that output stream.
+      Note that the text we write is HTML code that is practically identical to the code contained in the previous HTML example.
+    </p>
+  </subsection>
+  <subsection>
+    <title>The Nim Servlet</title>
+    <p>
+      The simple servlet in the preceding section illustrates how the servlet communicates with the client<mdash/>by writing HTML code to the
+<c>HttpServletResponse</c> object.
+      Let's now look at an example that uses two-way communication between the client and server.
+      To keep the example simple,
+      we will revisit once again on our One Row Nim game.
+      In this application the servlet will manage the One Row Nim game and will play against a human player,
+      who will access the game through a Web browser.
+    </p>
+    <figure xml:id="fig-nimscreen">
+      <caption>The interface for the Nim servlet.</caption>
+      <image width="73%" source="chptr15/nimscreen.png"/>
+    </figure>
+    <p>
+      The browser interface for this version of the game is shown in <xref ref="fig-nimscreen">Figure</xref>.
+      As you can see, it is a simple Web page.
+      The sticks in this instance are replaced by pennies.
+      In addition to reporting the total number of pennies left,
+      the page displays images of pennies.
+      This Web page itself is organized as a simple HTML form,
+      which contains one text field for the user's input.
+      Each time the user hits the RETURN key in the text field,
+      the user's input is transmitted to the servlet where it is processed.
+      The servlet then transmits a new page to the user's browser,
+      which shows the updated state of the game.
+    </p>
+    <p>
+      Let's now look at the servlet program itself,
+      whose code is shown in <xref ref="fig-nimservlet">Figures</xref>
+      and <xref ref="fig-nimservlet2"></xref>.
+      This servlet program is quite a bit longer than the simple hello server,
+      but it is not really any more complex or difficult.
+      The <c>NimServlet</c> extends the <c>HttpServlet</c> superclass and overrides the <c>doGet()</c> method.
+      Note that it also overrides the <c>doPost()</c> method,
+      by simply having that method call the <c>doPost()</c> method.
+      So this servlet will work for both <em>get</em>
+      and <em>post</em> requests.
+    </p>
+    <figure xml:id="fig-nimservlet">
+      <caption>Java code for the <c>NimServlet</c>, minus the <c>doGet()</c> method.</caption>
+<pre>
+import java.io.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class NimServlet extends HttpServlet {
+    private OneRowNim nim = null;
+    private NimPlayer nimPlayer = null;
+    public void doPost(HttpServletRequest request,
+                       HttpServletResponse response)
+      throws IOException, ServletException
+    {
+        doGet(request, response);
+    }
+    //  The doGet() method goes here.
+} // NimServlet
+</pre>
+    </figure>
+    <figure xml:id="fig-nimservlet2">
+      <caption>Java code for the <c>NimServlet</c>'s <c>doGet()</c> method.</caption>
+<pre>
+public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
+{
+  response.setContentType("text/html");
+  PrintWriter out = response.getWriter();
+  HttpSession session = request.getSession(true);
+  out.println("&lt;html>");
+  out.println("&lt;body>");
+  out.println("&lt;head>");
+  out.println("&lt;title>Simple Nim Game&lt;/title>");
+  out.println("&lt;/head>");
+  out.println("&lt;body>");
+  out.println("&lt;center>&lt;h1>One Row Nim&lt;/h1>&lt;/center>");
+  out.println("&lt;center>&lt;h3>The Rules&lt;/h3>");
+  out.println("A random number of pennies is thrown on the table.&lt;BR>");
+  out.println("Two players alternate making moves,&lt;BR>");
+  out.println("picking up between 1 and 3 pennies on each move.&lt;BR>");
+  out.println("The player who picks up the last penny loses.&lt;BR>&lt;BR>");
+  if (nim == null) {
+    nim = new OneRowNim(7 + (int)(Math.random() * 11));
+    nimPlayer = new NimPlayer(nim);
+    out.println("&lt;h4>You go first!&lt;/h4>&lt;/center>");
+  } else {
+    int userTakes = Integer.parseInt(request.getParameter("pickup"));
+    if (!nim.takeSticks(userTakes)) {
+       out.println("&lt;h4>&lt;font color='red'>Woops. That's an illegal move!. Try again. &lt;/font>&lt;h4>");
+    } else if (!nim.gameOver()) {
+       nim.changePlayer();
+       out.println("&lt;h4>So, you took &lt;font color='blue'>" + userTakes + "&lt;/font>&lt;BR>");
+       out.println("That leaves me with &lt;font color='blue'>" + nim.getSticks() + "&lt;/font>&lt;BR>");
+       int iTake = nimPlayer.move();
+       out.println("OK. I take &lt;font color='red'>" + iTake + " &lt;/font>pennies.&lt;BR>&lt;/h4>");
+       nim.takeSticks(iTake);
+       nim.changePlayer();
+    } // if not gameover
+  } // else nim != null
+  if (!nim.gameOver()) {
+    if (nim.getPlayer() == 1)
+      out.println("&lt;center>&lt;h3>Who's Turn: &lt;font color='magenta'> Your turn &lt;/font>&lt;h3>&lt;/center>");
+    else
+      out.println("&lt;center>&lt;h3>Who's Turn: &lt;font color='magenta'> My turn &lt;/font>&lt;h3>&lt;/center>");
+    out.println("&lt;center>&lt;h3>Pennies Left: &lt;font color='red'>" + nim.getSticks() + "&lt;/font>&lt;h3>&lt;/center>");
+    out.println("&lt;center>");
+    for (int k=0; k &lt; nim.getSticks(); k++)
+      out.println("&lt;img src='http://xroads.virginia.edu/&#126;CAP/LINCOLN/cent.jpg' width='25' height='25'>");
+    out.println("&lt;/center>&lt;br>");
+    out.println("&lt;center>");
+    out.println("&lt;form action='/jjj3e/NimServlet' method='POST'>");
+    out.println("&lt;table border='0'>");
+    out.println("&lt;tr>&lt;td>How many do you pickup?: &lt;/td>" +
+        "&lt;td>&lt;input type='text' name='pickup' value='0'>&lt;/td>&lt;/tr>");
+    out.println("&lt;/table>");
+    out.println("&lt;/center>");
+    out.println("&lt;/form>");
+  } else {
+    out.println("&lt;h3>&lt;font color='red'>Game over!&lt;/font>&lt;h3>");
+    if (nim.getPlayer() == 1)
+      out.println("&lt;center>&lt;h4>And the winner is : &lt;font color='magenta'> Me.&lt;/font>&lt;h4>&lt;/center>");
+    else
+      out.println("&lt;center>&lt;h4>And the winner is: &lt;font color='magenta'> You.&lt;/font>&lt;h4>&lt;/center>");
+    out.println("&lt;center>&lt;h4>&lt;font color='magenta'> Nice game!&lt;/font>&lt;h4>&lt;/center>");
+    out.println("&lt;center>&lt;h4>To play again, just reload the page.&lt;h4>&lt;/center>");
+    nim = null;
+  } // else game over
+  out.println("&lt;/body>");
+  out.println("&lt;/html>");}// doGet
+</pre>
+    </figure>
+    <p>
+<c>NimServlet</c> uses two other objects:
+      a <c>OneRowNim</c> object and a <c>NimPlayer</c> object.
+      You should be familiar with these from Chapter<nbsp/>8,
+      so we won't go over their internal details here.
+      The
+<c>OneRowNim</c> object manages the playing of the game and the
+<c>NimPlayer</c> object acts as a computer-based player of the game.
+      Note that variable references for these two objects are declared in the beginning of the class definition,
+      but the objects themselves are declared within the <c>doGet()</c> method.
+    </p>
+    <p>
+      One of the tricky parts of <c>NimServlet</c> is how we declare the <c>OneRowNim</c> object.
+      As you might already know,
+      the HTTP protocol is said to be a
+      <em>stateless</em> protocol,
+      which means that each time a browser submits a request to a Web server,
+      the Web server sees the request as a completely independent communication.
+      The server does not, in and of itself,
+      maintain an internal state that keeps track of a series of transactions with a particular browser session.
+      For example, when you are shopping for books on Amazon,
+      each time you go to a new page,
+      the Amazon web server treats that request as a completely independent action.
+      Web applications use various techniques to get around the stateless nature of the HTTP protocol.
+      One technique is to use <em>cookies</em>
+      to record the progress of a session.
+      A <term>cookie</term> is a small text file containing data that the server uses to keep track of a user's session.
+      Data that identifies the user and the state of the transaction<mdash/>for example,
+      buying a book<mdash/>are passed back and forth between the browser and the server each time the user visits the Amazon Web site.
+    </p>
+    <p>
+      Java's servlet library contains methods and objects that support the use of cookies.
+      But rather than use cookies,
+      we will use the <c>OneRowNim</c> object itself to keep track of the state of the Nim game.
+      The first time the user submits a request to Nim servlet<mdash/>that is,
+      when the user first visits the servlet's URL<mdash/>the servlet will create an instance of the <c>OneRowNim</c> object.
+      Creating a <c>OneRowNim</c> object will have the effect of initializing the game,
+      including the creation of a <c>NimPlayer</c> to play the server's moves.
+      The <c>OneRowNim</c> object will persist throughout the playing of the game and will handle all subsequent user's move.
+      When the game is over,
+      the
+<c>NimServlet</c> will,
+      in effect,
+      dispose of the <c>OneRowNim</c> object by setting its reference to <c>null</c>. Thus,
+      in outline form,
+      the code for creating and disposing of the <c>OneRowNim</c> object goes as follows:
+    </p>
+<pre>
+// First request: Start a new Nim game
+if (nim == null) {
+   nim = new OneRowNim(7 + (int)(Math.random() * 11));
+   nimPlayer = new NimPlayer(nim);
+// Code deleted here.
+else {
+   // Code for playing the game goes here.}
+if (!nim.gameOver()) {
+  // Code for playing the game goes here.} else {
+   // Code deleted here.
+  nim = null;}
+</pre>
+    <p>
+      Those places where code has been deleted in this segment would contain Java code for responding to the user's input and deciding how many pennies to take.
+    </p>
+    <p>
+      Unlike the <c>HelloServlet</c>, the <c>NimServlet</c> accepts input from the client.
+      The code for handling user input is as follows:
+    </p>
+<pre>
+int userTakes =
+        Integer.parseInt(request.getParameter("pickup"));
+</pre>
+    <p>
+      This statements reads the user's input from the text field on the Web page by using the <c>request.getParameter()</c> method.
+      This is one of the public methods of the <c>HttpServletRequest</c> object.
+      The name of the text field is 'pickup', which is provided as an argument in this method call.
+      As we noted above,
+      the text field itself is on element of the HTML form contained in the servlet's Web page.
+      The HTML code for creating the form element is also generated by the servlet:
+    </p>
+<pre>
+out.println("&lt;form action='/jjj3e/NimServlet' method='POST'>");
+out.println("&lt;table border='0'>");
+out.println("&lt;tr>&lt;td>How many do you pick up?: &lt;/td>" +
+  "&lt;td>&lt;input type='text' name='pickup' value='0'>&lt;/td>&lt;/tr>");
+</pre>
+    <p>
+      Unless you already know something about HTML, you won't completely understand this code.
+      We will give a minimal explanation.
+      In HTML, a text field is known as a input element of type 'text'. Note that this code segment names the element 'pickup', which allows our program to refer to it by that name.
+    </p>
+    <p>
+      The remaining details in the servlet have to do with managing the game and repeat concepts that were covered in Chapter<nbsp/>8.
+      We won't repeat them here,
+      other than to note that any output sent to the client must be in the form of HTML statements,
+      hence the appearance throughout the code of HTML tags,
+      which are the elements in the angle brackets.
+    </p>
+  </subsection>
+  <subsection xml:id="chapter-summary36">
+    <title>Setting Up and Using Java Servlets</title>
+    <p>
+      Java servlets can only run on a Web server that is specially configured to interpret them.
+      To experiment with the servlets discussed in this chapter,
+      just go to the following URL:
+    </p>
+<pre>
+http://www.cs.trincoll.edu/&#126;ram/jjj/servlets
+</pre>
+    <p>
+      That web page contains links to both the <c>HelloServlet</c> and <c>NimServlet</c>. It also contains links to Web sites where you can learn more about creating servlets.
+      In order to create and run your own servlets,
+      you will need access to a Web server that has been specially configured to run servlets.
+      There are several very good free servers that support Java servlets.
+      You can download one of these onto your own computer and follow the directions on how to set it up.
+      Links to Java servlet sites are also provided on our servlets page.
+    </p>
+    <p>
+      \secSMHleft{Chapter Summary} \secKTH{Technical Terms} \begin{KT} busy waiting
+    </p>
+    <p>
+      callback method
+    </p>
+    <p>
+      client
+    </p>
+    <p>
+      client/server protocols
+    </p>
+    <p>
+      domain name
+    </p>
+    <p>
+      ethernet protocol
+    </p>
+    <p>
+      File Transfer Protocol (FTP)
+    </p>
+    <p>
+      get
+    </p>
+    <p>
+      HyperText Transfer Protocol (HTTP)
+    </p>
+    <p>
+      internet
+    </p>
+    <p>
+      Internet
+    </p>
+    <p>
+      Internetworking Protocol (IP)
+    </p>
+    <p>
+      Java Server Page (JSP)
+    </p>
+    <p>
+      packet
+    </p>
+    <p>
+      port
+    </p>
+    <p>
+      post
+    </p>
+    <p>
+      protocol
+    </p>
+    <p>
+      router
+    </p>
+    <p>
+      sandbox security model
+    </p>
+    <p>
+      scriptlet
+    </p>
+    <p>
+      server
+    </p>
+    <p>
+      servlet
+    </p>
+    <p>
+      Simple Mail Transfer Protocol (SMTP)
+    </p>
+    <p>
+      socket
+    </p>
+    <p>
+      trusted code
+    </p>
+    <p>
+      Uniform Resource Locator (URL)
+    </p>
+    <p>
+      World Wide Web (WWW)
+    </p>
+    <p>
+      \end{KT}
+    </p>
+    <p>
+      \secSMHtwo{Summary of Important Points}
+      <ul>
+        <li>
+          <p>
+            An <em>internet</em> is a collection of two or more distinct networks joined by <em>routers</em>,
+            which have the task of translating one network's language to the other's.
+            The <em>Internet</em> is a network of networks that uses the
+            <em>Internet Protocol (IP)</em>
+            as the translation medium.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <em>protocol</em> is a set of rules that controls the transfer of information between two computers in a network.
+            The <em>HyperText Transfer Protocol (HTTP)</em>
+            governs information exchange on the World Wide Web (WWW).
+            The <em>Simple Mail Transfer Protocol</em>
+            controls mail service on the Internet.
+            The <em>File Transfer Protocol (FTP)</em>
+            controls the transfer of files between Internet computers.
+            The <em>Domain Name System (DNS)</em>
+            governs the use of names on the Internet.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <em>client/server</em> application is one that divides its task between a client,
+            which requests service, and a server, which provides service.
+            Many Internet applications and protocols are based on the client/server model.
+          </p>
+        </li>
+        <li>
+          <p>
+            Lower-level protocols, such as the
+            <em>ethernet protocol</em>
+            and <em>token ring protocol</em>,
+            govern the transmission of data between computers on a single network.
+            The <em>Internet Protocol (IP)</em>
+            translates between such protocols.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <em>Uniform Resource Locator (URL)</em>
+            is a standard way of specifying addresses on the Internet.
+            It consists of several parts separated by slashes and colons: <c>method://host:port/path/file</c>. The <c>java.net.URL</c> class is used to represent URLs.
+          </p>
+        </li>
+        <li>
+          <p>
+            Files of text or data (images,
+            audio files) on the Internet or Web can be downloaded using the same <c>InputStream</c> s and
+<c>OutputStream</c> s as files located on a disk.
+            To read or write a resource located on a network,
+            you need to connect its URL to an input or output stream.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>java.awt.Toolkit</c> class contains useful methods for downloading <c>Image</c> s into an application.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <em>socket</em> is a two-way communication channel between two running programs on a network.
+            The <c>java.net.Socket</c> class can be used to set up communication channels for client/server applications.
+            The <em>server</em> process listens at a socket for requests from a client.
+            The <em>client</em> process requests service from a server listening at a particular socket.
+            Once a connection exists between client and server,
+            input and output streams are used to read and write data over the socket.
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      { \rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secANSHleft}{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secKTH}[1]{{ #1} } \newcommand{\secLREXRH}[1]{{ { \uppercase{#1}}} } \def\endpracticedesign{ {\rule[0pt]{27pc}{0.5pt}} } \newcommand{\secHsix}[1]{{#1} } \newcommand{\secHfive}[2]{{ \rule[16pt]{27pc}{0.5pt} }\newcommand{\secBXsixHone}[1]{{#1} } \newcommand{\secBXsixBTHleft}[1]{ {\rule[0pt]{44.45pc}{2pt}} \marginpar{ }\newcommand{\secBXsevenHone}[1]{{#1} }\newcommand{\secCOBH}[1] {{\uppercase{#1}} }\newcommand{\secCOLH}[1] {{\uppercase{#1}} }\newcommand{\secSMH}[1]{ {\rule[0pt]{40.5pc}{1pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{#1} } } } \newcommand{\secSMHleft}[1]{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=} \marginpar{ \uppercase{#1} } } \newcommand{\secSMHtwo}[1]{{ #1} }\newcommand{\secEXRHone}[1]{{\uppercase{#1}} } \newcounter{EXRLLcount} { \marginpar{{From the Java Library} #1} } {\begin{minipage}{26pc}}{\end{minipage}} \rule[0pt]{27pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1} } \begin{minipage}[t]{#2} { \end{minipage} } \rule[0pt]{40pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1}
+      <ul>
+        <li>
+          <p>
+            The fully connected mesh topology requires the most cables.
+          </p>
+        </li>
+        <li>
+          <p>
+            The fully connected mesh topology would have the most potential to use alternate routes if one of the host computers crashed.
+          </p>
+        </li>
+        <li>
+          <p>
+            The star topology would be rendered completely useless if its central hub crashed.
+          </p>
+        </li>
+        <li>
+          <p>
+            Prentice Hall's Web server is located at
+<pre>
+http://www.prenhall.com
+</pre>The protocol is <c>http</c>. The host computer is named <c>www</c>. Prentice Hall's domain name is <c>prenhall</c>, and it is part of the
+<c>com</c>(commercial) Internet domain.
+          </p>
+        </li>
+        <li>
+          <p>
+            \begin{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            For buying a piece of software at a bookstore,
+            the server would be the sales clerk.
+            The protocol would be to select the software from off the shelf,
+            bring it to the checkout counter,
+            give the sales clerk money, and get a receipt.
+          </p>
+        </li>
+        <li>
+          <p>
+            For buying a piece of software over the phone,
+            the server would be the telephone sales clerk.
+            The protocol would be to select from a catalog,
+            provide the sales clerk with your credit card information,
+            and say goodbye.
+          </p>
+        </li>
+        <li>
+          <p>
+            For buying a piece of software over the Internet,
+            the server would be the computer that handles the transaction.
+            The protocol would be to select the item from a Web-based form,
+            provide the form with personal and payment information,
+            and click on the Buy button. \end{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            To play sounds along with slides in the <c>SlideShowFrame</c>, you would make the following modifications to the code:
+<pre>
+private Clip soundClip[] = new Clip[NIMGS];
+private Clip currentClip = null;
+</pre>Declare an array of <c>URL</c> s to store the URLs of the audio files you want to play.
+            Assign Clips to the array at the same time you input the images:
+<pre>
+for (int k=0; k &lt; NIMGS; k++) {
+  url =
+   new URL( "http://www.cs.trincoll.edu/&#126;ram/jjj/slide" +
+                                              k + ".gif");
+  slide[k] = imageIO.read( url );
+  URL soundURL =
+   new URL("http://www.cs.trincoll.edu/&#126;ram/jjj/sound" +
+                                               k + ".au");
+  AudioInputStream audio =
+    AudioSystem.getAudioInputStream(url);
+  DataLine.Info info = new DataLine.Info(Clip.class,
+               audio.getFormat());
+  soundClip[k] = (Clip) AudioSystem.getLine(info);}
+</pre>Change the nextSlide() code to the following
+<pre>
+public void nextSlide() {
+    currentClip.stop(); // stop sound playback
+    currentClip = soundClip[nextImg]; // get next soundClip
+    currentClip.setFramePosition(0); // start clip at beginning
+    currentImage = slide[nextImg];
+    nextImg = ( nextImg + 1) % NIMGS;
+    repaint ();}
+</pre>Each time an image is displayed in <c>paint()</c>, play the corresponding sound by using the URL from the array:
+<pre>
+public void paint(Graphics g) {
+    if (currentImage != null) {
+        g.drawImage(currentImage,10,10,this);
+        currentClip.start();
+    }}
+</pre>
+          </p>
+        </li>
+        <li>
+          <p>
+            The scramble service would be implemented by defining two new classes: The <c>ScrambleServer</c> class is a subclass of <c>Server</c>, and the <c>ScrambleClient</c> class is a subclass of <c>Client</c>. The <c>ScrambleClient</c> would implement the <c>requestService()</c> method and the <c>ScrambleServer</c> would implement the
+<c>provideService()</c> method.
+          </p>
+        </li>
+        <li>
+          <p>
+            \begin{ANSBL}
+          </p>
+        </li>
+        <li>
+          <p>
+            If you specify the wrong host name or port,
+            you will get the following exception:
+<c>java.net.ConnectException: Connection refused</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            If you leave off the <c>\n</c> in the <c>writeToSocket()</c> call,
+            nothing will go wrong because the <c>writeToSocket()</c> method will catch this error and add the end-of-line character to the string before sending it to the server.
+            The server reads lines from the client,
+            so every communication must end with <c>\n</c> or the protocol will break down. \end{ANSBL}
+          </p>
+        </li>
+      </ul>
+    </p>
+    <ol>
+      <li>
+        <p>
+          Explain the difference between each of the following pairs of terms:
+          <ol>
+            Stream and <em>socket</em>. Internet and <em>internet</em>. Domain name and <em>port</em>. Client and <em>server</em>. Ethernet and <em>Internet</em>. URL and <em>domain name</em>.
+          </ol>
+        </p>
+        \marginpar{<term>Note:</term> For programming exercises,
+        <term>first</term> draw a UML class diagram describing all classes and their inheritance relationships and/or associations.}
+      </li>
+      <li>
+        <p>
+          What is a <em>protocol</em>?
+          Give one or two examples of protocols that are used on the Internet.
+        </p>
+      </li>
+      <li>
+        <p>
+          What service is managed by the HTTP protocol?
+        </p>
+      </li>
+      <li>
+        <p>
+          Give examples of client applications that use the HTTP \mbox{protocol.}
+        </p>
+      </li>
+      <li>
+        <p>
+          Why is it important that applets be limited in terms of their network and file system access?
+          Describe the various networking restrictions that apply to Java applets.
+        </p>
+      </li>
+      <li>
+        <p>
+          What does the <c>Internet Protocol</c> do?
+          Describe how it would be used to join an ethernet and a token ring network.
+        </p>
+      </li>
+      <li>
+        <p>
+          Describe one or two circumstances under which a <c>ConnectException</c> would be thrown.
+        </p>
+      </li>
+      <li>
+        <p>
+          Modify the <c>SlideShowFrame</c> so that it plays an audio file along with each slide.
+        </p>
+      </li>
+      <li>
+        <p>
+          Design and implement a Java applet that downloads a random substitution cryptogram and provides an interface that helps the user try to solve the cryptogram.
+          The interface should enable the user to substitute an arbitrary letter for the letters in the cryptogram.
+          The cryptogram files should be stored in the same directory as the applet itself.
+        </p>
+      </li>
+      <li>
+        <p>
+          Design and implement a Java application that displays a random message
+          (or a random joke)
+          each time the user clicks a
+<c>GetMessage</c> button.
+          The messages should be stored in a set of files in the same directory as the applet itself.
+          Each time the button is clicked,
+          the applet should download one of the message files.
+        </p>
+      </li>
+      <li>
+        <p>
+          Write a client/server application of the message or joke service described in the previous exercise.
+          Your implementation should extend the <c>Server</c> and <c>Client</c> classes.
+        </p>
+      </li>
+      <li>
+        <p>
+          Write an implementation of the scramble service.
+          Given a word,
+          the scramble service will return a string containing all possible permutations of the letter combinations in the word.
+          For example, given
+          <q>man,</q>
+          the scramble service will return
+          <q>amn, anm, man, mna, nam, nma.</q>
+          Use the <c>Server</c> and <c>Client</c> classes in your design.
+          (See the Self-Study Exercises for a description of the design.)
+          Challenge: Modify the Nim server game in this chapter so that the client and server can negotiate the rules of the game,
+          including how many sticks, how many pick ups per turn,
+          and who goes first.
+        </p>
+      </li>
+    </ol>
+  </subsection>
+</section>

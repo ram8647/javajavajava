@@ -1,0 +1,749 @@
+<section xml:id="casestudy-readingand-writing-text-files">
+  <title>CASE STUDY: Reading and Writing Text Files</title>
+  <introduction>
+    <p>
+      Let's write a GUI application that will be able to read and write data to and from a text file.
+      To do this, we will need to develop a set of methods to perform I/O on text files.
+    </p>
+    <p>
+      The GUI for this application will contain a <c>JTextArea</c>, where text \marginpar{GUI design} file data can be input and displayed,
+      and a <c>JTextField</c>, where the user can enter the file's name.
+      It will also contain two
+<c>JButton</c> s, one for reading a file into the <c>JTextArea</c>, and the other for writing the data in the <c>JTextArea</c> into a file (Fig.
+      <xref ref="fig-guitextio"></xref>).
+      Note that even this simple interface will let the user create new files and rename existing files.
+    </p>
+    <figure xml:id="fig-guitextio">
+      <caption>The GUI design for a program that reads
+      and writes text files.</caption>
+      <image width="73%" source="chptr11/guitextio.png"/>
+    </figure>
+  </introduction>
+  <subsection>
+    <title>Text File Format</title>
+    <p>
+      A text file consists of a sequence of characters divided into zero or more lines and ending with a special
+      <term>end-of-file character</term>.
+          <idx><h>end-of-file character</h></idx>
+      \marginpar{The end-of-file character} When you open a new file in a text editor,
+      it contains zero lines and zero characters.
+      After typing a single character,
+      it would contain one character and one line.
+      The following would be an example of a file with four lines of text:
+    </p>
+<pre>
+one\ntwo\nthree\nfour\n\eof
+</pre>
+    <p>
+      Note the use of the end-of-line character,
+<c>\n</c>, to mark the end of each line,
+      and the use of the end-of-file character,
+<c>\eof</c>, to mark the end of the file.
+      As we'll see,
+      the I/O methods for text files use these special characters to control reading and writing loops.
+      Thus, when the file is read by appropriate Java methods,
+      such as the <c>BufferedReader.readLine()</c> and <c>BufferedReader.read()</c> methods,
+      one or more characters will be read until either an end-of-line or end-of-file character is encountered.
+      When a line of characters is written using <c>println()</c>, the end-of-line character is appended to the characters themselves.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Writing to a Text File</title>
+    <introduction>
+      <p>
+        Let's see how to write to a text file.
+        In this program we write the entire contents of the <c>JTextArea()</c> to the text file.
+        In general, writing data to a file requires three steps:
+      </p>
+      <p>
+        \begin{NL} \item Connect an output stream to the file. \item Write text data into the stream,
+        possibly using a loop. \item Close the stream. \end{NL}
+      </p>
+      <p>
+        As <xref ref="fig-systemout">Figure</xref> shows,
+        connecting a stream to a file looks like doing a bit of plumbing.
+        The first step is to connect an output stream to the file.
+        The output stream serves as \marginpar{Output stream} a conduit between the program and a named file.
+        The output stream opens the file and gets it ready to accept data from the program.
+        If the file already exists,
+        then opening the file will destroy any data it previously contained.
+        If the file doesn't yet exist,
+        then it will be created from scratch.
+      </p>
+      <p>
+        Once the file is open, the next step is to write the text to the stream,
+        which passes the text on to the file.
+        This step might require a loop that outputs one line of data on each iteration.
+        Finally, once all the data have been written to the file,
+        the stream should be closed.
+        This also has the effect of closing the file itself.
+      </p>
+      <principle>
+        <title>EFFECTIVE DESIGN:Writing a File</title>
+        <p>
+          Writing data to a file requires a three-step algorithm: (1) Connect an output stream to the file, (2) write the data,
+          and (3) close the file.
+        </p>
+      </principle>
+    </introduction>
+    <subsubsection>
+      <title>Code Reuse: Designing an Output Method</title>
+      <p>
+        Now let's see how these three steps are done in Java.
+        Suppose the text we want to write is contained in a <c>JTextArea</c>. Thus,
+        we want a method that will write the contents of a <c>JTextArea</c> to a named file.
+      </p>
+      <p>
+        What output stream should we use for the task of writing a <c>String</c>\marginpar{Choosing an output stream} to a named file?
+        To decide this,
+        we need to use the information in <xref ref="fig-streamhier">Figure</xref> and Table<nbsp/>11.1.
+        As we pointed out earlier, because we're writing a text file,
+        we would use a <c>Writer</c> subclass.
+        But which subclass should we use?
+        The only way to decide this is to consult the Java API documentation,
+        using links at
+      </p>
+<pre>
+http://java.sun.com/j2se/1.5.0/docs/api/
+</pre>
+      <p>
+        to see what methods are available in the various subclasses.
+        For I/O operations you want to consult the classes in the <c>java.io</c> package.
+        Ideally, we would like to be able to create an output stream to a named file,
+        and we would like to be able to write a
+<c>String</c> to the file.
+      </p>
+      <p>
+        One likely candidate is the <c>FileWriter</c> class (Fig.
+        <xref ref="fig-filewriter"></xref>).
+        Its name and description (Table<nbsp/>11.1) suggest that it's designed for writing text files.
+        And indeed it contains the kind of constructor we need<mdash/>that is,
+        one that takes the file name as a parameter.
+        Note that by taking a <c>boolean</c> parameter,
+        the second constructor allows us to append data to a file rather than rewrite the entire file,
+        which is the default case.
+      </p>
+      <p>
+        However, <c>FileWriter</c> doesn't define a <c>write()</c> method.
+        This doesn't necessarily mean that it doesn't contain such a method.
+        It might have inherited one from its superclasses, \marginpar{Inheritance}<c>OutputStreamWriter</c> and <c>Writer</c>. Indeed,
+        the <c>Writer</c> class contains a method, <c>write()</c>, whose signature suggests that it is ideally suited for our task (Fig.
+        <xref ref="fig-filewriter"></xref>).
+      </p>
+      <figure xml:id="fig-filewriter">
+        <caption>To find the right I/O method, it is sometimes
+        necessary to search the Java class hierarchy. This is
+        easy to do with the online documentation.</caption>
+        <image width="73%" source="chptr11/filewriter.png"/>
+      </figure>
+      <p>
+        Having decided on a <c>FileWriter</c> stream,
+        the rest of the task of designing our method is simply a matter of using
+<c>FileWriter</c> methods in an appropriate way:
+      </p>
+<pre>
+private void writeTextFile(JTextArea display,
+                                        String fileName) {
+    // Create stream &amp; open file
+    FileWriter outStream = new FileWriter(fileName);
+    //  Write the entire display text and close the stream
+    outStream.write(display.getText());
+    outStream.close();   //  Close the output stream}
+</pre>
+      <p>
+        We use the <c>FileWriter()</c> constructor to create an output stream to the file whose name is stored in <c>fileName</c>. In this case,
+        the task of writing data to the file is handled by a single <c>write()</c> statement,
+        which writes the entire contents of the <c>JTextArea</c> in one operation.
+      </p>
+      <p>
+        Finally, once we have finished writing the data,
+        we <c>close()</c> the output stream.
+        This also has the effect of closing the file.
+        The overall effect of this method is that the text contained in
+<c>display</c> has been output to a file,
+        named <c>fileName</c>, which is stored on the disk.
+      </p>
+      <principle>
+        <title>PROGRAMMING TIP:Closing a File</title>
+        <p>
+          Even though Java will close any apen files and streams when a program terminates normally,
+          it is good programming practice to close the file yourself with a <c>close()</c> statement.
+          It also reduces the chances of damaging the file if the program terminates abnormally.
+        </p>
+      </principle>
+      <p>
+        Because so many different things can go wrong during an I/O operation,
+        most I/O operations generate some kind of
+        <em>checked exception</em>.
+        Therefore, it is necessary to embed the I/O operations within a <c>try/catch</c> statement.
+        In this example,
+        the <c>FileWriter()</c> constructor,
+        the
+<c>write()</c> method,
+        and the <c>close()</c> method may each throw an
+<c>IOException</c>. Therefore,
+        the entire body of this method should be embedded within a <c>try/catch</c> block that catches the
+<c>IOException</c>(Fig.
+        <xref ref="fig-writetextmethod"></xref>).
+      </p>
+      <figure xml:id="fig-writetextmethod">
+        <caption>A method to write a text file.</caption>
+        \[26.5pc]
+<pre>
+private void writeTextFile(JTextArea display,
+                                      String fileName) {
+  try {
+      FileWriter outStream =  new FileWriter (fileName);
+      outStream.write (display.getText());
+      outStream.close();
+  } catch (IOException e) {
+      display.setText("IOERROR: " + e.getMessage() + "\n");
+      e.printStackTrace();
+  }} // writeTextFile()
+</pre>
+      </figure>
+    </subsubsection>
+  </subsection>
+  <subsection xml:id="self-study-exerciseN28">
+    <title>Code Reuse: Designing Text File Output</title>
+    <p>
+      The <c>writeTextFile()</c> method provides a simple example of how to write data to a text file.
+      More importantly,
+      its development illustrates the kinds of choices necessary to design effective I/O methods.
+      Two important design questions we asked and answered were
+      <ul>
+        <li>
+          <p>
+            What methods do we need to perform the desired task?
+          </p>
+        </li>
+        <li>
+          <p>
+            What streams contain the desired methods?
+          </p>
+        </li>
+      </ul>
+    </p>
+    <p>
+      As in so many other examples we've considered, \marginpar{Method design} designing a method to perform a task is often a matter of finding the appropriate methods in the Java class hierarchy.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Code Reuse</title>
+      <p>
+        Developing effective I/O routines is primarily a matter of choosing the right library methods.
+        Start by asking yourself,
+        <q>What methods do I need?</q>
+        and then find a stream class that contains the appropriate methods.
+      </p>
+    </principle>
+    <p>
+      As you might expect,
+      there is more than one way to write data to a text file.
+      Suppose we decided that writing text to a file is like printing data to <c>System.out</c>. And suppose we chose to use a <c>PrintWriter</c> object as our first candidate for an output stream (Fig.
+      <xref ref="fig-streamhier"></xref> and Table<nbsp/>11.1).
+      This class (Fig.<nbsp/>11\mbox{.} 4) contains a wide range of <c>print()</c> methods for writing different types of data as text.
+      So it has exactly the kind of method we need: <c>print(String)</c>. However,
+      this stream does not contain a constructor method that allows us to create a stream from the name of a file.
+      Its constructors require either a
+<c>Writer</c> object or an <c>OutputStream</c> object.
+    </p>
+    <p>
+      This means that we can use a <c>PrintWriter</c> to print to a file,
+      but only if we can first construct either an <c>OutputStream</c> or a <c>Writer</c> object to the file.
+      So we must go back to searching <xref ref="fig-streamhier">Figure</xref>
+      and Table<nbsp/>11.1 for an appropriate candidate.
+      Fortunately,
+      the <c>FileOutputStream</c> class (Fig.
+      <xref ref="fig-fileoutput"></xref>) has just the constructors we want.
+      We now have an alternative way of coding the <c>writeTextFile()</c> method,
+      this time using a combination of <c>PrintWriter</c> and
+<c>FileOutputStream</c>:
+    </p>
+    <figure xml:id="fig-fileoutput">
+      <caption>The <c>FileOutputStream</c> class.</caption>
+      <image width="73%" source="chptr11/fileoutput.png"/>
+    </figure>
+<pre>
+//  Create an output stream and open the file
+PrintWriter outStream =
+    new PrintWriter(new FileOutputStream(fileName));
+//  Write the display's text and close the stream
+outStream.print ( display.getText() );
+outStream.close();
+</pre>
+    <p>
+      Note how the output stream is created in this case.
+      First, we create a <c>FileOutputStream</c> using the file name as its argument.
+      Then we create a <c>PrintWriter</c> using the
+<c>FileOutputStream</c> as its argument.
+      The reason we can do this is \marginpar{Parameter agreement} because the <c>PrintWriter()</c> constructor takes a
+<c>FileOutputStream</c> parameter.
+      This is what makes the connection possible.
+    </p>
+    <p>
+      To use the plumbing analogy again,
+      this is like connecting two sections of pipe between the program and the file.
+      The data will flow from the program through <c>PrintWriter</c>, through the <c>OutputStream</c>, to the file.
+      Of course, you can't just arbitrarily connect one stream to another.
+      They have to
+      <q>fit together,</q>
+      which means that their parameters have to match.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Stream/Stream Connections</title>
+      <p>
+        Two different kinds of streams can be connected if a constructor for one stream takes the second kind of stream as a parameter.
+        This is often an effective way to create the kind of object you need to perform an I/O task.
+      </p>
+    </principle>
+    <p>
+      \marginpar{ \psfig{file=../commonart/www_dg.eps}
+      <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
+    </p>
+    <p>
+      The important lesson here is that we found what we wanted by searching through the <c>java.io.*</c> hierarchy.
+      This same approach can be used to help you to design I/O methods for other tasks.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Is it possible to perform output to a text file using a
+<c>PrintWriter</c> and a <c>FileWriter</c> stream in combination?
+            If so, write the Java code.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection xml:id="self-study-exerciseO28">
+    <title>Reading from a Text File</title>
+    <p>
+      Let's now look at the problem of inputting data from an existing text file,
+      a common operation that occurs whenever your email program opens an email message or your word processor opens a document.
+      In general, there are three steps to reading data from a file:
+    </p>
+    <p>
+      \begin{NL} \item Connect an input stream to the file.
+    </p>
+    <p>
+      \item Read the text data using a loop.
+    </p>
+    <p>
+      \item Close the stream. \end{NL}
+    </p>
+    <p>
+      As <xref ref="fig-readfromstream">Figure</xref> shows,
+      the input stream serves as a kind of pipe between the file and the
+    </p>
+    <figure xml:id="fig-readfromstream">
+      <caption>A stream serves as a pipe through which
+      data flow.</caption>
+      <image width="73%" source="chptr11/filestream.png"/>
+    </figure>
+    <p>
+      program.
+      The first step is to connect an input stream to the file.
+      Of course, in order to read a file, the file must exist.
+      The input stream serves as a conduit between the program and the named file.
+      It opens the file and gets it ready for reading.
+      Once the file is open, the next step is to read the file's data.
+      This will usually require a loop that reads data until the end of the file is reached.
+      Finally, once all the data are read,
+      the stream should be closed.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Reading Data</title>
+      <p>
+        Reading data from a file requires a three-step algorithm: (1) Connect an input stream to the file, (2) read the data,
+        and (3) close the file.
+      </p>
+    </principle>
+    <p>
+      Now let's see how these three steps are done in Java.
+      Suppose that we want to put the file's data into a <c>JTextArea</c>. Thus,
+      we want a method that will be given the name of a file and a reference to a <c>JTextArea</c>, and it will read the data from the file into the <c>JTextArea</c>.
+    </p>
+    <p>
+      What input stream should we use for this task?
+      Here again we \marginpar{Choosing an input stream} need to use the information in <xref ref="fig-streamhier">Figure</xref> and Table<nbsp/>11.1.
+      Because we're reading a text file,
+      we should use a <c>Reader</c> subclass.
+      A good candidate is the <c>FileReader</c>, whose name and description suggest that it might contain useful methods.
+    </p>
+    <p>
+      What methods do we need?
+      As in the previous example,
+      we need a constructor method that connects an input stream to a file when the constructor is given the \marginpar{What methods should we use?} name of the file.
+      And, ideally,
+      we'd like to have a method that will read one line at a time from the text file.
+    </p>
+    <figure xml:id="fig-filereader">
+      <caption><c>FileReader</c>'s superclasses contain
+<c>read()</c> methods but no <c>readLine()</c> methods.</caption>
+      <image width="73%" source="chptr11/filereader.png"/>
+    </figure>
+    <p>
+      The <c>FileReader</c> class (Fig.
+      <xref ref="fig-filereader"></xref>) has the right kind of constructor.
+      However, it contains no <c>readLine()</c> methods itself,
+      which would be necessary for our purposes.
+      Searching upward through its superclasses,
+      we find that \mbox{InputStreamReader} , its immediate parent class,
+      has a method that reads <c>int</c> s:
+    </p>
+<pre>
+public int read() throws IOException();
+</pre>
+    <p>
+      As shown in <xref ref="fig-filereader">Figure</xref>,
+      this <c>read()</c> method is an override of the <c>read()</c> method defined in the <c>Reader</c> class,
+      the root class for text file input streams.
+      Thus, there are no <c>readLine()</c> methods in the <c>Reader</c> branch of the hierarchy.
+      We have to look elsewhere for an appropriate class.
+    </p>
+    <p>
+      One class that does contain a <c>readLine()</c> method is <c>BufferedReader</c>(Fig.
+      <xref ref="fig-filereader"></xref>).
+      Can we somehow use it?
+      Fortunately,
+      the answer is yes. <c>BufferedReader</c>'s constructor takes a <c>Reader</c> object as a parameter.
+      But a <c>FileReader</c><em>is</em>
+      a <c>Reader</c><mdash/>that is,
+      it is a descendant of the <c>Reader</c> class.
+      So, to use our plumbing analogy again,
+      to build an input stream to the file,
+      we can join a <c>BufferedReader</c> and a <c>FileReader</c>
+    </p>
+<pre>
+BufferedReader inStream
+    = new BufferedReader(new FileReader(fileName));
+</pre>
+    <p>
+      Given this sort of connection to the file,
+      the program can use <c>BufferedReader.readLine()</c> to read one line at a time from the file.
+    </p>
+    <p>
+      So, we have found a method that reads one line at a time.
+      Now we need an algorithm that will read the entire file.
+      Of course, this will involve a loop,
+      and the key will be to make sure we get the loop's termination condition correct.
+    </p>
+    <p>
+      An important fact about <c>readLine()</c>\marginpar{Using the end-of-file character} is that it will return <c>null</c> as its value when it reaches the end of the file.
+      Recall that text files have a special end-of-file character.
+      When <c>readLine()</c> encounters this character,
+      it will return
+<c>null</c>. Therefore,
+      we can specify the following <c>while</c> loop:
+    </p>
+<pre>
+String line = inStream.readLine();
+while (line != null) {
+    display.append(line + "\n");
+    line = inStream.readLine();}
+</pre>
+    <p>
+      We begin outside the loop by attempting to read a line from the file.
+      If the file happens to be empty
+      (which it might be),
+      then <c>line</c> will be set to <c>null</c>; otherwise it will contain the <c>String</c> that was read.
+      In this case,
+      we append the line to a <c>JTextArea</c>. Note that <c>readLine()</c><em>does not</em>
+      return the end-of-line character with its return value.
+      That's why we add a <c>\n</c> before we append the line to the <c>JTextArea</c>.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:End of Line</title>
+      <p>
+        Remember that <c>readLine()</c> does not return the end-of-line character as part of the text it returns.
+        If you want to print the text on separate lines,
+        you must append <m>\backslash</m>n.
+      </p>
+    </principle>
+    <p>
+      The last statement in the body of the loop attempts to read the next line from the input stream.
+      If the end of file has been reached,
+      this attempt will return <c>null</c> and the loop will terminate.
+      Otherwise, the loop will continue reading and displaying lines until the end of file is reached.
+      Taken together,
+      these various design decisions lead to the definition for <c>readTextFile()</c> shown in <xref ref="fig-readtextmethod">Figure</xref>.
+    </p>
+    <figure xml:id="fig-readtextmethod">
+      <caption>A method for reading a text file.</caption>
+<pre>
+private void readTextFile(JTextArea display,
+                                    String fileName) {
+ try {
+  BufferedReader inStream  // Create and open the stream
+      = new BufferedReader (new FileReader(fileName));
+  String line = inStream.readLine(); // Read one line
+  while (line != null) {            // While more text
+      display.append(line + "\n");  // Display a line
+      line = inStream.readLine();   // Read next line
+  }
+   inStream.close();                // Close the stream
+  } catch (FileNotFoundException e) {
+   display.setText("IOERROR: "+ fileName +" NOT found\n");
+   e.printStackTrace();
+  } catch ( IOException e ) {
+   display.setText("IOERROR: " + e.getMessage() + "\n");
+   e.printStackTrace();
+  }} // readTextFile()
+</pre>
+    </figure>
+    <p>
+      Note that we must catch both the <c>IOException</c>, thrown by \marginpar{IOException}<c>readLine()</c> and <c>close()</c>, and the <c>FileNotFoundException</c>, thrown by the <c>FileReader()</c> constructor.
+      It's important to see that the read loop has the following form:
+    </p>
+<pre>
+try to read one line of data
+     and store it in line     // Loop initializer
+while ( line is not null ) { // Loop entry condition
+    process the data
+    try to read one line of data
+        and store it in line  // Loop updater}
+</pre>
+    <p>
+      When it attempts to read the <em>end-of-file</em>
+      character, <c>readLine()</c> will return <c>null</c>.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Reading Text</title>
+      <p>
+        In reading text files,
+        the
+<c>readLine()</c> method will return <c>null</c> when it tries to read the end-of-file character.
+        This provides a convenient way of testing for the end of file.
+      </p>
+    </principle>
+    <principle>
+      <title>EFFECTIVE DESIGN:Reading an Empty File</title>
+      <p>
+        Loops for reading text files are designed to work even if the file is empty.
+        Therefore, the loop should attempt to read a line <term>before</term>
+        testing the loop-entry condition.
+        If the initial read returns
+<c>null</c>, that means the file is empty and the loop body will be skipped.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            What's wrong with the following loop for reading a text file and printing its output on the screen?
+<pre>
+String line = null;
+    do {
+        line = inStream.readLine();
+        System.out.println ( line );
+    } while (line != null);
+</pre>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection xml:id="self-study-exerciseP28">
+    <title>Code Reuse: Designing Text File Input</title>
+    <p>
+      Our last example used <c>BufferedReader.readLine()</c> to read an entire line from the file in one operation.
+      But this isn't the only way to do things.
+      For example,
+      we could use the <c>FileReader</c> stream directly if we were willing to do without the <c>readLine()</c> method.
+      Let's design an algorithm that works in this case.
+    </p>
+    <p>
+      As we saw earlier,
+      if you use a <c>FileReader</c> stream,
+      then you must use the <c>InputStreamReader.read()</c> method.
+      This method reads bytes from an input stream and translates them into Java Unicode characters.
+      The <c>read()</c> method,
+      for example,
+      returns a single Unicode character as an <c>int</c>:
+    </p>
+<pre>
+public int read() throws IOException();
+</pre>
+    <p>
+      Of course, we can always convert this to a <c>char</c> and concatenate it to a <c>JTextArea</c>, as the following algorithm illustrates:
+    </p>
+<pre>
+int ch = inStream.read(); // Init: Try to read a character
+while (ch != -1) { // Entry-condition: while more chars
+    display.append((char)ch + ""); // Append the character
+    ch = inStream.read();   // Updater: try to read}
+</pre>
+    <p>
+      Although the details are different,
+      the structure of this loop is the same as if we were reading one line at a time.
+    </p>
+    <p>
+      The loop variable in this case is an <c>int</c> because <c>InputStreamReader.\-read()</c> returns the next character as an <c>int</c>, or it returns <m>-1</m> if it encounters the <c>end-of-file</c>\marginpar{Data conversion} character.
+      Because <c>ch</c> is an <c>int</c>, we must convert it to a
+<c>char</c> and then to a <c>String</c> in order to <c>append()</c> it to the display.
+    </p>
+    <p>
+      A loop to read data from a file has the following basic form:
+    </p>
+<pre>
+try to read data into a variable // Initializer
+while ( read was successful ) {  // Entry condition
+    process the data
+    try to read data into a variable // Updater}
+</pre>
+    <principle>
+      <title>EFFECTIVE DESIGN:Read Loop Structure</title>
+      <p>
+        The <c>read()</c> and
+<c>readLine()</c> methods have different ways to indicate when a read attempt fails.
+        These differences affect how the loop-entry condition is specified,
+        but the structure of the read loop is the same.
+      </p>
+    </principle>
+    <principle>
+      <title>PROGRAMMING TIP:Read Versus Readline</title>
+      <p>
+        Unless it is necessary to manipulate each character in the text file,
+        reading a line at a time is more efficient and, therefore,
+        preferable.
+      </p>
+    </principle>
+    <p>
+      It is worth noting again the point we made earlier: Designing effective I/O routines is largely a matter of searching the
+<c>java.io</c> package for appropriate classes and methods.
+      The methods we've developed can serve as suitable models for a wide variety of text I/O tasks,
+      but if you find that they aren't suitable for a particular task,
+      you can design your own method.
+      Just think about what it is you want the program to accomplish,
+      then find the stream classes that contain methods you can use to perform the desired task.
+      Basic \marginpar{Reusing existing code} reading and writing algorithms will be pretty much the same no matter which particular read or write method you use.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            What's wrong with the following loop for reading a text file and printing its output on the screen?
+<pre>
+int ch;
+do {
+    ch = inStream.read();
+    System.out.print((char)ch);}  while (ch != -1)
+</pre>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection>
+    <title>The <c>TextIO</c>Application</title>
+    <p>
+      Given the text I/O methods we wrote in the previous sections,
+      we can now specify the overall design of our <c>TextIO</c> class (Fig.
+      <xref ref="fig-textiouml"></xref>).
+      In order to complete this application,
+      we need only set up its GUI and write its <c>actionPerformed()</c> method.
+    </p>
+    <figure xml:id="fig-textiouml">
+      <caption>The <c>TextIO</c> class.</caption>
+      <image width="73%" source="chptr11/textiouml.png"/>
+    </figure>
+    <p>
+      Setting up the GUI for this application is straightforward.
+      Figure<nbsp/>11.13 shows how the finished product will look.
+      The code is given in Figure<nbsp/>11.14.
+      Pay particular attention to the <c>actionPerformed()</c> method,
+      which uses the methods we defined in the previous section.
+    </p>
+    <figure xml:id="fig-textioapp">
+      <caption>An application that performs simple text I/O.</caption>
+      <image width="73%" source="chptr11/textioapp.png"/>
+    </figure>
+    <figure xml:id="fig-textioclass">
+      <caption>Part I of the <c>TextIO</c> class.</caption>
+      \[30pc]
+<pre>
+import javax.swing.*;         // Swing components
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+public class TextIO extends JFrame implements ActionListener{
+ private JTextArea display = new JTextArea();
+ private JButton read = new JButton("Read From File"),
+                 write = new JButton("Write to File");
+ private JTextField nameField = new JTextField(20);
+ private JLabel prompt = new JLabel("Filename:",JLabel.RIGHT);
+ private JPanel commands = new JPanel();
+ public TextIO() {                     // Constructor
+  super("TextIO Demo");             // Set window title
+  read.addActionListener(this);
+  write.addActionListener(this);
+  commands.setLayout( new GridLayout(2,2,1,1));  // Control panel
+  commands.add(prompt);
+  commands.add(nameField);
+  commands.add(read);
+  commands.add(write);
+  display.setLineWrap(true);
+  this.getContentPane().setLayout(new BorderLayout());
+  this.getContentPane().add("North", commands);
+  this.getContentPane().add( new JScrollPane(display));
+  this.getContentPane().add("Center", display);
+ } // TextIO
+ private void writeTextFile(JTextArea display, String fileName) {
+   try {
+      FileWriter outStream =  new FileWriter (fileName);
+      outStream.write (display.getText());
+      outStream.close();
+  } catch (IOException e) {
+      display.setText("IOERROR: " + e.getMessage() + "\n");
+      e.printStackTrace();
+  }
+ } // writeTextFile()
+ private void readTextFile(JTextArea display, String fileName) {
+   try {
+      BufferedReader inStream  // Create and open the stream
+          = new BufferedReader (new FileReader(fileName));
+      String line = inStream.readLine(); // Read one line
+      while (line != null) {         // While more text
+        display.append(line + "\n"); // Display a line
+        line = inStream.readLine();      // Read next line
+      }
+        inStream.close();        // Close the stream
+      } catch (FileNotFoundException e) {
+        display.setText("IOERROR: "+ fileName +" NOT found\n");
+        e.printStackTrace();
+      } catch (IOException e) {
+        display.setText("IOERROR: " + e.getMessage() + "\n");
+        e.printStackTrace();
+      }
+ } // readTextFile
+</pre>
+    </figure>
+    <figure xml:id="fig_textIOpart2">
+      <caption>(<em>continued</em>) The <c>TextIO</c> class, Part II.</caption>
+<pre>
+public void actionPerformed(ActionEvent evt) {
+    String fileName = nameField.getText();
+    if (evt.getSource()  == read) {
+        display.setText("");
+        readTextFile(display, fileName);
+    }
+    else writeTextFile(display, fileName);
+  } // actionPerformed()
+  public static void main(String args[]) {
+    TextIO tio = new TextIO();
+    tio.setSize(400, 200);
+    tio.setVisible(true);
+    tio.addWindowListener(new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+            System.exit(0); // Quit the application
+        }
+    });
+  } // main()}//TextIO
+</pre>
+    </figure>
+  </subsection>
+</section>

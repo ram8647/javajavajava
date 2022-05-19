@@ -1,0 +1,195 @@
+<section xml:id="recursive-definition">
+  <title>Recursive Definition</title>
+  <introduction>
+    <p>
+      One place you might have already seen recursion is in mathematics.
+      A <term>recursive definition</term>
+          <idx><h>recursive definition</h></idx>
+      consists of two parts: a recursive part in which the
+      <em>n</em>th value is defined in terms of the <m>(n-1)</m>st value,
+      and a nonrecursive,
+      <em>boundary</em> or <term>base case</term>,
+      which defines a limiting condition.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Factorial: <em>N</em>!</title>
+    <p>
+      For example, consider the problem of calculating the factorial
+          <idx><h>factorial</h></idx>
+      of <em>n</em><mdash/>that is,
+      <em>n</em>! for <m>n \geq 0</m>.
+      As you may recall, <em>n</em>! is calculated as follows:
+    </p>
+<pre>
+n! = n * (n-1) * (n-2) * ... * 1, for n > 0
+</pre>
+    <p>
+      In addition, 0! is defined as 1.
+      Let's now look at some examples for different values of <em>n</em>:
+    </p>
+<pre>
+4! = 4 * 3 * 2 * 1 = 24
+3! = 3 * 2 * 1 = 6
+2! = 2 * 1 = 2
+1! = 1
+0! = 1
+</pre>
+    <p>
+      As these examples suggest,
+      <em>n</em>! can always be calculated in terms of <m>(n-1)</m>!
+      This relationship might be clearer if we rewrite the previous calculations as follows:
+    </p>
+<pre>
+4! = 4 * 3 * 2 * 1 = 4 * 3! = 24
+3! = 3 * 2 * 1     = 3 * 2! = 6
+2! = 2 * 1         = 2 * 1! = 2
+1!                 = 1 * 0! = 1
+0!                 = 1
+</pre>
+    <p>
+      The only case in which we can't calculate
+      <em>n</em>! in terms of <m>(n-1)</m>! is when <em>n</em> is 0.
+      Otherwise, in each case we see that
+    </p>
+<pre>
+n! = n * (n-1)!
+</pre>
+    <p>
+      This leads to the following recursive definition:
+    </p>
+<pre>
+n! = 1          if n = 0    // Boundary (or base) case
+n! = n * (n-1)! if n > 0    // Recursive case
+</pre>
+    <p>
+      Note that if we had omitted the base case,
+      the recursion would have continued to <m>(-1)</m>! and <m>(-2)</m>! and so on.
+    </p>
+    <principle>
+      <title>DEBUGGING TIP:Bounding the Repetition</title>
+      <p>
+        An infinite repetition will result if a recursive definition is not properly bounded.
+      </p>
+    </principle>
+    <p>
+      The recursive<idx><h>recursion,
+      recursive case</h></idx> case uses divide and conquer to break the problem into a smaller problem,
+      but the smaller problem is just a smaller version of the original problem.
+      This combination of self-similarity and divide and conquer is what characterizes recursion.
+      The base
+          <idx><h>recursion, base case</h></idx>
+      case is used to stop or limit the recursion.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Recursive Definition</title>
+      <p>
+        For recursive algorithms and definitions,
+        the base case serves as the bound for the algorithm.
+        The <term>recursive case</term>
+            <idx><h>recursive case</h></idx>
+        defines the <term>n</term>th case in terms of the <m>(n-1)</m>st case.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="fig-boxes">
+    <title>Drawing a Nested Pattern</title>
+    <p>
+      As another example,
+      consider the problem of drawing the nested boxes pattern in Figure<nbsp/>12.2.
+      The self-similarity occurs in the fact that for this pattern,
+      its parts resemble the whole.
+      The basic shape involved is a square,
+      which is repeated over and over at an ever-smaller scale.
+      A recursive definition for this <image width="73%" source="chptr12/boxes.png"/> pattern would be
+    </p>
+<pre>
+Base case:      if side &lt; 5 do nothing
+Recursive case: if side >= 5
+                  draw a square
+                  decrease the side and draw a smaller
+                             pattern inside the square
+</pre>
+    <p>
+      This definition uses the length of the square's side to help define the pattern.
+      If the length of the side is greater than or equal to 5, draw a square with dimensions <m>side \times side</m>.
+      Then decrease the length of the side and draw a smaller version of the pattern inside that square.
+      In this case, the <em>side</em>
+      variable will decrease at each level of the drawing.
+      When the length of the side becomes less than 5, the recursion stops.
+      Thus, the length of the side serves as the limit or bound for this algorithm.
+    </p>
+    <p>
+      You should note that the length of the side functions here like a parameter in a method definition: It provides essential information for the definition,
+      just as a method parameter provides essential data to the method.
+      Indeed, this is exactly the role that parameters play in recursive methods.
+      They provide essential information that determines the method's behavior.
+    </p>
+    <p>
+      Figure<nbsp/>12.3 illustrates how we would apply the definition.
+      <image width="73%" source="chptr12/nestedbox.png"/> \caption{A trace of the nested boxes definition starting with a side of 20 and decreasing the side by 5 each time. } Suppose the side starts out at 20 and decreases by 5 at each level of recursion.
+      Note that as you move from top to bottom across the four patterns,
+      each pattern contains the one below it.
+      A <c>nestedBoxes(20)</c> can be drawn by first drawing a
+      <m>20 \times 20</m> square and then drawing a <c>nestedBoxes(15)</c> pattern inside it.
+      Similarly, a <c>nestedBoxes(15)</c> can be drawn by first drawing a
+      <m>15 \times 15</m> square and then drawing a <c>nestedBoxes(10)</c> pattern inside it.
+      And so on.
+    </p>
+    <p>
+      These examples illustrate the power of recursion
+          <idx><h>recursion</h></idx>
+      as a problem-solving technique for situations that involve repetition.
+      Like the iterative (looping) control structures we studied in Chapter<nbsp/>6,
+      recursion is used to implement repetition within a bound.
+      For recursive algorithms, the bound is defined by the base case,
+      whereas for loops,
+      the bound is defined by the loop's entry condition.
+      In either case, repetition stops when the bound is reached.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            You can calculate <m>2^n</m> by multiplying 2 by itself <em>n</em> times.
+            For example, <m>2^3</m> is <m>2 \times 2 \times 2</m>.
+            Note also that <m>2^0=1</m>.
+            Given these facts,
+            write a recursive definition for <m>2^n</m>, for <m>n \geq 0</m>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Generalize your solution to the previous exercise by giving a recursive definition for <m>x^n</m>,
+            where <m>x</m> and <m>n</m> are both integers <m>\geq 0</m>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Is the recursive definition given earlier for the nested boxes equivalent to the following recursive definition?
+            Explain.
+<pre>
+Draw a square.         // in every case
+If side > 5
+    draw a smaller nested boxes inside the square
+</pre>In this case,
+            the base case <m>(side \lt = 5)</m> is implicit.
+          </p>
+        </li>
+        <li>
+          <p>
+            Write a recursive definition for the recursive pattern shown in Figure<nbsp/>12.4.
+            <principle>
+              <title>DEBUGGING TIP:Infinite Recursion</title>
+              <p>
+                An unbounded or incorrectly bounded recursive algorithm will lead to infinite repetition.
+                Care must be taken to get the bound right.
+              </p>
+            </principle>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

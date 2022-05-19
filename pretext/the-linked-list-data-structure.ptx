@@ -1,0 +1,668 @@
+<section xml:id="the-linked-list-data-structure">
+  <title>The Linked List Data Structure</title>
+  <introduction>
+    <p>
+      As we said, a <em>static</em> data structure is one whose size is fixed \marginpar{Static vs. dynamic} during a program's execution<mdash/>a static structure's memory is allocated at compile time.
+      By contrast, a <em>dynamic</em>
+      structure is one that can grow and shrink as needed.
+      In this section, we will develop a dynamic <em>list</em>,
+          <idx><h>list</h></idx>
+      which is a data structure whose elements are arranged in a linear sequence.
+      There is a first element in the list,
+      a second element, and so on.
+      Lists are quite general and,
+      as we will discuss later, lists have a broad range of applications.
+      Depending on how elements are inserted and removed from a list,
+      they can be used for a range of specialized purposes.
+    </p>
+  </introduction>
+  <subsection xml:id="self-study-exercisesA38">
+    <title>Using References to Link Objects</title>
+    <p>
+      As you know from earlier chapters,
+      when you create an object using the \marginpar{Referring to objects}<c>new</c> operator you get back a <em>reference</em>
+      to the object that you then can assign to a reference variable.
+      In the following example,
+      <em>b</em> is a reference to a <c>JButton</c>:
+    </p>
+<pre>
+JButton b = new JButton();
+</pre>
+    <p>
+      We have defined many classes that contained references to other objects:
+    </p>
+<pre>
+public class Student {
+     private String name;}
+</pre>
+    <p>
+      In this example, <c>name</c> is a reference to a <c>String</c> object.
+    </p>
+    <figure xml:id="fig-linkedlist">
+      <caption>A linked list of <c>Node</c> s terminated
+      by a <c>null</c> link.</caption>
+      <image width="73%" source="chptr16/linkedlist.png"/>
+    </figure>
+    <p>
+      A <term>linked list</term>
+          <idx><h>linked list</h></idx>
+      is a list in which a collection of nodes are linked together by references from one node to the next.
+      To make a linked list,
+      we will define a class of self-referential \marginpar{Self-referential objects} objects.
+      A <term>self-referential object</term>
+          <idx><h>self-referential object</h></idx>
+      is an object that contains a reference to an object of the same class.
+      The convention is to name these objects <c>Node</c> s:
+    </p>
+<pre>
+public class Node {
+     private String name;
+     private Node next;}
+</pre>
+    <p>
+      \marginfigvspace{10pt}{chptr16/nodeuml.eps}{The <c>Node</c> class.}{fig-nodeuml} In addition to the reference to a <c>String</c> object,
+      each
+<c>Node</c> object contains a reference to another <c>Node</c> object.
+      The <c>next</c> variable is often called a <term>link</term>
+          <idx><h>link</h></idx>
+      because it is used to link together two <c>Node</c> objects.
+      For example, <xref ref="fig-linkedlist">Figure</xref>
+      provides an illustration of a linked list of <c>Node</c> s.
+    </p>
+    <p>
+      By assigning references to the <c>next</c> variables in each <c>Node</c>, we can chain together arbitrarily long lists of objects.
+      Therefore, we will want to add methods to our <c>Node</c> class that enable us to manipulate a <c>Node</c>'s next variable (Fig.<nbsp/>16<ndash/>2).
+      By assigning it a reference to another <c>Node</c>, we can link two <c>Node</c> s together.
+      By retrieving the link's value,
+      we can find the next <c>Node</c> in the list.
+    </p>
+    <principle>
+      <title>Self-Referential Object</title>
+      <p>
+        A <term>self-referential object</term>
+        is one that contains an instance variable that refers to an object of the same class.
+      </p>
+    </principle>
+    <p>
+      In addition to the link variable,
+      each <c>Node</c> stores some data.
+      In this example,
+      the data is a single <c>String</c>. But there's no real limit to the amount and type of data that can be \marginpar{Linking objects together} stored in a linked list.
+      Therefore, in addition to methods that manipulate a <c>Node</c>'s link,
+      we will also want methods to manipulate its data.
+      These points suggest the following basic design for a <c>Node</c>:
+    </p>
+<pre>
+public class Node {
+     private Object data;
+     private Node next;
+     public Node(Object obj);          // Constructor
+     public void setData(Object obj);  // Data access
+     public Object getData();
+     public void setNext(Node link);   // Link access
+     public Node getNext();} // Node
+</pre>
+    <p>
+      Note that we have defined the <c>Node</c>'s data in the most general possible way: As a reference to an <c>Object</c>. Because the <c>Object</c> class is the root of Java's entire class hierarchy,
+      an <c>Object</c> can encompass any kind of data.
+      By using Java's wrapper classes,
+      such as <c>Integer</c> and <c>Double</c>, a
+<c>Node</c>'s data can even include primitive data.
+    </p>
+    <p>
+      The important point is that regardless of its type of data,
+      a
+<c>Node</c> will have data access methods and link access methods.
+      The data \marginpar{Divide and conquer} access methods differ,
+      depending on the type of data,
+      but the link access methods will generally be the same.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Link Versus Data</title>
+      <p>
+        Making a clear distinction between an object's data and those elements used to manipulate the object is an example of the divide-and-conquer principle.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            Write a statement to create a new <c>Node</c> whose data consist of the <c>String</c>
+            <q>Hello.</q>
+          </p>
+        </li>
+        <li>
+          <p>
+            Write a statement to create a new <c>Node</c> whose data consist of the <c>Student</c> named
+            <q>William.</q>
+            Assume that the <c>Student</c> class has a constructor with a <c>String</c> parameter for the student's name.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection xml:id="fig-phonelist">
+    <title>Example: The Dynamic Phone List</title>
+    <p>
+      Let's define a <c>PhoneListNode</c> class that can be used to implement a phone list (Fig.
+      <xref ref="fig-phoneuml"></xref>).
+      This definition will be a straightforward specialization of the generic <c>Node</c> list defined in the previous section.
+      Each element of the phone list will consist of a person's name and phone number.
+      These will be the node's data and can be stored in two <c>String</c> variables.
+      To access these data,
+      we will provide a \marginpar{Accessing a list's data} constructor and a basic set of access methods.
+      Thus, we have the definition shown in <xref ref="fig-phonelistnode">Figure</xref>.
+    </p>
+    <figure xml:id="fig-phoneuml">
+      <caption>Design of the <c>PhoneListNode</c> class.</caption>
+      <image width="73%" source="chptr16/phoneuml.png"/>
+    </figure>
+    <figure xml:id="fig-phonelistnode">
+      <caption>The <c>PhoneListNode</c> class.</caption>
+<pre>
+public class PhoneListNode {
+     private String name;
+     private String phone;
+     private PhoneListNode next;
+     public PhoneListNode(String s1, String s2) {
+         name = s1;
+         phone = s2;
+         next = null;
+     } // PhoneListNode()
+     public void setData(String s1, String s2) {
+         name = s1;
+         phone = s2;
+     } // setData()
+     public String getName() {
+         return name;
+     } // getName()
+     public String getData() {
+         return name + " " + phone;
+     } // getData()
+     public String toString() {
+         return name + " " + phone;
+     } // toString()
+     public void setNext(PhoneListNode nextPtr) {
+         next = nextPtr;
+     } // setNext()
+     public PhoneListNode getNext() {
+         return next;
+     } // getNext()} // PhoneListNode
+</pre>
+    </figure>
+    <p>
+      The constructor and data access methods should be familiar to you.
+      Note that the constructor sets the initial value of <c>next</c> to
+<c>null</c>, which means that it refers to no object.
+    </p>
+    <principle>
+      <title>DEBUGGING TIP:Null Reference</title>
+      <p>
+        A common programming error is the attempt to use a <c>null</c> reference to refer to an object.
+        This usually means the reference has not been successfully initialized.
+      </p>
+    </principle>
+    <p>
+      Let's discuss the details of the link access methods<mdash/>the
+<c>setNext()</c> and <c>getNext()</c> methods<mdash/>which are also simple to implement.
+      Because this is a <c>PhoneListNode</c>, these methods \marginpar{Manipulating a list's nodes} take <c>PhoneListNode</c> as a parameter and return type,
+      respectively.
+      Given a reference to a <c>PhoneListNode</c>, the <c>setNext()</c> method assigns it to <c>next</c>. The <c>getNext()</c> method simply returns the value of its <c>next</c> link.
+    </p>
+    <p>
+      Let's now see how we would use these methods to construct a list.
+      The following statements create three nodes:
+    </p>
+<pre>
+PhoneListNode node1 =
+       new PhoneListNode("Roger M","090-997-2918");
+PhoneListNode node2 =
+       new PhoneListNode("Jane M","090-997-1987");
+PhoneListNode node3 =
+       new PhoneListNode("Stacy K","090-997-9188");
+</pre>
+    <p>
+      The next two statements chain the nodes together into the list shown in Figure<nbsp/>16.5:
+    </p>
+<pre>
+node1.setNext(node2);
+node2.setNext(node3);
+</pre>
+    <p>
+      If we wanted to add a fourth node to the end of this <image width="73%" source="chptr16/phonelistpic.png"/> list,
+      we could use the following statements:
+    </p>
+<pre>
+PhoneListNode node4 =
+     new PhoneListNode("gary g","201-119-8765");
+node3.setNext(node4);
+</pre>
+    <p>
+      Although this example illustrates the basic technique for inserting nodes at the end of the list,
+      it depends too much on our knowledge of the list.
+      In order to be truly useful we will have to develop a more general set of methods to create and manipulate a list of nodes.
+      As we will see,
+      a better design would be able to find the end of the list without knowing anything about the list's data.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Generality</title>
+      <p>
+        In a well-designed list data structure,
+        you should be able to manipulate its elements without knowing anything about its data.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Suppose you know that <c>nodeptr</c> is a reference to the last element of a linked list of <c>PhoneListNode</c> s.
+            Create a new element for
+            <q>Bill C</q>
+            with phone number
+            <q>111-202-3331</q>
+            and link it into the end of the list.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection>
+    <title>Manipulating the Phone List</title>
+    <p>
+      In addition to the <c>Node</c> s that make a list,
+      we must define a class containing methods to manipulate the list.
+      This class will include the insert,
+      access, and remove methods.
+      It must also contain a reference to the list itself.
+      This leads to the basic design shown in Figure<nbsp/>16.6.
+      Because this is a list of <c>PhoneListNode</c> s, we need a <c>PhoneListNode</c> reference to point to \marginfigvspace{-120pt}{chptr16/phonelistclass.eps}{The <c>PhoneList</c> class has a reference to the first node of the list (<c>head</c>) and methods to insert,
+      remove, and look up information.}{fig-phonelistclass} the list,
+      which is the purpose of the <c>head</c> variable.
+    </p>
+    <p>
+      A preliminary coding of the <c>PhoneList</c> class is shown in <xref ref="fig-phonelistprelim">Figure</xref>.
+      As you can see there,
+      when a new
+<c>PhoneList</c> instance is constructed, <c>head</c> is initialized to
+<c>null</c>, meaning the list is initially empty. \marginpar{An empty list} Since we will frequently want to test whether the list is empty,
+      we define the <c>boolean</c><c>isEmpty()</c> method for that purpose.
+      As you can see,
+      its definition says that a list is empty when the reference to the <c>head</c> of this list is <c>null</c>.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:The <c>null</c>Reference</title>
+      <p>
+        A <c>null</c> reference is useful for defining limit cases,
+        such as an empty list or an uninstantiated object.
+      </p>
+    </principle>
+    <figure xml:id="fig-phonelistprelim">
+      <caption>A preliminary version of the <c>PhoneList</c> class.</caption>
+<pre>
+public class PhoneList {
+    private PhoneListNode head;
+    public PhoneList() {
+        head = null;         // Start with empty list
+    }
+    public boolean isEmpty() {  // Defines an empty list
+        return head == null;
+    }
+    public void insert(PhoneListNode node) { }
+    public String getPhone(String name) { }
+    public String remove(String name) { }
+    public void print() { }} // PhoneList
+</pre>
+    </figure>
+  </subsection>
+  <subsection>
+    <title>Inserting Nodes into a List</title>
+    <p>
+      The <c>insert()</c> method will have the task of inserting new
+<c>PhoneListNode</c> s into the list.
+      There are a number of ways to do this.
+      The node could be inserted at the beginning or at the end of the list,
+      or in alphabetical order, or possibly in other ways.
+      As we'll see,
+      it is easiest to insert a new node at the head of the list.
+      But for this example,
+      let's develop a method that inserts the node at the end of the list.
+    </p>
+    <figure xml:id="fig-insertions">
+      <caption>Two cases.  (a) The list is empty before
+      the insertion, which takes place at <c>head</c>. (b) The list is not empty,
+      so the insertion takes place at the end of the list.</caption>
+      <image width="73%" source="chptr16/insertions.png"/>
+    </figure>
+    <p>
+      There are two cases we need to worry about for this algorithm.
+      First, \marginpar{Insertion algorithm} if the list is empty,
+      we can insert the node by simply setting <c>head</c> to point to the node [<xref ref="fig-insertions">Figure</xref>(a)]. Second,
+      if the list is not empty, we must move through, or <em>traverse</em>,
+          <idx><h>traverse</h></idx>
+      the links of the list until we find the last node and insert the new node after it [<xref ref="fig-insertions">Figure</xref>(b)]. In this case,
+      we want to set the
+<c>next</c> variable of the last node to point to the new node.
+      This gives us the following algorithm:
+    </p>
+<pre>
+public void insert(PhoneListNode newNode) {
+  if (isEmpty())
+    head = newNode;        // Insert at head of list
+  else {
+    PhoneListNode current = head; // Start traversal at head
+    while (current.getNext() != null)// While not last node
+      current = current.getNext(); //   go to next node
+      current.setNext( newNode );  // Do the insertion
+    }} // insert()
+</pre>
+    <p>
+      Recall that when nodes are linked,
+      their <c>next</c> variables are non-<c>null</c>. So when a node's <c>next</c> variable is
+<c>null</c>, that indicates the end of the list<mdash/>there's no next node.
+      Thus, our algorithm begins by checking if the list is empty.
+      If so, we assign <c>head</c> the reference to <c>newNode</c>, the
+<c>PhoneListNode</c> that's being inserted.
+    </p>
+    <p>
+      If the list is not empty, then we need to find the last node.
+      In order \marginpar{Traversing a list} to traverse the list,
+      we will need a temporary variable,
+<c>current</c>, which will always point to the current node.
+      It's important to understand the while loop used here:
+    </p>
+<pre>
+PhoneListNode current = head;       // Initializer
+while (current.getNext() != null)   // Entry condition
+     current = current.getNext();    // Updater
+</pre>
+    <p>
+      The loop variable, <c>current</c>, is initialized by setting it to point to the head of the list.
+      The entry condition tests whether the <c>next</c> link,
+      leading out of <c>current</c>, is
+<c>null</c>(Fig.
+      <xref ref="fig-inserting"></xref>).
+      That is, when the link coming out of a node is <c>null</c>, then that node is the last node in the list [<xref ref="fig-inserting">Figure</xref>(c)]. Inside the while loop,
+      the update expression simply assigns the next node to <c>current</c>. In that way, <c>current</c> will point to each successive node until the last node is found.
+      It's very important that the loop exits when <c>current.getNext()</c> is <c>null</c><mdash/>that is,
+      when the next pointer of the current node is null.
+      That way <c>current</c> is pointing to \marginpar{Loop-exit condition} the last node and can be used to set its <c>next</c> variable to the node being inserted [<xref ref="fig-inserting">Figure</xref>(d)]. Thus,
+      after the loop is exited, <c>current</c> still points to the last node.
+      At that point,
+      the <c>setNext()</c> method is used to link <c>newNode</c> into the list as the new last node.
+    </p>
+    <figure xml:id="fig-inserting">
+      <caption>The temporary variable <c>current</c> is
+      used to traverse the list to find its end.</caption>
+      <image width="73%" source="chptr16/inserting.png"/>
+    </figure>
+    <principle>
+      <title>DEBUGGING TIP:List Traversal</title>
+      <p>
+        A common error in designing list-traversal algorithms is an erroneous loop-entry or loop-exit condition.
+        One way to avoid this error is to hand trace your algorithm to make sure your code is correct.
+      </p>
+    </principle>
+  </subsection>
+  <subsection>
+    <title>Printing the Nodes of a List</title>
+    <p>
+      The <c>print()</c> method also uses a traversal strategy to print the \marginpar{List traversal} data from each node of the list.
+      Here again it is necessary to test whether the list is empty.
+      If so, we must print an error message.
+      (This would be a good place to throw a programmer-defined exception,
+      such as an <c>EmptyListException</c>.)
+      If the list is not empty,
+      then we use a temporary variable to traverse the list,
+      printing each node's data along the way:
+    </p>
+<pre>
+public void print() {
+  if (isEmpty())
+     System.out.println("Phone list is empty");
+  PhoneListNode current = head; // Start traversal at head
+  while (current != null) {      // While not end of list
+    System.out.println( current.toString() ); // print data
+    current = current.getNext();       //  go to next node
+  }} // print()
+</pre>
+    <p>
+      Note the differences between this while loop and the one used in the <c>insert()</c> method.
+      In this case,
+      we exit the loop when <c>current</c> becomes <c>null</c>; there's no action to be taken after the loop is exited.
+      The printing takes place within the loop.
+      Thus, in this case,
+      the entry condition, <c>(current != null)</c>, signifies that the task has been completed.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:Terminating a Traversal</title>
+      <p>
+        In designing list-traversal algorithms where the reference,
+        <term>p</term>,
+        points to the nodes in the list,
+        if you need to refer to the last node in the list after the traversal loop exits,
+        then your exit condition should be
+<c>p.getNext() == null</c>. If you have finished processing the nodes when the loop exits,
+        your exit condition should be <c>p == null</c>.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="self-study-exerciseO38">
+    <title>Looking up a Node in a List</title>
+    <p>
+      Because the record associated with a person can be located anywhere in the list,
+      the traversal strategy must also be used to look \marginpar{List traversal} up someone's phone number in the <c>PhoneList</c>. Here again we start at the <c>head</c> of the list and traverse through the <c>next</c> links until we find the node containing the desired phone number.
+      This method takes the name of the person as a parameter.
+      There are three cases to worry about: (1) The list is empty; (2) the normal case where the person named is found in the list;
+      and (3) the person named is not in the list.
+      Because the method returns a <c>String</c>, we can return error messages in the first and third cases:
+    </p>
+<pre>
+public String getPhone(String name) {
+  if (isEmpty())                    // Case 1: Empty list
+    return "Phone list is empty";
+  else {
+    PhoneListNode current = head;
+    while ((current.getNext() != null) &amp;&amp;
+                 (!current.getName().equals(name)))
+      current = current.getNext();
+      if (current.getName().equals(name))
+        return current.getData(); // Case 2: Found name
+      else                        // Case 3: No such person
+        return ("Sorry.  No entry for " + name);
+   }} // getPhone()
+</pre>
+    <p>
+      Note the while loop in this case.
+      As in the <c>insert()</c> method,
+      when the loop exits,
+      we need a reference to the <c>current</c> node so that we can print its phone number [<c>current.getData()</c>]. But here there are three ways to exit the loop: (1) We reach the end of the list without finding the named person; (2) we find the named person in the interior of the list;
+      or (3) we find the named person \marginpar{Compound exit condition} in the last node of the list.
+      In any case,
+      it is necessary to test whether the name was found or not after the loop is exited.
+      Then appropriate action can be taken.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            What if the exit condition for the while loop in <c>getPhone()</c> were stated as
+<pre>
+((current.getNext() != null) ||
+     (!current.getName().equals(name)))
+</pre>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection>
+    <title>Removing a Node from a List</title>
+    <p>
+      By far the most difficult task is that of removing a node from a \marginpar{Node-removal algorithm} list.
+      In the <c>PhoneList</c> we use the person's name to identify the node,
+      and we return a <c>String</c> that can be used to report either success or failure.
+      There are four cases to worry about in designing this algorithm: (1) The list is empty, (2) the first node is being removed, (3) some other node is being removed,
+      and (4) the named person is not in the list.
+      The same traversal strategy we used in
+<c>getPhone()</c> is used here,
+      with the same basic while loop for cases 3 and 4.
+    </p>
+    <p>
+      As <xref ref="fig-remove">Figure</xref> shows,
+      the first two cases are easily handled.
+      If the list is empty, we just return an error message.
+      We
+    </p>
+    <figure xml:id="fig-remove">
+      <caption>The <c>remove()</c> method.</caption>
+<pre>
+public String remove(String name) { // Remove an entry by name
+  if (isEmpty())                         // Case 1: empty list
+    return "Phone list is empty";
+  PhoneListNode current = head;
+  PhoneListNode previous = null;
+  if (current.getName().equals(name)) { // Case 2: remove first node
+    head = current.getNext();
+    return "Removed " + current.toString() ;
+  }
+  while ((current.getNext() != null) AmPaMp
+                              (!current.getName().equals(name)))  {
+    previous = current;
+    current = current.getNext();
+  }
+  if (current.getName().equals(name)) { // Case 3: remove named node
+    previous.setNext(current.getNext());
+    return "Removed " + current.toString();
+  } else
+    return ("Sorry.  No entry for " + name); // Case 4: node not found} // remove()
+</pre>
+    </figure>
+    <p>
+      use <c>current</c> as the traversal variable.
+      If the named node is the first node,
+      we simply need to set <c>head</c> to
+<c>current.getNext()</c>, which has the effect of making <c>head</c> point to the second node in the list [<xref ref="fig-removal">Figure</xref>(a)]. Once the node is cut out from the chain of links,
+      there will be no further reference to it.
+      In this case, Java will recapture the memory it uses when it does garbage collection.
+    </p>
+    <principle>
+      <title>Garbage Collection</title>
+      <p>
+        Java's garbage collector handles the disposal of unused objects automatically.
+        This helps to simplify linked-list applications.
+        In languages such as C++, the programmer would have to <term>dispose</term>
+        of the memory occupied by the deleted node.
+      </p>
+    </principle>
+    <figure xml:id="fig-removal">
+      <caption>Removing different nodes from a linked list.</caption>
+      <image width="73%" source="chptr16/removal.png"/>
+    </figure>
+    <p>
+      In order to remove some other node besides the first,
+      two traversal variables are needed: <c>previous</c> and <c>current</c>. They proceed together down the list,
+      with <c>previous</c> always pointing to \marginpar{Tandem traversal} the node just before the <c>current</c> node.
+      The reason, of course,
+      is that to remove the <c>current</c> node,
+      you need to adjust the link pointing to it contained in the \mbox{previous} node [<xref ref="fig-removal">Figure</xref>(b)]. That is,
+      the new value of
+<c>previous.next</c> will be the current value of <c>current.next</c>. We use the <c>getNext()</c> and \mbox{setNext()} methods to effect this change:
+    </p>
+<pre>
+previous.setNext(current.getNext());
+</pre>
+  </subsection>
+  <subsection xml:id="self-study-exercisesB38">
+    <title>Testing the List</title>
+    <p>
+      In developing list-processing programs,
+      it is important to design good test data.
+      As we have seen,
+      both the insertion and removal operations involve several distinct cases.
+      Proper testing of \marginpar{Designing test data} these methods ideally would test every possible case.
+      The <c>main()</c> program in <xref ref="fig-testlist">Figure</xref>
+      illustrates the kinds of tests that should be performed.
+      This method could be incorporated directly into the <c>PhoneList</c> class,
+      or it could be made part of a separate class.
+    </p>
+    <figure xml:id="fig-testlist">
+      <caption>A <c>main()</c> method containing a set of tests for the
+<c>PhoneList</c> class.</caption>
+<pre>
+public static void main(String argv[]) {
+                  // Create list and insert nodes
+  PhoneList list = new PhoneList();
+  list.insert( new PhoneListNode("Roger M", "997-0020"));
+  list.insert( new PhoneListNode("Roger W", "997-0086"));
+  list.insert( new PhoneListNode("Rich P", "997-0010"));
+  list.insert( new PhoneListNode("Jane M", "997-2101"));
+  list.insert( new PhoneListNode("Stacy K", "997-2517"));
+                  // Test whether insertions worked
+  System.out.println( "Phone Directory" );
+  list.print();
+                  // Test whether lookups work
+  System.out.println("Looking up numbers by name");
+  System.out.println(list.getPhone("Roger M"));
+  System.out.println(list.getPhone("Rich P"));
+  System.out.println(list.getPhone("Stacy K"));
+  System.out.println(list.getPhone("Mary P"));
+  System.out.println(list.remove("Rich P"));
+  System.out.println("Phone Directory");
+  list.print();
+      // Test removals, printing list after each removal
+  System.out.println(list.remove("Roger M"));
+  System.out.println("Phone Directory");
+  list.print();
+  System.out.println(list.remove("Stacy K"));
+  System.out.println("Phone Directory");
+  list.print();
+  System.out.println(list.remove("Jane M"));
+  System.out.println("Phone Directory");
+  list.print();
+  System.out.println(list.remove("Jane M"));
+  System.out.println("Phone Directory");
+  list.print();
+  System.out.println(list.remove("Roger W"));
+  System.out.println("Phone Directory");
+  list.print();
+  System.out.println(list.remove("Roger W"));
+  System.out.println("Phone Directory");
+  list.print();} // main()
+</pre>
+    </figure>
+    <p>
+      Of course, there are often so many combinations of list operations that exhaustive testing might not be feasible.
+      At the very least you should design test data that test each of the different conditions identified in your algorithms.
+      For example, in testing removals from a list,
+      you should test all four cases that we discussed.
+      In testing insertions or lookups,
+      you should test all three cases that we identified.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Test Data</title>
+      <p>
+        Test data for validating list-processing algorithms should
+        (at least)
+        test each of the cases identified in each of the removal and insertion methods.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            Trace through the <c>main()</c> method line by line and predict its output.
+          </p>
+        </li>
+        <li>
+          <p>
+            Design a test of <c>PhoneList</c> that shows that new elements can be inserted into a list after some or all of its previous nodes have been removed.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

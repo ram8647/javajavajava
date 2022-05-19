@@ -1,0 +1,882 @@
+<section xml:id="what-ismbox-programming">
+  <title>What Is  Object-Oriented  Programming?</title>
+  <introduction>
+    <p>
+      Java is an object-oriented (OO) language,
+      and this book takes an object-oriented approach to programming.
+      So before beginning our discussion of Java,
+      it is important that we introduce some of the underlying concepts involved in object-oriented programming.
+      We need to talk about what an object is,
+      how objects are grouped into classes,
+      how classes are related to each other,
+      and how objects use messages to interact with and communicate with each other.
+    </p>
+  </introduction>
+  <subsection xml:id="fig-kitchen">
+    <title>Basic  Object-Oriented  Programming Metaphor:
+    Interacting Objects</title>
+    <p>
+      A Java program, and any object-oriented program,
+      is a collection of interacting objects that models a collection of real-world <image width="73%" source="chptr00/kitchen.png"/> objects.
+      Think of the model that a kitchen designer might use to layout your new kitchen (Fig.
+      <xref ref="fig-kitchen"></xref>).
+      It will contain objects that represent the various kitchen appliances and cabinets.
+      Each object in the model is a simplified version of the corresponding real object.
+      For example,
+      a rectangle might be used to represent the refrigerator.
+    </p>
+    <p>
+      A kitchen model is mostly <em>static</em>.
+      It doesn't change.
+      Once put into place,
+      its various objects just stand there in a certain relation to each other.
+      By contrast, a computer program is <em>dynamic</em>.
+      It changes.
+      It does things and performs certain actions.
+      The objects in a computer program communicate with each other and they change over time.
+      In this respect,
+      the objects that make up our computer programs are very
+      <em>anthropomorphic</em>, a big word that means
+      <q>like people.</q>
+      If we are eating together and I want you to pass me the salt, I say,
+      <q>Please pass me the salt,</q>
+      and you invariably comply.
+      Similarly, when you (Student X) put your ATM card into an ATM machine,
+      the ATM object asks the bank's database object
+      <q>Give me Student X's bank account object</q>
+      and the database invariably complies.
+      If you tell the ATM you want to withdraw $100 dollars it tells your bank account object to deduct $100 from your current balance.
+      And so it goes.
+      Both you and your bank account are changed objects as a result of the transaction.
+    </p>
+  </subsection>
+  <subsection>
+    <title>What is an Object?</title>
+    <p>
+      So what is an object?
+      Just as in the real world, an <term>object</term> is any thing whatsoever.
+      An object can be a physical thing,
+      such as a
+<c>Car</c>, or a mental thing,
+      such as an <c>Idea</c>. It can be a natural thing,
+      such as an <c>Animal</c>, or an artificial,
+      human-made thing,
+      such as a <c>ATM</c>. A program that manages an ATM would involve <c>BankAccount</c> s and <c>Customer</c> objects.
+      A chess program would involve a <c>Board</c> object and <c>ChessPiece</c> objects.
+    </p>
+    <p>
+      Throughout this text,
+      we will use the notation shown in <xref ref="fig-umlobj1">Figure</xref>
+      to depict objects and to illustrate object-oriented concepts.
+      The notation is known as the <term>Unified Modeling Language</term>,
+      or <term>UML</term> for short,
+      and it is a standard in the object-oriented programming community.
+      As the diagram shows,
+      an object is represented by a rectangle whose label consists of the object's (optional) id and its type.
+      An object's <em>id</em> is the name by which it is referred to in the computer program.
+      In this case we show a <c>ATM</c> object,
+      who's id is not given,
+      and a <c>ChessPiece</c> object,
+      named <c>pawn1</c>. An object's label is always underlined.
+    </p>
+    <figure xml:id="fig-umlobj1">
+      <caption>In UML, objects are represented by
+      rectangles that are labeled with a two-part label of the form <em>id:Type</em>. The object's label is always underlined.</caption>
+      <image width="73%" source="chptr00/umlobj1.png"/>
+    </figure>
+  </subsection>
+  <subsection>
+    <title>Attributes and Values</title>
+    <p>
+      Just as with real objects,
+      the objects in our programs have certain characteristic <term>attributes</term>.
+      For example,
+      an <c>ATM</c> object would have a current amount of <c>cash</c> that it could dispense.
+      A
+<c>ChessPiece</c> object might have a pair of <c>row</c> and <c>column</c> attributes that specify its position on the chess board.
+      Notice that an object's attributes are themselves objects.
+      The ATM's <c>cash</c> attribute and the chess piece's <c>row</c> and <c>column</c> attributes are <c>Number</c> s.
+    </p>
+    <p>
+      <xref ref="fig-umlobj2">Figure</xref>
+      shows two <c>ATM</c> objects and their respective attributes.
+      As you can see,
+      an object's attributes are listed in a second partition of the UML diagram.
+      Notice that each attribute has a value.
+      So the <c>lobby:ATM</c> has a $8650.0 in <c>cash</c>, while the <c>drivethru:ATM</c> has only $150.0 in <c>cash</c>.
+    </p>
+    <figure xml:id="fig-umlobj2">
+      <caption>A second partition of an object diagram is used to display
+      the object's attributes and their values.</caption>
+      <image width="73%" source="chptr00/umlobj2.png"/>
+    </figure>
+    <p>
+      We sometimes refer to the collection of an object's attributes and values as its <em>state</em>.
+      For example,
+      the current state of the
+<c>lobby:ATM</c> is $8650.0 in cash.
+      Of course, this is a gross simplification of an ATM's state,
+      which would also include many other attributes.
+      But, hopefully, you see the point.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Actions and Messages</title>
+    <p>
+      In addition to their attributes,
+      objects also have characteristic
+      <em>actions</em> or behaviors.
+      As we have already said, objects in programs are dynamic.
+      They do things or have things done to them.
+      In fact, programming in Java is largely a matter of getting objects to perform certain actions for us.
+      For example,
+      in a chess program the <c>ChessPiece</c> s have the ability to <c>moveTo()</c> a new position on the chess board.
+      Similarly, when a customer pushes the
+      <q>Current Balance</q>
+      button on an ATM machine,
+      this is telling the ATM to <c>report()</c> the customer's current bank balance.
+      (Note how we use parentheses to distinguish actions from objects and attributes.)
+    </p>
+    <figure xml:id="fig-umlmsg1">
+      <caption>Messages in UML are represented by labeled
+      arrows. In this example, we are telling a pawn to move from its
+      current position to row 3 column 4.</caption>
+      <image width="73%" source="chptr00/umlmsg1.png"/>
+    </figure>
+    <p>
+      The actions that are associated with an object can be used to send messages to the objects and to retrieve information from objects.
+      A <term>message</term> is the passing of information or data from one object to another.
+      <xref ref="fig-umlmsg1">Figure</xref> illustrates how this works.
+      In UML, messages are represented by arrows.
+      In this example,
+      we are telling
+<c>pawn1:ChessPiece</c> to <c>moveTo(3,4)</c>. The numbers 3 and 4 in this case are arguments that tell the pawn what square to move to. (A chess board has 8 rows and 8 columns and each square is identified by its row and column coordinates.) In general,
+      an <term>argument</term> is a data value that specializes the content of a message in some way.
+      In this example we are telling the pawn to move forward by 1 row.
+      If we wanted the pawn to move forward by 2 rows,
+      we would send the message
+<c>moveTo(4,4)</c>.
+    </p>
+    <p>
+      The diagram in <xref ref="fig-umlmsg2">Figure</xref>
+      depicts a sequence of messages representing an idealized ATM transaction.
+      First, an ATM customer asks the ATM machine to report his current balance.
+      The ATM machine in turn asks the customer's bank account to report the customer's balance.
+      The ATM receives the value $528.52 from the bank account and passes it along to the customer.
+      In this case, the message does not involve an argument.
+      But it does involve a result.
+      A <term>result</term> is information or data that is returned to the object that sent the message.
+    </p>
+    <figure xml:id="fig-umlmsg2">
+      <caption>This UML diagram illustrates an ATM
+      transaction in which a customer asks the ATM machine for his current
+      balance. The ATM gets this information from an object representing the
+      customer's bank account and passes it to the customer.</caption>
+      <image width="73%" source="atmreport.png"/>
+    </figure>
+    <p>
+      Obviously, in order to respond to a message,
+      an object has to know how to perform the action that is requested.
+      The pawn has to know how to move to a designated square.
+      The ATM has to know how to find out the customer's current balance.
+      Indeed, an object can only respond to messages that are associated with its characteristic actions and behaviors.
+      You can't tell an ATM to move forward 2 squares.
+      And you can't ask a chess piece to tell you your current bank balance.
+    </p>
+    <p>
+      Responding to a message or performing an action sometimes causes a change in an object's state.
+      For example,
+      after performing <c>moveTo(3, 4)</c>, the pawn will be on a different square.
+      Its position will have changed.
+      On the other hand, some messages
+      (or actions)
+      leave the object's state unchanged.
+      Reporting the customer's bank account balance doesn't change the balance.
+    </p>
+  </subsection>
+  <subsection>
+    <title>What is a Class?</title>
+    <p>
+      A <term>class</term> is a template for an object.
+      A class encapsulates the attributes and actions that characterize a certain type of object.
+      In an object-oriented program,
+      classes serve as blueprints or templates for the objects that the program uses.
+      We say that an object is an <term>instance</term> of a class.
+      A good analogy here is to think of a class as a cookie cutter and its objects,
+      or instances, as individual cookies.
+      Just as we use the cookie cutter to stamp out cookies of a certain type,
+      in an object-oriented program,
+      we use a definition of a class to create objects of a certain type.
+    </p>
+    <p>
+      Writing an object-oriented program is largely a matter of designing classes and writing definitions for those classes in Java.
+      Designing a class is a matter of specifying all of the attributes and behaviors that are characteristic of that type of object.
+    </p>
+    <p>
+      For example, suppose we are writing a drawing program.
+      One type of object we would need for our program is a rectangle.
+      A <c>Rectangle</c> object has two fundamental attributes,
+      a <c>length</c> and a <c>width</c>. Given these attributes,
+      we can define characteristic rectangle actions,
+      such as the ability to calculate its area and the ability to draw itself.
+      Identifying an object's attributes and actions is the kind of design activity that goes into developing an object-oriented program.
+    </p>
+    <figure xml:id="fig-umlrect">
+      <caption>A UML diagram of the <c>Rectangle</c> class.</caption>
+      <image width="73%" source="chptr00/rectclass.png"/>
+    </figure>
+    <p>
+      <xref ref="fig-umlrect">Figure</xref>
+      shows a UML diagram of our <c>Rectangle</c> class.
+      Like the symbol for an object,
+      a UML class symbol has up to three partitions.
+      Unlike the UML object symbol,
+      the label for a UML class gives just the class's name and it is not underlined.
+      The second partition lists the class's attributes and the third partition lists the classes actions.
+      Our rectangle has four attributes.
+      The first two, <c>x</c> and <c>y</c>, determine a rectangles position on a two-dimensional graph.
+      The second two, <c>length</c> and <c>width</c>, determine a rectangle's dimensions.
+      Note that the attributes have no values.
+      This is because the class represents a general
+      <em>type</em> of rectangle.
+      It specifies what all rectangles have in common,
+      without representing any particular rectangle.
+      Like a cookie cutter for a cookie,
+      a class gives the general shape of an object.
+      The content is not included.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Variables and Methods</title>
+    <p>
+      Up to this point we have been using the terms
+      <em>attribute</em> and <em>action</em>
+      to describe an object's features.
+      We will continue to use this terminology when talking in general about objects or when talking about an object or class represented by a UML diagram.
+    </p>
+    <p>
+      However, when talking about a programming language,
+      the more common way to describe an object's features are to talk about its variables and methods.
+      A <term>variable</term>, which corresponds to an attribute,
+      is a named memory location that can store a certain type of value.
+      You can think of a variable as a special container that can only hold objects of a certain type.
+      For example, as <xref ref="fig-umlrect">Figure</xref>
+      shows,
+<c>Rectangle</c>'s <c>length</c> and <c>width</c> are variables that can store a certain type of numeric value known as an <c>int</c>. An <c>int</c> value is a whole number,
+      such as 76 or -5.
+    </p>
+    <p>
+      A <term>method</term>, which corresponds to an action or a behavior,
+      is a named chunk of code that can be called upon or <em>invoked</em>
+      to perform a certain pre-defined set of actions.
+      For example,
+      in our <c>Rectangle</c> object,
+      the <c>calculateArea()</c> method can be called upon to calculate the rectangle's area.
+      It would do this, of course,
+      by multiplying the rectangle's length by its width.
+      Similarly, the <c>draw()</c> method can be invoked to draw a picture of the rectangle.
+      It would take the actions necessary to draw a rectangle on the console.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Instance versus Class Variables and Methods</title>
+    <p>
+      Variables and methods can be associated either with objects or their classes.
+      An <term>instance variable</term>
+      (or <term>instance method</term>)
+      is a variable
+      (or method)
+      that belongs to an object.
+      By contrast, a <em>class variable</em>
+      (or <term>class method</term>)
+      is a variable
+      (or method)
+      that is associated with the class itself.
+      An example will help make this distinction clear.
+    </p>
+    <p>
+      An instance variable will have different values for different instances.
+      For example,
+      individual <c>Rectangle</c> s will have different values for their <c>length</c>, <c>width</c>, <c>x</c>, and
+<c>y</c> variables.
+      So these are examples of instance variables.
+      The
+<c>calculateArea()</c> method is an example of an instance method because it uses the instance's current length and width values in its calculation.
+      Similarly, the <c>draw()</c> method is an instance method,
+      because it uses the object's length and width to draw the object's shape.
+    </p>
+    <p>
+      An example of a class variable would be a variable in the <c>Rectangle</c> class that is used to keep track of how many individual
+<c>Rectangle</c> s have been created.
+      (Our drawing program might need this information to help manage its memory resources.)
+      Suppose we name this variable <c>nRectangles</c> and suppose we add 1 to it each time a new <c>Rectangle</c> instance is created.
+    </p>
+    <p>
+      An example of a method that is associated with the class is a special method known as a <term>constructor</term>.
+      This is a method used to create an object.
+      It is used to create an instance of a class.
+      Calling a constructor to create an object is like pressing the cookie cutter into the cookie dough:
+      the result is an individual cookie
+      (object).
+    </p>
+    <figure xml:id="fig-rects">
+      <caption>The <c>Rectangle</c> class and two of its
+      instances. Note that the class variable, <c>nRectangles</c>, is
+      underlined to distinguish it from <c>length</c> and <c>width</c>, the
+      instance variables.</caption>
+      <image width="73%" source="chptr00/rects.png"/>
+    </figure>
+    <p>
+      <xref ref="fig-rects">Figure</xref> illustrates these concepts.
+      Note that class variables are underlined in the UML diagram.
+      We have modified the
+<c>Rectangle</c> class to include its constructor method,
+      which is named <c>Rectangle()</c>. Note that it takes four arguments,
+      representing the values that we want to give as the rectangle's <em>x</em>,
+      <em>y</em>, length and width respectively.
+      Note also how the <c>Rectangle</c> class's <c>nRectangles</c> variable has a value of 2, representing that two <c>Rectangle</c> instances have been created.
+      These are shown as members of the <c>Rectangle</c> class.
+    </p>
+    <p>
+      It won't be obvious to you at this point,
+      but <c>nRectangles</c> is a value that has to be associated with the <c>Rectangle</c> class,
+      not with its instances.
+      To see this let's imagine what happens when a new
+<c>Rectangle</c> instance is created.
+      <xref ref="fig-rectconstr">Figure</xref> illustrates the process.
+      When the <c>Rectangle()</c> constructor is invoked,
+      its arguments (100, 50, 25, 10) are used by the <c>Rectangle</c> class to create a <c>Rectangle</c> object located at <em>x=100</em>,
+      <em>y=50</em> and with a length of 25 and width of 10.
+      The constructor method also increases the value of <c>nRectangles</c> by 1 as a way of keeping count of how many objects it has created.
+    </p>
+    <figure>
+      \figaleftscaled{chptr00/rectconstr.eps}{0.8}
+      {Constructing a <c>Rectangle</c> instance.}{fig-rectconstr}
+    </figure>
+  </subsection>
+  <subsection>
+    <title>Class Hierarchy and Inheritance</title>
+    <p>
+      How are classes related to each other?
+      In Java, and in any other object-oriented language,
+      classes are organized in a class hierarchy.
+      A <term>class hierarchy</term> is like an upside-down tree.
+      At the very top of the hierarchy is the most general class.
+      In Java, the most general class is the <c>Object</c> class.
+      The classes below <c>Object</c> in the hierarchy are known as its <term>subclasses</term>.
+      Since all of the objects we use in our programs belong to some class or other,
+      this is like saying that all objects are <c>Object</c> s.
+    </p>
+    <p>
+      <xref ref="fig-classhier">Figure</xref>
+      illustrates the concept of a class hierarchy using the classes that we have described in this section.
+      Notice that the <c>Object</c> class occurs at the top of the hierarchy.
+      It is the most general class.
+      It has features that are common to all Java objects.
+      As you move down the hierarchy,
+      the classes become more and more specialized.
+      A <c>Rectangle</c> is an <c>Object</c> but it contains attributes <mdash/> length and width <mdash/> that are common to all rectangles but not to other objects in the hierarchy.
+      For example,
+      an <c>ATM</c> object does not necessarily have a length and a width.
+      Notice that we have added a <c>Square</c> class to the hierarchy.
+      A <c>Square</c> is a special type of <c>Rectangle</c>, namely one who's length equals its width.
+    </p>
+    <figure xml:id="fig-classhier">
+      <caption>A hierarchy of Java classes.</caption>
+      <image width="73%" source="chptr00/classhier.png"/>
+    </figure>
+    <p>
+      To introduce some important terminology associated with this kind of \marginpar{Superclass and subclass} hierarchy,
+      we say that the <c>Rectangle</c> class is a subclass of the <c>Object</c> class.
+      The <c>Square</c> class is a subclass of both <c>Rectangle</c> and <c>Object</c>. Classes that occur above a given class in the hierarchy are said to be its
+      <term>superclasses</term>.
+      Thus <c>Rectangle</c> class is superclass of the <c>Square</c> class.
+      The <c>Object</c> class is also a superclass of
+<c>Square</c>. In general,
+      we say that a subclass <em>extends</em> a superclass,
+      meaning that it adds additional elements
+      (attributes and/or methods)
+      to those contained in its superclasses.
+      We saw this in the case of the <c>Square</c> class.
+      It adds the feature that its length and width are always equal.
+    </p>
+    <p>
+      Another important concept associated with a class hierarchy is the \marginpar{Class inheritance} notion of
+      <term>class inheritance</term>,
+      whereby a subclass inherits elements
+      (attributes and/or methods)
+      from its superclasses.
+      To take an example from the natural world,
+      think of the sort of inheritance that occurs between a horse and a mammal.
+      A horse is a mammal.
+      So horses inherit the characteristic of being warm blooded by virtue of also being mammals.
+      (This is different from the kind of individual inheritance whereby you inherit your mother's blue eyes and your father's black hair.)
+    </p>
+    <p>
+      To illustrate how inheritance works,
+      lets go back to our chess program.
+      There are several different types of <c>ChessPiece</c> s.
+      There are <c>Pawn</c> s, and <c>Knight</c> s, and <c>Queen</c> s and <c>King</c> s.
+      <xref ref="fig-chesshier">Figure</xref>
+      illustrates the chess piece hierarchy.
+      A pair of attributes that all chess pieces have in common is their <c>row</c> and <c>column</c> position on the chess board.
+      Because all chess pieces have these attributes in common,
+      they are located at the top of the <c>ChessPiece</c> hierarchy and inherited by all <c>ChessPiece</c> subclasses.
+      Of course, the <c>row</c> and <c>column</c> attributes are given different values in each <c>ChessPiece</c> object.
+    </p>
+    <figure xml:id="fig-chesshier">
+      <caption>The <c>ChessPiece</c> hierarchy.</caption>
+      <image width="73%" source="chesshier-small.png"/>
+    </figure>
+    <p>
+      One of the actions that all chess pieces have in common is that they can <c>moveTo()</c> a given square on the chess board.
+      But different types of chess pieces have different ways of moving.
+      For example,
+      a
+<c>Bishop</c> can only move along diagonals on the chess board,
+      whereas a <c>Rook</c> can only move along a row or column on the chess board.
+      So, clearly,
+      we can't describe a <c>moveTo()</c> method that will work for all <c>ChessPiece</c> s.
+      This is why we put the <c>moveTo()</c> method in all of the <c>ChessPiece</c> subclasses.
+      The <c>ChessPiece</c> class also has a <c>moveTo()</c> method,
+      but note that its name is italicized.
+      This indicates that it cannot be completely defined at that level.
+    </p>
+    <p>
+      Finally, note that in chess,
+      the king has certain special attributes and actions.
+      Thus only the king can be put <em>in check</em>.
+      This means that the king is under attack and in danger of being captured,
+      thereby ending the game.
+      Similarly, only the king has the ability to castle.
+      This is special move that a king can make together with one of its rooks under certain conditions.
+      Thus, the reason we show the <c>inCheck</c> attribute and <c>castle()</c> action in the <c>King</c> class is because these are characteristics that particular to <c>King</c> s.
+    </p>
+    <p>
+      In this way,
+      a class hierarchy represents a <em>specialization</em>
+      of classes as you move from top to bottom.
+      The most general class, <c>ChessPiece</c>, is at the top of the hierarchy.
+      Its attributes and methods are passed on to
+      (inherited by)
+      its subclasses.
+      However, in addition to the attributes and methods they inherit from their superclasses,
+      the subclasses define their own special attributes and methods.
+      Each of the subclasses, <c>Pawn</c>, <c>Bishop</c>, and so on,
+      represents some kind of specialization of the superclass.
+      In this example,
+      each of the subclasses have their own distinctive ways of moving.
+      And the <c>King</c> subclass has unique attributes and actions (<c>inCheck</c> and <c>castle()</c>.
+    </p>
+  </subsection>
+  <subsection xml:id="summaryof-important-points">
+    <title>Principles of  Object-Oriented  Design</title>
+    <p>
+      As we have discussed,
+      an object-oriented program is composed of many objects communicating with each other.
+      The process of designing an object-oriented program to solve some problem or other involves several important principles:
+      <ul>
+        Divide-and-Conquer Principle. Generally, the first step in designing a program is to divide the overall problem into a number of objects that will interact with each other to solve the problem. Thus, an object-oriented program employs a <em>division of labor</em> much as we do in organizing many of our real-world tasks. This <em>divide-and-conquer</em> approach is an important problem-solving strategy. Encapsulation Principle. Once the objects are identified, the next step involves deciding, for each object, what attributes it has and what actions it will take. The goal here is to encapsulate within each object the expertise needed to carry out its role in the program. Each object is a self-contained module with a clear responsibility and the tools (attributes and actions) necessary to carry out its role. Just as a dentist encapsulates the expertise needed to diagnose and treat a tooth ache, a well-designed object contains the information and methods needed to perform its role. Interface Principle. In order for objects to work cooperatively and efficiently, we have to clarify exactly how they should interact, or <em>interface</em>, with one another. An object's interface should be designed to limit the way the object can be used by other objects. Think of how the different interfaces presented by a digital and analog watch determine how the watches are used. In a digital watch, time is displayed in discrete units, and buttons are used to set the time in hours, minutes and seconds. In an analog watch, the time is displayed by hands on a clock face, and time is set, less precisely, by turning a small wheel. Information Hiding Principle. In order to enable objects to work together cooperatively, certain details of their individual design and performance should be hidden from other objects. To use the watch analogy again, in order to use a watch we needn't know how its time keeping mechanism works. That level of detail is hidden from us. Hiding such implementation details protects the watch's mechanism, while not limiting its usefulness. Generality Principle. To make objects as generally useful as possible, we design them not for a particular task but rather for a particular <em>kind</em> of task. This principle underlies the use of software libraries. As we will see, Java comes with an extensive library of classes that specialize in performing certain kinds of input and output operations. For example, rather than having to write our own method to print a message on the console, we can use a library object to handle our printing tasks. Extensibility Principle. One of the strengths of the object-oriented approach is the ability to extend an object's behavior to handle new tasks. This also has its analogue in the everyday world. If a company needs sales agents to specialize in hardware orders, it would be more economical to extend the skills of its current sales agents instead of training a novice from scratch. In the same way, in the object-oriented approach, an object whose role is to input data might be specialized to input numeric data. Abstraction Principle. Abstraction is the ability to focus on the important features of an object when trying to work with large amounts of information. For example, if we are trying to design a floor plan for a kitchen, we can focus on the shapes and relative sizes of the appliances and ignore attributes such as color, style, and manufacturer. The objects we design in our Java programs will be abstractions in this sense because they ignore many of the attributes that characterize the real objects and focus only on those attributes that are essential for solving a particular problem.
+      </ul>
+    </p>
+    <p>
+      These, then,
+      are the principles that will guide our discussion as we learn how to design and write object-oriented Java programs.
+    </p>
+    <p>
+      \secSMHleft{Chapter Summary}\secKTH{Technical Terms}\begin{KT} action (behavior)
+    </p>
+    <p>
+      argument
+    </p>
+    <p>
+      attribute
+    </p>
+    <p>
+      class
+    </p>
+    <p>
+      class inheritance
+    </p>
+    <p>
+      class hierarchy
+    </p>
+    <p>
+      class method
+    </p>
+    <p>
+      class variable
+    </p>
+    <p>
+      compiler
+    </p>
+    <p>
+      computer program
+    </p>
+    <p>
+      constructor
+    </p>
+    <p>
+      high\mbox{-} level language
+    </p>
+    <p>
+      instance
+    </p>
+    <p>
+      instance method
+    </p>
+    <p>
+      instance variable
+    </p>
+    <p>
+      interpreter
+    </p>
+    <p>
+      method
+    </p>
+    <p>
+      message
+    </p>
+    <p>
+      object
+    </p>
+    <p>
+      object code
+    </p>
+    <p>
+      object oriented
+    </p>
+    <p>
+      result
+    </p>
+    <p>
+      source code
+    </p>
+    <p>
+      subclass
+    </p>
+    <p>
+      superclass
+    </p>
+    <p>
+      Unified Modeling Language (UML)
+    </p>
+    <p>
+      variable \end{KT}
+    </p>
+    <p>
+      \secSMHtwo{Summary of Important Points}
+    </p>
+    <ul>
+      <li>
+        <p>
+          A computer system generally consists of input/output devices,
+          primary and secondary memory,
+          and a central processing unit.
+          A computer can only run programs in its own
+          <em>machine language</em>,
+          which is based on the <em>binary code</em>.
+          Special programs known as <em>compilers</em>
+          and <em>interpreters</em>
+          translate <em>source code</em>
+          programs written in a <em>high-level language</em>, such as Java,
+          into machine language <em>object code</em> programs.
+          Application software refers to programs designed to provide a particular task or service;
+          <em>systems software</em> assists the user in using application software.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <em>client/server</em> model is a form of
+          <em>distributed computing</em>
+          in which part of the software for a task is stored on a <em>server</em>
+          and part on <em>client</em> computers.
+        </p>
+      </li>
+      <li>
+        <p>
+          HyperText Markup Language (HTML) is the language used to encode WWW documents.
+        </p>
+      </li>
+      <li>
+        <p>
+          A Java program is a set of interacting objects.
+          This is the basic metaphor of <em>object-oriented programming</em>.
+        </p>
+      </li>
+      <li>
+        <p>
+          An <em>object</em> in a Java program encapsulates the program's <em>attributes</em>
+          (or <em>variables</em>)
+          and <em>actions</em>
+          (or <em>methods</em>).
+          A variable is a named memory location where data of appropriate type can be stored.
+          A method is a named section of code that can be called
+          (or invoked)
+          when needed.
+        </p>
+      </li>
+      <li>
+        <p>
+          An object's methods are used to pass messages to it.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>class</em> is an abstract template that defines the characteristics and behaviors of all objects of a certain type.
+        </p>
+      </li>
+      <li>
+        <p>
+          An object is an <em>instance</em> of a class.
+          An object has <em>instance methods</em>
+          and <em>instance variables</em>.
+          A <em>class method</em>
+          (or <em>class variable</em>)
+          is a method
+          (or variable)
+          that is associated with the class itself, not with its instances.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>constructor</em> is a special method that is used to construct objects.
+        </p>
+      </li>
+      <li>
+        <p>
+          Java classes are organized into a
+          <em>class hierarchy</em>,
+          with the
+<c>Object</c> class at the top of the hierarchy.
+          For a given class,
+          classes that occur below it in the hierarchy are called its <em>subclasses</em>,
+          while classes that occur above it are called its <em>superclasses</em>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Classes <em>inherit</em> attributes and methods from their superclasses.
+          This is known as <em>class inheritance</em>.
+        </p>
+      </li>
+      <li>
+        <p>
+          The main principles of the object-oriented programming approach are as follows:
+        </p>
+        <ul>
+          <li>
+            <p>
+              Divide and Conquer: Successful problem solving involves breaking a complex problem into objects.
+            </p>
+          </li>
+          <li>
+            <p>
+              Encapsulation and Modularity: Each object should be assigned a clear role.
+            </p>
+          </li>
+          <li>
+            <p>
+              Public Interface: Each object should present a clear public interface that determines how other objects will use it.
+            </p>
+          </li>
+          <li>
+            <p>
+              Information Hiding: Each object should shield its users from unnecessary details of how it performs its role.
+            </p>
+          </li>
+          <li>
+            <p>
+              Generality: Objects should be designed to be as general as possible.
+            </p>
+          </li>
+          <li>
+            <p>
+              Extensibility: Objects should be designed so that their functionality can be extended to carry out more specialized tasks.
+              Abstraction is the ability to group a large quantity of information into a single chunk so it can be managed as a single entity.
+            </p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <ol>
+      <li>
+        <p>
+          Fill in the blanks in each of the following statements.
+          <ol>
+            example of the \rule{60pt}{0.5pt} principle.
+            <li>
+              <p>
+                Designing a class so that it shields certain parts of an object from other objects is an example of the \rule{60pt}{0.5pt} principle.
+              </p>
+            </li>
+            <li>
+              <p>
+                Java programs that can run without change on a wide variety of computers is an example of \rule{60pt}{0.5pt}<nbsp/>.
+              </p>
+            </li>
+            <li>
+              <p>
+                The fact that social security numbers are divided into three parts is an example of the \rule{60pt}{0.5pt} principle.
+              </p>
+            </li>
+            <li>
+              <p>
+                To say that a program is robust means that \rule{60pt}{0.5pt} .
+              </p>
+            </li>
+            <li>
+              <p>
+                An \rule{60pt}{0.5pt} is a separate module that encapsulates a Java program's attributes and actions.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Explain the difference between each of the following pairs of concepts.
+          <ol>
+            hardware and <em>software</em> systems and <em>application</em> software compiler and <em>interpreter</em> machine language and <em>high-level language</em> general-purpose and <em>special-purpose</em> computer primary and <em>secondary</em> memory
+            <li>
+              <p>
+                the <em>CPU</em> and the <em>ALU</em>
+              </p>
+            </li>
+            <li>
+              <p>
+                the <em>Internet</em> and the <em>WWW</em>
+              </p>
+            </li>
+            <li>
+              <p>
+                a <em>client</em> and a <em>server</em> HTTP and <em>HTML</em>
+                source and <em>object</em> code
+              </p>
+            </li>
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Fill in the blanks in each of the following statements.
+          <ol>
+            that directs a computer's behavior.
+            <li>
+              <p>
+                A disk drive would be an example of a \rule{60pt}{0.5pt} device.
+              </p>
+            </li>
+            <li>
+              <p>
+                A mouse is an example of an \rule{60pt}{0.5pt} device.
+              </p>
+            </li>
+            <li>
+              <p>
+                A monitor is an example of an \rule{60pt}{0.5pt} device.
+              </p>
+            </li>
+            <li>
+              <p>
+                The computer's \rule{60pt}{0.5pt} functions like a scratch pad.
+              </p>
+            </li>
+            <li>
+              <p>
+                Java is an example of a \rule{60pt}{0.5pt} programming language.
+              </p>
+            </li>
+            <li>
+              <p>
+                The Internet is a network of \rule{60pt}{0.5pt} .
+              </p>
+            </li>
+            <li>
+              <p>
+                The protocol used by the World Wide Web is the \rule{60pt}{0.5pt} protocol.
+              </p>
+            </li>
+            <li>
+              <p>
+                Web documents are written in \rule{60pt}{0.5pt} code.
+              </p>
+            </li>
+            <li>
+              <p>
+                A \rule{60pt}{0.5pt} is a networked computer that is used to store data for other computers on the network.
+              </p>
+            </li>
+          </ol>
+        </p>
+        responsible for the following functions.
+        <ol>
+          <li>
+            <p>
+              executing the <em>fetch-execute cycle</em>
+            </p>
+          </li>
+          <li>
+            <p>
+              arithmetic operations
+            </p>
+          </li>
+          <li>
+            <p>
+              executing instructions
+            </p>
+          </li>
+          <li>
+            <p>
+              storing programs while they are executing
+            </p>
+          </li>
+          <li>
+            <p>
+              storing programs and data when the computer is off
+            </p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>
+          Explain why a typical piece of software, such as a word processor,
+          cannot run on both a Macintosh and a Windows machine.
+        </p>
+      </li>
+      <li>
+        <p>
+          What advantages do you see in platform independence?
+          What are the disadvantages?
+        </p>
+      </li>
+      <li>
+        <p>
+          In what sense is a person's name an abstraction?
+          In what sense is any word of the English language an abstraction?
+        </p>
+      </li>
+      <li>
+        <p>
+          Analyze the process of writing a research paper in terms of the divide-and-conquer and encapsulation principles.
+        </p>
+      </li>
+      <li>
+        <p>
+          Analyze your car by using object-oriented design principles.
+          In other words, pick one of your car's systems,
+          such as the braking system, and analyze it in terms of the divide-and-conquer,
+          encapsulation, information-hiding, and interface principles.
+        </p>
+      </li>
+      <li>
+        <p>
+          Make an object oriented analysis of the interaction between,
+          a student,
+          librarian,
+          and a library database when a student checks a book out of a college library.
+        </p>
+      </li>
+    </ol>
+  </subsection>
+</section>

@@ -1,0 +1,265 @@
+<section xml:id="object-serialization-readingand-writing-objects">
+  <title>Object Serialization: Reading and Writing Objects</title>
+  <introduction>
+    <p>
+      The examples in the previous sections showed how to perform I/O operations on simple binary data or text.
+      The <c>java.io</c> package also provides methods for reading and writing objects,
+      a process known as <term>object serialization</term>.
+          <idx><h>object serialization</h></idx>
+      Objects can be converted into a sequence of bytes, or <em>serialized</em>,
+      by using the
+<c>ObjectOutputStream</c> class,
+      and they can be <em>deserialized</em>,
+      or converted from bytes into a structured object,
+      by using the <c>ObjectInputStream</c> class (Fig.<nbsp/>11.26).
+      Despite the complexity of the serialization/deserialization processes,
+      the methods in these classes make the task just as easy as reading and writing primitive data.
+      <image width="73%" source="chptr11/objiouml.png"/> To illustrate object serialization,
+      let's begin by defining a
+<c>Student</c> class (Fig.
+      <xref ref="fig-student"></xref>).
+      In order to serialize an object,
+      it must be a member of a class that implements the
+<c>Serializable</c> interface.
+      The <c>Serializable</c> interface is a
+      <em>marker interface</em>,
+      an interface that doesn't define any methods or constants but just serves to designate whether an object can be serialized or not.
+    </p>
+    <figure xml:id="fig-student">
+      <caption>The <em>serializable</em><c>Student</c> class.</caption>
+      \[31pc]
+<pre>
+import java.io.*;
+public class Student implements Serializable {
+  private String name;
+  private int year;
+  private double gpa;
+  public Student() {}
+  public Student (String nameIn, int yr, double gpaIn) {
+    name = nameIn;
+    year = yr;
+    gpa = gpaIn;
+  }
+  public void writeToFile(FileOutputStream outStream)
+                                     throws IOException{
+    ObjectOutputStream ooStream = new ObjectOutputStream(outStream);
+    ooStream.writeObject(this);
+    ooStream.flush();
+  } // writeToFile()
+  public void readFromFile(FileInputStream inStream)
+           throws IOException, ClassNotFoundException {
+    ObjectInputStream oiStream = new ObjectInputStream(inStream);
+    Student s = (Student)oiStream.readObject();
+    this.name = s.name;
+    this.year = s.year;
+    this.gpa = s.gpa;
+  } // readFromFile()
+  public String toString() {
+    return name + "\t" + year + "\t" + gpa;
+  }} // Student
+</pre>
+    </figure>
+    <p>
+      The <c>Student</c> class contains its own I/O methods,
+<c>readFromFile()</c> and <c>writeToFile()</c>. This is an appropriate object-oriented design.
+      The <c>Student</c> class encapsulates all the relevant information needed to read and write its data.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:I/O Design</title>
+      <p>
+        If an object is going to be input and output to and from files,
+        it should define its own I/O methods.
+        An object contains all the relevant information needed to perform I/O correctly.
+      </p>
+    </principle>
+    <p>
+      Note the definition of the <c>writeToFile()</c> method,
+      which performs the output task.
+      This method's <c>FileOutputStream</c> parameter is used to create an <c>ObjectOutputStream</c>, whose <c>writeObject()</c>\marginpar{Object serialization} method writes the object into the file.
+      To output a
+<c>Student</c> object,
+      we merely invoke the <c>writeObject()</c> method.
+      This method writes out the current values of all the object's public and private fields.
+      In this case,
+      the method would write a <c>String</c> for the object's <c>name</c>, an <c>int</c> for the object's <c>year</c>, and a <c>double</c> for the object's <c>gpa</c>.
+    </p>
+    <p>
+      Although our example doesn't require it,
+      the <c>writeObject()</c> method can also handle fields that refer to other objects.
+      For example,
+      suppose our <c>Student</c> object provided a field for
+<c>courses</c> that contained a reference to an array of objects,
+      each of which described a course the student has taken.
+      In that case,
+      the
+<c>writeObject()</c> method would serialize the array and all its objects
+      (assuming they are serializable).
+      Thus, when a complex object is serialized,
+      the result would be a complex structure that contains all the data linked to that root object.
+    </p>
+    <p>
+      Object deserialization,
+      as shown in the <c>readFromFile()</c> method, \marginpar{Object deserialization} is simply the reverse of the serialization process.
+      The
+<c>readObject()</c> method reads one serialized object from the
+<c>ObjectInputStream</c>. Its result type is <c>Object</c>, so it is necessary to cast the result into the proper type.
+      In our example we use a local <c>Student</c> variable to store the object as it is input.
+      We then copy each field of the local object to <c>this</c> object.
+    </p>
+    <p>
+      Note that the <c>readFromFile()</c> method throws both the
+<c>IOException</c> and <c>ClassNotFoundException</c>. An <c>IOException</c> will be generated if the file you are attempting to read does not contain serialized objects of the correct type.
+      Objects that can be input by <c>readObject()</c> are those that were output by
+<c>writeObject()</c>. Thus,
+      just as in the case of binary I/O, it is best to design an object's input and output routines together so that they are compatible.
+      The <c>ClassNotFoundException</c> will be thrown if the
+<c>Student</c> class cannot be found.
+      This is needed to determine how to deserialize the object.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:Object Serialization</title>
+      <p>
+        Java's serialization classes, <c>ObjectOutputStream</c> and <c>ObjectInputStream</c>, should be used whenever an object needs to be input or output from a stream.
+      </p>
+    </principle>
+  </introduction>
+  <subsection xml:id="self-study-exerciseS28">
+    <title>The <c>ObjectIO</c>Class</title>
+    <p>
+      Given the <c>Student</c> class,
+      let's now write a user interface that can read and write <c>Student</c> objects.
+      We can use the same interface we used in the <c>BinaryIO</c> program.
+      The only things we need to change are the <c>writeRecords()</c> and <c>readRecords()</c> methods.
+      Everything else about this program will be exactly the same as in <c>BinaryIO</c>.
+    </p>
+    <p>
+      <xref ref="fig-objectioclass">Figure</xref>
+      provides the full implementation of the
+<c>ObjectIO</c> class.
+      Note that the <c>writeRecords()</c> method will still write five random records to the data file.
+      The difference in this case is that we will call the <c>Student.writeToFile()</c> method to take care of the actual output operations.
+      The revised algorithm will create a new <c>Student</c> object,
+      using randomly generated data for its name, year,
+      and GPA and then invoke its <c>writeToFile()</c> to output its data.
+      Note how a <c>FileOutputStream</c> is created and passed to the <c>Student.\-writeToFile()</c> method.
+    </p>
+    <figure xml:id="fig-objectioclass">
+      <caption>Part I of the <c>ObjectIO</c> class, which provides
+      an interface to reading and writing files of <c>Student</c> s.</caption>
+      \[29pc]
+<pre>
+import javax.swing.*;         // Swing components
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+public class ObjectIO extends JFrame implements ActionListener{
+  private JTextArea display = new JTextArea();
+  private JButton read = new JButton("Read From File"),
+                  write = new JButton("Write to File");
+  private JTextField nameField = new JTextField(10);
+  private JLabel prompt = new JLabel("Filename:",JLabel.RIGHT);
+  private JPanel commands = new JPanel();
+  public ObjectIO () {
+    super("ObjectIO Demo");                // Set window title
+    read.addActionListener(this);
+    write.addActionListener(this);
+    commands.setLayout(new GridLayout(2,2,1,1));
+    commands.add(prompt);                 // Control panel
+    commands.add(nameField);
+    commands.add(read);
+    commands.add(write);
+    display.setLineWrap(true);
+    this.getContentPane().setLayout(new BorderLayout () );
+    this.getContentPane().add("North",commands);
+    this.getContentPane().add( new JScrollPane(display));
+    this.getContentPane().add("Center", display);
+  } // ObjectIO
+  public void actionPerformed(ActionEvent evt) {
+    String fileName = nameField.getText();
+    if (evt.getSource() == read)
+        readRecords(fileName);
+    else
+        writeRecords(fileName);
+  } // actionPerformed()
+</pre>
+    </figure>
+    <figure xml:id="fig_objectIOpart2cont">
+      <caption>(<em>continued</em>) The <c>ObjectIO</c> class, Part II.</caption>
+<pre>
+private void readRecords(String fileName) {
+     try {
+       FileInputStream inStream = new FileInputStream(fileName);  // Open a stream
+       display.setText("Name\tYear\tGPA\n");
+       try {
+         while (true) {                   // Infinite loop
+           Student student = new Student();    // Create a student instance
+           student.readFromFile(inStream);     //  and have it read an object
+           display.append(student.toString() +  "\n"); //  and display it
+         }
+       } catch (IOException e) {     // Until IOException
+       }
+       inStream.close();                           // Close the stream
+     } catch (FileNotFoundException e) {
+         display.append("IOERROR: File NOT Found: " + fileName + "\n");
+     } catch (IOException e) {
+         display.append("IOERROR: " + e.getMessage() + "\n");
+     } catch (ClassNotFoundException e) {
+         display.append("ERROR: Class NOT found " + e.getMessage() + "\n");
+     }
+  } // readRecords()
+  private void writeRecords(String fileName) {
+    try {
+      FileOutputStream outStream = new FileOutputStream( fileName );// Open stream
+      for (int k = 0; k &lt; 5 ; k++) {               // Generate 5 random objects
+        String name = "name" + k;                     // Name
+        int year = (int)(2000 + Math.random() * 4);   // Class year
+        double gpa = Math.random() * 12;              // GPA
+        Student student = new Student(name, year, gpa); // Create the object
+        display.append("Output: "+ student.toString() +"\n"); // and display it
+        student.writeToFile(outStream) ;    //  and tell it to write data
+      } //for
+      outStream.close();
+    } catch (IOException e) {
+       display.append("IOERROR: " + e.getMessage() + "\n");
+    }
+  } // writeRecords()
+  public static void main(String args[]) {
+    ObjectIO io = new ObjectIO();
+    io.setSize( 400,200);
+    io.setVisible(true);
+    io.addWindowListener(new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+            System.exit(0);  // Quit the application
+            }
+    });
+  } // main()} // ObjectIO
+</pre>
+    </figure>
+    <p>
+      The <c>readRecords()</c> method (Fig.
+      <xref ref="fig-objectioclass"></xref>, Part II) will read data from a file containing serialized <c>Student</c> objects.
+      To do so, it first creates a \mbox{Student} object and then invokes its <c>readFromFile()</c> method,
+      passing it a <c>FileInputStream</c>. Note how the <c>FileInputStream</c> is created and,
+      unlike in <c>BinaryIO</c>, the inner try block is exited by an \mbox{IOException} rather than an <c>EOFException</c>.
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercise}
+      <ol>
+        <li>
+          <p>
+            Given the following definition,
+            would a binary file consisting of several <c>SomeObject</c> s be readable by either the <c>BinaryIO</c> or the <c>ObjectIO</c> programs?
+            Explain.
+<pre>
+public class SomeObject {
+    private String str;
+    private short n1;
+    private short n2;
+    private long  n3;}
+</pre>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>

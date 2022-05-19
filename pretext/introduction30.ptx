@@ -1,0 +1,216 @@
+<section xml:id="introduction30">
+  <title>Introduction</title>
+  <introduction>
+    <p>
+      The pattern in Figure<nbsp/>12.1 is known as the Sierpinski gasket.
+      Its overall shape is that of an equilateral triangle.
+      But notice how inside the outer triangle there are three smaller triangles that are similar to the overall pattern.
+      And inside each of those are three even smaller triangles,
+      and so on.
+      The Sierpinski gasket is known as a <em>fractal</em>
+      because when you divide it up,
+      you end up with a smaller version of the overall pattern.
+      The overall gasket pattern is repeated over and over,
+      at smaller and smaller scales, throughout the figure.
+      <image width="73%" source="chptr12/sierpinski1.png"/> How would you draw this pattern?
+      If you try to use some kind of nested loop structure,
+      you'll find that it is very challenging.
+      It can be done using loops, but it isn't easy.
+      On the other hand,
+      if you use an approach known as <em>recursion</em>,
+      this problem is much easier to solve.
+      It's a little bit like the representation issue we discussed in Chapter<nbsp/>5.
+      Your ability to solve a problem often depends on how you represent the problem.
+      Recursion gives you another way to approach problems that involve repetition,
+      such as the problem of drawing the Sierpinski gasket.
+    </p>
+    <p>
+      The main goal of this chapter is to introduce recursion as both a problem-solving technique and as alternative to loops
+      (which we discussed in Chapter<nbsp/>6)
+      for implementing repetition.
+      We begin with the notion of a <em>recursive definition</em>,
+      a concept used widely in mathematics and computer science.
+      We then introduce the idea of a
+      <em>recursive method</em>,
+      which is the way recursion is implemented in a program.
+    </p>
+    <p>
+      Recursion is a topic that is taken up in considerable detail in upper-level computer science courses,
+      so our goal here is mainly to introduce the concept and give you some idea of its power as a problem-solving approach.
+      To illustrate recursion,
+      we use a number of simple examples throughout the chapter.
+      One risk in using simple examples, though,
+      is that you might be tempted to think that recursion is only good for
+      <q>toy problems.</q>
+      Nothing could be further from the truth.
+      Recursion is often used for some of the most difficult algorithms.
+      Some of the exercises at the end of the chapter are examples of more challenging problems.
+    </p>
+  </introduction>
+  <subsection xml:id="self-study-exercisesA30">
+    <title>Recursion as Repetition</title>
+    <p>
+      A <term>recursive method</term>
+          <idx><h>recursive method</h></idx>
+      is a method that calls itself.
+      An <em>iterative method</em>
+          <idx><h>iterative method</h></idx>
+      is a method that uses a loop to repeat an action.
+      In one sense, <em>recursion</em>
+      is an alternative to the iterative (looping) control structures we studied in Chapter<nbsp/>6.
+      In this sense, recursion is just another way to repeat an action.
+    </p>
+    <p>
+      For example,
+      consider the following iterative method for \marginpar{Iterative method} saying
+      <q>Hello</q>
+      <em>N</em> times:
+    </p>
+<pre>
+public void hello(int N)  {
+    for (int k = 0; k &lt; N; k++)
+        System.out.println("Hello");} // hello()
+</pre>
+    <p>
+      A recursive version of this method would be defined \marginpar{Recursive method} as follows:
+    </p>
+<pre>
+public void hello(int N)  {
+    if (N > 0) \verb!{!
+        System.out.println("Hello");
+        hello(N - 1);                // Recursive call} // hello()
+</pre>
+    <p>
+      This method is recursive because it calls itself when
+      <em>N</em> is greater than 0.
+      However, note that when it calls itself,
+      it passes <m>N-1</m> as the value for its parameter.
+      If this method is initially called with <em>N</em>
+      equal to 5, the following is a trace of what happens.
+      The indentations indicate each time the method calls itself:
+    </p>
+<pre>
+hello(5)
+    Print "Hello"
+    hello(4)
+        Print "Hello"
+        hello(3)
+            Print "Hello"
+            hello(2)
+                Print "Hello"
+                hello(1)
+                    Print "Hello"
+                    hello(0)
+</pre>
+    <p>
+      Thus,
+      <q>Hello</q>
+      will be printed five times,
+      just as it would be in the iterative version of this method.
+    </p>
+    <p>
+      So, in one sense, recursion is just an alternative to iteration.
+      In fact, there are some programming languages,
+      such as the original versions of LISP and PROLOG, that do not have loop structures.
+      In these languages, <em>all</em>
+      repetition is done by recursion.
+      In contrast, if a language contains loop structures,
+      it can do without recursion.
+      Anything that can be done iteratively can be done recursively,
+      and vice versa.
+    </p>
+    <p>
+      Moreover, it is much less efficient to call a method five times than to repeat a for loop five times.
+      Method calls take up more memory than loops and involve more
+      <term>computational overhead</term>
+          <idx><h>computational overhead</h></idx>
+      <mdash/>for such tasks \marginpar{Computational overhead} as passing parameters,
+      allocating storage for the method's local variables,
+      and returning the method's results.
+      Therefore, because of its reliance on repeated method calls,
+      recursion is often less efficient than iteration as a way to code a particular algorithm.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN:Efficiency</title>
+      <p>
+        Iterative algorithms and methods are generally more efficient than recursive algorithms that do the same thing.
+      </p>
+    </principle>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            What would be printed if we call the following method with the expression <c>mystery(0)</c>?
+<pre>
+public void mystery(int N) {
+    System.out.print(N + " ");
+    if (N &lt;= 5)
+        mystery(N + 1);} // mystery()
+</pre>What about <c>mystery(100)</c>?
+          </p>
+        </li>
+        <li>
+          <p>
+            What would be printed if we call the following method with the expression <c>mystery(5)</c>?
+<pre>
+public void mystery(int N) {
+    System.out.print(N + " ");
+    if (N &lt;= 5)
+        mystery(N - 1);} // mystery()
+</pre>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+  <subsection>
+    <title>Recursion as a Problem-Solving Approach</title>
+    <p>
+      Given that recursion is not really necessary<mdash/>if a programming language has loops<mdash/>and is not more efficient than loops,
+      why is it so important?
+      The answer is that, in a broader sense,
+      recursion is an effective approach to problem solving.
+      It is a way of viewing a problem.
+      It is mostly in this sense that we want to study recursion.
+    </p>
+    <p>
+      Recursion is based on two key problem-solving concepts:
+      <em>divide and conquer</em>
+          <idx><h>divide and conquer</h></idx>
+      and <em>self-similarity</em>.
+          <idx><h>self-similarity</h></idx>
+      In recursive problem solving we use the divide-and-conquer strategy repeatedly to break a big problem into a sequence of smaller and smaller problems until we arrive at a problem that is practically trivial to solve.
+    </p>
+    <p>
+      What allows us to create this series \marginpar{Subproblems} of subproblems is that each subproblem is similar to the original problem<mdash/>that is,
+      each subproblem is just a smaller version of the original problem.
+      Look again at the task of saying
+      <q>Hello</q>
+      <em>N</em> times.
+      Solving this task involves solving the similar task of saying
+      <q>Hello</q>
+      <m>N-1</m> times,
+      which can be divided into the similar task<nbsp/>of saying
+      <q>Hello</q>
+      <m>N-2</m> times.
+      And so on.
+    </p>
+    <p>
+      The ability to see a problem as being composed of smaller,
+      self-similar problems is at the heart of the recursive approach.
+      And \marginpar{Self-similarity} although you might not have thought about this before,
+      a surprising number of programming problems have this self-similarity characteristic.
+      Let's illustrate these ideas with some simple examples.
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP:Divide and Conquer</title>
+      <p>
+        Many programming problems can be solved by dividing them into smaller,
+        simpler problems.
+        For recursive solutions,
+        finding the key to the subproblem often holds the solution to the original problem.
+      </p>
+    </principle>
+  </subsection>
+</section>

@@ -1,0 +1,286 @@
+<section xml:id="using-objects">
+  <title>Using <c>String</c>Objects</title>
+  <introduction>
+    <p>
+      As we know, a Java program is a collection of interacting objects,
+      where each object is a module that encapsulates a portion of the program's attributes and actions.
+      Objects belong to classes,
+      which serve as templates or blueprints for creating objects.
+      Think again of the cookie cutter analogy.
+      A class is like a cookie cutter.
+      Just as a cookie cutter is used to shape and create individual cookies,
+      a class definition is used to shape and create individual objects.
+    </p>
+    <p>
+      Programming in Java is primarily a matter of designing and defining class definitions,
+      which are then used to construct objects.
+      The objects perform the program's desired actions.
+      To push the cookie cutter analogy a little further,
+      designing and defining a class is like building the cookie cutter.
+      Obviously, very few of us would bake cookies if we first had to design and build the cookie cutters.
+      We'd be better off using a pre-built cookie cutter.
+      By the same token, rather than designing our own classes,
+      it will be easier to get into
+      <q>baking</q>
+      programs if we begin by using some predefined Java classes.
+    </p>
+    <p>
+      The Java library contains many pre-defined classes that we will use in our programs.
+      So let's begin our study of programming by using two of these classes,
+      the <c>String</c> and <c>Graphics</c> classes.
+    </p>
+  </introduction>
+  <subsection xml:id="fig-strclass">
+    <title>Creating and Combining Strings</title>
+    <p>
+      Strings are very useful objects in Java and in all computer programs.
+      <image width="73%" source="chptr02/stringuml.png"/> They are used for inputting and outputting all types of data.
+      Therefore, it essential that we learn how to create and use String objects.
+    </p>
+    <p>
+      Figure<nbsp/>2.1 provides an overview of a very small part of Java's <c>String</c> class.
+      In addition to the two <c>String()</c> constructor methods,
+      which are used to create strings,
+      it lists several useful instance methods that can be used to manipulate strings.
+      The <c>String</c> class also has two instance variables.
+      One stores the <c>String</c>'s <em>value</em>,
+      which is a string of characters such as
+      <q>Hello98</q>, and the other stores the <c>String</c>'s <em>count</em>,
+      which is the number of characters in its string value.
+    </p>
+    <p>
+      Recall from Chapter<nbsp/>0 that in order to get things done in a program we send messages to objects.
+      The messages must correspond to the object's instance methods.
+      Sending a message to an object is a matter of calling one of its instance methods.
+      In effect, we use an object's methods to get the object to perform certain actions for us.
+      For example,
+      if we have a <c>String</c>, named <c>str</c> and we want to find out how many characters it contains,
+      we can call its <c>length()</c> method,
+      using the expression <c>str.length()</c>. If we want to print <c>str</c>'s length,
+      we can embed this expression in a print statement:
+    </p>
+<pre>
+System.out.println(str.length()); // Print str's length
+</pre>
+    <p>
+      In general, to use an object's instance method,
+      we refer \marginpar{Dot notation} to the method in dot notation by first naming the object and then the method:
+    </p>
+    <p>
+      \begin{extract}<em>objectName.methodName()</em> ; \end{extract}
+    </p>
+    <p>
+      The <em>objectName</em> refers to a particular object,
+      and the <c>methodName()</c> refers to one of its instance methods.
+    </p>
+    <p>
+      As this example makes clear,
+      instance methods belong to objects,
+      and in order to use a method,
+      you must first have an object that has that method.
+      So, to use one of the <c>String</c> methods in a program,
+      we must first create a <c>String</c> object.
+    </p>
+    <p>
+      To create a <c>String</c> object in a program,
+      we first declare a <c>String</c> variable.
+    </p>
+<pre>
+String str; // Declare a String variable named str
+</pre>
+    <p>
+      We then create a <c>String</c> object by using <image width="73%" source="chptr02/hello.png"/> \caption{A <c>String</c> object stores a sequence of characters and a <c>count</c> giving the number of characters. }
+    </p>
+    <p>
+      the <c>new</c> keyword in conjunction with one of the <c>String()</c> constructors.
+      We assign the new object to the variable we declared:
+    </p>
+<pre>
+str = new String("Hello");// Create a String object
+</pre>
+    <p>
+      This example will create a <c>String</c> that contains,
+      as its value,
+      the word "Hello" that is passed in by the constructor.
+      The <c>String</c> object that this creates is shown in Figure<nbsp/>2.2.
+    </p>
+    <p>
+      We can also use a constructor with an empty parameter list.
+      Note that in this case we combine the
+      <em>variable declaration</em>
+      and the <em>object creation</em> into one statement:
+    </p>
+<pre>
+String str2 = new String(); // Create a String
+</pre>
+    <p>
+      This example will create a <c>String</c> object that contains the empty string as its value.
+      The <term>empty string</term> has the literal value "" <mdash/> that is,
+      a pair of double quotes that contain no characters.
+      Because the empty string has no characters,
+      the <c>count</c> variable stores a zero (Fig.<nbsp/>2.3).
+      <image width="73%" source="chptr02/emptystr.png"/> \caption{The empty string has a value of "" and a its length is 0. } Note that we use a constructor to assign an initial value to a variable of type <c>String</c>
+      (or of a type equal to any other class).
+      This differs from how we assign an initial value to variables of primitive type,
+      for which we use a simple assignment operator.
+      This difference is related to an important difference in the way Java treats these two types of variables.
+      Variables of primitive type are names for memory locations where values of primitive type are stored.
+      As soon as they are declared they are assigned a
+      <term>default value</term> of that primitive type.
+      The default value for <c>int</c> is <m>0</m> and the default value for <c>boolean</c> is <c>false</c>. On the other hand,
+      variables that are declared to be of a type equal to a class name are designed to store a <term>reference</term>
+      to an object of that type. (A reference is also called a <term>pointer</term>
+      because it points to the memory address where the object itself is stored.) A constructor creates an object somewhere in memory and supplies a reference to it that is stored in the variable.
+      For that reason,
+      variables that are declared as a type equal to a class name are said to be variables of reference type or
+      <term>reference variables</term>.
+      Reference variables have a special default value called <c>null</c> after they are declared and before they are assigned a reference.
+      It is possible to check whether or not a reference variable contains a reference to an actual object by checking whether or not it contains this
+      <term>null pointer</term>.
+    </p>
+    <p>
+      Once you have constructed a <c>String</c> object,
+      you can use any of the methods shown in Figure<nbsp/>2.1 on it.
+      As we already saw, we use dot notation to call one of the methods.
+      Thus, we first mention the name of the object followed by a period (dot),
+      followed by the name of the method.
+      For example,
+      the following statements print the lengths of our two strings:
+    </p>
+<pre>
+System.out.println(str.length());
+System.out.println(str2.length());
+</pre>
+    <p>
+      Another useful <c>String</c> method is the <c>concat(String)</c> method,
+      which can be used to <em>concatenate</em> two strings.
+      This method takes a <c>String</c> argument.
+      It returns a <c>String</c> that combines the
+<c>String</c> argument to the <c>String</c> that the method is called on.
+      Consider this example:
+    </p>
+<pre>
+String s1 = new String("George ");
+String s2 = new String("Washington");
+System.out.println(s1.concat(s2));
+</pre>
+    <p>
+      In this case,
+      the <c>concat()</c> method adds the <c>String</c><em>s2</em>
+      to the end of the <c>String</c><em>s1</em>.
+      The result, which gets printed,
+      will be the <c>String</c>"George Washington".
+    </p>
+    <p>
+      Because strings are so important, Java allows a number of shortcuts to be used when creating and concatenating strings.
+      For example,
+      you don't have to use <c>new String()</c> when creating a new string object.
+      The following code will also work:
+    </p>
+<pre>
+String s1 = "George ";
+String s2 = "Washington";
+</pre>
+    <p>
+      Similarly, an easier way to concatenate two <c>String</c> objects is to use the plus sign (+), which serves as a
+      <em>concatenation operator</em> in Java:
+    </p>
+<pre>
+System.out.println(s1 + s2);
+</pre>
+    <p>
+      Another useful <c>String</c> method is the <c>equals()</c> method.
+      This is a <c>boolean</c> method,
+      which is used to compare two
+<c>String</c> s.
+      If both <c>String</c> s have the same characters,
+      in the same order, it will return true.
+      Otherwise it will return false.
+      For example, consider the following code segment:
+    </p>
+<pre>
+String s1 = "Hello";
+String s2 = "Hello";
+String s3 = "hello";
+</pre>
+    <p>
+      In this case,
+      the expression <c>s1.equals(s2)</c> will be true,
+      but <c>s1.equals(s3)</c> will be false.
+    </p>
+    <p>
+      It is important to note that the empty string is not the same as a
+<c>String</c> variable that contains <c>null</c>. Executing the statements:
+    </p>
+<pre>
+String s1;
+String s2 = "";
+System.out.println(s1.equals(s2));
+</pre>
+    <p>
+      will not only not print out <c>true</c>; it will cause the the program to terminate abnormally.
+      It is an error to use the method of a <c>String</c> variable,
+      or any other variable whose type is a class,
+      before it has been assigned an object.
+      When the above code is executed,
+      it will report a <term>null pointer exception</term>,
+      one of the most common runtime errors.
+      When you see that error message,
+      it means that some method was executed on a variable that does not refer to an object.
+      On the other hand,
+      the empty string is a perfectly good <c>String</c> object which just happens to contain zero characters.
+    </p>
+    <p>
+      <xref ref="fig-sillystr">Figure</xref>
+      shows a program that uses string
+    </p>
+    <figure xml:id="fig-sillystr">
+      <caption>A program that prints silly string puns.</caption>
+<pre>
+public class StringPuns
+{
+  public static void main(String args[])
+  { String s = new String("string");
+    String s1 = s.concat(" puns.");
+    System.out.println("Here are the top 5 " + s1);
+    String s2 = "5. Hey baby, wanna ";
+    String s3 = s + " along with me.";
+    System.out.println(s2 + s3);
+    System.out.println("4. I've got the world on a " +
+                                                 s + ".");
+    String s4 = new String("two");
+    String s5 = ". You have more class than a ";
+    System.out.print(s4.length());
+    System.out.println(s5 + s + " of pearls.");
+    System.out.print("2. It is ");
+    System.out.print(s.equals("string"));
+    System.out.println(" that I am no " + s + " bean.");
+    String s6 = " quintet.";
+    System.out.println("1. These puns form a " + s + s6);
+  } // main()} //  StringPuns class
+</pre>
+    </figure>
+    <p>
+      concatenation to create some silly sentences.
+      The programs declares a number of string variables,
+      named <c>s</c>, <c>s1</c>, and so on,
+      and it instantiates a <c>String</c> object for each variable to refer to.
+      It then prints out a top-five list using the concatenation operator to combine strings.
+      Can you figure out what it prints without running it?
+    </p>
+    <p>
+      \secEXRHone{Self-Study Exercises}
+      <ol>
+        <li>
+          <p>
+            What is the output to the console window when the following Java code fragment is executed:
+<pre>
+String s = "ing";
+System.out.println("The s" + s + s + " k" + s + ".");
+</pre>
+          </p>
+        </li>
+      </ol>
+    </p>
+  </subsection>
+</section>
