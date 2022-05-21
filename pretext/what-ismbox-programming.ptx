@@ -61,7 +61,7 @@
       such as an <c>Idea</c>. It can be a natural thing,
       such as an <c>Animal</c>, or an artificial,
       human-made thing,
-      such as a <c>ATM</c>. A program that manages an ATM would involve <c>BankAccount</c> s and <c>Customer</c> objects.
+      such as a <c>ATM</c>. A program that manages an ATM would involve a <c>BankAccount</c> and <c>Customer</c> objects.
       A chess program would involve a <c>Board</c> object and <c>ChessPiece</c> objects.
     </p>
     <p>
@@ -95,7 +95,7 @@
       A
 <c>ChessPiece</c> object might have a pair of <c>row</c> and <c>column</c> attributes that specify its position on the chess board.
       Notice that an object's attributes are themselves objects.
-      The ATM's <c>cash</c> attribute and the chess piece's <c>row</c> and <c>column</c> attributes are <c>Number</c> s.
+      The ATM's <c>cash</c> attribute and the chess piece's <c>row</c> and <c>column</c> attributes are <c>Numbers</c>.
     </p>
     <p>
       <xref ref="fig-umlobj2">Figure</xref>
@@ -130,7 +130,7 @@
       They do things or have things done to them.
       In fact, programming in Java is largely a matter of getting objects to perform certain actions for us.
       For example,
-      in a chess program the <c>ChessPiece</c> s have the ability to <c>moveTo()</c> a new position on the chess board.
+      in a chess program a <c>ChessPiece</c> has the ability to <c>moveTo()</c> a new position on the chess board.
       Similarly, when a customer pushes the
       <q>Current Balance</q>
       button on an ATM machine,
@@ -160,7 +160,7 @@
     <p>
       The diagram in <xref ref="fig-umlmsg2">Figure</xref>
       depicts a sequence of messages representing an idealized ATM transaction.
-      First, an ATM customer asks the ATM machine to report his current balance.
+      First, an ATM customer asks the ATM machine to report their current balance.
       The ATM machine in turn asks the customer's bank account to report the customer's balance.
       The ATM receives the value $528.52 from the bank account and passes it along to the customer.
       In this case, the message does not involve an argument.
@@ -297,7 +297,7 @@
     <p>
       An instance variable will have different values for different instances.
       For example,
-      individual <c>Rectangle</c> s will have different values for their <c>length</c>, <c>width</c>, <c>x</c>, and
+      an individual <c>Rectangle</c> will have different its for their <c>length</c>, <c>width</c>, <c>x</c>, and
 <c>y</c> variables.
       So these are examples of instance variables.
       The
@@ -307,7 +307,7 @@
     </p>
     <p>
       An example of a class variable would be a variable in the <c>Rectangle</c> class that is used to keep track of how many individual
-<c>Rectangle</c> s have been created.
+<c>Rectangle</c>s have been created.
       (Our drawing program might need this information to help manage its memory resources.)
       Suppose we name this variable <c>nRectangles</c> and suppose we add 1 to it each time a new <c>Rectangle</c> instance is created.
     </p>
@@ -365,7 +365,7 @@
       In Java, the most general class is the <c>Object</c> class.
       The classes below <c>Object</c> in the hierarchy are known as its <term>subclasses</term>.
       Since all of the objects we use in our programs belong to some class or other,
-      this is like saying that all objects are <c>Object</c> s.
+      this is like saying that every object is an <c>Object</c>.
     </p>
     <p>
       <xref ref="fig-classhier">Figure</xref>
@@ -386,7 +386,7 @@
       <image width="73%" source="chptr00/classhier.png"/>
     </figure>
     <p>
-      To introduce some important terminology associated with this kind of \marginpar{Superclass and subclass} hierarchy,
+      To introduce some important terminology associated with this kind of <aside>Superclass and subclass</aside> hierarchy,
       we say that the <c>Rectangle</c> class is a subclass of the <c>Object</c> class.
       The <c>Square</c> class is a subclass of both <c>Rectangle</c> and <c>Object</c>. Classes that occur above a given class in the hierarchy are said to be its
       <term>superclasses</term>.
@@ -401,7 +401,7 @@
       It adds the feature that its length and width are always equal.
     </p>
     <p>
-      Another important concept associated with a class hierarchy is the \marginpar{Class inheritance} notion of
+      Another important concept associated with a class hierarchy is the <aside>Class inheritance</aside> notion of
       <term>class inheritance</term>,
       whereby a subclass inherits elements
       (attributes and/or methods)
@@ -476,7 +476,27 @@
       an object-oriented program is composed of many objects communicating with each other.
       The process of designing an object-oriented program to solve some problem or other involves several important principles:
       <ul>
-        Divide-and-Conquer Principle. Generally, the first step in designing a program is to divide the overall problem into a number of objects that will interact with each other to solve the problem. Thus, an object-oriented program employs a <em>division of labor</em> much as we do in organizing many of our real-world tasks. This <em>divide-and-conquer</em> approach is an important problem-solving strategy. Encapsulation Principle. Once the objects are identified, the next step involves deciding, for each object, what attributes it has and what actions it will take. The goal here is to encapsulate within each object the expertise needed to carry out its role in the program. Each object is a self-contained module with a clear responsibility and the tools (attributes and actions) necessary to carry out its role. Just as a dentist encapsulates the expertise needed to diagnose and treat a tooth ache, a well-designed object contains the information and methods needed to perform its role. Interface Principle. In order for objects to work cooperatively and efficiently, we have to clarify exactly how they should interact, or <em>interface</em>, with one another. An object's interface should be designed to limit the way the object can be used by other objects. Think of how the different interfaces presented by a digital and analog watch determine how the watches are used. In a digital watch, time is displayed in discrete units, and buttons are used to set the time in hours, minutes and seconds. In an analog watch, the time is displayed by hands on a clock face, and time is set, less precisely, by turning a small wheel. Information Hiding Principle. In order to enable objects to work together cooperatively, certain details of their individual design and performance should be hidden from other objects. To use the watch analogy again, in order to use a watch we needn't know how its time keeping mechanism works. That level of detail is hidden from us. Hiding such implementation details protects the watch's mechanism, while not limiting its usefulness. Generality Principle. To make objects as generally useful as possible, we design them not for a particular task but rather for a particular <em>kind</em> of task. This principle underlies the use of software libraries. As we will see, Java comes with an extensive library of classes that specialize in performing certain kinds of input and output operations. For example, rather than having to write our own method to print a message on the console, we can use a library object to handle our printing tasks. Extensibility Principle. One of the strengths of the object-oriented approach is the ability to extend an object's behavior to handle new tasks. This also has its analogue in the everyday world. If a company needs sales agents to specialize in hardware orders, it would be more economical to extend the skills of its current sales agents instead of training a novice from scratch. In the same way, in the object-oriented approach, an object whose role is to input data might be specialized to input numeric data. Abstraction Principle. Abstraction is the ability to focus on the important features of an object when trying to work with large amounts of information. For example, if we are trying to design a floor plan for a kitchen, we can focus on the shapes and relative sizes of the appliances and ignore attributes such as color, style, and manufacturer. The objects we design in our Java programs will be abstractions in this sense because they ignore many of the attributes that characterize the real objects and focus only on those attributes that are essential for solving a particular problem.
+        <li>
+          Divide-and-Conquer Principle. Generally, the first step in designing a program is to divide the overall problem into a number of objects that will interact with each other to solve the problem. Thus, an object-oriented program employs a <em>division of labor</em> much as we do in organizing many of our real-world tasks. This <em>divide-and-conquer</em> approach is an important problem-solving strategy. 
+        </li>
+        <li>
+         Encapsulation Principle. Once the objects are identified, the next step involves deciding, for each object, what attributes it has and what actions it will take. The goal here is to encapsulate within each object the expertise needed to carry out its role in the program. Each object is a self-contained module with a clear responsibility and the tools (attributes and actions) necessary to carry out its role. Just as a dentist encapsulates the expertise needed to diagnose and treat a tooth ache, a well-designed object contains the information and methods needed to perform its role. 
+        </li>
+        <li>
+         Interface Principle. In order for objects to work cooperatively and efficiently, we have to clarify exactly how they should interact, or <em>interface</em>, with one another. An object's interface should be designed to limit the way the object can be used by other objects. Think of how the different interfaces presented by a digital and analog watch determine how the watches are used. In a digital watch, time is displayed in discrete units, and buttons are used to set the time in hours, minutes and seconds. In an analog watch, the time is displayed by hands on a clock face, and time is set, less precisely, by turning a small wheel.
+        </li>
+        <li>
+          Information Hiding Principle. In order to enable objects to work together cooperatively, certain details of their individual design and performance should be hidden from other objects. To use the watch analogy again, in order to use a watch we needn't know how its time keeping mechanism works. That level of detail is hidden from us. Hiding such implementation details protects the watch's mechanism, while not limiting its usefulness.
+        </li>
+        <li>
+         Generality Principle. To make objects as generally useful as possible, we design them not for a particular task but rather for a particular <em>kind</em> of task. This principle underlies the use of software libraries. As we will see, Java comes with an extensive library of classes that specialize in performing certain kinds of input and output operations. For example, rather than having to write our own method to print a message on the console, we can use a library object to handle our printing tasks.
+        </li>
+        <li> 
+         Extensibility Principle. One of the strengths of the object-oriented approach is the ability to extend an object's behavior to handle new tasks. This also has its analogue in the everyday world. If a company needs sales agents to specialize in hardware orders, it would be more economical to extend the skills of its current sales agents instead of training a novice from scratch. In the same way, in the object-oriented approach, an object whose role is to input data might be specialized to input numeric data.
+        </li>
+        <li>
+          Abstraction Principle. Abstraction is the ability to focus on the important features of an object when trying to work with large amounts of information. For example, if we are trying to design a floor plan for a kitchen, we can focus on the shapes and relative sizes of the appliances and ignore attributes such as color, style, and manufacturer. The objects we design in our Java programs will be abstractions in this sense because they ignore many of the attributes that characterize the real objects and focus only on those attributes that are essential for solving a particular problem.
+       </li>
       </ul>
     </p>
     <p>
