@@ -1,6 +1,6 @@
 <section xml:id="java-language-elements">
   <title>Java Language Elements</title>
-  <introduction>
+  <!-- <introduction> -->
     <p>
       In this section we will introduce some of the key elements of the Java language by describing the details of a small program.
       We will look at how a program is organized and what the various parts do.
@@ -9,12 +9,11 @@
     </p>
     <p>
       The program we will study is a Java version of the traditional HelloWorld program<mdash/>''traditional'' because practically every introductory programming text begins with it.
-      When it is run, the HelloWorld program (Fig.
-      <xref ref="fig_helloworld"></xref>) just displays the greeting
+      When it is run, the HelloWorld program (<xref ref="lstng_helloworld"></xref>) just displays the greeting
       <q>Hello, World!</q>
       on the console.
     </p>
-    <figure xml:id="fig_helloworld">
+    <listing xml:id="lstng_helloworld">
       <caption>The <c>HelloWorld</c> application program.</caption>
 <pre>
 /*
@@ -37,8 +36,7 @@
    }  //  main()
  }  // HelloWorld                  // End class body
 </pre>
-    </figure>
-  </introduction>
+    </listing>>
   <subsection>
     <title>Comments</title>
     <p>
@@ -82,14 +80,14 @@
       it is impossible to begin a new comment inside an already-started comment because all text inside the first comment,
       including /*, is ignored by the compiler.
     </p>
-    <principle>
-      <title>Comments</title>
+    <definition>
+      <title>Comment</title>
       <p>
         Any text contained within /* and */, which may span several lines,
         is considered a comment and is ignored by the compiler.
         Inserting double slashes (//) into a line turns the rest of the line into a comment.
       </p>
-    </principle>
+    </definition>
     <p>
       Multiline comments are often used to create a <em>comment block</em>
       that provides useful documentation for the program.
@@ -97,17 +95,19 @@
     </p>
     <p>
       For single-line comments,
-      double slashes (//) can be inserted anywhere \marginpar{Single-line comment} on a line of code.
+      double slashes (//) can be inserted anywhere
+<!--  \marginpar{Single-line comment} -->
+      on a line of code.
       The result is that the rest of the line is ignored by the compiler.
       We use single-line comments throughout the <c>HelloWorld</c> program to provide a running commentary of its language elements.
     </p>
+    <principle>
+     <title>PROGRAMMING TIP: Use of Comments</title>
     <p>
-      \begin{principle}[PROGRAMMING TIP:Use of Comments.]
+      A well-written program should begin with a comment block that provides the name of the program,
+      its author, and a description of what the program does.
     </p>
-    <p>
-      {A well-written program should begin with a comment block that provides the name of the program,
-      its author, and a description of what the program does.}
-    </p>
+    </principle>
   </subsection>
   <subsection>
     <title>Program Layout</title>
@@ -147,16 +147,14 @@
       The Java language contains 48 predefined <em>keywords</em>
       (<xref ref="tab_keywords">Table</xref>).
       These are words that have special meaning in the language and whose use is reserved for special purposes.
-      For example, the keywords used in the HelloWorld program (Fig.
-      <xref ref="fig_helloworld"></xref>) are: <c>class</c>, <c>extends</c>, <c>private</c>, <c>public</c>, <c>static</c>, and
-<c>void</c>.
+      For example, the keywords used in the HelloWorld program (<xref ref="lstng_helloworld"></xref>) are: 
+      <c>class</c>, <c>extends</c>, <c>private</c>, <c>public</c>, <c>static</c>, and
+      <c>void</c>.
     </p>
     <figure xml:id="tab_keywords">
-      <title>Java keywords</title>
-      { }{\rule{27pc}{1pt}}
-      \vspace{-10pt}
+      <caption>Java keywords. Those with * are not used.</caption>
 <pre>
-abstract   default   goto             package       this
+abstract   default   goto*             package       this
 boolean    do        if               private       throw
 break      double    implements       protected     throws
 byte       enum      import           public        transient
@@ -164,11 +162,9 @@ case       elses     instanceof       return        try
 catch      extend    int              short         void
 char       final     interface        static        volatile
 class      finally   long             super         while
-const      float     native           switch
+const*      float     native           switch
 continue   for       new              synchronized
 </pre>
-      \vspace{-14pt}{\rule{27pc}{1pt}}
-      \endTB
     </figure>
     <p>
       Because their use is restricted,
@@ -180,7 +176,9 @@ continue   for       new              synchronized
     </p>
     <p>
       The names for classes, methods,
-      and variables are called identifiers, \marginpar{Identifier syntax} which follow certain syntax rules:
+      and variables are called identifiers, 
+<!-- \marginpar{Identifier syntax} -->
+     which follow certain syntax rules:
     </p>
     <principle>
       <title>Identifier</title>
@@ -196,12 +194,15 @@ continue   for       new              synchronized
       For example, <c>thisVar</c> and <c>ThisVar</c> are two different identifiers.
     </p>
     <p>
-      In addition to the syntax rule that governs identifiers, Java \marginpar{Identifier style} programmers follow certain style conventions in making up names for classes,
+      In addition to the syntax rule that governs identifiers, Java 
+<!-- \marginpar{Identifier style} -->
+      programmers follow certain style conventions in making up names for classes,
       variables,
       and methods.
       By convention,
-      class names in Java begin with a capital letter and use capital letters to distinguish the individual words in the name<mdash/>for example, <c>HelloWorld</c> and <c>\marginpar{Java naming conventions}
-TextField</c>. Variable and method names begin with a lowercase letter but also use capital letters to distinguish the words in the name<mdash/>for example, <c>main()</c>, <c>greeting</c>, <c>greet()</c>, <c>getQuestion()</c>, and <c>getAnswer()</c>. The advantage of this convention is that it is easy to distinguish the different elements in a program<mdash/>classes, methods,
+      class names in Java begin with a capital letter and use capital letters to distinguish the individual words in the name<mdash/>for example, <c>HelloWorld</c> and <c>TextField</c>.
+<!-- \marginpar{Java naming conventions}-->
+ Variable and method names begin with a lowercase letter but also use capital letters to distinguish the words in the name<mdash/>for example, <c>main()</c>, <c>greeting</c>, <c>greet()</c>, <c>getQuestion()</c>, and <c>getAnswer()</c>. The advantage of this convention is that it is easy to distinguish the different elements in a program<mdash/>classes, methods,
       variables<mdash/>just by how they are written. (For more on Java style conventions,
       see Appendix A.).
     </p>
@@ -211,14 +212,74 @@ TextField</c>. Variable and method names begin with a lowercase letter but also 
       and methods.
       This helps to make the program more readable.
     </p>
+    <principle>
+      <title>PROGRAMMING TIP: Choice of Identifiers</title>
     <p>
-      \begin{principle}[PROGRAMMING TIP:Choice of Identifiers.]
-    </p>
-    <p>
-      {To make your program more readable,
+      To make your program more readable,
       choose names that describe the purpose of the class, variable,
-      or method.}
+      or method.
     </p>
+   </principle>
+
+       <exercise>
+            <title>True/False</title>
+            <idx>vector space</idx>
+            <statement correct="no">
+                <p>Every vector space has finite dimension.</p>
+            </statement>
+            <feedback>
+                <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+            </feedback>
+            <hint>
+                <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+            </hint>
+        </exercise>
+
+        <exercise>
+            <title>Multiple-Choice, Not Randomized, One Answer</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>What color is a stop sign?</p>
+            </statement>
+            <!-- to appear as problem with potentially multiple correct -->
+            <!-- answers (even though there is only one), use           -->
+            <!--                                                        -->
+            <!--     <choices multiple-correct="yes">                   -->
+            <!--                                                        -->
+            <choices>
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>White might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
   </subsection>
   <subsection xml:id="subsec_primitives">
     <title>Data Types and Variables</title>
@@ -237,7 +298,9 @@ TextField</c>. Variable and method names begin with a lowercase letter but also 
       In addition to new types of objects that are created by programmers, Java has many different types of built-in objects.
       Two types that we will encounter in this chapter are the <c>String</c> and
 <c>PrintStream</c> objects.
-      Java's primitive types include three \marginpar{Primitive types} integer types,
+      Java's primitive types include three 
+<!-- \marginpar{Primitive types}-->
+       integer types,
       three real number types,
       a character type, and a boolean type with values true and false.
       The names of the primitive types are keywords like <c>int</c> for one integer type, <c>double</c> for one real number type,
@@ -256,10 +319,18 @@ TextField</c>. Variable and method names begin with a lowercase letter but also 
       <q>Hello</q>. (Actually, this is not the full story,
       which is a little more complicated,
       but we will get to that in <xref ref="chapter-objects">Chapter</xref>.)
+
+      <figure xml:id="fig_vars">
+      <caption>Variables are like <em>typed</em> containers.</caption>
+      <image width="25%" source="chptr01/vars.png"/> 
+      </figure>
+
+
     </p>
     <p>
       In the <c>HelloWorld</c> class,
-      the instance variable <c>greeting</c><image width="73%" source="chptr01/vars.png"/> (line 8) stores a value of type <c>String</c>. In the <c>main()</c> method,
+      the instance variable <c>greeting</c>
+      (line 8) stores a value of type <c>String</c>. In the <c>main()</c> method,
       the variable <c>helloworld</c> is assigned a <c>HelloWorld</c> object
       (line 16).
     </p>
@@ -275,9 +346,13 @@ TextField</c>. Variable and method names begin with a lowercase letter but also 
     <title>Statements</title>
     <p>
       A Java program is a collection of statements.
-      A <term>statement</term> is a \marginpar{Executing a program} segment of code that takes some action in the program.
+      A <term>statement</term> is a 
+<!-- \marginpar{Executing a program} -->
+      segment of code that takes some action in the program.
       As a program runs, we say it <em>executes</em> statements,
       meaning it carries out the actions specified by those statements.
+    </p>
+    <p>
       In our <c>HelloWorld</c> program,
       statements of various types occur on lines 8, 11, 15, 16, and 17.
       Notice that all of these lines end with a semicolon.
@@ -290,12 +365,14 @@ TextField</c>. Variable and method names begin with a lowercase letter but also 
       In Java, a variable must be declared before it can be used in a program.
       Failure to do so would cause a syntax error.
       In its simplest form,
-      a declaration statement begins with the \marginpar{Declaration statement} variable's type,
+      a declaration statement begins with the 
+<!-- \marginpar{Declaration statement} -->
+      variable's type,
       which is followed by the variable's name,
       and ends with a semicolon:
     </p>
     <p>
-      \begin{extract}<em>Type VariableName</em> ; \end{extract}
+      <em>Type VariableName</em> ; 
     </p>
     <p>
       A variable's type is either one of the primitive types we mentioned,
@@ -315,11 +392,11 @@ HelloWorld helloworld;
       The variable's name is <c>helloworld</c> and its type is <c>HelloWorld</c>, the name of the class that is being defined in our example.
       To take another example the following statements declare two
 <c>int</c> variables,
-      named <c>int1</c> and <c>int2</c>:
+      named <c>num1</c> and <c>num2</c>:
     </p>
 <pre>
-int int1;
-int int2;
+int num1;
+int num2;
 </pre>
     <p>
       As we noted,
@@ -329,7 +406,7 @@ int int2;
     <p>
       Without going into too much detail at this point,
       declaring a variable causes the program to set aside enough memory for the type of data that will be stored in that variable.
-      So in this example, Java would reserve enough space to store an <c>int</c>.
+      So in this example, Java would reserve enough space to store an <c>int</c> value, such as 25 or 1000.
     </p>
     <p>
       An <term>assignment statement</term>
@@ -340,77 +417,97 @@ int int2;
       Like other statements, an assignment statement ends with a semicolon:
     </p>
     <p>
-      \begin{extract}<em>VariableName</em>
-      = <em>Value</em> ; \end{extract}
+      <em>VariableName</em>  = <em>Value</em> ;
     </p>
     <p>
-      When it executes an assignment statement, Java will first determine what value is given on the right hand side and then assign (store) that value to (in) the variable on the left hand side.
-      Here are some simple examples:
-      <image width="73%" source="chptr01/assign.png"/>
+      When it executes an assignment statement, Java will first determine what value is given on the right hand side and then assign that 
+       value to the variable on the left hand side. 
+     For example, consider these three assignment statements: 
+    <pre>
+    <!-- greeting = "Hello, World"; -->
+    num1 = 50;        // (a) Assign 50 to num1
+    num2 = 10 + 15;   // (b) Assign 25 to num2
+    num1 = num2;      // (c) Copy num2's value (25) into num1
+    </pre>
     </p>
-<pre>
-greeting = "Hello, World";
-num1 = 50;        // (a) Assign 50 to num1
-num2 = 10 + 15;   // (b) Assign 25 to num2
-num1 = num2;      // (c) Copy num2's value (25) into num1
-</pre>
     <p>
-      In the first case,
+      <figure xml:id="fig_assign">
+      <caption>This illustrates how the states of the variables <c>num1</c> and <c>num2</c> change over the course of 
+       the three assignments, (a), (b) and (c).</caption>
+      <image width="50%" source="chptr01/assign.png"/>
+      </figure>
+     </p>
+     <p>
+<!--      In the first case,
       the value on the right hand side is the string literal "Hello, World!", which gets stored in <c>greeting</c>. Of course, <c>greeting</c> has to be the right type of container<ndash/>in this case,
       a <c>String</c> variable.
-      In the next case, the value on the right hand side is 50.
-      So that is the value that gets stored in <c>num1</c>, assuming that <c>num1</c> is an <c>int</c> variable.
-      The situation after this assignment is shown in the top drawing in <xref ref="fig_assign">Figure</xref>.
-      In the third case, the value on the right hand side is 25,
-      which is determined by adding 10 and 15.
-      So the value that gets assigned to <c>num2</c> is 25.
-      After this assignment we have the situation shown in the middle drawing in the figure.
-      Of course, this assumes that <c>num2</c> is an <c>int</c> variable.
-      In the last case, the value on the right hand side is 25,
-      the value that we just stored in the variable <c>num2</c>. So, 25 gets stored in <c>num1</c>. This is the bottom drawing in the accompanying figure.
+-->
+
+      In the first statement (a) the value on the right hand side is 50.
+      So that is the value that gets stored in <c>num1</c>, resulting 
+      in the situation shown in the top drawing in <xref ref="fig_assign">Figure</xref>.
+      In the second statement (b) the value on the right hand side is 25,
+      the result of adding  10 and 15. So 25 gets assigned to <c>num2</c>, leading to the situation shown in
+      in the middle drawing in the figure.
+      In the last statement (c), the value on the right hand side is 25, the value of <c>num2</c>, 
+      which is stored in <c>num1</c>, as depicted in the bottom drawing in the figure.
     </p>
     <p>
-      The last of these examples
-    </p>
-<pre>
-num1 = num2;   // Copy num2's value into num1
-</pre>
-    <p>
-      can be confusing to beginning programmers,
-      so it is worth some additional comment.
-      In this case,
-      there are variables on both the left and right of the assignment operator.
-      But they have very different meaning.
-      The variable on the right is treated as a value.
-      If that variable is storing 25, then that is its value.
-      In fact, whatever occurs on the right hand side of an assignment operator is treated as a value.
-      The variable on the left hand side is treated as a memory location.
-      It is where the value 25 will be stored as a result of executing this statement.
-      The effect of this statement is to copy the value stored in
-      <em>num2</em> into <em>num1</em>,
-      as illustrated <image width="73%" source="chptr01/assign2.png"/> \caption{In the assignment <em>num1 = num2;</em>,
-      <em>num2</em>'s value is copied into
-      <em>num1</em>. } in <xref ref="fig_assign2">Figure</xref>.
+      The last of these assignments, (c), has variables on both sides of the equal sign, which 
+      can be confusing to beginning programmers. It might look like we're saying that <c>num1</c> <em>equals</em>
+      <c>num2</c>, which cannot be true. But, remember, in this case the equal sign is serving as an 
+      assignment operator. 
     </p>
     <p>
-      Java has many other kinds of statements and we will be learning about these in subsequent examples.
-      The following examples from the <c>HelloWorld</c> program are examples of statements in which a method is called:
+    <observation>
+      Whenever a variable occurs on
+      the right hand side of an assignment operator, we are using its value. We are treating it as a value.
+    </observation>
     </p>
-<pre>
-System.out.println(greeting);// Call println() method
-helloworld.greet();          // Call greet() method
-</pre>
+    <p> 
+       As depicted in <xref ref="fig_assign2">Figure</xref>, the value of <c>num2</c>, 25, 
+       is copied into <c>num1</c>.  the variable on the left hand side of the assignment operator.
+    </p>
+     <p>
+      <figure xml:id="fig_assign2">
+       <image width="50%" source="chptr01/assign2.png"/>
+       <caption>In the assignment <em>num1 = num2;</em>, <em>num2</em>'s value is copied into  <em>num1</em>.</caption>
+      </figure>
+    </p>
     <p>
-      We will discuss these kinds of statements in greater detail as we go along.
+      Another kind of Java statemrnt is the <term>method-call statement</term>, as in these examples from the 
+     <c>HelloWorld</c> program:
+     <pre>
+     helloworld.greet();          // Call greet() method
+     System.out.println(greeting);// Call println() method
+     </pre>
+    </p>
+    <p>
+    In the first statement we are calling the <c>greet()</c> method, which will perform certain actions for us. In the 
+    second, we are calling the system's <c>println()</c> method to display a greeting on the computer screen.       
+    We will discuss these kinds of statements in greater detail as we go along.
+    </p>
+    <p>
+      Finally, notice that we can use curly braces to group one or more  statements into a sequence as in the
+      definition of the <c>greet()</c> method.
+    <pre>
+       public void greet()               // Method definition
+       {                                 // Start method body
+	   System.out.println(greeting); //  Output statement
+       } // greet()                      // End method body
+    </pre>
+    </p>
+ <!--
       One final type of statement that should be mentioned at this point is the
       <term>compound statement</term>
       (or <em>block</em>),
-      which is a sequence of statements contained within braces ().
+      which is a sequence of statements contained within braces, {}.
       We see three examples of this in the <c>HelloWorld</c> program.
       The body of a class definition extends from lines 7 through 19.
       The body of the <c>greet()</c> method is a block that extends from lines 10 through 12.
       The body of the <c>main()</c> method is a block that extends from lines 14 to 19.
     </p>
+-->
   </subsection>
   <subsection xml:id="subsec_expressions">
     <title>Expressions and Operators</title>
@@ -477,6 +574,39 @@ num == 7     // An equality expression of type boolean
 <c>false</c>.
       </p>
     </principle>
+
+
+        <exercise>
+            <title>Fill-In, Assignment statements</title>
+
+            <statement>
+             <p>After the following two statements are executed
+	      <pre>
+	      int num = 11;
+	      num = 23 - num;
+	      </pre>
+             </p>
+             <p>
+              the variable <c>num</c> will have the value <var/>.
+             </p>   
+            </statement>
+            <setup>
+                <var>
+                    <!-- Note, no "p" in "feedback" -->
+                    <condition number="12">
+                        <feedback>
+                            <p>Correct, 23 - 11 is 12, which is stored in <c>num</c>.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Incorrect. Did you perform the subtraction on the right hand side?</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
     <p>
       \secEXRHone{Self-Study Exercises}
       <ol>
@@ -510,7 +640,9 @@ int num = 11;
     </p>
     <p>
       As the <c>HelloWorld</c> program's comments indicate,
-      a class definition \marginpar{Class header} has two parts:
+      a class definition 
+<!-- \marginpar{Class header} -->
+      has two parts:
       a <em>class header</em> and a <em>class body</em>.
       In general, a class header takes the following form,
       some parts of which are optional (<em>opt</em>):
@@ -543,7 +675,9 @@ extends Object</c>, we are saying that <c>HelloWorld</c> is a direct <em>subclas
     </p>
     <p>
       The class's body,
-      which is enclosed within curly brackets (), \marginpar{Class body} contains the declaration and definition of the elements that make up the objects of the class.
+      which is enclosed within curly brackets (), 
+<!-- \marginpar{Class body} -->
+      contains the declaration and definition of the elements that make up the objects of the class.
       This is where the object's attributes and actions are defined.
     </p>
   </subsection>
@@ -576,7 +710,9 @@ private String greeting = "Hello, World!";
 <c>HelloWorld</c> class,
       cannot be directly accessed by other objects.
       The next part of the declaration is the variable's type.
-      In \marginpar{Information hiding} this case,
+      In 
+<!-- \marginpar{Information hiding} -->
+      this case,
       the <c>greeting</c> variable is a <c>String</c>, which means that it can store a string object.
       The type is followed by the name of the variable,
       in this case (<c>greeting</c>).
@@ -687,7 +823,9 @@ public static void main(String args[])
 </pre>
     <p>
       It must be declared <c>public</c> so it can be accessed from outside the class that contains it.
-      The <c>static</c> modifier \marginpar{Class method} is used to designate <c>main()</c> as a class method.
+      The <c>static</c> modifier 
+<!-- \marginpar{Class method} -->
+      is used to designate <c>main()</c> as a class method.
       As you might recall from Chapter 0, a class method is a method that is associated directly with the class that contains it rather than with the objects of the class.
       A class method is not part of the class's objects.
       Unlike instance methods,
@@ -749,7 +887,9 @@ helloworld.greet();             // Method invocation
     </p>
     <p>
       If you look back at the <c>HelloWorld</c> program in <xref ref="fig_helloworld">Figure</xref>
-      you won't find a definition of a \marginpar{Default constructor} constructor method.
+      you won't find a definition of a 
+<!-- \marginpar{Default constructor} -->
+      constructor method.
       This is not an error because Java will provide a default constructor if a class does not contain a constructor definition.
       The <term>default constructor</term>
       is a trivial constructor method,
@@ -771,7 +911,9 @@ public HelloWorld() {  }  // Default constructor
       we can make do with the default constructor.
     </p>
     <p>
-      The <c>HelloWorld</c> program illustrates the idea that an \marginpar{Interacting objects} object-oriented program is a collection of interacting objects.
+      The <c>HelloWorld</c> program illustrates the idea that an 
+<!-- \marginpar{Interacting objects} -->
+      object-oriented program is a collection of interacting objects.
       Although we create just a single <c>HelloWorld</c> object in the <c>main()</c> method,
       there are two other objects used in the program.
       One is the <c>greeting</c>, which is a <c>String</c> object consisting of the string
