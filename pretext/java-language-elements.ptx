@@ -12,165 +12,164 @@
       When it is run, the HelloWorld program (<xref ref="lstng_helloworld"></xref>) just displays the greeting
       <q>Hello, World!</q>
       on the console.
-    </p>
-    <listing xml:id="lstng_helloworld">
-      <caption>The <c>HelloWorld</c> application program.</caption>
-<pre>
-/*
-   * File: HelloWorld.java
-   * Author: Java Java Java
-   * Description: Prints Hello, World! greeting.
-   */
- public class HelloWorld extends Object // Class header
- {                                   // Start class body
-   private String greeting = "Hello, World!";
-   public void greet()               // Method definition
-   {                                 // Start method body
-       System.out.println(greeting); //  Output statement
-   } // greet()                      // End method body
-  public static void main(String args[])// Method header
-  {
-    HelloWorld helloworld;         // declare
-    helloworld = new HelloWorld(); // create
-    helloworld.greet();            // Method call
-   }  //  main()
- }  // HelloWorld                  // End class body
-</pre>
-    </listing>>
-  <subsection>
-    <title>Comments</title>
-    <p>
-      The first thing to notice about the <c>HelloWorld</c> program is the use of comments.
-      A <term>comment</term> is a non-executable portion of a program that is used to document the program.
-      Because comments are not executable instructions they are just ignored by the compiler.
-      Their sole purpose is to make the program easier for the programmer to read and understand.
-    </p>
-    <p>
-      The <c>HelloWorld</c> program contains examples of two types of Java comments.
-      Any text contained within /* and */ is considered a comment.
-      As you can see in <c>HelloWorld</c>, this kind of comment can extend over several lines and is sometimes called a
-      <em>multiline</em> comment.
-      A second type of comment is any text that follows double slashes (//) on a line.
-      This is known as a <em>single-line comment</em>
-      because it cannot extend beyond a single line.
-    </p>
-    <p>
-      When the compiler encounters the beginning marker (/*) of a multiline comment,
-      it skips over everything until it finds a matching end marker (*/).
-      One implication of this is that it is not possible to put one multiline comment inside of another.
-      That is, one comment cannot be <em>nested</em>,
-      or contained, within another comment.
-      The following code segment illustrates the rules that govern the use of /* and */:
-    </p>
-<pre>
-/* This first comment begins and ends on the same line. */
-/* A second comment starts on this line ...
-   and goes on ...
-   and this is the last line of the second comment.
-*/
-/* A third comment starts on this line ...
-    /* This is NOT a fourth comment. It is just
-       part of the third comment.
-   And this is the last line of the third comment.
-*/
-*/  This is an error because it is an unmatched end marker.
-</pre>
-    <p>
-      As you can see from this example,
-      it is impossible to begin a new comment inside an already-started comment because all text inside the first comment,
-      including /*, is ignored by the compiler.
-    </p>
-    <definition>
-      <title>Comment</title>
-      <p>
-        Any text contained within /* and */, which may span several lines,
-        is considered a comment and is ignored by the compiler.
-        Inserting double slashes (//) into a line turns the rest of the line into a comment.
       </p>
-    </definition>
-    <p>
-      Multiline comments are often used to create a <em>comment block</em>
-      that provides useful documentation for the program.
-      In <c>HelloWorld</c>, the program begins with a comment block that identifies the name of file that contains the program and its author and provides a brief description of what the program does.
-    </p>
-    <p>
-      For single-line comments,
-      double slashes (//) can be inserted anywhere
-<!--  \marginpar{Single-line comment} -->
-      on a line of code.
-      The result is that the rest of the line is ignored by the compiler.
-      We use single-line comments throughout the <c>HelloWorld</c> program to provide a running commentary of its language elements.
-    </p>
-    <principle>
-     <title>PROGRAMMING TIP: Use of Comments</title>
-    <p>
-      A well-written program should begin with a comment block that provides the name of the program,
-      its author, and a description of what the program does.
-    </p>
-    </principle>
-  </subsection>
-  <subsection>
-    <title>Program Layout</title>
-    <p>
-      Another thing to notice about the program is how neatly it is arranged on the page.
-      This is done deliberately so that the program is easy to read and understand.
-      In Java, program expressions and statements may be arranged any way the programmer likes.
-      They may occur one per line, several per line, or one per several lines.
-      But the fact that the rules governing the layout of the program are so lax makes it all the more important that we adopt a good programming style,
-      one that will help make programs easy to read.
-    </p>
-    <p>
-      So look at how things are presented in <c>HelloWorld</c>. Notice how beginning and ending braces, { and }, are aligned,
-      and note how we use single-line comments to annotate ending braces.
-      Braces are used to mark the beginning and end of different blocks of code in a Java program and it can sometimes be difficult to know which beginning and end braces are matched up.
-      Proper indentation and the use of single-line comments make it easier to determine how the braces are matched up.
-    </p>
-    <p>
-      Similarly, notice how indentation is used to show when one element of the program is contained within another element.
-      Thus, the elements of the <c>HelloWorld</c> class are indented inside of the braces that mark the beginning and end of the class.
-      And the statements in the <c>main()</c> method are indented to indicate that they belong to that method.
-      Use of indentation in this way,
-      to identify the program's structure,
-      makes the program easier to read and understand.
-    </p>
-    <principle>
-      <title>PROGRAMMING TIP:Use of Indentation</title>
+      <listing xml:id="lstng_helloworld">
+	<caption>The <c>HelloWorld</c> application program.</caption>
+  <pre>
+    /*
+     * File: HelloWorld.java
+     * Author: Java Java Java
+     * Description: Prints Hello, World! greeting.
+     */
+   public class HelloWorld extends Object // Class header
+   {                                   // Start class body
+     private String greeting = "Hello, World!";
+     public void greet()               // Method definition
+     {                                 // Start method body
+	 System.out.println(greeting); //  Output statement
+     } // greet()                      // End method body
+    public static void main(String args[])// Method header
+    {
+      HelloWorld helloworld;         // declare
+      helloworld = new HelloWorld(); // create
+      helloworld.greet();            // Method call
+     }  //  main()
+   }  // HelloWorld                  // End class body
+  </pre>
+      </listing>>
+    <subsection>
+      <title>Comments</title>
       <p>
-        Indent the code within a block and align the block's opening and closing braces.
-        Use a comment to mark the end of a block of code.
+	The first thing to notice about the <c>HelloWorld</c> program is the use of comments.
+	A <term>comment</term> is a non-executable portion of a program that is used to document the program.
+	Because comments are not executable instructions they are just ignored by the compiler.
+	Their sole purpose is to make the program easier for the programmer to read and understand.
       </p>
-    </principle>
-  </subsection>
-  <subsection xml:id="subsec_keywords">
-    <title>Keywords and Identifiers</title>
-    <p>
-      The Java language contains 48 predefined <em>keywords</em>
-      (<xref ref="tab_keywords">Table</xref>).
-      These are words that have special meaning in the language and whose use is reserved for special purposes.
-      For example, the keywords used in the HelloWorld program (<xref ref="lstng_helloworld"></xref>) are: 
-      <c>class</c>, <c>extends</c>, <c>private</c>, <c>public</c>, <c>static</c>, and
-      <c>void</c>.
-    </p>
-    <figure xml:id="tab_keywords">
-      <caption>Java keywords. Those with * are not used.</caption>
+      <p>
+	The <c>HelloWorld</c> program contains examples of two types of Java comments.
+	Any text contained within /* and */ is considered a comment.
+	As you can see in <c>HelloWorld</c>, this kind of comment can extend over several lines and is sometimes called a
+	<em>multiline</em> comment.
+	A second type of comment is any text that follows double slashes (//) on a line.
+	This is known as a <em>single-line comment</em>
+	because it cannot extend beyond a single line.
+      </p>
+      <p>
+	When the compiler encounters the beginning marker (/*) of a multiline comment,
+	it skips over everything until it finds a matching end marker (*/).
+	One implication of this is that it is not possible to put one multiline comment inside of another.
+	That is, one comment cannot be <em>nested</em>,
+	or contained, within another comment.
+	The following code segment illustrates the rules that govern the use of /* and */:
+      </p>
+  <pre>
+  /* This first comment begins and ends on the same line. */
+  /* A second comment starts on this line ...
+     and goes on ...
+     and this is the last line of the second comment.
+  */
+  /* A third comment starts on this line ...
+      /* This is NOT a fourth comment. It is just
+	 part of the third comment.
+     And this is the last line of the third comment.
+  */
+  */  This is an error because it is an unmatched end marker.
+  </pre>
+      <p>
+	As you can see from this example,
+	it is impossible to begin a new comment inside an already-started comment because all text inside the first comment,
+	including /*, is ignored by the compiler.
+      </p>
+      <definition>
+	<title>Comment</title>
+	<p>
+	  Any text contained within /* and */, which may span several lines,
+	  is considered a comment and is ignored by the compiler.
+	  Inserting double slashes (//) into a line turns the rest of the line into a comment.
+	</p>
+      </definition>
+      <p>
+	Multiline comments are often used to create a <em>comment block</em>
+	that provides useful documentation for the program.
+	In <c>HelloWorld</c>, the program begins with a comment block that identifies the name of file that contains the program and its author and provides a brief description of what the program does.
+      </p>
+      <p>
+	For single-line comments,
+	double slashes (//) can be inserted anywhere
+  <!--  \marginpar{Single-line comment} -->
+	on a line of code.
+	The result is that the rest of the line is ignored by the compiler.
+	We use single-line comments throughout the <c>HelloWorld</c> program to provide a running commentary of its language elements.
+      </p>
+      <principle>
+       <title>PROGRAMMING TIP: Use of Comments</title>
+      <p>
+	A well-written program should begin with a comment block that provides the name of the program,
+	its author, and a description of what the program does.
+      </p>
+      </principle>
+    </subsection>
+    <subsection>
+      <title>Program Layout</title>
+      <p>
+	Another thing to notice about the program is how neatly it is arranged on the page.
+	This is done deliberately so that the program is easy to read and understand.
+	In Java, program expressions and statements may be arranged any way the programmer likes.
+	They may occur one per line, several per line, or one per several lines.
+	But the fact that the rules governing the layout of the program are so lax makes it all the more important that we adopt a good programming style,
+	one that will help make programs easy to read.
+      </p>
+      <p>
+	So look at how things are presented in <c>HelloWorld</c>. Notice how beginning and ending braces, { and }, are aligned,
+	and note how we use single-line comments to annotate ending braces.
+	Braces are used to mark the beginning and end of different blocks of code in a Java program and it can sometimes be difficult to know which beginning and end braces are matched up.
+	Proper indentation and the use of single-line comments make it easier to determine how the braces are matched up.
+      </p>
+      <p>
+	Similarly, notice how indentation is used to show when one element of the program is contained within another element.
+	Thus, the elements of the <c>HelloWorld</c> class are indented inside of the braces that mark the beginning and end of the class.
+	And the statements in the <c>main()</c> method are indented to indicate that they belong to that method.
+	Use of indentation in this way,
+	to identify the program's structure,
+	makes the program easier to read and understand.
+      </p>
+      <principle>
+	<title>PROGRAMMING TIP:Use of Indentation</title>
+	<p>
+	  Indent the code within a block and align the block's opening and closing braces.
+	  Use a comment to mark the end of a block of code.
+	</p>
+      </principle>
+    </subsection>
+    <subsection xml:id="subsec_keywords">
+      <title>Keywords and Identifiers</title>
+      <p>
+	The Java language contains 50 predefined <term>keywords</term>
+	(<xref ref="tab_keywords">Table</xref>).
+	These are words that have special meaning in the language and whose use is reserved for special purposes.
+	For example, the keywords used in the HelloWorld program (<xref ref="lstng_helloworld"></xref>) are: 
+	<c>class</c>, <c>extends</c>, <c>private</c>, <c>public</c>, <c>static</c>, and
+	<c>void</c>.
+      </p>
+      <figure xml:id="tab_keywords">
+	<caption>Java keywords. Those with * are not used.</caption>
 <pre>
-abstract   default   goto*             package       this
-boolean    do        if               private       throw
-break      double    implements       protected     throws
-byte       enum      import           public        transient
-case       elses     instanceof       return        try
-catch      extend    int              short         void
-char       final     interface        static        volatile
-class      finally   long             super         while
-const*      float     native           switch
-continue   for       new              synchronized
+abstract	continue	for		new		switch
+assert		default		goto*		package		synchronized
+boolean		do		if		private		this
+break		double		implements	protected	throw
+byte		else		import		public		throws
+case		enum*		instanceof	return		transient
+catch		extends		int		short		try
+char		final		interface	static		void
+class		finally		long		strictfp**	volatile
+const*		float		native		super		while
 </pre>
     </figure>
     <p>
-      Because their use is restricted,
-      keywords cannot be used as the names of methods, variables,
+      Keywords cannot be used as the names of methods, variables,
       or classes.
-      However, the programmer can make up his or her own names for the classes, methods,
+      However, the programmer can make up their own names for the classes, methods,
       and variables that occur in the program,
       provided that certain rules and conventions are followed.
     </p>
@@ -196,13 +195,27 @@ continue   for       new              synchronized
     <p>
       In addition to the syntax rule that governs identifiers, Java 
 <!-- \marginpar{Identifier style} -->
-      programmers follow certain style conventions in making up names for classes,
+      programmers follow two <term>style conventions</term> when naming classes,
       variables,
       and methods.
-      By convention,
-      class names in Java begin with a capital letter and use capital letters to distinguish the individual words in the name<mdash/>for example, <c>HelloWorld</c> and <c>TextField</c>.
-<!-- \marginpar{Java naming conventions}-->
- Variable and method names begin with a lowercase letter but also use capital letters to distinguish the words in the name<mdash/>for example, <c>main()</c>, <c>greeting</c>, <c>greet()</c>, <c>getQuestion()</c>, and <c>getAnswer()</c>. The advantage of this convention is that it is easy to distinguish the different elements in a program<mdash/>classes, methods,
+    </p>
+    <ol>
+     <li>
+      <p>
+       Class names in Java begin with a capital letter and use capital letters to distinguish the individual
+        in the name<mdash/>for example, <c>HelloWorld</c> and <c>TextField</c>.
+      </p>
+     </li>
+    <li>
+     <p>
+    <!-- \marginpar{Java naming conventions}-->
+      Variable and method names begin with a lowercase letter but also use capital letters to distinguish the words in the 
+      name<mdash/>for example, <c>main()</c>, <c>greeting</c>, <c>greet()</c>, <c>getQuestion()</c>, and <c>getAnswer()</c>. 
+     </p>
+    </li>
+   </ol>
+   <p>
+      These conventions make it is easier to distinguish the different elements in a program<mdash/>classes, methods,
       variables<mdash/>just by how they are written. (For more on Java style conventions,
       see Appendix A.).
     </p>
@@ -220,7 +233,6 @@ continue   for       new              synchronized
       or method.
     </p>
    </principle>
-
        <exercise>
             <title>True/False</title>
             <idx>vector space</idx>
@@ -279,7 +291,6 @@ continue   for       new              synchronized
                 <p>Maybe go out for a drive?</p>
             </hint>
         </exercise>
-
   </subsection>
   <subsection xml:id="subsec_primitives">
     <title>Data Types and Variables</title>
@@ -292,12 +303,11 @@ continue   for       new              synchronized
       Thus, every piece of data in a Java program is classified according to its <term>data type</term>.
     </p>
     <p>
-      Broadly speaking, there are two categories of data in Java:
-      various types of objects and eight different types of built-in
-      <term>primitive data types</term>.
-      In addition to new types of objects that are created by programmers, Java has many different types of built-in objects.
-      Two types that we will encounter in this chapter are the <c>String</c> and
-<c>PrintStream</c> objects.
+      Broadly speaking, there are two categories of data in Java: objects and <term>primitive data types</term>.
+      Java has many different types of built-in objects, in addition to those objects defined by programmers, 
+      Two built-in objects we encounter in this chapter are the <c>String</c> and <c>PrintStream</c> objects.
+    </p>
+    <p>
       Java's primitive types include three 
 <!-- \marginpar{Primitive types}-->
        integer types,
@@ -308,20 +318,16 @@ continue   for       new              synchronized
     </p>
     <p>
       As we noted in <xref ref="chapter-intro">Chapter</xref>,
-      a variable is a named storage location that can store a value of a particular type.
-      Practically speaking,
-      you can think of a variable as a special container into which you can place values,
-      but only values of a certain type (Fig.
-      <xref ref="fig_vars"></xref>).
-      For example,
-      an <c>int</c> variable can store values like 5 or -100.
+      a <term>variable</term> is a named storage location that can store a value of a particular type.
+      You can think of a variable as a special container into which you can place values (Fig. <xref ref="fig_vars"></xref>),
+      but only values that fit into that type of variable .
+      For example, an <c>int</c> variable can store values like 5 or -100.
       A <c>String</c> variable can store values like
-      <q>Hello</q>. (Actually, this is not the full story,
-      which is a little more complicated,
-      but we will get to that in <xref ref="chapter-objects">Chapter</xref>.)
+      <q>Hello</q>. 
 
       <figure xml:id="fig_vars">
-      <caption>Variables are like <em>typed</em> containers.</caption>
+      <caption>Variables are like <em>typed</em> containers. An <c>int</c> variable can only store whole numbers
+       and a <c>String</c> can only store strings.</caption> 
       <image width="25%" source="chptr01/vars.png"/> 
       </figure>
 
@@ -338,7 +344,11 @@ continue   for       new              synchronized
       A <term>literal value</term> is an actual value of some type that occurs in a program.
       For example, a string enclosed in double quotes,
       such as "Hello, World!", is known as a <c>String</c> literal.
-      A number such as 45.2 would be an example of a literal of type <c>double</c>, and -72 would be an example of a literal of type <c>int</c>. Our HelloWorld program contains just a single literal value,
+      A number such as 45.2 would be an example of a literal of type <c>double</c>, and -72 would be an 
+      example of a literal of type <c>int</c>. 
+    </p>
+    <p>
+      Our HelloWorld program contains just a single literal value,
       the "HelloWorld!" <c>String</c>.
     </p>
   </subsection>
@@ -356,14 +366,29 @@ continue   for       new              synchronized
       In our <c>HelloWorld</c> program,
       statements of various types occur on lines 8, 11, 15, 16, and 17.
       Notice that all of these lines end with a semicolon.
-      The rule in Java is that statements must end with a semicolon.
-      Forgetting to do so would cause a syntax error.
     </p>
+    <principle>
+      <title>JAVA LANGUAGE RULE: Semicolons</title>
+     <p>
+       In Java statements must end with a semicolon.
+       Forgetting to do so would cause a syntax error.
+
+     </p>
+    </principle>
+
     <p>
       A <term>declaration statement</term>
       is a statement that declares a variable of a particular type.
-      In Java, a variable must be declared before it can be used in a program.
+      In a Java program, a variable must be declared before it can be used.
+    </p>
+    <principle>
+      <title>JAVA LANGUAGE RULE: Variable Declaration</title>
+     <p>
+       In Java, all variables must be declaraed before they can be used.
       Failure to do so would cause a syntax error.
+     </p>
+    </principle>
+    <p>
       In its simplest form,
       a declaration statement begins with the 
 <!-- \marginpar{Declaration statement} -->
@@ -378,39 +403,25 @@ continue   for       new              synchronized
       A variable's type is either one of the primitive types we mentioned,
       such as <c>int</c>, <c>double</c>, or <c>boolean</c>, or for objects,
       it is the name of the object's class,
-      such as <c>String</c> or <c>HelloWorld</c>. A variable's name may be any legal identifier,
-      as defined earlier,
-      although the convention in Java is to begin variable names with a lowercase letter.
-      In our <c>HelloWorld</c> program,
-      an example a simple declaration statement occurs on line 15:
+      such as <c>String</c> or <c>HelloWorld</c>. Here are some examples: 
     </p>
 <pre>
 HelloWorld helloworld;
-</pre>
-    <p>
-      This example declares a variable for an object.
-      The variable's name is <c>helloworld</c> and its type is <c>HelloWorld</c>, the name of the class that is being defined in our example.
-      To take another example the following statements declare two
-<c>int</c> variables,
-      named <c>num1</c> and <c>num2</c>:
-    </p>
-<pre>
 int num1;
 int num2;
 </pre>
     <p>
-      As we noted,
-      an <c>int</c> is one of Java's primitive types and the word
-      <em>int</em> is a Java keyword.
+      The first declaration declares a variable namrd <c>helloworld</c> of type <c>HelloWorld</c>.
+      The next two declarations declare <c>int</c> variables named <c>num1</c> and <c>num2</c>. 
     </p>
     <p>
-      Without going into too much detail at this point,
+      What's the purpose of declaration statements?  Without going into too much detail at this point,
       declaring a variable causes the program to set aside enough memory for the type of data that will be stored in that variable.
       So in this example, Java would reserve enough space to store an <c>int</c> value, such as 25 or 1000.
     </p>
     <p>
       An <term>assignment statement</term>
-      is a statement that stores (assigns) a value in a variable.
+      is a statement that assigns a value to a variable <mdash/> i.e., stores a value in the variable's memory location.
       An assignment statement uses the equal sign (<m>=</m>) as an assignment operator.
       In its simplest form,
       an assignment statement has a variable on the left hand side of the equals sign and some type of value on the right hand side.
@@ -419,6 +430,12 @@ int num2;
     <p>
       <em>VariableName</em>  = <em>Value</em> ;
     </p>
+    <principle>
+      <title>JAVA LANGUAGE RULE: Assignment Operator</title>
+     <p>
+       In Java, the equal sign (<c>=</c>) is used as the assignment operator.
+     </p>
+    </principle>
     <p>
       When it executes an assignment statement, Java will first determine what value is given on the right hand side and then assign that 
        value to the variable on the left hand side. 
@@ -431,32 +448,29 @@ int num2;
     </pre>
     </p>
     <p>
+      In (a) the value on the right hand side is 50.
+      So 50 gets stored in <c>num1</c>, resulting 
+      in the situation shown in the top row of <xref ref="fig_assign">Figure</xref>.
+    </p>
+    <p>
       <figure xml:id="fig_assign">
-      <caption>This illustrates how the states of the variables <c>num1</c> and <c>num2</c> change over the course of 
+      <caption>Illustrates changes in variables <c>num1</c> and <c>num2</c> as a result off 
        the three assignments, (a), (b) and (c).</caption>
       <image width="50%" source="chptr01/assign.png"/>
       </figure>
      </p>
      <p>
-<!--      In the first case,
-      the value on the right hand side is the string literal "Hello, World!", which gets stored in <c>greeting</c>. Of course, <c>greeting</c> has to be the right type of container<ndash/>in this case,
-      a <c>String</c> variable.
--->
-
-      In the first statement (a) the value on the right hand side is 50.
-      So that is the value that gets stored in <c>num1</c>, resulting 
-      in the situation shown in the top drawing in <xref ref="fig_assign">Figure</xref>.
-      In the second statement (b) the value on the right hand side is 25,
+      In (b) the value on the right hand side is 25,
       the result of adding  10 and 15. So 25 gets assigned to <c>num2</c>, leading to the situation shown in
-      in the middle drawing in the figure.
-      In the last statement (c), the value on the right hand side is 25, the value of <c>num2</c>, 
-      which is stored in <c>num1</c>, as depicted in the bottom drawing in the figure.
+      in row two of the figure.
+      In (c) the value on the right hand side is 25, the value of <c>num2</c>, 
+      which is stored in <c>num1</c>, as depicted in row three of the  drawing.
     </p>
     <p>
       The last of these assignments, (c), has variables on both sides of the equal sign, which 
       can be confusing to beginning programmers. It might look like we're saying that <c>num1</c> <em>equals</em>
-      <c>num2</c>, which cannot be true. But, remember, in this case the equal sign is serving as an 
-      assignment operator. 
+      <c>num2</c>. But, remember, the equal sign is the assignment operator. So, this statement is saying: take the
+      value stored in <c>num2</c> and store it in <c>num1</c>. 
     </p>
     <p>
     <observation>
@@ -464,6 +478,7 @@ int num2;
       the right hand side of an assignment operator, we are using its value. We are treating it as a value.
     </observation>
     </p>
+<!--
     <p> 
        As depicted in <xref ref="fig_assign2">Figure</xref>, the value of <c>num2</c>, 25, 
        is copied into <c>num1</c>.  the variable on the left hand side of the assignment operator.
@@ -474,12 +489,14 @@ int num2;
        <caption>In the assignment <em>num1 = num2;</em>, <em>num2</em>'s value is copied into  <em>num1</em>.</caption>
       </figure>
     </p>
+-->
+
     <p>
       Another kind of Java statemrnt is the <term>method-call statement</term>, as in these examples from the 
      <c>HelloWorld</c> program:
      <pre>
-     helloworld.greet();          // Call greet() method
-     System.out.println(greeting);// Call println() method
+     helloworld.greet();          // Call HelloWorld's greet() method
+     System.out.println(greeting);// Call System.out's println() method
      </pre>
     </p>
     <p>
@@ -489,12 +506,14 @@ int num2;
     </p>
     <p>
       Finally, notice that we can use curly braces to group one or more  statements into a sequence as in the
-      definition of the <c>greet()</c> method.
+      definition of the <c>main()</c> method.
     <pre>
-       public void greet()               // Method definition
-       {                                 // Start method body
-	   System.out.println(greeting); //  Output statement
-       } // greet()                      // End method body
+    public static void main(String args[])// Method header
+    {
+      HelloWorld helloworld;         // declare
+      helloworld = new HelloWorld(); // create
+      helloworld.greet();            // Method call
+     }  //  main()
     </pre>
     </p>
  <!--
@@ -645,11 +664,11 @@ int num = 11;
       has two parts:
       a <em>class header</em> and a <em>class body</em>.
       In general, a class header takes the following form,
-      some parts of which are optional (<em>opt</em>):
-      <me>
-        \hbox{ClassModifiers}_{\hbox{\scriptsize opt}} \hbox{class} \hbox{ClassName} \hbox{Pedigree}_{\hbox{\scriptsize opt}}
-      </me>
-    </p>
+      where the parts in brackets are  optional.
+      </p>
+      <pre>
+        [ClassModifiers] class ClassName [Pedigree]
+      </pre>
     <p>
       The class header for the <c>HelloWorld</c> class is:
     </p>
@@ -659,6 +678,9 @@ public class HelloWorld extends Object
     <p>
       The purpose of the header is to give the class its name (<c>HelloWorld</c>), identify its accessibility (<c>public</c> as opposed to <c>private</c>), and describe where it fits into the Java class hierarchy
       (as an extension of the <c>Object</c> class).
+
+    </p>
+    <p>
       In this case,
       the header begins with the optional access modifier, <c>public</c>, which declares that this class can be accessed by any other classes.
       The next part of the declaration identifies the name of the class, <c>HelloWorld</c>. And the last part declares that <c>HelloWorld</c> is a subclass of the <c>Object</c> class.
@@ -667,15 +689,15 @@ public class HelloWorld extends Object
     <p>
       As you recall from <xref ref="chapter-intro">Chapter</xref>,
       the <c>Object</c> class is the top class of the entire Java hierarchy.
-      By declaring that <c>HelloWorld
-extends Object</c>, we are saying that <c>HelloWorld</c> is a direct <em>subclass</em>
+      By declaring that <c>HelloWorld extends Object</c>, we are saying that 
+      <c>HelloWorld</c> is a direct <em>subclass</em>
       of <c>Object</c>. In fact,
       it is not necessary to declare explicitly that <c>HelloWorld</c> extends <c>Object</c> because that is Java's default assumption.
       That is, if you omit the extends clause in the class header, Java will automatically assume that the class is a subclass of <c>Object</c>.
     </p>
     <p>
       The class's body,
-      which is enclosed within curly brackets (), 
+      which is enclosed within curly brackets, { and }, 
 <!-- \marginpar{Class body} -->
       contains the declaration and definition of the elements that make up the objects of the class.
       This is where the object's attributes and actions are defined.
@@ -687,7 +709,7 @@ extends Object</c>, we are saying that <c>HelloWorld</c> is a direct <em>subclas
       There are generally two kinds of elements declared and defined in the class body:
       variables and methods.
       As we described in <xref ref="chapter-intro">Chapter</xref>,
-      an instance variable is a variable that belongs to each object,
+      an <term>instance variable</term> is a variable that belongs to each object,
       or instance, of the class.
       That is, each instance of a class has its own copies of the class's instance variables.
       The <c>HelloWorld</c> class has a single instance variable, (<c>greeting</c>), which is declared as follows:
@@ -698,27 +720,20 @@ private String greeting = "Hello, World!";
     <p>
       In general, an instance variable declaration has the following syntax,
       some parts of which are optional:
-      <me>
-        \hbox{Modifiers}_{\hbox{\scriptsize opt}} \hbox{Type} \hbox{VariableName} \hbox{InitializerExpression}_{\hbox{\scriptsize opt}}
-      </me>
+    </p>
+    <pre>
+        [Modifiers] Type VariableName [InitializerExpression]
+    </pre>
+    <p>
+      In declaring the <c>greeting</c> variable,
+      we use the optional access modifier, <c>private</c>, to declare that <c>greeting</c> can only be
+      accessed in the <c>HelloWorld</c> class; it cannot be directly accessed by other objects.
     </p>
     <p>
-      Thus, a variable declaration begins with optional modifiers.
-      In declaring the <c>greeting</c> variable,
-      we use the access modifier,
-<c>private</c>, to declare that <c>greeting</c>, which belongs to the
-<c>HelloWorld</c> class,
-      cannot be directly accessed by other objects.
-      The next part of the declaration is the variable's type.
-      In 
-<!-- \marginpar{Information hiding} -->
-      this case,
-      the <c>greeting</c> variable is a <c>String</c>, which means that it can store a string object.
-      The type is followed by the name of the variable,
-      in this case (<c>greeting</c>).
-      This is the name that is used to refer to this memory location throughout the class.
-      For example,
-      notice that the variable is referred to on line 11 where it is used in a <c>println()</c> statement.
+      The next part of the declaration is the variable's type (<c>String</c>), which means that it can store a string object.
+      The type is followed by the name of the variable (<c>greeting</c>), which can be used 
+      throughout the <c>HelloWorld</c> class. For example, notice that <c>greeting</c> is used on line 11 
+      in a <c>println()</c> statement.
     </p>
     <p>
       The last part of the declaration is an optional initializer expression.
@@ -730,7 +745,7 @@ private String greeting = "Hello, World!";
   <subsection>
     <title>Defining an Instance Method</title>
     <p>
-      Recall that a method is a named section of code that can be called or invoked to carry out an action or operation.
+      Recall that a <term>method</term> is a named section of code that can be called or invoked to carry out an action or operation.
       In a Java class,
       the methods correspond to the object's behaviors or actions.
       The <c>HelloWorld</c> program has two method definitions:
@@ -741,29 +756,29 @@ private String greeting = "Hello, World!";
       the method header and the method body.
       In general, a method header takes the following form,
       including some parts which are optional:
-      <me>
-        \hbox{Modifiers}_{\hbox{\scriptsize opt}} \hbox{ReturnType} \hbox{MethodName} \hbox{(} \hbox{ParameterList}_{\hbox{\scriptsize opt}} \hbox{)}
-      </me>
-    </p>
+     </p>
+      <pre>
+        [Modifiers] ReturnType MethodName ([ParameterList])
+      </pre>
     <p>
       As with a variable declaration,
       a method definition begins with optional modifiers.
       For example,
       the definition of the
 <c>greet()</c> method on line 9 uses the access modifier, <c>public</c>, to declare that this method can be accessed or referred to by other classes.
-      The <c>main()</c> method,
-      whose definition begins on line 13,
-      is a special method, and is explained in the next section.
     </p>
     <p>
       The next part of the method header is the method's return type.
       This is the type of value, if any, that the method returns.
-      Both of the methods in <c>HelloWorld</c> have a return type of <c>void</c>. This means that they don't return any kind of value.
-      Void methods just execute the sequence of statements given in their bodies.
+      Both of the methods in <c>HelloWorld</c> have a return type of <c>void</c>. This means that they don't return anything.
+      Void methods just execute the sequence of statements given in their bodies. We'll see examples of methods that return
+      values in the next chapter.
+<!--
       For an example of a method that does return a value,
       take a look again at the declaration of the <c>getQuestion()</c> method in the <c>Riddle</c> class,
       which returns a <c>String</c>(Fig.
       <xref ref="fig_riddleclass"></xref>).
+-->
     </p>
     <p>
       The method's name follows the method's return type.
@@ -807,11 +822,13 @@ System.out.println(greeting);   //  Output statement
       <q>stand-alone</q>
       in the sense that it does not depend on any other program,
       like a Web browser, for its execution.
+     </p>
+     <p>
       Every Java application program must contain a <c>main()</c> method,
       which is where the program begins execution when it is run.
       For a program that contains several classes,
       it is up to the programmer to decide which class should contain the <c>main()</c> method.
-      We don't have to worry about that decision for the HelloWorld,
+      We don't have to worry about that decision for HelloWorld,
       because it contains just a single class.
     </p>
     <p>
@@ -823,23 +840,21 @@ public static void main(String args[])
 </pre>
     <p>
       It must be declared <c>public</c> so it can be accessed from outside the class that contains it.
-      The <c>static</c> modifier 
-<!-- \marginpar{Class method} -->
-      is used to designate <c>main()</c> as a class method.
-      As you might recall from Chapter 0, a class method is a method that is associated directly with the class that contains it rather than with the objects of the class.
-      A class method is not part of the class's objects.
-      Unlike instance methods,
-      which are invoked through a class's objects,
-      a class method is called through the class itself.
-      Thus, a class method can be called even before the program has created objects of that class.
-      Because of <c>main()</c>'s special role as the program's starting point,
-      it is necessary for <c>main()</c> to be a class method because it is called,
-      by the Java runtime system, before the program has created any objects.
+      And it must be declared <c>static</c>. Static methods are associated with their class, not with
+      the class's objects or instances. Because of this, a static or <term>class method</term> can be 
+      called before the program has created any instances (or objects) of that class. 
+    </p>
+    <p>
+      This is important for <c>main()</c>'s special role as the program's starting point, because
+      <c>main()</c> is called by the Java runtime system before the program has created any objects.
     </p>
     <p>
       The <c>main()</c> method has a <c>void</c> return type,
       which means it does not return any kind of value.
-      Finally, notice that <c>main()</c>'s parameter list contains a declaration of some kind of <c>String</c> parameter named <em>args</em>.
+    </p>
+    <p>
+      Finally, notice that <c>main()</c>'s parameter list contains a declaration of some 
+      kind of <c>String</c> parameter named <em>args</em>.
       This is actually an array that can be used to pass string arguments to the program when it is started up.
       We won't worry about this feature until our chapter on arrays.
     </p>
@@ -849,21 +864,21 @@ public static void main(String args[])
     <p>
       The body of the <c>main()</c> method is where the
 <c>HelloWorld</c> program creates its one and only object.
-      Recall that when it is run the <c>HelloWorld</c> program just prints the
-      <q>Hello World!</q>
-      greeting.
-      As we noted earlier,
-      this action happens in the
-<c>greet()</c> method.
-      So in order to make this action happen,
-      we need to call the <c>greet()</c> method.
+      When it is run the <c>HelloWorld</c> program simply prints
+      <q>Hello World!</q> on the console.
+      In order for this action happen,
+      the program needs to call the <c>greet()</c> method.
+    </p>
+    <p>
       However, because the <c>greet()</c> method is an instance method that belongs to a <c>HelloWorld</c> object,
       we first need to create a <c>HelloWorld</c> instance.
-      This is what happens in the body of the <c>main()</c> method (Fig.
+      This is what happens in the body of the <c>main()</c> method:  
+<!--  (Fig.
       <xref ref="fig_helloworld"></xref>).
     </p>
     <p>
       The <c>main()</c> method contains three statements:
+-->
     </p>
 <pre>
 HelloWorld helloworld;          // Variable declaration
@@ -873,22 +888,34 @@ helloworld.greet();             // Method invocation
     <p>
       The first statement declares a variable of type
 <c>HelloWorld</c>, which is then assigned a <c>HelloWorld</c> object.
-      The second statement creates a <c>HelloWorld</c> object.
-      This is done by invoking the <c>HelloWorld()</c> constructor method.
+    </p>
+    <p>
+      The second statement creates a <c>HelloWorld</c> object by
+      invoking <c>HelloWorld</c>'s default constructor: <c>HelloWorld()</c>.
+      A default constructor has the same name as the class and merely creates
+      an object of that class. It is defined automatically by Java 
+      and looks like this:
+    </p>
+     <pre>
+     public HelloWorld() {  }  // Default constructor
+     </pre>
+    <p>  
       Creating an object is called <term>object instantiation</term>
       because you are creating an instance of the object.
       Once a <c>HelloWorld</c> instance is created,
       we can use one of its instance methods to perform some task or operation.
+    </p>
+    <p>
       Thus, in the third statement,
       we call the <c>greet()</c> method,
       which will print
       <q>Hello World!</q>
       on the console.
     </p>
-    <p>
+<!--
+     <p>
       If you look back at the <c>HelloWorld</c> program in <xref ref="fig_helloworld">Figure</xref>
       you won't find a definition of a 
-<!-- \marginpar{Default constructor} -->
       constructor method.
       This is not an error because Java will provide a default constructor if a class does not contain a constructor definition.
       The <term>default constructor</term>
@@ -897,9 +924,6 @@ helloworld.greet();             // Method invocation
       because its body contains no statements.
       Here is what the default <c>HelloWorld()</c> constructor would look like:
     </p>
-<pre>
-public HelloWorld() {  }  // Default constructor
-</pre>
     <p>
       For most of the classes we design,
       we will design our own constructors,
@@ -910,28 +934,35 @@ public HelloWorld() {  }  // Default constructor
 <c>HelloWorld</c> object doesn't require any startup tasks,
       we can make do with the default constructor.
     </p>
+-->
+
     <p>
       The <c>HelloWorld</c> program illustrates the idea that an 
 <!-- \marginpar{Interacting objects} -->
       object-oriented program is a collection of interacting objects.
       Although we create just a single <c>HelloWorld</c> object in the <c>main()</c> method,
       there are two other objects used in the program.
-      One is the <c>greeting</c>, which is a <c>String</c> object consisting of the string
-      <q>Hello, World!</q>. The other is the <c>System.out</c> object,
+      One is the <c>greeting</c> object, the <q>Hello, World!</q> <c>String</c>. 
+      The other is the <c>System.out</c> object,
       which is a special Java system object used for printing.
     </p>
   </subsection>
   <subsection>
     <title>Java JFrames</title>
     <p>
-      Java cann run a program in a <term>JFrame</term>
+      Java can run a program in a <term>JFrame</term>
       so that the output and interaction occurs in a Window
       (or Frame).
       <xref ref="fig_hellojframe">Figure</xref>
       shows a Java program named <c>HelloWorldSwing</c>. This program does more or less the same thing as
+      the <c>HelloWorld</c> application<mdash/>it displays the
+      <q>Hello, World!</q>
+      greeting.
+      The difference is that it displays the greeting within a Window rather than directly on the console.
     </p>
     <figure xml:id="fig_hellojframe">
       <caption><c>HelloWorldCanvas</c> program.</caption>
+
 <pre>
 /** File: HelloWorldSwing program */
 import javax.swing.JFrame; // Import class names
@@ -940,26 +971,21 @@ import java.awt.Canvas;
 public class HelloWorldCanvas extends Canvas // Class header
 {
     // Start of body
-    public void paint(Graphics g)
-        // The paint method
+    public void paint(Graphics g)  // The paint method
     {
         g.drawString("Hello, World!", 10, 10);
     }  // End of paint
-    public static void main(String[] args){
-        HelloWorldCanvas c = new HelloWorldCanvas();
+
+    public static void main(String[] args)   // The main() method
+    {   HelloWorldCanvas c = new HelloWorldCanvas();
         JFrame f = new JFrame();
         f.add(c);
         f.setSize(150,50);
         f.setVisible(true);
-    }}  // End of HelloWorldCanvas
+    }  // End of main
+}  // End of HelloWorldCanvas
 </pre>
     </figure>
-    <p>
-      the <c>HelloWorld</c> application<mdash/>it displays the
-      <q>Hello, World!</q>
-      greeting.
-      The difference is that it displays the greeting within a Window rather than directly on the console.
-    </p>
     <p>
       As in the case of the <c>HelloWorld</c> console application program, <c>HelloWorldCanvas</c> consists of a class definition.
       It contains a single method definition,
@@ -982,9 +1008,8 @@ g.drawString("Hello, World!",10,10);
       We'll explain it more fully when we take up graphics examples again.
     </p>
     <p>
-      The <c>HelloWorldSwing</c> also contains some elements,
-      such as the
-<c>import</c> statements,
+      The <c>HelloWorldSwing</c> class also contains some elements,
+      such as the <c>import</c> statements,
       that we did not find in the <c>HelloWorld</c> application.
       We will now discuss those features.
     </p>
@@ -992,7 +1017,7 @@ g.drawString("Hello, World!",10,10);
   <subsection>
     <title>Java Library Packages</title>
     <p>
-      Recall that the <c>HelloWorld</c> application program used two pre-defined classes,
+      Recall that the <c>HelloWorld</c> program used two pre-defined classes,
       the <c>String</c> and the <c>System</c> classes.
       Both of these classes are basic language classes in Java.
       The <c>HelloWorldSwing</c> program also uses pre-defined classes,
@@ -1040,11 +1065,11 @@ package java.lang;
     </p>
     <p>
       In other words,
-      the full name of any class provides its package name as a prefix.
+      the full name of any class has its package name as a prefix.
     </p>
     <p>
       Of all the packages in the Java library,
-      the <c>java.lang</c> package is the only one whose classes are available by their shorthand names to all Java programs.
+      only the classes in the <c>java.lang</c> package can be refererced  by their shorthand names.
       This means that when a program uses a class from the <c>java.lang</c> package,
       it can refer to it simply by its class name.
       For example,
@@ -1058,30 +1083,31 @@ package java.lang;
       Any public class in the Java class library is available to a program by its fully qualified name.
       Thus, if a program was using the <c>Graphics</c> class,
       it could always refer to it as <c>java.awt.Graphics</c>. However,
-      being able to refer to
-<c>Graphics</c> by its shorthand name,
+      being able to refer to<c>Graphics</c> by its shorthand name,
       makes the program a bit shorter and more readable.
     </p>
     <p>
       The <c>import</c> statement doesn't actually load classes into the program.
       It just makes their abbreviated names available.
       For example,
-      the import statements in <c>HelloWorldSwing</c> allow us to refer to the <c>JFrame</c>, <c>Canvas</c>, and <c>Graphics</c> classes by their abbreviated names (Fig.
+      the import statements in <c>HelloWorldSwing</c> allow us to 
+      refer to the <c>JFrame</c>, <c>Canvas</c>, and <c>Graphics</c> classes by their abbreviated names (Fig.
       <xref ref="fig_hellojframe"></xref>).
     </p>
     <p>
       The <c>import</c> statement takes two possible forms:
-      <me>
-        \hbox{import } \hbox{package.class}
-      </me>
-      <me>
-        \hbox{import } \hbox{package.*}\\
-      </me>
+      <pre>
+        import package.class
+      </pre>
+      <pre>
+        import package.*
+      </pre>
     </p>
     <p>
       The first form allows a specific class to be known by its abbreviated name.
       The second form,
-      which uses the asterisk as a wildcard characters ('*'), allows all the classes in the specified package to be known by their short names.
+      which uses the asterisk as a wildcard character ('*'), 
+      allows all the classes in the specified package to be known by their short names.
       The <c>import</c> statements in <c>HelloWorldSwing</c> are examples of the first form.
       The following example,
     </p>
@@ -1121,6 +1147,7 @@ import java.lang.*;
       <q>Kim Smith</q>
       ) when the first name alone would be too vague or ambiguous.
     </p>
+<!--
     <p>
       One thing that complicates the use of qualified names is that they are used to refer to different kinds of things within a Java program.
       But this is no different,
@@ -1141,6 +1168,7 @@ import java.lang.*;
       You will have to learn a bit more about the Java language before you'll be able to completely understand these names,
       but the following provide some naming rules to get you started.
     </p>
+-->
     <principle>
       <title>Library Class Names</title>
       <p>
@@ -1169,7 +1197,7 @@ import java.lang.*;
       It is a syntax error if the Java compiler can't find the object or method that you are referencing.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Not Found Error</title>
+      <title>DEBUGGING TIP: Not Found Error</title>
       <p>
         If Java cannot find the item you are referring to, it will report an
         <q>X not found</q>
