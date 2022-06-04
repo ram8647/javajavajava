@@ -28,16 +28,12 @@
       In the real world,
       the problem specification is often arrived at through an extensive discussion between the customer and the developer.
       In an introductory programming course,
-      the specification is usually assigned by the instructor.
-    </p>
-    <p>
-      To help make these ideas a little clearer,
-      let's design an object-oriented solution to a simple problem.
+      the specification is usually assigned by the instructor. So, here is our spec:
     </p>
     <p>
       <project>
-      Design a class that will represent a riddle with a given question and answer.
-      The definition of this class should make it possible to store different riddles and to retrieve a riddle's question and answer independently.
+      <term>Specification:</term> Design an object that will contain a riddle's question and answer. It
+      should provide a way for users to set and retrieve the riddle's  question and  answer.
       </project>
     </p>
   </introduction>
@@ -46,12 +42,14 @@
     <p>
       Most problems are too big and too complex to be tackled all at once.
       So the next step in the design process is to divide the  problem into parts that make the solution more manageable.
+    </p>
+    <p>
       In the object-oriented approach,
       a problem is divided into objects,
-      where each object will handle one specific aspect of the program's overall job.
+      where each object will play a specific role in the problem's solution.
       In effect, each object will become an expert or specialist in some aspect of the program's overall behavior.
     </p>
-<aside>Divide and conquer</aside> 
+<!--
     <p>
       Note that there is some ambiguity here about how far we should go in decomposing a given program.
       This ambiguity is part of the design process.
@@ -59,6 +57,7 @@
       <q>simple to solve</q>
       depends on the problem we're trying to solve and on the problem solver.
     </p>
+-->
     <p>
       One useful design guideline for trying to decide what objects are needed is the following:
     </p>
@@ -69,57 +68,55 @@
       </p>
     </principle>
     <p>
-      Again, there's some ambiguity involved in this guideline.
-      For example,
-      the key noun in our current problem is <em>riddle</em>,
-      so our solution will involve an object that serves as a model for a riddle.
-      The main task of this Java object will be simply to represent a riddle.
-      Two other nouns in the specification are
-      <em>question</em> and <em>answer</em>.
-      Fortunately, Java has built-in <c>String</c> objects that represent strings of characters such as words or sentences.
-      We can use two <c>String</c> objects for the riddle's question and answer.
-      Thus, for this simple problem,
-      we need only design one new type of object<mdash/>a riddle<mdash/>whose primary role will be to represent a riddle's question and answer.
+      There are three nouns in our problem spec: riddle, question and answer. The <em>riddle</em> is a 
+      complex object contains the <em>question</em> and <em>answer</em> as parts. Those parts are just 
+      strings, and, fortunately, Java has a built-in <c>String</c> class that can be used to represent 
+      the question and answer, 
     </p>
     <p>
-      Don't worry too much if our design decisions seem somewhat mysterious at this stage.
-      A good understanding of object-oriented design can come only after much design experience.
-      But this is a good place to start.
+      Thus, for this simple problem,
+      we need only design one new type of object<mdash/>a riddle<mdash/>whose primary role will 
+      be to contain and display a riddle's question and answer.
+    </p>
+    <p>
+      Don't worry too much if our design decisions seem somewhat mysterious at this stage. This type 
+      of analysis will come more easily with experience.
     </p>
   </subsection>
   <subsection xml:id="fig_ruml">
     <title>Object Design</title>
     <p>
       Once we have divided a problem into a set of cooperating objects,
-      designing a Java program is primarily a matter of designing and creating the objects themselves.
-      In our example,
-      this means we must now design the features of our riddle object.
-      For each object,
-      we must answer the following basic design questions:
+      designing a Java program is primarily a matter of designing each object.  Given that 
+      we will be using the built-in  <c>String</c> class for the question and answer,
+      we need only design the features of our riddle object.
+    </p>
+    <p>
+      Here are the main design questions we need to resolve:
       <ul>
         <li>
           <p>
-            What role will the object perform in the program?
+            What <term>role</term> will the object perform in the program?
           </p>
         </li>
         <li>
           <p>
-            What data or information will it need?
+            What <term>data</term> or information will it need?
           </p>
         </li>
         <li>
           <p>
-            What actions will it take?
+            What <term>actions</term> will it take?
           </p>
         </li>
         <li>
           <p>
-            What interface will it present to other objects?
+            What <term>interface</term> will it present to other objects?
           </p>
         </li>
         <li>
           <p>
-            What information will it hide from other objects?
+            What <term>information</term> will it hide from other objects?
           </p>
         </li>
       </ul>
@@ -127,21 +124,8 @@
     <p>
       For our riddle object,
       the answers to these questions are shown in <xref ref="fig_specs">Figure</xref>.
-      Note that although we talk about
-      <q>designing an object,</q>
-      we are really talking about designing the object's class.
-      A class defines the collection of objects that belong to it.
-      The class can be considered the object's <em>type</em>.
-      This is the same as for real-world objects.
-      Thus, Seabiscuit is a horse<mdash/>that is, Seabiscuit is an object of type Horse.
-      Similarly, an individual riddle,
-      such as the newspaper riddle, is a riddle.
-      That is, it is an object of type Riddle.
     </p>
     <p>
-      The following discussion shows how we arrived at the decisions for the design specifications for the <c>Riddle</c> class,
-      illustrated in <xref ref="fig_specs">Figure</xref>.
-    </p>
     <figure xml:id="fig_specs">
     <caption>Design specifications for the Riddle object.</caption>
       <ul>
@@ -152,12 +136,12 @@
         </li>
         <li>
           <p>
-            Role: To store and retrieve a question and answer
+            <term>Role:</term> To store and retrieve a question and answer
           </p>
         </li>
         <li>
           <p>
-            Attributes (Information)
+            Attributes (<term>data</term>)
             <ul>
               <li>
                 <p>
@@ -174,7 +158,7 @@
         </li>
         <li>
           <p>
-            Behaviors
+            Behaviors (<term>actions</term>)
             <ul>
               <li>
                 <p>
@@ -183,12 +167,12 @@
               </li>
               <li>
                 <p>
-                  getQuestion(): A method to return a riddle's question
+                  getQuestion(): A method to retrieve a riddle's question
                 </p>
               </li>
               <li>
                 <p>
-                  getAnswer(): A method to return a riddle's answer
+                  getAnswer(): A method to retrieve a riddle's answer
                 </p>
               </li>
             </ul>
@@ -196,13 +180,31 @@
         </li>
       </ul>
     </figure>
+    </p>
     <p>
-      The role of the <c>Riddle</c> object is to model an ordinary 
-      <!-- \marginpar{What is the object's role?} --> riddle.
-      Because a riddle is defined in terms of its question and answer,
-      our <c>Riddle</c> object will need some way to store these two pieces of information.
+      Note that although we talk about
+      <q>designing an object,</q>
+      we are really talking about designing the object's class.
+      A class in Java defines the collection of objects that belong to that class.
+      The class defines what <em>type</em> of object we are defining..
+    </p>
+    <p>
+      This is similar to how we talk about real-world objects.
+      For example, Seabiscuit is a horse<mdash/>that is, Seabiscuit is an object that belongs
+      to the class of horses. 
+      Similarly, an individual riddle,
+      such as the zebra riddle, is an object that belongs to the class of riddles. If we ask what type of object it is,
+      the answer would be, <q>a Riddle</q>.
+    </p>
+    <p>
+
+
+      The role of the <c>Riddle</c> object is to serve as a container for its question and answer.
       As we learned in <xref ref="chapter-intro">Chapter</xref>,
-      an instance variable is a named memory location that belongs to an object.
+      an <term>instance variable</term> is a named memory location that belongs to an object.
+      Instance variables store the data that an object needs to perform its role. So our <c>Riddle</c>
+      will need two instance variables, for the <c>question</c> and <c>answer</c> data.
+<!--
       The fact that the memory location is named,
       makes it easy to retrieve the data stored there by invoking the variable's name.
       For example,
@@ -212,15 +214,14 @@
       would be retrieved and printed.
     </p>
     <p>
-      In general, instance variables are used to store the information that an object needs to perform its role. 
-<!-- \marginpar{What information will the object need?} --> 
       They correspond to what we have been calling the object's attributes.
       Deciding on these variables provides the answer to the question,
       <q>What information does the object need?</q>
+-->
     </p>
     <p>
       Next we decide what actions a <c>Riddle</c> object will take.
-      A useful design guideline for actions of objects is the following:
+      A useful design guideline for actions is the following:
     </p>
     <principle>
       <title>EFFECTIVE DESIGN:Looking for Verbs</title>
@@ -229,14 +230,14 @@
       </p>
     </principle>
     <p>
-      <!-- \marginpar{What actions will the object take?} -->
       For this problem,
       the key verbs are <em>set</em> and <em>retrieve</em>.
       As specified in <xref ref="fig_specs">Figure</xref>,
-      each <c>Riddle</c> object should provide some means of setting the values of its question and answer variables and a means of retrieving each value separately.
+      each <c>Riddle</c> object should provide some means of setting the values of its question and 
+      answer variables and a means of retrieving each value.
     </p>
     <p>
-      Each of the actions we have identified will be encapsulated in a Java method.
+      Each of the actions we have identified will be defined by a Java method.
       As you recall from <xref ref="chapter-intro">Chapter</xref>,
       a method is a named section of code that can be
       <em>invoked</em>, or called upon,
@@ -244,34 +245,42 @@
       In the object-oriented approach, calling a method
       (method invocation)
       is the means by which interaction occurs among objects.
+    </p>
+    <p>
       Calling a method is like sending a message between objects.
       For example, when we want to get a riddle's answer,
-      we would invoke the <c>getAnswer()</c> method.
+      we would call its <c>getAnswer()</c> method.
       This is like sending the message
-      <q>Give me your answer.</q>
-      One special method, known as a constructor,
-      is invoked when an object is first created.
-      We will use the <c>Riddle()</c> constructor to give specific values to riddle's question and answer variables.
+      <q>Tell me the answer.</q>
     </p>
+    <p>
+      One special method, known as a <term>constructor</term>,
+      is invoked when an object is first created.
+      We will use the <c>Riddle()</c> constructor to give specific values to the riddle's question and answer variables.
+    </p>
+</subsection>
+<subsection>
+<title>The Object's Interface</title>
     <p>
       In designing an object,
       we must decide which methods should be made 
-<!-- \marginpar{What interface will it present, and what information will it hide?} -->
       available to other objects.
-      This determines what interface the object should present and what information it should hide from other objects.
-      In general, those methods that will be used to communicate with an object are designated as part of the object's interface.
-      Except for its interface,
-      all other information maintained by each riddle should be kept
-      <q>hidden</q>
-      from other objects.
+      This determines what <term>interface</term> the object should present and <term>what information it should hide</term> from other objects.
+    </p>
+    <p>
+      In general, those methods needed to communicate with an object make up its interface and are designated as <term>public</term> 
+      in Java. All other data and methods  should be kept <q>hidden</q> from other objects and are therefore designated 
+      as <term>private</term> in Java. 
+    </p>
+    <p>
       For example,
-      it is not necessary for other objects to know where a riddle object stores its question and answer.
+      it is not necessary for other objects to know where a <c>Riddle</c> object stores its question and answer.
       The fact that they are stored in variables named <c>question</c> and <c>answer</c>, rather than variables named <c>ques</c> and <c>ans</c>, is irrelevant to other objects.
     </p>
     <principle>
       <title>EFFECTIVE DESIGN:Object Interface</title>
       <p>
-        An object's interface should consist of just those methods needed to communicate with or to use the object.
+        An object's interface should consist of just those methods needed to use and communicate with the object.
       </p>
     </principle>
     <principle>
@@ -282,72 +291,49 @@
     </principle>
     <p>
       Taken together,
-      these various design decisions lead to the  specification shown in <xref ref="fig_riddleuml">Figure</xref>.
-      As our discussion has illustrated,
-      we arrived at the decisions by asking and answering the right questions.
-      In most classes the attributes (variables) are private.
-      This is represented by a minus sign
-      (<m>-</m>).
-      In this example, the operations (methods) are public,
-      which is represented by the plus sign
-      (<m>+</m>).
-      The figure shows that the <c>Riddle</c> class has two hidden
-      (or private)
-      variables for storing data and three visible
-      (or public)
-      methods that represent the operations that it can perform.
+      these various design decisions lead to the  specification shown in the <term>UML class diagram</term> in
+      <xref ref="fig_riddleuml">Figure</xref>.
     </p>
     <p>
-     <figure xml:id="fig_riddleuml">>
-      <caption>A UML class diagram representing the <c>Riddle</c> class.</caption>
+      A class diagram has three parts. The top part gives the name of the class (<c>Riddle</c>). The second
+      part gives its instance variables, which are typically designated as private (<m>-</m>). The third part
+      gives the object's methods, which in this case are all designated as public (<m>+</m>).
+    </p>
+    <p>
+     <figure xml:id="fig_riddleuml">
+      <caption>A UML class diagram representing the <c>Riddle</c> class. Its instance variables are private (<m>-</m>). Its
+      methods are public (<m>+</m>).</caption>
       <image width="50%" source="chptr02/riddleuml.png"/>
      </figure>
     </p>
 
   </subsection>
   <subsection>
-    <title>Data, Methods, and Algorithms</title>
+    <title>Data</title>
     <p>
-      Among the details that must be worked out in designing a riddle object is deciding what type of data,
-      methods, and algorithms we need.
-      There are two basic questions involved:
+      For designing the data needed for our <c>Riddle</c> object, the main question is this:
       <ul>
         <li>
           <p>
             What type of data will be used to represent the information needed by the riddle?
           </p>
         </li>
-        <li>
-          <p>
-            How will each method carry out its task?
-          </p>
-        </li>
       </ul>
     </p>
     <p>
+      This question is easily answered for our <c>Riddle</c> object.
       Like other programming languages, Java supports a wide range of different types of data,
-      some simple and some complex. 
-<!-- \marginpar{What type of data will be used?} -->
-      Obviously a riddle's question and answer should be represented by text.
-      As we noted earlier, Java has a <c>String</c> type,
-      which is designed to store text,
-      which can be considered a string of characters.
+      some simple and some complex. Obviously a riddle's question and answer variables 
+      should be represented by Java <c>String</c> objects,
+      as specified in the UML diagram (<xref ref="fig_riddleuml">Figure</xref>).
     </p>
+  </subsection>
+  <subsection>
+    <title>Methods, and Algorithms</title>
     <p>
-      In designing a method,
-      you have to decide what the method will do. 
-<!-- \marginpar{How will each method carry out its task?} -->
-      In order to carry out its task,
-      a method will need certain information,
-      which it may store in variables.
-      Plus, it will have to carry out a sequence of individual actions to perform the task.
-      This is called its <term>algorithm</term>,
-      which is a step-by-step description of the solution to a problem.
-      And, finally,
-      you must decide what result the method will produce.
-      Thus, as in designing objects,
-      it is important to ask the right questions:
-      <ul>
+     For each of the object's methods, we need to figure out its task, its data, its algorithm and
+      its result:
+       <ul>
         <li>
           <p>
             What specific task will the method perform?
@@ -355,7 +341,7 @@
         </li>
         <li>
           <p>
-            What information will it need to perform its task?
+            What information (data) will it need to perform its task?
           </p>
         </li>
         <li>
@@ -371,64 +357,88 @@
       </ul>
     </p>
     <p>
-      Methods can be thought of as using an algorithm to complete a required action.
-      The algorithm required for the <c>Riddle()</c> constructor is very simple but also typical of constructors for many classes.
-      It takes two strings and assigns the first to the
-<c>question</c> instance variable and then assigns the second to the
-<c>answer</c> instance variable.
-      The algorithms for the other two methods for the Riddle class are even simpler.
-      They are referred to as <em>get</em>
-      methods that merely <em>return</em>
-      or produce the value that is currently stored in an instance variable.
+      Methods can be thought of as using data and an algorithm to perform a task and produce a result.
+      The <c>Riddle</c> methods are very simple to describe:
+      <tabular>
+       <row>
+        <cell> <term>Constructor:</term> <c>Riddle(q:String, a:String)</c></cell>
+        <cell> <term>Algorithm:</term> Assign the values of <c>q</c> and <c>a</c> as
+           the values of  <c>question</c> and <c>answer</c>, respectively</cell>
+       </row>
+       <row> 
+         <cell><term>Instance method</term> <c>getAnswer():String</c></cell>
+         <cell><term>Algorithm:</term> Return the Riddle's <c>answer</c></cell>
+       </row>
+       <row> 
+          <cell><term>Instance method:</term> <c>getQuestion():String</c></cell>
+          <cell><term>Algorithm:</term> Return the Riddle's <c>question</c></cell>
+       </row>
+      </tabular>
     </p>
     <p>
-      Not all methods are so simple to design,
-      and not all algorithms are so 
-<!-- \marginpar{Algorithm design} -->
-      simple.
-      Even when programming a simple arithmetic problem,
-      the steps involved in the algorithm will not always be as obvious as they are when doing the calculation by hand.
-      For example,
-      suppose the problem were to calculate the sum of a list of numbers.
+      For example, if we use our constructor to create a zebra riddle as follows:
+    </p>
+    <p>
+      <c>Riddle(<q>What is black and white and red all over?</q>, <q>An embarrassed zebra</q>)</c>
+    </p>
+    <p>
+      Then when we call <c>getQuestion()</c> the riddle would tell us (return) 
+      <q>What is black and white and red all over?</q>  And when ask the riddle for the answer, <c>getAnswer()</c>,
+      it would tell us <q>An embarrassed zebra</q>.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Algorithms and Pseudocode</title>
+    <p>
+      An <term>algorithm</term> is a step-by-step process for performing a certain task. 
+      Not all algorithms are as simple as those for our <c>Riddle</c> methods. 
+    </p>
+    <p>
+      When writing a program, the algorithm for even a simple arithmetic problem can be more complex 
+      than doing the calculation by hand. 
+      For example, consider the task of calculating the sum of a list of numbers.
       If we were telling our classmate how to do this problem,
-      we might just say,
+      we might just say, 
       <q>add up all the numbers and report their total.</q>
-      But this description is far too vague to be used in a program.
-      By contrast, here's an algorithm that a program could use:
     </p>
     <p>
-      <ol>
-       <li>Set the initial value of the sum to 0.</li>
-       <li>If there are no more numbers to total, go to step 5.</li>
-       <li>Add the next number to the sum.</li>
-       <li>Go to step 2.</li>
-       <li>Report the sum.</li>
-      </ol>
+      But this description is far too vague and imprecise to be used in a program.
+      Here's an algorithm that a program could use:
     </p>
+    <algorithm>
+     <c>
+       1. Set the initial value of the sum to 0.
+       2. If there are no more numbers to total, go to step 5.
+       3. Add the next number to the sum.
+       4. Go to step 2.
+       5. Report the sum.
+     </c>
+    </algorithm>
     <p>
       Note that each step in this algorithm is simple and easy to follow.
       It would be relatively easy to translate it into Java.
-      Because English is somewhat imprecise as an algorithmic language,
-      programmers frequently write algorithms in the programming 
-<!-- \marginpar{Pseudocode} -->
-       language itself or in <term>pseudocode</term>,
-      a hybrid language that combines English and programming language structures without being too fussy about programming language syntax.
+    </p>
+    <p>
+      Because English is imprecise and often ambiguous, 
+      programmers frequently write algorithms in <term>pseudocode</term>,
+      a hybrid that combines English and programming language structures 
+      without being too fussy about programming language syntax.
       For example,
       the preceding algorithm might be expressed in pseudocode as follows:
     </p>
 
-<algorithm>
-<pre>
-sum = 0
-while (more numbers remain)
-    add next number to sum
-print the sum
-</pre>
-</algorithm>
+    <algorithm>
+    <c>
+    sum = 0
+    while (more numbers remain)
+	add next number to sum
+    print the sum
+    </c>
+    </algorithm>
     <p>
-      Of course, it is unlikely that an experienced programmer would take the trouble to write out pseudocode for such a simple algorithm.
-      But many programming problems are quite complex and require careful design to minimize the number of errors that the program contains.
-      In such situations, pseudocode could be useful.
+      While it is unlikely that experienced programmers would need to write out 
+      pseudocode for such a simple algorithm, many programming problems are quite 
+      complex and require careful design to minimize errors.
     </p>
     <p>
       Another important part of designing an algorithm is to
@@ -463,7 +473,7 @@ print the sum
     </p>
     <p>
       Initially, the sum starts out at 0 and the list of numbers contains 54, 30, and 20.
-      On each iteration through the algorithm,
+      On each pass through the algorithm,
       the sum increases by the amount of the next number,
       and the list diminishes in size.
       The algorithm stops with the correct total left under the sum column.
@@ -482,8 +492,7 @@ print the sum
     <p>
       The right way to code is to use the principle of
       <term>stepwise refinement</term>. 
-<!-- \marginpar{Stepwise refinement} -->
-       The program is coded in small stages,
+      The program is coded in small stages,
       and after each stage the code is compiled and tested.
       For example,
       you could write the code for a single method and test that method before moving on to another part of the program.
@@ -494,8 +503,7 @@ print the sum
       The code for the <c>Riddle</c> class is shown in <xref ref="lstng_riddleclass">Listing</xref>.
       Even though we have not yet begun learning the details of the Java language,
       you can easily pick out the key parts in this program:
-      the instance variables <c>question</c> and
-<c>answer</c> of type <c>String</c>, which are used to store the riddle's data;
+      the instance variables <c>question</c> and <c>answer</c> of type <c>String</c>, which are used to store the riddle's data;
       the <c>Riddle()</c> constructor and the <c>getQuestion()</c> and <c>getAnswer()</c> methods make up the interface.
       The specific language details needed to understand each of these elements will be covered in this and the following chapter.
     </p>
@@ -505,92 +513,76 @@ print the sum
 <listing xml:id="lstng_riddleclass">
  <title>Riddle</title>
  <caption>The <c>Riddle</c> class definition.</caption>
-<pre>
-/*
- * File: Riddle.java
- * Author: Java, Java, Java
- * Description: Defines a simple riddle.
- */
-public class Riddle extends Object  // Class header
-{                                   // Begin class body
-   private String question;       // Instance variables
-   private String answer;
-   public Riddle(String q, String a) // Constructor method
-   {
-     question = q;
-     answer = a;
-   } // Riddle()
-   public String getQuestion()   // Instance method
-   {
-     return question;
-   } // getQuestion()
-   public String getAnswer()     // Instance method
-   {
-     return answer;
-   } //getAnswer() 
-} // Riddle class                // End class body
-</pre>
+<c>
+    public class Riddle extends Object  // Class header
+    {                                   // Begin class body
+       private String question;       // Instance variables
+       private String answer;
+       public Riddle(String q, String a) // Constructor method
+       {
+	 question = q;
+	 answer = a;
+       } // Riddle()
+       public String getQuestion()   // Instance method
+       {
+	 return question;
+       } // getQuestion()
+       public String getAnswer()     // Instance method
+       {
+	 return answer;
+       } //getAnswer() 
+    } // Riddle class                // End class body
+</c>
 </listing>
 <!--    </figure> -->
   </subsection>
   <subsection>
     <title>Syntax and Semantics</title>
     <p>
-      Writing Java code requires that you know its syntax and semantics.
-      A language's <term>syntax</term> is the set of rules 
-<!-- \marginpar{Syntax} -->
-      that determines whether a particular statement is correctly formulated.
-      As an example of a syntax rule,
-      consider the following two English statements:
+      Writing Java code requires that you know its syntax and semantics, where
+      syntax refers to a program's grammar and semantics corresponds to its meaning.
     </p>
-<pre>
-The rain in Spain falls mainly on the plain. // Valid
-Spain rain the mainly in on the falls plain. // Invalid
-</pre>
     <p>
-      The first sentence follows the rules of English syntax (grammar),
-      and it means that it rains a lot on the Spanish plain.
-      The second sentence does not follow English syntax, and,
-      as a result, it is rendered meaningless.
+      A language's <term>syntax</term> is the set of rules 
+      that determines whether a particular statement is correctly formulated.
       An example of a Java syntax rule is that a Java statement must end with a semicolon.
+      For example:
     </p>
+    <c>
+    sum = 0;
+    sum = 0  // Syntax error, missing semicolon
+    </c>
+     <p>
+      This is comparable to a grammatical error in English:
+    </p>
+    <c>
+    The rain in Spain falls mainly on the plain. 
+    Spain rain the mainly in on the falls plain. // Ungrammatical
+    </c>
     <p>
       However, unlike in English,
       where one can still be understood even when one breaks a syntax rule,
       in a programming language the syntax rules are very strict.
-      If you break even the slightest syntax rule<mdash/>for example,
-      if you forget just a single semicolon<mdash/>the program won't work at all.
+      If you break even the slightest syntax rule<mdash/>e.g.,
+      forget a semicolon<mdash/>the program won't work at all.
     </p>
     <p>
-      Similarly, the programmer must know the 
-<!-- \marginpar{Semantics} -->
-      <term>semantics</term>
-      of the language<mdash/>that is,
-      the meaning of each statement.
-      In a programming language,
-      a statement's meaning is determined by what effect it will have on the program.
-      For example,
-      to set the <c>sum</c> to 0 in the preceding algorithm,
-      an assignment statement is used to store the value 0 into the memory location named
-<c>sum</c>. Thus,
-      we say that the statement
+      Similarly, the programmer must know the <term>semantics</term>  of the language.
+      The semantics of a programming statement refers to what it does <mdash/> to its
+      effect on the program. For example, the meaning of the following statement,
     </p>
-<pre>
-sum = 0;
-</pre>
+    <c>
+    sum = 10 + 15;
+    </c>
     <p>
-      assigns 0 to the memory location <c>sum</c>, where it will be stored until some other part of the program needs it.
+      is to add 10 and 15 and store their sum in the variable <c>sum</c>.
     </p>
     <p>
-      Learning Java's syntax and semantics is a major part of learning to program.
-      This aspect of learning to program is a lot like learning a foreign language.
+      Learning Java's syntax and semantics is a lot like learning a foreign language.
       The more quickly you become fluent in the new language (Java),
       the better you will be at expressing solutions to interesting programming problems.
       The longer you struggle with Java's rules and conventions,
       the more difficult it will be to talk about problems in a common language.
-      Also, computers are a lot fussier about correct language than humans,
-      and even the smallest syntax or semantic error can cause tremendous frustration.
-      So, try to be very precise in learning Java's syntax and semantics.
     </p>
   </subsection>
   <subsection>
@@ -599,19 +591,22 @@ sum = 0;
       Coding, testing, and revising a program is an repetitive process,
       one that may require you to repeat the different program-development stages shown in (Fig.
       <xref ref="fig_progdev"></xref>).
-      According to the stepwise-refinement principle,
+    </p>
+    <p>
+      According to the <term>stepwise-refinement principle</term>,
       the process of developing a program should proceed in small,
       incremental steps,
       where the solution becomes more refined at each step.
-      However, no matter how much care you take,
+      However, no matter how carefuk you are,
       things can still go wrong during the coding process.
     </p>
     <p>
-      A <em>syntax error</em> is an error that breaks one of Java's syntax rules.
+      A <term>syntax error</term> is an error that breaks one of Java's syntax rules.
       Such errors will be detected by the Java compiler.
       Syntax errors 
-<!-- \marginpar{Syntax errors} -->
-       are relatively easy to fix once you understand the error messages provided by the compiler.
+      are relatively easy to fix once you understand the compiler's error messages.
+    </p>
+    <p>
       As long as a program contains syntax errors,
       the programmer must correct them and recompile the program.
       Once all the syntax errors are corrected,
@@ -620,23 +615,21 @@ sum = 0;
     </p>
     <p>
       When a program is run,
-      the computer carries out the steps specified in the program and produces results.
+      the computer carries out the steps specified in the program's statements and produces results.
       However, just because a program runs does not mean that its actions and results are correct.
-      A running program can contain <em>semantic errors</em>,
+      A running program can contain <term>semantic errors</term>,
       also called 
-<!-- \marginpar{Semantic errors} -->
-      <em>logic errors</em>.
-      A semantic error is caused by an error in the logical design of the program causing it to behave incorrectly,
-      producing incorrect results.
+      <term>logic errors</term>.
+      A semantic error causes the program to behave incorrectly, producing incorrect results.
     </p>
     <p>
       Unlike syntax errors, semantic errors cannot be detected automatically.
       For example,
       suppose that a program contains the following statement for calculating the area of a rectangle:
     </p>
-<pre>
-return length + width;
-</pre>
+    <c>
+    area = length + width;
+    </c>
     <p>
       Because we are adding length and width instead of multiplying them,
       the area calculation will be incorrect.
@@ -646,16 +639,19 @@ return length + width;
     </p>
     <p>
       Semantic errors can only be discovered by testing the program and they are sometimes very hard to detect.
-      Just because a program appears to run correctly on one test doesn't guarantee that it contains no semantic errors.
-      It might just mean that it has not been adequately tested.
+      Also, just because a program appears to run correctly on one or more tests doesn't guarantee that it is correct. 
+      It may just mean that it has not been adequately tested.
     </p>
     <p>
       Fixing semantic errors is known as
-      <em>debugging</em> a program,
+      <term>debugging</term> a program,
       and when subtle errors occur it can be the most frustrating part of the whole program development process.
       The various examples presented will occasionally provide hints and suggestions on how to track down
       <em>bugs</em>, or errors, in your code.
-      One point to remember when you are trying to find a very subtle bug is that no matter how convinced you are that your code is correct and that the bug must be caused by some kind of error in the computer,
+    </p>
+    <p>
+      One point to remember when you are trying to find a very subtle bug is that no matter how convinced you are 
+      that your code is correct and that the bug must be caused by some kind of error in the computer,
       the error is almost certainly caused by your code!
     </p>
   </subsection>
@@ -664,7 +660,6 @@ return length + width;
     <p>
       Becoming a proficient programmer goes beyond simply writing a program that produces correct output.
       It also involves 
-<!-- \marginpar{Programming style} -->
       developing good
       <em>programming style</em>,
       which includes how readable and understandable your code is.
