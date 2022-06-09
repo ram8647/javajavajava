@@ -1,85 +1,98 @@
 <section xml:id="drawing-shapeswitha-object-optional">
-  <title>Drawing Shapes with a <c>Graphics</c>Object (Optional)</title>
+  <title>Drawing Shapes with a <c>Graphics</c> Object (Optional)</title>
   <introduction>
     <p>
       All of the instance methods of the <c>String</c> class that we examined return values.
       The <c>length()</c> method return an <c>int</c> value,
       and the <c>concat()</c> method returned a <c>String</c>. It is also very common for classes to define instance methods that perform actions but do not return a value.
       The <c>Graphics</c> object, <c>g</c>, that appears in Chapter<nbsp/>1's <c>HelloWorldSwing</c> is one example.
-      The program is reproduced in <xref ref="fig-helloworld2">Figure</xref>
+      The program is reproduced in <xref ref="list-helloworld2">Listing</xref>
     </p>
-    <figure xml:id="fig-helloworld2">
-      <caption><c>HelloWorldCanvas</c> program source code.</caption>
-<pre>
+    <listing xml:id="list-helloworld2">
+      <caption><c>HelloWorldCanvas</c> source code.</caption>
+    <program language="java">
+    <input>
 /** File: HelloWorldSwing program */
 import javax.swing.JFrame; // Import class names
 import java.awt.Graphics;
 import java.awt.Canvas;
 public class HelloWorldCanvas extends Canvas // Class header
 {
-    // Start of body
-    public void paint(Graphics g)
-        // The paint method
-    {
+    public void paint(Graphics g) {
         g.drawString("Hello, World!", 10, 10);
     }  // End of paint
+
     public static void main(String[] args){
         HelloWorldCanvas c = new HelloWorldCanvas();
         JFrame f = new JFrame();
         f.add(c);
         f.setSize(150,50);
         f.setVisible(true);
-    }}  // End of HelloWorldCanvas
-</pre>
-    </figure>
+    } // main
+}  // End of HelloWorldCanvas
+    </input>
+    </program>
+    </listing>
     <p>
       At this point we will not worry about the language features that enable the <c>paint()</c> method to draw on the Java Swing window.
       We will focus instead on the information needed to make good use of the <c>g.drawString()</c> method.
+    </p>
+    <p>  
       The first thing you should know is that,
       when the <c>paint()</c> method is executed,
       its parameter, <c>g</c>, refers to an instance of the <c>Graphics</c> class.
       Unlike our other examples involving variables that refer to objects,
-      in this case there is no need to use a constructor to create an object of type <c>Graphics</c>. We can assume
-<c>g</c> already refers to such an object.
+      in this case there is no need to use a constructor to create an object of type <c>Graphics</c>. 
+      We can assume <c>g</c> already refers to such an object.
     </p>
     <p>
-      We already know that the statement
-    </p>
-<pre>
-g.drawString("Hello, World!",10,10);
-</pre>
-    <p>
+      We already know that the statement <c>g.drawString("Hello, World!",10,20); </c>
       displays the <c>String</c>
       <q>Hello, World!</q>
-      in the program window.
-      More generally,
-      if <c>str</c> is a literal <c>String</c> value or a reference to a <c>String</c> object and <c>x</c> and <c>y</c> are literal <c>int</c> values or <c>int</c> variables then
+      in the program window. In fact, it draws the string at the coordinate (10,20) in the window, which is
+      10 pixels from the left edge and 20 pixels from the top edge of the window.  (A <term>pixel</term>
+      is a dot on the console window that can be set to a certain color.) 
+<!--            
+            More generally, 
+      if <c>str</c> is a literal <c>String</c> value or a reference to a <c>String</c> object 
+      and <c>x</c> and <c>y</c> are literal <c>int</c> values or <c>int</c> variables then
+	<c>
+	g.drawString(str,x,y)
+	</c>
+    displays the <c>String str</c> from left to right in the program window beginning at a point which is <c>x</c> 
+    pixels from the left edge of the window and <c>y</c> pixels down from the top edge of the window.
+     
+      Notice that increasing the value of <c>y</c> will cause <c>str</c> to be displayed lower.
+      This is the opposite of the usual <m>x</m> and <m>y</m> coordinate system used in 
+      mathematics where increasing the <m>y</m> value designates a higher point.
+-->
     </p>
-<pre>
-g.drawString(str,x,y)
-</pre>
     <p>
-      displays the <c>String str</c> from left to right in the program window beginning at a point which is <c>x</c> pixels from the left edge of the window and <c>y</c> pixels down from the top edge of the window.
       In a graphics window,
       the point with coordinates (0,0) is at the top-left corner.
       The horizontal axis grows positively from left to right.
-      The vertical axis grows positively from top to bottom (Fig.<nbsp/>2.6).
-      <image width="73%" source="chptr02/drawxy.png"/> (A <em>pixel</em>
-      is a dot on the console window that can be set to a certain color.) Notice that increasing the value of <c>y</c> will cause <c>str</c> to be displayed lower.
-      This is the opposite of the usual <m>x</m> and <m>y</m> coordinate system used in mathematics where increasing the <m>y</m> value designates a higher point.
+      The vertical axis grows positively from top to bottom (<xref ref="fig-drawxy">Figure</xref>).
+      
+      <figure xml:id="fig-drawxy">
+      <caption>The point (0,0) is at the top left of the window,</caption>
+      <image width="50%" source="chptr02/drawxy.png"/> 
+      </figure>
+      
     </p>
     <p>
       With this information about <c>g.drawString()</c>, we can calculate where to display any message in the program window.
       For example, if we wish to display the message
       <q>Welcome to Java</q>
-      25 pixels below where
+      15 pixels below where
       <q>Hello, World!</q>
       is displayed we could use the statements
     </p>
-<pre>
-g.drawString("Hello, World!",10,10);
-g.drawString("Welcome to Java",10,35);
-</pre>
+    <program language="java">
+    <input>
+    g.drawString("Hello, World!",10,20);
+    g.drawString("Welcome to Java",10,35);
+    </input>
+    </program>
     <p>
       in the body of <c>HelloWorldCanvas</c>'s <c>paint()</c> method.
       The result of these statements would appear as shown in <xref ref="fig-drawstr">Figure</xref>.
@@ -88,33 +101,42 @@ g.drawString("Welcome to Java",10,35);
       <caption>
       <q>Hello, World!</q>
       is drawn
-      at coordinate (10, 10) and
+      at coordinate (10, 20) and
       <q>Welcome to Java</q>
       at
       (10, 35) on the JFrame.</caption>
-      <image width="73%" source="chptr02/drawstr.png"/>
+      <image width="50%" source="chptr02/drawstr.png"/>
     </figure>
   </introduction>
   <subsection xml:id="fig-graphics">
     <title>Graphics Drawing Methods</title>
     <p>
-      The <c>Graphics</c> class discussed in the previous section also has methods that can be used to draw geometric shapes in different colors.
-      These methods can be used to create graphical user interfaces that are more interesting or to give a visual representation of data,
+      The <c>Graphics</c> class discussed in the previous section also has methods that can be 
+      used to draw geometric shapes in different colors.
+      These methods can be used to create graphical user interfaces that are more interesting 
+      or to give a visual representation of data,
       such as a pie chart or a bar graph.
     </p>
+      <figure xml:id="fig-graphics-class">
+      <caption>The <c>Graphics</c> class.</caption>
+      <image width="40%" source="chptr02/graphics.png"/>
+      </figure>
     <p>
-      There are two <c>Graphics</c> methods for drawing rectangles,
-<c>fillRect()</c> and <c>drawRect()</c>(Fig.<nbsp/>2.8).
-      The first draws a rectangle and fills it with the current drawing color and the second just draws the outline of the rectangle.
-      Using the
-<c>Graphics</c> object, <c>g</c>, each of these is called in the same way as the <c>drawString()</c> method from the previous example.
+      There are two <c>Graphics</c> methods for drawing rectangles, <c>fillRect()</c> and <c>drawRect()</c>
+      (<xref ref="fig-graphics-class">Figure</xref>).
+      The first draws a rectangle and fills it with the current drawing color and the second just 
+      draws the outline of the rectangle.
+      Using the <c>Graphics</c> object, <c>g</c>, each of these is called in the same way as 
+      the <c>drawString()</c> method from the previous example.
       Each of these methods takes four <c>int</c> arguments,
-      which specify <image width="73%" source="chptr02/graphics.png"/> the rectangle's location and size.
+      which specify  the rectangle's location and size.
       Thus, a call to <c>fillRect()</c> would take the form
     </p>
-<pre>
-g.fillRect(x,y,width,height);
-</pre>
+    <program language="java">
+    <input>
+    g.fillRect(x,y,width,height);
+    </input>
+    </program>
     <p>
       where <c>x</c> and <c>y</c> arguments specify the location of the upper left corner of the rectangle as being <c>x</c> pixels from the left edge of the window and <c>y</c> pixels down from the top edge of the window.
       The <c>width</c> and <c>height</c> arguments specify the width and height of the rectangle in pixels.
@@ -192,29 +214,35 @@ g.fillRect(x,y,width,height);
     </p>
     <p>
       Drawing and filling a <c>Graphics</c> oval is very similar to drawing and filling a rectangle.
-      Notice in Figure<nbsp/>2.8 that the
-<c>fillOval()</c> and <c>drawOval()</c> methods take the same four arguments as the corresponding rectangle methods.
+      Notice in Figure<nbsp/>2.8 that the <c>fillOval()</c> and <c>drawOval()</c> methods 
+      take the same four arguments as the corresponding rectangle methods.
       An oval is inscribed within an enclosing rectangle.
       The <c>x</c> and <c>y</c> arguments give the coordinates of the enclosing rectangle's top left point.
       And the <c>width</c> and <c>height</c> arguments give the enclosing rectangles dimensions.
     </p>
     <p>
       All that remains is to choose the location and dimensions of the rectangles.
-      We could specify one rectangle as having its upper left corner 25 pixels to the right of the left edge of the JFrame and 25 pixels down from the top edge.
+      We could specify one rectangle as having its upper left corner 25 pixels 
+      to the right of the left edge of the JFrame and 25 pixels down from the top edge.
       A medium sized rectangle could have a width of 140 pixels and a height of 40 pixels.
       The statement
     </p>
-<pre>
-g.fillRect(25, 25, 140, 40);
-</pre>
+    <program language="java">
+    <input>
+    g.fillRect(25, 25, 140, 40);
+    </input>
+    </program>
     <p>
       will fill this rectangle with whatever color happens to be <c>g</c>'s current color.
-      A location 25 pixels to the right of the left edge of the rectangle and 25 pixels down from the top edge of the rectangle would have coordinates \mbox{x = 50} and \mbox{y = 50} . Thus,
+      A location 25 pixels to the right of the left edge of the rectangle and 25 
+      pixels down from the top edge of the rectangle would have coordinates \mbox{x = 50} and \mbox{y = 50} . Thus,
       the statement
     </p>
-<pre>
-g.drawString("Hello, World!", 50, 50);
-</pre>
+    <program language="java">
+    <input>
+    g.drawString("Hello, World!", 50, 50);
+    </input>
+    </program>
     <p>
       will display
       <q>Hello, World!</q>
@@ -223,18 +251,18 @@ g.drawString("Hello, World!", 50, 50);
     </p>
     <p>
       Thus, we now have sufficient information to finish the <c>paint()</c> method for accomplishing our plan.
-      The completed program is displayed in <xref ref="fig-hw2appletclass">Figure</xref>.
+      The completed program is displayed in <xref ref="list-hw-graphics">Listing</xref>.
       Note how we repeatedly use the <c></c>
     </p>
-    <figure xml:id="fig-hw2appletclass">
+    <listing xml:id="list-hw-graphics">
       <caption>The <c>HelloWorldGraphic</c> class is a Java
       Swing program that shows how to use color and drawing methods.</caption>
-<pre>
+    <program language="java">
+    <input>
 import java.awt.*;
 import javax.swing.JFrame;
 public class HelloWorldGraphic  extends Canvas
 {
-    // called after setVisible(true)
     public void paint(Graphics g) {
         g.setColor(Color.cyan);      // Set color
         g.fillRect(25, 25, 140, 40); // Fill rectangle
@@ -249,18 +277,20 @@ public class HelloWorldGraphic  extends Canvas
         g.setColor(Color.black);
         g.drawString("Welcome to Java", 50, 100);
     }//paint()
-   // the program
+
     public static void main(String[] args){
         HelloWorldCanvas c = new HelloWorldCanvas();
         JFrame f = new JFrame();
         f.add(c);
         f.setSize(150,50);
         f.setVisible(true);
-    }} //HelloWorldGraphic
-</pre>
-    </figure>
+    } //main
+} //HelloWorldGraphic
+    </input>
+    </program>
+    </listing>
     <p>
-      g.setColor()} method to change <c>g</c>'s current color before drawing each element of our picture.
+    g.setColor()} method to change <c>g</c>'s current color before drawing each element of our picture.
     </p>
     <p>
       <xref ref="fig-drawrect">Figure</xref>
@@ -269,9 +299,9 @@ public class HelloWorldGraphic  extends Canvas
       download its sourcecode from the book's Web site and compile and run it on your computer.
       Additional drawing capabilities will be explored throughout the text in sections that can either be covered or skipped.
     </p>
-    <figure>
-      \figaleftscaled{chptr02/drawrect.eps}{0.8}{This is how the <c>HelloWorldGraphic</c>
-      program will look when run.}{fig-drawrect}
+    <figure xml:id="fig-drawrect">
+     <caption>Output from the  <c>HelloWorldGraphic</c> program.</caption>
+     <image width="40%" source="chptr02/drawrect.png"/>
     </figure>
   </subsection>
 </section>
