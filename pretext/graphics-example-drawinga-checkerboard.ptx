@@ -33,7 +33,7 @@
     </p>
     <figure xml:id="fig-checkerapplet">
       <caption>The <c>CheckerBoardFrame</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;
 public class CheckerBoardFrame extends JFrame {
@@ -50,7 +50,7 @@ public class CheckerBoardFrame extends JFrame {
         c.setSize(500,500);
         c.setVisible(true);
     }} // CheckerBoardFrame
-</pre>
+ </input></program>
     </figure>
     <p>
       shown there,
@@ -115,8 +115,8 @@ public class CheckerBoardFrame extends JFrame {
     </p>
     <figure xml:id="fig-checkerclass">
       <caption>The <c>CheckerBoard</c> class.</caption>
-      \[28pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 public class CheckerBoard {
              // Default values for a standard checkerboard
@@ -160,7 +160,7 @@ public class CheckerBoard {
       drawBoard(g);
       drawCheckers(g);
   }//draw()} //CheckerBoard
-</pre>
+ </input></program>
     </figure>
     <p>
       The <c>drawBoard()</c> method uses a nested <c>for</c> loop to draw an
@@ -189,10 +189,10 @@ public class CheckerBoard {
       To switch from one color to the other,
       we use the <c>Graphics</c><c>setColor()</c> method to alternate between the two colors designated for the checkerboard, <c>SQ_COLOR1</c> and <c>SQ_COLOR2</c>. We then use the following method call to draw the colored squares:
     </p>
-<pre>
+ <program language="java"><input>
 g.fillRect(LEFT_X+col*SQ_SIDE,UPPER_Y+row*SQ_SIDE,
                                         SQ_SIDE,SQ_SIDE);
-</pre>
+ </input></program>
     <p>
       Note how we use the loop variables, <c>row</c><c>col</c>, together with the constants specifying the top left corner of the board (<c>UPPER_Y</c> and <c>LEFT_X</c>) and the size of the squares (<c>SQ_SIDE</c>) to calculate the location and size of each square.
       The calculation here is illustrated in <xref ref="fig-checkerlayout">Figure</xref>.
@@ -213,7 +213,7 @@ g.fillRect(LEFT_X+col*SQ_SIDE,UPPER_Y+row*SQ_SIDE,
       <m>(row+col) \% 2 == 1)</m><mdash/>on the first three rows of each player's side of the board.
       So, each player's checkers initially are located in the first three rows and last three rows of the checker board:
     </p>
-<pre>
+ <program language="java"><input>
 if ((row + col)%2 == 1) {// One player has top 3 rows
     if (row &lt; 3){
         g.setColor(CHECKER_COLOR1);
@@ -225,7 +225,7 @@ if ((row + col)%2 == 1) {// One player has top 3 rows
         g.fillOval(LEFT_X+col*SQ_SIDE,
            UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
     }//if}//if
-</pre>
+ </input></program>
     <p>
       Because the checkers are circles,
       we use the <c>fillOval()</c> method to draw them.

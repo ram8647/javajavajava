@@ -64,14 +64,14 @@
       
       <tabular>
         <row>
-          <cell>\multicolumn{2}{l}{\rule{35pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{Manager}</cell>
           <cell>{Description}</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{35pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell><c>java.awt.BorderLayout</c></cell>
@@ -91,7 +91,7 @@
           <cell>Arranges elements on top of each other.</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{35pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB
@@ -99,11 +99,11 @@
     <p>
       To override the default layout for any of the <c>JApplet</c>,
 <c>JDialog</c>, <c>JFrame</c>, and <c>JWindow</c> containers,
-      you must remember to use the \mbox{getContentPane()} . The correct statement is
+      you must remember to use the getContentPane() . The correct statement is
     </p>
-<pre>
+ <program language="java"><input>
 getContentPane().setLayout(new FlowLayout());
-</pre>
+ </input></program>
     <principle>
       <title>DEBUGGING TIP:Content Pane</title>
       <p>
@@ -118,14 +118,14 @@ getContentPane().setLayout(new FlowLayout());
       
       <tabular>
         <row>
-          <cell>\multicolumn{2}{l}{\rule{18pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{Container}</cell>
           <cell>{Layout Manager}</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{18pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell><c>JApplet</c></cell>
@@ -142,7 +142,7 @@ getContentPane().setLayout(new FlowLayout());
           <cell><c>BorderLayout</c>(on its content pane)</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{18pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB
@@ -159,9 +159,9 @@ getContentPane().setLayout(new FlowLayout());
       we need only set the keypad's layout to a <c>GridLayout</c>. This takes a single statement,
       which should be added to the beginning of the <c>KeyPad()</c> constructor:
     </p>
-<pre>
+ <program language="java"><input>
 setLayout(new GridLayout(4,3,1,1));
-</pre>
+ </input></program>
     <p>
       This statement creates a <c>GridLayout</c> object and assigns it as the layout manager for the keypad.
       It will ensure that the keypad will have four rows and three columns of buttons (Fig.
@@ -233,10 +233,10 @@ setLayout(new GridLayout(4,3,1,1));
       The <c>BorderLayout</c> class contains two constructors:
       <image width="73%" source="9f14.eps"/>
     </p>
-<pre>
+ <program language="java"><input>
 public BorderLayout();
 public BorderLayout(int hgap, int vgap);
-</pre>
+ </input></program>
     <p>
       The two parameters in the second version of the constructor allow you to insert spacing between the areas.
     </p>
@@ -246,10 +246,10 @@ public BorderLayout(int hgap, int vgap);
       to set the application window to a border layout and to add the keypad to its east area,
       we would use the following statements:
     </p>
-<pre>
+ <program language="java"><input>
 getContentPane().setLayout(new BorderLayout(2, 2));
 getContentPane().add(keypad,"East");
-</pre>
+ </input></program>
     <p>
       In this version of the <c>add()</c> method,
       the second parameter must be a capitalized <c>String</c> with one of the names,
@@ -262,33 +262,33 @@ getContentPane().add(keypad,"East");
       The order in which components are added does not matter.
     </p>
     <p>
-      One limitation of the <c>BorderLayout</c> is that only one component \marginpar{Containment hierarchy} can be added to each area.
+      One limitation of the <c>BorderLayout</c> is that only one component  can be added to each area.
       That means that if you want to add several components to an area,
       you must first enclose them within a
 <c>JPanel</c> and then add the entire panel to the area.
       For example,
       let's create a panel to contain the prompt and the text field and place it at the north edge of the frame:
     </p>
-<pre>
+ <program language="java"><input>
 JPanel inputPanel = new JPanel(); // Create panel
 inputPanel.add(prompt);              // Add label
 inputPanel.add(input);           // Add textfield
                     // Add the panel to the frame
 getContentPane().add(inputPanel,"North");
-</pre>
+ </input></program>
     <p>
       The same point would apply if we want to group the keypad with the convert button and place them at the east edge.
       There are several ways these elements could be grouped.
       In this example,
       we give the panel a border layout and put the keypad in the center and the convert button at the south edge:
     </p>
-<pre>
+ <program language="java"><input>
 JPanel controlPanel= new JPanel(new BorderLayout(0,0));
 controlPanel.add(keypad,"Center");
 controlPanel.add(convert, "South");
                     // Add the panel to the frame
 getContentPane.add(controlPanel,"East");
-</pre>
+ </input></program>
     <p>
       Given these details about the <c>BorderLayout</c>, a more appropriate design for the converter application is shown in <xref ref="fig-metricgui3">Figure</xref>.
       Notice that the border layout for the top-level <c>JFrame</c> uses only the center, north,
@@ -323,7 +323,7 @@ getContentPane.add(controlPanel,"East");
       The only changes to the program itself occur in the constructor method,
       which in its revised form is defined as follows:
     </p>
-<pre>
+ <program language="java"><input>
 public Converter() {
   getContentPane().setLayout(new BorderLayout());
   keypad = new KeyPad(this);
@@ -342,7 +342,7 @@ public Converter() {
   display.setEditable(false);
   convert.addActionListener(this);
   input.addActionListener(this);} // Converter()
-</pre>
+ </input></program>
     <p>
       This layout divides the interface into three main panels,
       an input panel, display panel,
@@ -351,7 +351,7 @@ public Converter() {
       Thus, the containment hierarchy for this design is much more complex than in our original design.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

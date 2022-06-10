@@ -34,7 +34,7 @@
     <p>
       Lexicographic order
           <idx><h>lexicographic order</h></idx>
-      can be extended to \marginpar{H precedes h} include strings of characters.
+      can be extended to  include strings of characters.
       Thus,
       <q>Hello</q>
       precedes
@@ -53,9 +53,9 @@
       As an example,
       the following strings are arranged in lexicographic order:
     </p>
-<pre>
+ <program language="java"><input>
 "" "!" "0" "A" "Andy" "Z" "Zero" "a" "an" "and" "andy" "candy" "zero"
-</pre>
+ </input></program>
     <p>
       We can define <term>lexicographic order</term>
           <idx><h>lexicographic order</h></idx>
@@ -78,7 +78,7 @@
     <p>
       Perhaps a more precise way to define lexicographic order is to define a Java method:
     </p>
-<pre>
+ <program language="java"><input>
 public boolean precedes(String s1, String s2) {
                            // Pick shorter length
   int minlen = Math.min(s1.length(), s2.length());
@@ -91,9 +91,9 @@ public boolean precedes(String s1, String s2) {
             // If all characters so far are equal
         //  then s1 &lt; s2 if it is shorter than s2
   return s1.length() &lt; s2.length();  } // precedes()}
-</pre>
+ </input></program>
     <p>
-      This method does a character-by-character comparison of \marginpar{Algorithm: Loop bound} the two strings,
+      This method does a character-by-character comparison of  the two strings,
       proceeding left to right, starting at the first character in both strings.
       Its <c>for</c> loop uses a counting bound,
       which starts at <em>k</em> equal to zero and counts up to the length of the shorter string.
@@ -121,14 +121,14 @@ public boolean precedes(String s1, String s2) {
       <q>alphabet.</q>
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
             Arrange the following strings in lexicographic order:
-<pre>
+ <program language="java"><input>
 zero bath bin alpha Alpha Zero Zeroes a A z Z
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -148,22 +148,22 @@ zero bath bin alpha Alpha Zero Zeroes a A z Z
     <p>
       Java provides several methods for comparing <c>String</c> s:
     </p>
-<pre>
+ <program language="java"><input>
 public boolean equals(Object anObject); // Overrides Object.equals()
 public boolean equalsIgnoreCase(String  anotherString);
 public int compareTo(String  anotherString);
-</pre>
+ </input></program>
     <p>
       The first comparison method, <c>equals()</c>,
           <idx><h>String.equals()</h></idx>
       overrides the <c>Object.equals()</c> method.
-      Two <c>String</c> s are equal if they have the exact same letters in the exact same \marginpar{Equality vs. identity} order.
+      Two <c>String</c> s are equal if they have the exact same letters in the exact same  order.
       Thus, for the following declarations,
     </p>
-<pre>
+ <program language="java"><input>
 String s1 = "hello";
 String s2 = "Hello";
-</pre>
+ </input></program>
     <p>
 <c>s1.equals(s2)</c> is <c>false</c>, but <c>s1.equals("hello")</c> is <c>true</c>.
     </p>
@@ -190,11 +190,11 @@ String s2 = "Hello";
       We can create an analogous situation in Java by using the following
 <c>JButton</c> definitions:
     </p>
-<pre>
+ <program language="java"><input>
 JButton b1 = new Button("a");
 JButton b2 = new Button("a");
 JButton b3 = b2;
-</pre>
+ </input></program>
     <p>
       Given these three declarations, <c>b1.equals(b2)</c> and <c>b1.equals(b3)</c> would be <c>false</c>, but <c>b2.equals(b3)</c> would be <c>true</c> because
       <em>b2</em> and <em>b3</em>
@@ -225,8 +225,8 @@ JButton b3 = b2;
     <figure xml:id="fig-equals">
       <caption>The <c>TestEquals</c> program tests Java's default
 <c>equals()</c> method, which is defined in the <c>Object</c> class.</caption>
-      \[32pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 public class TestEquals {
   static Button b1 = new Button ("a");
@@ -255,16 +255,16 @@ public class TestEquals {
     isIdentical(b1, b3);     // not identical
     isIdentical(b2, b3);     // identical
   } // main()} // TestEquals
-</pre>
+ </input></program>
     </figure>
     <p>
       and <c>isIdentical()</c> to perform the comparisons and print the results.
       This program will produce the following output:
     </p>
     <p>
-      \[32pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 java.awt.Button[button0,0,0,0x0,invalid,label=a]
    does NOT equal java.awt.Button[button1,0,0,0x0,invalid,label=b]
 java.awt.Button[button0,0,0,0x0,invalid,label=a]
@@ -277,7 +277,7 @@ java.awt.Button[button0,0,0,0x0,invalid,label=a]
    is NOT identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
 java.awt.Button[button1,0,0,0x0,invalid,label=b]
    is identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
-</pre>
+ </input></program>
   </subsection>
   <subsection xml:id="self-study-exercisesG20">
     <title>String Identity Versus String Equality</title>
@@ -295,31 +295,31 @@ java.awt.Button[button1,0,0,0x0,invalid,label=b]
 <c>s6</c>.</caption>
       <image width="73%" source="chptr07/p375f1.png"/>
     </figure>
-<pre>
+ <program language="java"><input>
 String s1 = new String("hello");
 String s2 = new String("hello");
 String s3 = new String("Hello");
 String s4 = s1;            // s1 and s4 are now identical
 String s5 = "hello";
 String s6 = "hello";
-</pre>
+ </input></program>
     <p>
       Given these declarations,
-      we would get the \marginpar{Equality vs. identity} following results if we compare the equality of the <c>String</c> s:
+      we would get the  following results if we compare the equality of the <c>String</c> s:
     </p>
-<pre>
+ <program language="java"><input>
 s1.equals(s2) ==> true  s1.equalsIgnoreCase(s3)  ==> true
 s1.equals(s3) ==> false s1.equals(s5)            ==> true
 s1.equals(s4) ==> true  s1.equals(s6)            ==> true
-</pre>
+ </input></program>
     <p>
       and the following results if we compare their identity:
     </p>
-<pre>
+ <program language="java"><input>
 s1 == s2  ==> false            s1 == s3  ==> false
 s1 == s4  ==> true             s1 == s5  ==> false
 s5 == s6  ==> true
-</pre>
+ </input></program>
     <p>
       The only true identities among these <c>String</c> s are
       <em>s1</em> and <em>s4</em>,
@@ -332,8 +332,8 @@ s5 == s6  ==> true
     <figure xml:id="fig-equals2">
       <caption>Program illustrating the difference between
       string equality and identity.</caption>
-      \[35pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 public class TestStringEquals {
   static String s1 = new String("hello"); // s1 and s2 are equal, not identical
@@ -377,20 +377,20 @@ public class TestStringEquals {
            hello is identical to hello
            hello is not identical to hello
            hello is identical to hello
-</pre>
+ </input></program>
     </figure>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
     </p>
     <ol>
       <li>
         <p>
           Given the  <c>String</c> declarations,
-<pre>
+ <program language="java"><input>
 String s1 = "java", s2 = "java", s3 = "Java";
 String s4 = new String(s2);
 String s5 = new String("java");
-</pre>evaluate the following expressions:
+ </input></program>evaluate the following expressions:
         </p>
         <ol>
           <li>
@@ -448,10 +448,10 @@ String s5 = new String("java");
       <li>
         <p>
           Given the following declarations,
-<pre>
+ <program language="java"><input>
 String s1 = "abcdefghijklmnopqrstuvwxyz";
 String s2 = "hello world";
-</pre>write Java expressions to carry out each of the following operations:
+ </input></program>write Java expressions to carry out each of the following operations:
           <ol>
             <li>
               <p>

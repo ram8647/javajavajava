@@ -27,8 +27,8 @@
     </p>
     <figure xml:id="fig-student">
       <caption>The <em>serializable</em><c>Student</c> class.</caption>
-      \[31pc]
-<pre>
+      
+ <program language="java"><input>
 import java.io.*;
 public class Student implements Serializable {
   private String name;
@@ -57,7 +57,7 @@ public class Student implements Serializable {
   public String toString() {
     return name + "\t" + year + "\t" + gpa;
   }} // Student
-</pre>
+ </input></program>
     </figure>
     <p>
       The <c>Student</c> class contains its own I/O methods,
@@ -75,7 +75,7 @@ public class Student implements Serializable {
     <p>
       Note the definition of the <c>writeToFile()</c> method,
       which performs the output task.
-      This method's <c>FileOutputStream</c> parameter is used to create an <c>ObjectOutputStream</c>, whose <c>writeObject()</c>\marginpar{Object serialization} method writes the object into the file.
+      This method's <c>FileOutputStream</c> parameter is used to create an <c>ObjectOutputStream</c>, whose <c>writeObject()</c> method writes the object into the file.
       To output a
 <c>Student</c> object,
       we merely invoke the <c>writeObject()</c> method.
@@ -99,7 +99,7 @@ public class Student implements Serializable {
     </p>
     <p>
       Object deserialization,
-      as shown in the <c>readFromFile()</c> method, \marginpar{Object deserialization} is simply the reverse of the serialization process.
+      as shown in the <c>readFromFile()</c> method,  is simply the reverse of the serialization process.
       The
 <c>readObject()</c> method reads one serialized object from the
 <c>ObjectInputStream</c>. Its result type is <c>Object</c>, so it is necessary to cast the result into the proper type.
@@ -146,8 +146,8 @@ public class Student implements Serializable {
     <figure xml:id="fig-objectioclass">
       <caption>Part I of the <c>ObjectIO</c> class, which provides
       an interface to reading and writing files of <c>Student</c> s.</caption>
-      \[29pc]
-<pre>
+      
+ <program language="java"><input>
 import javax.swing.*;         // Swing components
 import java.awt.*;
 import java.io.*;
@@ -181,11 +181,11 @@ public class ObjectIO extends JFrame implements ActionListener{
     else
         writeRecords(fileName);
   } // actionPerformed()
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig_objectIOpart2cont">
       <caption>(<em>continued</em>) The <c>ObjectIO</c> class, Part II.</caption>
-<pre>
+ <program language="java"><input>
 private void readRecords(String fileName) {
      try {
        FileInputStream inStream = new FileInputStream(fileName);  // Open a stream
@@ -233,14 +233,14 @@ private void readRecords(String fileName) {
             }
     });
   } // main()} // ObjectIO
-</pre>
+ </input></program>
     </figure>
     <p>
       The <c>readRecords()</c> method (Fig.
       <xref ref="fig-objectioclass"></xref>, Part II) will read data from a file containing serialized <c>Student</c> objects.
-      To do so, it first creates a \mbox{Student} object and then invokes its <c>readFromFile()</c> method,
+      To do so, it first creates a Student object and then invokes its <c>readFromFile()</c> method,
       passing it a <c>FileInputStream</c>. Note how the <c>FileInputStream</c> is created and,
-      unlike in <c>BinaryIO</c>, the inner try block is exited by an \mbox{IOException} rather than an <c>EOFException</c>.
+      unlike in <c>BinaryIO</c>, the inner try block is exited by an IOException rather than an <c>EOFException</c>.
     </p>
     <p>
       \secEXRHone{Self-Study Exercise}
@@ -250,13 +250,13 @@ private void readRecords(String fileName) {
             Given the following definition,
             would a binary file consisting of several <c>SomeObject</c> s be readable by either the <c>BinaryIO</c> or the <c>ObjectIO</c> programs?
             Explain.
-<pre>
+ <program language="java"><input>
 public class SomeObject {
     private String str;
     private short n1;
     private short n2;
     private long  n3;}
-</pre>
+ </input></program>
           </p>
         </li>
       </ol>

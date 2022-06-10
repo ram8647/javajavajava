@@ -80,26 +80,26 @@
         this class's only task will be to convert miles to kilometers,
         for which it will use the formula that 1 kilometer equals 0.62 miles:
       </p>
-<pre>
+ <program language="java"><input>
 public class MetricConverter {
     public static double milesToKm(double miles) {
         return miles / 0.62;
     }}
-</pre>
+ </input></program>
       <p>
         Note that the method takes a <c>double</c> as input and returns a <c>double</c>. Also,
         by declaring the method <c>static</c>, we make it a class method,
         so it can be invoked simply by
       </p>
-<pre>
+ <program language="java"><input>
 MetricConverter.milesToKm(10);
-</pre>
+ </input></program>
     </introduction>
     <subsubsection>
       <title>Choosing the Components</title>
       <p>
         Let's now design a GUI to handle the interaction with the user.
-        First, let's choose Swing components for each of the four interface \marginpar{Which components do we need?} tasks of input,
+        First, let's choose Swing components for each of the four interface  tasks of input,
         output, control, and guidance.
         For each component,
         it might be useful to refer back to <xref ref="fig-swing2-guis">Figure</xref>
@@ -111,7 +111,7 @@ MetricConverter.milesToKm(10);
               an image, or both.
               Its AWT counterpart,
               the <c>Label</c>, cannot display images.
-              A \mbox{JLabel} does not react to input.
+              A JLabel does not react to input.
               Therefore, it is used primarily to display a graphic or small amounts of static text.
               It is perfectly suited to serve as a prompt,
               which is what we will use it for in this interface.
@@ -152,7 +152,7 @@ MetricConverter.milesToKm(10);
     <subsubsection>
       <title>Choosing the Top-Level Window</title>
       <p>
-        The next issue we must decide is what kind of top-level \marginpar{What top-level window to use?} window to use for this interface.
+        The next issue we must decide is what kind of top-level  window to use for this interface.
         For applet interfaces,
         the top-level component would be a <c>JApplet</c>. For Java applications,
         you would typically use a <c>JFrame</c> as the top-level window.
@@ -171,7 +171,7 @@ MetricConverter.milesToKm(10);
     <subsubsection xml:id="fig-p484f1">
       <title>Designing a Layout</title>
       <p>
-        The next step in designing the interface is deciding how to arrange the \marginpar{ How should the components be arranged?} components so that they will be visually appealing and comprehensible,
+        The next step in designing the interface is deciding how to arrange the  components so that they will be visually appealing and comprehensible,
         as well as easy to use.
       </p>
       <figure xml:id="fig-metricgui">
@@ -223,7 +223,7 @@ MetricConverter.milesToKm(10);
       </p>
       <figure xml:id="fig-converterclass">
         <caption>The <c>Converter</c> class implements a simple GUI interface.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;             // Packages used
 import java.awt.*;
 import java.awt.event.*;
@@ -261,7 +261,7 @@ public class Converter extends JFrame
       }
     });
   } // main()} // Converter
-</pre>
+ </input></program>
       </figure>
       <p>
         We have to do all initializing tasks in the constructor.
@@ -276,9 +276,9 @@ public class Converter extends JFrame
       <p>
         Second, note the statements used to set the layout and to add components directly to the <c>JFrame</c>. Instead of adding components directly to the <c>JFrame</c>, we must add them to its content pane:
       </p>
-<pre>
+ <program language="java"><input>
 getContentPane().add(input);
-</pre>
+ </input></program>
       <p>
         A <term>content pane</term>
             <idx><h>content pane</h></idx>
@@ -303,7 +303,7 @@ getContentPane().add(input);
         made visible,
         and eventually exited in the application's <c>main()</c> method:
       </p>
-<pre>
+ <program language="java"><input>
 public static void main(String args[]) {
    Converter f = new Converter();
    f.setSize(400, 300);
@@ -314,7 +314,7 @@ public static void main(String args[]) {
            System.exit(0);
        }
    });} // main()
-</pre>
+ </input></program>
       <p>
         It is necessary to set both the size and visibility of the frame,
         since these are not set by default.
@@ -333,15 +333,15 @@ public static void main(String args[]) {
       which are used in the <c>main()</c> method shown above to handle the closing of the
 <c>Converter</c> application's window when the program is exited:
     </p>
-<pre>
+ <program language="java"><input>
 f.addWindowListener(new WindowAdapter() {
        public void windowClosing(WindowEvent e) {
            System.exit(0);
        }
  });
-</pre>
+ </input></program>
     <p>
-      This code segment provides a listener that listens for \marginpar{Inner classes} window closing events.
+      This code segment provides a listener that listens for  window closing events.
       When such an event occurs,
       it exits the application by calling <c>System.exit()</c>.
     </p>
@@ -369,7 +369,7 @@ f.addWindowListener(new WindowAdapter() {
       Inner classes are mostly used to handle a task that supports the work of the containing class.}
     </p>
     <p>
-      An <term>adapter class</term> is a wrapper class that implements trivial \marginpar{Adapter class} versions of the abstract methods that make up a particular interface.
+      An <term>adapter class</term> is a wrapper class that implements trivial  versions of the abstract methods that make up a particular interface.
       (Remember from Chapter<nbsp/>4 that a wrapper class contains methods for converting primitive data into objects and for converting data from one type to another.)
     </p>
     <p>
@@ -384,21 +384,21 @@ f.addWindowListener(new WindowAdapter() {
       the <c>windowClosing()</c> method,
       which is the method implemented in the anonymous inner class:
     </p>
-<pre>
+ <program language="java"><input>
 public void windowClosing(WindowEvent e) {
     System.exit(0);}
-</pre>
+ </input></program>
     <p>
       The <c>WindowAdapter</c> is defined simply as
     </p>
-<pre>
+ <program language="java"><input>
 public abstract class WindowAdapter
                           implements WindowListener {
     public void windowActivated(WindowEvent e) {}
     public void windowClosed(WindowEvent e) {}
     ...
     // Five other window listener methods}
-</pre>
+ </input></program>
     <p>
       Note that each method is given a trivial implementation ().
       To create a subclass of <c>WindowAdapter</c>, you must override at least one of its trivially implemented methods.
@@ -406,7 +406,7 @@ public abstract class WindowAdapter
     <p>
       Another way to manage the application's window closing event is to define a subclass of <c>WindowAdapter</c>:
     </p>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -414,14 +414,14 @@ public class WindowCloser extends WindowAdapter {
     public void windowClosing(WindowEvent e) {
         System.exit(0);
     }}
-</pre>
+ </input></program>
     <p>
       Given this class,
       we can then place the following statement in <c>Converter</c>'s <c>main()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 f.addWindowListener(new WindowCloser());
-</pre>
+ </input></program>
     <p>
       This is somewhat more familiar looking than the inner class construct.
       If you prefer this way of handling things,
@@ -449,9 +449,9 @@ f.addWindowListener(new WindowCloser());
       In this case,
       the user's input value is displayed along with the result in the <c>JTextArea</c>, so there's no reason not to clear the input text field:
     </p>
-<pre>
+ <program language="java"><input>
 input.setText("");  // Clear the input field
-</pre>
+ </input></program>
     <principle>
       <title>EFFECTIVE DESIGN:Reduce the User's Burden</title>
       <p>
@@ -477,9 +477,9 @@ input.setText("");  // Clear the input field
       we only need to add an
 <c>ActionListener</c> to the <c>JTextField</c> during the initialization step:
     </p>
-<pre>
+ <program language="java"><input>
 input.addActionListener(this);
-</pre>
+ </input></program>
     <p>
       A <c>JTextField</c> generates an <c>ActionEvent</c> whenever the Enter key is pressed.
       We don't even need to modify the <c>actionPerformed()</c> method,
@@ -512,7 +512,7 @@ input.addActionListener(this);
       </p>
     </principle>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -536,7 +536,7 @@ input.addActionListener(this);
       Is there some way we could modify the interface to accommodate these users?
     </p>
     <p>
-      This gets back to the point we were just making about incorporating \marginpar{What components do we need?} redundancy into the interface.
+      This gets back to the point we were just making about incorporating  redundancy into the interface.
       One way to satisfy this requirement would be to implement a numeric keypad for input,
       similar to a calculator keypad.
       Regular <c>JButton</c> s can be used as the keypad's keys.
@@ -545,7 +545,7 @@ input.addActionListener(this);
       The keypad will also need a button to clear the text field and one to serve as a decimal point.
     </p>
     <p>
-      This new feature will add 12 new <c>JButton</c> components to our \marginpar{ How should the components be organized?} interface.
+      This new feature will add 12 new <c>JButton</c> components to our  interface.
       Instead of inserting them into the <c>JFrame</c> individually,
       it will be better to organize them into a separate panel and to insert the entire panel into the frame as a single unit.
       This will help reduce the complexity of the display,
@@ -598,28 +598,28 @@ input.addActionListener(this);
       Actually, two arrays would be even better,
       one for the buttons and one for their labels:
     </p>
-<pre>
+ <program language="java"><input>
 private JButton buttons[];
 private String labels[] = // An array of button labels
             { "1","2","3",
               "4","5","6",
               "7","8","9",
               "C","0","." };
-</pre>
+ </input></program>
     <p>
       The <c>label</c> array stores the strings that we will use as the buttons' labels.
       The main advantage of the array is that we can use a loop to instantiate the buttons:
     </p>
-<pre>
+ <program language="java"><input>
 buttons = new JButton[NBUTTONS]; // Create the array
                           // For each labeled button
 for(int k = 0; k &lt; buttons.length; k++) {
  buttons[k] = new JButton(labels[k]); // Create button
  buttons[k].addActionListener(this); // and a listener
  add(buttons[k]);           // and add it to the panel} // for
-</pre>
+ </input></program>
     <p>
-      This code should be placed in the <c>KeyPad()</c>\marginpar{Algorithm design} constructor.
+      This code should be placed in the <c>KeyPad()</c> constructor.
       It begins by instantiating the array itself.
       It then uses a for loop, bounded by the size of the array,
       to instantiate each individual button and insert it into the array.
@@ -629,10 +629,10 @@ for(int k = 0; k &lt; buttons.length; k++) {
       In that way the labels are assigned to the appropriate buttons.
       Note also how each button is assigned an <c>ActionListener</c> and added to the panel:
     </p>
-<pre>
+ <program language="java"><input>
 buttons[k].addActionListener(this); // Add listener
 add(buttons[k]);            //  Add button to panel
-</pre>
+ </input></program>
     <p>
       An important design issue for our <c>KeyPad</c> object concerns how it will interact with the <c>Converter</c> that contains it.
       When the user clicks a keypad button,
@@ -641,7 +641,7 @@ add(buttons[k]);            //  Add button to panel
       But because the text area is private to the converter,
       the <c>KeyPad</c> does not have direct access to it.
       To address this problem,
-      we will use a Java interface to implement a \marginpar{Callback design}<term>callback design</term>.
+      we will use a Java interface to implement a <term>callback design</term>.
           <idx><h>callback design</h></idx>
       In this design,
       whenever a <c>KeyPad</c> button is pressed,
@@ -664,17 +664,17 @@ add(buttons[k]);            //  Add button to panel
       result of the keypress.</caption>
       <image width="73%" source="chptr13/p493f1.png"/>
     </figure>
-<pre>
+ <program language="java"><input>
 private KeyPad keypad = new KeyPad(this);
-</pre>
+ </input></program>
     <p>
       Another important design issue is that the <c>KeyPad</c> needs to know the name of the callback method and the <c>Converter</c> needs to have an implementation of that method.
       This is a perfect job for an abstract interface:
     </p>
-<pre>
+ <program language="java"><input>
 public abstract interface KeyPadClient {
     public void keypressCallback(String s);}
-</pre>
+ </input></program>
     <p>
       The <c>KeyPad</c> can interact with any class that implements the <c>KeyPadClient</c> interface.
       Note that the <c>KeyPad</c> has a reference to the <c>KeyPadClient</c>, which it will use to invoke the
@@ -689,8 +689,8 @@ public abstract interface KeyPadClient {
       <caption>The <c>KeyPad</c> object implements a 12-key keypad
       in a <c>JPanel</c>. It has a reference to the <c>KeyPadClient</c> that
       contains the keypad.</caption>
-      \[29pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -716,7 +716,7 @@ public class KeyPad extends JPanel implements ActionListener{
     String keylabel = ((JButton)e.getSource()).getText();
     kpc.keypressCallback(keylabel);
   } // actionPerformed()} // KeyPad
-</pre>
+ </input></program>
     </figure>
     <p>
       Given the <c>KeyPad</c> design,
@@ -726,13 +726,13 @@ public class KeyPad extends JPanel implements ActionListener{
       which means it must provide an implementation of the
 <c>keypressCallback()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 public void keypressCallback(String s) {
     if (s.equals("C"))
         input.setText("");
     else
         input.setText(input.getText() + s);}
-</pre>
+ </input></program>
     <p>
       Recall that whenever the <c>KeyPad</c> object calls the
 <c>keypressCallback()</c> method,
@@ -747,8 +747,8 @@ public void keypressCallback(String s) {
     <figure xml:id="fig-convertclass2">
       <caption>The second version of the <c>Converter</c> class, which
       implements the GUI shown in Figure 13.19.</caption>
-      \[27pc]
-<pre>
+      
+ <program language="java"><input>
 import javax.swing.*;      // Packages used
 import java.awt.*;
 import java.awt.event.*;
@@ -795,7 +795,7 @@ public class Converter extends JFrame   // Version 2
       }
     });
   } // main()} // Converter
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection xml:id="fig-convertscreen2">

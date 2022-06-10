@@ -22,9 +22,9 @@
       The particular font used is system dependent,
       but to override the default one can simply invoke the <c>setFont()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
-</pre>
+ </input></program>
     <p>
       In this case,
       the <c>Font()</c> constructor is used to specify a 12-point,
@@ -72,9 +72,9 @@ g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
       For example,
       if you specify a 48-point, italic, Monospaced font,
     </p>
-<pre>
+ <program language="java"><input>
 Font myFont = new Font("Monospaced", Font.ITALIC, 48);
-</pre>
+ </input></program>
     <p>
       the system may map this to a 24-point, italic Courier font,
       if that is the largest fixed-spaced font available.
@@ -86,10 +86,10 @@ Font myFont = new Font("Monospaced", Font.ITALIC, 48);
       For example,
       on my system, specifying a nonexistent font named Random,
     </p>
-<pre>
+ <program language="java"><input>
 g.setFont(new Font("Random", Font.ITALIC, 12) );
 g.drawString("Hello, World!! (random, italic, 12)", 30, 45);
-</pre>
+ </input></program>
     <p>
       produces the same font used as the mapping for a font named <em>Dialog</em>.
     </p>
@@ -107,10 +107,10 @@ g.drawString("Hello, World!! (random, italic, 12)", 30, 45);
       For example,
       the following code could be used to override a <c>Button</c>'s font:
     </p>
-<pre>
+ <program language="java"><input>
 Button b = new Button("Label");
 b.setFont(new Font("Times", Font.ITALIC, 14));
-</pre>
+ </input></program>
     <p>
       If 14-point,
       italic, Times font is not available on the host system,
@@ -121,7 +121,7 @@ b.setFont(new Font("Times", Font.ITALIC, 14));
     <title>Font Metrics</title>
     <p>
       To illustrate how to use the <c>FontMetrics</c> class,
-      let's write a \marginpar{Problem statement}
+      let's write a 
       <q>Hello, World!</q>
       application that centers its message both horizontally and vertically in its window.
       The message should be centered regardless of the size of the application window.
@@ -144,9 +144,9 @@ b.setFont(new Font("Times", Font.ITALIC, 14));
       and <em>y-</em>coordinates determine the baseline of the string's first character.
       Thus, in
     </p>
-<pre>
+ <program language="java"><input>
 g.drawString("Hello, World!", 10, 40);
-</pre>
+ </input></program>
     <p>
       the bottom left of the <em>H</em> in
       <q>Hello, World!</q>
@@ -192,7 +192,7 @@ g.drawString("Hello, World!", 10, 40);
       Given this background,
       let's take on the task of centering a message in an application window.
       In order for this application to work for any font,
-      we must take care not to base its design on characteristics of the \marginpar{Algorithm design: Generality} particular font that we happen to be using.
+      we must take care not to base its design on characteristics of the  particular font that we happen to be using.
       To underscore this point,
       let's design it to work for a font named Random,
       which, as we noted earlier,
@@ -207,10 +207,10 @@ g.drawString("Hello, World!", 10, 40);
       To get the characteristics of this font,
       we create a <c>FontMetrics</c> object and get the font metrics for the font we just created:
     </p>
-<pre>
+ <program language="java"><input>
 g.setFont(new Font("Random", Font.BOLD, 24));
 FontMetrics metrics = g.getFontMetrics();
-</pre>
+ </input></program>
     <p>
       The next step is to determine the <c>JFrame</c>'s dimensions using the <c>getSize()</c> method.
       This method returns an object of type <c>Dimension</c>. The <c>java.awt.Dimension</c> class (Fig.<nbsp/>7.22) represents the size
@@ -222,11 +222,11 @@ FontMetrics metrics = g.getFontMetrics();
       For example,
       the following syntax can be used to refer to a component's dimensions:
     </p>
-<pre>
+ <program language="java"><input>
 Dimension d = new Dimension(100, 50);
 System.out.println("width = " + d.width +
                    " height = " + d.height);
-</pre>
+ </input></program>
     <p>
       Note the redundancy built into the <c>Dimension</c> class.
       For example,
@@ -253,20 +253,20 @@ System.out.println("width = " + d.width +
       In order to center the string horizontally,
       we need to know its width,
       which is supplied by the <c>metrics</c> object.
-      If the <c>JFrame</c> is <c>\marginpar{Centering text}
+      If the <c>JFrame</c> is <c>
 d.width</c> pixels wide,
       then the following expression subtracts the width of the string from the width of the <c>JFrame</c> and then divides the leftover space in half:
     </p>
-<pre>
+ <program language="java"><input>
 // Calculate coordinates
 int x = (d.width - metrics.stringWidth(str)) / 2;
-</pre>
+ </input></program>
     <p>
       Similarly, the following expression adds the height of the string to the height of the <c>JFrame</c> and divides the leftover space in half:
     </p>
-<pre>
+ <program language="java"><input>
 int y = (d.height + metrics.getHeight()) / 2;
-</pre>
+ </input></program>
     <p>
       Taken together,
       these calculations give the coordinates for the lower left pixel of the first character in
@@ -280,8 +280,8 @@ int y = (d.height + metrics.getHeight()) / 2;
     </p>
     <figure xml:id="fig-centertext">
       <caption>The <c>CenterText</c> application.</caption>
-      \[28pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;
 public class CenterText extends JFrame {
@@ -303,7 +303,7 @@ public static void main(String args[]) {
   CenterText ct = new CenterText();
   ct.setSize(400,400);
   ct.setVisible(true);}} // CenterText
-</pre>
+ </input></program>
     </figure>
     <principle>
       <title>PROGRAMMING TIP:Generality</title>
@@ -464,10 +464,10 @@ public static void main(String args[]) {
     </p>
     <p>
       { \rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secANSHleft}{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secKTH}[1]{{ #1} } \newcommand{\secLREXRH}[1]{{ { \uppercase{#1}}} } \def\endpracticedesign{ {\rule[0pt]{27pc}{0.5pt}} } \newcommand{\secHsix}[1]{{#1} } \newcommand{\secHfive}[2]{{ \rule[16pt]{27pc}{0.5pt} }\newcommand{\secBXsixHone}[1]{{#1} } \newcommand{\secBXsixBTHleft}[1]{ {\rule[0pt]{44.45pc}{2pt}} \marginpar{ }\newcommand{\secBXsevenHone}[1]{{#1} }\newcommand{\secCOBH}[1] {{\uppercase{#1}} }\newcommand{\secCOLH}[1] {{\uppercase{#1}} }\newcommand{\secSMH}[1]{ {\rule[0pt]{40.5pc}{1pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{#1} } } } \newcommand{\secSMHleft}[1]{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ \uppercase{#1} } } \newcommand{\secSMHtwo}[1]{{ #1} }\newcommand{\secEXRHone}[1]{{\uppercase{#1}} } \newcounter{EXRLLcount} { \marginpar{{From the Java Library} #1} } {\begin{minipage}{26pc}}{\end{minipage}} \rule[0pt]{27pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1} } \begin{minipage}[t]{#2} { \end{minipage} } \rule[0pt]{40pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1}
+      height=4pt,width=40.5pc,clip=}  } } \newcommand{\secANSHleft}{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=}  } } \newcommand{\secKTH}[1]{{ #1} } \newcommand{\secLREXRH}[1]{{ { \uppercase{#1}}} } \def\endpracticedesign{ {\rule[0pt]{27pc}{0.5pt}} } \newcommand{\secHsix}[1]{{#1} } \newcommand{\secHfive}[2]{{ \rule[16pt]{27pc}{0.5pt} }\newcommand{\secBXsixHone}[1]{{#1} } \newcommand{\secBXsixBTHleft}[1]{ {\rule[0pt]{44.45pc}{2pt}} \newcommand{\secBXsevenHone}[1]{{#1} }\newcommand{\secCOBH}[1] {{\uppercase{#1}} }\newcommand{\secCOLH}[1] {{\uppercase{#1}} }\newcommand{\secSMH}[1]{ {\rule[0pt]{40.5pc}{1pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=}  } } } \newcommand{\secSMHleft}[1]{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=}  } } \newcommand{\secSMHtwo}[1]{{ #1} }\newcommand{\secEXRHone}[1]{{\uppercase{#1}} } \newcounter{EXRLLcount} {  #1} } {\begin{minipage}{26pc}}{\end{minipage}} \rule[0pt]{27pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1} } \begin{minipage}[t]{#2} { \end{minipage} } \rule[0pt]{40pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1}
       <ul>
         \columnsep = 0pt
         <li>
@@ -684,13 +684,13 @@ public static void main(String args[]) {
         <li>
           <p>
             Evaluate the following expression:
-<pre>
+ <program language="java"><input>
 String tricky = "abcdefg01234567";
 tricky.indexOf(String.valueOf(tricky.indexOf("c")));
 tricky.indexOf(String.valueOf(2));
 tricky.indexOf("2");
 Answer: 9
-</pre>\item
+ </input></program>\item
             <ol>
               <li>
                 <title>a</title>
@@ -760,8 +760,8 @@ Answer: 9
         </li>
         <li>
           <p>
-            A class to test the string methods. \[27pc]
-<pre>
+            A class to test the string methods. 
+ <program language="java"><input>
 public class StringProcessorTest {
   public static void main(String[] args) {
     KeyboardReader kb = new KeyboardReader();
@@ -781,13 +781,13 @@ public class StringProcessorTest {
       str = kb.getKeyboardInput();
     } // while
   } //main()} // StringProcessorTest class
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             Method to remove all blanks from a string:
-<pre>
+ <program language="java"><input>
 // Pre: s is a non null string
  // Post: s is returned with all its blanks removed
  public String removeBlanks(String s) {
@@ -797,7 +797,7 @@ public class StringProcessorTest {
        result.append(s.charAt(k));  //  append it to result
    return result.toString();
  }
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -809,10 +809,10 @@ public class StringProcessorTest {
           <p>
             To modify <c>precedes</c> so that it also returns true when its two string arguments are equal,
             just change the operator in the final return statement to <c>&lt;=</c>:
-<pre>
+ <program language="java"><input>
 if (s1.charAt(k) &lt;= s2.charAt(k) )
       return true;
-</pre>\item
+ </input></program>\item
             <ol>
               <li>
                 <title>f</title>
@@ -928,12 +928,12 @@ if (s1.charAt(k) &lt;= s2.charAt(k) )
           <ol>
             <li>
               <p>
-                When the first character in a string has index 0, this is known as \rule{40pt}{0.5pt} .
+                When the first character in a string has index 0, this is known as <c>__________</c> .
               </p>
             </li>
             <li>
               <p>
-                A sequence of characters enclosed within quotes is known as a \rule{40pt}{0.5pt} .
+                A sequence of characters enclosed within quotes is known as a <c>__________</c> .
               </p>
             </li>
           </ol>
@@ -961,11 +961,11 @@ if (s1.charAt(k) &lt;= s2.charAt(k) )
                 the first
                 <q>to</q>
                 in the string
-<pre>
+ <program language="java"><input>
 str.substring(0, 2)                            // Answer 1
 str.substring(
      str.indexOf("to"), str.indexOf("to") + 2) // Answer 2
-</pre>
+ </input></program>
               </p>
             </li>
             <li>
@@ -1080,7 +1080,7 @@ str.substring(
       </li>
       <li>
         <p>
-          Write your own <c>String</c> equality method without using <c>String.</c>\mbox{equals()} . (<em>Hint</em>: Modify the <c>precedes()</c> method.)
+          Write your own <c>String</c> equality method without using <c>String.</c>equals() . (<em>Hint</em>: Modify the <c>precedes()</c> method.)
         </p>
       </li>
       <li>
@@ -1095,10 +1095,10 @@ str.substring(
           Write a method that converts its <c>String</c> parameter so that letters are written in blocks five characters long.
           For example,
           consider the following two versions of the same sentence:
-<pre>
+ <program language="java"><input>
 Plain :   This is how we would ordinarily write a sentence.
 Blocked : Thisi showw ewoul dordi naril ywrit easen tence.
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -1132,7 +1132,7 @@ Blocked : Thisi showw ewoul dordi naril ywrit easen tence.
           Write a method that accepts a <c>String</c> parameter and prints a two-dimensional representation of a maze.
           For example, the maze shown here,
           where <c>O</c> marks the entrance and exit can be generated from the following string:
-<pre>
+ <program language="java"><input>
 String: XX_XXXXXXXX__XXX_XXXX_XX____XXX_XX_XX_XXX____X____XXXXXXXX_X
   O
 XX XXXXXXX
@@ -1141,7 +1141,7 @@ X XX    XX
 X XX XX XX
 X    X    O
 XXXXXXXX X
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -1150,8 +1150,8 @@ XXXXXXXX X
           from which you can print a mailing label.
           For example, if the string contains
           <q>Sam Penn:14 Bridge St.:Hoboken, NJ 01881,</q>
-          the method should print the label shown in the margin. \marginpar{\rule{8pc}{1pt} Sam Penn 14 Bridge St.
-          Hoboken, NJ 01881 \rule{8pc}{1pt} }
+          the method should print the label shown in the margin. {1pt} Sam Penn 14 Bridge St.
+          Hoboken, NJ 01881 <c>__________</c> }
         </p>
       </li>
       <li>
@@ -1189,7 +1189,7 @@ XXXXXXXX X
           <q>a,b,c,d,12,dog</q>
           <mdash/>to implement a list.
           Implement the following methods for this class:
-<pre>
+ <program language="java"><input>
 void addItem( Object o );      // Use Object.toString()
 String getItem(int position);
 String toString();
@@ -1199,15 +1199,15 @@ int getPosition(String item);
 String getHead();              // First element
 List getTail();                // All but the first element
 int length();                  // Number of items
-</pre>Challenge: Use a delimited string to create a <c>PhoneList</c> class with an instance method to insert names and phone numbers,
+ </input></program>Challenge: Use a delimited string to create a <c>PhoneList</c> class with an instance method to insert names and phone numbers,
           and a method to look up a phone number when a user provides a person's name.
           Since your class will take care of looking things up,
           you don't have to worry about keeping the list in alphabetical order.
           For example,
           the following string could be used as such a directory:
-<pre>
+ <program language="java"><input>
 mom:860-192-9876::bill g:654-0987-1234::mary lancelot:123-842-1100
-</pre>
+ </input></program>
         </p>
       </li>
       <li>

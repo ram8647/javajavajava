@@ -33,7 +33,7 @@
       A psychologist is conducting a psychometric experiment to measure user response to a visual cue and asks you to create the following program.
       The program should have two buttons.
       When the Draw button is clicked,
-      the program begins drawing thousands of black dots at \marginpar{Problem specification} random locations within a rectangular region of the screen (Fig.<nbsp/>14.7).
+      the program begins drawing thousands of black dots at  random locations within a rectangular region of the screen (Fig.<nbsp/>14.7).
       After a random time interval,
       the program begins drawing red dots.
       This change corresponds to the presentation of the stimulus.
@@ -46,7 +46,7 @@
       <xref ref="fig-dotsgui">Figure</xref>
       shows a design for this program's GUI. It contains a control <c>JPanel</c> that contains the two
 <c>JButton</c> s.
-      The dots are drawn on a <c>JPanel</c>, which is positioned in the center of a <c>BorderLayout</c> design. \marginpar{GUI design}
+      The dots are drawn on a <c>JPanel</c>, which is positioned in the center of a <c>BorderLayout</c> design. 
     </p>
     <figure xml:id="fig-dotsgui">
       <caption>GUI design for the dot-drawing program.</caption>
@@ -57,7 +57,7 @@
     <title>Problem Decomposition</title>
     <p>
       This program should be decomposed into two classes,
-      a GUI to handle \marginpar{Interface class and drawing class} the user interface and a drawing class to manage the drawing.
+      a GUI to handle  the user interface and a drawing class to manage the drawing.
       The main features of its classes are as follows:
       <ul>
         RandomDotGUI Class: This class manages the user interface, responding to user actions by calling methods of the <c>Dotty</c> class (Fig.<nbsp/>14.9). Dotty Class: This class contains <c>draw()</c> and <c>clear()</c> methods for drawing on the GUI's drawing panel (Fig.<nbsp/>14.10).
@@ -75,10 +75,10 @@
       When the user clicks the Draw button,
       the GUI's <c>actionPerformed()</c> method will create a new <c>Dotty</c> instance and call its <c>draw()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 dotty = new Dotty(canvas, NDOTS);
 dotty.draw();
-</pre>
+ </input></program>
     <p>
       Note that <c>Dotty</c> is passed a reference to the drawing
 <c>canvas</c> as well as the number of dots to be drawn.
@@ -90,7 +90,7 @@ dotty.draw();
     </p>
     <figure xml:id="fig-randomdotgui">
       <caption>The <c>RandomDotGUI</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -127,7 +127,7 @@ public class RandomDotGUI extends JFrame
     gui.setSize(400,400);
     gui.setVisible(true);
   }} // RandomDotGUI
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection xml:id="self-study-exerciseP34">
@@ -150,8 +150,8 @@ public class RandomDotGUI extends JFrame
     </p>
     <figure xml:id="fig-singledotty">
       <caption>The <c>Dotty</c> class, single-threaded version.</caption>
-      \[30pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;   // Import Swing classes
 public class Dotty {
@@ -184,7 +184,7 @@ public class Dotty {
     System.out.println(
      "Number of dots drawn since first red = " + (nDrawn-firstRed));
   } // clear()} // Dotty
-</pre>
+ </input></program>
     </figure>
     <p>
       The complete implementation of <c>Dotty</c> is shown in <xref ref="fig-singledotty">Figure</xref>.
@@ -258,20 +258,20 @@ public class Dotty {
       to do the drawing.
       The drawing thread will be responsible just for drawing,
       while the GUI thread will be responsible for handling user actions in the interface.
-      The trick to making the user interface more responsive will be to interrupt the drawing thread periodically so that the GUI thread has a chance to \marginpar{Multithreaded design: Interrupt the drawing loop} handle any events that have occurred.
+      The trick to making the user interface more responsive will be to interrupt the drawing thread periodically so that the GUI thread has a chance to  handle any events that have occurred.
     </p>
     <p>
       As Figure<nbsp/>14.14 illustrates,
       the easiest way to convert
 <c>Dotty</c> into a thread is to have it implement the <c>Runnable</c> interface:
     </p>
-<pre>
+ <program language="java"><input>
 public class Dotty implements Runnable {
     // Everything else remains the same
     public void run() {
         draw();
     }}
-</pre>
+ </input></program>
     <p>
       This version of <c>Dotty</c> will perform the same task as before except that it will now run as a separate thread of execution.
       Note that its <c>run()</c> method just calls the <c>draw()</c> method that we defined in the previous version.
@@ -281,7 +281,7 @@ public class Dotty implements Runnable {
       However, just because this program has two threads doesn't necessarily mean that it will be any more responsive to the user.
       There's no guarantee that the drawing thread will stop as soon as the Clear button is clicked.
       On most systems,
-      if both threads have \marginpar{Thread control} equal priority,
+      if both threads have  equal priority,
       the GUI thread won't run until the drawing thread finishes drawing all <em>N</em> dots.
     </p>
     <principle>
@@ -295,7 +295,7 @@ public class Dotty implements Runnable {
       Therefore, we have to modify our design in order to guarantee that the GUI thread will get a chance to handle the user's actions.
       One good way to do this is to have <c>Dotty</c> sleep for a short instance after it draws each dot.
       When a thread sleeps,
-      any other \marginpar{ Using <c>sleep()</c> to interrupt the drawing} threads that are waiting their turn will get a chance to run.
+      any other  threads that are waiting their turn will get a chance to run.
       If the GUI thread is waiting to handle the user's click on Clear,
       it will now be able to call <c>Dotty</c>'s <c>clear()</c> method.
     </p>
@@ -308,7 +308,7 @@ public class Dotty implements Runnable {
     <figure xml:id="fig-threadeddotty">
       <caption>By implementing the <c>Runnable</c> interface, this version of <c>Dotty</c>
       can run as a separate thread.</caption>
-<pre>
+ <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;     // Import Swing classes
 public class Dotty implements Runnable {
@@ -351,7 +351,7 @@ public class Dotty implements Runnable {
     System.out.println("Number of dots drawn since first red = "
                                              + (nDrawn-firstRed));
   } // clear()} // Dotty
-</pre>
+ </input></program>
     </figure>
     <p>
       Another necessary change is that once the <c>clear()</c> method is called,
@@ -392,9 +392,9 @@ public class Dotty implements Runnable {
       We don't need to make many changes in <c>RandomDotGUI</c> to get it to work with the new version of <c>Dotty</c>. The primary change comes in the <c>actionPerformed()</c> method.
       Each time the Draw button was clicked in the original version of this method,
       we created a <c>dotty</c> instance and then called its <c>draw()</c> method.
-      In the revised version we must create a new <c>Thread</c> and pass it \marginpar{Starting the drawing thread} an instance of <c>Dotty</c>, which will then run as a separate thread:
+      In the revised version we must create a new <c>Thread</c> and pass it  an instance of <c>Dotty</c>, which will then run as a separate thread:
     </p>
-<pre>
+ <program language="java"><input>
 public void actionPerformed(ActionEvent e) {
     if (e.getSource() == draw) {
         dotty = new Dotty(canvas, NDOTS);
@@ -403,7 +403,7 @@ public void actionPerformed(ActionEvent e) {
     } else {
         dotty.clear();
     } } // actionPerformed()
-</pre>
+ </input></program>
     <p>
       Note that in addition to a reference to <c>dotty</c> we also have a reference to a <c>Thread</c> named <c>dottyThread</c>. This additional variable must be declared within the GUI.
     </p>
@@ -439,7 +439,7 @@ public void actionPerformed(ActionEvent e) {
       By forcing the drawing to sleep on each iteration,
       we guarantee that the GUI thread will remain responsive to the user's actions.
       <xref ref="fig-threadedtrace">Figure</xref>
-      illustrates the difference \marginpar{Divide and conquer!} between the single- and multithreaded designs.
+      illustrates the difference  between the single- and multithreaded designs.
       Note that the GUI thread starts and stops the drawing thread,
       and the GUI thread executes <c>dotty.clear()</c>. The drawing thread simply executes its
 <c>draw()</c> method.
@@ -470,7 +470,7 @@ public void actionPerformed(ActionEvent e) {
       </p>
     </principle>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

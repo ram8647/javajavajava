@@ -15,12 +15,12 @@
       <q>Hello</q>
       100 times, you can use the following <c>while</c> structure:
     </p>
-<pre>
+ <program language="java"><input>
 int k = 0;
 while (k &lt; 100) {
     System.out.println("Hello");
     k++;}
-</pre>
+ </input></program>
     <p>
       In this case, the counter is the variable <em>k</em>,
       which counts from 0 through 99<mdash/>that is, it counts 100 times.
@@ -28,12 +28,12 @@ while (k &lt; 100) {
       Counting from 0 is known as <term>zero indexing</term>
       and it is a common programming convention for counting loops.
       Although it doesn't really make any practical difference in this case,
-      later on we will use loops to process \marginpar{Zero indexing} structures,
+      later on we will use loops to process  structures,
       such as strings and arrays, which use zero indexing.
       It will be easier to process these structures if our loop counter also starts at<nbsp/>0.
     </p>
     <p>
-      The variable <em>k</em> in this example is called a \marginpar{Loop counter}<em>counter variable</em>
+      The variable <em>k</em> in this example is called a <em>counter variable</em>
       or <em>loop counter</em>.
       Although it is certainly possible to name the counter variable anything we like,
       it is customary to use single letters like <em>i, j</em>,
@@ -53,10 +53,10 @@ while (k &lt; 100) {
       <q>Hello</q>
       100 times:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; 100; k++)
      System.out.println("Hello");
-</pre>
+ </input></program>
     <p>
       In fact, this <c>for</c> statement is equivalent to the preceding <c>while</c> structure.
     </p>
@@ -116,7 +116,7 @@ for (int k = 0; k &lt; 100; k++)
     <p>
       Tracing the order in which the <c>for</c> loop components are evaluated gives this sequence:
     </p>
-<pre>
+ <program language="java"><input>
 evaluate initializer
  evaluate loop entry condition ==> True
  execute for loop body;
@@ -131,7 +131,7 @@ evaluate initializer
  .
  .
  evaluate loop entry condition ==> False
-</pre>
+ </input></program>
     <p>
       As this trace shows,
       the loop entry condition controls entry to the body of the loop and will,
@@ -139,18 +139,18 @@ evaluate initializer
     </p>
     <p>
       We have followed the standard convention of declaring the counter variable in the header of the <c>for</c> statement.
-      This restricts the \marginpar{Loop variable scope} variable's <em>scope</em>
+      This restricts the  variable's <em>scope</em>
       to the <c>for</c> statement itself.
       It would be a syntax error to use <em>k</em>
       outside the scope of the <c>for</c> loop,
       as in this example:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; 100; k++)
   System.out.println("Hello");
         // Syntax error, k undeclared
 System.out.println("k = " + k);
-</pre>
+ </input></program>
     <p>
       For some problems,
       it might be necessary to use the loop variable outside the scope of the <c>for</c> statement,
@@ -160,12 +160,12 @@ System.out.println("k = " + k);
 <c>k</c>, after the loop completes,
       we have to declare it before the loop:
     </p>
-<pre>
+ <program language="java"><input>
 int k = 0;         // Declare the loop variable here
 for (k = 0; k &lt; 100; k++)
     System.out.println("Hello");
 System.out.println("k = " + k); // To use it here
-</pre>
+ </input></program>
     <p>
       In this example,
       the loop will exit when <c>k</c> becomes 100, so
@@ -178,7 +178,7 @@ System.out.println("k = " + k); // To use it here
     <p>
       A counting loop starts at some initial value and counts 0 or more iterations.
       A <term>loop bound</term> is a value that controls how many times a loop is repeated.
-      A loop will repeat until its loop bound is reached. \marginpar{Loop bound} In a counting loop,
+      A loop will repeat until its loop bound is reached.  In a counting loop,
       the <em>loop entry condition</em>
       should be a boolean expression that tests whether the loop's bound has been reached.
       Similarly, in a counting loop,
@@ -189,16 +189,16 @@ System.out.println("k = " + k); // To use it here
 2 1 BLASTOFF</c>. In this case,
       progress toward the loop bound is made by decrementing the loop counter:
     </p>
-<pre>
+ <program language="java"><input>
 public void countdown() {
     for (int k = 10; k > 0; k--)
         System.out.print(k + " ");
     System.out.println("BLASTOFF");} // countdown()
-</pre>
+ </input></program>
     <p>
       Note in this case that we are using
       <term>unit indexing</term>
-      \marginpar{Unit indexing} instead of zero indexing,
+       instead of zero indexing,
       because countdowns repeat,
       or <em>iterate</em>, from 10 down to 1, not from 10 down to 0.
     </p>
@@ -209,16 +209,16 @@ public void countdown() {
       If the loop bound is never reached,
       the loop entry condition will never become false and the loop will repeat forever.
       This is known as an <term>infinite loop</term>.
-      Can you see why each of the following \marginpar{Infinite loop}<c>for</c> statements will result in an infinite loop?
+      Can you see why each of the following <c>for</c> statements will result in an infinite loop?
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; 100; k--)       // Infinite loop
     System.out.println("Hello");
 for (int k = 1; k != 100; k+=2)     // Infinite loop
     System.out.println("Hello");
 for (int k = 98; k &lt; 100; k = k / 2)// Infinite loop
     System.out.println("Hello");
-</pre>
+ </input></program>
     <p>
       In the first example, <em>k</em>
       starts out at 0 and is decremented on each iteration,
@@ -242,7 +242,7 @@ for (int k = 98; k &lt; 100; k = k / 2)// Infinite loop
     </p>
     <p>
       Encountering an unintended infinite loop when developing a program can be very frustrating.
-      If the program is stuck in a loop \marginpar{Stuck in a loop} that generates output,
+      If the program is stuck in a loop  that generates output,
       it will be obvious that it is looping,
       but if no output is being generated,
       the computer will appear to
@@ -265,17 +265,17 @@ for (int k = 98; k &lt; 100; k = k / 2)// Infinite loop
     <p>
       Note how indentation is used to distinguish the loop body from both the heading and from the statement that follows the loop:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 10; k > 0; k--)     // Loop heading
     System.out.print (k + " ");  //  Indent the body
 System.out.println( "BLASTOFF" ) // After the loop
-</pre>
+ </input></program>
     <p>
       Indenting the loop body is a stylistic convention intended to make the code more readable.
       However, the indentation itself has no effect on how the code is interpreted by Java.
       Each of the following code segments would still produce the same countdown:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 10; k > 0; k--)
 System.out.print (k + " ");
 System.out.println("BLASTOFF");
@@ -285,7 +285,7 @@ for
 (int k = 10; k > 0; k--)
 System.out.print (k + " ");
 System.out.println("BLASTOFF");
-</pre>
+ </input></program>
     <p>
       In each case the statement, <c>System.out.println("BLASTOFF")</c>, is not part of the <c>for</c> loop body and is executed only once when the loop terminates.
     </p>
@@ -313,30 +313,30 @@ System.out.println("BLASTOFF");
       The first example prints the sequence 0, 5, 10, 15, <m>\dots</m> 95.
       Its loop body consists of a single <c>if</c> statement:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; 100; k++)// Print 0 5 10...95
   if (k % 5 == 0) // Loop body: single if statement
      System.out.println("k= " + k);
-</pre>
+ </input></program>
     <p>
       The next example prints the lowercase letters of the alphabet.
       In this case,
       the loop counter is of type <c>char</c>, and it counts the letters of the alphabet.
       The loop body consists of a single <c>print()</c> statement:
     </p>
-<pre>
+ <program language="java"><input>
 for (char k = 'a'; k &lt;= 'z'; k++)// Print 'a' 'b'...'z'
   System.out.print (k + " ");  // Loop body: single print()
-</pre>
+ </input></program>
     <p>
       The next example prints the sequence 5, 10, 15, <m>\dots</m> 50,
       but it uses several statements within the loop body:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 1; k &lt;= 10; k++) {// Print 5 10 15...50
    int m = k * 5;                  // Begin body
    System.out.print (m + " ");}                                  // End body
-</pre>
+ </input></program>
     <p>
       In this example, the scope of the local variable <em>m</em>,
       declared within the loop body,
@@ -356,10 +356,10 @@ for (int k = 1; k &lt;= 10; k++) {// Print 5 10 15...50
       For example,
       it is always correct to code the <c>for</c> loop as
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 1; k &lt;= 10; k++) {// Print 1 2 ... 10
   System.out.print (k + " ");     // Begin body}                                // End body
-</pre>
+ </input></program>
     <p>
       Another advantage of this coding style is that you can easily place additional statements in the loop body by placing them within the braces.
     </p>
@@ -371,28 +371,28 @@ for (int k = 1; k &lt;= 10; k++) {// Print 1 2 ... 10
       </p>
     </principle>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
     </p>
     <ol>
       <li>
         <p>
-          Identify the syntax error in the following <c>for</c> loop \mbox{statements.}
+          Identify the syntax error in the following <c>for</c> loop statements.
         </p>
         <ol>
           <li>
             <p>
-              <pre>
+               <program language="java"><input>
 for (int k = 5, k &lt; 100, k++)
      System.out.println(k);
-</pre>
+ </input></program>
             </p>
           </li>
           <li>
             <p>
-              <pre>
+               <program language="java"><input>
 for (int k = 0; k &lt; 12 ; k--;)
      System.out.println(k);
-</pre>
+ </input></program>
             </p>
           </li>
         </ol>
@@ -403,26 +403,26 @@ for (int k = 0; k &lt; 12 ; k--;)
           <ol>
             <li>
               <p>
-                <pre>
+                 <program language="java"><input>
 for (int k = 0; k &lt; 100; k = k )
      System.out.println(k);
-</pre>
+ </input></program>
               </p>
             </li>
             <li>
               <p>
-                <pre>
+                 <program language="java"><input>
 for (int k = 1; k == 100; k = k + 2 )
      System.out.println(k);
-</pre>
+ </input></program>
               </p>
             </li>
             <li>
               <p>
-                <pre>
+                 <program language="java"><input>
 for (int k = 1; k >= 100; k = k - 2 )
      System.out.println(k);
-</pre>
+ </input></program>
               </p>
             </li>
           </ol>
@@ -436,12 +436,12 @@ for (int k = 1; k >= 100; k = k - 2 )
       </li>
       <li>
         <p>
-          What value will <em>j</em> have when the following loop \mbox{terminates?}
-<pre>
+          What value will <em>j</em> have when the following loop terminates?
+ <program language="java"><input>
 for (int i = 0; i &lt; 10; i++) {
     int j;
     j = j + 1;}
-</pre>
+ </input></program>
         </p>
       </li>
     </ol>
@@ -459,29 +459,29 @@ for (int i = 0; i &lt; 10; i++) {
       where the prices per unit are listed in the top row,
       and the prices for 2, 3 and 4 units are listed in subsequent rows:
     </p>
-<pre>
+ <program language="java"><input>
 1  2  3  4  5  6  7  8  9
  2  4  6  8  10 12 14 16 18
  3  6  9  12 15 18 21 24 27
  4  8  12 16 20 24 28 32 36
-</pre>
+ </input></program>
     <p>
       To produce this multiplication table,
       we could use the following nested <c>for</c> loops:
     </p>
     <p>
-      \[28pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 for (int row = 1; row &lt;= 4 ; row++) { // For each of 4 rows
   for (int col = 1; col &lt;= 9; col++) // For each of 9 columns
     System.out.print(col * row + "\t" );      // Print number
   System.out.println();              // Start a new row         } // for row
-</pre>
+ </input></program>
     <p>
       Note how indenting is used here to distinguish the levels of nesting and to make the code more readable.
       In this example, the <em>outer loop</em>
-      \marginpar{Inner and outer loop} controls the number of rows in the table, hence,
+       controls the number of rows in the table, hence,
       our choice of <c>row</c> as its loop counter.
       The <c>println()</c> statement is executed after the
       <em>inner loop</em> is done iterating,
@@ -500,16 +500,16 @@ for (int row = 1; row &lt;= 4 ; row++) { // For each of 4 rows
       The body of the inner loop is executed 36 times<mdash/>9 times for each execution of line 2.
     </p>
     <p>
-      Sometimes it is useful to use the loop variable of the outer loop as \marginpar{Algorithm design} the bound for the inner loop.
+      Sometimes it is useful to use the loop variable of the outer loop as  the bound for the inner loop.
       For example, consider the following pattern:
     </p>
-<pre>
+ <program language="java"><input>
 # # # # #
  # # # #
  # # #
  # #
  #
-</pre>
+ </input></program>
     <p>
       Note that the number of # symbols in each row varies inversely with the row number.
       In row 1, we have five symbols;
@@ -534,7 +534,7 @@ for (int row = 1; row &lt;= 4 ; row++) { // For each of 4 rows
       
       <tabular>
         <row>
-          <cell>\multicolumn{3}{l}{\rule{19pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{Row}</cell>
@@ -542,7 +542,7 @@ for (int row = 1; row &lt;= 4 ; row++) { // For each of 4 rows
           <cell>{Number of Symbols}</cell>
         </row>
         <row>
-          <cell>[-6pt]\multicolumn{3}{l}{\rule{19pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>1</cell>
@@ -570,7 +570,7 @@ for (int row = 1; row &lt;= 4 ; row++) { // For each of 4 rows
           <cell>1</cell>
         </row>
         <row>
-          <cell>[-8pt]\multicolumn{3}{l}{\rule{19pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB
@@ -580,12 +580,12 @@ for (int row = 1; row &lt;= 4 ; row++) { // For each of 4 rows
       then <em>j</em> will be bound by the expression 6 <m>-</m> <em>row</em>.
       This leads to the following nested loop structure:
     </p>
-<pre>
+ <program language="java"><input>
 for (int row = 1; row &lt;= 5; row++) { // For each row
   for (int j = 1; j &lt;= 6 - row; j++)// Print the row
     System.out.print('#');
   System.out.println();    // Start a new line} // for row
-</pre>
+ </input></program>
     <p>
       Note that the bound of the inner loop varies according to the value of <em>row</em>,
       the loop counter for the outer loop.
@@ -597,13 +597,13 @@ for (int row = 1; row &lt;= 5; row++) { // For each row
           <p>
             As the engineer hired to design ski jumps,
             write a nested <c>for</c> loop to print the following pattern:
-<pre>
+ <program language="java"><input>
 #
 # #
 # # #
 # # # #
 # # # # #
-</pre>
+ </input></program>
           </p>
         </li>
       </ol>

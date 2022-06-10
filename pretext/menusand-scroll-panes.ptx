@@ -49,10 +49,10 @@
       First, you create a menu bar and make it the menu bar for the application's
 <c>JFrame</c> or for the <c>JApplet</c>. This is usually done in the application's constructor or in the applet's <c>init()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 JMenuBar mBar = new JMenuBar();// Create menu bar
 this.setMenuBar(mBar);   // Add it to this window
-</pre>
+ </input></program>
     <p>
       The next step involves creating and adding menus and menu items to the menu bar.
       This is also usually done in the constructor or the <c>init()</c> method.
@@ -69,7 +69,7 @@ this.setMenuBar(mBar);   // Add it to this window
     <p>
       Here's the definition of the file menu for our simple text editor:
     </p>
-<pre>
+ <program language="java"><input>
 private void initFileMenu() {
     fileMenu = new JMenu("File");   // Create menu
     mBar.add(fileMenu);      // Add it to menu bar
@@ -85,7 +85,7 @@ private void initFileMenu() {
     quitItem = new JMenuItem("Quit"); // Quit item
     quitItem.addActionListener(this);
     fileMenu.add(quitItem);} // initFileMenu()
-</pre>
+ </input></program>
     <p>
       The first two statements in the method create the file menu and add it to the menu bar.
       The rest of the statements create the individual menu items that make up the file menu.
@@ -152,7 +152,7 @@ private void initFileMenu() {
       and the recent cuts menu drops down and to the right of where its arrow points.
       The following method was used to create the edit menu:
     </p>
-<pre>
+ <program language="java"><input>
 private void initEditMenu() {
   editMenu = new JMenu("Edit"); // Create edit menu
   mBar.add(editMenu);            // Add to menu bar
@@ -172,7 +172,7 @@ private void initEditMenu() {
   editMenu.addSeparator();
   cutsMenu = new JMenu("Recent Cuts");//Cuts submenu
   editMenu.add(cutsMenu);} // initEditMenu()
-</pre>
+ </input></program>
     <p>
       The main difference between this method and the one used to create the file menu is that here we insert an entire submenu as one of the items in the edit menu.
       The <c>cutsMenu</c> will be used to hold the strings that are cut from the document.
@@ -199,7 +199,7 @@ private void initEditMenu() {
       <p>
         The following <c>actionPerformed()</c> method is used to handle the menu selections for the text editor:
       </p>
-<pre>
+ <program language="java"><input>
 public void actionPerformed(ActionEvent e) {
   JMenuItem m  = (JMenuItem)e.getSource(); // Get selected menu item
   if ( m == quitItem ) {                   // Quit
@@ -220,7 +220,7 @@ public void actionPerformed(ActionEvent e) {
     JMenuItem item = (JMenuItem)e.getSource(); // Default is cutsMenu
     scratchPad = item.getActionCommand(); // Put cut back in scratchpad
   }} // actionPerformed()
-</pre>
+ </input></program>
       <p>
         The method begins by getting the source of the <c>ActionEvent</c> and casting it into a <c>JMenuItem</c>. It then checks each case of the if-else structure.
         Because the actions taken by this program are fairly short,
@@ -246,7 +246,7 @@ public void actionPerformed(ActionEvent e) {
         <q>catch all</q>
         condition to catch and handle selections from the <c>cutsMenu</c>. All of the other menu items can be referred to by name.
         However, the menu items in the
-<c>cutsMenu</c> are just snippets of a string that the user has \marginpar{Default logic} previously cut from the text,
+<c>cutsMenu</c> are just snippets of a string that the user has  previously cut from the text,
         so they can't be referenced by name.
         Luckily, we don't really need to.
         For any <c>JMenuItem</c>, the
@@ -268,13 +268,13 @@ public void actionPerformed(ActionEvent e) {
         The most difficult function in our program is the cut operation.
         Not only must the selected text be removed from the document and stored in the <c>scratchpad</c>, but it must also be inserted into the vector that is storing all the previous cuts.
         The <c>addRecentCut()</c> method takes care of this last task.
-        The basic idea here is to take the cut string \marginpar{Algorithm design} and insert it at the beginning of the vector,
+        The basic idea here is to take the cut string  and insert it at the beginning of the vector,
         so that cuts will be maintained in a last-in<ndash/>first-out order.
         Then the <c>cutsMenu</c> must be completely rebuilt by reading its entries out of the vector,
         from first to last.
         That way the most recent cut will appear first in the menu:
       </p>
-<pre>
+ <program language="java"><input>
 private void addRecentCut(String cut) {
   recentCuts.insertElementAt(cut,0);
   cutsMenu.removeAll();
@@ -284,7 +284,7 @@ private void addRecentCut(String cut) {
     cutsMenu.add( item );
     item.addActionListener(this);
   }} // addRecentCut()
-</pre>
+ </input></program>
       <p>
         The <c>recentCuts Vector</c> stores the cut strings.
         Note the use of the <c>insertElementAt()</c> method to insert strings into the vector and the <c>elementAt()</c> method to get strings from the vector.
@@ -310,7 +310,7 @@ private void addRecentCut(String cut) {
     </p>
     <figure xml:id="fig-texteditor">
       <caption>A menu-based <c>SimpleTextEditor</c> application, Part I.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -361,12 +361,12 @@ public class SimpleTextEditor extends JFrame implements ActionListener{
     openItem.setEnabled(false);
     fileMenu.add(openItem);
     saveItem = new JMenuItem("Save");   // Save item
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig_simpletexteditorpart2cont">
       <caption><em>(continued)</em> The <c>SimpleTextEditor</c>, Part II.</caption>
-      \[37pc]
-<pre>
+      
+ <program language="java"><input>
 saveItem.addActionListener(this);
     saveItem.setEnabled(false);
     fileMenu.add(saveItem);
@@ -416,15 +416,15 @@ saveItem.addActionListener(this);
       }
     });
   } // main()} // SimpleTextEditor
-</pre>
+ </input></program>
     </figure>
     <p>
       It uses a <c>BorderLayout</c>, with the <c>JTextArea</c> placed at the center.
-      Note how simple it is to add \marginpar{Scrollbars} scrollbars to the text area:
+      Note how simple it is to add  scrollbars to the text area:
     </p>
-<pre>
+ <program language="java"><input>
 this.getContentPane().add(new JScrollPane(display));
-</pre>
+ </input></program>
     <p>
       This statement creates a <c>JScrollPane</c> and adds it to the application's container.
       A <c>JScrollPane</c> is one of Swing's scrollbar classes.
@@ -443,10 +443,10 @@ this.getContentPane().add(new JScrollPane(display));
       This refers to the scrollable component,
       in this case to the <c>JTextArea</c>. Another constructor that you might use takes the following form:
     </p>
-<pre>
+ <program language="java"><input>
 public JScrollPane(Component comp, int vsbPolicy,
                                      int hsbPolicy);
-</pre>
+ </input></program>
     <p>
       The two integers refer to the vertical and horizontal scrolling policies.
       These cover properties such as whether the scrollbars are always present or just as needed.
@@ -455,7 +455,7 @@ public JScrollPane(Component comp, int vsbPolicy,
       <xref ref="fig-scrollexample"></xref>).
       Because the text area in this example is wrapping the text,
       the horizontal scrollbar will never be needed.
-      <image width="73%" source="chptr13/9f25.png"/> \secEXRHone{Self-Study Exercises}
+      <image width="73%" source="chptr13/9f25.png"/> </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

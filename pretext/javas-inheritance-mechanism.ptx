@@ -56,7 +56,7 @@
       To illustrate this,
       suppose we define a <c>Student</c> class as follows:
     </p>
-<pre>
+ <program language="java"><input>
 public class Student {
     protected String name;
     public Student(String s) {
@@ -65,7 +65,7 @@ public class Student {
     public String getName() {
         return name;
     }}
-</pre>
+ </input></program>
     <p>
       <xref ref="fig-student1">Figure</xref>
       shows the relationship between this class <image width="73%" source="chptr08/student1.png"/> and the <c>Object</c> class.
@@ -73,10 +73,10 @@ public class Student {
       Therefore, for a given <c>Student</c> object,
       we can call its <c>toString()</c> as follows:
     </p>
-<pre>
+ <program language="java"><input>
 Student stu = new Student("Stu");
 System.out.println(stu.toString());
-</pre>
+ </input></program>
     <p>
       How does this work?
       That is, how does Java know where to find the <c>toString()</c> method, which,
@@ -94,9 +94,9 @@ System.out.println(stu.toString());
       it finds a <c>toString()</c> method in the <c>Object</c> class and it executes that implementation of <c>toString()</c>. As you know from Chapter<nbsp/>3,
       this would result in the expression <c>stu.toString()</c> returning something like:
     </p>
-<pre>
+ <program language="java"><input>
 Student@cde100
-</pre>
+ </input></program>
     <p>
       The default implementation of <c>toString()</c> returns the name of the object's class and the address (<c>cde100</c>) where the object is stored in memory.
       However, this type of result is much too general and not particularly useful.
@@ -115,10 +115,10 @@ Student@cde100
       To override <c>toString()</c> for the <c>Student</c> class,
       let's add the following method definition to the <c>Student</c> class:
     </p>
-<pre>
+ <program language="java"><input>
 public String toString() {
   return "My name is " + name +  " and I am a Student.";}
-</pre>
+ </input></program>
     <p>
       <image width="73%" source="chptr08/student2.png"/>
     </p>
@@ -128,9 +128,9 @@ public String toString() {
       Note that both <c>Object</c> and <c>Student</c> contain implementations of <c>toString()</c>. Now when the expression <c>stu.toString()</c> is invoked,
       the following, more informative, output is generated:
     </p>
-<pre>
+ <program language="java"><input>
 My name is Stu and I am a Student.
-</pre>
+ </input></program>
     <p>
       In this case,
       when Java encounters the method call <c>stu.toString()</c>, it invokes the <c>toString()</c> method that it finds in the <c>Student</c> class (Fig.<nbsp/>8.3).
@@ -176,7 +176,7 @@ My name is Stu and I am a Student.
       the method call to the correct implementation of that method.
     </p>
     <p>
-      In Java, all method calls use dynamic binding except methods that are \marginpar{Dynamic binding} declared <c>final</c> or <c>private</c>. Final methods cannot be overridden,
+      In Java, all method calls use dynamic binding except methods that are  declared <c>final</c> or <c>private</c>. Final methods cannot be overridden,
       so declaring a method as <c>final</c> means that the Java compiler can bind it to the correct implementation.
       Similarly, private methods are not inherited and therefore cannot be overridden in a subclass.
       In effect, private methods are final methods and the compiler can perform the binding at compile time.
@@ -184,7 +184,7 @@ My name is Stu and I am a Student.
     <p>
       Java's dynamic-binding mechanism,
       which is also called <em>late</em>
-      \marginpar{Polymorphism} binding or
+       binding or
       <em>run-time</em> binding,
       leads to what is know as <em>polymorphism</em>.
       <term>Polymorphism</term> is a feature of object-oriented languages whereby the same method call can lead to different behaviors depending on the type of object on which the method call is made.
@@ -194,15 +194,15 @@ My name is Stu and I am a Student.
       Here's a simple example:
     </p>
     <p>
-      \[32pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 Object obj;                        // Static type: Object
  obj = new Student("Stu");          // Actual type: Student
  System.out.println(obj.toString());// Prints "My name is Stu..."
  obj = new OneRowNim(11);           // Actual type: OneRowNim
  System.out.println(obj.toString());// Prints "nSticks = 11, player = 1"
-</pre>
+ </input></program>
     <p>
       The variable <c>obj</c> is declared to be of type <c>Object</c>. This is its <term>static</term>
       or <em>declared</em> type.
@@ -226,7 +226,7 @@ Object obj;                        // Static type: Object
     <p>
       Thus, we see that the same expression, <c>obj.toString()</c>, is bound alternatively to two different <c>toString()</c> implementations,
       based on the actual type of the object, <c>obj</c>, on which it is invoked.
-      This is polymorphism and we will sometimes say that the <c>\marginpar{Polymorphic method}
+      This is polymorphism and we will sometimes say that the <c>
 toString()</c> method is a
       <em>polymorphic</em> method.
       A <term>polymorphic method</term>
@@ -246,22 +246,22 @@ toString()</c> method is a
       also called <em>early</em> binding, is not possible.
       Consider the following method definition:
     </p>
-<pre>
+ <program language="java"><input>
 public void polyMethod(Object obj) {
   System.out.println(obj.toString()); // Polymorphic}
-</pre>
+ </input></program>
     <p>
       The method call in this method, <c>obj.toString()</c>, can't be bound to the correct implementation of <c>toString()</c> until the method is actually invoked<mdash/>that is,
       at run time.
       For example,
       suppose we make the following method calls in a program:
     </p>
-<pre>
+ <program language="java"><input>
 Student stu = new Student("Stu");
  polyMethod(stu);
  OneRowNim nim = new OneRowNim();
  polyMethod(nim);
-</pre>
+ </input></program>
     <p>
       The first time <c>polyMethod()</c> is called,
       the <c>obj.toString()</c> is invoked on a <c>Student</c> object.
@@ -289,7 +289,7 @@ Student stu = new Student("Stu");
       The <c>print()</c> and
 <c>println()</c> methods are examples of
       <term>overloaded</term> methods<mdash/>that is,
-      methods that have the same name but different \marginpar{Overloaded methods} parameter lists.
+      methods that have the same name but different  parameter lists.
       Remember that a method's signature involves its name,
       plus the type, number, and order of its parameters.
       Methods that have the same name but different parameters are said to be overloaded.
@@ -298,14 +298,14 @@ Student stu = new Student("Stu");
       Here are the signatures of some of the different <c>print()</c> and
 <c>println()</c> methods:
     </p>
-<pre>
+ <program language="java"><input>
 print(char c);           println(char c);
 print(int i);            println(int i);
 print(double d);         println(double d);
 print(float f);          println(float f);
 print(String s);         println(String s);
 print(Object o);         println(Object o);
-</pre>
+ </input></program>
     <p>
       Basically, there is a <c>print()</c> and <c>println()</c> method for every type of primitive data,
       plus methods for printing any type of object.
@@ -321,14 +321,14 @@ print(Object o);         println(Object o);
       we can make an educated guess that their implementations utilize the polymorphic <c>toString()</c> method,
       as follows:
     </p>
-<pre>
+ <program language="java"><input>
 public void print(Object o) {
      System.out.print(o.toString());
  }
  public void println(Object o) {
      System.out.println(o.toString());
  }
-</pre>
+ </input></program>
     <p>
       Here again we have a case where an expression, <c>o.toString()</c>, is bound dynamically to the correct implementation of
 <c>toString()</c> based on the type of <c>Object</c> that the variable
@@ -339,25 +339,25 @@ public void print(Object o) {
       if we call <c>System.out.print(game)</c>, where <c>game</c> is a <c>OneRowNim</c>, then the <c>OneRowNim.toString()</c> method is invoked.
     </p>
     <p>
-      The beauty of using polymorphism in this way is the flexibility and \marginpar{Extensibility} extensibility that it allows.
+      The beauty of using polymorphism in this way is the flexibility and  extensibility that it allows.
       The <c>print()</c> and <c>println()</c> methods can print any type of object,
       even new types of objects that did not exist when these library methods were written.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
             To confirm that the <c>print()</c> and <c>println()</c> methods are implemented along the lines that we suggest here,
             compile and run the <c>TestPrint</c> program shown here.
             Describe how it confirms our claim.
-<pre>
+ <program language="java"><input>
 public class TestPrint {
     public static void main(String args[]) {
         System.out.println(new Double(56));
         System.out.println(new TestPrint());
     }}
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -384,24 +384,24 @@ public class TestPrint {
       you wanted to concatenate the result of both the default and the new <c>toString()</c> methods.
       The following expression would accomplish that:
     </p>
-<pre>
+ <program language="java"><input>
 super.toString() + toString()
-</pre>
+ </input></program>
     <p>
       The <c>super</c> keyword specifies that the first
 <c>toString()</c> is the one implemented in the superclass.
       The second
-<c>toString()</c> refers simply to the version implemented within the \marginpar{Keyword <c>super</c>}<c>Student</c> class.
+<c>toString()</c> refers simply to the version implemented within the <c>Student</c> class.
       We will see additional examples of using the
 <c>super</c> keyword in the following sections.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
             Consider the following class definitions and determine the output that would be generated by the code segment.
-<pre>
+ <program language="java"><input>
 public class A {
      public void method() { System.out.println("A"); }
  }
@@ -415,7 +415,7 @@ public class A {
  a.method();
  B b = new B();
  b.method();
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -428,12 +428,12 @@ public class A {
           <p>
             Given the definitions of the classes <c>A</c> and <c>B</c>, which of the following statements are valid?
             Explain.
-<pre>
+ <program language="java"><input>
 A a = new B();
     a = new A();
     B b = new A();
     b = new B();
-</pre>
+ </input></program>
           </p>
         </li>
       </ol>
@@ -447,7 +447,7 @@ A a = new B();
       To illustrate some of the implications of this language feature,
       let's define a subclass of <c>Student</c> called <c>CollegeStudent</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public class CollegeStudent extends Student {
     public CollegeStudent() { }
     public CollegeStudent(String s) {
@@ -457,7 +457,7 @@ public class CollegeStudent extends Student {
        return "My name is " + name +
                " and I am a CollegeStudent.";
     }}
-</pre>
+ </input></program>
     <p>
       Because <c>CollegeStudent</c> is a subclass of <c>Student</c>, it inherits the public and protected instance methods and variables from <c>Student</c>. So, a <c>CollegeStudent</c> has an instance variable for <c>name</c> and it has a public <c>getName()</c><image width="73%" source="chptr08/collstudent.png"/> method.
       Recall that a <c>protected</c> element,
@@ -483,7 +483,7 @@ public class CollegeStudent extends Student {
     </p>
     <p>
       As we have noted,
-      a subclass does not inherit constructors from its \marginpar{Constructor chaining} superclasses.
+      a subclass does not inherit constructors from its  superclasses.
       However, if the subclass constructor does not explicitly invoke a superclass constructor, Java will automatically invoke the default superclass constructor<mdash/>in this case, <c>super()</c>. By
       <q>default superclass constructor</q>
       we mean the constructor that has no parameters.
@@ -511,22 +511,22 @@ public class CollegeStudent extends Student {
 <c>B</c>, Java will first invoke <c>A</c>'s constructor before executing the code in <c>B</c>'s constructor.
       Thus, Java's default behavior during construction of <c>B</c> is equivalent to the following implementation of <c>B</c>'s constructor:
     </p>
-<pre>
+ <program language="java"><input>
 public B() {
     A();   // Call the superconstructor
     // Now continue with this constructor's code}
-</pre>
+ </input></program>
     <p>
       Calls to the default constructors are made all the way up the class hierarchy,
       and the superclass constructor is always called before the code in the class's constructor is executed.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
             Consider the following class definitions and describe what would be output by the code segment.
-<pre>
+ <program language="java"><input>
 public class A {
      public A() { System.out.println("A"); }
  }
@@ -540,7 +540,7 @@ public class A {
  A a = new A();
  B b = new B();
  C c = new C();
-</pre>
+ </input></program>
           </p>
         </li>
       </ol>

@@ -22,13 +22,13 @@
       (or the end of the array is reached).
       A pseudocode description of this algorithm is as follows:
     </p>
-<pre>
+ <program language="java"><input>
 1. For each element of the array
 2.    If the element equals the key
 3.       Return its index
 4. If the key is not found in the array
 5.    Return -1 (to indicate failure)
-</pre>
+ </input></program>
     <p>
       This algorithm can easily be implemented in a method that searches an integer array,
       which is passed as the method's parameter.
@@ -51,7 +51,7 @@
     <figure xml:id="fig-search">
       <caption>The <c>Search</c> class contains both a <c>sequentialSearch()</c>
       and a <c>binarySearch()</c>.</caption>
-<pre>
+ <program language="java"><input>
 public class Search {
   public int sequentialSearch(int arr[], int key) {
     for (int k = 0; k &lt; arr.length; k++)
@@ -73,7 +73,7 @@ public class Search {
     }  // while
     return -1;     // Post: if low > high search failed
   } // binarySearch()}//Search
-</pre>
+ </input></program>
     </figure>
     <principle>
       <title>EFFECTIVE DESIGN:Sentinel Return Value</title>
@@ -114,7 +114,7 @@ public class Search {
     </p>
     <p>
       Proceeding in this way,
-      the correct number can be guessed in at most \marginpar{How many guesses?} <m>log_2 N</m> guesses,
+      the correct number can be guessed in at most  <m>log_2 N</m> guesses,
       because the base-2 logarithm of <em>N</em>
       is the number of times you can divide <em>N</em> in half.
       For a list of 100 items, the search should take no more than seven guesses
@@ -133,7 +133,7 @@ public class Search {
     <p>
       A pseudocode representation of the binary search is given as follows:
     </p>
-<pre>
+ <program language="java"><input>
 TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
 1. Assign 0 low and assign N-1 to high initially
 2. As long as low is not greater than high
@@ -144,7 +144,7 @@ TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
 7.        then assign mid + 1 to low
 8.    Else assign mid - 1 to high
 9. If this is reached return -1 to indicate failure
-</pre>
+ </input></program>
     <p>
       Just as with the sequential search algorithm,
       this algorithm can easily be implemented in a method that searches an integer array that is passed as the method's parameter (Fig.
@@ -173,10 +173,10 @@ TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
       For example,
       suppose we are searching for <m>-5</m> in the following array:
     </p>
-<pre>
+ <program language="java"><input>
 int sortArr[] =
    { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-</pre>
+ </input></program>
     <p>
       The <m>-5</m> is smaller than the smallest array element.
       Therefore, the algorithm will repeatedly divide the low end of the array in half until the condition
@@ -184,7 +184,7 @@ int sortArr[] =
       We can see this by tracing the values that low, mid,
       and high will take during the search:
     </p>
-<pre>
+ <program language="java"><input>
 Key  Iteration  Low   High    Mid
 ----------------------------------
  -5   0          0     19      9
@@ -192,7 +192,7 @@ Key  Iteration  Low   High    Mid
  -5   2          0     3       1
  -5   3          0     0       0
  -5   4          0     -1      Failure
-</pre>
+ </input></program>
     <p>
       As this trace shows,
       the algorithm examines only four locations to determine that <m>-5</m> is not in the array.
@@ -221,7 +221,7 @@ Key  Iteration  Low   High    Mid
     </p>
     <figure xml:id="fig-testsearch">
       <caption>The <c>TestSearch</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import java.io.*;
 public class TestSearch {
   public static int getInput() {
@@ -254,7 +254,7 @@ public class TestSearch {
       key = getInput();
     } // while
   } // main()} // TestSearch
-</pre>
+ </input></program>
     </figure>
   </subsection>
 </section>

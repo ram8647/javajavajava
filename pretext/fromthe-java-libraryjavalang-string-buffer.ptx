@@ -1,7 +1,7 @@
 <section xml:id="fromthe-java-libraryjavalang-string-buffer">
   <title>From the Java Library: java.lang.StringBuffer</title>
   <p>
-    \marginpar{ \psfig{file=../commonart/www_dg.eps}
+    
     <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
   </p>
   <p>
@@ -25,13 +25,13 @@
     Figure<nbsp/>7.9 illustrates the process.
     Thus, given the statement
   </p>
-<pre>
+ <program language="java"><input>
 resultStr = resultStr + ptr + " ";
-</pre>
+ </input></program>
   <p>
     Java will evaluate the right-hand side,
     which creates a new
-<c>String</c> object whose value would be the concatenation of the right-hand-side elements, <c>resultStr + ptr + " "</c>(Fig.<nbsp/>7\mbox{.} 9a).
+<c>String</c> object whose value would be the concatenation of the right-hand-side elements, <c>resultStr + ptr + " "</c>(Fig.<nbsp/>7. 9a).
     It would then assign the new object as the new referent of <c>resultStr</c>(Fig.<nbsp/>7.9b).
     This turns the previous referent of <c>resultStr</c> into an
     <term>orphan object</term><mdash/>that is,
@@ -66,7 +66,7 @@ resultStr = resultStr + ptr + " ";
     the <c>java.lang.StringBuffer</c> class also represents a string of characters.
     However, unlike the <c>String</c> class,
     a <c>StringBuffer</c> can be modified,
-    and it can grow and shrink in length as \marginpar{ Choosing the appropriate data structure} necessary.
+    and it can grow and shrink in length as  necessary.
     As Figure<nbsp/>7.10 shows,
     the <c>StringBuffer</c> class contains several of the same kind of methods as the <c>String</c> class,
     for example, <c>charAt()</c> and <c>length()</c>. But it also contains methods that allow characters and other types of data to be inserted into a string,
@@ -89,7 +89,7 @@ resultStr = resultStr + ptr + " ";
   <p>
     The typical way to use a <c>StringBuffer</c> is shown in the following revised version of the <c>keywordSearch()</c> method:
   </p>
-<pre>
+ <program language="java"><input>
 public String keywordSearch(String s, String keyword) {
                                    // Create StringBuffer
   StringBuffer resultStr = new StringBuffer();
@@ -102,7 +102,7 @@ public String keywordSearch(String s, String keyword) {
   }
   resultStr.insert(0, count + ": ");
   return resultStr.toString(); // Convert buffer to String} // keywordSearch()
-</pre>
+ </input></program>
   <p>
     We declare <c>resultStr</c> as a <c>StringBuffer</c><image width="73%" source="chptr07/p360f1.png"/> \caption{The <c>java.lang.StringBuffer</c> class. } instead of a <c>String</c>. Then,
     instead of concatenating the <c>ptr</c> and reassigning the <c>resultStr</c>, we <c>append()</c> the <c>ptr</c> to the <c>resultStr</c> for each occurrence of a keyword.
@@ -117,7 +117,7 @@ public String keywordSearch(String s, String keyword) {
   </p>
   <p>
     To summarize, <c>String</c> objects in Java are <em>immutable</em>.
-    So \marginpar{Strings are immutable} when a <c>String</c> is
+    So  when a <c>String</c> is
     <q>modified,</q>
     this really means that a new <c>String</c> object is created and the old <c>String</c> object must be garbage collected.
     This is somewhat inefficient,

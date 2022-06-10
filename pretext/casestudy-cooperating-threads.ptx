@@ -16,7 +16,7 @@
     </p>
     <p>
       One example of an application for this model would be to control the display of data that is read by your browser.
-      As information arrives from the \marginpar{Producer and consumer threads} Internet,
+      As information arrives from the  Internet,
       it is written to a buffer by the producer thread.
       A separate consumer thread reads information from the buffer and displays it in your browser window.
       Obviously, the two threads must be carefully synchronized.
@@ -27,7 +27,7 @@
     <p>
       To illustrate how to address the sorts of problems that can arise when you try to synchronize threads,
       let's consider a simple application in which several threads use a shared resource.
-      You're familiar with \marginpar{Simulating a waiting line} those take-a-number devices that are used in bakeries to manage a waiting line.
+      You're familiar with  those take-a-number devices that are used in bakeries to manage a waiting line.
       Customers take a number when they arrive,
       and the clerk announces who's next by looking at the device.
       As customers are called, the clerk increments the
@@ -49,7 +49,7 @@
   <subsection>
     <title>Problem Decomposition</title>
     <p>
-      This simulation will use four classes of objects. \marginpar{What classes do we need?} <xref ref="fig-p726f1">Figure</xref>
+      This simulation will use four classes of objects.  <xref ref="fig-p726f1">Figure</xref>
       provides a UML representation of the interactions among the objects.
     </p>
     <figure xml:id="fig-p726f1">
@@ -74,7 +74,7 @@
       Let's call this the <c>Bakery</c> class,
       which gives us the following list of classes:
       <ul>
-        Bakery<mdash/>creates the threads and starts the \mbox{simulation.} TakeANumber<mdash/>represents the gadget that keeps track of the next customer to be served. Clerk<mdash/>uses the <c>TakeANumber</c> to determine the next customer and will serve the customer. Customer<mdash/>represents the customers who will use the <c>TakeANumber</c> to take their place in line.
+        Bakery<mdash/>creates the threads and starts the simulation. TakeANumber<mdash/>represents the gadget that keeps track of the next customer to be served. Clerk<mdash/>uses the <c>TakeANumber</c> to determine the next customer and will serve the customer. Customer<mdash/>represents the customers who will use the <c>TakeANumber</c> to take their place in line.
       </ul>
     </p>
   </subsection>
@@ -99,11 +99,11 @@
 <c>Customer</c> s and the <c>Clerk</c>. They can each store the reference as an instance variable.
       In this way,
       all the objects in the simulation can share a <c>TakeANumber</c> object as a common resource.
-      Our design considerations lead to the definition of \marginpar{Passing a reference to a shared object} the <c>TakeANumber</c> class shown in <xref ref="fig-takeanumber1">Figure</xref>.
+      Our design considerations lead to the definition of  the <c>TakeANumber</c> class shown in <xref ref="fig-takeanumber1">Figure</xref>.
     </p>
     <figure xml:id="fig-takeanumber1">
       <caption>Definition of the <c>TakeANumber</c> class, Version 1.</caption>
-<pre>
+ <program language="java"><input>
 class TakeANumber {
     private int next = 0;     // Next place in line
     private int serving = 0;  // Next customer to serve
@@ -116,14 +116,14 @@ class TakeANumber {
         return serving;
     } // nextCustomer()
 } // TakeANumber
-</pre>
+ </input></program>
     </figure>
     <p>
       Note that the <c>nextNumber()</c> method is declared
 <c>synchronized</c>. As we will discuss in more detail,
       this ensures that only one customer at a time can take a number.
       Once a thread begins executing a <c>synchronized</c> method,
-      no other thread can execute that method until the first thread finishes. \marginpar{Synchronized methods} This is important because,
+      no other thread can execute that method until the first thread finishes.  This is important because,
       otherwise,
       several <c>Customer</c> s could call the <c>nextNumber</c> method at the same time.
       It's important that the customer threads have access only one at a time,
@@ -150,7 +150,7 @@ class TakeANumber {
       An object that contains <c>synchronized</c> methods has a <term>monitor</term>
           <idx><h>monitor</h></idx>
       associated with it.
-      A monitor is a widely used synchronization \marginpar{The monitor concept} mechanism that ensures that only one thread at a time can execute a
+      A monitor is a widely used synchronization  mechanism that ensures that only one thread at a time can execute a
 <c>synchronized</c> method.
       When a <c>synchronized</c> method is called,
       a <term>lock</term>
@@ -163,7 +163,7 @@ class TakeANumber {
       Other threads must wait for the lock to be released before they can execute a <c>synchronized</c> method.
     </p>
     <p>
-      While one <c>Customer</c> is executing <c>nextNumber()</c>, all other \marginpar{Mutually exclusive access to a shared object}<c>Customer</c> s will be forced to wait until the first <c>Customer</c> is finished.
+      While one <c>Customer</c> is executing <c>nextNumber()</c>, all other <c>Customer</c> s will be forced to wait until the first <c>Customer</c> is finished.
       When the <c>synchronized</c> method is exited,
       the lock on the object is released,
       allowing other <c>Customer</c> threads to access their <c>synchronized</c> methods.
@@ -217,7 +217,7 @@ class TakeANumber {
     </p>
     <figure xml:id="fig-customer1">
       <caption>Definition of the <c>Customer</c> class, Version 1.</caption>
-<pre>
+ <program language="java"><input>
 public class Customer extends Thread {
   private static int number = 10000; // Initial ID number
   private int id;
@@ -235,12 +235,12 @@ public class Customer extends Thread {
       System.out.println("Exception " + e.getMessage());
     }
   } // run()} // Customer
-</pre>
+ </input></program>
     </figure>
     <p>
       Another important feature of this definition is the use of the
 <c>static</c> variable <c>number</c> to assign each customer a unique ID number.
-      Remember that a <c>static</c> variable belongs to the class \marginpar{Static (class) variables} itself,
+      Remember that a <c>static</c> variable belongs to the class  itself,
       not to its instances.
       Therefore, each <c>Customer</c> that is created can share this variable.
       By incrementing it and assigning its new value as the <c>Customer</c>'s ID, we guarantee that each customer has a unique ID number.
@@ -279,8 +279,8 @@ public class Customer extends Thread {
     </p>
     <figure xml:id="fig-clerk1">
       <caption>Definition of <c>Clerk</c>, Version 1.</caption>
-      \[27pc]
-<pre>
+      
+ <program language="java"><input>
 public class Clerk extends Thread {
   private TakeANumber takeANumber;
   public Clerk(TakeANumber gadget) {
@@ -297,7 +297,7 @@ public class Clerk extends Thread {
       }
     } //while
   } //run()} // Clerk
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection>
@@ -306,7 +306,7 @@ public class Clerk extends Thread {
       Finally, <c>Bakery</c> is the simplest class to design.
       It contains the <c>main()</c> method,
       which gets the whole simulation started.
-      As we said, its role will be to create one <c>Clerk</c> thread and \marginpar{The main program} several <c>Customer</c> threads,
+      As we said, its role will be to create one <c>Clerk</c> thread and  several <c>Customer</c> threads,
       and get them all started (Fig.
       <xref ref="fig-bakery"></xref>).
       Notice that the <c>Customer</c> s and the
@@ -315,7 +315,7 @@ public class Clerk extends Thread {
     </p>
     <figure xml:id="fig-bakery">
       <caption>Definition of the <c>Bakery</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public class Bakery {
   public static void main(String args[]) {
     System.out.println("Starting clerk and customer threads");
@@ -327,7 +327,7 @@ public class Bakery {
       customer.start();
     }
   } // main()} // Bakery
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection xml:id="fig-p731f1">
@@ -340,9 +340,9 @@ public class Bakery {
       without violating the real-world constraints that should be satisfied by the simulation.
       If we run the simulation as it is presently coded,
       it will generate five customers and the clerk will serve all of them.
-      But we get something \marginpar{Testing and debugging} like the following output:
+      But we get something  like the following output:
     </p>
-<pre>
+ <program language="java"><input>
 Starting clerk and customer threads
   Clerk serving ticket 1
   Clerk serving ticket 2
@@ -359,9 +359,9 @@ Customer 10005 takes ticket 3
   Clerk serving ticket 10
 Customer 10001 takes ticket 4
 Customer 10003 takes ticket 5
-</pre>
+ </input></program>
     <p>
-      Our current solution violates an important real-world constraint: You can't serve customers before they enter the \marginpar{Problem: The clerk thread doesn't wait for customer threads} line!
+      Our current solution violates an important real-world constraint: You can't serve customers before they enter the  line!
       How can we ensure that the clerk doesn't serve a customer unless there's actually a customer waiting?
     </p>
     <p>
@@ -374,10 +374,10 @@ Customer 10003 takes ticket 5
       The correct way to solve this problem is to have the clerk check that there are customers waiting before taking the next customer.
       One way to model this would be to add a <c>customerWaiting()</c> method to our
 <c>TakeANumber</c> object.
-      This method would return <c>true</c> whenever <c>next</c> is greater than <c>serving</c>. That will correspond to the real-world situation in which the clerk can see \marginpar{The clerk checks the line} customers waiting in line.
+      This method would return <c>true</c> whenever <c>next</c> is greater than <c>serving</c>. That will correspond to the real-world situation in which the clerk can see  customers waiting in line.
       We can make the following modification to <c>Clerk.run()</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public void run() {
   while (true) {
     try {
@@ -389,14 +389,14 @@ public void run() {
       System.out.println("Exception " + e.getMessage());
     }
   } // while} // run()
-</pre>
+ </input></program>
     <p>
       And we add the following method to <c>TakeANumber</c>(Fig.<nbsp/>14.25):
     </p>
-<pre>
+ <program language="java"><input>
 public boolean customerWaiting() {
     return next > serving;}
-</pre>
+ </input></program>
     <p>
       <image width="73%" source="chptr14/p731f1.png"/>
     </p>
@@ -406,7 +406,7 @@ public boolean customerWaiting() {
       unless <c>next</c> is greater than <c>serving</c>. Given these changes,
       we get the following type of output when we run the simulation:
     </p>
-<pre>
+ <program language="java"><input>
 Starting clerk and customer threads
 Customer 10003 takes ticket 1
   Clerk serving ticket 1
@@ -418,7 +418,7 @@ Customer 10004 takes ticket 4
   Clerk serving ticket 4
 Customer 10002 takes ticket 5
   Clerk serving ticket 5
-</pre>
+ </input></program>
     <p>
       This example illustrates that when application design involves cooperating threads,
       the algorithm used must ensure the proper cooperation and coordination among the threads.
@@ -435,16 +435,16 @@ Customer 10002 takes ticket 5
     <title>Problem: Critical Sections</title>
     <p>
       It is easy to forget that thread behavior is asynchronous.
-      You can't predict when a thread might be interrupted or might have to give up \marginpar{Thread interruptions are unpredictable} the CPU to another thread.
+      You can't predict when a thread might be interrupted or might have to give up  the CPU to another thread.
       In designing applications that involve cooperating threads,
       it's important that the design incorporates features to guard against problems caused by asynchronicity.
       To illustrate this problem,
       consider the following statement from the <c>Customer.run()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 System.out.println("Customer " + id +
        " takes ticket " + takeANumber.nextNumber());
-</pre>
+ </input></program>
     <p>
       Even though this is a single Java statement,
       it breaks up into several Java bytecode statements.
@@ -452,7 +452,7 @@ System.out.println("Customer " + id +
       We can simulate this by breaking the <c>println()</c> into two statements and putting a
 <c>sleep()</c> in their midst:
     </p>
-<pre>
+ <program language="java"><input>
 public void run() {
   try {
     int myturn = takeANumber.nextNumber();
@@ -462,12 +462,12 @@ public void run() {
   } catch (InterruptedException e) {
     System.out.println("Exception " + e.getMessage());
   }} // run()
-</pre>
+ </input></program>
     <p>
       If this change is made in the simulation,
       you might get the following output:
     </p>
-<pre>
+ <program language="java"><input>
 Starting clerk and customer threads
   Clerk serving ticket 1
   Clerk serving ticket 2
@@ -479,7 +479,7 @@ Customer 10001 takes ticket 1
 Customer 10002 takes ticket 2
 Customer 10003 takes ticket 3
 Customer 10005 takes ticket 5
-</pre>
+ </input></program>
     <p>
       Because the <c>Customer</c> threads are now interrupted in between taking a number and reporting their number,
       it looks as if they are being served in the wrong order.
@@ -487,9 +487,9 @@ Customer 10005 takes ticket 5
       It's their reporting of their numbers that is wrong!
     </p>
     <p>
-      The problem here is that the <c>Customer.run()</c> method is being interrupted in such a way that it invalidates the simulation's output. \marginpar{Problem: An interrupt in a critical section} A method that displays the simulation's state should be designed so that once a thread begins reporting its state,
+      The problem here is that the <c>Customer.run()</c> method is being interrupted in such a way that it invalidates the simulation's output.  A method that displays the simulation's state should be designed so that once a thread begins reporting its state,
       that thread will be allowed to finish reporting before another thread can start reporting its state.
-      Accurate \mbox{reporting} of a thread's state is a critical element of the simulation's overall integrity.
+      Accurate reporting of a thread's state is a critical element of the simulation's overall integrity.
     </p>
     <p>
       A <term>critical section</term>
@@ -508,7 +508,7 @@ Customer 10005 takes ticket 5
       The correct way to address this problem is to treat the reporting of the customer's state as a critical section.
       As we saw earlier when we discussed the concept of a monitor,
       a <c>synchronized</c> method within a shared object ensures that once a thread starts the method,
-      it will be allowed to finish it before any other thread can start \marginpar{ Making a critical section uninterruptible} it.
+      it will be allowed to finish it before any other thread can start  it.
       Therefore, one way out of this dilemma is to redesign the <c>nextNumber()</c> and <c>nextCustomer()</c> methods in the <c>TakeANumber</c> class so that they report which customer receives a ticket and which customer is being served (Fig.
       <xref ref="fig-takeanumber2"></xref>).
       In this version all of the methods are
@@ -516,7 +516,7 @@ Customer 10005 takes ticket 5
     </p>
     <figure xml:id="fig-takeanumber2">
       <caption>Definition of the <c>TakeANumber</c> class, Version 2.</caption>
-<pre>
+ <program language="java"><input>
 public class TakeANumber {
   private int next = 0;     // Next place in line
   private int serving = 0;  // Next customer to serve
@@ -535,7 +535,7 @@ public class TakeANumber {
   public synchronized boolean customerWaiting() {
     return next > serving;
   } // customerWaiting()} // TakeANumber
-</pre>
+ </input></program>
     </figure>
     <p>
       Note that the reporting of both the next number and the next customer to be served are now handled by
@@ -547,7 +547,7 @@ public class TakeANumber {
     <p>
       Given these changes to <c>TakeANumber</c>, we must remove the <c>println()</c> statements from the <c>run()</c> methods in <c>Customer</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public void run() {
   try {
     sleep((int)(Math.random() * 2000));
@@ -555,11 +555,11 @@ public void run() {
   } catch (InterruptedException e) {
     System.out.println("Exception: "+ e.getMessage());
   }} // run()
-</pre>
+ </input></program>
     <p>
       and from the <c>run()</c> method in <c>Clerk</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public void run() {
   while (true) {
     try {
@@ -570,13 +570,13 @@ public void run() {
       System.out.println("Exception: "+e.getMessage());
     }
   } // while} // run()
-</pre>
+ </input></program>
     <p>
       Rather than printing their numbers,
       these methods now just call the appropriate methods in <c>TakeANumber</c>. Given these design changes,
       our simulation now produces the following correct output:
     </p>
-<pre>
+ <program language="java"><input>
 Starting clerk and customer threads
 Customer 10001 takes ticket 1
   Clerk serving ticket 1
@@ -588,11 +588,11 @@ Customer 10004 takes ticket 5
   Clerk serving ticket 3
   Clerk serving ticket 4
   Clerk serving ticket 5
-</pre>
+ </input></program>
     <p>
       The lesson to be learned from this is that in designing multithreaded programs,
       it is important to assume that if a thread can be interrupted at a certain point,
-      it will be interrupted at \marginpar{Preventing undesirable interrupts} that point.
+      it will be interrupted at  that point.
       The fact that an interrupt is unlikely to occur is no substitute for the use of a critical section.
       This is something like
       <q>Murphy's Law of Thread Coordination.</q>
@@ -604,7 +604,7 @@ Customer 10004 takes ticket 5
         By designating certain methods as synchronized,
         you can ensure their mutually exclusive access.
         Once a thread starts a synchronized method,
-        no other thread will be able to execute the method until the first thread is \mbox{finished.}
+        no other thread will be able to execute the method until the first thread is finished.
       </p>
     </principle>
     <p>
@@ -648,7 +648,7 @@ Customer 10004 takes ticket 5
     <p>
       One problem with our current design of the Bakery algorithm is that it uses <em>busy waiting</em>
           <idx><h>busy waiting</h></idx>
-      \marginpar{Busy waiting} on the part of the <c>Clerk</c> thread.
+       on the part of the <c>Clerk</c> thread.
       <em>Busy waiting</em> occurs when a thread,
       while waiting for some condition to change,
       executes a loop instead of giving up the CPU. Because busy waiting is wasteful of CPU time,
@@ -658,7 +658,7 @@ Customer 10004 takes ticket 5
       As it is presently designed,
       the <c>Clerk</c> thread sits in a loop that repeatedly checks whether there's a customer to serve:
     </p>
-<pre>
+ <program language="java"><input>
 public void run() {
   while (true) {
     try {
@@ -669,11 +669,11 @@ public void run() {
       System.out.println("Exception: " + e.getMessage());
     }
   } // while} // run()
-</pre>
+ </input></program>
     <p>
       A far better solution would be to force the <c>Clerk</c> thread to wait until a customer arrives without using the CPU. Under such a design,
       the <c>Clerk</c> thread can be notified and enabled to run as soon as a <c>Customer</c> becomes available.
-      Note that this description views the customer/clerk relationship as one-half of the producer/consumer \marginpar{Producer/consumer} relationship.
+      Note that this description views the customer/clerk relationship as one-half of the producer/consumer  relationship.
       When a customer takes a number,
       it <em>produces</em> a customer in line that must be served
       (that is, <em>consumed</em>)
@@ -702,9 +702,9 @@ public void run() {
       the <c>Clerk</c> should be made to <c>wait()</c>:
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 public synchronized int nextCustomer() {
   try {
     while (next &lt;= serving)
@@ -716,12 +716,12 @@ public synchronized int nextCustomer() {
     System.out.println(" Clerk serving ticket " + serving);
     return serving;
   }}
-</pre>
+ </input></program>
     <p>
       Note that the <c>Clerk</c> still checks whether there are customers waiting.
       If there are none,
       the <c>Clerk</c> calls the <c>wait()</c> method.
-      This removes the <c>Clerk</c> from the CPU \marginpar{A waiting thread gives up the CPU} until some other thread notifies it,
+      This removes the <c>Clerk</c> from the CPU  until some other thread notifies it,
       at which point it will be ready to run again.
       When it runs again,
       it should check that there is in fact a customer waiting before proceeding.
@@ -736,14 +736,14 @@ public synchronized int nextCustomer() {
       Therefore, we put a <c>notify()</c> in the <c>nextNumber()</c> method,
       which is the method called by each <c>Customer</c> as it gets in line:
     </p>
-<pre>
+ <program language="java"><input>
 public synchronized int nextNumber( int custId) {
   next = next + 1;
   System.out.println("Customer " + custId +
                      " takes ticket " + next);
   notify();
   return next;}
-</pre>
+ </input></program>
     <p>
       Thus, as soon as a <c>Customer</c> thread executes the
 <c>nextNumber()</c> method,
@@ -762,7 +762,7 @@ public synchronized int nextNumber( int custId) {
       It is to be tested in the <c>TakeANumber.nextCustomer()</c>. Thus,
       the <c>Clerk.run()</c> can be simplified to
     </p>
-<pre>
+ <program language="java"><input>
 public void run() {
   while (true) {
     try {
@@ -772,7 +772,7 @@ public void run() {
       System.out.println("Exception: "+ e.getMessage());
     }
   } // while} // run()
-</pre>
+ </input></program>
     <p>
       The <c>Clerk</c> thread may be forced to wait when it calls the <c>nextCustomer</c> method.
     </p>
@@ -785,7 +785,7 @@ public void run() {
     </p>
     <figure xml:id="fig-takeanumber3">
       <caption>The <c>TakeANumber</c> class, Version 3.</caption>
-<pre>
+ <program language="java"><input>
 public class TakeANumber {
   private int next = 0;
   private int serving = 0;
@@ -811,13 +811,13 @@ public class TakeANumber {
        return serving;
     }
   } // nextCustomer()} // TakeANumber
-</pre>
+ </input></program>
     </figure>
     <p>
       Given this version of the program,
       the following kind of output will be generated:
     </p>
-<pre>
+ <program language="java"><input>
 Starting clerk and customer threads
 Customer 10004 takes ticket 1
 Customer 10002 takes ticket 2
@@ -830,7 +830,7 @@ Customer 10001 takes ticket 5
   Clerk serving ticket 4
   Clerk serving ticket 5
   Clerk waiting
-</pre>
+ </input></program>
     <principle>
       <title>PROGRAMMING TIP:Busy Waiting</title>
       <p>
@@ -859,7 +859,7 @@ Customer 10001 takes ticket 5
   <subsection>
     <title>The <c>wait/notify</c>Mechanism</title>
     <p>
-      There are a number of important restrictions that must be observed \marginpar{ Wait/notify go into synchronized methods} when using the <c>wait/notify</c> mechanism:
+      There are a number of important restrictions that must be observed  when using the <c>wait/notify</c> mechanism:
       <ul>
         <li>
           <p>
@@ -898,7 +898,7 @@ Customer 10001 takes ticket 5
       <title>DEBUGGING TIP:Wait/Notify</title>
       <p>
         It's easy to forget that the
-<c>wait()</c> and \mbox{notify()} methods can only be used within
+<c>wait()</c> and notify() methods can only be used within
 <c>synchronized</c> methods.
       </p>
     </principle>

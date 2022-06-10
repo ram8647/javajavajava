@@ -13,7 +13,7 @@
       The example we showed was intended mainly to illustrate the basic techniques involved in list processing.
     </p>
     <p>
-      Also, the <c>PhoneList</c> example is limited to a particular type of \marginpar{A generic list structure} data<mdash/>namely,
+      Also, the <c>PhoneList</c> example is limited to a particular type of  data<mdash/>namely,
       a <c>PhoneListNode</c>. Let's develop a more general linked list class and a more general node class that can be used to store and process lists of any kind of data.
     </p>
     <p>
@@ -27,7 +27,7 @@
       There are no other ways to manipulate integers.
     </p>
     <p>
-      Moreover, in designing an ADT, it's important to hide the implementation of the operations from the users of the operations. \marginpar{Information hiding} Thus,
+      Moreover, in designing an ADT, it's important to hide the implementation of the operations from the users of the operations.  Thus,
       our programs have used all of these integer operations on <c>int</c> s, but we have no real idea how they are implemented<mdash/>that is,
       what exact algorithm they use.
     </p>
@@ -43,7 +43,7 @@
       So let's design a list ADT. We want it to be able to store any kind of data,
       and we want to prescribe the operations that can be performed on those data<mdash/>the insert, delete,
       and so on.
-      Also, we want to design \marginpar{Design specifications} the ADT so that it can be extended to create more specialized kinds of lists.
+      Also, we want to design  the ADT so that it can be extended to create more specialized kinds of lists.
     </p>
   </introduction>
   <subsection xml:id="fig-listnode">
@@ -74,7 +74,7 @@
     <figure xml:id="fig-nodeclass">
       <caption>The <c>Node</c> class is a more abstract version of
       the <c>Phone- ListNode</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public class Node {
    private Object data;        // Stores any kind of data
    private Node next;
@@ -97,7 +97,7 @@ public class Node {
    public Node getNext() {
       return next;
    }} // Node
-</pre>
+ </input></program>
     </figure>
     <p>
       getData()} and <c>setData()</c>, use references to <c>Object</c> for their parameter and return type.
@@ -135,8 +135,8 @@ public class Node {
     </p>
     <figure xml:id="fig-listadt">
       <caption>The <c>List</c>ADT.</caption>
-      \[32pc]
-<pre>
+      
+ <program language="java"><input>
 public class List {
   private Node head;
   public List() { head = null; }
@@ -188,7 +188,7 @@ public class List {
     previous.setNext(null);
     return current.getData();
   } // removeLast()} // List
-</pre>
+ </input></program>
     </figure>
     <p>
       We already know the basic strategies for implementing these new methods,
@@ -200,9 +200,9 @@ public class List {
       At the same time,
       our list consists of <c>Node</c> s, so we have to use the <c>Object</c> to create a <c>Node</c> in our insert methods:
     </p>
-<pre>
+ <program language="java"><input>
 head = new Node(obj);
-</pre>
+ </input></program>
     <p>
       Recall that the <c>Node</c> constructor takes an <c>Object</c> argument and simply assigns it to the <c>data</c> reference.
       So when we insert an <c>Object</c> into the list,
@@ -215,11 +215,11 @@ head = new Node(obj);
       since no traversal of the list is necessary.
       You just need to create a new <c>Node</c> with the <c>Object</c> as its data element and then link the new node into the head of the list:
     </p>
-<pre>
+ <program language="java"><input>
 Node newnode = new Node(obj);
 newnode.setNext(head);
 head = newnode;
-</pre>
+ </input></program>
     <p>
       See <xref ref="fig-insertions">Figure</xref>a for a graphical representation of this type of insertion.
     </p>
@@ -256,14 +256,14 @@ head = newnode;
     <p>
       Testing the list ADT follows the same strategy used in the
 <c>PhoneList</c> example.
-      However, one of the things we want to test is that \marginpar{Heterogeneous lists} we can indeed create lists of heterogeneous types<mdash/>lists that include
+      However, one of the things we want to test is that  we can indeed create lists of heterogeneous types<mdash/>lists that include
 <c>Integer</c> s mixed with <c>Float</c> s, mixed with other types of objects.
       The <c>main()</c> method in <xref ref="fig-testlistadt">Figure</xref> illustrates this feature.
     </p>
     <figure xml:id="fig-testlistadt">
       <caption>A series of tests for the <c>List</c>ADT.</caption>
-      \[27pc]
-<pre>
+      
+ <program language="java"><input>
 public static void main( String argv[] ) {
          // Create list and insert heterogeneous nodes
   List list = new List();
@@ -289,7 +289,7 @@ public static void main( String argv[] ) {
   System.out.println(" Removed " +o.toString());
   System.out.println("Generic List:");
   list.print();} // main()
-</pre>
+ </input></program>
     </figure>
     <principle>
       <title>EFFECTIVE DESIGN:The <c>List</c>ADT</title>
@@ -312,7 +312,7 @@ public static void main( String argv[] ) {
     </figure>
     <figure xml:id="fig-phonerecord">
       <caption>A <c>PhoneRecord</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public class PhoneRecord {
      private String name;
      private String phone;
@@ -329,10 +329,10 @@ public class PhoneRecord {
      public String getPhone( ) {
          return phone;
      }} // PhoneRecord
-</pre>
+ </input></program>
     </figure>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

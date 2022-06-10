@@ -62,7 +62,7 @@
         We will return to the problem of designing changes to this class in the next chapter after an in-depth discussion of method parameters and return values.
       </p>
       <p>
-        The <c>OneRowNim</c> object should manage two pieces of information \marginpar{What data do we need?} that vary as the game is played.
+        The <c>OneRowNim</c> object should manage two pieces of information  that vary as the game is played.
         One is the number of sticks remaining in the row and the other is which player has the next turn.
         Clearly, the number of sticks remaining corresponds to a positive integer that can be stored in a variable of type <c>int</c>. One suitable name for such a variable is <c>nSticks</c>. For this chapter,
         let us assume that the game starts with 7 sticks,
@@ -85,7 +85,7 @@
       <p>
         Now that we have decided what information the <c>OneRowNim</c> object should manage,
         we need to decide what actions it should be able to perform.
-        We should think of methods that would be needed to communicate with a user interface that is both prompting some human players as well as receiving moves from them. \marginpar{What methods do we need?} Clearly,
+        We should think of methods that would be needed to communicate with a user interface that is both prompting some human players as well as receiving moves from them.  Clearly,
         methods are needed for taking a turn in the game.
         If a message to a <c>OneRowNim</c> object has no argument to indicate the number of sticks taken,
         there will need to be three methods corresponding to taking one, two,
@@ -103,7 +103,7 @@
         Figure<nbsp/>2.16 is a UML class diagram that summarizes this <image width="73%" source="chptr02/onerow3.png"/> design of the <c>OneRowNim</c> class.
         Note that the methods are declared public (<m>+</m>) and will thereby form the interface for a <c>OneRowNim</c> object.
         These will be the methods that other objects will use to interact with it.
-        Similarly, we have followed the convention of designating an object's instance variables<mdash/>the \mbox{OneRowNim} 's instance variables<mdash/>be kept hidden from other objects,
+        Similarly, we have followed the convention of designating an object's instance variables<mdash/>the OneRowNim 's instance variables<mdash/>be kept hidden from other objects,
         and so we have designated them as private(<m>-</m>).
       </p>
     </subsubsection>
@@ -128,16 +128,16 @@
         <image width="73%" source="chptr02/onerow1.png"/> Thus,
         the class header for <c>OneRowNim</c> will look like:
       </p>
-<pre>
+ <program language="java"><input>
 public class OneRowNim  // Class header
 {                       // Beginning of class body
 }                       // End of class body
-</pre>
+ </input></program>
     </subsubsection>
     <subsubsection>
       <title>The Class's Instance Variables</title>
       <p>
-        The body of a class definition consists of \marginpar{Variables and methods} two parts:
+        The body of a class definition consists of  two parts:
         the class-level variables and the method definitions.
         A <term>class-level variable</term>
         is a variable whose definition applies to the entire class in which it is defined.
@@ -149,7 +149,7 @@ public class OneRowNim  // Class header
       </p>
       <figure xml:id="fig-form">
         <caption>A template for constructing a Java class definition.</caption>
-<pre>
+ <program language="java"><input>
 public class ClassName
 {  // Instance and class variables
      VariableDeclaration1
@@ -159,13 +159,13 @@ public class ClassName
      MethodDefinition1
      MethodDefinition2
      ...} // End of class
-</pre>
+ </input></program>
       </figure>
       <p>
         Although Java does not impose any particular order on variable and method declarations,
         in this book we'll define the class's class-level variables at the beginning of the class definition,
         followed by method definitions.
-        Class-level variables are distinguished from \marginpar{Class-level vs. local variables} local variables.
+        Class-level variables are distinguished from  local variables.
         A <term>local variable</term> is a variable that is defined within a method.
         Examples would be the variables <c>q</c> and <c>a</c> that were defined in the <c>Riddle(String q, String a)</c> constructor (Fig.
         <xref ref="fig-riddleclass2"></xref>).
@@ -212,7 +212,7 @@ public class ClassName
         
         <tabular>
           <row>
-            <cell>\multicolumn{3}{l}{\rule{27pc}{1pt}}</cell>
+            <cell><c>__________</c></cell>
           </row>
           <row>
             <cell>{Element}</cell>
@@ -220,7 +220,7 @@ public class ClassName
             <cell>{Rule}</cell>
           </row>
           <row>
-            <cell>[-4pt]\multicolumn{3}{l}{\rule{27pc}{0.5pt}}</cell>
+            <cell><c>__________</c></cell>
           </row>
           <row>
             <cell>Class</cell>
@@ -233,7 +233,7 @@ public class ClassName
             <cell>Accessible only within its package.</cell>
           </row>
           <row>
-            <cell>[-4pt]\multicolumn{3}{l}{\rule{27pc}{0.5pt}}</cell>
+            <cell><c>__________</c></cell>
           </row>
           <row>
             <cell>Instance variable</cell>
@@ -261,7 +261,7 @@ public class ClassName
             <cell>Accessible only within the package.</cell>
           </row>
           <row>
-            <cell>[-4pt]\multicolumn{3}{l}{\rule{27pc}{1pt}}</cell>
+            <cell><c>__________</c></cell>
           </row>
         </tabular>
         \endTB
@@ -279,10 +279,10 @@ public class ClassName
       <p>
         The <c>Riddle</c> class that we considered earlier has the following two examples of valid declarations of instance variables:
       </p>
-<pre>
+ <program language="java"><input>
 private String question;
 private String answer;
-</pre>
+ </input></program>
     </subsubsection>
     <subsubsection>
       <title>Class Level Variables for <c>OneRowNim</c></title>
@@ -296,13 +296,13 @@ private String answer;
         we will assign 7 as the initial value for <c>nSticks</c> and 1 as the initial value for <c>player</c>. If we add the declarations for our instance variable declarations to the class header for the <c>OneRowNim</c> class,
         we get the following:
       </p>
-<pre>
+ <program language="java"><input>
 public class OneRowNim
 {
   private int nSticks = 7;
   private int player = 1;
   //Method definitions go here} // OneRowNim
-</pre>
+ </input></program>
       <p>
         To summarize, despite its apparent simplicity,
         a class level variable declaration actually accomplishes five tasks:
@@ -338,10 +338,10 @@ public class OneRowNim
         The method header declares the name of the method and other general information about the method.
         The method body contains the executable statements that the method performs.
       </p>
-<pre>
+ <program language="java"><input>
 public void methodName()  // Method header
 {                  // Beginning of method body}                  // End of method body
-</pre>
+ </input></program>
     </subsubsection>
     <subsubsection>
       <title>The Method Header</title>
@@ -359,7 +359,7 @@ public void methodName()  // Method header
         
         <tabular>
           <row>
-            <cell>\multicolumn{4}{l}{\rule{27pc}{1pt}}</cell>
+            <cell><c>__________</c></cell>
           </row>
           <row>
             <cell>{MethodModifiers}<m>_{opt}</m></cell>
@@ -368,7 +368,7 @@ public void methodName()  // Method header
             <cell>{(FormalParameterList)}</cell>
           </row>
           <row>
-            <cell>[-4pt]\multicolumn{4}{l}{\rule{27pc}{0.5pt}}</cell>
+            <cell><c>__________</c></cell>
           </row>
           <row>
             <cell><c>public</c><c>static</c></cell>
@@ -394,7 +394,7 @@ public void methodName()  // Method header
             <cell><c>()</c>\cr</cell>
           </row>
           <row>
-            <cell>[-4pt]\multicolumn{4}{l}{\rule{27pc}{1pt}}
+            <cell><c>__________</c>
               \endUNTB</cell>
           </row>
         </tabular>
@@ -449,7 +449,7 @@ public void methodName()  // Method header
       <figure xml:id="fig-ornmheaders">
         <caption>The Instance variables and method headers for the <c>
 OneRowNim</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public class OneRowNim
 { private int nSticks = 7; // Start with 7 sticks.
   private int player = 1;  // Player 1 plays first.
@@ -457,7 +457,7 @@ public class OneRowNim
   public void takeTwo(){ } //  to be defined.
   public void takeThree(){ }
   public void report(){ }} //OneRowNim class
-</pre>
+ </input></program>
       </figure>
       <p>
         associated with a particular instance of <c>OneRowNim</c>. That is,
@@ -478,14 +478,14 @@ public class OneRowNim
     <subsubsection>
       <title>The Method Body</title>
       <p>
-        The body of a method definition is a block of Java \marginpar{Designing a method is an application of the encapsulation principle.} statements enclosed by braces, , which are executed in sequence when the method is called.
+        The body of a method definition is a block of Java  statements enclosed by braces, , which are executed in sequence when the method is called.
         The description of the action required of the <c>takeOne()</c> method is typical of many methods that change the state of an object.
         The body of the <c>takeOne()</c> method should use a series of assignment statements to reduce the value stored in <c>nSticks</c> by one and change the value in <c>player</c> from 2 to 1 or from 1 to 2.
         The first change is accomplished in a straightforward way by the assignment:
       </p>
-<pre>
+ <program language="java"><input>
 nSticks = nSticks - 1;
-</pre>
+ </input></program>
       <p>
         This statement says subtract 1 from the value stored in <c>nSticks</c> and assign the new value back to <c>nSticks</c>.
       </p>
@@ -498,21 +498,21 @@ nSticks = nSticks - 1;
         Therefore, the new value of <c>player</c> is equal to 3 minus its current value.
         Writing this as an assignment we have:
       </p>
-<pre>
+ <program language="java"><input>
 player = 3 - player;
-</pre>
+ </input></program>
       <p>
         One can easily verify that this clever assignment assigns 2 to <c>player</c> if its current value is 1 and assigns 1 to it if its current value is 2.
         In effect, this assignment will toggle the value off <c>player</c> between 1 and 2 each time it is executed.
         In the next chapter we will introduce the <c>if-else</c> control structure that would allow us to accomplish this same toggling action in a more straightforward manner.
         The complete definition of <c>takeOne()</c> method becomes:
       </p>
-<pre>
+ <program language="java"><input>
 public void takeOne()
 {
    nSticks = nSticks - 1;  // Take one stick
    player = 3 - player;    // Change to other player}
-</pre>
+ </input></program>
       <p>
         The <c>takeTwo()</c> and <c>takeThree()</c> methods are completely analogous to the <c>takeOne()</c> method with the only difference being the amount subtracted from <c>nSticks</c>.
       </p>
@@ -521,18 +521,18 @@ public void takeOne()
         the values should be clearly labeled.
         Thus the body of <c>report()</c> could contain:
       </p>
-<pre>
+ <program language="java"><input>
 System.out.println("Number of sticks left: " + nSticks);
 System.out.println("Next turn by player " + player);
-</pre>
+ </input></program>
       <p>
         This completes the method bodies of the <c>OneRowNim</c> class.
         The completed class definition is shown in <xref ref="fig-orndef">Figure</xref>.
       </p>
       <figure xml:id="fig-orndef">
         <caption>The <c>OneRowNim</c> class definition.</caption>
-        \[27pc]
-<pre>
+        
+ <program language="java"><input>
 public class OneRowNim
 { private int nSticks = 7; // Start with 7 sticks.
   private int player = 1;  //Player 1 plays first.
@@ -552,7 +552,7 @@ public class OneRowNim
   { System.out.println("Number of sticks left: " + nSticks);
     System.out.println("Next turn by player " + player);
   }   // report()} // OneRowNim1 class
-</pre>
+ </input></program>
       </figure>
       <p>
         We will discuss alternative methods for this class in the next chapter.
@@ -605,7 +605,7 @@ public class OneRowNim
       It is now an easy task to convert the steps in the pseudocode outline into Java statements.
       The resulting <c>main()</c> method is shown with the complete definition of the <c>OneRowNimTester</c> class:
     </p>
-<pre>
+ <program language="java"><input>
 public class OneRowNimTester
 { public static void main(String args[])
   {   OneRowNim1 game = new OneRowNim();
@@ -617,11 +617,11 @@ public class OneRowNimTester
       game.takeOne();
       game.report();
   } //main()}
-</pre>
+ </input></program>
     <p>
       When it is run, <c>OneRowNimTester</c> produces the following output:
     </p>
-<pre>
+ <program language="java"><input>
 Number of sticks left: 7
     Next turn by player 1
     Number of sticks left: 4
@@ -630,12 +630,13 @@ Number of sticks left: 7
     Next turn by player 1
     Number of sticks left: 0
     Next turn by player 2
-</pre>
+ </input></program>
     <p>
       This output indicates that player 1 removed the final stick and so player 2 is the winner of this game.
     </p>
-    <p>
-      \secEXRHone{Self-Study Exercises}
+
+      </subsection><subsection><title>Self-Study Exercises</title>
+      <p>
       <ol>
         <li>
           <p>
@@ -712,7 +713,7 @@ Number of sticks left: 7
       Recall that if a <c>void</c>
           <idx><h>void</h></idx>
       method does not contain a <c>return</c> statement,
-      then control will \marginpar{Default returns} automatically return to the calling statement after the invoked method executes its last statement.
+      then control will  automatically return to the calling statement after the invoked method executes its last statement.
     </p>
   </subsection>
   <subsection xml:id="subsect-trace">
@@ -728,7 +729,7 @@ Number of sticks left: 7
     </p>
     <figure xml:id="fig-trace">
       <caption>A trace of the <c>OneRowNim</c> program.</caption>
-<pre>
+ <program language="java"><input>
 public class OneRowNim
 2 {  private int nSticks = 7; // Start with 7 sticks.
 3    private int player = 1;  //Player 1 plays first.
@@ -759,7 +760,7 @@ public class OneRowNim
 22       game.report();
 23     } //main()
    } //OneRowNim1 class
-</pre>
+ </input></program>
     </figure>
     <p>
       in the <c>OneRowNimTester</c> class.
@@ -778,10 +779,10 @@ public class OneRowNim
 <c>OneRowNim</c> class with an initial state shown in Figure<nbsp/>2.23.
       Executing statement 4 causes control to shift to the <c>report()</c> method where statements 5 and 6 use <c>System.out.println()</c> to write the following statements to the console.
     </p>
-<pre>
+ <program language="java"><input>
 Number of sticks left: 7
     Next turn by player 1
-</pre>
+ </input></program>
     <p>
       Control shifts back to statement 7 in the <c>main()</c> method,
       which calls the <c>takeThree()</c> method,
@@ -818,7 +819,7 @@ Number of sticks left: 7
             These methods constrain the way users can interact with <c>OneRowNim</c> objects and ensures that <c>OneRowNim</c> instances remain in a valid state.
             Those are the main purposes of a good interface.
             Generality and Extensibility.
-            There is little in our design of \mbox{OneRowNim} that limits its use and its extensibility.
+            There is little in our design of OneRowNim that limits its use and its extensibility.
             Moreover, as we will see later,
             we can create several different kinds of user interfaces which interact with <c>OneRowNim</c> objects.
           </p>

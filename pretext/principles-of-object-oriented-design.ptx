@@ -123,20 +123,20 @@
         <p>
           Running the <c>TestPrint</c> program will produce the output shown here.
           It is clear that the inherited <c>toString()</c> method is used by <c>println()</c> when printing a <c>TestPrint</c> object.
-<pre>
+ <program language="java"><input>
 56.0
  TestPrint@be2d65
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           If you override the <c>toString()</c> method in <c>TestPrint</c>, you should get something like the output shown here,
           depending on how you code <c>toString()</c>. It is clear that the <c>toString()</c> method is used polymorphously by <c>println()</c>.
-<pre>
+ <program language="java"><input>
 56.0
  Hello from TestPrint
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -144,9 +144,9 @@
           The output produced when constructing objects of type <em>A</em>
           and <c>B</c> in the order shown in the exercise would be as follows,
           with each letter occurring on a separate line:
-<pre>
+ <program language="java"><input>
 A B B
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -154,24 +154,24 @@ A B B
           The new implementation of <c>B</c>'s <c>method()</c> will invoke <c>A</c>'s version of the method before printing <em>B</em>.
           This will print
           <q>A A B A B</q>.
-<pre>
+ <program language="java"><input>
 void method () {
      super.method();
      System.out.println("B");
  }
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           Give the definitions of classes <c>A</c> and <c>B</c> in the exercise,
           the marked statements would be invalid:
-<pre>
+ <program language="java"><input>
 A a = new B();   // Valid a B is an A
 a = new A();     // Ok
 B b = new A();   // Invalid. An A is not necessarily a B
 b = new B();     // OK
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -183,7 +183,7 @@ b = new B();     // OK
       <li>
         <p>
           Definition of an <c>Pig</c> subclass of <c>Animal</c>:
-<pre>
+ <program language="java"><input>
 public class Pig extends Animal {
     public Pig() {
         kind = "pig";
@@ -191,14 +191,14 @@ public class Pig extends Animal {
     public String speak() {
         return "oink";
     }}
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           If polymorphism was not used in our design,
           the <c>talk()</c> method would have to be modified to the following in order to accommodate a <c>Pig</c> subclass:
-<pre>
+ <program language="java"><input>
 public String talk(Animal a) {
   if (a instanceof Cow)
      return "I am a " + kind + " and I go " + a.moo();
@@ -208,34 +208,34 @@ public String talk(Animal a) {
      return "I am a " + kind + " and I go " + a.oink();
    else
      return "I don't know what I am";}
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           Code to swap two <c>boolean</c> variables:
-<pre>
+ <program language="java"><input>
 boolean temp = b1; // Save b1's value
  b1 = b2;           // Change b1 to b2
  b2 = temp;         // Change b2 to b1's original value
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           Creating a <c>ToggleButton</c> that can be used to deal or collect cards:
-<pre>
+ <program language="java"><input>
 private ToggleButton dealer =
             new ToggleButton("deal","collect");
  add(dealer);
  dealer.addActionListener(this);
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           Modify the <c>Caesar</c> class so that it will allow various-sized shifts to be used.
-<pre>
+ <program language="java"><input>
 private int shift;
 public void setShift(int n) { shift = n;    }
 public int getShift()       { return shift; }
@@ -243,7 +243,7 @@ public int getShift()       { return shift; }
 ch = (char)('a' + (ch -'a'+ shift) % 26); // Shift
 // Modification to decode():
 ch = (char)('a' + (ch -'a'+ (26-shift)) % 26); // Shift
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -255,7 +255,7 @@ ch = (char)('a' + (ch -'a'+ (26-shift)) % 26); // Shift
           <q>hello</q>. Its letters are indexed from 0 to 4.
           The following table shows how the expression <c>((k+2) % 5)</c> will rearrange the letters as <em>k</em>
           varies from 0 to 4:
-<pre>
+ <program language="java"><input>
 k  charAt(k)  (k+2) % 5   charAt((k+2) % 5)
     -------------------------------------------
     0  'h'          2          'l'
@@ -269,13 +269,13 @@ public String encode(String word) {
     for (int k=0; k &lt; word.length(); k++)
         result.append(word.charAt((k+2) % word.length()));
     return result.toString();}
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
           A <c>NimPlayer</c> class that plays the optimal <c>OneRowNim</c> game would be identical to the <c>NimPlayerBad</c> class except the <c>move():int</c> method would be replaced with the following implementation:
-<pre>
+ <program language="java"><input>
 public int move() {
     int sticksLeft = game.getSticks();
     if (sticksLeft % (game.MAX_PICKUP + 1) != 1)
@@ -285,7 +285,7 @@ public int move() {
          return 1 + (int)(Math.random() * maxPickup);
     }
  }
-</pre>
+ </input></program>
         </p>
       </li>
     </ul>
@@ -302,38 +302,38 @@ public int move() {
       <ol>
         <li>
           <p>
-            A method that lacks a body is an \rule{40pt}{0.5pt} method.
+            A method that lacks a body is an <c>__________</c> method.
           </p>
         </li>
         <li>
           <p>
-            An \rule{40pt}{0.5pt} is like a class except that it contains only instance methods,
+            An <c>__________</c> is like a class except that it contains only instance methods,
             no instance variables.
           </p>
         </li>
         <li>
           <p>
-            Two ways for a class to inherit something in Java is to \rule{40pt}{0.5pt} a class and \rule{40pt}{0.5pt} an interface.
+            Two ways for a class to inherit something in Java is to <c>__________</c> a class and <c>__________</c> an interface.
           </p>
         </li>
         <li>
           <p>
-            Instance variables and instance methods that are declared \rule{40pt}{0.5pt} or \rule{40pt}{0.5pt} are inherited by the subclasses.
+            Instance variables and instance methods that are declared <c>__________</c> or <c>__________</c> are inherited by the subclasses.
           </p>
         </li>
         <li>
           <p>
-            An object can refer to itself by using the \rule{40pt}{0.5pt} keyword.
+            An object can refer to itself by using the <c>__________</c> keyword.
           </p>
         </li>
         <li>
           <p>
-            If a GUI class intends to handle <c>ActionEvent</c> s, it must implement the \rule{40pt}{0.5pt} interface.
+            If a GUI class intends to handle <c>ActionEvent</c> s, it must implement the <c>__________</c> interface.
           </p>
         </li>
         <li>
           <p>
-            A \rule{40pt}{0.5pt} method is one that does different things depending upon the object that invokes it.
+            A <c>__________</c> method is one that does different things depending upon the object that invokes it.
           </p>
         </li>
       </ol>
@@ -365,9 +365,9 @@ public int move() {
     <li>
       <p>
         Look up the documentation for the <c>JButton</c> class on Sun's Web site:
-<pre>
+ <program language="java"><input>
 http://java.sun.com/j2se/1.5.0/docs/api/
-</pre>List the names of all the methods that would be inherited by the <c>ToggleButton</c> subclass that we defined in this chapter.
+ </input></program>List the names of all the methods that would be inherited by the <c>ToggleButton</c> subclass that we defined in this chapter.
       </p>
     </li>
     <li>
@@ -430,10 +430,10 @@ http://java.sun.com/j2se/1.5.0/docs/api/
         You place the keyword at the beginning of the alphabet,
         and then fill out the other 21 slots with remaining letters,
         giving the following alphabet:
-<pre>
+ <program language="java"><input>
 Cipher alphabet:   zebracdfghijklmnopqstuvwxy
 Plain alphabet:    abcdefghijklmnopqrstuvwxyz
-</pre>Design and implement an <c>Alphabet</c> class for constructing these kinds of substitution alphabets.
+ </input></program>Design and implement an <c>Alphabet</c> class for constructing these kinds of substitution alphabets.
         It should have a single public method that takes a keyword <c>String</c> as an argument and returns an alphabet string.
         Note that an alphabet cannot contain duplicate letters,
         so repeated letters in a keyword like

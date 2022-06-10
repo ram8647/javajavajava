@@ -9,9 +9,9 @@
     and the ranks of cards in a deck of cards.
     The following declaration of <c>Season</c> enumerated type is an example used by the Sun online documentation.
   </p>
-<pre>
+ <program language="java"><input>
 public enum Season {spring, summer, fall, winter}
-</pre>
+ </input></program>
   <p>
     Compiling a file that contains only this statement will create a
 <c>Season.class</c> file that defines a Java type just in the same way that compiling class definitions does.
@@ -20,11 +20,11 @@ public enum Season {spring, summer, fall, winter}
     For example,
     the following statements are valid statements in a method definition in another class:
   </p>
-<pre>
+ <program language="java"><input>
 Season s1 = winter;
 if (s1 == spring)
     System.out.println(s1);
-</pre>
+ </input></program>
   <p>
     Note that the values of enumerated types can be used in assignment statements,
     equality relations,
@@ -39,7 +39,7 @@ if (s1 == spring)
     if one wanted to represent the four seasons you would have to do it inside a definition of a class,
     say of a class named <c>Calendar</c>. Such a representation might look like:
   </p>
-<pre>
+ <program language="java"><input>
 public class Calendar {
     public static final int SPRING = 0;
     public static final int SUMMER = 1;
@@ -47,16 +47,16 @@ public class Calendar {
     public static final int WINTER = 3;
     // Other Calendar definitions
     } // Calendar
-</pre>
+ </input></program>
   <p>
     In addition to being a lengthier declaration,
     note that other classes that wish to refer to this representation would have to use notation something like:
   </p>
-<pre>
+ <program language="java"><input>
 int s1 = Calendar.WINTER;
 if (s1 == Calendar.SPRING)
     System.out.println(s1);
-</pre>
+ </input></program>
   <p>
     In addition to being more awkward,
     note that the <c>println()</c> call will print out an integer in this case.
@@ -71,7 +71,7 @@ if (s1 == Calendar.SPRING)
     lets consider using the <c>int</c> representation above in a method definition that describes the start date of a given season.
     Code for such a method would look something like:
   </p>
-<pre>
+ <program language="java"><input>
 public static String startDate(int s){
         switch(s){
         case SPRING : return "Vernal Equinox";
@@ -81,7 +81,7 @@ public static String startDate(int s){
         } // switch
         return "error";
     } // startDate()
-</pre>
+ </input></program>
   <p>
     This method has a problem referred to as not being <term>typesafe</term>.
     We would want the <c>startDate()</c> method to be called only with an argument equal to an <c>int</c> value of 0, 1, 2, or 3.
@@ -93,7 +93,7 @@ public static String startDate(int s){
   </p>
   <figure xml:id="fig-calendar">
     <caption>A Calendar class using the <c>Season</c>.</caption>
-<pre>
+ <program language="java"><input>
 public class Calendar {
     public static String startDate(Season s){
         switch(s){
@@ -108,7 +108,7 @@ public class Calendar {
         for (Season s : Season.values())
             System.out.println(s + " - " + startDate(s));
     } // printDates()} // Calendar
-</pre>
+ </input></program>
   </figure>
   <p>
     Note that the parameter of <c>startDate()</c> is of type <c>Season</c> and so the Java compiler can check that call to this method have an argument of this type.
@@ -125,12 +125,12 @@ public class Calendar {
     prints out the type name followed by a dash followed by the <c>String</c> computed by the <c>startDate()</c> method.
     The output when the <c>printDates()</c> method is called is given below:
   </p>
-<pre>
+ <program language="java"><input>
 spring - Vernal Equinox
 summer - Summer Solstice
 fall - Autumnal Equinox
 winter - Winter Solstice
-</pre>
+ </input></program>
   <p>
     The <c>for-in</c> loop provides a very nice way to iterate through the values of any enumerated type.
     You may wish to write a corresponding method for the earlier <c>int</c> representation of the seasons for a comparison.

@@ -5,7 +5,7 @@
     <em>switch/break structure</em>.
     It is meant to provide a shorthand way of coding the following type of multiway selection structure:
   </p>
-<pre>
+ <program language="java"><input>
 if (integralVar == integralValue1)
      // some statements
 else if (integralVar == integralValue2)
@@ -13,7 +13,7 @@ else if (integralVar == integralValue2)
 else if (integralVar == integralValue3)
      // some statements
 else // some statements
-</pre>
+ </input></program>
   <p>
     Note that each of the conditions in this case involves the equality of an integral variable and an integral value.
     This type of structure occurs so frequently in programs that most languages contain statements specially designed to handle it.
@@ -22,7 +22,7 @@ else // some statements
   <p>
     The <c>switch</c> is designed to select one of several actions depending on the value of some integral expression:
   </p>
-<pre>
+ <program language="java"><input>
 switch (integralExpression)
 {  case integralValue1:
        // some statements
@@ -32,10 +32,10 @@ switch (integralExpression)
        // some statements
    default:
        some statements}
-</pre>
+ </input></program>
   <p>
     The <em>integralExpression</em>
-    must evaluate to a primitive integral value of type <c>byte</c>, <c>short</c>, <c>int</c>, <c>char</c>, \marginpar{\itIntegral expression} or <c>boolean</c>. It may not be a <c>long</c>, <c>float</c>, <c>double</c>, or a class type.
+    must evaluate to a primitive integral value of type <c>byte</c>, <c>short</c>, <c>int</c>, <c>char</c>,  or <c>boolean</c>. It may not be a <c>long</c>, <c>float</c>, <c>double</c>, or a class type.
     The <em>integralValues</em> must be literals or <c>final</c> variables.
     They serve as labels in the one or more case clauses that make up the <c>switch</c> statement body.
     The <c>default</c> clause is optional,
@@ -59,7 +59,7 @@ switch (integralExpression)
   <p>
     Consider the following example:
   </p>
-<pre>
+ <program language="java"><input>
 int m = 2;
 switch (m)
 {  case 1:
@@ -70,21 +70,21 @@ switch (m)
       System.out.print(" m = 3");
    default:
       System.out.print(" default case");}
-</pre>
+ </input></program>
   <p>
     In this case, because <em>m</em>
     equals 2, the following output would be produced:
   </p>
-<pre>
+ <program language="java"><input>
 m = 2 m = 3 default case
-</pre>
+ </input></program>
   <p>
     Obviously, this output does not match the following if-else multiway selection structure,
         <idx><h>multiway-selection structure</h></idx>
     which would output,
     simply, <c>m = 2</c>:
   </p>
-<pre>
+ <program language="java"><input>
 int m = 2;
 if (m == 1)
      System.out.print(" m = 1");
@@ -94,7 +94,7 @@ else if (m == 3)
      System.out.print(" m = 3");
 else
      System.out.print(" default case");
-</pre>
+ </input></program>
   <p>
     The reason for this disparity is that the <c>switch</c> executes <em>all</em>
     statements following the label that matches the value of the
@@ -105,7 +105,7 @@ else
     In order to use the switch as a multiway selection,
     you must force it to <c>break<idx><h>break</h></idx></c> out of the case clause after executing that clause's statements:
   </p>
-<pre>
+ <program language="java"><input>
 int m = 2;
 switch (m)
 {  case 1:
@@ -119,11 +119,11 @@ switch (m)
        break;
    default:
        System.out.print(" default case");}
-</pre>
+ </input></program>
   <p>
     In this example,
     the <c>break</c> statement causes control to pass to the end of the <c>switch</c>, with the effect being that one and only one case will be executed within the <c>switch</c>. Thus,
-    the output of this code segment will be simply \mbox{m = 2} , matching exactly the behavior of the multiway if-else selection structure (Fig.
+    the output of this code segment will be simply m = 2 , matching exactly the behavior of the multiway if-else selection structure (Fig.
     <xref ref="fig-multiwayswitch"></xref>).
   </p>
   <figure xml:id="fig-multiwayswitch">
@@ -154,13 +154,13 @@ switch (m)
     </p>
   </principle>
   <p>
-    \secEXRHone{Self-Study Exercises}
+    </subsection><subsection><title>Self-Study Exercises</title>
     <ol>
       <li>
         <p>
           Identify any errors in the following switch structures (if there is no error,
           specify the output):
-<pre>
+ <program language="java"><input>
 (a) int k = 0;
     switch (k)
     case 0:
@@ -172,8 +172,8 @@ switch (m)
     default:
         System.out.println("default");
         break;
-</pre>
-<pre>
+ </input></program>
+ <program language="java"><input>
 (b) int k = 0;
     switch (k + 1)
     {   case 0:
@@ -186,8 +186,8 @@ switch (m)
             System.out.println("default");
             break;
     }
-</pre>\
-<pre>
+ </input></program>\
+ <program language="java"><input>
 (c) int k = 6;
     switch (k / 3.0)
     {   case 2:
@@ -200,7 +200,7 @@ switch (m)
             System.out.println("default");
             break;
     }
-</pre>
+ </input></program>
         </p>
       </li>
       <li>

@@ -4,7 +4,7 @@
     <p>
       A <term>fractal</term> is a geometric shape that exhibits a recursive structure.
       When it is divided into parts,
-      each part is a \marginpar{Fractal patterns} smaller version of the whole.
+      each part is a  smaller version of the whole.
       Fractal patterns occur in many situations and places.
       For example,
       if you look at a graph of the Dow Jones Industrial Average (DJIA) over the past year,
@@ -38,16 +38,16 @@
       The recursive case, if more divisions are desired,
       is the drawing of smaller patterns within the square:
     </p>
-<pre>
+ <program language="java"><input>
 Draw a square.
 If more divisions are desired
     draw a smaller version of pattern within square.
-</pre>
+ </input></program>
     <p>
       An important consideration for this algorithm is to specify precisely what we mean by
       <q>if more divisions are desired.</q>
       In other words,
-      how \marginpar{How should we represent the problem?} exactly do we control the recursion?
+      how  exactly do we control the recursion?
       In our earlier definition of the pattern,
       we used the length of the side to control the algorithm.
       When <m>side \geq 5</m>, we recursed.
@@ -55,18 +55,18 @@ If more divisions are desired
     <p>
       Another more general way to do this is to describe the fractal structure in terms of its <em>levels</em>.
       For nested squares,
-      the \marginpar{Levels of recursion} level-zero pattern would be just the basic square shape (Fig.<nbsp/>12.21).
+      the  level-zero pattern would be just the basic square shape (Fig.<nbsp/>12.21).
       A level-one pattern would be the basic <image width="73%" source="chptr12/boxes2.png"/> square shape plus an inner square,
       and so on.
       The higher the level, the more subdividing we do.
       Therefore, one way to control the recursion is to use a <em>level</em>
       parameter as the <em>recursion parameter</em><mdash/>as the parameter that controls the recursion:
     </p>
-<pre>
+ <program language="java"><input>
 Draw a square.
 If the level is greater than 0,
     draw a smaller version of pattern within square.
-</pre>
+ </input></program>
     <p>
       What other parameters will we need for this method?
       If we're going to draw a rectangle,
@@ -90,8 +90,8 @@ If the level is greater than 0,
     </p>
     <figure xml:id="fig-drawboxes">
       <caption>The <c>drawBoxes()</c> method.</caption>
-      \[26.5pc]
-<pre>
+      
+ <program language="java"><input>
 /**
  * drawBoxes()---recursively draws pattern of nested
  *  squares with top left corner of outer square at
@@ -107,7 +107,7 @@ private void drawBoxes(Graphics g, int level,
     drawBoxes(g, level - 1, newLocX, newLocY,
                                    side - 2 * delta, delta);
   } // if} // drawBoxes()
-</pre>
+ </input></program>
     </figure>
     <p>
       Finally, note the use of the <c>delta</c> parameter,
@@ -128,7 +128,7 @@ private void drawBoxes(Graphics g, int level,
       </p>
     </principle>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -179,11 +179,11 @@ private void drawBoxes(Graphics g, int level,
       If we follow the same strategy we used in the nested squares example,
       we get the following algorithm:
     </p>
-<pre>
+ <program language="java"><input>
 Base case:       Draw a triangle.
 Recursive Case:  If more divisions are desired,
      draw three smaller gaskets within the triangle.
-</pre>
+ </input></program>
     <p>
       For this pattern the base case is the drawing of the basic triangle.
       The recursive cases, if more divisions are desired,
@@ -193,14 +193,14 @@ Recursive Case:  If more divisions are desired,
     </p>
     <p>
       If we're going to draw a triangle shape,
-      we need the coordinates of \marginpar{What other parameters do we need?} its three vertices<mdash/>that is,
+      we need the coordinates of  its three vertices<mdash/>that is,
       an <em>x-</em> and <em>y-</em>coordinate for each vertex.
       Taken together,
       these design considerations suggest the method definition shown in <xref ref="fig-gasket">Figure</xref>.
     </p>
     <figure xml:id="fig-gasket">
       <caption>The <c>drawGasket()</c> method.</caption>
-<pre>
+ <program language="java"><input>
 /**
  * drawGasket()---recursively draws the Sierpinski gasket
  *  pattern, with points (p1X, p1Y),(p2X, p2Y),(p3X, p3Y)
@@ -220,12 +220,12 @@ private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
     drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
     drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
   } // if} // drawGasket()
-</pre>
+ </input></program>
     </figure>
     <p>
       As we described earlier,
       we use the <c>level</c> parameter as the recursion parameter for this method,
-      which controls the \marginpar{Levels of recursion} recursion.
+      which controls the  recursion.
       Note that each of the three recursive calls decreases the
 <c>level</c> by 1.
       This will ensure that eventually <c>level</c> will equal 0, and recursion will stop.
@@ -242,11 +242,11 @@ private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
       Thus, the triangle on the
       <q>left</q>
       uses the left vertex <c>(p1X,p1Y)</c>, and the midpoints of the other two lines from <c>(p1X,p1Y)</c> to <c>(p2X,p2Y)</c> and from <c>(p1X,p1Y)</c> to <c>(p3X,p3Y)</c>. As you might remember from high school math,
-      the formula for computing the midpoint of the line segment <m>(x1,y1)</m> to <m>(x2,y2)</m> is \marginpar{Midpoint of a line}
+      the formula for computing the midpoint of the line segment <m>(x1,y1)</m> to <m>(x2,y2)</m> is 
     </p>
-<pre>
+ <program language="java"><input>
 ( (x1 + x2) / 2, (y1 + y2) / 2 )
-</pre>
+ </input></program>
     <p>
       This formula is used repeatedly to calculate the vertices of the three smaller gaskets.
     </p>

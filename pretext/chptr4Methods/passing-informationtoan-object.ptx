@@ -1,6 +1,6 @@
 <section xml:id="passing-informationtoan-object">
   <title>Passing Information to an Object</title>
-  <introduction>
+  
     <p>
       One convention of object-oriented programming is to provide <c>public</c> methods to
       <em>set</em> and <em>get</em>
@@ -45,12 +45,14 @@
       All three of these method change the values of the instance variables <c>nSticks</c> and <c>player</c>. All three methods have very similar bodies.
       The definition of the <c>takeOne()</c> is:
     </p>
-<pre>
+<program language="java">
+<input>
 public void takeOne()
 {   nSticks = nSticks - 1;
     player = 3 - player;
- }
-</pre>
+}
+</input>
+</program>
     <p>
       The only difference in the bodies of the other two methods is that they subtract 2 and 3 from <c>nSticks</c> instead of 1.
       Instead of having three,
@@ -62,7 +64,8 @@ public void takeOne()
     <p>
       A <term>formal parameter</term>,
       or more simply, <term>parameter</term>,
-      is a variable used to pass \marginpar{Formal parameter} information into a method when the method is invoked.
+      is a variable used to pass formal parameter information into a 
+      method when the method is invoked.
       The <em>type</em> and <em>variable name</em>
       of the formal parameter must appear in the
       <em>formal parameter list</em>
@@ -83,11 +86,12 @@ public void takeOne()
     <p>
       Consider the following definition for a <c>takeSticks()</c> method:
     </p>
-<pre>
+<program language="java"><input>
 public void takeSticks(int num)
 {    nSticks = nSticks - num;
-     player = 3 - player;}
-</pre>
+     player = 3 - player;
+}
+</input></program>
     <p>
       Notice that executing the body of <c>takeSticks()</c> when the parameter <c>num</c> stores the value 1 accomplishes precisely the same task as executing <c>takeOne()</c>. If, instead,
       a value of 2 or 3 is stored in <c>num</c>, then calling the method acts like <c>takeTwo()</c> or <c>takeThree()</c> respectively.
@@ -99,10 +103,12 @@ public void takeSticks(int num)
       to allow the starting number of sticks to be set for an instance of <c>OneRowNim</c>. For this,
       we could define:
     </p>
-<pre>
+<program language="java"><input>
 public void setSticks(int sticks)
-{    nSticks = sticks;} // setSticks()
-</pre>
+{    
+  nSticks = sticks;
+} // setSticks()
+</input></program>
     <p>
       As we will see in <xref ref="sec-constructors">Section</xref>,
       we can also define a constructor method that can be used,
@@ -116,20 +122,21 @@ public void setSticks(int sticks)
       if we wanted a method for <c>OneRowNim</c> that specified both the number of sticks for the start of a game and which player takes a turn first,
       it could be defined:
     </p>
-<pre>
+<program language="java"><input>
 public void setGame(int sticks, int starter)
 {   nSticks = sticks;
-    player = starter; } // setGame()
-</pre>
-    <p>
-      \subsubsection*{The Scope of Parameters, Variables, and Methods}
-    </p>
+    player = starter; 
+} // setGame()
+</input></program>
+
+      <subsection><title>The Scope of Parameters, Variables, and Methods</title>
+  
     <p>
       The bodies of the mutator methods in the previous section make use of both instance variables and parameters.
       It is important to note that there is a difference in where these two types of variables can be used.
       The <term>scope</term>
           <idx><h>scope</h></idx>
-      of a variable \marginpar{Scope} or method refers to where it can be used in a program.
+      of a variable scope or method refers to where it can be used in a program.
     </p>
     <p>
       A parameter's scope
@@ -137,7 +144,7 @@ public void setGame(int sticks, int starter)
       is limited to the body of the method in which it is declared.
       Variables that are declared in the body of a method have scope which extends from the point where they are declared to the end of the block of code in which they are declared.
       Parameters are local variables which are declared in the parameter list of a method's header and which have initial values specified by the arguments in a method call.
-      The scope of a parameter is the same as the scope of a variable declared at the very beginning of the body of a method. \marginpar{Local scope} Once the flow of execution leaves a method,
+      The scope of a parameter is the same as the scope of a variable declared at the very beginning of the body of a method.  Once the flow of execution leaves a method,
       its parameters and other local variables cease to exist.
       The scope of local variables is referred to as <term>local scope</term>.
           <idx><h>local scope</h></idx>
@@ -161,17 +168,17 @@ public void setGame(int sticks, int starter)
       They can be used in the body of any method and in the expressions that assign initial values to class level variables.
       There are two restrictions to remember.
       First, instance variables and instance methods cannot be used in the body of a class method,
-      one modified with <c>static</c>, unless an instance of the class is created there and then the dot notation of qualified names must be used to \marginpar{Class scope} refer to the variable or method.
+      one modified with <c>static</c>, unless an instance of the class is created there and then the dot notation of qualified names must be used to  refer to the variable or method.
       This is because class methods are called without reference to a particular instance of the class.
       The
 <c>main()</c> method of the <c>OneRowNim</c> class that we defined in the previous chapter is an example of such a class method.
       In that case,
       to test the instance methods of <c>OneRowNim</c> we first created an instance of <c>OneRowNim</c> and used it to call its instance methods:
     </p>
-<pre>
+<program language="java"><input>
 OneRowNim game = new OneRowNim(); // Create instance
 game.report();   // Call an instance method
-</pre>
+</input></program>
     <p>
       The second restriction involved in class scope is that one class level variable can be used in the expression that initializes a second class level variable only if the first is declared before the second.
       There is no similar restriction on methods.
@@ -191,7 +198,7 @@ game.report();   // Call an instance method
       methods and class level variables can be referred to within the same class by their simple names,
       with just the method
       (or variable)
-      name itself, \marginpar{Simple vs. qualified names} rather than by their qualified names,
+      name itself,  rather than by their qualified names,
       with the dot operator.
       Thus, in
 <c>OneRowNim</c>, we can refer to <c>nSticks</c> and <c>report()</c> in the bodies of other instance methods.
@@ -218,7 +225,7 @@ game.report();   // Call an instance method
         It would be a syntax error to refer to a method's parameters or other local variables from outside the method.
       </p>
     </principle>
-  </introduction>
+  </subsection>
   <subsection>
     <title>Arguments and Parameters</title>
     <p>
@@ -227,8 +234,8 @@ game.report();   // Call an instance method
     </p>
     <figure xml:id="fig-ornclass2">
       <caption>The <c>OneRowNim</c> class definition with <c>takeSticks()</c> method.</caption>
-      \[26.5pc]
-<pre>
+ 
+<program language="java"><input>
 public class OneRowNim
 { private int nSticks = 7; // Start with 7 sticks
   private int player = 1;  //Player 1 plays first
@@ -240,7 +247,7 @@ public class OneRowNim
   { System.out.println("Number of sticks left: " + nSticks);
     System.out.println("Next turn by player " + player);
   }   // report()} //OneRowNim1 class
-</pre>
+</input></program>
     </figure>
     <p>
       single method, <c>takeSticks()</c>, that can be used to take away a variable number of sticks,
@@ -261,10 +268,10 @@ public class OneRowNim
       In order to effect this action,
       we would use the following statements:
     </p>
-<pre>
+<program language="java"><input>
 OneRowNim game = new OneRowNim();
 game.takeSticks(3);
-</pre>
+</input></program>
     <p>
       Because the definition of <c>takeSticks()</c> includes a single <c>int</c> parameter,
       we must supply a single <c>int</c> value
@@ -276,10 +283,10 @@ game.takeSticks(3);
       We can supply any expression or variable that evaluates to an <c>int</c> value.
       For example:
     </p>
-<pre>
+<program language="java"><input>
 int val = 7 - 5;
 game.takeSticks(val);
-</pre>
+</input></program>
     <p>
       In this case,
       the value being passed to <c>takeSticks()</c> is 2, the value that <c>val</c> has at the time the method call is made.
@@ -289,13 +296,13 @@ game.takeSticks(val);
 <c>int</c> to <c>takeSticks()</c>. For example,
       each of the following invocations of <c>takeSticks()</c> results in a syntax error:
     </p>
-<pre>
+<program language="java"><input>
 game.takeSticks();     // no argument is supplied
 game.takeSticks("3");  // "3" is a String, not an int
 game.takeSticks(int);  // int not is an int value
-</pre>
+</input></program>
     <p>
-      As you recall from Chapter 0, the value that is passed to a method when it is invoked is called \marginpar{Parameter vs. argument} an argument.
+      As you recall from Chapter 0, the value that is passed to a method when it is invoked is called  an argument.
       Even though the terms argument and parameter
           <idx><h>parameter</h></idx>
       are sometimes used interchangeably,
@@ -308,26 +315,26 @@ game.takeSticks(int);  // int not is an int value
     <principle>
       <title>DEBUGGING TIP:Type Error</title>
       <p>
-        It would be a syntax error to use an argument whose type doesn't match the type of its corresponding \mbox{parameter.}
+        It would be a syntax error to use an argument whose type doesn't match the type of its corresponding parameter.
       </p>
     </principle>
     <p>
-      The distinction between parameter and argument is related \marginpar{Defining vs. calling a method} to the difference between <em>defining</em>
+      The distinction between parameter and argument is related  to the difference between <em>defining</em>
       a method and <em>invoking</em> a method.
       Defining a method is a matter of writing a method definition, such as
     </p>
-<pre>
+<program language="java"><input>
 public void printStr(String s)
 {   System.out.println(s);}
-</pre>
+</input></program>
     <p>
       This definition defines a method that takes a single <c>String</c> parameter, <c>s</c>, and simply prints the value of its parameter.
       On the other hand,
-      invoking a method is a matter of \marginpar{Invoking a method} writing a method call statement, such as
+      invoking a method is a matter of  writing a method call statement, such as
     </p>
-<pre>
+<program language="java"><input>
 printStr("HelloWorld");
-</pre>
+</input></program>
     <p>
       This statement calls the <c>printStr()</c> method and passes it the string
       <q>HelloWorld</q>. This notation assumes that the call to the instance method <c>printStr()</c> is made within the body of another instance method of the same class.
@@ -342,24 +349,25 @@ printStr("HelloWorld");
     </p>
     <p>
       Our first version of <c>main()</c> is shown in <xref ref="fig-testorn1">Figure</xref>.
-      We will use it to trace how the parameter
+      We will use it to trace how the parameter  of <c>takeSticks()</c> interacts with the instance variables <c>nSticks</c> and <c>player</c>. The statements in the <c>main()</c> program simply create an instance of <c>OneRowNim</c> that is referenced by
+      <c>game</c> and invoke the <c>setSticks()</c> method with an argument of<nbsp/>3.
+         
     </p>
     <figure xml:id="fig-testorn1">
       <caption>A <c>main()</c> method to test the <c>takeSticks()</c> method.</caption>
-<pre>
+<program language="java"><input>
 public static void main (String argv[])
 {  OneRowNim game;        // Declare a OneRowNim object
    game = new OneRowNim(); // Instantiate the references
-   game.takeSticks(3);     // remove 3 sticks} // main()
-</pre>
+   game.takeSticks(3);     // remove 3 sticks
+} // main()
+</input></program>
     </figure>
-    <p>
-      of <c>takeSticks()</c> interacts with the instance variables <c>nSticks</c> and <c>player</c>. The statements in the <c>main()</c> program simply create an instance of <c>OneRowNim</c> that is referenced by
-<c>game</c> and invoke the <c>setSticks()</c> method with an argument of<nbsp/>3.
-    </p>
+ 
     <p>
       To get a clearer understanding of how a parameter works,
-      it will be instructive to trace through the code in <c>main()</c>. Figure<nbsp/>3.3 displays how the states of the instance variables of <c>game</c> and the parameter of <c>takeSticks()</c> interact.
+      it will be instructive to trace through the code in <c>main()</c>. 
+      The <xref ref="fig-parameps">Figure</xref>below displays how the states of the instance variables of <c>game</c> and the parameter of <c>takeSticks()</c> interact.
     </p>
     <figure xml:id="fig-parameps">
       <caption>Tracing the state of <c>game</c>(a) Just
@@ -394,7 +402,7 @@ public static void main (String argv[])
     </p>
     <figure xml:id="fig-testorn2">
       <caption>A <c>main()</c> method with keyboard input for <c>OneRowNim</c>.</caption>
-<pre>
+<program language="java"><input>
 import java.util.Scanner;
 public static void main (String argv[])
 { Scanner sc;             // Declare a Scanner variable
@@ -405,13 +413,14 @@ public static void main (String argv[])
   System.out.println("Input 1, 2, or 3 and hit enter:");
   int num = sc.nextInt(); // Read an int from keyboard
   game.takeSticks(num);   // Use the value read
-  game.report();          // Report state of game} // main()
-</pre>
+  game.report();          // Report state of game
+} // main()
+</input></program>
     </figure>
     <p>
       this program the following output will be generated in the console window before waiting for keyboard input:
     </p>
-<pre>
+ <pre>
 Number of sticks left: 7
 Next turn by player 1
 Input 1, 2, or 3 and hit enter:
@@ -421,15 +430,17 @@ Input 1, 2, or 3 and hit enter:
       that input will be read and the <c>takeSticks()</c> method will remove 2 sticks.
       The output in the console window will now look like:
     </p>
-<pre>
+ <program language="java"><input>
 Number of sticks left: 7
 Next turn by player 1
 Input 1, 2, or 3 and hit enter:2
 Number of sticks left: 5
 Next turn by player 2
-</pre>
-    <p>
-      \secEXRHone{Self-Study Exercises}
+ </input></program>
+    
+      </subsection>
+
+      <subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -464,6 +475,6 @@ Next turn by player 2
           </p>
         </li>
       </ol>
-    </p>
+   
   </subsection>
 </section>

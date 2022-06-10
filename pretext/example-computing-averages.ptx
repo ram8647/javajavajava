@@ -2,7 +2,7 @@
   <title>Example: Computing Averages</title>
   <p>
         <idx><h>Compute Average Example</h></idx>
-    Suppose you want to compute the average of your exam grades in a \marginpar{Algorithm design: what kind of loop?} course.
+    Suppose you want to compute the average of your exam grades in a  course.
     Grades, represented as real numbers,
     will be input from the keyboard using our
 <c>KeyboardReader</c> class.
@@ -16,7 +16,7 @@
   </p>
   <p>
     The algorithm should add each grade to a running total,
-    keeping track \marginpar{Algorithm design} of the number of grades entered.
+    keeping track  of the number of grades entered.
     Thus, this algorithm requires two variables:
     one to keep track of the running total and the other to keep track of the count.
     Both should be initialized to 0.
@@ -24,7 +24,7 @@
     the total should be divided by the count to give the average.
     In pseudocode, the algorithm for this problem is as follows:
   </p>
-<pre>
+ <program language="java"><input>
 initialize runningTotal to 0         // Initialize
 initialize count to 0
 prompt and read the first grade      // Priming read
@@ -35,9 +35,9 @@ while the grade entered is not 9999 {// Sentinel test
 if (count > 0)           // Guard against divide by 0
     divide runningTotal by count
 output the average as the result
-</pre>
+ </input></program>
   <p>
-    Note that in this problem our loop variable, <c>grade</c>, \marginpar{Priming read} is read before the loop test is made.
+    Note that in this problem our loop variable, <c>grade</c>,  is read before the loop test is made.
     This is known as a <term>priming read</term>.
     It is necessary in this case,
     because the loop test depends on the value that is read.
@@ -57,39 +57,39 @@ output the average as the result
     In addition to reading the first exam score,
     we must initialize the variables used for the running total and the counter.
     Thus, for our initialization step,
-    we get the following code: \marginpar{Initialization step}
+    we get the following code: 
   </p>
-<pre>
+ <program language="java"><input>
 double runningTotal = 0;
 int count = 0;
 reader.prompt("Input a grade (e.g., 85.3) " +
       "or 9999 to indicate the end of the list >> ");
 double grade =
      reader.getKeyboardDouble(); // Priming input
-</pre>
+ </input></program>
   <p>
     Within the body of the loop we must add the grade to the running total and increment the counter.
     Since these variables are not tested in the loop entry condition,
     they will not affect the loop control.
     Our loop updater in this case must read the next grade.
-    Placing the updater statement at the end of the \marginpar{Updater step} loop body will ensure that the loop terminates immediately after the user enters the sentinel value:
+    Placing the updater statement at the end of the  loop body will ensure that the loop terminates immediately after the user enters the sentinel value:
   </p>
-<pre>
+ <program language="java"><input>
 while (grade != 9999) {    // Loop test: sentinel
   runningTotal += grade;
   count++;
   reader.prompt("Input a grade (e.g., 85.3) " +
       "or 9999 to indicate the end of the list >> ");
   grade = reader.getKeyboardDouble(); // Update:input} // while
-</pre>
+ </input></program>
   <p>
     You can see that it is somewhat redundant to repeat the same statements needed to do the initializating and the updating of the <c>grade</c> variable.
-    A better design would be to encapsulate \marginpar{Modularity} these into a method and then call the method both before and within the loop.
+    A better design would be to encapsulate  these into a method and then call the method both before and within the loop.
     The method should take care of prompting the user, reading the input,
     converting it to <c>double</c>, and returning the input value.
     The method doesn't require a parameter:
   </p>
-<pre>
+ <program language="java"><input>
 private double promptAndRead() {
   reader.prompt("Input a grade (e.g., 85.3) " +
      "or 9999 to indicate the end of the list >> ");
@@ -97,7 +97,7 @@ private double promptAndRead() {
                           // Confirm input
   System.out.println("You input " + grade + "\n");
   return grade;}
-</pre>
+ </input></program>
   <p>
     Note that we have declared this as a <c>private</c> method.
     It will be used to help us perform our task but won't be available to other objects.
@@ -131,7 +131,7 @@ private double promptAndRead() {
     Another advantage of encapsulating the input task in a separate method is that it simplifies the task of calculating the average.
     This task should also be organized into a separate method:
   </p>
-<pre>
+ <program language="java"><input>
 public double inputAndAverageGrades() {
   double runningTotal = 0;
   int count = 0;
@@ -145,14 +145,14 @@ public double inputAndAverageGrades() {
     return runningTotal / count;// Return the average
   else
     return 0;         // Special (error) return value}
-</pre>
+ </input></program>
   <p>
     Note that we have declared this as a <c>public</c> method.
     This will be the method you call to calculate your course average.
   </p>
   <p>
     Because we have decomposed the problem into its subtasks,
-    each subtask \marginpar{Method decomposition} is short and simple,
+    each subtask  is short and simple,
     making it easier to read and understand.
     As we saw in the checkerboard example, the use of small,
     clearly-focused methods is a desireable aspect of designing a program.
@@ -168,7 +168,7 @@ public double inputAndAverageGrades() {
   <figure xml:id="fig-avg">
     <caption>A program to compute average grade using a <c>while</c>
     structure.</caption>
-<pre>
+ <program language="java"><input>
 import java.io.*;
 public class Average {                            // Console I/O
   private KeyboardReader reader = new KeyboardReader();
@@ -202,7 +202,7 @@ public class Average {                            // Console I/O
    else
       System.out.println("Your average is " + average);
  } // main()} // Average
-</pre>
+ </input></program>
   </figure>
   <p>
     One final point about this program is to note the care taken in the design of the user interface to explain the program to the user,

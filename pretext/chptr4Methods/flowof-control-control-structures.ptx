@@ -11,12 +11,12 @@
     <p>
       A second problem is with the definition of <c>takeSticks()</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public void takeSticks(int num)
   {   nSticks - num;
       player = 3 - player;
   }
-</pre>
+ </input></program>
     <p>
       It is possible to call this method with an argument greater than 3 or less than 1.
       The call <c>game.takeSticks(5)</c> will remove 5 sticks even though the rules of One Row Nim say that you must remove 1, 2, or 3.
@@ -34,7 +34,7 @@ public void takeSticks(int num)
       A <term>selection</term> control structure,
       allows a program to select between two or more alternative paths of execution.
       The if statement is the most basic selection control structure in Java.
-      Most programming languages have its equivalent. \marginpar{Simple <c>if</c> statement}
+      Most programming languages have its equivalent. 
     </p>
     <principle>
       <title>If Statement</title>
@@ -42,7 +42,7 @@ public void takeSticks(int num)
         The <term>if statement</term> has the following syntax:
       </p>
       <p>
-        <m>\matrix{ \mbox{if} \amp ( \; \textit{boolean\;expression} \; ) \cr \;\;\;\; \amp \textit{contained statement} \; ; \cr}</m>
+        <m>\matrix{ if \amp ( \; \textit{boolean\;expression} \; ) \cr \;\;\;\; \amp \textit{contained statement} \; ; \cr}</m>
       </p>
     </principle>
     <p>
@@ -55,30 +55,30 @@ public void takeSticks(int num)
       Given this description of if statement syntax,
       the following are examples of valid if statements:
     </p>
-<pre>
+ <program language="java"><input>
 if (true) System.out.println("Hello");
 if (nSticks &lt;= 0) System.out.println("game is over");
-</pre>
+ </input></program>
     <p>
       For readability,
       we usually write an if statement with its contained statement indented on the next line:
     </p>
-<pre>
+ <program language="java"><input>
 if (true)
       System.out.println("Hello");
   if (nSticks &lt;= 0)
       System.out.println("game is over");
-</pre>
+ </input></program>
     <p>
       The following are all examples of syntax errors involving the if statement:
     </p>
-<pre>
+ <program language="java"><input>
 if true                   // Parentheses are missing
     System.out.println("Hello");
 if (nSticks &lt;= 0) return   // Semicolon missing
 if ("true") return;  // "true" is not a boolean
 if (true) "Hello";    // "Hello" is  not a statement
-</pre>
+ </input></program>
     <p>
       Semantically, the if statement
           <idx><h>if statement</h></idx>
@@ -95,7 +95,7 @@ if (true) "Hello";    // "Hello" is  not a statement
       As another example,
       consider the definition of a <c>getPlayerString()</c> method for the <c>OneRowNim</c> class:
     </p>
-<pre>
+ <program language="java"><input>
 public String getPlayerString()
 {
   if (player == 1)
@@ -103,7 +103,7 @@ public String getPlayerString()
   if (player == 2)
     return "Player Two"; // Exit the method
   return "Player error";   // Exit the method}
-</pre>
+ </input></program>
     <p>
       The flowchart in <xref ref="fig-getplayerflow">Figure</xref>
       shows the program flow of the entire <c>getPlayerString()</c> method.
@@ -132,19 +132,19 @@ public String getPlayerString()
       if <c>player</c> has value 1 or 2<mdash/>then the third <c>return</c> statement should never be reached.
     </p>
     <p>
-      The following example shows the more common case where the statement contained in an if statement can be a compound statement: \marginpar{Compound statement}
+      The following example shows the more common case where the statement contained in an if statement can be a compound statement: 
     </p>
-<pre>
+ <program language="java"><input>
 if (player == 1)
 {   String s = "Player One";
     System.out.print (s);
     System.out.println (" plays next");
     System.out.println (" The game is not over");}
-</pre>
+ </input></program>
     <p>
       If <c>player == 1</c> is true,
       then all four statements in the contained compound statement will be executed.
-      Note here that \marginpar{Local scope} we are declaring the local variable, <c>s</c>, in this block.
+      Note here that  we are declaring the local variable, <c>s</c>, in this block.
       Its scope would extend only to the end of the block.
       Note also that when we use a compound statement,
       the compound statement itself is not followed by a semicolon because it is already enclosed in braces.
@@ -155,11 +155,11 @@ if (player == 1)
       For example,
       the following if statement still has only one statement in its if clause:
     </p>
-<pre>
+ <program language="java"><input>
 if (condition1)
   System.out.println("One");
   System.out.println("Two"); //Not part of if statement
-</pre>
+ </input></program>
     <p>
       This segment will always print
       <q>Two</q>
@@ -167,11 +167,11 @@ if (condition1)
       To include it in the if statement,
       you must enclose both <c>println()</c> statements within braces:
     </p>
-<pre>
+ <program language="java"><input>
 if (condition1)
 {  System.out.println("One");
    System.out.println("Two");}
-</pre>
+ </input></program>
     <principle>
       <title>DEBUGGING TIP:Indentation</title>
       <p>
@@ -189,12 +189,12 @@ if (condition1)
       as the result of one boolean expression.
       For example, the statement
     </p>
-<pre>
+ <program language="java"><input>
 if (player == 1)
     System.out.println("Player One");
 else
     System.out.println("Player Two");
-</pre>
+ </input></program>
     <p>
       will print
       <q>Player One</q>
@@ -214,7 +214,7 @@ else
     </principle>
     <p>
       As in the case of the simple if statement,
-      the \marginpar{If-else syntax} keyword <c>if</c> is followed by a parenthesized
+      the  keyword <c>if</c> is followed by a parenthesized
       <em>boolean expression</em>,
       which is followed by <em>statement1</em>,
       which may be either simple or compound.
@@ -270,7 +270,7 @@ else
       there are three alternatives plus an error state.
       Here is the Java code for this example:
     </p>
-<pre>
+ <program language="java"><input>
 if (num == 1)
    System.out.println("One");
 else if (num == 2)
@@ -279,9 +279,9 @@ else if (num == 3)
    System.out.println("Three");
 else
    System.out.println("Error: Unknown value");
-</pre>
+ </input></program>
     <p>
-      Note that the multiway structure has a single entry point and that only one of the four possible alternatives is \marginpar{Multiple alternatives} executed.
+      Note that the multiway structure has a single entry point and that only one of the four possible alternatives is  executed.
       The code will print exactly one of the strings.
     </p>
     <p>
@@ -289,20 +289,20 @@ else
       Although it does not represent a significant change,
       we could rewrite our <c>takeStick()</c> method to make use of the if-else instead of the somewhat obscure statement :
     </p>
-<pre>
+ <program language="java"><input>
 player = 3 - player;
-</pre>
+ </input></program>
     <p>
       to change the value of player from <m>1</m> to <m>2</m> or vice versa:
     </p>
-<pre>
+ <program language="java"><input>
 public String takeSticks(int num)
 {   nSticks = nSticks - num;
   if (player == 1)
     player = 2;   // From 1 to 2
   else
     player = 1;   // From 2 to 1}
-</pre>
+ </input></program>
     <p>
       In some respects this version of <c>takeSticks()</c> involves four lines of code instead of one but is simpler to understand.
       The <c>if</c>-statement tests whether the value of <c>player</c> is <m>1</m>.
@@ -312,20 +312,21 @@ public String takeSticks(int num)
       Both versions of the code will give precisely the same result,
       a programmer could choose to write the code either way.
     </p>
-    <p>
-      \secEXRHone{Self-Study Exercises}
+   
+      </subsection><subsection><title>Self-Study Exercises</title>
+        <p>
       <ol>
         <li>
           <p>
             Consider the following method with
 <c>boolean</c> parameter.
-<pre>
+ <program language="java"><input>
 public String getStatus(boolean isDone)
 {   if (isDone)
         return "Done";
     else
         return "Not Done";}
-</pre>Draw a flowchart for the if-else version of the \marginpar{Flowchart symbols}<c>getStatus()</c> method,
+ </input></program>Draw a flowchart for the if-else version of the <c>getStatus()</c> method,
             using the figures in this section as a guide.
             The if-else structure should be drawn exactly as shown in Figure<nbsp/>3.11.
             It should have a single entry point that leads directly to the top of a diamond-shaped box that contains a boolean condition.
@@ -341,7 +342,7 @@ public String getStatus(boolean isDone)
         <li>
           <p>
             Identify the error in the following statements:
-<pre>
+ <program language="java"><input>
 if (isHeavy == true)
     System.out.println("Heavy");
 else ;
@@ -350,7 +351,7 @@ if (isLong == true)
     System.out.println("Long")
 else
     System.out.println("Short");
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -413,7 +414,7 @@ else
       We will use the while statement to sum the squares of integers from <m>1</m> to a number specified as a parameter of the method.
       Thus, the method call <c>sumSquares(3)</c> should return the value <m>14</m> since <m>1*1 + 2*2 + 3*3 = 1 + 4 + 9 = 14</m>.
     </p>
-<pre>
+ <program language="java"><input>
 public int sumSquares(int max)
 { int num = 1;
   int sum = 0;
@@ -422,7 +423,7 @@ public int sumSquares(int max)
     num = num + 1;       // Add 1 to num
   } //while
   return sum;           // Return the sum}
-</pre>
+ </input></program>
     <p>
       Note that in this example,
       the variable <c>num</c> gets assigned an initial value of <m>1</m> before the <c>while</c> statement.
@@ -473,12 +474,12 @@ public int sumSquares(int max)
           <idx><h>while structure</h></idx>
       would take the following form:
     </p>
-<pre>
+ <program language="java"><input>
 InitializerStatements;         // Initializer
 while (loop entry condition) { // Bound test
      Statements;                // Loop body
      UpdaterStatements;         // Updater}
-</pre>
+ </input></program>
     <p>
       As its form suggests,
       the while structure is designed so that on some conditions the loop body will never be executed.

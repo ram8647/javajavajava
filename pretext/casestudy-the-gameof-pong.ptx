@@ -87,8 +87,8 @@
     </p>
     <figure xml:id="fig-paddle">
       <caption>Definition of the <c>Paddle</c> class.</caption>
-      \[27pc]
-<pre>
+      
+ <program language="java"><input>
 public class Paddle {
     public static final int HEIGHT = 50;  // Paddle size
     public static final int WIDTH = 10;
@@ -121,7 +121,7 @@ public class Paddle {
        if (locationY + HEIGHT &lt; gameAreaHeight - BORDER)
            locationY += DELTA;
     } // moveDown()} // Paddle
-</pre>
+ </input></program>
     </figure>
     <p>
       Class constants, <c>HEIGHT</c> and <c>WIDTH</c> are used to define the size of the <c>Paddle</c>, which is represented on the frame as a simple rectangle.
@@ -129,11 +129,11 @@ public class Paddle {
 <c>Graphics.fillRect()</c> method to draw the paddle:
     </p>
     <p>
-      \[28pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 g.fillRect(pad.getX(),pad.getY(),Paddle.WIDTH,Paddle.HEIGHT);
-</pre>
+ </input></program>
     <p>
       Note how the frame uses the paddle's <c>getX()</c> and <c>getY()</c> methods to get the paddle's current location.
     </p>
@@ -149,17 +149,17 @@ g.fillRect(pad.getX(),pad.getY(),Paddle.WIDTH,Paddle.HEIGHT);
 <c>SIZE</c> to determine the size of the oval that represents the ball,
       drawn by the frame as follows:
     </p>
-<pre>
+ <program language="java"><input>
 g.fillOval(ball.getX(),ball.getY(),ball.SIZE,ball.SIZE);
-</pre>
+ </input></program>
     <p>
       As with the paddle,
       the frame uses the ball's <c>getX()</c> and <c>getY()</c> method to determine the ball's current location.
     </p>
     <figure xml:id="fig-ball">
       <caption>Definition of the <c>Ball</c> class.</caption>
-      \[34.5pc]
-<pre>
+      
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.Toolkit;
 public class Ball extends Thread {
@@ -210,7 +210,7 @@ public class Ball extends Thread {
       } catch (InterruptedException e) {}
     } // while
   } // run()} // Ball
-</pre>
+ </input></program>
     </figure>
     <p>
       Unlike the paddle, however, the ball moves autonomously.
@@ -230,10 +230,10 @@ public class Ball extends Thread {
       right, up,
       or down by adjusting the values of its <c>locationX</c> and <c>locationY</c> coordinates:
     </p>
-<pre>
+ <program language="java"><input>
 locationX = locationX + directionX; // Calculate location
 locationY = locationY + directionY;
-</pre>
+ </input></program>
     <p>
       The <c>directionX</c> and <c>directionY</c> variables are set to either <m>+1</m> or <m>-1</m>,
       depending on whether the ball is moving left or right,
@@ -267,7 +267,7 @@ locationY = locationY + directionY;
     </p>
     <figure xml:id="fig-pongapplet">
       <caption>Definition of the <c>PongFrame</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -308,7 +308,7 @@ public class PongFrame extends JFrame implements KeyListener {
        PongFrame f = new PongFrame();
        f.setSize(400,400);
        f.setVisible(true);} // PongFrame
-</pre>
+ </input></program>
     </figure>
     <p>
       There's a bit of redundancy in the <c>KeyListener</c> interface in the sense that a single key press and release generates three <c>KeyEvent</c> s: A key-typed event,
@@ -320,14 +320,14 @@ public class PongFrame extends JFrame implements KeyListener {
       (typed and released).
       Therefore, we implement the <c>keyPressed()</c> method as follows:
     </p>
-<pre>
+ <program language="java"><input>
 public void keyPressed( KeyEvent e) { // Check arrow keys
    int keyCode = e.getKeyCode();
    if (keyCode == e.VK_UP)            // Up arrow
       pad.moveUp();
    else if (keyCode == e.VK_DOWN)     // Down arrow
       pad.moveDown();} // keyReleased()
-</pre>
+ </input></program>
     <p>
       Each key on the keyboard has a unique code that identifies the key.
       The key's code is gotten from the <c>KeyEvent</c> object by means of the <c>getKeyCode()</c> method.
@@ -373,7 +373,7 @@ public void keyPressed( KeyEvent e) { // Check arrow keys
       There is no need to do this for the ball because the ball's drawing area is updated within the <c>Ball.move()</c> method every time the ball is moved.
     </p>
     <p>
-      One problem with computer animations of this sort is that the repeated \marginpar{Double buffering} drawing and erasing of the drawing area can cause the screen to flicker.
+      One problem with computer animations of this sort is that the repeated  drawing and erasing of the drawing area can cause the screen to flicker.
       In some drawing environments a technique known as
       <term>double buffering</term>
       is used to reduce the flicker.
@@ -605,7 +605,7 @@ public void keyPressed( KeyEvent e) { // Check arrow keys
       <ul>
         <li>
           <p>
-            <pre>
+             <program language="java"><input>
 public class PrintOdds implements Runnable {
   private int bound;
   public PrintOdds(int b) {
@@ -618,26 +618,26 @@ public class PrintOdds implements Runnable {
   public void run() {
     print();
   }}
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             On my system, the experiment yielded the following output,
             if each thread printed its number after every 100,000 iterations:
-<pre>
+ <program language="java"><input>
 1111112222222211111111333333322222221111113333333
 222224444444433333344444445555555544444555555555555
-</pre>This suggests that round-robin scheduling is being used.
+ </input></program>This suggests that round-robin scheduling is being used.
           </p>
         </li>
         <li>
           <p>
             If each thread is given 50 milliseconds of sleep on each iteration,
             they tend to run in the order in which they were created:
-<pre>
+ <program language="java"><input>
 123451234512345...
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -744,32 +744,32 @@ public class PrintOdds implements Runnable {
           <ol>
             <li>
               <p>
-                \rule{40pt}{0.5pt} happens when a CPU's time is divided among several different threads.
+                <c>__________</c> happens when a CPU's time is divided among several different threads.
               </p>
             </li>
             <li>
               <p>
-                A method that should not be interrupted during its execution is known as a \rule{40pt}{0.5pt} .
+                A method that should not be interrupted during its execution is known as a <c>__________</c> .
               </p>
             </li>
             <li>
               <p>
-                The scheduling algorithm in which each thread gets an equal portion of the CPU's time is known as \rule{40pt}{0.5pt} .
+                The scheduling algorithm in which each thread gets an equal portion of the CPU's time is known as <c>__________</c> .
               </p>
             </li>
             <li>
               <p>
-                The scheduling algorithm in which some threads can preempt other threads is known as \rule{40pt}{0.5pt}.
+                The scheduling algorithm in which some threads can preempt other threads is known as <c>__________</c>.
               </p>
             </li>
             <li>
               <p>
-                A \rule{40pt}{0.5pt} is a mechanism that enforces mutually exclusive access to a synchronized method.
+                A <c>__________</c> is a mechanism that enforces mutually exclusive access to a synchronized method.
               </p>
             </li>
             <li>
               <p>
-                A thread that performs an I/O operation may be forced into the \rule{40pt}{0.5pt} state until the operation is completed.
+                A thread that performs an I/O operation may be forced into the <c>__________</c> state until the operation is completed.
               </p>
             </li>
           </ol>
@@ -778,7 +778,7 @@ public class PrintOdds implements Runnable {
       <li>
         <p>
           Describe the concept of <em>time slicing</em>
-          as it applies to CPU \mbox{scheduling.}
+          as it applies to CPU scheduling.
         </p>
       </li>
       <li>

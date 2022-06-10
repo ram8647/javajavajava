@@ -11,7 +11,7 @@
     For example, Figure<nbsp/>10.20 shows the design of an exception that can be used for validating that an integer is less than or equal to a certain maximum value.
     It would be coded as follows:
   </p>
-<pre>
+ <program language="java"><input>
 /**
   *  IntOutOfRangeException reports an exception when
   *    an integer exceeds its bound.
@@ -20,7 +20,7 @@ public class IntOutOfRangeException extends Exception {
     public IntOutOfRangeException (int Bound) {
       super("The input value exceeds the bound " + Bound);
     }}
-</pre>
+ </input></program>
   <p>
     The class extends <c>Exception</c> and consists entirely of a constructor method that calls the superclass constructor.
     The argument passed to the superclass constructor is the message that will be returned by <c>getMessage()</c> when an instance of this exception is created.
@@ -36,7 +36,7 @@ public class IntOutOfRangeException extends Exception {
   <p>
     This leads to the following revision of <c>IntField</c>:
   </p>
-<pre>
+ <program language="java"><input>
 public class IntField extends JTextField {
     private int bound = Integer.MAX_VALUE;
     public IntField(int size, int max) {
@@ -44,7 +44,7 @@ public class IntField extends JTextField {
         bound = max;
     }
    // The rest of the class is unchanged for now} // IntField
-</pre>
+ </input></program>
   <p>
     Our new constructor has the signature <c>IntField(int,int)</c>, which doesn't duplicate any of <c>JTextField</c>'s constructors.
     This is good design, because in extending a class,
@@ -81,7 +81,7 @@ public class IntField extends JTextField {
   <figure xml:id="fig-intfield2">
     <caption>The revised <c>IntField</c> class containing the
     revised <c>getInt()</c> method.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 public class IntField extends JTextField {
     private int bound = Integer.MAX_VALUE;
@@ -100,7 +100,7 @@ public class IntField extends JTextField {
         return num;
     } // getInt()
 } // IntField
-</pre>
+ </input></program>
   </figure>
   <p>
     The <c>IntFieldTester</c> class (Fig.
@@ -116,7 +116,7 @@ public class IntField extends JTextField {
   </p>
   <figure xml:id="fig-intbound">
     <caption>An application that uses an <c>IntField</c> object to process integers.</caption>
-<pre>
+ <program language="java"><input>
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -164,10 +164,10 @@ public class IntFieldTester extends JPanel
       }
     });
   } // main()} // IntFieldTester
-</pre>
+ </input></program>
   </figure>
   <p>
-    \secEXRHone{Self-Study Exercises}
+    </subsection><subsection><title>Self-Study Exercises</title>
     <ol>
       <li>
         <p>

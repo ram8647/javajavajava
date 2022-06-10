@@ -7,7 +7,7 @@
       As we have seen,
       the JVM will catch any unchecked exceptions that are not caught by the program itself.
       For your own (practice) programs,
-      the best design may \marginpar{Let Java do it?} simply be to use Java's default exception handling.
+      the best design may  simply be to use Java's default exception handling.
       The program will terminate when an exception is thrown,
       and then you can debug the error and recompile the program.
     </p>
@@ -26,7 +26,7 @@
       
       <tabular>
         <row>
-          <cell>\multicolumn{3}{l}{\rule{27pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell><term>Kind of Exception</term></cell>
@@ -34,7 +34,7 @@
           <cell><term>Action to Be Taken</term></cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{3}{l}{\rule{27pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>Caught by Java</cell>
@@ -61,7 +61,7 @@
           <cell><nbsp/><nbsp/> processing</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{3}{l}{\rule{27pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB
@@ -70,7 +70,7 @@
       exceptional condition cannot be fixed,
       the program should be terminated,
       with an appropriate error message.
-      Second, if the \marginpar{What action should we take?} exceptional condition can be fixed without invalidating the program,
+      Second, if the  exceptional condition can be fixed without invalidating the program,
       then it should be remedied and the program's normal execution should be resumed.
       Third, if the exception cannot be fixed,
       but the program cannot be terminated,
@@ -94,7 +94,7 @@
       which will terminate the program when the exception is thrown.
       There is simply no way to satisfy the postcondition of the
 <c>avgFirstN()</c> method when <em>N</em>
-      is less than or equal to 0. \marginpar{Program development} This type of error often calls attention to a design flaw in the program's logic that should be caught during program development.
+      is less than or equal to 0.  This type of error often calls attention to a design flaw in the program's logic that should be caught during program development.
       The throwing of the exception helps identify the design flaw.
     </p>
     <principle>
@@ -112,7 +112,7 @@
       suppose that your program receives an erroneous input value,
       whose use would invalidate the calculation it is making.
       This won't be caught by Java.
-      But it should \marginpar{Don't spread bad data!} be caught by your program,
+      But it should  be caught by your program,
       and an appropriate alternative here is to report the error and terminate the program.
       Fixing this type of error may involve adding routines to validate the input data before they are used in the calculation.
     </p>
@@ -140,7 +140,7 @@
     </p>
     <p>
       Such programs are called <em>failsafe</em>
-      because they are designed to \marginpar{Failsafe programs} run without termination.
+      because they are designed to  run without termination.
       For these programs,
       the exception should be reported in whatever manner is most appropriate,
       but the program should continue running.
@@ -148,7 +148,7 @@
       then the exception handler should make it clear that the results are tainted.
     </p>
     <p>
-      Other programs<mdash/>such as programs that analyze a large transaction \marginpar{Programs that can't be stopped} database<mdash/>should be designed to continue processing after catching such errors.
+      Other programs<mdash/>such as programs that analyze a large transaction  database<mdash/>should be designed to continue processing after catching such errors.
       For example,
       suppose the program a large airline runs a program once a day to analyze the ticketing transactions that took place.
       This kind of program might use exceptions to identify erroneous transactions or transactions that involve invalid data of some sort.
@@ -177,7 +177,7 @@
   <subsection xml:id="fig-intfield">
     <title>Fix the Error and Resume</title>
     <p>
-      As an example of a problem that can be addressed as the \marginpar{Problem statement} program runs,
+      As an example of a problem that can be addressed as the  program runs,
       consider the task of inputting an integer into a text field.
       As you have probably experienced,
       if a program is expecting an integer and you attempt to input something beside an integer,
@@ -204,7 +204,7 @@
     <figure xml:id="fig-intfieldprog">
       <caption>A <c>NumberFormatException</c> might be thrown by
       the <c>Integer.parseInt()</c> method in  <c>IntField.getInt()</c>.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 public class IntField extends JTextField {
     public IntField () {
@@ -216,17 +216,17 @@ public class IntField extends JTextField {
     public int getInt() throws NumberFormatException {
         return Integer.parseInt(getText());
     } // getInt()} // IntField
-</pre>
+ </input></program>
     </figure>
     <p>
       Note that the constructor methods use <c>super</c> to call the
 <c>JTextField</c> constructor.
-      For now, these two constructors should \marginpar{What constructors do we need?} suffice.
+      For now, these two constructors should  suffice.
       However, later we will introduce a third constructor that allows us to associate a bound with the <c>IntField</c> later in this chapter.
     </p>
     <p>
       Our <c>IntField</c> class needs a method that can return its contents.
-      This method should work like <c>JTextField.getText()</c>, but \marginpar{What methods do we need?} it should return a valid integer.
+      This method should work like <c>JTextField.getText()</c>, but  it should return a valid integer.
       The <c>getInt()</c> method takes no parameters and will return an <c>int</c>, assuming that a valid integer is typed into the <c>IntField</c>. If the user enters
       <q>$55,</q>
       a
@@ -249,7 +249,7 @@ public class IntField extends JTextField {
       the calling method is likely to be an <c>actionPerformed()</c> method,
       such as the following:
     </p>
-<pre>
+ <program language="java"><input>
 public void actionPerformed(ActionEvent e) {
   try {
     userInt = intField.getInt();
@@ -260,7 +260,7 @@ public void actionPerformed(ActionEvent e) {
   } finally {
       repaint();
   }} // actionPerformed()
-</pre>
+ </input></program>
     <p>
       The call to <c>getInt()</c> is embedded in a <c>try/catch</c> block.
       This leads to the design summarized in <xref ref="fig-numformat">Figure</xref>.
@@ -297,7 +297,7 @@ public void actionPerformed(ActionEvent e) {
     <p>
       This is an example of what we might call
       <em>defensive</em> design.
-      Defensive design is when we anticipate a possible \marginpar{Defensive design: Anticipating an exception} input error and take steps to ensure that a bad value is not propagated throughout the program.
+      Defensive design is when we anticipate a possible  input error and take steps to ensure that a bad value is not propagated throughout the program.
     </p>
     <principle>
       <title>EFFECTIVE DESIGN:Defensive Design</title>
@@ -317,7 +317,7 @@ public void actionPerformed(ActionEvent e) {
       That would not be a very user-friendly interface!
     </p>
     <p>
-      Clearly, this is the type of exceptional condition that should be \marginpar{Anticipating exceptions} anticipated during program design.
+      Clearly, this is the type of exceptional condition that should be  anticipated during program design.
       If this happens to be a program designed exclusively for your own use,
       then this type of exception handling might be unnecessary.
       But if the program is meant to be used by others,
@@ -346,18 +346,18 @@ public void actionPerformed(ActionEvent e) {
       <q>on the fly.</q>
       Suppose you have a program that contains an array of <c>String</c> s, which is initially created with just two elements.
     </p>
-<pre>
+ <program language="java"><input>
 String list[] = new String[2];
-</pre>
+ </input></program>
     <p>
       If an attempt is made to add more than two elements to the array,
-      an \mbox{ArrayIndexOutOfBoundsException} will be raised.
+      an ArrayIndexOutOfBoundsException will be raised.
       This exception can be handled by extending the size of the array and inserting the element.
       Then the program's normal execution can be resumed.
     </p>
     <p>
       To begin creating such a program,
-      let's first design a method that will insert a string into the \marginpar{Problem statement} array.
+      let's first design a method that will insert a string into the  array.
       Suppose that this is intended to be a <c>private</c> method that will only be used within the program.
       Also, let's suppose that the program maintains a variable,
 <c>count</c>, that tracks how many values have been stored in the array.
@@ -365,12 +365,12 @@ String list[] = new String[2];
       So, we are creating a <c>void</c> method with one parameter,
       the <c>String</c> to be inserted:
     </p>
-<pre>
+ <program language="java"><input>
 private void insertString(String str) {
      // Might throw ArrayIndexOutOfBoundsException
     list[count] = str;
     ++count;}
-</pre>
+ </input></program>
     <p>
       The comment notes where an exception might be thrown.
     </p>
@@ -378,14 +378,14 @@ private void insertString(String str) {
       Can we handle this exception?
       When this exception is raised,
       we could create a new array with one more element than the current array.
-      We \marginpar{Algorithm design} could copy the old array into the new array and then insert the
+      We  could copy the old array into the new array and then insert the
 <c>String</c> in the new location.
       Finally, we could set the variable
 <c>list</c>, the array reference,
       so that it points to the new array.
       Thus, we could use the following <c>try/catch</c> block to handle this exception:
     </p>
-<pre>
+ <program language="java"><input>
 private void insertString(String str) {
     try {
         list[count] = str;
@@ -399,7 +399,7 @@ private void insertString(String str) {
     } finally {         // Since the exception is now fixed
         count++;        // Increase the count
     }} // insertString()
-</pre>
+ </input></program>
     <p>
       The effect of the <c>catch</c> clause is to create a new array,
       still referred to as <c>list</c>, but that contains one more element than the original array.
@@ -425,8 +425,8 @@ private void insertString(String str) {
     <figure xml:id="fig-arraybound">
       <caption><c>FixArrayBound</c> increases the size of the array when
       a <c>ArrayIndexOutOfBoundsException</c> is raised.</caption>
-      \[29pc]
-<pre>
+      
+ <program language="java"><input>
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -472,12 +472,12 @@ public class FixArrayBound extends JPanel
     inField.setText("");
     repaint();
   } // actionPerformed()
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig-arraybound2">
       <caption>{(continued)}<c>FixArrayBound</c> increases the size of the array when
  <c>ArrayIndexOutOfBoundsException</c> is raised.</caption>
-<pre>
+ <program language="java"><input>
 public static void main( String args[] ) {
         JFrame f = new JFrame("Array Fixer");
         FixArrayBound panel = new FixArrayBound();
@@ -490,7 +490,7 @@ public static void main( String args[] ) {
             }
         });
     } // main()} // FixArrayBound
-</pre>
+ </input></program>
     </figure>
     <p>
       Each time the user types a string into the text field,
@@ -510,7 +510,7 @@ public static void main( String args[] ) {
       </p>
     </principle>
     <p>
-      The complete implementation of <c>FixArrayBound</c> is given in Figure<nbsp/>10\mbox{--} 19.
+      The complete implementation of <c>FixArrayBound</c> is given in Figure<nbsp/>10-- 19.
       This example illustrates how an exception <em>can</em>
       be handled successfully and the program's normal flow of control resumed.
       However, the question is whether such an exception
@@ -518,7 +518,7 @@ public static void main( String args[] ) {
     </p>
     <p>
       Unfortunately, this is not a well-designed program.
-      The array's \marginpar{Poor program design} initial size is much too small for the program's intended use.
+      The array's  initial size is much too small for the program's intended use.
       Therefore, the fact that these exceptions arise at all is the result of poor design.
       In general, exceptions should <em>not</em>
       be used as a remedy for poor design.
@@ -532,7 +532,7 @@ public static void main( String args[] ) {
     </principle>
     <p>
       For a program that uses an array,
-      the size of the array should be chosen so that it can store all the objects required by the \marginpar{Proper array usage} program.
+      the size of the array should be chosen so that it can store all the objects required by the  program.
       If the program is some kind of failsafe program,
       which cannot afford to crash,
       then something like the previous approach might be justified,
@@ -547,7 +547,7 @@ public static void main( String args[] ) {
       (see
       <q>From the Java Library</q>
       in Chapter<nbsp/>9).
-      Vectors are \marginpar{Choosing the correct data structure} designed to grow as new objects are inserted.
+      Vectors are  designed to grow as new objects are inserted.
       In some ways the exception-handling code in our example mimics the behavior of a vector.
       However, the <c>Vector</c> class makes use of efficient algorithms for extending its size.
       By contrast, exception-handling code is very inefficient.

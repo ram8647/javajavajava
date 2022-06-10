@@ -20,7 +20,7 @@
     </p>
     <p>
       According to this protocol,
-      a server program creates a socket at a \marginpar{Sockets and ports} certain port and waits until a client requests a connection.
+      a server program creates a socket at a  certain port and waits until a client requests a connection.
       A <em>port</em>
           <idx><h>port</h></idx>
       is a particular address or entry point on the host computer,
@@ -43,7 +43,7 @@
       think of some service performed by a human using a telephone connection.
       The
       <q>server</q>
-      waits for the \marginpar{Client/server protocol} phone to ring.
+      waits for the  phone to ring.
       When it rings,
       the server picks it up and begins communicating with the client.
       A socket, combined with input and output streams,
@@ -68,7 +68,7 @@
       <xref ref="fig-clientserverpict">Figure</xref>
       provides a view of the client/server connection.
       Note that a socket has two channels.
-      Once a connection \marginpar{Sockets and channels} has been established between a client and a server,
+      Once a connection  has been established between a client and a server,
       a single two-way channel exists between them.
       The client's output stream is connected to the server's input stream.
       The server's output stream is connected to the client's input stream.
@@ -99,13 +99,13 @@
     </p>
     <p>
       The next step is to wait for a client request.
-      The <c>accept()</c>\marginpar{Waiting for client requests} method will <em>block</em>
+      The <c>accept()</c> method will <em>block</em>
       until a connection is established.
       The Java system is responsible for waking the server when a client request is received.
     </p>
     <figure xml:id="fig-serverpro">
       <caption>Template for the server protocol.</caption>
-<pre>
+ <program language="java"><input>
 Socket socket;    // Reference to the socket
 ServerSocket port;// The port where the server will listen
 try {
@@ -114,7 +114,7 @@ try {
  // Communicate with the client
     socket.close();} catch (IOException e) {
     e.printStackTrace();}
-</pre>
+ </input></program>
     </figure>
     <p>
       Once a connection is established,
@@ -165,7 +165,7 @@ try {
       <xref ref="fig-clientpro"></xref>) is just as easy to implement.
       Indeed, on the client side there are only three steps involved.
       The first step is to request a connection to the server.
-      This is done \marginpar{Initiating a request} in the <c>Socket()</c> constructor by supplying the server's URL and port number.
+      This is done  in the <c>Socket()</c> constructor by supplying the server's URL and port number.
       Once the connection is established,
       the client can carry out two-way communication with the server.
       This step is not shown here.
@@ -195,14 +195,14 @@ try {
     </p>
     <figure xml:id="fig-clientpro">
       <caption>Template for the client protocol.</caption>
-<pre>
+ <program language="java"><input>
 Socket connection;     // Reference to the socket
 try {                  // Request a connection
   connection = new Socket("java.cs.trincoll.edu", 10001);
    // Carry on a two-way communication
     connection.close();   // Close the socket} catch (IOException e ) {
     e.printStackTrace();}
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection>
@@ -216,15 +216,15 @@ try {                  // Request a connection
     </p>
     <p>
       The <c>writeToSocket()</c> method takes two parameters,
-      the \marginpar{Output routine}<c>Socket</c> and a <c>String</c>, which will be sent to the process on the other end of the socket:
+      the <c>Socket</c> and a <c>String</c>, which will be sent to the process on the other end of the socket:
     </p>
-<pre>
+ <program language="java"><input>
 protected void writeToSocket(Socket sock, String str)
                              throws IOException {
     oStream = sock.getOutputStream();
     for (int k = 0; k &lt; str.length(); k++)
         oStream.write(str.charAt(k));}// writeToSocket()
-</pre>
+ </input></program>
     <p>
       If <c>writeToSocket()</c> is called by the server,
       then the string will be sent to the client.
@@ -232,7 +232,7 @@ protected void writeToSocket(Socket sock, String str)
       the string will be sent to the server.
     </p>
     <p>
-      The method is declared <c>protected</c> because we will define it in a \marginpar{Protected methods} superclass so that it can be inherited and used by both the client and server classes.
+      The method is declared <c>protected</c> because we will define it in a  superclass so that it can be inherited and used by both the client and server classes.
       Note also that the method declares that it throws an
 <c>IOException</c>. Because there's no way to fix an <c>IOException</c>, we'll just let this exception be handled elsewhere,
       rather than handling it within the method.
@@ -280,9 +280,9 @@ protected void writeToSocket(Socket sock, String str)
       </p>
     </principle>
     <p>
-      The <c>readFromSocket()</c> method takes a <c>Socket</c> parameter \marginpar{Input routine} and returns a <c>String</c>:
+      The <c>readFromSocket()</c> method takes a <c>Socket</c> parameter  and returns a <c>String</c>:
     </p>
-<pre>
+ <program language="java"><input>
 protected String readFromSocket(Socket sock)
                                 throws IOException {
     iStream = sock.getInputStream();
@@ -291,7 +291,7 @@ protected String readFromSocket(Socket sock)
     while (  ( c = (char) iStream.read() ) != '\n')
         str = str + c + "";
     return str;}
-</pre>
+ </input></program>
     <p>
       It uses the <c>Socket.getInputStream()</c> method to obtain a reference to the socket's input stream,
       which has already been created.

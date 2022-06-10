@@ -2,7 +2,7 @@
   <title>Class Definition</title>
   <introduction>
     <p>
-      To program in Java the main thing you do is write class definitions \marginpar{The class as template} for the various objects that will make up the program.
+      To program in Java the main thing you do is write class definitions  for the various objects that will make up the program.
       A class definition <em>encapsulates</em>
       its objects' data and behavior.
       Once a class has been defined,
@@ -13,7 +13,7 @@
     <p>
       A class definition contains two types of elements:
       variables and methods.
-      <em>Variables</em> are used to store the \marginpar{Variables and methods} object's information.
+      <em>Variables</em> are used to store the  object's information.
       <em>Methods</em> are used to process the information.
       To design an object you need to answer five basic questions:
     </p>
@@ -51,7 +51,7 @@
     <principle>
       <title>EFFECTIVE DESIGN:Private Variables</title>
       <p>
-        Instance variables are usually declared <c>private</c> so that they cannot be directly accessed by other \mbox{objects.}
+        Instance variables are usually declared <c>private</c> so that they cannot be directly accessed by other objects.
       </p>
     </principle>
     <principle>
@@ -69,7 +69,7 @@
     </p>
     <figure xml:id="fig-riddleclass2">
       <caption>Definition of the <c>Riddle</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public class Riddle
 { private String question; //Instance variables
   private String answer;
@@ -83,14 +83,14 @@ public class Riddle
   public String getAnswer() // Instance method
   { return answer;
   } //getAnswer()} //Riddle class
-</pre>
+ </input></program>
     </figure>
     <p>
       two <c>private</c> instance variables and defines the three <c>public</c> methods listed in the UML diagram.
       In a Java class definition,
       access to a class element, such as a variable or a method,
       is controlled by labeling it with either the <c>private</c>, or <c>public</c> access modifier.
-      An <term>access modifier</term> is a declaration \marginpar{Access modifier} that controls access to a class or one of its elements.
+      An <term>access modifier</term> is a declaration  that controls access to a class or one of its elements.
       Note also that the <c>Riddle</c> class itself is declared <c>public</c>. This lets other classes have access to the class and to its public variables and methods.
     </p>
     <p>
@@ -100,7 +100,7 @@ public class Riddle
       It defines the methods (operations) that each <c>Riddle</c> can perform,
       but it doesn't actually perform the methods.
       In short, a class serves as a template,
-      providing a detailed blueprint of the \marginpar{Class as blueprint} objects
+      providing a detailed blueprint of the  objects
       (or instances)
       of that class.
     </p>
@@ -116,7 +116,7 @@ public class Riddle
       which can be defined either within the <c>Riddle</c> class itself or in a second class named something like <c>RiddleUser</c>.
     </p>
     <p>
-      One advantage of using a second class is that it gets us in the \marginpar{User interface} habit of thinking about the need for a separate class to serve as a user interface,
+      One advantage of using a second class is that it gets us in the  habit of thinking about the need for a separate class to serve as a user interface,
       with a separate set of tasks from the <c>Riddle</c> class.
       A <term>user interface</term> is an object or class that handles the interaction between a program's user and the rest of the program's computational tasks.
       This concept is illustrated in Figure<nbsp/>2.13.
@@ -169,8 +169,8 @@ public class Riddle
     </p>
     <figure xml:id="fig-riddleuser">
       <caption>The <c>RiddleUser</c> class.</caption>
-      \[27pc]
-<pre>
+      
+ <program language="java"><input>
 public class RiddleUser
 {
   public static void main(String argv[])
@@ -188,7 +188,7 @@ public class RiddleUser
     System.out.println("The answer to the second is:");
     System.out.println(riddle2.getAnswer());
   } // main()} // RiddleUser
-</pre>
+ </input></program>
     </figure>
     <p>
       Let's now discuss the statements that make up <c>RiddleUser</c>'s
@@ -197,14 +197,14 @@ public class RiddleUser
       or <em>instantiate</em>,
       two instances of the <c>Riddle</c> class:
     </p>
-<pre>
+ <program language="java"><input>
 Riddle riddle1 = new Riddle(
      "What is black and white and red all over?",
      "An embarrassed zebra.");
 Riddle riddle2 = new Riddle(
     "What is black and white and read all over?",
      "A newspaper.");
-</pre>
+ </input></program>
     <p>
       Note how the constructor gives each object a pair of <c>String</c> s that serve as the values of their two instance variables.
       Each object has its own <c>question</c> and its own <c>answer</c>, and each object has its own unique name, <c>riddle1</c> and
@@ -218,11 +218,11 @@ Riddle riddle2 = new Riddle(
       we can ask each riddle to tell us either of its values.
       The following expression is an example of a <em>method call</em>:
     </p>
-<pre>
+ <program language="java"><input>
 riddle1.getQuestion()
-</pre>
+ </input></program>
     <p>
-      Calling (or invoking) a method is a means of executing its code. \marginpar{Method call} The above method call just gets the <c>String</c> value that is stored in the <c>question</c> instance variable of <c>riddle1</c>.
+      Calling (or invoking) a method is a means of executing its code.  The above method call just gets the <c>String</c> value that is stored in the <c>question</c> instance variable of <c>riddle1</c>.
     </p>
     <principle>
       <title>PROGRAMMING TIP:Method Call versus Method Definition</title>
@@ -235,18 +235,18 @@ riddle1.getQuestion()
     <p>
       If we want to display the value of <c>riddle1</c>'s <c>question</c>, we can embed this method call within a <c>println()</c> statement
     </p>
-<pre>
+ <program language="java"><input>
 System.out.println(riddle1.getQuestion());
-</pre>
+ </input></program>
     <p>
       This tells the <c>System.out</c> object to execute its
 <c>println()</c> method,
       which displays the string given to it by <c>riddle1</c> on the console.
       Thus, the output produced by this statement will be
     </p>
-<pre>
+ <program language="java"><input>
 What is black and white and red all over?
-</pre>
+ </input></program>
   </subsection>
   <subsection xml:id="sect-mantra">
     <title>Define, Create, Use</title>
@@ -279,8 +279,9 @@ What is black and white and red all over?
       Instantiation creates an instance and associates a name with it in the program.
       The object's methods can then be called as a way of getting the object to perform certain tasks.
     </p>
-    <p>
-      \secEXRHone{Self-Study Exercises}
+  
+      </subsection><subsection><title>Self-Study Exercises</title>
+      <p>
       <ol>
         <li>
           <p>

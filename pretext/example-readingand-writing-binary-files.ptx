@@ -50,7 +50,7 @@
       <p>
         Let's begin by designing a method that will output employee data to a binary file.
         As the developer of this program,
-        one thing you'll have \marginpar{Generating binary data} to do is build some sample data files.
+        one thing you'll have  to do is build some sample data files.
         These can't easily be built by hand<mdash/>remember you can't use a text editor to create them<mdash/>so you'll want to develop a method that can generate some random data of the sort your application will have to process.
       </p>
       <principle>
@@ -69,12 +69,12 @@
         the data in a file containing four records might look like this,
         once the data are interpreted:
       </p>
-<pre>
+ <program language="java"><input>
 Name0 24 15.06
 Name1 25 5.09
 Name2 40 11.45
 Name3 52 9.25
-</pre>
+ </input></program>
       <p>
         As you can see,
         these data look as if they were randomly generated,
@@ -136,10 +136,10 @@ Name3 52 9.25
         and the
 <c>FileOutputStream</c> lets us use the file's name to create the stream:
       </p>
-<pre>
+ <program language="java"><input>
 DataOutputStream outStream
   = new DataOutputStream(new FileOutputStream (fileName));
-</pre>
+ </input></program>
       <p>
         This enables the program to write data to the <c>DataOutputStream</c>, which will pass them through the <c>FileOutputStream</c> to the file itself.
         That settles the first question.
@@ -152,12 +152,12 @@ DataOutputStream outStream
         say, five records of employee data.
         We need one <c>write()</c> statement for each of the elements in the employee record: The name (<c>String</c>), age (<c>int</c>), and pay rate (<c>double</c>):
       </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; 5; k++) {  // Output 5 data records
  outStream.writeUTF("Name" + k);             // Name
  outStream.writeInt((int)(20 + Math.random() * 25)); //Age
  outStream.writeDouble(Math.random() * 500); // Payrate}
-</pre>
+ </input></program>
       <p>
         Within the loop body we have one output statement for each data element in the record.
         The names of the methods reflect the type of data they write.
@@ -200,7 +200,7 @@ for (int k = 0; k &lt; 5; k++) {  // Output 5 data records
       <figure xml:id="fig-writerecordsmethod">
         <caption>A method to write a binary file consisting of five
         randomly constructed records.</caption>
-<pre>
+ <program language="java"><input>
 private void writeRecords( String fileName )  {
  try {
    DataOutputStream outStream   // Open stream
@@ -215,7 +215,7 @@ private void writeRecords( String fileName )  {
  } catch (IOException e) {
    display.setText("IOERROR: " + e.getMessage() + "\n");
  }} // writeRecords()
-</pre>
+ </input></program>
       </figure>
     </subsubsection>
   </subsection>
@@ -244,16 +244,16 @@ private void writeRecords( String fileName )  {
 <c>InputStream</c> subclass (Fig.
       <xref ref="fig-streamhier"></xref> and Table<nbsp/>11.1).
       As you've probably come to expect,
-      the <c>FileInputStream</c> class contains constructors that let us create a stream from a file name (Fig.<nbsp/>11\mbox{.} 20).
+      the <c>FileInputStream</c> class contains constructors that let us create a stream from a file name (Fig.<nbsp/>11. 20).
       However, it does not contain useful <c>read()</c> methods.
       Fortunately,
       the <c>DataInputStream</c> class contains the input counterparts of the methods we found in <c>DataOutputStream</c>(Fig.<nbsp/>11.21).
       Therefore, our input stream for this method will be a combination of <c>DataInputStream</c> and <c>FileInputStream</c>:
     </p>
-<pre>
+ <program language="java"><input>
 DataInputStream inStream
    = new DataInputStream(new FileInputStream(file));
-</pre>
+ </input></program>
     <p>
       Now that we have identified the classes and methods we'll use to read the data,
       the most important remaining issue is designing a read loop that will terminate correctly.
@@ -264,7 +264,7 @@ DataInputStream inStream
       an end-of-file exception <c>EOFException</c> is thrown.
       Thus, the binary loop is coded as an infinite loop that's exited when the <c>EOFException</c> is raised: \marginfigvspace{-120pt}{chptr11/distream.eps}{The <c>java.io.DataInputStream</c> class contains methods for reading all types of data.}{fig-distream}
     </p>
-<pre>
+ <program language="java"><input>
 try {
   while (true) {  // Infinite loop
     String name = inStream.readUTF();  // Read a record
@@ -272,7 +272,7 @@ try {
     double pay = inStream.readDouble();
     display.append(name + " " + age + " " + pay + "\n");
   } // while} catch (EOFException e) {} // Until EOF exception
-</pre>
+ </input></program>
     <p>
       The read loop is embedded within a <c>try/catch</c> statement.
       Note that the <c>catch</c> clause for the
@@ -281,7 +281,7 @@ try {
       the block is exited for good,
       which is precisely the action we want to take.
       That's why we needn't do anything when we catch the <c>EOFException</c>. We have to catch the exception or else Java will catch it and terminate the program.
-      This is an \marginpar{An expected exception} example of an expected exception.
+      This is an  example of an expected exception.
     </p>
     <principle>
       <title>EFFECTIVE DESIGN:<c>EOFException</c></title>
@@ -312,7 +312,7 @@ try {
     </p>
     <figure xml:id="fig-readrecordsmethod">
       <caption>A method for reading binary data.</caption>
-<pre>
+ <program language="java"><input>
 private void readRecords( String fileName ) {
  try {
    DataInputStream inStream     // Open stream
@@ -334,7 +334,7 @@ private void readRecords( String fileName ) {
    } catch (IOException e) {
       display.setText("IOERROR: " + e.getMessage() + "\n");
    }} // readRecords()
-</pre>
+ </input></program>
     </figure>
     <p>
       It's important that a <c>close()</c> statement be placed after the
@@ -372,7 +372,7 @@ private void readRecords( String fileName ) {
           <p>
             Identify the error in the following method,
             which is supposed to read a binary file of <c>int</c> s from a <c>DataInputStream</c>:
-<pre>
+ <program language="java"><input>
 public void readIntegers(DataInputStream inStream) {
     try {
         while (true) {
@@ -383,7 +383,7 @@ public void readIntegers(DataInputStream inStream) {
     } catch (EOFException e) {
     } catch (IOException e) {
     }} // readIntegers
-</pre>
+ </input></program>
           </p>
         </li>
       </ol>
@@ -405,7 +405,7 @@ public void readIntegers(DataInputStream inStream) {
     <figure xml:id="fig-binaryioclass">
       <caption>Part I of the <c>BinaryIO</c> class, which illustrates
       simple input and output from a binary file.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;         // Swing components
 import java.awt.*;
 import java.io.*;
@@ -454,12 +454,12 @@ public class BinaryIO extends JFrame implements ActionListener{
             display.setText("IOERROR: " + e.getMessage() + "\n");
         }
     } // readRecords()
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig_binaryIOpart2">
       <caption>(<em>continued</em>) The <c>BinaryIO</c> class, Part II.</caption>
-      \[28pc]
-<pre>
+      
+ <program language="java"><input>
 private void writeRecords( String fileName )  {
    try {
      DataOutputStream outStream   // Open stream
@@ -492,7 +492,7 @@ private void writeRecords( String fileName )  {
        }
     });
  } // main()} // BinaryIO
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection>
@@ -502,24 +502,24 @@ private void writeRecords( String fileName )  {
       For example,
       if the file contains records that consist of a <c>String</c> followed by an <c>int</c> followed by a <c>double</c>, then they must be written by a sequence consisting of
     </p>
-<pre>
+ <program language="java"><input>
 writeUTF();
 writeInt():
 writeDouble();
-</pre>
+ </input></program>
     <p>
       And they must thereafter be read by the sequence of
     </p>
-<pre>
+ <program language="java"><input>
 readUTF();
 readInt():
 readDouble();
-</pre>
+ </input></program>
     <p>
       Attempting to do otherwise would make it impossible to interpret the data in the file.
     </p>
     <p>
-      This point should make it evident why (non-Java) binary files are not portable \marginpar{Portability} whereas text files are.
+      This point should make it evident why (non-Java) binary files are not portable  whereas text files are.
       With text files, each character consists of 8 bits,
       and each 8-bit chunk can be interpreted as an ASCII character.
       So even though a text file consists of a long sequence of 0's and 1's, we know how to find the boundaries between each character.
@@ -531,12 +531,12 @@ readDouble();
       binary files are also just a long sequence of 0's and 1's, but we can't tell where one data element begins and another one ends.
       For example, the 64-bit sequence
     </p>
-<pre>
+ <program language="java"><input>
 010100110011001001010100110011000
     010100110011001011010100110011000
-</pre>
+ </input></program>
     <p>
-      could represent two 32-bit <c>int</c> s or two 32-bit <c>float</c> s or one 64-bit \mbox{double} or four 16-bit <c>char</c> s or a single
+      could represent two 32-bit <c>int</c> s or two 32-bit <c>float</c> s or one 64-bit double or four 16-bit <c>char</c> s or a single
 <c>String</c> of 8 ASCII characters.
       We can't tell what data we have unless we know exactly how the data were written.
     </p>

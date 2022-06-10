@@ -5,39 +5,39 @@
         <idx><h>character conversion</h></idx>
     as integers is that we can represent various character operations in terms of integer operations.
     For example,
-    suppose we want to capitalize a lowercase \marginpar{Lowercase to uppercase} letter.
+    suppose we want to capitalize a lowercase  letter.
     Table<nbsp/>5.13 shows that the entire sequence of lowercase letters <c>('a' <ellipsis /> 'z')</c> is displaced by 32 from the sequence of uppercase letters <c>('A' <ellipsis /> 'Z')</c>, so we can convert any lowercase letter into its corresponding uppercase letter by subtracting 32 from its integer value,
     provided we perform an explicit cast on the result.
     When we perform the cast <c>(char) ('a' - 32 )</c>, the resulting value is <c>'A'</c>, as the following example shows:
   </p>
-<pre>
+ <program language="java"><input>
 (char)('a' - 32)              ==>  'A'
-</pre>
+ </input></program>
   <p>
     Recall that in evaluating <c>'a' - 32</c>Java will promote <sq>a</sq> to an <c>int</c> and then perform the subtraction.
     Thus, a step-by-step evaluation of the expression would go as follows:
   </p>
-<pre>
+ <program language="java"><input>
 Step 1. (char)((int)'a' - 32)// Promote 'a' to int
 Step 2. (char)(97 - 32)      // Subtract
 Step 3. (char) (65)          // Cast result to a char
 Step 4. 'A'                  // Results in 'A'
-</pre>
+ </input></program>
   <p>
-    Similarly, we can convert an uppercase letter into the corresponding \marginpar{Uppercase to lowercase} lowercase letter by simply adding 32 to its integer code and casting the result back to a char:
+    Similarly, we can convert an uppercase letter into the corresponding  lowercase letter by simply adding 32 to its integer code and casting the result back to a char:
   </p>
-<pre>
+ <program language="java"><input>
 (char)('J' + 32)              ==>  'j'
-</pre>
+ </input></program>
   <p>
     We can group these ideas into a method that performs conversion from lowercase to uppercase:
   </p>
-<pre>
+ <program language="java"><input>
 char toUpperCase(char ch) {
   if ((ch >= 'a') AmPaMp (ch &lt;= 'z'))
     return ch - 32 ;  // Error: can't return an int
   return ch;}
-</pre>
+ </input></program>
   <p>
     This method
         <idx><h>toUpperCase() method</h></idx>
@@ -47,7 +47,7 @@ char toUpperCase(char ch) {
     if <em>ch</em> falls between <sq>a</sq> and <sq>z</sq> inclusive.
     If so, it returns the result of subtracting 32 from <em>ch</em>.
     If not, it returns <em>ch</em> unchanged.
-    However, the method contains a syntax error that becomes \marginpar{Type error} apparent if we trace through its steps.
+    However, the method contains a syntax error that becomes  apparent if we trace through its steps.
     If we invoke it with the expression <c>toUpperCase('b')</c>, then since <em><sq>b</sq></em>
     is between <em><sq>a</sq></em> and <em><sq>z</sq></em>,
     the method will return <em><sq>b</sq> <m>-</m> 32</em>.
@@ -56,45 +56,45 @@ char toUpperCase(char ch) {
     which is the integer code for the character <em><sq>B</sq></em>.
     However, the method is supposed to return a <c>char</c>, so this last statement will generate the following syntax error:
   </p>
-<pre>
+ <program language="java"><input>
 Incompatible type for return. An explicit cast needed
 to convert int to char.
 >>    return ch - 32 ;
 >>    ^
-</pre>
+ </input></program>
   <p>
     In order to avoid this error,
     the result must be converted back to <c>char</c> before it can be returned:
   </p>
-<pre>
+ <program language="java"><input>
 char toUpperCase (char ch) {
   if ((ch >= 'a') AmPaMp (ch &lt;= 'z'))
     return (char)(ch - 32);  // Explicit cast
   return ch;}
-</pre>
+ </input></program>
   <p>
     Another common type of conversion is to convert a digit
         <idx><h>digitToInteger() method</h></idx>
     to its corresponding integer value.
     For example,
-    we convert the character <sq>9</sq> to the integer 9 by \marginpar{Digit to integer} making use of the fact that the digit <sq>9</sq> is 9 characters beyond the digit <sq>0</sq> in the lexical order.
+    we convert the character <sq>9</sq> to the integer 9 by  making use of the fact that the digit <sq>9</sq> is 9 characters beyond the digit <sq>0</sq> in the lexical order.
     Therefore, subtracting <sq>0</sq> from <sq>9</sq> gives integer 9 as a result:
   </p>
-<pre>
+ <program language="java"><input>
 ('9' - '0')  ==> (57 - 48) ==>   9
-</pre>
+ </input></program>
   <p>
     More generally,
     the expression <em><m>ch -</m> <sq>0</sq></em> will convert any digit,
     <em>ch</em>, to its integer value.
     We can encapsulate these ideas into a method that converts any digit into its corresponding integer value:
   </p>
-<pre>
+ <program language="java"><input>
 int digitToInteger(char ch) {
   if ((ch >= '0') AmPaMp (ch &lt;= '9'))
     return ch - '0';
   return -1 ;}
-</pre>
+ </input></program>
   <p>
     This method takes a single <c>char</c> parameter and returns an
 <c>int</c>. It first checks that
@@ -117,7 +117,7 @@ int digitToInteger(char ch) {
     <caption>A Java program illustrating character<idx><h>character
     conversion example</h></idx> conversions. When run, the program will generate
     the following outputs, one per line: a, 98, b, A, B, 7.</caption>
-<pre>
+ <program language="java"><input>
 public class Test {
     public static void main(String argv[]) {
         char ch = 'a';          // Local variables
@@ -140,6 +140,6 @@ public class Test {
             return ch - '0';
         return -1 ;
     }} // Test
-</pre>
+ </input></program>
   </figure>
 </section>

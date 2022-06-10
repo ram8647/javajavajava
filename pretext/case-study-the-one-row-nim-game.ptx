@@ -49,7 +49,7 @@
       It will use the <c>OneRowNim</c> object to keep track of the game.
     </p>
     <p>
-      In fact, the main challenge for this part of our problem is designing \marginpar{Loop algorithm} the <c>run()</c> method,
+      In fact, the main challenge for this part of our problem is designing  the <c>run()</c> method,
       which will use a loop algorithm to play the game.
       The user and the computer will repeatedly take turns picking up sticks until the game is over.
       The game is over when there are no more sticks to pick up.
@@ -62,7 +62,7 @@
       and we refer to the <c>KeyboardReader</c> instance as the <c>reader</c> object.
       We use the notation <c>game:get the number of sticks left</c> to indicate that we are sending a message to the <c>game</c> object.
     </p>
-<pre>
+ <program language="java"><input>
 Create a game object with 21 sticks
  Create a reader object
  sticksLeft = game:get the number of sticks left
@@ -80,7 +80,7 @@ Create a game object with 21 sticks
         reader: report that the user wins
  else
        reader: report that the computer wins
-</pre>
+ </input></program>
     <p>
       In this algorithm,
       the initializations we perform consist of creating the game and reader objects and initializing <c>sticksLeft</c>. We use a while loop structure to control the game.
@@ -121,7 +121,7 @@ Create a game object with 21 sticks
       The use of the boolean method <c>gameOver()</c> to control the loop makes this code segment easier to understand.
       Also, it leaves it up to the game object to determine when the game is over.
       From an object-oriented design perspective,
-      this is an appropriate \marginpar{Division of labor} division of responsibility.
+      this is an appropriate  division of responsibility.
       If you doubt this,
       imagine what could go wrong if this determination was left up to the user interface.
       A user-interface programmer might end up, mistakenly,
@@ -135,8 +135,8 @@ Create a game object with 21 sticks
     <figure xml:id="fig-ornapp">
       <caption>Definition of <c>OneRowNimApp</c>, a command-line interface
       to the <c>OneRowNim</c>.</caption>
-      \[31pc]
-<pre>
+      
+ <program language="java"><input>
 public class OneRowNimApp
 { private KeyboardReader reader;
   private OneRowNim game;
@@ -179,7 +179,7 @@ public class OneRowNimApp
   { OneRowNimApp app = new OneRowNimApp();
     app.run();
   } //main()} // OneRowNimApp
-</pre>
+ </input></program>
     </figure>
     <p>
       The <c>run()</c> method calls <c>userMove()</c> and <c>computerMove()</c> to perform the specific set of actions associated with each type of move.
@@ -232,11 +232,11 @@ public class OneRowNimApp
       the GUI will still need a reference to its associated computational object,
       in this case the game:
     </p>
-<pre>
+ <program language="java"><input>
 private OneRowNim game;
     ...
     game = new OneRowNim();
-</pre>
+ </input></program>
     <p>
       The biggest difference between this GUI and the one we used with the greeter application occurs in the details of the interaction between the GUI and the game.
       These details are the responsibility of the <c>actionPerformed()</c> method,
@@ -245,7 +245,7 @@ private OneRowNim game;
     <p>
       Unlike in the command-line version,
       there is no need to use a loop construct in the <c>actionPerformed()</c> method.
-      Instead, because we \marginpar{Java's event loop} are using event-driven programming here,
+      Instead, because we  are using event-driven programming here,
       we will rely on Java's event loop to move the game from one turn to another.
     </p>
     <p>
@@ -258,7 +258,7 @@ private OneRowNim game;
       it performs the computer's move.
       Thus, the basic algorithm is as follows:
     </p>
-<pre>
+ <program language="java"><input>
 Let the user move.
     If game:game is not over and computer turn
        let the computer move.
@@ -267,7 +267,7 @@ Let the user move.
     If game:game is over
         Stop accepting moves.
         Report the winner.
-</pre>
+ </input></program>
     <p>
       After the user's move,
       it is possible that the user picked up the last stick,
@@ -281,7 +281,7 @@ Let the user move.
     </p>
     <figure xml:id="fig-orngui">
       <caption>The <c>OneRowNimGUI</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -342,7 +342,7 @@ public class OneRowNimGUI extends JFrame implements ActionListener
       if (game.gameOver()) endGame();
     } // if
   } // actionPerformed()} // OneRowNimGUI
-</pre>
+ </input></program>
     </figure>
     <p>
       <xref ref="fig-orngui">Figure</xref>
@@ -375,9 +375,9 @@ public class OneRowNimGUI extends JFrame implements ActionListener
       The primary difference here is that for the user move we input the user's choice from a <c>JTextField</c> rather than from the keyboard.
       We use <c>getText()</c> to retrieve the user's input from the <c>JTextField</c> and we use <c>Integer.parseInt()</c> to convert to an <c>int</c> value:
     </p>
-<pre>
+ <program language="java"><input>
 int userTakes = Integer.parseInt(inField.getText());
-</pre>
+ </input></program>
     <p>
       Another difference is that we use a <c>JTextField</c> to display the program's messages to the user.
     </p>
@@ -402,12 +402,12 @@ gameOver()</c> and <c>getWinner()</c> to control the interaction with the user.
       <q>turn off</q>
       that component:
     </p>
-<pre>
+ <program language="java"><input>
 if (game.gameOver())
 {  goButton.setEnabled(false);  // End the game
    inField.setEnabled(false);
    ...}
-</pre>
+ </input></program>
     <p>
       Although it doesn't apply in this situation,
       the <c>setEnabled()</c> method can be used repeatedly in a GUI to turn components on and off as the context of the interaction dictates.

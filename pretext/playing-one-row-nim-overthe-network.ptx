@@ -12,7 +12,7 @@
     </p>
     <p>
       In order to generalize our design,
-      we begin by identifying those elements that are common to all \marginpar{Designing for extensibility} servers and clients and what is particular to the echo service and client.
+      we begin by identifying those elements that are common to all  servers and clients and what is particular to the echo service and client.
       Clearly, the general server and client protocols that are defined here in their respective <c>run()</c> methods,
       are something that all servers and clients have in common.
       What differs from one application to another is the particular service provided and requested,
@@ -25,7 +25,7 @@
       <image width="73%" source="chptr15/p858f1.png"/>
     </figure>
     <p>
-      Therefore, the way to generalize this application is to define the \marginpar{Abstract service methods}<c>run()</c> method in the generic <c>Server</c> and <c>Client</c> classes.
+      Therefore, the way to generalize this application is to define the <c>run()</c> method in the generic <c>Server</c> and <c>Client</c> classes.
       The overall design of the One Row Nim service will now consist of five classes organized into the hierarchy shown in <xref ref="fig-p858f1">Figure</xref>.
       At the root of the hierarchy is the <c>ClientServer</c> class,
       which contains nothing but I/O methods used by both clients and servers.
@@ -36,7 +36,7 @@
 <c>requestService()</c> methods.
       Because the <c>run()</c> methods defined in <c>Client</c> and <c>Server</c> call <c>provideService()</c> and <c>requestService()</c>, respectively,
       these methods must be declared as <c>abstract</c> methods in the <c>Server</c> and <c>Client</c> classes.
-      Any class that contains an \mbox{abstract} method must itself be declared <c>abstract</c>.
+      Any class that contains an abstract method must itself be declared <c>abstract</c>.
     </p>
     <p>
       Note that we have left the <c>readFromSocket()</c> and <c>writeToSocket()</c> methods in the <c>ClientServer</c> class.
@@ -69,8 +69,8 @@
     </principle>
     <figure xml:id="fig-serverclass">
       <caption>The abstract <c>Server</c> class.</caption>
-      \[27pc]
-<pre>
+      
+ <program language="java"><input>
 import java.net.*;
 import java.io.*;
 public abstract class Server extends ClientServer {
@@ -102,11 +102,11 @@ public abstract class Server extends ClientServer {
   }// run()
  // Implemented in subclass
  protected abstract void provideService(Socket socket);  }// Server
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig-clientclass">
       <caption>The abstract <c>Client</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import java.net.*;
 import java.io.*;
 public abstract class Client extends ClientServer {
@@ -141,20 +141,20 @@ public abstract class Client extends ClientServer {
     String line = input.readLine();
     return line;
   }// readFromKeyboard()}// Client
-</pre>
+ </input></program>
     </figure>
   </introduction>
   <subsection>
     <title>The <c>NimServer</c>Class</title>
     <p>
       Given the abstract definition of the <c>Server</c> class,
-      defining a new service is simply a matter of extending <c>Server</c> and \marginpar{Extensibility} implementing the <c>provideService()</c> method in the new subclass.
+      defining a new service is simply a matter of extending <c>Server</c> and  implementing the <c>provideService()</c> method in the new subclass.
       We will name the subclass <c>NimServer</c>.
     </p>
     <figure xml:id="fig-nimserverclass">
       <caption>The  <c>NimServer</c> class.</caption>
-      \[29pc]
-<pre>
+      
+ <program language="java"><input>
 import java.net.*;
 import java.io.*;
 public class NimServer extends Server {
@@ -214,7 +214,7 @@ public class NimServer extends Server {
     NimServer server = new NimServer(10001,5);
     server.start();
   } // main()} // NimServer
-</pre>
+ </input></program>
     </figure>
     <p>
       <xref ref="fig-nimserverclass">Figure</xref>
@@ -247,7 +247,7 @@ public class NimServer extends Server {
       this instance of <c>provideService()</c> is no different than the <c>provideService()</c> method we used in the <c>EchoServer</c> class.
     </p>
     <p>
-      Finally, note that <c>NimServer</c> provides an implementation of the \marginpar{Overriding a method}<c>writeToSocket()</c> method.
+      Finally, note that <c>NimServer</c> provides an implementation of the <c>writeToSocket()</c> method.
       This method is implemented in the <c>ClientServer()</c> class and is inherited by <c>NimServer</c>. However,
       the default implementation assumes that the client will use the a carriage return (<c><c>\n</c></c>) to determine the end of a particular message in the socket.
       Because <c>OneRowNim</c>'s methods, <c>getGamePrompt()</c> and <c>reportGameState()</c>, contain embedded carriage returns,
@@ -262,12 +262,12 @@ public class NimServer extends Server {
       As its task is simply to manage the communication between the human user and the <c>NimServer</c>, it is very similar to the <c>requestService()</c> method we used in <c>EchoClient</c>. The relationship between the abstract <c>Client</c> class (Fig.
       <xref ref="fig-clientclass"></xref>) and its extension in <c>NimClient</c>(Fig.
       <xref ref="fig-nimclientclass"></xref>) is very similar to the relationship between <c>Server</c> and <c>NimServer</c>. The<nbsp/><c>requestService()</c> method is called by <c>Client.run()</c>. It is implemented in <c>NimClient</c>. In this way,
-      the <c>Client</c> class can serve as a superclass for any number of clients. \marginpar{Creating new clients} New clients for new services can be derived from <c>Client</c> by simply implementing their own <c>requestService()</c> method.
+      the <c>Client</c> class can serve as a superclass for any number of clients.  New clients for new services can be derived from <c>Client</c> by simply implementing their own <c>requestService()</c> method.
     </p>
     <figure xml:id="fig-nimclientclass">
       <caption>The derived <c>NimClient</c> class.</caption>
-      \[34pc]
-<pre>
+      
+ <program language="java"><input>
 import java.net.*;
 import java.io.*;
 public class NimClient extends Client {
@@ -292,7 +292,7 @@ public class NimClient extends Client {
     NimClient client = new NimClient("localhost", 10001);
     client.start();
   } // main()} // NimClient
-</pre>
+ </input></program>
     </figure>
     <principle>
       <title>EFFECTIVE DESIGN:Inheritance</title>

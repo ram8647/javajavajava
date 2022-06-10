@@ -2,7 +2,7 @@
   <title>Checkboxes, Radio Buttons, and Borders</title>
   <introduction>
     <p>
-      Suppose you are the software developer for your own software business \marginpar{Problem statement} specializing in computer games.
+      Suppose you are the software developer for your own software business  specializing in computer games.
       You want to develop an applet-based order form that customers can use to order software over the Web.
       At the moment you have three software titles<mdash/>a chess game,
       a checkers game, and a crossword puzzle game.
@@ -16,13 +16,13 @@
       Unlike the previous problem where the input was a numeric value,
       in this problem the input will be the user's selection from some kind of menu.
       The result will be the creation of an order.
-      Let's suppose that this part \marginpar{Interface design} of the task happens behind the scenes<mdash/>that is,
+      Let's suppose that this part  of the task happens behind the scenes<mdash/>that is,
       we don't have to worry about creating an actual order.
       The output the user sees will simply be an acknowledgment that the order was successfully submitted.
     </p>
     <p>
       There are several kinds of controls needed for this interface.
-      First, \marginpar{What components do we need?} a conventional way to have users indicate their purchase decisions is to have them click a Submit button.
+      First,  a conventional way to have users indicate their purchase decisions is to have them click a Submit button.
       They should also have the option to cancel the transaction at any time.
     </p>
     <p>
@@ -61,32 +61,32 @@
       The borders will have titles that help explain the purpose of the various panels.
     </p>
     <p>
-      Note that the top-level window in this case is a <c>JApplet</c>. By default \marginpar{What top-level windows do we use?} it will have a border layout.
+      Note that the top-level window in this case is a <c>JApplet</c>. By default  it will have a border layout.
       For the main <c>JPanel</c> we are using a
       <m>3 \times 1</m> <c>GridLayout</c>. The components in the main panel are the <c>JTextArea</c> and two other <c>JPanel</c> s.
       The <c>GridLayout</c> will take care of sizing these so they are all of equal size.
     </p>
     <p>
       The center panel, which uses a flow layout,
-      contains panels for the checkboxes and \marginpar{Component layout} the radio buttons.
+      contains panels for the checkboxes and  the radio buttons.
       These elements are grouped within their own panels.
       Again, we can put a border around them in the final implementation (Fig.<nbsp/>13.26).
       The button panels use a
-<c>BoxLayout</c>, which we will discuss later. \marginpar{Containment hierarchy} This design leads to the most complex containment hierarchy thus far.
+<c>BoxLayout</c>, which we will discuss later.  This design leads to the most complex containment hierarchy thus far.
     </p>
   </introduction>
   <subsection>
     <title>Checkbox and Radio Button Arrays</title>
     <p>
       Because we will need three checkboxes, one for each title,
-      and three \marginpar{What data structures do we need?} radio buttons,
+      and three  radio buttons,
       one for each payment option,
       it will be useful again to use arrays to store both the buttons and their titles:
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 private ButtonGroup optGroup = new ButtonGroup();
 private JCheckBox titles[] = new JCheckBox[NTITLES];
 private JRadioButton options[] = new JRadioButton[NOPTIONS];
@@ -95,16 +95,16 @@ private String titleLabels[] =
                            "Crossword Maker - \$19.95"};
 private String optionLabels[] = {"Credit Card",
              "Debit Card", "E-cash"};
-</pre>
+ </input></program>
     <p>
       Again, the advantage of this design is that it simplifies the instantiation and initialization of the buttons: \marginfigvspace{-76pt}{chptr13/9f18.eps}{Borders around containers help make them stand out more.}{fig-acmescreen}
     </p>
-<pre>
+ <program language="java"><input>
 for(int k = 0; k &lt; titles.length; k++) {
     titles[k] = new JCheckBox(titleLabels[k]);
     titles[k].addItemListener(this);
     choicePanel.add(titles[k]);}
-</pre>
+ </input></program>
     <p>
       The only difference between this array of checkboxes and the keypad array of buttons that we used in the <c>Converter</c> program is that checkboxes generate <c>ItemEvent</c> s instead
 <c>ActionEvent</c> s.
@@ -118,14 +118,14 @@ for(int k = 0; k &lt; titles.length; k++) {
     <p>
       The code for instantiating and initializing the radio buttons is almost the same:
     </p>
-<pre>
+ <program language="java"><input>
 for(int k = 0; k &lt; options.length; k++) {
     options[k] = new JRadioButton(optionLabels[k]);
     options[k].addItemListener(this);
     optionPanel.add(options[k]);
     optGroup.add(options[k] );}
 options[0].setSelected(true); // Set first button 'on'
-</pre>
+ </input></program>
     <p>
       Radio buttons also generate <c>ItemEvent</c> s, so they too must be registered with an <c>ItemListener</c>. Note that the first button is set on,
       which represents a default payment option for the user.
@@ -148,7 +148,7 @@ options[0].setSelected(true); // Set first button 'on'
       <image width="73%" source="chptr13/p504f1.png"/>
     </figure>
     <p>
-      Note the effective division of labor in the design of \marginpar{Divide and conquer} the various objects to which a radio button belongs.
+      Note the effective division of labor in the design of  the various objects to which a radio button belongs.
       The
 <c>optionPanel</c> is a GUI component (a <c>JPanel</c>) that contains the button within the visual interface.
       Its role is to help manage the graphical aspects of the button's behavior.
@@ -198,10 +198,10 @@ options[0].setSelected(true); // Set first button 'on'
 <c>JPanel</c><mdash/>is very simple.
       It takes one statement:
     </p>
-<pre>
+ <program language="java"><input>
 choicePanel.setBorder(
        BorderFactory.createTitledBorder("Titles"));
-</pre>
+ </input></program>
     <p>
       The <c>setBorder()</c> method is defined in <c>JComponent</c>, is inherited by all Swing components,
       and takes a <c>Border</c> argument.
@@ -246,10 +246,10 @@ choicePanel.setBorder(
       Once again, to set the layout manager for a container you use the
 <c>setLayout()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 choicePanel.setLayout(new
              BoxLayout(choicePanel,BoxLayout.Y_AXIS));
-</pre>
+ </input></program>
     <p>
       The <c>BoxLayout()</c> constructor has two parameters.
       The first is a reference to the container that's being managed,
@@ -277,7 +277,7 @@ choicePanel.setLayout(new
       which consists of a single method,
       the <c>itemStateChanged()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 public void itemStateChanged(ItemEvent e) {
   display.setText("Your order so far (Payment by: ");
   for (int k = 0; k &lt; options.length; k++ )
@@ -286,7 +286,7 @@ public void itemStateChanged(ItemEvent e) {
   for (int k = 0; k &lt; titles.length; k++ )
     if (titles[k].isSelected())
       display.append("\t" + titles[k].getText() + "\n");} // itemStateChanged()
-</pre>
+ </input></program>
     <p>
       This version of the method handles item changes for both the checkbox menu and the radio buttons menu.
       The code uses two consecutive for loops.
@@ -304,12 +304,12 @@ public void itemStateChanged(ItemEvent e) {
       we have no real need to identify the item that caused the event.
       No matter what item the user selected,
       we want to display the entire state of the order.
-      However, like the \mbox{ActionEvent} class,
-      the \mbox{ItemEvent} class contains methods that can retrieve the item that caused the event:
+      However, like the ActionEvent class,
+      the ItemEvent class contains methods that can retrieve the item that caused the event:
     </p>
-<pre>
+ <program language="java"><input>
 getItem();  // Returns a menu item within a menu
-</pre>
+ </input></program>
     <p>
       The <c>getItem()</c> method is the <c>ItemListener</c>'s analogue to the <c>ActionEvent</c>'s <c>getSource()</c> method.
       It enables you to obtain the object that generated the event but returns a representation of the item that was selected or deselected.
@@ -326,8 +326,8 @@ getItem();  // Returns a menu item within a menu
     </p>
     <figure xml:id="fig-orderapplet">
       <caption>The <c>OrderApplet</c> class, Part I.</caption>
-      \[28pc]
-<pre>
+      
+ <program language="java"><input>
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -371,11 +371,11 @@ public class OrderApplet extends JApplet
     getContentPane().add(mainPanel);
     setSize(400,400);
   } // init()
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig_orderappletpart2cont">
       <caption><em>(continued)</em> The <c>OrderApplet</c> class, Part II.</caption>
-<pre>
+ <program language="java"><input>
 private void initChoices() {
     choicePanel.setBorder(
              BorderFactory.createTitledBorder("Titles"));
@@ -425,7 +425,7 @@ private void initChoices() {
       display.setText(
         "Thank you. Maybe we can serve you next time!\n");
   } // actionPerformed()} // OrderApplet
-</pre>
+ </input></program>
     </figure>
     <p>
       Second, note the use of titled borders around the four internal panels.
@@ -446,7 +446,7 @@ private void initChoices() {
       The first time the user clicks the Submit button,
       the button's label is changed to,
       <q>Confirm Order,</q>
-      and the user is prompted in the display area to click the \mbox{Confirm} button to submit the order.
+      and the user is prompted in the display area to click the Confirm button to submit the order.
       This design allows the interface to catch inadvertent button clicks.
     </p>
     <p>

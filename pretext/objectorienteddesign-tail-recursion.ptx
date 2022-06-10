@@ -12,7 +12,7 @@
     One difference between <c>drawBoxes()</c> and <c>drawGasket()</c> is that <c>drawBoxes()</c> is an example of a tail-recursive method.
     A method is <term>tail recursive</term>
         <idx><h>tail recursive</h></idx>
-    \marginpar{Tail recursion} if all of its recursive calls occur as the last action performed in the method.
+     if all of its recursive calls occur as the last action performed in the method.
     You have to be a bit careful about this definition.
     The recursive call in a tail-recursive method has to be the last
     <em>executed</em> statement.
@@ -24,14 +24,14 @@
     <em>N</em> times.
     This method is tail recursive even though its last statement is not a recursive call:
   </p>
-<pre>
+ <program language="java"><input>
 public void printHello(int N) {
  if (N > 1) {
    System.out.println("Hello");
    printHello(N - 1); // The last executed statement
  } else
    System.out.println("Hello");} // printHello()
-</pre>
+ </input></program>
   <p>
     This method is tail recursive because the last statement that will be executed,
     in its recursive cases, is the recursive call.
@@ -44,11 +44,11 @@ public void printHello(int N) {
     <q>Hello</q>
     <em>N</em> times:
   </p>
-<pre>
+ <program language="java"><input>
 public void printHelloIterative(int N) {
     for (int k = N; k > 0; k--)
         System.out.println("Hello");}
-</pre>
+ </input></program>
   <p>
     In this case, we use the parameter <em>N</em>
     to set the initial value of the loop variable,
@@ -79,12 +79,12 @@ public void printHelloIterative(int N) {
     consider how difficult it would be to draw the Sierpinski gasket using an iterative approach.
     We could start by developing an outer for loop to account for the different levels in the pattern:
   </p>
-<pre>
+ <program language="java"><input>
 for (int k = lev; k > 0; k--) {
  drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
  drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
  drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);}
-</pre>
+ </input></program>
   <p>
     But now each of the method calls within the body of this loop would have to be replaced by very complex loops.
     That would be a daunting task.
@@ -98,7 +98,7 @@ for (int k = lev; k > 0; k--) {
     </p>
   </principle>
   <p>
-    \secEXRHone{Self-Study Exercises}
+    </subsection><subsection><title>Self-Study Exercises</title>
     <ol>
       <li>
         <p>

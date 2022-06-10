@@ -5,7 +5,7 @@
       Suppose we wish to design a collection of cipher classes,
       including a Caesar cipher and a transposition cipher.
       Because the basic operations used in all forms of encryption are the same,
-      both the \marginpar{Problem decomposition}<c>Caesar</c> class and the <c>Transpose</c> class will have methods to <c>encrypt()</c> and <c>decrypt()</c> messages,
+      both the <c>Caesar</c> class and the <c>Transpose</c> class will have methods to <c>encrypt()</c> and <c>decrypt()</c> messages,
       where each message is assumed to be a string of words separated by spaces.
       These methods will take a <c>String</c> of words and translate each word using the encoding method that is appropriate for that cipher.
       Therefore, in addition to
@@ -36,9 +36,9 @@
       The following method definition will work for any cipher:
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 public String encrypt(String s) {
   StringBuffer result = new StringBuffer("");
   StringTokenizer words = new StringTokenizer(s);// Tokenize
@@ -46,7 +46,7 @@ public String encrypt(String s) {
     result.append(encode(words.nextToken()) + " ");
   }
   return result.toString();        // Return result} // encrypt()
-</pre>
+ </input></program>
     <p>
       This method creates a local <c>StringBuffer</c> variable,
 <c>result</c>, and uses <c>StringTokenizer</c> to break the original
@@ -57,13 +57,13 @@ public String encrypt(String s) {
     </p>
     <p>
       If we define <c>encrypt()</c> in the superclass,
-      it will be inherited \marginpar{Inheritance} by all of <c>Cipher</c>'s subclasses.
+      it will be inherited  by all of <c>Cipher</c>'s subclasses.
       Thus, if we define <c>Caesar</c> and <c>Transpose</c> as
     </p>
-<pre>
+ <program language="java"><input>
 public class Caesar extends Cipher { ... }
 public class Transpose extends Cipher { ... }
-</pre>
+ </input></program>
     <p>
       instances of these classes will be able to use the <c>encrypt()</c> method.
     </p>
@@ -77,11 +77,11 @@ public class Transpose extends Cipher { ... }
 <c>Cipher</c> class,
       we would define <c>encode()</c> and <c>decode()</c> as follows:
     </p>
-<pre>
+ <program language="java"><input>
 // Abstract methods
 public abstract String encode(String word);
 public abstract String decode(String word);
-</pre>
+ </input></program>
     <p>
       These declarations within the <c>Cipher</c> class tell the compiler that these methods will be implemented in <c>Cipher</c>'s subclasses.
       By defining it as <c>abstract</c>, <c>encode()</c> can be used in the <c>Cipher</c> class,
@@ -94,14 +94,14 @@ public abstract String decode(String word);
       <xref ref="fig-cipher">Figure</xref>
       provides the full definition of the
 <c>Cipher</c> class.
-      The \mbox{encode()} and <c>decode()</c> methods are declared abstract.
+      The encode() and <c>decode()</c> methods are declared abstract.
       They are intended to be implemented by
 <c>Cipher</c>'s subclasses.
     </p>
     <figure xml:id="fig-cipher">
       <caption>The <c>abstract Cipher</c> class.</caption>
-      \[35pc]
-<pre>
+      
+ <program language="java"><input>
 import java.util.*;
 public abstract class Cipher {
   public String encrypt(String s) {
@@ -122,10 +122,10 @@ public abstract class Cipher {
   } // decrypt()
   public abstract String encode(String word);            // Abstract methods
   public abstract String decode(String word);} // Cipher
-</pre>
+ </input></program>
     </figure>
     <p>
-      Note again that <c>encrypt()</c> and <c>decrypt()</c>, which are implemented in \mbox{Cipher} , invoke <c>encode()</c> and <c>decode()</c>, \marginpar{ encode() and decode() are polymorphic} respectively,
+      Note again that <c>encrypt()</c> and <c>decrypt()</c>, which are implemented in Cipher , invoke <c>encode()</c> and <c>decode()</c>,  respectively,
       which are declared in <c>Cipher</c> but implemented in <c>Cipher</c>'s subclasses.
       Java's dynamic binding mechanism will take care of invoking the appropriate implementation of
 <c>encode()</c> or <c>decode()</c>, depending on what type of object is involved.
@@ -134,12 +134,12 @@ public abstract class Cipher {
       respectively,
       then the following calls to <c>encrypt()</c> will cause their respective <c>encode()</c> methods to be invoked:
     </p>
-<pre>
+ <program language="java"><input>
 // Invokes caesar.encode()
 caesar.encrypt("hello world");
 // Invokes transpose.encode()
 transpose.encrypt("hello world");
-</pre>
+ </input></program>
     <p>
       When <c>caesar.encrypt()</c> is called,
       it will in turn invoke <c>caesar.encode()</c><mdash/>that is,
@@ -149,7 +149,7 @@ transpose.encrypt("hello world");
 <c>transpose.encrypt()</c> is invoked,
       it will in turn invoke
 <c>transpose.encode()</c>. In this way,
-      each object can perform the encoding algorithm appropriate for its type of \marginpar{Method polymorphism} cipher.
+      each object can perform the encoding algorithm appropriate for its type of  cipher.
     </p>
   </subsection>
   <subsection>
@@ -161,9 +161,9 @@ transpose.encrypt("hello world");
       It takes each character of its parameter (<c>word.charAt(k)</c>) and performs a Caesar shift on the character.
       Note how the shift is done:
     </p>
-<pre>
+ <program language="java"><input>
 ch = (char)('a' + (ch -'a'+ 3) % 26);// Caesar shift
-</pre>
+ </input></program>
     <p>
       Recall from Chapter<nbsp/>5 that <c>char</c> data in Java are represented as 16-bit integers.
       This enables us to manipulate characters as numbers.
@@ -171,8 +171,8 @@ ch = (char)('a' + (ch -'a'+ 3) % 26);// Caesar shift
     </p>
     <figure xml:id="fig-caesar">
       <caption>The <c>Caesar</c> class.</caption>
-      \[35pc]
-<pre>
+      
+ <program language="java"><input>
 public class Caesar extends Cipher {
   public String encode(String word) {
     StringBuffer result = new StringBuffer(); // Initialize a string buffer
@@ -192,12 +192,12 @@ public class Caesar extends Cipher {
     }
     return result.toString();            // Return the result as a string
   } // decode()} // Caesar
-</pre>
+ </input></program>
     </figure>
     <p>
       For example,
       suppose that the character (<c>ch</c>) is <em>h</em>,
-      which has \marginpar{Character conversions} an ASCII code of 104
+      which has  an ASCII code of 104
       (see Table<nbsp/>5.13).
       We want to shift it by 3, giving
       <em>k</em>, which has a code of 107.
@@ -231,45 +231,45 @@ public class Caesar extends Cipher {
       were numbered 0 through 25,
       then we can shift any character within that range by using the following formula:
     </p>
-<pre>
+ <program language="java"><input>
 (ch + 3) % 26         // Shift by 3 with wraparound
-</pre>
+ </input></program>
     <p>
       To map a character in the range
       <em>a</em> to <em>z</em>
       onto the integers 0 to 25,
       we can simply subtract <em>a</em> from it:
     </p>
-<pre>
+ <program language="java"><input>
 'a' - 'a' = 0
 'b' - 'a' = 1
 'c' - 'a' = 2
 ...
 'z' - 'a' = 25
-</pre>
+ </input></program>
     <p>
       Finally, we simply map the numbers 0 through 25 back to the characters
       <em>a</em> to <em>z</em>
       to complete the shift operation:
     </p>
-<pre>
+ <program language="java"><input>
 (char)('a' + 0) = 'a'
 (char)('a' + 1) = 'b'
 (char)('a' + 2) = 'c'
 ...
 (char)('a' + 25) = 'z'
-</pre>
+ </input></program>
     <p>
       Note the use here of the cast operator <c>(char)</c> to covert an integer into a <c>char</c>.
     </p>
     <p>
       To summarize,
       we can shift any character by 3 if we map it into the range 0 to 25, then add 3 to it mod 26,
-      then map that result back into \marginpar{Modular arithmetic} the<nbsp/>range
+      then map that result back into  the<nbsp/>range
       <em>a</em> to <em>z</em>.
       Thus, shifting <em>y</em> would go as follows:
     </p>
-<pre>
+ <program language="java"><input>
 (char)('a' + (ch -'a'+ 3) % 26)   //  Perform Caesar shift
 (char)('a' + ('y' - 'a' +3) % 26) //   on 'y'
 (char)(97 + (121 - 97 + 3) % 26)      //  Map 'y' to 0..25
@@ -277,7 +277,7 @@ public class Caesar extends Cipher {
 (char)(97 + 1)           //  Map result back to 'a' to 'z'
 (char)(98)                    //  Convert from int to char
 'b'
-</pre>
+ </input></program>
     <p>
       Note that in <c>decode()</c> a reverse Caesar shift is done by shifting by 23, which is <m>26-3</m>.
       If the original shift is 3, we can reverse that by shifting an additional 23.
@@ -304,7 +304,7 @@ public class Caesar extends Cipher {
     </p>
     <figure xml:id="fig-transpose">
       <caption>The <c>Transpose</c> class<idx><h>Transpose class</h></idx>.</caption>
-<pre>
+ <program language="java"><input>
 public class Transpose extends Cipher {
   // encode() reverses and returns a word
   public String encode(String word) {
@@ -314,7 +314,7 @@ public class Transpose extends Cipher {
   public String decode(String word) {
     return encode(word);         // Just call encode
   } // decode} // Transpose
-</pre>
+ </input></program>
     </figure>
   </subsection>
   <subsection xml:id="self-study-exercisesF22">
@@ -327,8 +327,8 @@ public class Transpose extends Cipher {
     </p>
     <figure xml:id="fig-testcipher">
       <caption>The <c>TestEncrypt</c> class<idx><h>TestEncrypt class</h></idx>.</caption>
-      \[35pc]
-<pre>
+      
+ <program language="java"><input>
 public class TestEncrypt {
   public static void main(String argv[]) {
     Caesar caesar = new Caesar();
@@ -345,13 +345,13 @@ public class TestEncrypt {
     System.out.println("Encrypted: " + secret);
     System.out.println("Decrypted: " + transpose.decrypt(secret));// Decrypt
   } // main()} // end TestEncrypt
-</pre>
+ </input></program>
     </figure>
     <p>
       a <c>Transpose</c> cipher and then encrypts and decrypts the same sentence using each cipher.
       If you run this program, it will produce the following output:
     </p>
-<pre>
+ <program language="java"><input>
 ********* Caesar Cipher Encryption *********
     PlainText: this is the secret message
     Encrypted: wklv lv wkh vhfuhw phvvdjh
@@ -360,9 +360,9 @@ public class TestEncrypt {
     PlainText: this is the secret message
     Encrypted: siht si eht terces egassem
     Decrypted: this is the secret message
-</pre>
+ </input></program>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

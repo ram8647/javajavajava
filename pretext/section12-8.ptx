@@ -11,7 +11,7 @@
     To illustrate how we can apply what we've learned about file I/O, let's modify the <c>WordGuess</c> class
     (which is listed in Fig.<nbsp/>8.27)
     so that it reads a list of possible words for players to guess from a file.
-    The Chapter<nbsp/>8 \marginpar{modifying <c>WordGuess</c>} version of the class contains a method, <c>getSecretWord()</c>, which uses a <c>switch</c> statement to randomly choose and return a word from a fixed list of ten words.
+    The Chapter<nbsp/>8  version of the class contains a method, <c>getSecretWord()</c>, which uses a <c>switch</c> statement to randomly choose and return a word from a fixed list of ten words.
     Reading the words from a text file would allow a user to modify the list of possible words by adding or changing words without needing to recompile the program.
   </p>
   <p>
@@ -36,31 +36,31 @@
     </ol>
   </p>
   <p>
-    Let us first choose descriptive names for \marginpar{New instance variables} declaring the two new instance variables:
+    Let us first choose descriptive names for  declaring the two new instance variables:
   </p>
-<pre>
+ <program language="java"><input>
 private String[] wordArray;
     private int arraySize;
-</pre>
+ </input></program>
   <p>
     Note that it will be useful to store the number of words in the file in its first line so that this information can be used to allocate memory for the array.
     For example,
     let us assume the text file will be named <c>secretwords.txt</c>, it will be located in the same directory as the <c>WordGuess</c> class,
     it will have the number of words in the file as its first line,
-    and it will have \marginpar{Format for the text file} a single word per line after that.
+    and it will have  a single word per line after that.
     Thus, a small file might look like:
   </p>
-<pre>
+ <program language="java"><input>
 3
     STREAMS
     CONDUIT
     DIALOGS
-</pre>
+ </input></program>
   <p>
-    We can use the body of the <c>readTextFile()</c> method of the <c>TextIO</c> class as a model for the Java code that needs to be added to the <c>WordGuess</c>\marginpar{Code to add to constructor} constructor.
+    We can use the body of the <c>readTextFile()</c> method of the <c>TextIO</c> class as a model for the Java code that needs to be added to the <c>WordGuess</c> constructor.
     Pseudocode for this code will look like:
   </p>
-<pre>
+ <program language="java"><input>
 Use file name to open a  BufferedReader stream
     Read first line and convert to an integer
     Store the integer as the size of the array
@@ -70,14 +70,14 @@ Use file name to open a  BufferedReader stream
        Store the word in the next array element
        Read next line of file
     Close the BufferedReader stream
-</pre>
+ </input></program>
   <p>
     When this pseudocode is translated into Java and inserted into a
 <c>try-catch</c> statement we get the code fragment in <xref ref="fig-wordguessfile">Figure</xref>.
   </p>
   <figure xml:id="fig-wordguessfile">
     <caption>Code added at beginning of the <c>WordGuess</c> constructor.</caption>
-<pre>
+ <program language="java"><input>
 try{
         FileReader fr = new FileReader("secretwords.txt");
         BufferedReader inStream
@@ -98,17 +98,17 @@ try{
     } catch(IOException e){
         e.printStackTrace();
     } //catch
-</pre>
+ </input></program>
   </figure>
   <p>
-    The new <c>getSecretWord()</c> method merely needs to generate a \marginpar{New code for <c>getSecretWord</c>} random array index and return the corresponding array element:
+    The new <c>getSecretWord()</c> method merely needs to generate a  random array index and return the corresponding array element:
   </p>
-<pre>
+ <program language="java"><input>
 private String getSecretWord(){
         int num = (int)(Math.random()*arraySize);
         return wordArray[num];
     } //getSecretWord()
-</pre>
+ </input></program>
   <p>
     The only other modification that is needed for to complete new
 <c>WordGuess</c> class is to add an initial <c>import java.io.*;</c> statement so that the file IO classes can be accessed.

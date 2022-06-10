@@ -80,20 +80,20 @@
       The default constructor sets the number of players to one.
       The constructors create an array of length <c>nPlayers</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public ComputerGame(int n) {
   nPlayers = n;
   player = new Player[n]; // Create the array}
-</pre>
+ </input></program>
     <p>
       The <c>setPlayer()</c> and <c>getPlayer()</c> methods are the mutator and accessor methods for the <c>whoseTurn</c> variable.
       This variable allows a user to determine and set whose turn it is,
       a useful feature for initializing a game.
       The <c>changePlayer()</c> method uses the default expression,
     </p>
-<pre>
+ <program language="java"><input>
 whoseTurn = (whoseTurn + 1) % nPlayers
-</pre>
+ </input></program>
     <p>
       for changing whose turn it is.
       Assuming that players are numbered from 0 to <em>nPlayers-1</em>,
@@ -112,7 +112,7 @@ whoseTurn = (whoseTurn + 1) % nPlayers
     </p>
     <figure xml:id="fig-gamesource">
       <caption>Implementation of the <c>ComputerGame</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public abstract class ComputerGame {
   protected int nPlayers;
   protected int addedPlayers = 0;
@@ -153,7 +153,7 @@ public abstract class ComputerGame {
   }
   public abstract boolean gameOver(); // Abstract
   public abstract String getWinner(); //  methods} //ComputerGame
-</pre>
+ </input></program>
     </figure>
     <p>
       There are several points worth noting about this implementation.
@@ -168,12 +168,12 @@ public abstract class ComputerGame {
 <c>addedPlayers</c> variable as the index into the <c>player</c> array,
       which always has length <c>nPlayers</c>. An attempt to call this method when the array is already full will lead to the following exception being thrown by Java:
     </p>
-<pre>
+ <program language="java"><input>
 Exception in thread ``main''
     java.lang.ArrayIndexOutOfBoundsException: 2
     at ComputerGame.addPlayer(ComputerGame.java:22)
     at TwentyOne.main(TwentyOne.java:121)
-</pre>
+ </input></program>
     <p>
       In other words,
       it is an error to try to add more players than will fit in the <c>player</c> array.
@@ -189,7 +189,7 @@ Exception in thread ``main''
       we are able to define a method here that doesn't know the exact types of the objects it will be listing.
     </p>
     <p>
-      The power of polymorphism is the flexibility and extensibility it \marginpar{polymorphism} lends to our class hierarchy.
+      The power of polymorphism is the flexibility and extensibility it  lends to our class hierarchy.
       Without this feature,
       we would not be able to define <c>listPlayers()</c> here in the superclass,
       and would instead have to define it in each subclass.
@@ -225,7 +225,7 @@ Exception in thread ``main''
       rather than the <c>TwoPlayerGame</c> class.
       Both constructors call the <c>init()</c> method to initialize the game:
     </p>
-<pre>
+ <program language="java"><input>
 public WordGuess() { super(1); init(); }
  public WordGuess(int m) { super(m); init(); }
  public void init() {
@@ -236,7 +236,7 @@ public WordGuess() { super(1); init(); }
         currentWord.setCharAt(k,'?');
      unguessedLetters = secretWord.length();
  }
-</pre>
+ </input></program>
     <p>
       The only other change required to convert <c>WordGuess</c> to an N-player game,
       is to rewrite its <c>play()</c> method.
@@ -245,9 +245,9 @@ public WordGuess() { super(1); init(); }
       it is actually much simpler than the <c>play()</c> method in the Chapter<nbsp/>8 version:
     </p>
     <p>
-      \[28pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 public void play(UserInterface ui) {
   ui.report(getRules());
   ui.report(listPlayers());
@@ -262,7 +262,7 @@ public void play(UserInterface ui) {
     }
     ui.report(reportGameState());
   } // while}
-</pre>
+ </input></program>
     <p>
       The method begins by displaying the game's rules and listing its players.
       The <c>listPlayers()</c> method is inherited from the <c>ComputerGame</c> class.
@@ -271,9 +271,9 @@ public void play(UserInterface ui) {
       On each iteration of the loop,
       a player is selected from the array:
     </p>
-<pre>
+ <program language="java"><input>
 WordGuesser p = (WordGuesser)player[whoseTurn];
-</pre>
+ </input></program>
     <p>
       The use of the <c>WordGuesser</c> variable, <c>p</c>, just makes the code somewhat more readable.
       Note that we have to use a cast operator, <c>(WordGuesser)</c>, to convert the array element,
@@ -286,9 +286,9 @@ WordGuesser p = (WordGuesser)player[whoseTurn];
       and then report the result.
       This is all done in a single statement:
     </p>
-<pre>
+ <program language="java"><input>
 ui.report(submitUserMove(p.makeAMove(getGamePrompt())));
-</pre>
+ </input></program>
     <p>
       If the player is a human,
       we prompt the player and use the <c>KeyboardReader</c>'s <c>getUserInput()</c> method to read the user's move.
@@ -296,7 +296,7 @@ ui.report(submitUserMove(p.makeAMove(getGamePrompt())));
       At the end of the loop, we report the game's updated state.
       The following code segment illustrates a small portion of the interaction generated by this <c>play()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 Current word ???????? Previous guesses GLE
  Player 0 guesses next.Sorry, Y is NOT a new letter
                        in the secret word
@@ -307,7 +307,7 @@ Current word ???????? Previous guesses GLE
  Player 2 guesses next.
  Guess a letter that you think is in the secret word: a
  Yes, the letter A is in the secret word
-</pre>
+ </input></program>
     <p>
       In this example,
       players 0 and 1 are computers and player 2 is a human.
@@ -320,9 +320,9 @@ Current word ???????? Previous guesses GLE
       the <c>WordGuesser</c> class is a subclass of <c>Player</c>(Figure<nbsp/>9.33).
       The <c>WordGuesser</c> class itself requires no changes other than its declaration:
     </p>
-<pre>
+ <program language="java"><input>
 public class WordGuesser extends Player
-</pre>
+ </input></program>
     <p>
       As we saw when we were discussing the <c>WordGuess</c> class,
       the
@@ -339,7 +339,7 @@ public class WordGuesser extends Player
     </p>
     <figure xml:id="fig-player">
       <caption>Implementation of the <c>Player</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public abstract class Player  {
   public static final int COMPUTER=0;
   public static final int HUMAN=1;
@@ -356,7 +356,7 @@ public abstract class Player  {
   public int getKind() { return kind; }
   public boolean isComputer() { return kind == COMPUTER; }
   public abstract String makeAMove(String prompt); } // Player
-</pre>
+ </input></program>
     </figure>
     <p>
       What gives <c>Player</c> its utility is the fact that it encapsulates those attributes and actions that are common to all computer game players.
@@ -380,7 +380,7 @@ public abstract class Player  {
     <p>
       Finally, the following <c>main()</c> method instantiates and runs an instance of the <c>WordGuess</c> game in a command-line user interface (CLUI):
     </p>
-<pre>
+ <program language="java"><input>
 public static void main(String args[])
 { KeyboardReader kb = new KeyboardReader();
   ComputerGame game = new WordGuess(3);
@@ -391,7 +391,7 @@ public static void main(String args[])
   game.addPlayer(new WordGuesser((WordGuess)game, 2,
                                          Player.COMPUTER);
   ((CLUIPlayableGame)game).play(kb);} //main()
-</pre>
+ </input></program>
     <p>
       In this example,
       we create a three player game in which two of the players are computers.

@@ -5,7 +5,7 @@
       An array is considered a <em>data structure</em>.
       A <term>data structure</term> is an organized collection of data.
       In an array,
-      data are arranged \marginpar{The array data structure} in a linear or sequential structure,
+      data are arranged  in a linear or sequential structure,
       with one element following another.
       When referencing elements in an array,
       we refer to the position of the particular element within the array.
@@ -15,7 +15,7 @@
       gives the number of elements in the array.
       This naming also reflects the fact that the array's data are contained in storage locations that are next to each other.
       In Java, as in C, C++, and some other programming languages,
-      the first element of an array has index 0. \marginpar{Zero indexing} (This is the same convention we used for <c>String</c> s.)
+      the first element of an array has index 0.  (This is the same convention we used for <c>String</c> s.)
     </p>
     <figure xml:id="fig-intarray">
       <caption>An array of 15 integers named <c>arr</c>.</caption>
@@ -37,21 +37,21 @@
     </p>
     <p>
       A <term>subscript</term> is an integer quantity contained in square brackets that is used to identify an array element.
-      An subscript must be either an integer value or an integer \marginpar{Subscript expressions} expression.
+      An subscript must be either an integer value or an integer  expression.
       Using <xref ref="fig-intarray">Figure</xref> to illustrate an example,
       suppose that <em>j</em> and <em>k</em>
       are integer variables equaling 5 and 7, respectively.
       Each of the following then would be valid references to elements of the array <em>arr</em>:
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 arr[4]     //Refers to 16
 arr[j]     //Is arr[5] which refers to 20
 arr[j + k] //Is arr[5+7] which is arr[12] which refers to 45
 arr[k % j] //Is arr[7%5] which is arr[2] which refers to -1
-</pre>
+ </input></program>
     <p>
       These examples show that when an expression,
       such as <c>j
@@ -63,12 +63,12 @@ arr[k % j] //Is arr[7%5] which is arr[2] which refers to -1
       Each of the following expressions would be invalid:
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 arr[5.0]  // 5.0 is a float and can't be an array subscript
 arr["5"]  // "5" is a string not an integer
-</pre>
+ </input></program>
     <p>
       For a given array,
       a valid array subscript must be in the range <c>0 ... N-1</c>, where <c>N</c> is the number of elements in the array or it is considered out-of-bounds.
@@ -77,12 +77,12 @@ arr["5"]  // "5" is a string not an integer
       which can be detected when the program is compiled.
       For the array <c>arr</c>, each of the following expressions contain out-of-bounds subscripts:
     </p>
-<pre>
+ <program language="java"><input>
 arr[-1]  // Arrays cannot have negative subscripts
 arr['5'] // Char '5' promoted to its Unicode value, 53
 arr[15]  // The last element of arr has subscript 14
 arr[j*k] // Since j*k equals 35
-</pre>
+ </input></program>
     <p>
       Each of these references would lead to an <c>IndexOutOfBoundsException</c>. (Exceptions are covered in detail in Chapter<nbsp/>10.)
     </p>
@@ -106,7 +106,7 @@ arr[j*k] // Since j*k equals 35
     <p>
       For the most part, arrays in Java are treated as objects.
       Like objects,
-      they are instantiated with the <c>new</c> operator \marginpar{Are arrays objects?} and they have instance variables
+      they are instantiated with the <c>new</c> operator  and they have instance variables
       (for example, <c>length</c>).
       Like variables for objects,
       array variables are considered <em>reference</em> variables.
@@ -135,7 +135,7 @@ arr[j*k] // Since j*k equals 35
     <p>
       A <term>one-dimensional</term> array
           <idx><h>one-dimensional array</h></idx>
-      has \marginpar{Components and elements} components that are called the array's <em>elements
+      has  components that are called the array's <em>elements
           <idx><h>array element</h></idx>
       </em>.
       Their type is the array's <em>element
@@ -155,16 +155,16 @@ char, boolean, String, Object, Image, TextField, TwoPlayerGame</c>, and so on.
       itself.
       The following statements create the array shown in <xref ref="fig-intarray">Figure</xref>:
     </p>
-<pre>
+ <program language="java"><input>
 int arr[];          // Declare a name for the array
 arr = new int[15];  // Create the array itself
-</pre>
+ </input></program>
     <p>
       These two steps can be combined into a single statement as follows:
     </p>
-<pre>
+ <program language="java"><input>
 int arr[] = new int[15];
-</pre>
+ </input></program>
     <p>
       In this example,
       the array's element type is <c>int</c> and its <c>length</c> is 15,
@@ -176,28 +176,28 @@ int arr[] = new int[15];
     <title>Array Allocation</title>
     <p>
       Creating the array in <xref ref="fig-intarray">Figure</xref>
-      means allocating \marginpar{Allocating memory} 15 storage locations that can store integers.
+      means allocating  15 storage locations that can store integers.
       Note that one difference between declaring an array and declaring some other kind of object is that square brackets (<c>[]</c>) are used to declare an array type.
       The brackets can be attached either to the array's name or to its type,
       as in the following examples:
     </p>
-<pre>
+ <program language="java"><input>
 int arr[];     // The brackets may follow the array's name
 int[] arr;     // The brackets may follow the array's type
-</pre>
+ </input></program>
     <p>
       The following example creates an array of five <c>String</c> s and then uses a for loop to assign the strings <c>"hello1"</c>, <c>"hello2"</c>, <c>"hello3"</c>, <c>"hello4"</c>, and <c>"hello5"</c> to the five array locations:
     </p>
     <p>
-      \[28pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 String strarr[];                // Declare a name for the array
 strarr = new String[5];              // Create the array itself
                                  // Assign strings to the array
 for (int k = 0; k &lt; strarr.length; k++)     // For each element
   strarr[k] = new String("hello" + (k + 1)); // Assign a string
-</pre>
+ </input></program>
     <p>
       Note that the expression <c>k &lt; strarr.length</c> specifies the loop bound.
       Every array has a <c>length</c>
@@ -205,7 +205,7 @@ for (int k = 0; k &lt; strarr.length; k++)     // For each element
       instance variable,
       which refers to the number of elements contained in the array.
       As we mentioned, arrays,
-      like <c>String</c> s, are zero \marginpar{<c>length</c> vs. <c>length()</c>} indexed,
+      like <c>String</c> s, are zero  indexed,
       so the last element of the array is always given by its <c>length-1</c>. However, <c>length</c> is an instance variable for arrays,
       whereas <c>length()</c> is an instance method for <c>String</c> s.
       Therefore, it would be a syntax error in this example to refer to <c>strarr.length()</c>.
@@ -229,7 +229,7 @@ for (int k = 0; k &lt; strarr.length; k++)     // For each element
     </p>
     <p>
       When an <c>array</c> of objects is created,
-      the array's elements are \marginpar{Arrays of objects} references to those objects (Fig.
+      the array's elements are  references to those objects (Fig.
       <xref ref="fig-arrayobjs"></xref>).
       Their initial values, like all reference variables,
       are <c>null</c>. So to create and initialize the array <c>strarr</c>, we need to create <em>six</em>
@@ -250,23 +250,23 @@ for (int k = 0; k &lt; strarr.length; k++)     // For each element
       The following statements create four
       <em>new</em><c>Object</c> s, an array to store three <c>Student</c> s plus the three <c>Student</c> s themselves:
     </p>
-<pre>
+ <program language="java"><input>
 Student school[] = new Student[3];   // A 3 Student array
 school[0] = new Student("Socrates"); // The first Student
 school[1] = new Student("Plato");    // The second Student
 school[2] = new Student("Aristotle");// The third Student
-</pre>
+ </input></program>
     <p>
-      The first statement creates an array named <c>school</c> to store three \mbox{Student} s, and the next three statements create the individual <c>Student</c> s and assign them to the array (Fig.<nbsp/>9.3).
+      The first statement creates an array named <c>school</c> to store three Student s, and the next three statements create the individual <c>Student</c> s and assign them to the array (Fig.<nbsp/>9.3).
       Thus, creating the array and initializing its elements require four <c>new</c> statements.
     </p>
     <p>
       <image width="73%" source="chptr09/p407f1.png"/> The following sequence of statements would lead to a null pointer exception because the array's elements have not been instantiated:
     </p>
-<pre>
+ <program language="java"><input>
 Student students[] = new Student[3]; // A 3 Student array
 System.out.println(students[0].getName());
-</pre>
+ </input></program>
     <p>
       In this case, <c>students[0]</c> is a null reference,
       thus causing the exception.
@@ -282,26 +282,26 @@ System.out.println(students[0].getName());
     <p>
       Now that we've assigned the three <c>Student</c> s to the array,
       we can refer to them by means of subscripted references.
-      A reference to the \mbox{Student} named
+      A reference to the Student named
       <q>Socrates</q>
-      is now <c>school[0]</c>, and a reference to the \mbox{Student} named
+      is now <c>school[0]</c>, and a reference to the Student named
       <q>Plato</q>
       is <c>school[1]</c>. In other words,
       to refer to the three individual students we must refer to their locations within <c>school</c>. Of course,
       we can also use variables, such as loop counters,
       to refer to a <c>Student</c>'s location within <c>school</c>. The following for loop invokes each <c>Student</c>'s <c>getState()</c> method to print out its current state:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; school.length; k++)
     System.out.println(school[k].getState());
-</pre>
+ </input></program>
     <p>
       What if the three <c>Student</c> s already existed before the array was created?
       In that case,
       we could just assign their references to the array elements,
       as in the following example:
     </p>
-<pre>
+ <program language="java"><input>
 Student student1 = new Student("Socrates");
 Student student2 = new Student("Plato");
 Student student3 = new Student("Aristotle");
@@ -309,7 +309,7 @@ Student school = new Student[3]; // A 3 Student array
 school[0] = student1;
 school[1] = student2;
 school[2] = student3;
-</pre>
+ </input></program>
     <p>
       <image width="73%" source="chptr09/p408f1.png"/> \caption{Arrays of objects store references to the objects,
       not the objects themselves. } In this case,
@@ -334,12 +334,12 @@ school[2] = student3;
       because each <c>int</c> requires 4 bytes (32 bits) of storage.
       If we declare an array of 20 <c>double</c> s,
     </p>
-<pre>
+ <program language="java"><input>
 double arr[] = new double[20];
-</pre>
+ </input></program>
     <p>
       the compiler will allocate 160 bytes of storage<mdash/>20 variables of 8 bytes (64<nbsp/>bits) each.
-      In the case of the \marginpar{How much memory?}<c>Student</c> examples and <c>String</c> examples,
+      In the case of the <c>Student</c> examples and <c>String</c> examples,
       because these are objects
       (not primitive types),
       the compiler will allocate space for <em>N</em> addresses,
@@ -366,7 +366,7 @@ double arr[] = new double[20];
     <p>
       Array elements are automatically initialized to default values that depend on the element type: Boolean elements are initialized to <c>false</c>, and integer and real types are initialized to 0.
       Reference types<mdash/>that is,
-      arrays of \marginpar{Default initialization} objects<mdash/>are initialized to <c>null</c>.
+      arrays of  objects<mdash/>are initialized to <c>null</c>.
     </p>
     <p>
       Arrays can also be assigned initial values when they are created,
@@ -375,17 +375,17 @@ double arr[] = new double[20];
           <idx><h>array initializer</h></idx>
       is written as a list of expressions separated by commas and enclosed by braces.
       For example,
-      we can declare and \marginpar{Array initializer} initialize the array shown in <xref ref="fig-intarray">Figure</xref> with the following statement:
+      we can declare and  initialize the array shown in <xref ref="fig-intarray">Figure</xref> with the following statement:
     </p>
-<pre>
+ <program language="java"><input>
 int arr[] = {-2,8,-1,-3,16,20,25,16,16,8,18,19,45,21,-2};
-</pre>
+ </input></program>
     <p>
       Similarly, to create and initialize an array of <c>String</c> s, we can use the following statement:
     </p>
-<pre>
+ <program language="java"><input>
 String strings[] = {"hello", "world", "goodbye", "love"};
-</pre>
+ </input></program>
     <p>
       This example creates and stores four <c>String</c> s in the array.
       Subsequently, to refer to
@@ -400,38 +400,38 @@ String strings[] = {"hello", "world", "goodbye", "love"};
     <title>Assigning and Using Array Values</title>
     <p>
       Array elements can be used in the same way as other variables.
-      The \marginpar{Array assignment} only difference, of course,
+      The  only difference, of course,
       is that references to the elements are subscripted.
       For example, the following assignment
           <idx><h>array assignment</h></idx>
       statements assign values to the elements of two arrays,
       named <c>arr</c> and <c>strings</c>:
     </p>
-<pre>
+ <program language="java"><input>
 arr[0] = 5;
 arr[5] = 10;
 arr[2] = 3;
 strings[0] = "who";
 strings[1] = "what";
 strings[2] = strings[3] = "where";
-</pre>
+ </input></program>
     <p>
       The following loop assigns the first 15 squares<mdash/><c>1, 4,
 9 <ellipsis /> </c><mdash/>to the array <c>arr</c>:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; arr.length; k++)
     arr[k] = (k+1) * (k+1);
-</pre>
+ </input></program>
     <p>
       The following loop prints the values of the array <c>arr</c>:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; arr.length; k++)
     System.out.println(arr[k]);
-</pre>
+ </input></program>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

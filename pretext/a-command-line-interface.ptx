@@ -35,7 +35,7 @@
       In Java, input and output is handled by objects that are called <term>streams</term>.
       You can think of a stream as a kind of pipe through which data flow (Fig.
       <xref ref="fig-streams"></xref>).
-      An <term>input stream</term> \marginpar{Streams} carries data from some kind of input device,
+      An <term>input stream</term>  carries data from some kind of input device,
       such as a keyboard or network connection or a file,
       to the program's main memory.
       An <em>output stream</em> carries data from the program's memory to some kind of output device,
@@ -62,7 +62,7 @@
       As its name implies,
       the <c>BufferedReader</c> class performs buffered input.
       A <term>buffer</term> is a portion of main memory where input is held until it is needed by the program.
-      Using a \marginpar{Buffered input} buffer between the keyboard and the program allows you to use the Backspace key to delete a character.
+      Using a  buffer between the keyboard and the program allows you to use the Backspace key to delete a character.
       When you hit the Enter key,
       any characters that you deleted will be ignored when the program retrieves characters from the input buffer.
       If the user's input were not buffered in this way,
@@ -84,10 +84,10 @@
       As the figure shows, <c>InputStreamReader</c> has a constructor that allows it to read an <c>InputStream</c>. Therefore,
       to construct a <c>BufferedReader</c> that will read <c>System.in</c> we use the following statement:
     </p>
-<pre>
+ <program language="java"><input>
 BufferedReader input = new BufferedReader
    (new InputStreamReader (System.in));
-</pre>
+ </input></program>
     <p>
       In this statement we are actually creating two objects.
       We first create an <c>InputStreamReader</c>, giving it a reference to
@@ -102,11 +102,11 @@ BufferedReader input = new BufferedReader
       having created a <c>BufferedReader</c> named
 <c>input</c>, the following code segment will read one line of input and assign it to the <c>String</c> variable named <c>inputString</c>.
     </p>
-<pre>
+ <program language="java"><input>
 String inputString = input.readLine();
-</pre>
+ </input></program>
     <p>
-      When the program encounters the <c>readLine()</c> expression, \marginpar{Keyboard input} it will wait for the user to hit the Enter key.
+      When the program encounters the <c>readLine()</c> expression,  it will wait for the user to hit the Enter key.
       It will then input whatever the user typed,
       minus any characters that were Backspaced over,
       into the <c>String</c> variable.
@@ -130,15 +130,15 @@ String inputString = input.readLine();
       known as wrapper classes: <c>Integer</c> and <c>Double</c>.
     </p>
     <p>
-      A <term>wrapper class</term> contains methods for converting primitive \marginpar{Wrapper classes} data into objects and for converting data from one type to another.
+      A <term>wrapper class</term> contains methods for converting primitive  data into objects and for converting data from one type to another.
       The <c>Integer</c> class contains the <c>parseInt()</c> method,
       which extracts an <c>int</c> from its <c>String</c> argument.
       For example, in the following usage,
       the string "55" is converted into the number 55:
     </p>
-<pre>
+ <program language="java"><input>
 int m = Integer.parseInt("55");
-</pre>
+ </input></program>
     <p>
       Similarly, the <c>Double</c> class contains the
 <c>parseDouble()</c> method,
@@ -146,16 +146,16 @@ int m = Integer.parseInt("55");
       In this example,
       the number 55.2 is extracted from the string "55.2":
     </p>
-<pre>
+ <program language="java"><input>
 double num = Double.parseDouble("55.2");
-</pre>
+ </input></program>
     <p>
       If we are writing a program that requires us to input numbers from the keyboard,
       then assuming we have created a <c>BufferedReader</c> object named <c>input</c>, we can use these methods in combination with the <c>readLine()</c> method,
       to input and process numbers.
       For example, this code segment calculates a runner's race pace:
     </p>
-<pre>
+ <program language="java"><input>
 String inputString = new String();
 System.out.println("How many total miles did you run? ");
 inputString = input.readLine();   // Input a String}
@@ -165,7 +165,7 @@ inputString = input.readLine();   // Input another String
 double minutes = Double.parseDouble(inString);  // Convert
 System.out.println("Your average pace was " +
                    minutes/miles + " minutes per mile");
-</pre>
+ </input></program>
     <p>
       Notice how we included prompts in this example so that the user knows what type of input is expected.
       Designing appropriate prompts is an important aspect of designing a good user interface.
@@ -209,10 +209,10 @@ System.out.println("Your average pace was " +
     <p>
       The following code segment illustrates how we will use a <c>KeyboardReader</c> object to input an integer:
     </p>
-<pre>
+ <program language="java"><input>
 KeyboardReader cmdline = new KeyboardReader();
 int m = cmdline.getKeyboardInteger();
-</pre>
+ </input></program>
     <p>
       All we need to do is create an instance of the <c>KeyboardReader</c> and ask it to get an integer for us.
       This greatly simplifies the work we would have to do when we want to perform keyboard input.
@@ -223,7 +223,7 @@ int m = cmdline.getKeyboardInteger();
       This is the method that does the actual work of reading data from the keyboard.
       Because it is private,
       it can only be called by the other methods in <c>KeyboardReader</c>. It cannot be called by other classes.
-      The reason we \marginpar{Private helper method} make it private is to hide it,
+      The reason we  make it private is to hide it,
       and the messy details of performing keyboard input, from other classes.
     </p>
     <p>
@@ -239,7 +239,7 @@ int m = cmdline.getKeyboardInteger();
       Because these types of external errors are possible, Java requires that whenever a program performs certain types of I/O, it must watch out for certain kinds of error conditions,
       known as <em>exceptions</em>.
       Exceptions are covered in Chapter<nbsp/>11,
-      so we will not attempt to cover \marginpar{I/O exceptions} them here.
+      so we will not attempt to cover  them here.
       Instead, we will design the
 <c>readKeyboard()</c> method to take care of this detail for us.
     </p>
@@ -257,7 +257,7 @@ int m = cmdline.getKeyboardInteger();
     </p>
     <figure xml:id="fig-keybrdrdrclass">
       <caption>Definition of the <c>KeyboardReader</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import java.io.*;
 public class KeyboardReader
 {   private BufferedReader reader;
@@ -289,7 +289,7 @@ public class KeyboardReader
         }
         return line;
     }}
-</pre>
+ </input></program>
     </figure>
     <p>
       line.
@@ -299,10 +299,10 @@ public class KeyboardReader
     <p>
       Next notice how we create a <c>BufferedReader</c> object in the <c>KeyboardReader()</c> constructor:
     </p>
-<pre>
+ <program language="java"><input>
 reader = new BufferedReader
     (new InputStreamReader (System.in));
-</pre>
+ </input></program>
     <p>
       The resulting <c>reader</c> object will persist as long as our <c>KeyboardReader</c> object exists and can be used for all subsequent input operations.
     </p>
@@ -352,10 +352,10 @@ reader = new BufferedReader
       Let's design a program that prompts the user for his or her name and then says hello.
       Thus, the program's I/O should look like this:
     </p>
-<pre>
+ <program language="java"><input>
 Hi, please input your name here > Kim
   Hi Kim, nice to meet you.
-</pre>
+ </input></program>
     <p>
       In the design we use there will be two primary objects involved.
       One will serve as the user interface.
@@ -399,7 +399,7 @@ Hi, please input your name here > Kim
     </p>
     <figure xml:id="fig-greeterapp">
       <caption>Definition of the <c>GreeterApp</c> class.</caption>
-<pre>
+ <program language="java"><input>
 public class GreeterApp
 {   private KeyboardReader reader;
     public GreeterApp()
@@ -418,7 +418,7 @@ public class GreeterApp
     {   GreeterApp app = new GreeterApp();
         app.run();
     }} // GreaterApp
-</pre>
+ </input></program>
     </figure>
     <p>
       variable for the <c>KeyboardReader</c>, which is instantiated in the constructor method.
@@ -461,7 +461,7 @@ public class GreeterApp
       </ul>
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -471,9 +471,9 @@ public class GreeterApp
             we can generate random numbers between any two values.
             For example,
             the following statement assigns a random integer between 1 and 100 to the variable:
-<pre>
+ <program language="java"><input>
 secretNumber = 1 + (int)(Math.random() * 100);
-</pre>Given this statement,
+ </input></program>Given this statement,
             design and implement an application that will play the following guessing game with the user.
             The computer generates a random number between 1 and 100 and then lets the user guess the number,
             telling the user when the guess is too high or too low.

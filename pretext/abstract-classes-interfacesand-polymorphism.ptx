@@ -38,7 +38,7 @@
     </p>
     <p>
       As we all know from our childhood,
-      animals have distinctive ways of \marginpar{Extensibility} speaking.
+      animals have distinctive ways of  speaking.
       A cow goes
       <q>moo</q>; a pig goes
       <q>oink</q>; and so on.
@@ -64,7 +64,7 @@
       must itself be <image width="73%" source="chptr08/animals.png"/> declared abstract.
       Here is the definition of the <c>Animal</c> class:
     </p>
-<pre>
+ <program language="java"><input>
 public abstract class Animal {
     protected String kind; // Cow, pig, cat, etc.
     public Animal()  {  }
@@ -72,27 +72,27 @@ public abstract class Animal {
         return "I am a " + kind + " and I go " + speak();
     }
     public abstract String speak();   // Abstract method}
-</pre>
+ </input></program>
     <p>
       Note how we declare the abstract method (<c>speak()</c>) and the abstract class.
       Because one or more of its methods is not implemented,
       an abstract class cannot be instantiated.
       That is, you cannot say:
     </p>
-<pre>
+ <program language="java"><input>
 Animal animal = new Animal(); // Error: Animal is abstract
-</pre>
+ </input></program>
     <p>
       Even though it is not necessary,
       we give the <c>Animal</c> class a constructor.
       If we had left this off, Java would have supplied a default constructor that would be invoked when <c>Animal</c> subclasses are created.
     </p>
     <p>
-      Java has the following rules on using abstract methods and \marginpar{Rules for abstract classes} classes.
+      Java has the following rules on using abstract methods and  classes.
       <ul>
         <li>
           <p>
-            Any class containing an <c>abstract</c> method must be declared an \mbox{abstract} class.
+            Any class containing an <c>abstract</c> method must be declared an abstract class.
           </p>
         </li>
         <li>
@@ -130,7 +130,7 @@ Animal animal = new Animal(); // Error: Animal is abstract
     </p>
     <figure xml:id="fig-animalsubs">
       <caption>Two <c>Animal</c> subclasses.</caption>
-<pre>
+ <program language="java"><input>
 public class Cat extends Animal {
     public Cat() {
         kind = "cat";
@@ -145,7 +145,7 @@ public class Cow extends Animal {
     public String speak() {
         return "moo";
     }}
-</pre>
+ </input></program>
     </figure>
     <p>
       In each case the subclass extends the <c>Animal</c> class and provides its own constructor and its own implementation of the <c>speak()</c> method.
@@ -165,12 +165,12 @@ public class Cow extends Animal {
       we can now demonstrate the power and flexibility of inheritance and polymorphism.
       Consider the following code segment:
     </p>
-<pre>
+ <program language="java"><input>
 Animal animal = new Cow();
  System.out.println(animal.toString()); // A cow goes moo
  animal = new Cat();
  System.out.println(animal.toString()); // A cat goes meow
-</pre>
+ </input></program>
     <p>
       We first create a <c>Cow</c> object and then invoke its (inherited) <c>toString()</c> method.
       It returns,
@@ -184,7 +184,7 @@ Animal animal = new Cow();
     </p>
     <p>
       What is the advantage of polymorphism here?
-      The main advantage is the \marginpar{Advantage of polymorphism} extensibility that it affords our <c>Animal</c> hierarchy.
+      The main advantage is the  extensibility that it affords our <c>Animal</c> hierarchy.
       We can define and use completely new <c>Animal</c> subclasses without redefining or recompiling the rest of the classes in the hierarchy.
       Note that the <c>toString()</c> method in the <c>Animal</c> class does not need to know what type of <c>Animal</c> subclass will be executing its <c>speak()</c> method.
       The <c>toString()</c> method will work correctly for any subclass of <c>Animal</c> because every non-abstract subclass of <c>Animal</c> must implement the <c>speak()</c> method.
@@ -201,7 +201,7 @@ Animal animal = new Cow();
       we could use a <c>switch</c> statement to select the appropriate method call.
       For example, consider the following method definition:
     </p>
-<pre>
+ <program language="java"><input>
 public String talk(Animal a) {
   if (a instanceof Cow)
      return "I am a " + kind + " and I go " + a.moo();
@@ -209,7 +209,7 @@ public String talk(Animal a) {
      return "I am a " + kind + " and I go " + a.meow();
   else
     return "I don't know what I am";}
-</pre>
+ </input></program>
     <p>
       In this example,
       we introduce the <c>instanceof</c> operator,
@@ -225,7 +225,7 @@ public String talk(Animal a) {
 <c>Animal</c> hierarchy without rewriting and recompiling the <c>talk()</c> method.
     </p>
     <p>
-      Thus, one of the chief advantages of using polymorphism is the great \marginpar{Extensibility} flexibility and extensibility it affords.
+      Thus, one of the chief advantages of using polymorphism is the great  flexibility and extensibility it affords.
       We can define new <c>Animal</c> subclasses and define their <c>speak()</c> methods.
       These will all work with the <c>toString()</c> method in the <c>Animal</c> class,
       without any need to revise that method.
@@ -239,7 +239,7 @@ public String talk(Animal a) {
       making it easier to use them in applications.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -261,7 +261,7 @@ public String talk(Animal a) {
     <p>
       A third form of polymorphism results through the implementation of Java <term>interfaces</term>,
       which are like classes but contain only abstract method definitions and constants (<c>final</c>) variables.
-      An \marginpar{Java interface} interface cannot contain instance variables.
+      An  interface cannot contain instance variables.
       We have already seen interfaces,
       such as when we encountered the <c>ActionListener</c> interface in Chapter<nbsp/>4.
     </p>
@@ -282,7 +282,7 @@ public String talk(Animal a) {
     </p>
     <figure xml:id="fig-speakable">
       <caption>Defining and using the  <c>Speakable</c> interface.</caption>
-<pre>
+ <program language="java"><input>
 public interface Speakable {
     public String speak();}
 public class Animal {
@@ -292,7 +292,7 @@ public class Animal {
         return "I am a " + kind + " and I go " +
                ((Speakable)this).speak();
     }}
-</pre>
+ </input></program>
     </figure>
     <p>
       Note the differences between this definition of <c>Animal</c> and the previous definition.
@@ -304,7 +304,7 @@ public class Animal {
     </p>
     <p>
       We encountered the cast operation in Chapter<nbsp/>5,
-      where we used it with \marginpar{Cast operation} primitive types such as <c>(int)</c> and <c>(char)</c>. Here,
+      where we used it with  primitive types such as <c>(int)</c> and <c>(char)</c>. Here,
       we use it to specify the actual type of some object.
       In this <c>toString()</c> example, <c>this</c> object is some type of <c>Animal</c> subclass,
       such as a <c>Cat</c>. The cast operation, <c>(Speakable)</c>, changes the object's actual type to <c>Speakable</c>, which syntactically allows its <c>speak()</c> method to be called.
@@ -312,14 +312,14 @@ public class Animal {
     <p>
       Given these definitions, <c>Animal</c> subclasses will now <c>extend</c> the <c>Animal</c> class and <c>implement</c> the <c>Speakable</c> interface:
     </p>
-<pre>
+ <program language="java"><input>
 public class Cat extends Animal implements Speakable {
     public Cat() { kind = "cat"; }
     public String speak() { return "meow";  }}
 public class Cow extends Animal implements Speakable {
     public Cow() { kind = "cow";  }
     public String speak() { return "moo";  }}
-</pre>
+ </input></program>
     <p>
       To implement a Java interface,
       one must provide a method implementation for each of the abstract methods in the interface.
@@ -330,9 +330,9 @@ public class Cow extends Animal implements Speakable {
       Note, again,
       the expression from the <c>Animal.toString()</c> class
     </p>
-<pre>
+ <program language="java"><input>
 ((Speakable)this).speak();
-</pre>
+ </input></program>
     <p>
       which casts <c>this</c> object into a <c>Speakable</c> object.
       The reason that this cast is required is because an <c>Animal</c> does not necessarily have a <c>speak()</c> method.
@@ -344,7 +344,7 @@ public class Cow extends Animal implements Speakable {
     </p>
     <p>
       This illustrates, by the way,
-      that a <c>Cat</c>, by virtue of extending \marginpar{Interface inheritance} the <c>Animal</c> class and implementing the <c>Speakable</c> interface,
+      that a <c>Cat</c>, by virtue of extending  the <c>Animal</c> class and implementing the <c>Speakable</c> interface,
       is both an <c>Animal</c> and a <c>Speakable</c>. In general,
       a class that implements an interface,
       has that interface as one of its types.
@@ -356,12 +356,12 @@ public class Cow extends Animal implements Speakable {
       Given these definitions of the <c>Cow</c> and <c>Cat</c> subclasses,
       the following code segment will produce the same results as in the previous section.
     </p>
-<pre>
+ <program language="java"><input>
 Animal animal = new Cow();
  System.out.println(animal.toString()); // A cow goes moo
  animal = new Cat();
  System.out.println(animal.toString()); // A cat goes meow
-</pre>
+ </input></program>
     <p>
       Although the design is different,
       both approaches produce the same result.

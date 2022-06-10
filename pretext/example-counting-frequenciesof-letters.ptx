@@ -35,26 +35,26 @@
     <p>
       So let us design a <c>LetterFreq</c> class that stores a letter in an instance variable of type <c>char</c> and its frequency in an instance variable of type <c>int</c>. These instance variables can be declared as:
     </p>
-<pre>
+ <program language="java"><input>
 private char letter;    //A character being counted
  private int freq;       //The frequency of letter
-</pre>
+ </input></program>
     <p>
       We will want a constructor that can initialize these two values and two accessor methods to return these values.
       We are familiar enough with these kinds of methods that it will not be necessary to discuss them any further.
       We need one additional method to increment <c>freq</c> whenever we encounter the letter while processing the string:
     </p>
-<pre>
+ <program language="java"><input>
 public void incrFreq() {
      freq++;
  } //setFreq()
-</pre>
+ </input></program>
     <p>
       A UML diagram for the <c>LetterFreq</c> class is given in Figure<nbsp/>9.9 and <image width="73%" source="chptr09/letfrequml.png"/> the class definition is given
     </p>
     <figure xml:id="fig-letfreq">
       <caption>The <c>LetterFreq</c> class definition.</caption>
-<pre>
+ <program language="java"><input>
 public class LetterFreq {
     private char letter;    //A character being counted
     private int freq;       //The frequency of letter
@@ -71,7 +71,7 @@ public class LetterFreq {
     public void incrFreq() {
         freq++;
     }} //LetterFreq
-</pre>
+ </input></program>
     </figure>
     <p>
       in <xref ref="fig-letfreq">Figure</xref>.
@@ -91,30 +91,30 @@ public class LetterFreq {
     <p>
       The array instance variable can be declared by:
     </p>
-<pre>
+ <program language="java"><input>
 private LetterFreq[] freqArr; //An array of frequencies
-</pre>
+ </input></program>
     <p>
       The constructor creates an array of <c>26</c> elements to store references to <c>LetterFreq</c> objects with the statement
     </p>
-<pre>
+ <program language="java"><input>
 freqArr = new LetterFreq[26];
-</pre>
+ </input></program>
     <p>
       The indices of the array range from <c>0</c> to <c>25</c> and the elements at these locations should store the letters <c>A</c> to
 <c>Z</c>. Recall that in Java, <c>char</c> data are a form of <c>int</c> data and can be used in arithmetic.
       If we let <c>k</c> be an integer that ranges between <c>0</c> and <c>25</c>, then the expression <c>(char)('A' + k)</c> will correspond to the letters <c>A</c> to <c>Z</c>. . Thus,
       the following loop will initialize the array correctly.
     </p>
-<pre>
+ <program language="java"><input>
 for (int k = 0; k &lt; 26; k++) {
     freqArr[k] = new LetterFreq((char)('A' + k), 0);} //for
-</pre>
+ </input></program>
     <p>
       The <c>countLetters()</c> method must identify the array index for <c>LetterFreq</c> object that stores a letter between <c>A</c> and <c>Z</c>. If <c>let</c> is a <c>char</c> variable that stores such a letter,
       then the expression <c>(let - 'A')</c> will give the index of the array element corresponding to <c>let</c>. Thus the following code will calculate the frequencies the letters in the string parameter, <c>str</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public void countLetters(String str) {
      char let;     //For use in the loop.
      str = str.toUpperCase();
@@ -125,24 +125,24 @@ public void countLetters(String str) {
          } //if
      } //for
  } //countLetters()
-</pre>
+ </input></program>
     <p>
       The definition of the <c>printArray()</c> method is completely straight forward:
     </p>
-<pre>
+ <program language="java"><input>
 public void printArray() {
   for (int k = 0; k &lt; 26; k++) {
     System.out.print("letter: " + freqArr[k].getLetter());
     System.out.println("   freq: " + freqArr[k].getFreq());
   } //for} //printArray()
-</pre>
+ </input></program>
     <p>
       The entire definition of <c>AnalyzeFreq</c> is
     </p>
     <figure xml:id="fig-anafreq">
       <caption>The <c>AnalyzeFreq</c> class definition.</caption>
-      \[26.5pc]
-<pre>
+      
+ <program language="java"><input>
 public class AnalyzeFreq {
   private LetterFreq[] freqArr; //An array of frequencies
   public AnalyzeFreq() {
@@ -167,7 +167,7 @@ public class AnalyzeFreq {
       System.out.println(" freq: " + freqArr[k].getFreq());
     } //for
   } } //AnalyzeFreq
-</pre>
+ </input></program>
     </figure>
     <p>
       given in <xref ref="fig-anafreq">Figure</xref>.
@@ -175,15 +175,15 @@ public class AnalyzeFreq {
       The following <c>main()</c> method,
       either in this class or in its own class will demonstrate how the class methods are used.
     </p>
-<pre>
+ <program language="java"><input>
 public static void main(String[] argv) {
   AnalyzeFreq af = new AnalyzeFreq();
   af.countLetters("Now is the time for all good students" +
      " to study computer related topics.");
   af.printArray();} //main()
-</pre>
+ </input></program>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

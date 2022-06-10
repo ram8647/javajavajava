@@ -1,9 +1,6 @@
 <section xml:id="sec-tostring">
-  <title>\terminology{From the Java Library}<c>java.lang.Object</c></title>
-  <p>
-    \marginpar{ \psfig{file=../commonart/www_dg.eps}
-    <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
-  </p>
+  <title><c>java.lang.Object</c></title>
+
   <p>
     The most general class in Java's class hierarchy is the <c>java.lang.Object</c> class.
     It is the superclass of all classes that occur in Java programs.
@@ -23,11 +20,11 @@
     One of the most useful methods in the <c>Object</c> class is the
 <c>toString()</c> method:
   </p>
-<pre>
+ <program language="java"><input>
 public class Object
 {
     public String toString() ;}
-</pre>
+ </input></program>
   <p>
     The <c>toString()</c>
         <idx><h>toString() method</h></idx>
@@ -39,21 +36,21 @@ public class Object
 <c>toString()</c> method.
     To illustrate the default behavior of <c>toString()</c>, let's use it with a <c>OneRowNim</c> instance:
   </p>
-<pre>
+ <program language="java"><input>
 OneRowNim g1 = new OneRowNim(11);
   OneRowNim g2 = new OneRowNim(13);
   System.out.println(g1.toString());
   System.out.println(g2.toString());
-</pre>
+ </input></program>
   <p>
     This code segment creates two <c>OneRowNim</c> instances,
     one named <c>g1</c> and the other named <c>g2</c>. The inherited <c>toString()</c> method is then invoked on each <c>OneRowNim</c> instance,
     which produces the following output:
   </p>
-<pre>
+ <program language="java"><input>
 OneRowNim@1dc6077b
   OneRowNim@1dc60776
-</pre>
+ </input></program>
   <p>
     What this experiment shows is that the default definition of <c>toString()</c> returns some kind of internal representation of its object.
     It looks as if it returns the name of the object's class concatenated with its memory address.
@@ -72,27 +69,27 @@ OneRowNim@1dc6077b
     the subclass method overrides the superclass version.
     Thus, <c>OneRowNim.toString()</c> will have the following signature:
   </p>
-<pre>
+ <program language="java"><input>
 public String toString();
-</pre>
+ </input></program>
   <p>
     Let us describe the state of a <c>oneRowNim</c> instance very briefly in the string returned by the <c>toString()</c> method:
   </p>
-<pre>
+ <program language="java"><input>
 public String toString()
 { return "nSticks = " + nSticks + ", player = " + player;}
-</pre>
+ </input></program>
   <p>
     If we add the <c>toString()</c> method to the <c>OneRowNim</c> class and then run the program shown in <xref ref="fig-orntostring">Figure</xref>,
     we get the following output:
   </p>
-<pre>
+ <program language="java"><input>
 nSticks = 9, player = 2
   nSticks = 13, player = 1
-</pre>
+ </input></program>
   <figure xml:id="fig-orntostring">
     <caption>An application to test the overridden <c>toString()</c> method.</caption>
-<pre>
+ <program language="java"><input>
 public class TestToString
 {
   public static void main(String argv[])
@@ -102,7 +99,7 @@ public class TestToString
     System.out.println(g1.toString());
     System.out.println(g2.toString());
   } //main} //TestToString
-</pre>
+ </input></program>
   </figure>
   <p>
     While this new method may not play an important role in the

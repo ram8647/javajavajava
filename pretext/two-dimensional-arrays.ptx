@@ -12,22 +12,22 @@
       One way to organize these data would be to create a one-dimensional array,
       consisting of 365 elements:
     </p>
-<pre>
+ <program language="java"><input>
 double rainfall[] = new double[365];
-</pre>
+ </input></program>
     <p>
       However, with this representation,
       it would make it very difficult to calculate the average rainfall within a given month,
       which might be an important part of your study.
     </p>
     <p>
-      A better representation for this problem would be to \marginpar{What data do we need?} use a two-dimensional array,
+      A better representation for this problem would be to  use a two-dimensional array,
       one dimension for the months and one for the days.
       The following statement declares the array variable <c>rainfall</c> and creates a 12 by 31 array object as its reference:
     </p>
-<pre>
+ <program language="java"><input>
 double rainfall[][] = new double[12][31];
-</pre>
+ </input></program>
     <p>
       Thus, <c>rainfall</c> is an
       <em>array of arrays</em>.
@@ -37,7 +37,7 @@ double rainfall[][] = new double[12][31];
       and the days will be indexed from 0 to 30.
     </p>
     <p>
-      The problem with this representation is that when we want to refer to \marginpar{Choosing an appropriate representation} the rainfall for January 5, we would have to use
+      The problem with this representation is that when we want to refer to  the rainfall for January 5, we would have to use
 <c>rainfall[0][4]</c>. This is awkward and misleading.
       The problem is that dates<mdash/>1/5/1999<mdash/>are unit indexed,
       while arrays are zero indexed.
@@ -47,9 +47,9 @@ double rainfall[][] = new double[12][31];
     <p>
       We can easily remedy this problem by just defining our array to have an extra month and an extra day each month:
     </p>
-<pre>
+ <program language="java"><input>
 double rainfall[][] = new double[13][32];
-</pre>
+ </input></program>
     <p>
       This representation creates an array with 13 months,
       indexed from 0 to 12, with 32 days per month, indexed from 0 to 31.
@@ -84,12 +84,12 @@ double rainfall[][] = new double[13][32];
       the first subscript will specify the <em>month</em>
       and the second will specify the
       <em>day</em> within the month.
-      Thus, the following statements assign 1.15 to the <c>rainfall</c> element representing January 5, and then print its \marginpar{Referencing two-dimensional arrays} value:
+      Thus, the following statements assign 1.15 to the <c>rainfall</c> element representing January 5, and then print its  value:
     </p>
-<pre>
+ <program language="java"><input>
 rainfall[1][5] = 1.15;   // Rainfall for January 5
 System.out.println( rainfall[1][5] );
-</pre>
+ </input></program>
     <p>
       Just as in the case of one-dimensional arrays,
       it is an error to attempt to reference an element that is not in the array.
@@ -97,33 +97,33 @@ System.out.println( rainfall[1][5] );
 <c>IndexOutOfBoundsException</c>:
           <idx><h>IndexOutOfBoundsException</h></idx>
     </p>
-<pre>
+ <program language="java"><input>
 rainfall[13][32] = 0.15 ;  // No such element
 rainfall[11][33] = 1.3;    // No such column
 rainfall[14][30] = 0.74;   // No such row
-</pre>
+ </input></program>
     <p>
       If the initial values of an array's elements are supposed to be zero,
       there is no need to initialize the elements.
       Java will do it automatically when you create the array with <c>new</c>. However,
-      for \marginpar{Initializing two-dimensional arrays} many array problems it is necessary to initialize the array elements to some other value.
+      for  many array problems it is necessary to initialize the array elements to some other value.
       For a two-dimensional array, this would require a nested loop.
       To illustrate this algorithm,
       let's use a nested for loop to initialize each element of the <c>rainfall</c> array to 0:
     </p>
-<pre>
+ <program language="java"><input>
 // Note that both loops are unit indexed.
 for (int month = 1; month &lt; rainfall.length; month++)
   for (int day = 1; day &lt; rainfall[month].length; day++)
      rainfall[month][day] = 0.0;
-</pre>
+ </input></program>
     <p>
       Note that both for loops use unit indexing.
       This is in keeping with our decision to leave month 0 and day 0 unused.
     </p>
     <p>
       Remember that when you have a nested for loop,
-      the inner loop iterates \marginpar{Nested for loops} faster than the outer loop.
+      the inner loop iterates  faster than the outer loop.
       Thus, for each month, the inner loop will iterate over 31 days.
       This is equivalent to processing the array as if you were going across each row and then down to the next row in the representation shown in <xref ref="fig-rainfall">Figure</xref>.
     </p>
@@ -137,7 +137,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
     <p>
       Another way to view the <c>rainfall</c> array is to remember that it is an array of arrays.
       The length of the first array,
-      which \marginpar{Array of arrays} corresponds to the number (13) of months,
+      which  corresponds to the number (13) of months,
       is given by
 <c>rainfall.length</c>. The length of each month's array,
       which corresponds to the number of days (32) in a month,
@@ -158,7 +158,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
       
       <tabular>
         <row>
-          <cell>\multicolumn{8}{l}{\rule{24pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell></cell>
@@ -171,7 +171,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell>{\bf31}</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{8}{l}{\rule{24pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{\bf0}</cell>
@@ -245,13 +245,13 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell>0.0</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{8}{l}{\rule{24pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB
     </table>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -283,15 +283,15 @@ for (int month = 1; month &lt; rainfall.length; month++)
         First, we want a method to initialize the array.
         This method will simply incorporate the nested loop algorithm we developed previously:
       </p>
-<pre>
+ <program language="java"><input>
 public void initRain(double rain[][]) {
     for (int month = 1; month &lt; rain.length; month++)
         for (int day = 1; day &lt; rain[month].length; day++)
             rain[month][day] = 0.0;} // initRain()
-</pre>
+ </input></program>
       <p>
         Note how we declare the parameter for a multidimensional array.
-        In addition to the element type (<c>double</c>), and the name of \marginpar{Array parameters} the parameter (<c>rain</c>), we must also include a set of brackets for
+        In addition to the element type (<c>double</c>), and the name of  the parameter (<c>rain</c>), we must also include a set of brackets for
         <em>each</em> dimension of the array.
       </p>
       <p>
@@ -304,7 +304,7 @@ public void initRain(double rain[][]) {
     <subsubsection>
       <title>The <c>avgDailyRain()</c>Method</title>
       <p>
-        One result that we need from our experiment is the average daily \marginpar{Algorithm design} rainfall.
+        One result that we need from our experiment is the average daily  rainfall.
         To calculate this result,
         we would add up all of the rainfalls stored in the
         <m>12 \;\times\; 31</m> array and divide by 365.
@@ -316,68 +316,68 @@ public void initRain(double rain[][]) {
         However, because we initialized all of the array's elements to 0, the rainfall recorded for the non-days will be 0, which won't affect our overall average.
       </p>
       <p>
-        The method for calculating average daily rainfall should take \marginpar{Method design} our two-dimensional array of \mbox{double} as a parameter,
-        and it should return a \mbox{double} . Its algorithm will use a nested for loop to iterate through the elements of the array,
+        The method for calculating average daily rainfall should take  our two-dimensional array of double as a parameter,
+        and it should return a double . Its algorithm will use a nested for loop to iterate through the elements of the array,
         adding each element to a running total.
         When the loops exits, the total will be divided by 365 and returned:
       </p>
-<pre>
+ <program language="java"><input>
 public double avgDailyRain(double rain[][]) {
     double total = 0;
     for (int month = 1; month &lt; rain.length; month++)
         for (int day = 1; day &lt; rain[month].length; day++)
             total += rain[month][day];
     return total/365;} // avgDailyRain()
-</pre>
+ </input></program>
     </subsubsection>
     <subsubsection>
       <title>The <c>avgRainForMonth()</c>Method</title>
       <p>
         One reason we used a two-dimensional array for this problem is so we could calculate the average daily rainfall for a given month.
         Let's write a method to solve this problem.
-        The algorithm for this method \marginpar{Algorithm design} will not require a nested for loop.
+        The algorithm for this method  will not require a nested for loop.
         We will just iterate through the 31 elements of a given month,
         so the month subscript will not vary.
         For example,
         suppose we are calculating the average for January,
         which is represented in our array as month 1:
       </p>
-<pre>
+ <program language="java"><input>
 double total = 0;
 for (int day = 1; day &lt; rainfall[1].length; day++)
     total = total + rainfall[1][day];
-</pre>
+ </input></program>
       <p>
         Thus, the month subscript is held constant (at 1) while the day subscript iterates from 1 to 31.
-        Of course, in our method we would use a parameter to represent the month, \marginpar{Method design} thereby allowing us to calculate the average daily rainfall for any given month.
+        Of course, in our method we would use a parameter to represent the month,  thereby allowing us to calculate the average daily rainfall for any given month.
       </p>
       <p>
         Another problem that our method has to deal with is that months don't all have 31 days,
         so we can't always divide by 31 to compute the monthly average.
         There are various ways to solve this problem,
-        but \marginpar{Method design: What data do we need?} perhaps the easiest is to let the number of days for that month be specified as a third parameter.
+        but  perhaps the easiest is to let the number of days for that month be specified as a third parameter.
         That way, the month itself and the number of days for the month are supplied by the user of the method:
       </p>
-<pre>
+ <program language="java"><input>
 public double avgRainForMonth(double rain[][],
                            int month, int nDays) {
     double total = 0;
     for (int day = 1; day &lt; rain[month].length; day++)
         total = total + rain[month][day];
     return total/nDays;} // avgRainForMonth()
-</pre>
+ </input></program>
       <p>
         Given this definition,
         we can call this method to calculate and print the average daily rainfall for March as in the following statement:
       </p>
-<pre>
+ <program language="java"><input>
 System.out.println("March: " +
                          avgRainForMonth(rainfall,3,31));
-</pre>
+ </input></program>
       <p>
         Note that when passing the entire two-dimensional array to the method,
         we just use the name of the array.
-        We do not have to follow the name with \mbox{subscripts.}
+        We do not have to follow the name with subscripts.
       </p>
     </subsubsection>
   </subsection>
@@ -390,27 +390,27 @@ System.out.println("March: " +
       Remember that a two-dimensional array is an array of arrays,
       so if we pass the month of January,
       we are passing an array of 32 days.
-      If we use this \marginpar{Method design: What data?} approach,
+      If we use this  approach,
       we need only two parameters:
       the month, which is array of days,
       and the number of days in that month:
     </p>
-<pre>
+ <program language="java"><input>
 public double avgRainForMonth(double monthRain[],
                                           int nDays) {
     double total = 0;
     for (int day = 1; day &lt; monthRain.length; day++)
         total = total + monthRain[day];
     return total/nDays;} // avgRainForMonth()
-</pre>
+ </input></program>
     <p>
       Given this definition,
       we can call it to calculate and print the average daily rainfall for March as in the following statement:
     </p>
-<pre>
+ <program language="java"><input>
 System.out.println("March: " +
                       avgRainForMonth(rainfall[3],31));
-</pre>
+ </input></program>
     <p>
       In this case,
       we're passing an array of <c>double</c> to the method,
@@ -429,7 +429,7 @@ System.out.println("March: " +
       <image width="73%" source="chptr09/8f15.png"/>
     </figure>
     <p>
-      It's important to note that deciding whether to use brackets when \marginpar{Specifying an argument} passing data to a method is not just a matter of whether you are passing an array.
+      It's important to note that deciding whether to use brackets when  passing data to a method is not just a matter of whether you are passing an array.
       It is a matter of what type of data the method parameter specifies.
       So, whenever you call a method that involves a parameter,
       you have to look at the method definition to see what kind of data that parameter specifies.
@@ -461,8 +461,8 @@ System.out.println("March: " +
     </figure>
     <figure xml:id="fig-rainfallclass">
       <caption>Definition of the <c>Rainfall</c> class.</caption>
-      \[32pc]
-<pre>
+      
+ <program language="java"><input>
 public class Rainfall {
   /**
    * Initializes the rainfall array
@@ -514,7 +514,7 @@ public class Rainfall {
     System.out.println("The average daily rainfall for March = "
                       +  data.avgRainForMonth(rainfall[3],31));
   } // main()}//Rainfall
-</pre>
+ </input></program>
     </figure>
     <p>
       shows how we can test our array algorithms.
@@ -524,13 +524,13 @@ public class Rainfall {
       Instead of just assigning 0 to each element,
       we assign a random value between 0 and 2.0:
     </p>
-<pre>
+ <program language="java"><input>
 rain[month][day] = Math.random() * 2.0;
-</pre>
+ </input></program>
     <p>
       Using the <c>Math.random()</c> method in this way enables us to generate some realistic test data.
       In this case,
-      we \marginpar{Generating test data} have scaled the data so that the daily rainfall is between 0 and 2 inches. (Rainfall like this would probably be appropriate for an Amazonian rain forest!) Testing our algorithms with these data provides some indication that our methods are in fact working properly.
+      we  have scaled the data so that the daily rainfall is between 0 and 2 inches. (Rainfall like this would probably be appropriate for an Amazonian rain forest!) Testing our algorithms with these data provides some indication that our methods are in fact working properly.
     </p>
     <principle>
       <title>EFFECTIVE DESIGN:Generating Test Data</title>
@@ -541,7 +541,7 @@ rain[month][day] = Math.random() * 2.0;
       </p>
     </principle>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -552,7 +552,7 @@ rain[month][day] = Math.random() * 2.0;
         <li>
           <p>
             Write a method to calculate the average number of newspapers sold per week,
-            using the array you declared in the previous \mbox{exercise.}
+            using the array you declared in the previous exercise.
           </p>
         </li>
         <li>

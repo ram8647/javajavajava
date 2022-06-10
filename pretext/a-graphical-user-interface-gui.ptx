@@ -20,7 +20,7 @@
       By <em>extensible</em> we mean a model that can be easily adapted and used in a wide variety of programs.
       GUI programming involves a computational model known as
       <term>event-driven programming</term>,
-      which means that GUI programs react to events that are generated mostly by \marginpar{Event-driven programming} the user's interactions with elements in the GUI. Therefore,
+      which means that GUI programs react to events that are generated mostly by  the user's interactions with elements in the GUI. Therefore,
       we will have to learn how to use Java's
       <em>event model</em> to handle simple events.
     </p>
@@ -71,7 +71,7 @@
       <image width="73%" source="chptr04/guicapture.png"/>
     </figure>
     <p>
-      The Swing classes are generally considered to be superior to their AWT \marginpar{Model-view-controller (MVC) architecture} counterparts.
+      The Swing classes are generally considered to be superior to their AWT  counterparts.
       For one thing, Swing components use a sophisticated object-oriented design known as the
       <term>model-view-controller (MVC)</term> architecture,
       which gives them much greater functionality than their AWT counterparts.
@@ -83,7 +83,7 @@
     <p>
       Second, Swing components are written entirely in Java which makes them more portable and enables them to behave the same way regardless of the operating system on which they are run.
       Because of their portability, Swing components are considered <em>lightweight</em>.
-      By contrast, AWT classes use routines that are implemented in the \marginpar{Swing portability} underlying operating system and are therefore not easily portable.
+      By contrast, AWT classes use routines that are implemented in the  underlying operating system and are therefore not easily portable.
       Hence, they are considered <em>heavyweight</em> components.
       Whereas a Swing <c>JButton</c> should look and act the same way regardless of platform,
       an AWT <c>Button</c> would have a different implementation,
@@ -95,12 +95,12 @@
   <subsection>
     <title>Class Inheritance: Extending a Superclass</title>
     <p>
-      As you recall from Chapter 0, class inheritance is the mechanism by which a class of objects can \marginpar{Inheritance} acquire (<em>inherit</em>) the methods and variables of its superclasses.
+      As you recall from Chapter 0, class inheritance is the mechanism by which a class of objects can  acquire (<em>inherit</em>) the methods and variables of its superclasses.
       Just as a horse, by membership in the class of horses,
       inherits those attributes and behaviors of a mammal, and,
       more generally, those of an animal,
       a Java subclass inherits the variables and methods of its superclasses.
-      We sometimes lump together an object's attributes and \marginpar{Functionality} behaviors and refer to them collectively as its <em>functionality</em>.
+      We sometimes lump together an object's attributes and  behaviors and refer to them collectively as its <em>functionality</em>.
       So we say that an object of a subclass inherits the functionality of all of its superclasses.
     </p>
     <p>
@@ -122,11 +122,11 @@
       the <c>GreeterApp</c> class that we defined earlier in this chapter is a subclass of <c>Object</c>. We can make the relationship between <c>GreeterApp</c> and
 <c>Object</c> explicit by using the <c>extends</c> keyword when we define the <c>GreeterApp</c> class:
     </p>
-<pre>
+ <program language="java"><input>
 public class GreeterApp extends Object { ... }
-</pre>
+ </input></program>
     <p>
-      Thus, the <c>extends</c> keyword is used to specify the \marginpar{The isa relationship} subclass/superclass relationships that hold in the Java class hierarchy.
+      Thus, the <c>extends</c> keyword is used to specify the  subclass/superclass relationships that hold in the Java class hierarchy.
       We sometimes refer to the subclass/superclass relationship as the
       <em>isa</em> relationship,
       in the sense that a horse <em>isa</em> mammal,
@@ -141,7 +141,7 @@ public class GreeterApp extends Object { ... }
     </figure>
     <p>
       A <term>top-level container</term>
-      is a GUI container that cannot be added to \marginpar{Top-level container} another container;
+      is a GUI container that cannot be added to  another container;
       it can only have components added to it.
       <xref ref="fig-swing1">Figure</xref>
       is a class hierarchy that shows the relationships among some of the top-level Swing and AWT classes.
@@ -150,14 +150,14 @@ public class GreeterApp extends Object { ... }
       which represents a top-level window,
       is a subclass of <c>java.awt.Frame</c>, and the <c>javax.swing.JPanel</c> is a subclass of <c>java.awt.Panel</c>. We can see from this figure that a <c>JFrame</c><em>isa</em><c>Frame</c> and an <c>Frame</c><em>isa</em><c>Window</c> and a <c>Window</c><em>isa</em><c>Container</c>. These subclass/superclass relationships are created in their respective class definitions by using the <c>extends</c> keyword as follows:
     </p>
-<pre>
+ <program language="java"><input>
 public class JFrame extends Frame { ... }
  public class Frame extends Window { ... }
  public class Window extends Container { ... }
-</pre>
+ </input></program>
     <p>
       As we will see in the next section,
-      extending a class in this way \marginpar{Specialization} enables us to create a new class by specializing an existing class.
+      extending a class in this way  enables us to create a new class by specializing an existing class.
     </p>
   </subsection>
   <subsection>
@@ -175,7 +175,7 @@ public class JFrame extends Frame { ... }
       Swing provides three top-level container classes: <c>JFrame</c>, <c>JApplet</c> and <c>JDialog</c>. For our basic GUI, we will use a <c>JFrame</c> as the top-level window for stand alone applications.
     </p>
     <p>
-      A <c>JFrame</c> encapsulates the basic functionality of a top-level \marginpar{Content pane} window.
+      A <c>JFrame</c> encapsulates the basic functionality of a top-level  window.
       It has what is called a <em>content pane</em>,
       to which other Swing components,
       such as buttons and text fields, can be added.
@@ -205,7 +205,7 @@ public class JFrame extends Frame { ... }
     </p>
     <figure xml:id="fig-simpleframe">
       <caption>A top-level window with a title.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 public class SimpleGUI extends JFrame
 {
@@ -218,7 +218,7 @@ public class SimpleGUI extends JFrame
     public static void main(String args[])
     {   new SimpleGUI("My GUI");
     } // main()} // SimpleGUI class
-</pre>
+ </input></program>
     </figure>
     <p>
       keyword to define <c>SimpleGUI</c> as a subclass of <c>JFrame</c>. As a subclass, <c>SimpleGUI</c> inherits all of the functionality of a <c>JFrame</c>(Fig.
@@ -324,7 +324,7 @@ public class SimpleGUI extends JFrame
       shows some of the constructors and public methods for the <c>JTextArea</c>, <c>JTextField</c>, <c>JButton</c>, and <c>JLabel</c> components.
       The following code segments illustrate how to use these constructors to create instances of these components:
     </p>
-<pre>
+ <program language="java"><input>
 // Declare instance variables for the components
 private JLabel prompt;
 private JTextField inField;
@@ -335,7 +335,7 @@ prompt = new JLabel("Please type your name here: ");
 inField = new JTextField(10);   // 10 chars wide
 display = new JTextArea(10, 30);// 10 rows x 30 columns
 goButton = new JButton("Click here for a greeting!");
-</pre>
+ </input></program>
     <p>
       For this example, we use some of the simpler constructors.
       Thus, we create a <c>JTextField</c> with a size of 10.
@@ -365,16 +365,16 @@ goButton = new JButton("Click here for a greeting!");
     <p>
       Java's <c>Container</c> class has several <c>add()</c> methods that can be used to insert components into the container:
     </p>
-<pre>
+ <program language="java"><input>
 add(Component comp)// add comp to end of  container
 add(Component comp, int index)// add comp at index
 add(String region, Component comp) add comp at region
-</pre>
+ </input></program>
     <p>
       The particular <c>add()</c> method to use depends on how we want to arrange the components in the container.
       The layout of a container is controlled by its default
       <term>layout manager</term>,
-      an object \marginpar{Layout manager} associated with the container that determines the sizing and the arrangement of its contained components.
+      an object  associated with the container that determines the sizing and the arrangement of its contained components.
       For a content pane,
       the default layout manager is a <c>BorderLayout</c>. This is an arrangement whereby components may be placed in the center of the pane and along its north,
       south, east, and west borders (Fig.
@@ -390,10 +390,10 @@ region, Component comp)</c> method,
       where the <c>String</c> parameter specifies either "North," "South," "East," "West," or "Center." For example,
       to add the <c>JTextArea</c> to the center of the <c>JFrame</c> we first create a reference to its content pane and we then add the component at its center:
     </p>
-<pre>
+ <program language="java"><input>
 Container contentPane = getContentPane(); // Get pane
 contentPane.add("Center",display); // Add JTextArea
-</pre>
+ </input></program>
     <p>
       One limitation of the border layout is that only one component can be added to each area.
       This is a problem for our example because we want our prompt <c>JLabel</c> to be located right before the <c>JTextField</c>. To get around this problem,
@@ -405,13 +405,13 @@ contentPane.add("Center",display); // Add JTextArea
       That way, all of the components involved in getting the user's input will be organized into one panel.
       We then add the entire panel to one of the areas on the content pane.
     </p>
-<pre>
+ <program language="java"><input>
 JPanel inputPanel = new JPanel();
 inputPanel.add(prompt);   // Add JLabel to panel
 inputPanel.add(inField);  // Add JTextField to panel
 inputPanel.add(goButton); // Add JButton to  panel
 contentPane.add("South", inputPanel); // Add to JFrame
-</pre>
+ </input></program>
     <p>
       The default layout for a <c>JPanel</c> is <c>FlowLayout</c>, which means that components are added left to right with the last addition going at the end of the sequence.
       This is an appropriate layout for this JPanel because it will place the prompt just to the left of the input <c>JTextField</c>.
@@ -432,7 +432,7 @@ contentPane.add("South", inputPanel); // Add to JFrame
       As <xref ref="fig-eventmodel">Figure</xref> illustrates,
       events are generated by the computer's hardware and filtered up through the operating system and the application programs.
       Events are handled by special objects called listeners.
-      A <term>listener</term> is a specialist \marginpar{Event listener} that monitors constantly for a certain type of event.
+      A <term>listener</term> is a specialist  that monitors constantly for a certain type of event.
       Some events, such as inserting a CD in the CD-ROM drive,
       are handled by listeners in the operating system.
       Others, such as typing input into a Web page or a Word document,
@@ -450,13 +450,13 @@ contentPane.add("South", inputPanel); // Add to JFrame
       taking some kind of action whenever an event is generated.
       In effect, we might portray this event loop as follows:
     </p>
-<pre>
+ <program language="java"><input>
 Repeat forever or until the program is stopped
     Listen for events
     If event-A occurs, handle it with event-A-handler
     If event-B occurs, handle it with event-B-handler
      ...
-</pre>
+ </input></program>
     <p>
       The event loop listens constantly for the occurrence of events and then calls the appropriate object to handle each event.
     </p>
@@ -484,10 +484,10 @@ Repeat forever or until the program is stopped
       in the <c>JTextArea</c>. That is,
       we want the program to execute the following code segment:
     </p>
-<pre>
+ <program language="java"><input>
 String name = inField.getText();
   display.append(greeter.greet(name) + "\n");
-</pre>
+ </input></program>
     <p>
       The first line uses the <c>JTextField.getText()</c> method to get the text that the user typed into the <c>JTextField</c> and stores it in a local variable, <c>name</c>. The second line passes the
 <c>name</c> to the <c>greeter.greet()</c> method and passes the result it gets back to the <c>JTextArea.append()</c> method.
@@ -497,7 +497,7 @@ String name = inField.getText();
       In this example,
       we have used a couple of the standard public methods of the <c>JTextField</c> and <c>JTextArea</c> classes.
       For our simple GUI, the methods described in <xref ref="fig-constructors">Figure</xref>
-      \marginpar{ \psfig{file=../commonart/www_dg.eps}
+      
       <em>java.sun.com/j2se/1.5.0/docs/api/</em>} will be sufficient for our needs.
       However, if you would like to see the other methods available for these and other Swing components,
       you should check Java's online API documentation.
@@ -515,7 +515,7 @@ String name = inField.getText();
       we need a special method that the button's listener knows how to call whenever the button is clicked.
     </p>
     <p>
-      Java solves this problem by letting us define a pre-selected method \marginpar{Java interface} that can be associated with the <c>goButton</c>. The name of the method is <c>actionPerformed()</c> and it is part of the <c>ActionListener</c> interface.
+      Java solves this problem by letting us define a pre-selected method  that can be associated with the <c>goButton</c>. The name of the method is <c>actionPerformed()</c> and it is part of the <c>ActionListener</c> interface.
       In this case, an <term>interface</term>
       is a special Java class that contains only methods and constants
       (final variables).
@@ -526,11 +526,11 @@ String name = inField.getText();
       whereby we say that a class's public methods make up its interface to other objects.)
       Here's the definition of the <c>ActionListener</c> interface:
     </p>
-<pre>
+ <program language="java"><input>
 public abstract interface ActionListener
                                 extends EventListener
 {    public abstract void actionPerformed(ActionEvent e);}
-</pre>
+ </input></program>
     <p>
       This resembles a class definition,
       but the keyword <c>interface</c> replaces the keyword <c>class</c> in the definition.
@@ -557,7 +557,7 @@ public abstract interface ActionListener
       </p>
     </principle>
     <p>
-      Declaring a method <c>abstract</c> means that we are leaving its \marginpar{Abstract method} implementation up to the class that implements it.
+      Declaring a method <c>abstract</c> means that we are leaving its  implementation up to the class that implements it.
       This way, its implementation can be tailored to a particular context,
       with its signature specifying generally what the method should do.
       Thus, <c>actionPerformed()</c> should take an <c>ActionEvent</c> object as a parameter and perform some kind of action.
@@ -571,14 +571,14 @@ public abstract interface ActionListener
       is to greet the user by name.
       Thus, we want to set things up so that the following <c>actionPerformed()</c> method is called whenever the <c>goButton</c> is clicked:
     </p>
-<pre>
+ <program language="java"><input>
 public void actionPerformed(ActionEvent e)
 {  if (e.getSource() == goButton)
    {   String name = inField.getText();
          display.append(greeter.greet(name) + "\n");
    }
  }
-</pre>
+ </input></program>
     <p>
       In other words,
       we place the code that we want executed when the button is clicked in the body of the <c>actionPerformed()</c> method.
@@ -596,7 +596,7 @@ public void actionPerformed(ActionEvent e)
     <p>
       The following stripped-down version of the GreeterGUI class illustrates how we put it all together:
     </p>
-<pre>
+ <program language="java"><input>
 public class GreeterGUI extends Frame
                                implements ActionListener
 { ...
@@ -614,7 +614,7 @@ public class GreeterGUI extends Frame
       }
   }
   ...}
-</pre>
+ </input></program>
     <p>
       First, we declare that <c>GreeterGUI</c> implements the <c>ActionListener</c> interface in the class header.
       This means that the class must provide a definition of the <c>actionPerformed()</c> method,
@@ -625,9 +625,9 @@ public class GreeterGUI extends Frame
     <p>
       Second, note how we use the <c>addActionListener()</c> method to associate the listener with the <c>goButton</c>:
     </p>
-<pre>
+ <program language="java"><input>
 goButton.addActionListener(this)
-</pre>
+ </input></program>
     <p>
       The <c>this</c> keyword is a self-reference<mdash/>that is,
       it always refers to the object in which it is used.
@@ -657,7 +657,7 @@ goButton.addActionListener(this)
     </p>
     <figure xml:id="fig-simplegui">
       <caption>Definition of the <c>GreeterGUI</c> class.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -694,7 +694,7 @@ public class GreeterGUI extends JFrame
       display.append(greeter.greet(name) + "\n");
     }
   } // actionPerformed()}
-</pre>
+ </input></program>
     </figure>
     <p>
       even though we have introduced most of its elements already.
@@ -708,17 +708,17 @@ public class GreeterGUI extends JFrame
       and the <c>java.awt</c> packages contain the <c>Container</c> class.
     </p>
     <p>
-      Next note how the <c>GreeterGUI</c> class is defined as a subclass of \marginpar{Extending a class}<c>JFrame</c> and as implementing the <c>ActionListener</c> interface.
+      Next note how the <c>GreeterGUI</c> class is defined as a subclass of <c>JFrame</c> and as implementing the <c>ActionListener</c> interface.
 <c>GreeterGUI</c> thereby inherits all of the functionality of a <c>JFrame</c>. Plus,
       we are giving it additional functionality.
-      One of its functions is to serve as an <c>ActionListener</c> for its <c>goButton</c>. The <c>ActionListener</c> interface consists entirely of \marginpar{Implementing an interface} the <c>actionPerformed()</c> method,
+      One of its functions is to serve as an <c>ActionListener</c> for its <c>goButton</c>. The <c>ActionListener</c> interface consists entirely of  the <c>actionPerformed()</c> method,
       which is defined in the program.
       This method encapsulates the actions that will be taken whenever the user clicks the <c>goButton</c>.
     </p>
     <p>
       The next elements of the program are its four instance variables,
       the most important of which is the <c>Greeter</c> variable.
-      This is the variable that sets up the relationship between the GUI and the \marginpar{The computational object} computational object.
+      This is the variable that sets up the relationship between the GUI and the  computational object.
       In this case,
       because the variable is declared in the GUI, we say that the GUI uses the computation object,
       as illustrated in <xref ref="fig-greeter">Figure</xref>.
@@ -754,7 +754,7 @@ public class GreeterGUI extends JFrame
       because they are not used elsewhere in the class.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -786,13 +786,13 @@ public class GreeterGUI extends JFrame
 <c>GreeterGUI</c> class itself or in a separate class.
       Here's an example with the main in a separate class:
     </p>
-<pre>
+ <program language="java"><input>
 public class GreeterApplication
 {  public static void main(String args[])
    {
       new GreeterGUI("Greeter");
    }}
-</pre>
+ </input></program>
     <p>
       The <c>main()</c> method creates an instance of
 <c>GreeterGUI</c>, passing it a string to use as its title.

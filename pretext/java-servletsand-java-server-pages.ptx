@@ -32,9 +32,9 @@
       A Java Server Page (JSP) is a Web page that contains small snippets of Java code.
       The simple example discussed here was downloaded from on online tutorial at
     </p>
-<pre>
+ <program language="java"><input>
 http://developer.apple.com/internet/java/tomcat1.html
-</pre>
+ </input></program>
     <p>
       The Java code on a JSP embedded within <c>&lt;% ... %&gt;</c> brackets and interspersed among a page's HTML tags.
       The Java code can extend over one or more lines.
@@ -43,7 +43,7 @@ http://developer.apple.com/internet/java/tomcat1.html
     </p>
     <figure xml:id="fig-jspcode">
       <caption>A simple JavaServer Page (JSP).</caption>
-<pre>
+ <program language="java"><input>
 &lt;html>&lt;head>&lt;title>Very Simple JSP Example&lt;/title>&lt;/head>
 &lt;body bgcolor="white">
 &lt;h1>Very Basic JSP&lt;/h1>
@@ -68,16 +68,16 @@ Reload this page to watch the greeting change.
 &lt;/b>
 &lt;/body>
 &lt;/html>
-</pre>
+ </input></program>
     </figure>
     <p>
       In this example we see two uses of Java code.
       In the first case,
       a JSP expression tag is used to display the current date on the Web page:
     </p>
-<pre>
+ <program language="java"><input>
 Current time: &lt;%= new java.util.Date() %&gt;
-</pre>
+ </input></program>
     <p>
       A JSP expression element begins with <c>&lt;%=</c> and ends with <c>%&gt;</c>. The expression contained within the tag is evaluated,
       converted into a Java <c>String</c> and inserted into the Web page.
@@ -117,16 +117,16 @@ Current time: &lt;%= new java.util.Date() %&gt;
       For example,
       the URL for a simple HTML document on the author's Web site is:
     </p>
-<pre>
+ <program language="java"><input>
 http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
-</pre>
+ </input></program>
     <p>
       If you type that URL into a Web browser,
       the Web server at
 <c>www.cs.trincoll.edu</c> would transmit the following text file to your browser,
       which would then render and display the document.
     </p>
-<pre>
+ <program language="java"><input>
 &lt;HTML>
 &lt;HEAD>
    &lt;TITLE>Very Simple HTML Document&lt;/TITLE>
@@ -135,7 +135,7 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
     &lt;CENTER>&lt;H1>Hello&lt;/H1>&lt;/CENTER>
 &lt;/BODY>
 &lt;/HTML>
-</pre>
+ </input></program>
     <p>
       If we want the server to do some processing and submit the results of that processing to the browser,
       we could use a Java servlet.
@@ -185,7 +185,7 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
     </p>
     <figure xml:id="fig-hiservlet">
       <caption>A simple Java servlet.</caption>
-<pre>
+ <program language="java"><input>
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -207,7 +207,7 @@ public class HelloServlet extends HttpServlet {
         out.println("&lt;/BODY>");
         out.println("&lt;/HTML>");
     }}
-</pre>
+ </input></program>
     </figure>
     <p>
       The servlet defines the <c>doGet()</c> method.
@@ -282,7 +282,7 @@ public class HelloServlet extends HttpServlet {
     </p>
     <figure xml:id="fig-nimservlet">
       <caption>Java code for the <c>NimServlet</c>, minus the <c>doGet()</c> method.</caption>
-<pre>
+ <program language="java"><input>
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;
@@ -298,11 +298,11 @@ public class NimServlet extends HttpServlet {
     }
     //  The doGet() method goes here.
 } // NimServlet
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig-nimservlet2">
       <caption>Java code for the <c>NimServlet</c>'s <c>doGet()</c> method.</caption>
-<pre>
+ <program language="java"><input>
 public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
 {
@@ -369,7 +369,7 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
   } // else game over
   out.println("&lt;/body>");
   out.println("&lt;/html>");}// doGet
-</pre>
+ </input></program>
     </figure>
     <p>
 <c>NimServlet</c> uses two other objects:
@@ -418,7 +418,7 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
       in outline form,
       the code for creating and disposing of the <c>OneRowNim</c> object goes as follows:
     </p>
-<pre>
+ <program language="java"><input>
 // First request: Start a new Nim game
 if (nim == null) {
    nim = new OneRowNim(7 + (int)(Math.random() * 11));
@@ -430,7 +430,7 @@ if (!nim.gameOver()) {
   // Code for playing the game goes here.} else {
    // Code deleted here.
   nim = null;}
-</pre>
+ </input></program>
     <p>
       Those places where code has been deleted in this segment would contain Java code for responding to the user's input and deciding how many pennies to take.
     </p>
@@ -438,10 +438,10 @@ if (!nim.gameOver()) {
       Unlike the <c>HelloServlet</c>, the <c>NimServlet</c> accepts input from the client.
       The code for handling user input is as follows:
     </p>
-<pre>
+ <program language="java"><input>
 int userTakes =
         Integer.parseInt(request.getParameter("pickup"));
-</pre>
+ </input></program>
     <p>
       This statements reads the user's input from the text field on the Web page by using the <c>request.getParameter()</c> method.
       This is one of the public methods of the <c>HttpServletRequest</c> object.
@@ -450,12 +450,12 @@ int userTakes =
       the text field itself is on element of the HTML form contained in the servlet's Web page.
       The HTML code for creating the form element is also generated by the servlet:
     </p>
-<pre>
+ <program language="java"><input>
 out.println("&lt;form action='/jjj3e/NimServlet' method='POST'>");
 out.println("&lt;table border='0'>");
 out.println("&lt;tr>&lt;td>How many do you pick up?: &lt;/td>" +
   "&lt;td>&lt;input type='text' name='pickup' value='0'>&lt;/td>&lt;/tr>");
-</pre>
+ </input></program>
     <p>
       Unless you already know something about HTML, you won't completely understand this code.
       We will give a minimal explanation.
@@ -476,9 +476,9 @@ out.println("&lt;tr>&lt;td>How many do you pick up?: &lt;/td>" +
       To experiment with the servlets discussed in this chapter,
       just go to the following URL:
     </p>
-<pre>
+ <program language="java"><input>
 http://www.cs.trincoll.edu/&#126;ram/jjj/servlets
-</pre>
+ </input></program>
     <p>
       That web page contains links to both the <c>HelloServlet</c> and <c>NimServlet</c>. It also contains links to Web sites where you can learn more about creating servlets.
       In order to create and run your own servlets,
@@ -648,10 +648,10 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/servlets
     </p>
     <p>
       { \rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secANSHleft}{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Solutions to Self-Study Exercises} } } \newcommand{\secKTH}[1]{{ #1} } \newcommand{\secLREXRH}[1]{{ { \uppercase{#1}}} } \def\endpracticedesign{ {\rule[0pt]{27pc}{0.5pt}} } \newcommand{\secHsix}[1]{{#1} } \newcommand{\secHfive}[2]{{ \rule[16pt]{27pc}{0.5pt} }\newcommand{\secBXsixHone}[1]{{#1} } \newcommand{\secBXsixBTHleft}[1]{ {\rule[0pt]{44.45pc}{2pt}} \marginpar{ }\newcommand{\secBXsevenHone}[1]{{#1} }\newcommand{\secCOBH}[1] {{\uppercase{#1}} }\newcommand{\secCOLH}[1] {{\uppercase{#1}} }\newcommand{\secSMH}[1]{ {\rule[0pt]{40.5pc}{1pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{#1} } } } \newcommand{\secSMHleft}[1]{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ \uppercase{#1} } } \newcommand{\secSMHtwo}[1]{{ #1} }\newcommand{\secEXRHone}[1]{{\uppercase{#1}} } \newcounter{EXRLLcount} { \marginpar{{From the Java Library} #1} } {\begin{minipage}{26pc}}{\end{minipage}} \rule[0pt]{27pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1} } \begin{minipage}[t]{#2} { \end{minipage} } \rule[0pt]{40pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1}
+      height=4pt,width=40.5pc,clip=}  } } \newcommand{\secANSHleft}{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=}  } } \newcommand{\secKTH}[1]{{ #1} } \newcommand{\secLREXRH}[1]{{ { \uppercase{#1}}} } \def\endpracticedesign{ {\rule[0pt]{27pc}{0.5pt}} } \newcommand{\secHsix}[1]{{#1} } \newcommand{\secHfive}[2]{{ \rule[16pt]{27pc}{0.5pt} }\newcommand{\secBXsixHone}[1]{{#1} } \newcommand{\secBXsixBTHleft}[1]{ {\rule[0pt]{44.45pc}{2pt}} \newcommand{\secBXsevenHone}[1]{{#1} }\newcommand{\secCOBH}[1] {{\uppercase{#1}} }\newcommand{\secCOLH}[1] {{\uppercase{#1}} }\newcommand{\secSMH}[1]{ {\rule[0pt]{40.5pc}{1pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=}  } } } \newcommand{\secSMHleft}[1]{ {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
+      height=4pt,width=40.5pc,clip=}  } } \newcommand{\secSMHtwo}[1]{{ #1} }\newcommand{\secEXRHone}[1]{{\uppercase{#1}} } \newcounter{EXRLLcount} {  #1} } {\begin{minipage}{26pc}}{\end{minipage}} \rule[0pt]{27pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1} } \begin{minipage}[t]{#2} { \end{minipage} } \rule[0pt]{40pc}{#1} } \begin{minipage}[t]{26pc} { \end{minipage} } \rule[0pt]{#2}{#1}
       <ul>
         <li>
           <p>
@@ -671,9 +671,9 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/servlets
         <li>
           <p>
             Prentice Hall's Web server is located at
-<pre>
+ <program language="java"><input>
 http://www.prenhall.com
-</pre>The protocol is <c>http</c>. The host computer is named <c>www</c>. Prentice Hall's domain name is <c>prenhall</c>, and it is part of the
+ </input></program>The protocol is <c>http</c>. The host computer is named <c>www</c>. Prentice Hall's domain name is <c>prenhall</c>, and it is part of the
 <c>com</c>(commercial) Internet domain.
           </p>
         </li>
@@ -712,12 +712,12 @@ http://www.prenhall.com
         <li>
           <p>
             To play sounds along with slides in the <c>SlideShowFrame</c>, you would make the following modifications to the code:
-<pre>
+ <program language="java"><input>
 private Clip soundClip[] = new Clip[NIMGS];
 private Clip currentClip = null;
-</pre>Declare an array of <c>URL</c> s to store the URLs of the audio files you want to play.
+ </input></program>Declare an array of <c>URL</c> s to store the URLs of the audio files you want to play.
             Assign Clips to the array at the same time you input the images:
-<pre>
+ <program language="java"><input>
 for (int k=0; k &lt; NIMGS; k++) {
   url =
    new URL( "http://www.cs.trincoll.edu/&#126;ram/jjj/slide" +
@@ -731,8 +731,8 @@ for (int k=0; k &lt; NIMGS; k++) {
   DataLine.Info info = new DataLine.Info(Clip.class,
                audio.getFormat());
   soundClip[k] = (Clip) AudioSystem.getLine(info);}
-</pre>Change the nextSlide() code to the following
-<pre>
+ </input></program>Change the nextSlide() code to the following
+ <program language="java"><input>
 public void nextSlide() {
     currentClip.stop(); // stop sound playback
     currentClip = soundClip[nextImg]; // get next soundClip
@@ -740,14 +740,14 @@ public void nextSlide() {
     currentImage = slide[nextImg];
     nextImg = ( nextImg + 1) % NIMGS;
     repaint ();}
-</pre>Each time an image is displayed in <c>paint()</c>, play the corresponding sound by using the URL from the array:
-<pre>
+ </input></program>Each time an image is displayed in <c>paint()</c>, play the corresponding sound by using the URL from the array:
+ <program language="java"><input>
 public void paint(Graphics g) {
     if (currentImage != null) {
         g.drawImage(currentImage,10,10,this);
         currentClip.start();
     }}
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -802,7 +802,7 @@ public void paint(Graphics g) {
       </li>
       <li>
         <p>
-          Give examples of client applications that use the HTTP \mbox{protocol.}
+          Give examples of client applications that use the HTTP protocol.
         </p>
       </li>
       <li>

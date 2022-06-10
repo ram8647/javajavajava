@@ -8,7 +8,7 @@
   <subsection xml:id="fig-exchand">
     <title>Trying, Throwing, and Catching an Exception</title>
     <p>
-      In Java, errors and other abnormal conditions are handled by throwing \marginpar{Pulling the program's fire alarm} and catching exceptions.
+      In Java, errors and other abnormal conditions are handled by throwing  and catching exceptions.
       When an error or an exceptional condition is detected,
       you can <em>throw an exception</em>
           <idx><h>throw an exception</h></idx>
@@ -24,7 +24,7 @@
     </p>
     <p>
       If we go back to our <c>avgFirstN()</c> example,
-      the typical way of handling this error in Java would be to throw an exception in the \mbox{avgFirstN()} method and catch it in the calling method.
+      the typical way of handling this error in Java would be to throw an exception in the avgFirstN() method and catch it in the calling method.
       Of course, the calling method could be in the same object or it could belong to some other object.
       In the latter case,
       the detection of the error is separated from its handling.
@@ -47,8 +47,8 @@
       <caption>In this version of the <c>calcAvgTest</c> program, an
 <c>IllegalArgumentException</c> thrown in <c>CalcAverage.avgFirstN()</c>, would be handled by the catch clause in
 <c>CalcAvgTest.main()</c>.</caption>
-      \[30.5pc]
-<pre>
+      
+ <program language="java"><input>
 public class CalcAverage {
   /**
    * Precondition:  N > 0
@@ -74,7 +74,7 @@ public class CalcAvgTest {
       System.exit(0);
     }
   }//main}// CalcAvgTest
-</pre>
+ </input></program>
     </figure>
     <p>
       Let's go through this example step by step.
@@ -82,12 +82,12 @@ public class CalcAvgTest {
       it will <c>throw</c> an exception:
     </p>
     <p>
-      \[28.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 if (N &lt;= 0)
   throw new IllegalArgumentException("ERROR: Illegal argument");
-</pre>
+ </input></program>
     <p>
       Note the syntax of the <c>throw</c> statement.
       It creates a new <c>IllegalArgumentException</c> object and passes it a message that describes the error.
@@ -104,12 +104,12 @@ if (N &lt;= 0)
       the exception handler is the <c>catch</c> clause contained in the
 <c>CalcAvgTest.main()</c> method:
     </p>
-<pre>
+ <program language="java"><input>
 catch (IllegalArgumentException e) {// Exception Handler
    System.out.println(e.getMessage());
    e.printStackTrace();
    System.exit(0);}
-</pre>
+ </input></program>
     <p>
       When an <c>IllegalArgumentException</c> is thrown,
       the statements within this <c>catch</c> clause are executed.
@@ -123,9 +123,9 @@ catch (IllegalArgumentException e) {// Exception Handler
       the following output will be generated as a result of the illegal argument error:
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 ERROR: Can't average 0 elements
 java.lang.IllegalArgumentException: ERROR: Illegal argument
    at java.lang.Throwable.fillInStackTrace(Native Method)
@@ -137,7 +137,7 @@ java.lang.IllegalArgumentException: ERROR: Illegal argument
                        (IllegalArgumentException.java:43)
    at CalcAverage.avgFirstN(Compiled Code)
    at CalcAvgTest.main(CalcAvgTest.java:5)
-</pre>
+ </input></program>
     <p>
       Thus, as in the previous example of Java's default exception handler,
       our exception handler also prints out a description of the error and a trace of the method calls that led up to the error.
@@ -149,7 +149,7 @@ java.lang.IllegalArgumentException: ERROR: Illegal argument
     <principle>
       <title>EFFECTIVE DESIGN:Using an Exception</title>
       <p>
-        Unless your program's handling of an exception is significantly different from Java's default \mbox{handling} of it,
+        Unless your program's handling of an exception is significantly different from Java's default handling of it,
         the program should just rely on the default.
       </p>
     </principle>
@@ -161,11 +161,11 @@ java.lang.IllegalArgumentException: ERROR: Illegal argument
       which may or may not lead to an exception.
       These are the statements contained within the <c>try</c> clause:
     </p>
-<pre>
+ <program language="java"><input>
 try {
     CalcAverage ca = new CalcAverage();
     System.out.println( "AVG + " + ca.avgFirstN(0));        }
-</pre>
+ </input></program>
     <p>
       Second, we provide one or more <c>catch</c> clauses to handle particular types of exceptions.
       In this case,
@@ -178,7 +178,7 @@ try {
       The
       <q>fire department</q>
       in this case is the code contained in the <c>catch</c> clause that immediately follows the try block.
-      This is the \marginpar{Responding to the fire alarm} exception handler for this particular exception.
+      This is the  exception handler for this particular exception.
       There's something like a game of catch going on here: Some method within the try block throws an <c>Exception</c> object,
       which is caught and handled by the catch block located in some other object (Fig.
       <xref ref="fig-exccatch"></xref>).
@@ -195,7 +195,7 @@ try {
     <title>Separating Error Checking from Error Handling</title>
     <p>
       As we see in the <c>CalcAvgTest</c> example,
-      an important difference between Java's exception handling and \marginpar{Divide and conquer} more traditional approaches is that error handling can be separated from the normal flow of execution within a program.
+      an important difference between Java's exception handling and  more traditional approaches is that error handling can be separated from the normal flow of execution within a program.
       The <c>CalcAverage.avgFirstN()</c> method still checks for the error and it still <c>throws</c><c>IllegalArgumentException</c> if <em>N</em>
       does not satisfy the method's precondition.
       But it does not contain code for handling the exception.
@@ -230,12 +230,12 @@ try {
     <p>
       A <term>try block</term>
           <idx><h>try block</h></idx>
-      begins with the keyword <c>try</c> followed by a block \marginpar{The try block} of code enclosed within curly braces.
+      begins with the keyword <c>try</c> followed by a block  of code enclosed within curly braces.
       A <em>catch clause</em> or <em>catch block</em>
           <idx><h>catch block</h></idx>
       consists of the keyword <c>catch</c>, followed by a parameter declaration that identifies the type of <c>Exception</c> being caught,
       followed by a collection of statements enclosed within curly braces.
-      These are the statements that \marginpar{The catch block} handle the exception by taking appropriate action.
+      These are the statements that  handle the exception by taking appropriate action.
     </p>
     <p>
       Once an exception is thrown,
@@ -255,7 +255,7 @@ try {
     </p>
     <figure xml:id="fig-trystmt">
       <caption>Java's try/catch statement.</caption>
-<pre>
+ <program language="java"><input>
 try {
       // Block of statements
       // At least one of which may throw an exception
@@ -272,7 +272,7 @@ try {
      // Optional block of statements that is executed
      // Whether an exception is thrown or not
  }
-</pre>
+ </input></program>
     </figure>
     <p>
       include a statement or statements that might throw an exception.
@@ -283,7 +283,7 @@ try {
       whether an exception is thrown or not.
     </p>
     <p>
-      The statements in the try block are part of the program's normal flow \marginpar{Normal flow of execution} of execution.
+      The statements in the try block are part of the program's normal flow  of execution.
       By encapsulating a group of statements within a try block,
       you thereby indicate that one or more exceptions may be thrown by those statements,
       and that you intend to catch them.
@@ -291,13 +291,13 @@ try {
       a block of code with the possibility that something might go wrong.
     </p>
     <p>
-      If an exception is thrown within a try block, Java exits the block and \marginpar{Exceptional flow of execution} transfers control to the first <c>catch</c> block that matches the particular kind of exception that was thrown.
+      If an exception is thrown within a try block, Java exits the block and  transfers control to the first <c>catch</c> block that matches the particular kind of exception that was thrown.
       Exceptions are thrown by using the <c>throw</c> statement,
       which takes the following general form:
     </p>
-<pre>
+ <program language="java"><input>
 throw new ExceptionClassName(OptionalMessageString);
-</pre>
+ </input></program>
     <p>
       The keyword <c>throw</c> is followed by the instantiation of an object of the <c>ExceptionClassName</c> class.
       This is done the same way we instantiate any object in Java:
@@ -307,10 +307,10 @@ throw new ExceptionClassName(OptionalMessageString);
     <p>
       A <c>catch</c> block has the following general form:
     </p>
-<pre>
+ <program language="java"><input>
 catch (ExceptionClassName ParameterName) {
     // Exception handling statements}
-</pre>
+ </input></program>
     <p>
       A <c>catch</c> block is very much like a method definition.
       It contains a parameter,
@@ -322,7 +322,7 @@ catch (ExceptionClassName ParameterName) {
     </p>
     <p>
       The <em>ExceptionClassName</em>
-      must be one of the classes in Java's \marginpar{Exceptions are objects} exception hierarchy
+      must be one of the classes in Java's  exception hierarchy
       (see Fig.
       <xref ref="fig-excepthier"></xref>).
       A thrown exception will match any parameter of its own class or any of its superclasses.
@@ -334,7 +334,7 @@ catch (ExceptionClassName ParameterName) {
       Note that there can be multiple <c>catch</c> clauses associated with a given <c>try</c> block,
       and the order with which they are arranged is important.
       A thrown exception will be caught by the first <c>catch</c> clause it matches.
-      Therefore, <c>catch</c> clauses \marginpar{Arranging <c>catch</c> clauses} should be arranged in order from most specific to most general (See the exception hierarchy in <xref ref="fig-excepthier">Figure</xref>).
+      Therefore, <c>catch</c> clauses  should be arranged in order from most specific to most general (See the exception hierarchy in <xref ref="fig-excepthier">Figure</xref>).
       If a more general catch clause precedes a more specific one,
       it will prevent the more specific one from executing.
       In effect, the more specific clause will be hidden by the more general one.
@@ -345,19 +345,19 @@ catch (ExceptionClassName ParameterName) {
       suppose an
 <c>ArithmeticException</c> is thrown in the following <c>try/catch</c> statement:
     </p>
-<pre>
+ <program language="java"><input>
 try {
      // Suppose an ArithmeticException is thrown here} catch (ArithmeticException e) {
      System.out.println("ERROR: " + e.getMessage() );
      e.printStackTrace();
      System.exit(1);} catch (Exception e) {
      System.out.println("ERROR: " + e.getMessage() );}
-</pre>
+ </input></program>
     <p>
       In this case,
       the exception would be handled by the more specific <c>ArithmeticException</c> block.
       On the other hand, if some other kind of exception is raised,
-      it will be caught by the second \marginpar{Which handler to use?} catch clause.
+      it will be caught by the second  catch clause.
       The <c>Exception</c> class will match any exception that is thrown.
       Therefore, it should always occur last in a sequence of
 <c>catch</c> clauses.
@@ -423,7 +423,7 @@ try {
       <term>dynamic scope</term>
           <idx><h>dynamic scope</h></idx>
       of an enclosing try block.
-      Let's see what \marginpar{Dynamic scope} this means.
+      Let's see what  this means.
     </p>
     <p>
       Dynamic scoping refers to the way a program is executed.
@@ -437,7 +437,7 @@ try {
       Contrast dynamic with what you have learned about
       <term>static scope</term>,
           <idx><h>static scope</h></idx>
-      which \marginpar{Static scope} we've used previously to define the scope of parameters and local variables (Fig.
+      which  we've used previously to define the scope of parameters and local variables (Fig.
       <xref ref="fig-dynamic"></xref>).
       Static scoping refers to the way a program is written.
       A statement or variable occurs within the scope of a block if its text is actually written within that block.
@@ -465,20 +465,20 @@ try {
     <p>
       Dynamic scoping can only be determined by running the program.
       For example,
-      in \mbox{MyClass} the order in which its statements are executed depends on the result of <c>Math.random()</c>. Suppose that when <c>random()</c> is executed it returns the value 0.99.
+      in MyClass the order in which its statements are executed depends on the result of <c>Math.random()</c>. Suppose that when <c>random()</c> is executed it returns the value 0.99.
       In that case, <c>main()</c> will call <c>method2()</c>, which will call <c>System.out.println()</c>, which will print
       <q>Hello2.</q>
       In that case,
       the statement <c>System.out.println("Hello" + Y</c>) has the following dynamic scope:
     </p>
-<pre>
+ <program language="java"><input>
 main()
     method2()
         System.out.println("Hello" + Y);
-</pre>
+ </input></program>
     <figure xml:id="fig-myclass">
       <caption>An example of dynamic versus static scoping.</caption>
-<pre>
+ <program language="java"><input>
 public class MyClass {
     public void method1() {
         int X = 1;
@@ -495,7 +495,7 @@ public class MyClass {
         else
             myclass.method1();
     }} // MyClass
-</pre>
+ </input></program>
     </figure>
     <p>
       It occurs within the (dynamic) scope of <c>method2()</c>, which is within the (dynamic) scope of <c>main()</c>. On the other hand,
@@ -518,7 +518,7 @@ public class MyClass {
       Java also places a record of every method call the program makes on a method call stack.
       A <term>method call stack</term>
           <idx><h>method call stack</h></idx>
-      is a \marginpar{Method call stack} data structure that behaves like a stack of dishes in the cafeteria.
+      is a  data structure that behaves like a stack of dishes in the cafeteria.
       For each method call, a <em>method call block</em>
       is placed on top of the stack
       (like a dish),
@@ -544,7 +544,7 @@ public class MyClass {
       In order to find a matching catch block for an exception, Java uses its knowledge of the program's static and dynamic scope to perform a
       <term>method stack trace</term>.
           <idx><h>method stack trace</h></idx>
-      The basic idea is that Java \marginpar{Method stack trace} traces backward through the program until it finds an appropriate catch clause.
+      The basic idea is that Java  traces backward through the program until it finds an appropriate catch clause.
       The trace begins within the block that threw the exception.
       Of course, one block can be nested (statically) within another block.
       If the exception is not caught by the block in which it is thrown, Java searches the enclosing block.
@@ -565,7 +565,7 @@ public class MyClass {
       It would, therefore, execute that catch clause.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
     </p>
     <ol>
       <li>
@@ -606,7 +606,7 @@ public class MyClass {
           In the program that follows suppose that the first time <c>random()</c> is called it returns 0.98,
           and the second time it is called it returns 0.44.
           What output would be printed by the program?
-<pre>
+ <program language="java"><input>
 class MyClass2 {
     public void method1(double X) {
         if (X > 0.95)
@@ -629,7 +629,7 @@ class MyClass2 {
             System.out.println(e.getMessage());
         }
     } // main()} // MyClass2
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -657,7 +657,7 @@ class MyClass2 {
         <p>
           Find the divide-by-zero error in the following program,
           and then show what stack trace would be printed by the program:
-<pre>
+ <program language="java"><input>
 public class BadDivide {
     public void method1 (int n) {
         method2(100, n);
@@ -670,7 +670,7 @@ public class BadDivide {
         for (int k = 0; k &lt; 5; k++)
             bd.method1(k);
     }}
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -683,7 +683,7 @@ public class BadDivide {
       <li>
         <p>
           What would be printed by the following code segment if <c>someValue</c> equals 1000?
-<pre>
+ <program language="java"><input>
 int M = someValue;
 try {
     System.out.println("Entering try block");
@@ -691,7 +691,7 @@ try {
         throw new Exception(M + " is too large");
     System.out.println("Exiting try block");} catch (Exception e) {
     System.out.println("ERROR: " + e.getMessage());}
-</pre>
+ </input></program>
         </p>
       </li>
       <li>

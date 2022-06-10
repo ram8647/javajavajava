@@ -35,7 +35,7 @@
       There are also methods to <c>setSelectedItem()</c> and <c>setSelectedIndex()</c> that let you select an individual item either by its reference or its position.
       The <c>addItemListener()</c> method is used to designate some object as the listener for the <c>ItemEvent</c> s that are generated whenever the user selects a menu option.
       Alternatively,
-      the \mbox{addActionListener()} method lets you handle action events,
+      the addActionListener() method lets you handle action events,
       such as when the user types a value into the box.
     </p>
   </introduction>
@@ -54,23 +54,23 @@
     <p>
       The first step is to declare and instantiate the <c>JComboBox</c> es as instance variables:
     </p>
-<pre>
+ <program language="java"><input>
 private String items[] =
     {"Sierpinski Gasket","Nested Boxes"};
 private JComboBox patterns = new JComboBox(items);
 private JComboBox levels = new JComboBox();
-</pre>
+ </input></program>
     <p>
       Note that in this case we pass the constructor for the <image width="73%" source="chptr12/comboscreen.png"/> <c>patterns</c> menu an entire array of items.
       If we hadn't done it this way,
       we would add individual items to the combo box in the JFrame's constructor <c>RecursivePatterns()</c>. In fact,
       that's how we'll initialize the <c>levels</c> menu:
     </p>
-<pre>
+ <program language="java"><input>
 for (int k=0; k &lt; 10; k++)   // Add 10 levels
     levels.addItem(k + "" );
 levels.setSelectedItem("4"); // Select default level
-</pre>
+ </input></program>
     <p>
       This loop would be placed in the JFrame's constructor, <c> RecursivePatterns()</c>. It adds strings representing levels 0 to 9 to the menu and initializes the box so that level four is showing as the default option.
     </p>
@@ -80,7 +80,7 @@ levels.setSelectedItem("4"); // Select default level
       Then we add the
 <c>JComboBox</c> component to the JFrame:
     </p>
-<pre>
+ <program language="java"><input>
 controls.add(levels);    // Control panel for menus
 controls.add(patterns);
                                 // Add the controls
@@ -90,7 +90,7 @@ getContentPane().add(canvas, "Center");
               // Register the menus with a listener
 levels.addItemListener(this);
 patterns.addItemListener(this);
-</pre>
+ </input></program>
     <p>
       Note that we use a separate <c>controls</c> panel (a <c>JPanel</c>) for the two menus and a <c>canvas</c> panel (another <c>JPanel</c>) for the drawings.
     </p>
@@ -103,15 +103,15 @@ patterns.addItemListener(this);
           <idx><h>ItemListener interface</h></idx>
       which consists of the single method <c>itemStateChanged()</c>. This method is invoked automatically whenever the user selects an item from one of the <c>JComboBox</c> es:
     </p>
-<pre>
+ <program language="java"><input>
 public void itemStateChanged(ItemEvent e) {
     canvas.setPattern(patterns.getSelectedIndex(),
                          levels.getSelectedIndex());
     repaint();}
-</pre>
+ </input></program>
     <p>
       The <c>itemStateChanged()</c> method has the same general form as the <c>actionPerformed()</c> method,
-      except that its parameter is an \mbox{ItemEvent} . For this example,
+      except that its parameter is an ItemEvent . For this example,
       the program uses the
 <c>getSelectedIndex()</c> method to get the selected pattern and the selected level by their respective item numbers within the menus.
       It then passes these values along to the <c>canvas</c> object,
@@ -132,7 +132,7 @@ public void itemStateChanged(ItemEvent e) {
     </figure>
     <figure xml:id="fig-recursivepatterns">
       <caption>The <c>RecursivePatterns</c> program.</caption>
-<pre>
+ <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -166,7 +166,7 @@ public class RecursivePatterns extends JFrame implements ItemListener  {
       JFrame f = new RecursivePatterns();
       f.setVisible(true);
    }} // RecursivePatterns
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig-canvas">
       <caption>Design of a drawing <c>Canvas</c> class.</caption>
@@ -180,12 +180,12 @@ public class RecursivePatterns extends JFrame implements ItemListener  {
       Because the <c>canvas</c> is contained within the JFrame,
       the <c>paintComponent()</c> method is called automatically whenever the JFrame repaints itself.
       Notice how the
-<c>switch</c> statement uses the pattern that \marginpar{Zero indexing} the user chose to call the corresponding drawing method.
+<c>switch</c> statement uses the pattern that  the user chose to call the corresponding drawing method.
       You can see from this <c>switch</c> statement that a <c>JComboBox</c>'s items are <em>zero indexed</em>.
     </p>
     <figure xml:id="fig-canvaspanel">
       <caption>The <c>Canvas</c> class is a drawing panel, Part I.</caption>
-<pre>
+ <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 public class Canvas extends JPanel {
@@ -204,12 +204,12 @@ public class Canvas extends JPanel {
     pattern = pat;
     level = lev;
   }
-</pre>
+ </input></program>
     </figure>
     <figure xml:id="fig_canvaspart2">
       <caption>The <c>Canvas</c> class, Part II.</caption>
-      \[33pc]
-<pre>
+      
+ <program language="java"><input>
 public void paintComponent(Graphics g) {
         g.setColor(getBackground());   // Redraw the panel's background
         g.drawRect(0, 0, WIDTH, HEIGHT);
@@ -257,7 +257,7 @@ public void paintComponent(Graphics g) {
                                           side - 2 * delta, delta);
         }
     } // drawBoxes()} // Canvas
-</pre>
+ </input></program>
     </figure>
     <p>
       \secSMHleft{Chapter Summary} \secKTH{Technical Terms} \begin{KT} base case
@@ -375,21 +375,21 @@ public void paintComponent(Graphics g) {
         </li>
         <li>
           <p>
-            <pre>
+             <program language="java"><input>
 Definition: twoToN(N), N >= 0
   1, if N == 0                   // Base case
   2 * twoToN(N - 1),  N > 0      // Recursive case
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             The function <m>x^n</m> is known as the power function:
-<pre>
+ <program language="java"><input>
 Definition: power(X,N), N >= 0
   1, if N == 0                    // Base case
   X * power(X, N - 1),  N > 0     // Recursive case
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -402,12 +402,12 @@ Definition: power(X,N), N >= 0
         <li>
           <p>
             A recursive definition for the pattern in Figure<nbsp/>12.4:
-<pre>
+ <program language="java"><input>
 Draw a square with side, s.
 Inscribe a circle with diameter, s.
 If s > 5,
   Draw a smaller version of same pattern. // Recursive case
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -419,7 +419,7 @@ If s > 5,
         <li>
           <p>
             A definition for <c>countDown()</c>:
-<pre>
+ <program language="java"><input>
 /** countDown(N) recursively prints a countdown
   *  beginning at N and ending at 1
   * @param N >= 1
@@ -432,13 +432,13 @@ void countDown(int N) {
         System.out.print(N + ", "); // Recursive case
         countDown(N - 1);
     }} // countDown()
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             A revised definition for <c>countDown()</c>:
-<pre>
+ <program language="java"><input>
 /** countDown(N) recursively prints a countdown
   *  beginning at N, counting every other number, 10 8 6 ...
   *  and ending at "blastoff"
@@ -452,26 +452,26 @@ void countDown(int N) {
         System.out.print(N + ", "); // Recursive case
         countDown(N - 2 );
     }} // countDown()
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             A method to sum the numbers from 1 to
             <em>N</em>.
-<pre>
+ <program language="java"><input>
 int sum(int N) {
     if (N == 0)
         return 0;
     else
         return N + sum(N-1);}
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             A method to change each blank within a string to two blanks.
-<pre>
+ <program language="java"><input>
 String addBlanks(String s) {
   if (s.length() == 0)
      return "";
@@ -479,13 +479,13 @@ String addBlanks(String s) {
      return ' ' + s.charAt(0) + addBlanks(s.substring(1));
   else
      return s.charAt(0) + addBlanks(s.substring(1));}
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             A method to print out all possible outcomes for a chess player playing <c>N</c> games. <c>printOutcomes(str, N)</c> will print all outcomes for the next <c>N</c> games given that results for previous games are stored in the string named <c>str</c>.
-<pre>
+ <program language="java"><input>
 public static void printOutcomes(String str, int N){
      if (N = 1){ // Base case: win, lose, or draw one game
          System.out.println(str + "W");
@@ -497,12 +497,12 @@ public static void printOutcomes(String str, int N){
          printOutcomes(str + "D", N - 1);
      } //else
  }// printOutcomes()
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
-            <pre>
+             <program language="java"><input>
 public static void main(String args[]) {
   int numbers[] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
   Searcher searcher = new Searcher();
@@ -513,13 +513,13 @@ public static void main(String args[]) {
     else
       System.out.println(k + " is not in the array ");
   } // for} // main()
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             The <c>sort()</c> method is used as a public interface to the recursive <c>selectionSort()</c> method:
-<pre>
+ <program language="java"><input>
 /** sort(arr) sorts the int array, arr
  *  Pre: arr is not null
  *  Post: arr will be arranged so that arr[j] &lt;= arr[k]
@@ -528,13 +528,13 @@ public static void main(String args[]) {
 public void sort(int arr[]) {
     selectionSort(arr, arr.length - 1);
              // Just call the recursive method}
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
             An iterative version of <c>findMax()</c>:
-<pre>
+ <program language="java"><input>
 /** findMax (arr,N) returns the index of the largest
   *  value between arr[0] and arr[N], N >= 0.
   *  Pre: 0 &lt;= N &lt;= arr.length -1
@@ -546,7 +546,7 @@ private int findMax(int arr[], int N) {
         if (arr[k] > arr[maxSoFar])
             maxSoFar = k;
     return maxSoFar;} // findMax()
-</pre>\marginfiglarge{chptr12/boxes45.eps}{Levels four and five of the nested boxes pattern.}{fig-boxes45}
+ </input></program>\marginfiglarge{chptr12/boxes45.eps}{Levels four and five of the nested boxes pattern.}{fig-boxes45}
           </p>
         </li>
         <li>
@@ -558,7 +558,7 @@ private int findMax(int arr[], int N) {
           <p>
             The following method will reduce the length of the side by <c>delta</c> percent at each level of recursion.
             The spacing between the boxes will vary by a constantly decreasing amount.
-<pre>
+ <program language="java"><input>
 private void  drawBoxes(Graphics g, int level, int locX,
                    int locY, int side, int delta) {
     g.drawRect(locX, locY, side, side );
@@ -569,12 +569,12 @@ private void  drawBoxes(Graphics g, int level, int locX,
       drawBoxes(g, level - 1, newLocX, newLocY,
                          side - 2 * dside, delta);
     }} // drawBoxes()
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
           <p>
-            <pre>
+             <program language="java"><input>
 private void drawBoxesIterative(Graphics g, int level,
             int locX, int locY, int side, int delta) {
  for (int k = level; k >= 0; k--) {
@@ -583,7 +583,7 @@ private void drawBoxesIterative(Graphics g, int level,
   locY += delta;
   side -= 2 * delta;         // Calculate new side length
  }} // drawBoxes()
-</pre>
+ </input></program>
           </p>
         </li>
         <li>
@@ -611,7 +611,7 @@ private void drawBoxesIterative(Graphics g, int level,
     </p>
     <p>
       {\rule[0pt]{40.5pc}{0.5pt}} \epsfig{file=../commonart/eoc2text.eps,
-      height=4pt,width=40.5pc,clip=} \marginpar{ { \uppercase{Exercises} } }
+      height=4pt,width=40.5pc,clip=}  } }
     </p>
     <ol>
       <li>
@@ -668,7 +668,7 @@ private void drawBoxesIterative(Graphics g, int level,
       </li>
       <li>
         <p>
-          Write a recursive method that takes a single <c>int</c> parameter \mbox{<m>N \geq 0</m>} and prints the sequence of even numbers between <em>N</em> down to 0.
+          Write a recursive method that takes a single <c>int</c> parameter <m>N \geq 0</m> and prints the sequence of even numbers between <em>N</em> down to 0.
         </p>
       </li>
       <li>
@@ -679,20 +679,20 @@ private void drawBoxesIterative(Graphics g, int level,
       </li>
       <li>
         <p>
-          Write a recursive method to print the following geometric \mbox{pattern:}
-<pre>
+          Write a recursive method to print the following geometric pattern:
+ <program language="java"><input>
 #
 # #
 # # #
 # # # #
 # # # # #
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
         <p>
-          Write recursive methods to print each of the following \mbox{patterns.}
-<pre>
+          Write recursive methods to print each of the following patterns.
+ <program language="java"><input>
 # # # # # # # #     # # # # # # # #
   # # # # # # #     # # # # # # #
     # # # # # #     # # # # # #
@@ -701,7 +701,7 @@ private void drawBoxesIterative(Graphics g, int level,
           # # #     # # #
             # #     # #
               #     #
-</pre>
+ </input></program>
         </p>
       </li>
       <li>
@@ -796,7 +796,7 @@ private void drawBoxesIterative(Graphics g, int level,
 <c>move(3, "A", "B", "C")</c>: <image width="73%" source="chptr12/hanoi.png"/> \caption{The towers of Hanoi problem.
           Move all the disks from needle A to needle B.<nbsp/>Only one disk can be moved at a time,
           and a larger disk can never go on top of a smaller one. }
-<pre>
+ <program language="java"><input>
 Move 1 disk from A to B.
 Move 1 disk from A to C.
 Move 1 disk from B to C.
@@ -804,7 +804,7 @@ Move 1 disk from A to B.
 Move 1 disk from C to A.
 Move 1 disk from C to B.
 Move 1 disk from A to B.
-</pre>
+ </input></program>
         </p>
       </li>
     </ol>

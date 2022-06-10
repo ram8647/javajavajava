@@ -2,7 +2,7 @@
   <title>From the Java Library: The Java Collections Framework and Generic Types</title>
   <introduction>
     <p>
-      \marginpar{ \psfig{file=../commonart/www_dg.eps}
+      
       <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
     </p>
     <p>
@@ -20,7 +20,7 @@
   <subsection xml:id="fig-libvectoruml">
     <title>Generic types in Java</title>
     <p>
-      Declaring classes that use the generic type construct introduced in Java 5.0 \marginpar{generic types} involves using new syntax to refer to the class name.
+      Declaring classes that use the generic type construct introduced in Java 5.0  involves using new syntax to refer to the class name.
       Such classes and interfaces, including those in the collections framework,
       use angle brackets containing one or more variables
       (separated by commas)
@@ -43,31 +43,31 @@
       The type must also be included after a constructor's type name when an object is instantiated and assigned to the variable.
       The following code demonstrates how to create a <c>Vector&lt;E&gt;</c> object for storing <c>String</c> objects.
     </p>
-<pre>
+ <program language="java"><input>
 Vector&lt;String&gt; strVec = new Vector&lt;String&gt;();
    strVec.addElement("alpha");
    strVec.addElement("beta");
    String str = strVec.elementAt(0);
-</pre>
+ </input></program>
     <p>
       In effect, the <c>&lt;E&gt;</c> serves as parameter for the type of objects that will be stored in the <c>Vector</c>. Java 5.0 still allows the use of the unparameterized <c>Vector</c> class which is equivalent to instantiating a <c>Vector&lt;Object&gt;</c> object.
       If you use a <c>Vector</c> object,
       the above code would be written as follows.
     </p>
-<pre>
+ <program language="java"><input>
 Vector strVec = new Vector();
    strVec.addElement("alpha");
    strVec.addElement("beta");
    String str = (String)strVec.elementAt(0);
-</pre>
+ </input></program>
     <p>
       One benefit a generic type provides is type checking of method arguments at compile time.
       If <c>strVec</c> is a <c>Vector&lt;String&gt;</c> object,
       then the statement
     </p>
-<pre>
+ <program language="java"><input>
 strVec.addElement(new Integer(57));
-</pre>
+ </input></program>
     <p>
       will generate a compile-time error.
       By contrast,
@@ -102,12 +102,12 @@ strVec.addElement(new Integer(57));
       An object of this class can be declared, instantiated,
       and used in a manner like the <c>Vector&lt;E&gt;</c> code.
     </p>
-<pre>
+ <program language="java"><input>
 Stack&lt;String&gt; stk = new Stack&lt;String&gt;();
    stk.push("alpha");
    stk.push("beta");
    String str = stk.pop();
-</pre>
+ </input></program>
     <p>
       \secEXRHone{Self-Study Exercise}
       <ol>
@@ -159,7 +159,7 @@ Stack&lt;String&gt; stk = new Stack&lt;String&gt;();
     <figure xml:id="fig-listtest">
       <caption>A method that demonstrates the interface <c>List&lt;E&gt;</c>
       and the class <c>LinkedList&lt;E&gt;</c>.</caption>
-<pre>
+ <program language="java"><input>
 public static void testList() {
   List&lt;PhoneRecord> theList = new LinkedList&lt;PhoneRecord>();
   // new ArrayList&lt;PhoneRecord>(); could also be used.
@@ -171,14 +171,14 @@ public static void testList() {
   System.out.println("Testing a LinkedList List");
   for (PhoneRecord pr : theList)
      System.out.println(pr);} // testList
-</pre>
+ </input></program>
     </figure>
     <p>
       Note that the statement
     </p>
-<pre>
+ <program language="java"><input>
 List&lt;PhoneRecord> theList = new LinkedList&lt;PhoneRecord>();
-</pre>
+ </input></program>
     <p>
       declares a variable <c>theList</c> of interface type <c>List&lt;E&gt;</c> but assigns an object of class type <c>LinkedList&lt;E&gt;</c>. This is appropriate because the class implements the interface and the code uses only methods from the interface.
       The class <c>ArrayList&lt;E&gt;</c> in the collections framework also implements the <c>List&lt;E&gt;</c> interface.
@@ -187,17 +187,17 @@ List&lt;PhoneRecord> theList = new LinkedList&lt;PhoneRecord>();
       but always less than, 100 elements,
       then it might be better to declare:
     </p>
-<pre>
+ <program language="java"><input>
 List&lt;PhoneRecord> theList = new ArrayList&lt;PhoneRecord>(100);
-</pre>
+ </input></program>
     <p>
       Also note the unusual looking <c>for</c> loop at the end of the method.
       This is a new feature of Java 5.0 which can be used to simplify the coding of loops that iterate through every object in a collection of objects.
-      The statement \marginpar{The for<ndash/>each loop}
+      The statement 
     </p>
-<pre>
+ <program language="java"><input>
 for (PhoneRecord pr : theList) { *** }
-</pre>
+ </input></program>
     <p>
       should be thought of as executing the enclosed statements
       <em>for each</em><c>PhoneRecord</c> object, <c>pr</c>, in the <c>theList</c> data structure.
@@ -209,13 +209,13 @@ for (PhoneRecord pr : theList) { *** }
     <p>
       The output of the method will be:
     </p>
-<pre>
+ <program language="java"><input>
 Roger M 090-997-2918
           Jane M 090-997-1987
           Stacy K 090-997-9188
           Gary G 201-119-8765
           Jane M 090-997-1987
-</pre>
+ </input></program>
     <p>
       In the next section we will examine two other structures in the collections framework,
       the <c>Set</c> interface and the <c>Map</c> interface.

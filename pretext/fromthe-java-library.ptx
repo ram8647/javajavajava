@@ -12,19 +12,19 @@
       (there are <image width="73%" source="chptr15/p827f1.png"/> others)
       takes a URL specification as a <c>String</c> and,
       assuming it specifies a valid URL, it creates a <c>URL</c> object.
-      If the URL \marginpar{ \psfig{file=../commonart/www_dg.eps}
+      If the URL 
       <em>java.sun.com/j2se/1.5.0/docs/api/</em>} specification is invalid,
       a <c>MalformedURLException</c> is thrown.
       A URL might be invalid if the protocol were left off or if it is not a known protocol.
       The following simple code creates a URL for the home page of our companion Web site:
     </p>
-<pre>
+ <program language="java"><input>
 URL url;
 try {
  url =
   new URL("http://www.prenhall.com:80/morelli/index.html");} catch (MalformedURLException e) {
  System.out.println("Malformed URL: " + url.toString());}
-</pre>
+ </input></program>
     <p>
       Note how we catch the <c>MalformedURLException</c> when we create a new <c>URL</c>.
     </p>
@@ -39,7 +39,7 @@ try {
       This method is especially useful for writing Java applications
       (in addition to applets).
       As you might guess,
-      downloading Web resources is particularly easy from a Java \marginpar{URLs and streams} applet.
+      downloading Web resources is particularly easy from a Java  applet.
       Now let's search around for other methods that we can use.
     </p>
   </introduction>
@@ -49,14 +49,14 @@ try {
       The <c>java.applet.Applet</c> class itself contains several useful methods for downloading and displaying Web resources.
       These methods are inherited by <c>javax.swing.JApplet</c>:
     </p>
-<pre>
+ <program language="java"><input>
 public class Applet extends Panel {
     public AppletContext getAppletContext();
     public AudioClip getAudioClip(URL url);
     public Image getImage(URL url);
     public void play(URL url);
     public void showStatus(String msg);}
-</pre>
+ </input></program>
     <p>
       As you see, both the <c>getImage()</c> and <c>getAudioClip()</c> methods use a URL to download a resource.
       An <c>AudioClip</c> is a sound file encoded in <c>AU</c> format,
@@ -69,34 +69,34 @@ public class Applet extends Panel {
       For example,
       to download and play an audio clip within an applet requires just two lines of code:
     </p>
-<pre>
+ <program language="java"><input>
 URL url;
 try {
   url = new
    URL("http://www.cs.trincoll.edu/&#126;ram/jjj/slideshow/sound.au");
   play(url);} catch (MalformedURLException e) {
     System.out.println("Malformed URL: " + url.toString()) ;}
-</pre>
+ </input></program>
     <p>
       Similarly, to download
       (and store a reference to)
       an image is just as simple:
     </p>
-<pre>
+ <program language="java"><input>
 URL url;
 try {
   url = new
    URL("http://www.cs.trincoll.edu/&#126;ram/jjj/slideshow/slide0.gif") ;
   imgRef = getImage(url);} catch (MalformedURLException e) {
     System.out.println( "Malformed URL: " + url.toString()) ;}
-</pre>
+ </input></program>
     <p>
       So, if applets were still in fashion,
       then these would be the methods we need to implement our slide show.
       For an application,
       to load an image you need to declare the <c>ImageRef </c> and the call to read the image url is different:
     </p>
-<pre>
+ <program language="java"><input>
 URL url;
 Image imageRef;
 try {
@@ -104,7 +104,7 @@ try {
    URL("http://www.cs.trincoll.edu/&#126;ram/jjj/slideshow/slide0.gif") ;
   imgRef = javax.imageio.ImageIO.read(url);} catch (MalformedURLException e) {
     System.out.println( "Malformed URL: " + url.toString()) ;}
-</pre>
+ </input></program>
     <p>
       For sound we need the <c>javax.sound.sampled</c> package.
       After constructing the URL, we need to set up an <c> AudioInputStream</c>, put the format of the stream into a
@@ -112,7 +112,7 @@ try {
       and then get the line as a <c>Clip</c>, which we can then use to play the sound.
       The <c>AudioSystem </c> class is used heavily for this.
     </p>
-<pre>
+ <program language="java"><input>
 Clip clip; URL url = null;
 try {
     url = new
@@ -143,9 +143,9 @@ try {
     System.out.println("Malformed URL: " + url.toString()) ;} catch (UnsupportedAudioFileException ae) {
     System.out.println("not supported: " + ae) ;} catch (IOException ioex) {
     ioex.printStackTrace();}
-</pre>
+ </input></program>
     <p>
-      We'll use the <c>URL()</c>\marginpar{What methods can we use?} constructor to create a URL from a <c>String</c>, and we'll use the <c>javax.imageio.ImageIO.read(url)</c> method to retrieve the images from the Web.
+      We'll use the <c>URL()</c> constructor to create a URL from a <c>String</c>, and we'll use the <c>javax.imageio.ImageIO.read(url)</c> method to retrieve the images from the Web.
     </p>
   </subsection>
 </section>

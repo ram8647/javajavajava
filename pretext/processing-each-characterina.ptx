@@ -9,24 +9,24 @@
       <q>jgnnq</q>, we have to go through each letter of the string and change each character to its substitute.
     </p>
     <p>
-      These types of algorithms usually involve a counting loop bounded by \marginpar{Counting loop algorithm} the length of the string.
+      These types of algorithms usually involve a counting loop bounded by  the length of the string.
       Recall that the <c>length()</c> method determines the number of characters in a <c>String</c> and that strings are zero indexed.
       This means that the first character is at index 0, and the last character is at index <c>length()-1</c>. For example,
       to print each character in a string on a separate line,
       we would step through the string from its first to its last character and print each character::
     </p>
     <p>
-      \[26.5pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 // Precondition:  str is not null
 // Postcondition: the letters in str will have been printed
 public void printLetters(String str) {
   for (int k = 0; k &lt; str.length(); k++)// For each char
     System.out.println(str.charAt(k));  //  Print it}
-</pre>
+ </input></program>
     <p>
-      Note that our loop bound is <c>k &lt; str.length()</c>, since \marginpar{Counting bound} the index of the last character of any <c>String</c> is
+      Note that our loop bound is <c>k &lt; str.length()</c>, since  the index of the last character of any <c>String</c> is
 <c>length()-1</c>. Note also the use of <c>str.charAt(k)</c> to retrieve the
       <em>k</em>th character in <c>str</c> on each iteration of the loop.
     </p>
@@ -46,7 +46,7 @@ public void printLetters(String str) {
       For example,
       if we had coded the loop boundary condition as
 <c>k &lt;= str.length()</c>, this would cause an off-by-one error,
-      because the last \marginpar{Off-by-one error} character in <c>str</c> is at location <c>length()-1</c>. This would lead to a Java <c>IndexOutOfBoundsException</c>, which would be reported as soon as the program executed this statement.
+      because the last  character in <c>str</c> is at location <c>length()-1</c>. This would lead to a Java <c>IndexOutOfBoundsException</c>, which would be reported as soon as the program executed this statement.
     </p>
     <p>
       The only way to avoid off-by-one errors is to check your loop bounds whenever you code a loop.
@@ -71,7 +71,7 @@ public void printLetters(String str) {
       perform this type of function.
     </p>
     <p>
-      The <c>countChar()</c> method will count the number of occurrences of \marginpar{Method design} any particular character in a <c>String</c>(Fig.
+      The <c>countChar()</c> method will count the number of occurrences of  any particular character in a <c>String</c>(Fig.
       <xref ref="fig-countchar"></xref>).
       This method takes two parameters:
       a
@@ -81,7 +81,7 @@ public void printLetters(String str) {
     <figure xml:id="fig-countchar">
       <caption>A method to count the occurrence of a particular
       character in a string.</caption>
-<pre>
+ <program language="java"><input>
 // Precondition: Neither str nor ch are null
 // Postcondition: countchar() == the number of ch in str
 public int countChar(String str, char ch) {
@@ -90,10 +90,10 @@ public int countChar(String str, char ch) {
     if (str.charAt(k) == ch)           //  If it's a ch
       counter++;                          //   count it
   return counter;                  // Return the result}
-</pre>
+ </input></program>
     </figure>
     <p>
-      Begin by initializing the local variable, <c>counter</c>, to \marginpar{Algorithm design} 0.
+      Begin by initializing the local variable, <c>counter</c>, to  0.
       As in the previous example,
       the <c>for</c> loop here will iterate through each character of the <c>String</c><mdash/>from 0 to <c>length()-1</c>. On each iteration a check is made to see if the character in the
       <em>k</em>th position (<c>str.charAt(k)</c>) is the character being counted.
@@ -116,14 +116,14 @@ public int countChar(String str, char ch) {
 <c>"avaj"</c>.
     </p>
     <p>
-      The algorithm for the <c>reverse()</c> method should use a simple \marginpar{Algorithm design} counting loop to reverse the letters in its <c>String</c> parameter.
+      The algorithm for the <c>reverse()</c> method should use a simple  counting loop to reverse the letters in its <c>String</c> parameter.
       In this case,
       however, we can process the string from right to left,
       beginning at its last character and ending with its first character.
       That way we can just append each character,
       left to right, in the result string:
     </p>
-<pre>
+ <program language="java"><input>
 /*
   * Pre:  s is any non null string
   * Post: s is returned in reverse order
@@ -134,7 +134,7 @@ public String reverse(String s) {
         result.append(s.charAt(k));
     } //for
     return result.toString();} // reverse()
-</pre>
+ </input></program>
     <p>
       Note that as in the other string-manipulation algorithms<mdash/>for example, <c>keywordSearch()</c><mdash/>we should us a <c>StringBuffer</c> to store the method's result.
       Thus we declare the <c>result</c><c>StringBuffer</c> at the beginning of the method and convert it back into a <c>String</c> at the end of the method.
@@ -151,15 +151,15 @@ public String reverse(String s) {
     <title>Example: Capitalizing the First Letter</title>
     <p>
       Another string manipulation method is the <c>capitalize()</c> method,
-      which returns a <c>String</c> whose \marginpar{Algorithm design} initial letter is capitalized but whose other letters are lowercase <mdash/> for example,
+      which returns a <c>String</c> whose  initial letter is capitalized but whose other letters are lowercase <mdash/> for example,
       <q>Hello</q>. We use the <c>static</c><c>toUpperCase()</c> and <c>toLowerCase()</c> methods from the <c>Character</c> class to convert individual letters.
       We could also have used the methods of the same name that we wrote in Section<nbsp/>5.8.
       The algorithm converts the first letter to upper case and then loops through the remaining letters converting each to lowercase:
     </p>
     <p>
-      \[27pc]
+      
     </p>
-<pre>
+ <program language="java"><input>
 /*
  * Pre:  s is any non null string
  * Post: s is returned with only its first letter capitalized
@@ -174,9 +174,9 @@ public String capitalize(String s) {
     result.append(Character.toLowerCase(s.charAt(k)));
   } //for
   return result.toString();} // capitalize()
-</pre>
+ </input></program>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -209,23 +209,23 @@ public String capitalize(String s) {
       If you want to use one of these methods to convert a string,
       you must reassign its result back to the original string:
     </p>
-<pre>
+ <program language="java"><input>
 String s = new String("hello world");
 s = s.toUpperCase(); // s now equals "HELLO WORLD"
-</pre>
+ </input></program>
     <table>
       \TBT{-12.5pc}{Some useful <c>String</c> methods applied to the literal string "Perfection."}
       
       <tabular>
         <row>
-          <cell>\multicolumn{2}{l}{\rule{40.5pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{Method Signature}</cell>
           <cell>{Example}</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{40.5pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell><c>boolean endsWith(String suffix)</c></cell>
@@ -242,7 +242,7 @@ s = s.toUpperCase(); // s now equals "HELLO WORLD"
           <cell><c>"Perfection".trim()</c><m>\Rightarrow</m> <c>"Perfection"</c></cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{40.5pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB

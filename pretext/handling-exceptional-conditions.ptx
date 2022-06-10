@@ -4,7 +4,7 @@
     <figure xml:id="fig-intavg1">
       <caption>Poor design.  No attempt is made to guard against
       a divide-by-zero error.</caption>
-<pre>
+ <program language="java"><input>
 /**
   * Precondition:  N > 0
   * Postcondition: avgFirstN() = (1+2+...+N)/N
@@ -14,7 +14,7 @@ public double avgFirstN(int N) {
     for (int k = 1; k &lt;= N; k++)
         sum += k;
     return sum/N;         // What if N is 0?} // avgFirstN()
-</pre>
+ </input></program>
     </figure>
     <p>
       To introduce you to handling exceptional conditions,
@@ -33,7 +33,7 @@ public double avgFirstN(int N) {
     <p>
       Obviously, the method in <xref ref="fig-intavg1">Figure</xref>
       should not simply ignore the possibility that <em>N</em>
-      \marginpar{Divide-by-zero error} might be 0.
+       might be 0.
       <xref ref="fig-traditional">Figure</xref>
       shows a revised version of the method,
       which includes code that takes action if the method's precondition fails.
@@ -56,8 +56,8 @@ public double avgFirstN(int N) {
       terminate the program, if there is an attempt to divide by 0, assuming
       it's the kind of program that can be safely aborted.  This version
       does not use exception handling.</caption>
-      \[28pc]
-<pre>
+      
+ <program language="java"><input>
 /**
   * Precondition:  N > 0
   * Postcondition: avgFirstN() equals (1+2+...+N) divided by N
@@ -72,16 +72,16 @@ public double avgFirstN(int N) {
     for (int k = 1; k &lt;= N; k++)
         sum += k;
     return sum/N;         // What if N is 0?} // avgFirstN()
-</pre>
+ </input></program>
     </figure>
     <p>
       The revised <c>avgFirstN()</c> method takes the traditional approach to error handling: Error-handling code is built right into the algorithm.
       If <em>N</em> happens to be 0 when <c>avgFirstN()</c> is called,
       the following output will be generated:
     </p>
-<pre>
+ <program language="java"><input>
 ERROR avgFirstN: N &lt;= 0. Program terminating.
-</pre>
+ </input></program>
   </subsection>
   <subsection>
     <title>Java's Default Exception Handling</title>
@@ -94,12 +94,12 @@ ERROR avgFirstN: N &lt;= 0. Program terminating.
       Note that the <c>avgFirstN()</c> method is passed an argument of 0 in the <c>CalcAvgTest.main()</c>. When the JVM detects the error,
       it will abort the program and print the following message:
     </p>
-<pre>
+ <program language="java"><input>
 Exception in thread "main"
    java.lang.ArithmeticException:  / by zero
         at CalcAverage.avgFirstN(Compiled Code)
         at CalcAvgTest.main(CalcAvgTest.java:5)
-</pre>
+ </input></program>
     <p>
       The error message describes the error and provides a trace of the method calls,
       from last to first, that led to the error.
@@ -109,7 +109,7 @@ Exception in thread "main"
     <figure xml:id="fig-calcavg">
       <caption>Note that there are two public classes defined in this figure,
       which would be saved in separate Java files.</caption>
-<pre>
+ <program language="java"><input>
 public class CalcAverage {
     public double avgFirstN(int N) {
         int sum = 0;
@@ -122,7 +122,7 @@ public class CalcAvgTest {
         CalcAverage ca = new CalcAverage();
         System.out.println( "AVG + " + ca.avgFirstN(0) );
     }//main}//CalcAvgTest
-</pre>
+ </input></program>
     </figure>
     <p>
       As this example suggests, Java's default exception handling is able to detect and handle certain kinds of errors and exceptional conditions.

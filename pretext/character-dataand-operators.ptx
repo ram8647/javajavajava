@@ -7,15 +7,15 @@
           <idx><h>char</h></idx>
       A character in Java is represented by a 16-bit
       <em>unsigned</em> integer.
-      This means that a total of <m>2^{16}</m> or 65536 \marginpar{Unicode} different Unicode characters can be represented,
+      This means that a total of <m>2^{16}</m> or 65536  different Unicode characters can be represented,
       corresponding to the integer values 0 to 65535.
       The <term>Unicode</term> character set is an international standard that has been developed to enable computer languages to represent characters in a wide variety of languages,
       not just English.
       Detailed information about this encoding can be obtained at
     </p>
-<pre>
+ <program language="java"><input>
 http://www.unicode.org/
-</pre>
+ </input></program>
     <p>
       It is customary in programming languages to use unsigned integers to represent characters.
       This means that all the digits (<m>0, \dots,9</m>),
@@ -23,7 +23,7 @@ http://www.unicode.org/
       (such as . ; , `` `' ! _ -),
       and nonprinting control characters (LINE_FEED, ESCAPE, CARRIAGE_RETURN, <m>\dots</m>) that make up the computer's character set are represented in the computer's memory by integers.
       A more traditional set of characters is the
-      <em>ASCII (American Standard \marginpar{ASCII code} Code for Information Interchange)</em> character set.
+      <em>ASCII (American Standard  Code for Information Interchange)</em> character set.
       ASCII is based on a 7-bit code and, therefore,
       defines <m>2^7</m> or 128 different characters,
       corresponding to the integer values 0 to 127.
@@ -35,7 +35,7 @@ http://www.unicode.org/
     </p>
     <figure>
       \TBT{0pc}{ASCII<idx><h>ASCII</h></idx> codes for selected characters}
-<pre>
+ <program language="java"><input>
 Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
  Char   SP !  "  #  $  %  &amp;  '  (  )   *  +  ,  -  .  /
  Code   48 49 50 51 52 53 54 55 56 57
@@ -54,7 +54,7 @@ Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
  Char   n   o   p   q   r   s   t   u   v   w   x   y   z
  Code   123 124 125 126
  Char   {   |   }   &#126;
-</pre>
+ </input></program>
     </figure>
   </introduction>
   <subsection xml:id="self-study-exerciseU16">
@@ -68,26 +68,26 @@ Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
       unless we explicitly tell Java to treat it as an integer.
       So if we display a literal's value
     </p>
-<pre>
+ <program language="java"><input>
 System.out.println('a');
-</pre>
+ </input></program>
     <p>
       the letter <sq>a</sq> will be displayed.
       Similarly, if we assign <sq>a</sq> to a
 <c>char</c> variable and then display the variable's value,
     </p>
-<pre>
+ <program language="java"><input>
 char ch = 'a';
 System.out.println(ch);         // Displays 'a'
-</pre>
+ </input></program>
     <p>
       the letter <sq>a</sq> will be shown.
       If, on the other hand, we wish to output a character's integer value,
       we must use an explicit cast operator as follows:
     </p>
-<pre>
+ <program language="java"><input>
 System.out.println((int)'a') ;   // Displays 97
-</pre>
+ </input></program>
     <p>
       A <term>cast operation</term>,
       such as <c>(int)</c>, converts one type of data ('a') into another (97).
@@ -96,13 +96,13 @@ System.out.println((int)'a') ;   // Displays 97
       we can <em>cast</em> the <c>char</c> into an
 <c>int</c> as follows:
     </p>
-<pre>
+ <program language="java"><input>
 int k = (int)'a';       // Converts 'a' to 97
 System.out.println(k);  // Displays 97
-</pre>
+ </input></program>
     <p>
       As these examples show, a <em>cast</em>
-      is a type conversion operator. \marginpar{The cast operator} Java allows a wide variety of both explicit and implicit type conversions.
+      is a type conversion operator.  Java allows a wide variety of both explicit and implicit type conversions.
       Certain conversions
       (for example, promotions)
       take place when methods are invoked,
@@ -115,49 +115,49 @@ System.out.println(k);  // Displays 97
       For example,
       in the following assignment a <c>char</c> is converted to an <c>int</c> even though no explicit cast operator is used:
     </p>
-<pre>
+ <program language="java"><input>
 char ch;
 int k;
 k = ch; // convert a char into an int
-</pre>
+ </input></program>
     <p>
       Java permits this conversion because no information will be lost.
-      A \marginpar{Implicit type conversion} character <c>char</c> is represented in 16 bits whereas an <c>int</c> is represented in 32 bits.
+      A  character <c>char</c> is represented in 16 bits whereas an <c>int</c> is represented in 32 bits.
       This is like trying to put a small object into a large box.
       Space will be left over,
       but the object will fit inside without being damaged.
       Similarly, storing a 16-bit <c>char</c> in a 32-bit <c>int</c> will leave the extra 16 bits unused.
       This <em>widening primitive conversion</em>
       changes one primitive type (<c>char</c>) into a wider one (<c>int</c>), where a type's
-      <em>\marginpar{Widening conversion} width</em>
+      <em> width</em>
       is the number of bits used in its representation.
     </p>
     <p>
       On the other hand,
       trying to assign an <c>int</c> value to a <c>char</c> variable leads to a syntax error:
     </p>
-<pre>
+ <program language="java"><input>
 char ch;
 int k;
 ch = k;    // Syntax error: can't assign int to char
-</pre>
+ </input></program>
     <p>
       Trying to assign a 32-bit <c>int</c> to 16-bit <c>char</c> is like trying to fit a big object into an undersized box.
       The object won't fit unless we shrink it in some way.
       Java will allow us to assign an <c>int</c> value to a <c>char</c> variable,
       but only if we perform an explicit cast on it:
     </p>
-<pre>
+ <program language="java"><input>
 ch = (char)k; // Explicit cast of int k into char ch
-</pre>
+ </input></program>
     <p>
       The <c>(char)</c> cast operation performs a careful
       <q>shrinking</q>
       of the <c>int</c> by lopping off the last 16 bits of the <c>int</c>. This can be done without loss of information provided that
       <em>k</em>'s value is in the range 0 to 65535<mdash/>that is,
-      in the range of values that fit into \marginpar{Narrowing conversion} a <c>char</c> variable.
+      in the range of values that fit into  a <c>char</c> variable.
       This <em>narrowing primitive conversion</em>
-      changes a wider type (32-bit <c>int</c>) to a narrower type (16\mbox{-} bit
+      changes a wider type (32-bit <c>int</c>) to a narrower type (16- bit
 <c>char</c>).
       Because of the potential here for information loss,
       it is up to the programmer to determine that the cast can be performed safely.
@@ -178,15 +178,15 @@ ch = (char)k; // Explicit cast of int k into char ch
       into a
 <c>char</c>:
     </p>
-<pre>
+ <program language="java"><input>
 char ch = (char)(m + n);
-</pre>
+ </input></program>
     <p>
       The following statement would cause a syntax error because the cast operator would only be applied to <c>m</c>:
     </p>
-<pre>
+ <program language="java"><input>
 char ch = (char)m + n; // Error: right side is an int
-</pre>
+ </input></program>
     <p>
       In the expression on the right-hand side,
       the character produced by <c>(char)m</c> will be promoted to an <c>int</c> because it is part of an integer operation whose result will still be an <c>int</c>. Therefore,
@@ -240,7 +240,7 @@ char ch = (char)m + n; // Error: right side is an int
       <em>ch1</em> and <em>ch2</em>,
       the expression <em>ch1 <m>\lt</m> ch2</em>
       is true if and only if the integer value of <em>ch1</em>
-      is \marginpar{\ttchar{\itrelations}} less than the integer value of <em>ch2</em>.
+      is } less than the integer value of <em>ch2</em>.
       In this case we say that <em>ch1</em><em>precedes</em><em>ch2</em> in lexical order.
       Similarly, the expression <em>ch1 <m>></m> ch2</em>
       is true if and only if the integer value of <em>ch1</em>
@@ -254,7 +254,7 @@ char ch = (char)m + n; // Error: right side is an int
       
       <tabular>
         <row>
-          <cell>\multicolumn{4}{l}{\rule{22pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{Operation}</cell>
@@ -263,7 +263,7 @@ char ch = (char)m + n; // Error: right side is an int
           <cell>{True Expression}</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{4}{l}{\rule{22pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell><em>Precedes</em></cell>
@@ -292,7 +292,7 @@ char ch = (char)m + n; // Error: right side is an int
           <cell><m>'a'\ !\!=\ 'b'</m></cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{4}{l}{\rule{22pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB

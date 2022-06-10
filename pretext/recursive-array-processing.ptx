@@ -18,7 +18,7 @@
     <title>Recursive Sequential Search</title>
     <p>
       Let's start by developing a recursive version of the sequential search algorithm that we discussed in Chapter<nbsp/>9.
-      Recall that the sequential search method takes two parameters: \marginpar{Method design} the array being searched and the <em>key</em>,
+      Recall that the sequential search method takes two parameters:  the array being searched and the <em>key</em>,
       or target value, being searched for.
       If the key is found in the array,
       the method returns its index.
@@ -26,7 +26,7 @@
       thereby indicating that the key was not contained in the array.
       The iterative version of this method has the following general form:
     </p>
-<pre>
+ <program language="java"><input>
 /**
   * Performs a sequential search of an integer array
   * @param arr is the array of integers
@@ -38,22 +38,22 @@
   */
 public int sequentialSearch(int arr[], int key) {
     return -1;           // failure if this is reached}
-</pre>
+ </input></program>
     <p>
       If we divide the array into its head and tail,
       then one way to describe a recursive search algorithm is as follows:
     </p>
-<pre>
+ <program language="java"><input>
 If the array is empty, return -1
 If the array's head matches the key, return its index
 If the array's head doesn't match the key,
  return the result of searching the tail of the array
-</pre>
+ </input></program>
     <p>
       This algorithm clearly resembles the approach we used in recursive string processing: Perform some operation on the head of the array and recurse on the tail of the array.
     </p>
     <p>
-      The challenge in developing this algorithm is not so much knowing what \marginpar{How do we represent head and tail?} to do but knowing how to represent concepts like the head and the tail of the array.
+      The challenge in developing this algorithm is not so much knowing what  to do but knowing how to represent concepts like the head and the tail of the array.
       For strings,
       we had methods such as <c>s.charAt(0)</c> to represent the head of the string and <c>s.substring(1)</c> to represent the string's tail.
       For an array named <c>arr</c>, the expression
@@ -93,7 +93,7 @@ arr.length</c>.
       <caption>The recursive search method takes three parameters.  The
       <em>head</em> parameter points to the beginning of that portion of the
       array that is being searched.</caption>
-<pre>
+ <program language="java"><input>
 /**
    * search(arr,head,key)---Recursively search arr for key
    *  starting at head
@@ -108,7 +108,7 @@ private int search(int arr[], int head, int key)  {
    return head;
  else               // Recursive: search the tail
    return search(arr, head + 1, key);}
-</pre>
+ </input></program>
     </figure>
     <p>
       This leads to the definition for recursive search shown in <xref ref="fig-rsearch">Figure</xref>.
@@ -122,7 +122,7 @@ arr.length</c>. In effect,
       Here the <em>head</em> parameter serves as the
       <em>recursion parameter</em>.
           <idx><h>recursion parameter</h></idx>
-      \marginpar{Recursion parameter} It controls the progress of the recursion.
+       It controls the progress of the recursion.
     </p>
     <p>
       Note also that for the search algorithm we need two base cases.
@@ -152,7 +152,7 @@ arr.length</c>. In effect,
       After all, if we want to search an array,
       we just want to pass two arguments,
       the array and the key we're searching for.
-      It's \marginpar{Design issue} unreasonable to expect users of a method to know that they also have to pass 0 as the head in order to get the recursion started.
+      It's  unreasonable to expect users of a method to know that they also have to pass 0 as the head in order to get the recursion started.
       This design is also prone to error,
       because it's quite easy for a mistake to be made when the method is called.
     </p>
@@ -162,7 +162,7 @@ arr.length</c>. In effect,
       The interface hides the fact that a recursive algorithm is being used,
       but this is exactly the kind of implementation detail that should be hidden from the user.
       This is an example of the principle of information hiding that we introduced in Chapter<nbsp/>0.
-      A more \marginpar{Hide implementation details} appropriate design would make the recursive method a <c>private</c> method that's called by the public method,
+      A more  appropriate design would make the recursive method a <c>private</c> method that's called by the public method,
       as shown <xref ref="fig-searcher">Figure</xref>
       and implemented in the <c>Searcher</c> class (Fig.
       <xref ref="fig-searcherclass"></xref>).
@@ -177,7 +177,7 @@ arr.length</c>. In effect,
       <caption>Information hiding principle: The <c>public</c><c>search()</c>
       method calls the <c>private</c>, recursive <c>search()</c>, thereby hiding the
       fact that a recursive algorithm is used.</caption>
-<pre>
+ <program language="java"><input>
 public class Searcher {
   /**
    * search(arr,key) -- searches arr for key.
@@ -214,7 +214,7 @@ public class Searcher {
           System.out.println(k + " is not in the array ");
     } // for
   } // main()} // Searcher
-</pre>
+ </input></program>
     </figure>
     <principle>
       <title>EFFECTIVE DESIGN:Information Hiding</title>
@@ -248,7 +248,7 @@ public class Searcher {
       one card next to the other.
       Starting at the last card,
       look through the deck,
-      from \marginpar{Sorting a deck of cards} last to first,
+      from  last to first,
       find the largest card and exchange it with the last card.
       Then go through the deck again starting at the next to the last card,
       find the next largest card, and exchange it with the next to the last card.
@@ -308,7 +308,7 @@ public class Searcher {
     <figure xml:id="fig-selectionsort">
       <caption>The <c>selection-</c><c>Sort()</c> method uses the <c>findMax()</c>
       and <c>swap()</c> methods to help it sort an array.</caption>
-<pre>
+ <program language="java"><input>
 /**
   * selectionSort(arr,last)--Recursively sort arr starting
   *   at last element
@@ -322,16 +322,16 @@ private void selectionSort(int arr[], int last) {
    swap(arr, last, maxLoc);         // Swap it with last
    selectionSort(arr, last - 1);    // Move down the array
  }} // selectionSort()
-</pre>
+ </input></program>
     </figure>
     <p>
       Note how simply the <c>selectionSort()</c> method can be coded.
-      Of course, this is because we have used separate methods to handle the \marginpar{Task decomposition} tasks of finding the largest element and swapping the last element and the largest.
+      Of course, this is because we have used separate methods to handle the  tasks of finding the largest element and swapping the last element and the largest.
       This not only makes sense in terms of the divide-and-conquer principle,
       but we also already defined a <c>swap()</c> method in Chapter<nbsp/>9.
       So here is a good example of reusing code:
     </p>
-<pre>
+ <program language="java"><input>
 /**
   * swap(arr, el1 el2) swaps el1 and el2 in the array, arr
   * Pre: arr is non null, 0 &lt;= el1 &lt; arr.length,
@@ -342,7 +342,7 @@ private void swap(int arr[], int el1, int el2)  {
  int temp = arr[el1]; // Assign the first element to temp
  arr[el1] = arr[el2]; // Overwrite first with second
  arr[el2] = temp;     // Overwrite second with first(temp)} // swap()
-</pre>
+ </input></program>
     <p>
       The definition of the <c>findMax()</c> method is left as a self-study exercise.
     </p>
@@ -354,7 +354,7 @@ private void swap(int arr[], int el1, int el2)  {
       </p>
     </principle>
     <p>
-      \secEXRHone{Self-Study Exercises}
+      </subsection><subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>

@@ -17,7 +17,7 @@
       That's at least part of the task that the browser's search engine would have to do.
     </p>
     <p>
-      So we want a method, <c>keywordSearch()</c>, that takes two \marginpar{Method design}<c>String</c> parameters,
+      So we want a method, <c>keywordSearch()</c>, that takes two <c>String</c> parameters,
       one for the string that's being searched,
       and the other representing the keyword.
       Let's have the method return a
@@ -35,11 +35,11 @@
       The algorithm for this method will require a loop,
       because we want to know the location of every occurrence of the keyword in the string.
       One way to do this would be to use the <c>indexOf()</c> method to search for the location of substrings in the string.
-      If it finds the \marginpar{Algorithm design} keyword at index <em>N</em>,
+      If it finds the  keyword at index <em>N</em>,
       it should record that location and then continue searching for more occurrences starting at index <m>N+1</m> in the string.
       It should continue in this way until there are no more occurrences.
     </p>
-<pre>
+ <program language="java"><input>
 Suppose S is our string and K is the keyword.
 Initialize a counter variable and result string.
 Set Ptr to the indexOf() the first occurrence of K in S.
@@ -49,10 +49,10 @@ While (Ptr != -1)
     Set Ptr to the next location of the keyword in S
 Insert the count into the result string
 Return the result string as a String
-</pre>
+ </input></program>
     <p>
       As this pseudocode shows,
-      the algorithm uses a while loop \marginpar{Implementation} with a
+      the algorithm uses a while loop  with a
       <em>sentinel bound</em>.
       The algorithm terminates when the
 <c>indexOf()</c> method returns a <m>-1</m>,
@@ -60,7 +60,7 @@ Return the result string as a String
     </p>
     <p>
       Translating the pseudocode into Java gives us the method shown in <xref ref="fig-keywordsearch">Figure</xref>.
-      Note how string concatenation is used to build the \mbox{resultStr} . Each time an occurrence is found,
+      Note how string concatenation is used to build the resultStr . Each time an occurrence is found,
       its location (<c>ptr</c>) is concatenated to the right-hand side of the
 <c>resultStr</c>. When the loop terminates,
       the number of occurrences (<c>count</c>) is concatenated to the left-hand side of the
@@ -68,7 +68,7 @@ Return the result string as a String
     </p>
     <figure xml:id="fig-keywordsearch">
       <caption>The <c>keywordSearch()</c> method.</caption>
-<pre>
+ <program language="java"><input>
 /**
  * Pre:  s and keyword are any Strings
  * Post: keywordSearch() returns a String containing the
@@ -86,13 +86,13 @@ public String keywordSearch(String s, String keyword) {
   }
   resultStr = count + ": " + resultStr;// Insert the count
   return resultStr;                  // Return as a String} // keywordSearch()
-</pre>
+ </input></program>
     </figure>
   </introduction>
   <subsection>
     <title>Testing and Debugging</title>
     <p>
-      What test data should we use for the <c>keywordSearch()</c> method? \marginpar{What test data do we need?} One important consideration in this case is to test that the method works for all possible locations of the keyword within the string.
+      What test data should we use for the <c>keywordSearch()</c> method?  One important consideration in this case is to test that the method works for all possible locations of the keyword within the string.
       Thus, the method should be tested on strings that contain keyword occurrences at the beginning,
       middle, and end of the string.
       We should also test the method with a string that doesn't contain the keyword.
@@ -108,14 +108,14 @@ public String keywordSearch(String s, String keyword) {
       
       <tabular>
         <row>
-          <cell>\multicolumn{2}{l}{\rule{27pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell>{Test Performed}</cell>
           <cell>{Expected Result}</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{27pc}{0.5pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
         <row>
           <cell><c>keywordSearch("this is a test","is")</c></cell>
@@ -126,7 +126,7 @@ public String keywordSearch(String s, String keyword) {
           <cell>0:</cell>
         </row>
         <row>
-          <cell>[-4pt]\multicolumn{2}{l}{\rule{27pc}{1pt}}</cell>
+          <cell><c>__________</c></cell>
         </row>
       </tabular>
       \endTB
