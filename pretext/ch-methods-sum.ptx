@@ -1,0 +1,278 @@
+<section xml:id="ch-methods-sum">
+    <title>Chapter Summary</title>
+    <subsection>
+      <title>Technical Terms</title> 
+      <p>
+       <tabular>
+       <row>
+      <cell>accessor method</cell>
+      <cell>loop structure</cell>
+      <cell>repetition structure</cell>
+       </row>
+       <row>
+      <cell>class scope</cell>
+      <cell>method overloading</cell>
+      <cell>scope</cell>
+       </row>
+       <row>
+      <cell>formal parameter</cell>
+      <cell>method signature</cell>
+      <cell>selection</cell>
+       </row>
+       <row>
+      <cell>if statement</cell>
+      <cell>mutator method</cell>
+      <cell>side effect</cell>
+       </row>
+       <row>
+      <cell>if/else statement</cell>
+      <cell>multiway selection</cell>
+      <cell>while statement</cell>
+       </row>
+       <row>
+      <cell>inherit</cell>
+      <cell>override</cell>
+      <cell>while structure</cell>
+       </row>
+       <row>
+      <cell>local scope</cell>
+      <cell>polymorphism</cell>
+      <cell></cell>
+       </row>
+      </tabular>
+    </p>
+</subsection>
+<subsection>
+ <title>Important Points</title>
+    <ul>
+      <li>
+        <p>
+           A <em>formal parameter
+            <idx><h>parameter</h></idx>
+          </em> is a variable in a method declaration.
+          It always consists of a type followed by a variable identifier.
+          An <em>argument</em> is a value that is passed to a method via a formal parameter when the method is invoked.
+          A method's <em>parameters</em> constrain the type of information that can be passed to a method.       
+        </p>
+      </li>
+      <li>
+        <p>
+          When an argument of primitive type is passed to a method,
+          it cannot be modified within the method.
+          When an argument of reference type is passed to a method,
+          the object it refers to can be modified within the method.        
+        </p>
+      </li>
+      <li>
+        <p>
+          Except for <c>void</c> methods,
+          a <em>method invocation</em> or <em>method call</em>
+          is an expression which has a value of a certain type.
+          For example, <c>nim.getSticks()</c> returns a <c>int</c> value.        
+        </p>
+      </li>
+      <li>
+        <p>
+          The <em>signature <idx><h>signature</h></idx> </em> of a method consists of its name,
+          and the number, types, and order of its formal parameters.
+          A class may not contain more than one method with the same signature.        
+        </p>
+      </li>
+       <li>
+        <p>
+          A <em>constructor
+            <idx><h>constructor</h></idx>
+          </em> is a method that is invoked when an object is created.
+          If a class does not contain a constructor method,
+          the Java compiler supplies a <em>default constructor</em>.
+        </p>
+      </li>
+     <li>
+        <p>
+          Restricting access to certain portions of a class is a form of
+          <em>information hiding<idx><h>Information Hiding Principle</h></idx>
+          </em>.
+          Generally, instance variables are hidden by declaring them
+<c>private</c>. The class's <c>public</c> methods make up its interface.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <em>if statement</em> executes a statement only if its boolean condition is true.
+          The <em>if-else statement</em> executes one or the other of its statements 
+          depending on the value of its boolean condition.
+          <em>Multiway selection</em> allows one and only one of several choices to be selected 
+          depending on the value of its boolean condition.        
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>while</c> statement is used for coding loop structures that repeatedly execute 
+          a block of code while a boolean condition is satisfied.       
+        </p>
+      </li>
+    </ul>
+  </subsection>  
+
+<subsection>
+<title>Solutions to Self-Study Exercises</title>
+  <p>
+    <ol>
+      <li>
+        <p>
+          A <em>method declaration</em> defines the method by specifying its name,
+          qualifiers, return type, formal parameters, and its algorithm,
+          thereby associating a name with a segment of executable code.
+          A <em>method invocation</em> calls or uses a defined method.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>formal parameter</em> is a variable in the method declaration,
+          whose purpose is to store a value while the method is running.
+          An <em>argument</em> is a value that is passed to a method in place of a formal parameter.
+        </p>
+      </li>
+      <li>
+        <p>
+          The following code declares two instance variables for names of players and defines a <c>setName()</c> method:
+<pre>
+private String nameOne = "Player One";
+private String nameTwo = "Player Two";
+public void setNames(String name1, String name2)
+{    nameOne = name1;
+     nameTwo = name2;
+}
+</pre>Of course,
+          there are many other appropriate names for the variables and parameters and other initial assignments.
+        </p>
+      </li>
+      <li>
+        <p>
+          A method call that sets the names of the players of <c>game1</c> is:
+<pre>
+game1.setNames("Xena","Yogi");
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          A constructor cannot have a return type, such as void.
+        </p>
+      </li>
+      <li>
+        <p>
+          One definition for the method is:
+<pre>
+public OneRowNim(int sticks)
+{    
+     nSticks = sticks;
+     player = 2;
+}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          The following would be displayed on the screen:
+<pre>
+   1
+   20
+   false
+</pre>        
+      </p>
+      </li>
+      <li>
+        <p>
+          One definition for the method is:
+<pre>
+public int getMoves()
+{   
+     return nMoves;
+}
+</pre>
+
+        </p>
+      </li>
+      <li>
+        <p>
+          One definition for the method is:
+<pre>
+public boolean playerOneIsNext()
+{   
+     return (player == 1);
+}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+See <xref ref="fig-getstateifelse">Figure</xref>. 
+<figure xml:id="fig-getstateifelse">
+<caption>
+Flowchart of the if-else version of the <c>getStatus()</c> method.
+</caption>
+<image width="50%" source="chptr03/isdone.png"/>
+</figure>
+        </p>
+      </li>
+      <li>
+        <p>
+          <pre>
+if (isHeavy == true)
+     System.out.println("Heavy") ;
+else ;  // Error (remove this semicolon)
+     System.out.println("Light");
+if (isLong == true)
+     System.out.println("Long")
+else   // Error (end line above with semicolon)
+     System.out.println("Short");
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          <pre>
+public String getPlayerName()
+{    if (player == 1)
+         return "Ann";
+     else if (player == 2)
+         return "Bill";
+     else if (player == 3)
+         return "Cal";
+     else
+         return "Error";
+}
+</pre>
+        </p>
+      </li>
+      <li>
+        <p>
+          When passing an argument for a primitive type,
+          a copy of the argument's value is passed.
+          The actual argument cannot be changed inside the method.
+          When passing a reference to an object,
+          the object can be changed within the method.
+        </p>
+      </li>
+      <li>
+        <p>
+          <pre>
+public int sumCubes(int min, int max)
+{
+    int num = min;
+    int sum = 0;
+    while (num &lt;=  max) 
+    { // While num &lt;= max
+        sum = sum + num*num*num; // Add cube of num to sum
+        num = num + 1;       // Add 1 to num
+    } //while
+    return sum;           // Return the sum
+}
+</pre>
+        </p>
+      </li>
+     </ol>
+  </p>
+</subsection>
+</section>
