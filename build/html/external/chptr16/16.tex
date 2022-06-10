@@ -1,0 +1,2692 @@
+%%REW\PHC{Photograph courtesy of Andrew Olney, Tony Stone 
+Images.}{CO-ch16.eps}
+%%%REW\clearpage
+\chapter{Data Structures: Lists, Stacks, and Queues}
+\label{chapter-datastructures}
+\label{pg-chapter-datastructures}
+
+
+%%%REW\CObegin
+\secCOBH{Objectives}
+\noindent After studying this chapter, you will
+\begin{COBL}
+\item  Understand the concepts of a dynamic data structure and an 
+Abstract Data Type (ADT).
+\item  Be able to create and use dynamic data structures
+such as linked lists and binary search trees.
+\item  Understand the stack, queue, set, and map ADTs.
+\item  Be able to use inheritance to define extensible data structures.
+\item  Know how to use the TreeSet, TreeMap, HashSet, and HashMap 
+library classes.
+\item  Be able to use the Java generic type construct.
+\end{COBL}
+
+\secCOLH{Outline}
+%%%REW\begin{COL}
+\begin{itemize}
+\item  {Introduction}
+\item  {The Linked List Data Structure}
+\item  {Object-Oriented Design: The List Abstract Data Type (ADT)}
+\item  {The Stack ADT}
+\item  {The Queue ADT}
+\item[] {\color{cyan} The LISP Language}
+\item {From the Java Library: The Java Collections Framework and Generic Types}
+\item { Using the {\tt Set} and {\tt Map} interfaces}
+\item { The Binary Search Tree Data Structure}
+%%%REW\item[] {\color{cyan}In the Laboratory: Capital Gains}
+\par\small\item[] {Chapter Summary}
+\par\small\item[] {Solutions to Self-Study Exercises}
+\par\small\item[] {Exercises}
+%%%REW\end{COL}
+\end{itemize}
+%%%REW\COend
+
+
+\section{Introduction}
+\noindent A {\bf data structure}\index{data structure} is used to
+organize information that a computer can access and process easily and
+efficiently.  You are already familiar with one type of data
+structure---arrays, which we discussed in Chapter~9.  If you remember,
+an array is an example of a data structure in which all of the data
+are of the same type or class and in which individual elements are
+accessed by their position (index or subscript). An array is an
+example of a {\bf static structure}\index{static structure}, because
+its size is fixed for the duration of the program's execution.  (This
+is a different meaning of {\it static} than the Java keyword {\tt
+static}.)
+
+The {\tt Vector}\index{vector} class from Chapter~9 is another example
+of a data structure.  Like an array, individual vector elements are
+accessed by their position.  However, unlike arrays, a vector is an
+example of a {\bf dynamic structure}\index{dynamic structure}---that
+is, one that can grow and shrink during a program's execution.
+
+These are only two of the many data structures developed by computer
+scientists.   For more advanced problems, it is often necessary to
+develop specialized structures to store and manipulate
+information.  Some of these structures---linked lists, stacks,
+queues, binary trees, hash tables---have become classic objects
+of study in computer science.
+
+This chapter describes how to implement a linked list and how to use
+inheritance to extend the list to implement the stack and queue
+structures. Then the Java Collections Framework implementation of
+numerous data structures in the {\tt java.util} package will be
+described.  The data structure classes in this library make use of a
+new Java construct, called {\em generic types}.  Finally, the binary
+tree data structure that is used in the Java Collections Framework
+will be studied briefly.
+
+\section{The Linked List Data Structure}
+\noindent As we said, a {\it static} data structure is one whose size is fixed
+\marginnote{Static vs.  dynamic}
+during a program's execution---a static structure's memory is allocated at compile
+time.  By contrast, a {\it dynamic} structure is one that can grow and
+shrink as needed.  In this section, we will develop a dynamic {\bf
+list}\index{list}, which is a data structure whose elements are
+arranged in a linear sequence.  There is a first element in the list,
+a second element, and so on.  Lists are quite general and, as we will
+discuss later, lists have a broad range of applications.  Depending on
+how elements are inserted and removed from a list, they can be used
+for a range of specialized purposes.
+
+\subsection{Using References to Link Objects}
+\noindent As you know from earlier chapters, when you create an 
+object using the
+\marginnote{Referring to objects}
+{\tt new} operator you get back a {\em reference} to the object
+that you then can assign to a reference variable.  In the following
+example, {\it b} is a reference to a {\tt JButton}:
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+JButton b = new JButton();
+\end{verbatim}
+\end{CDT}
+
+\noindent We have defined many classes that contained
+references to other objects:
+
+\begin{CDT}{40pt}
+\begin{verbatim}
+public class Student {
+     private String name;
+}
+\end{verbatim}
+\end{CDT}
+
+\noindent In this example, {\tt name} is a reference to a {\tt String}
+object.
+
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{CHPTR16/linkedlist.eps}{A linked list of {\tt Node}s terminated
+by a {\tt null} link.
+\label{fig-linkedlist}\label{pg-fig-linkedlist}}
+\end{figure}
+%\end{figure}
+
+A {\bf linked list}\index{linked list} is a list in which a 
+collection of nodes are
+linked together by references from one node to the next.  To make a
+linked list, we will define a class of self-referential
+\marginnote{Self-referential objects}
+objects.  A {\bf self-referential object}\index{self-referential
+object} is an object that contains a reference to an object of the
+same class.  The convention is to name these objects {\tt Node}s:
+
+\begin{CDT}{51pt}
+\begin{verbatim}
+public class Node {
+     private String name;
+     private Node next;
+}
+\end{verbatim}
+\end{CDT}
+
+\noindent In addition to the reference to a {\tt String} object,
+each {\tt Node} object contains a reference to another {\tt Node}
+object.   The {\tt next} variable is often called a {\bf 
+link}\index{link} because
+%\begin{marginalnote}\it Linking objects together\end{marginalnote}
+\marginnote{Linking objects together}
+it is used to link together two {\tt Node} objects.  For example,
+Figure~\ref{fig-linkedlist} provides an illustration of a linked list
+of {\tt Node}s.
+
+By assigning references to the {\tt next} variables in each {\tt
+Node}, we can chain together arbitrarily long lists of objects.
+Therefore, we will want to add methods to our {\tt Node} class that
+enable us to manipulate a {\tt Node}'s next variable
+(Fig.~16--2).  By assigning it a reference to another {\tt
+%\begin{figure}
+%\begin{graphic}
+\marginfigvspace{10pt}{CHPTR16/nodeuml.eps}{The {\tt Node} class.
+\label{fig-nodeuml}\label{pg-fig-nodeuml}}
+%\end{graphic}
+%\end{figure}
+Node}, we can link two {\tt Node}s together.  By retrieving the
+link's value, we can find the next {\tt Node} in the list.
+
+%%%REW\BOXtwonospec{Self-Referential Object.}{A {\it
+\BOXtwo{Self-Referential Object.}{A {\it
+self-referential object} is one that contains an instance variable
+that refers to an object of the same class.}
+
+\noindent In addition to the link variable, each {\tt Node} stores 
+some data.  In
+this example, the data is a single {\tt String}. But there's no real
+limit to the amount and type of data that can be stored in a linked
+list.   Therefore, in addition to methods that manipulate a
+{\tt Node}'s link, we will also want methods to manipulate its data.   These
+points suggest the following basic design for a {\tt Node}:
+
+
+\begin{CDT}{139pt}
+\begin{alltt}
+public class Node \verb|{|
+     private Object data;
+     private Node next;
+
+     public Node(Object obj);          {\color{cyan}// Constructor}
+
+     public void setData(Object obj);  {\color{cyan}// Data access}
+     public Object getData();
+
+     public void setNext(Node link);   {\color{cyan}// Link access}
+     public Node getNext();
+\verb|}| {\color{cyan}// Node}
+\end{alltt}
+\end{CDT}
+
+
+\noindent Note that we have defined the {\tt Node}'s data in the
+most general possible way: As a reference to an {\tt Object}.  Because
+the {\tt Object} class is the root of Java's entire class hierarchy,
+an {\tt Object} can encompass any kind of data.  By using Java's
+wrapper classes, such as {\tt Integer} and {\tt Double}, a
+{\tt Node}'s data can even include primitive data.
+
+The important point is that regardless of its type of data, a
+{\tt Node} will have data access methods and link access methods.  The data
+%\begin{marginalnote}\it Divide and conquer\end{marginalnote}
+\marginnote{Divide and conquer}
+access methods differ, depending on the type of data, but the link
+access methods will generally be the same.
+
+\begin{BOXoneleft}{46pt}{Link Versus Data.}Making a clear distinction
+between an object's data and those elements used to manipulate the
+object is an example of the divide-and-conquer principle.
+\end{BOXoneleft}
+
+\vspace{-6pt}\secEXRHone{Self-Study Exercises}
+\begin{EXR}
+\item  Write a statement to create a new {\tt Node} whose data
+consist of the {\tt String} ``Hello.''
+
+\item  Write a statement to create a new {\tt Node} whose data
+consist of the {\tt Student} named ``William.''  Assume that the {\tt Student}
+class has a constructor with a {\tt String} parameter for the student's name.
+\end{EXR}
+
+\subsection{Example: The Dynamic Phone List}
+
+%\begin{figure}
+\begin{figure}[b]
+\figaleft{CHPTR16/phoneuml.eps}{Design of the {\tt PhoneListNode} class.
+\label{fig-phoneuml}\label{pg-fig-phoneuml}}
+\end{figure}
+%\end{figure}
+
+\noindent Let's define a {\tt PhoneListNode} class that can be used 
+to implement
+a phone list (Fig.~\ref{fig-phoneuml}).  This definition will be a
+straightforward specialization of the generic {\tt Node} list defined
+in the previous section.  Each element of the phone list will consist
+of a person's name and phone number.  These will be the node's
+data and can be stored in two {\tt String} variables.  To access these
+data, we will provide a
+%\begin{marginalnote}\it Accessing a list's data\end{marginalnote}
+\marginnote{Accessing a list's data}
+constructor and a basic set of access methods.  Thus, we have the
+definition shown in Figure~\ref{fig-phonelistnode}.
+
+\begin{figure}[h!]
+\figaproga{33.3pc}{
+\begin{alltt}
+public class PhoneListNode \verb|{|
+     private String name;
+     private String phone;
+     private PhoneListNode next;
+
+     public PhoneListNode(String s1, String s2) \verb|{|
+         name = s1;
+         phone = s2;
+         next = null;
+     \verb|}| {\color{cyan}// PhoneListNode()}
+
+     public void setData(String s1, String s2) \verb|{|
+         name = s1;
+         phone = s2;
+     \verb|}| {\color{cyan}// setData()}
+
+     public String getName() \verb|{|
+         return name;
+     \verb|}| {\color{cyan}// getName()}
+
+     public String getData() \verb|{|
+         return name + " " + phone;
+     \verb|}| {\color{cyan}// getData()}
+
+     public String toString() \verb|{|
+         return name + " " + phone;
+     \verb|}| {\color{cyan}// toString()}
+
+     public void setNext(PhoneListNode nextPtr) \verb|{|
+         next = nextPtr;
+     \verb|}| {\color{cyan}// setNext()}
+
+     public PhoneListNode getNext() \verb|{|
+         return next;
+     \verb|}| {\color{cyan}// getNext()}
+\verb|}| {\color{cyan}// PhoneListNode}
+\end{alltt}
+}\figaprogbleft{The {\tt PhoneListNode} class.
+\label{fig-phonelistnode}\label{pg-fig-phonelistnode}}
+\end{figure}
+
+The constructor and data access methods should be familiar to
+you.  Note that the constructor sets the initial value of {\tt next} to
+{\tt null}, which means that it refers to no object.
+
+\begin{BOXthreeleft}{46pt}{Null Reference.}A common programming error
+is the attempt to use a {\tt null} reference to refer to an object.
+This usually means the reference has not been successfully initialized.
+\end{BOXthreeleft}
+
+\noindent Let's discuss the details of the link access methods---the
+{\tt setNext()} and {\tt getNext()} methods---which are also simple
+to implement.   Because this is a {\tt PhoneListNode}, these methods
+%\begin{marginalnote}\it Manipulating a list's nodes\end{marginalnote}
+\marginnote{Manipulating a list's nodes}
+take {\tt PhoneListNode} as a parameter and return type, respectively.
+Given a reference to a {\tt PhoneListNode}, the {\tt setNext()} method
+assigns it to {\tt next}.  The {\tt getNext()} method simply
+returns the value of its {\tt next} link.\spnormalstr
+
+
+Let's now see how we would use these methods to construct a list.
+The following statements create three nodes:
+
+\vspace{-6pt}\begin{CDT}{40pt} \small
+\begin{verbatim}
+PhoneListNode node1 = new PhoneListNode("Roger M", "090-997-2918");
+PhoneListNode node2 = new PhoneListNode("Jane M", "090-997-1987");
+PhoneListNode node3 = new PhoneListNode("Stacy K", "090-997-9188");
+\end{verbatim}
+\end{CDT}
+
+\noindent The next two statements chain the nodes together into
+the list shown in Figure~16--5:
+
+\begin{CDT}{29pt}
+\begin{verbatim}
+node1.setNext(node2);
+node2.setNext(node3);
+\end{verbatim}
+\end{CDT}
+
+\noindent If we wanted to add a fourth node to the end of this
+list, we could use the following statements:
+
+\vspace{-6pt}\begin{CDT}{29pt} \small
+\begin{verbatim}
+PhoneListNode node4 =
+     new PhoneListNode("gary g","201-119-8765");
+node3.setNext(node4);
+\end{verbatim}
+\end{CDT}
+
+\noindent Although this example illustrates the basic technique
+for inserting nodes at the end of the list, it depends too much on our
+knowledge of the list.  In order to be truly useful we will have to
+develop a more general set of methods to create and manipulate a list
+of nodes. As we will see, a better design would be able to find
+the end of the list without knowing anything about the list's data.
+
+\marginfig{CHPTR16/phonelistpic.eps}{The phone list: a linked list of nodes,
+each of which contains a person's name and phone number.
+\label{fig-phonelist}\label{pg-fig-phonelist}}
+
+\begin{BOXoneleft}{46pt}{Generality.}In a well-designed list data
+structure, you should be able to manipulate its elements without
+knowing anything about its data.
+\end{BOXoneleft}
+
+
+\vspace{-6pt}\secEXRHone{Self-Study Exercise}
+\begin{EXR}
+\addtocounter{EXRcount}{2}\item Suppose you know that {\tt nodeptr} is
+a reference to the last element of a linked list of {\tt
+PhoneList\-Node}s.  Create a new element for ``Bill C'' with phone
+number ``111-202-3331'' and link it into the end of the list.
+\end{EXR}
+%\epage
+
+\vspace{6pt}\subsection{Manipulating the Phone List}
+
+\noindent In addition to the {\tt Node}s that make a list, we must define a
+class containing methods to manipulate the list.  This class will
+include the insert, access, and remove methods.  It must also contain
+a reference to the list itself.  This leads to the basic design shown
+in Figure~16--6. Because this is a list of {\tt
+PhoneListNode}s, we need a {\tt PhoneListNode} reference to point to
+%\begin{figure}
+%\begin{graphic}
+\marginfigvspace{-120pt}{CHPTR16/phonelistclass.eps}{The {\tt PhoneList} class
+has a reference to the first node of the list ({\tt head}) and methods to
+insert, remove, and look up information.
+\label{fig-phonelistclass}\label{pg-fig-phonelistclass}}
+%\end{graphic}
+%\end{figure}
+the list, which is the purpose of the {\tt head} variable.
+
+
+A preliminary coding of the {\tt PhoneList} class is shown in
+Figure~\ref{fig-phonelistprelim}.  As you can see there, when a new
+{\tt PhoneList} instance is constructed, {\tt head} is initialized to
+{\tt null}, meaning the list is initially empty.
+%\begin{marginalnote}\it An empty list\end{marginalnote}
+\marginnote{\vspace{12pt}An empty list}
+Since we will frequently want to test whether the list is empty, we
+define the {\tt boolean} {\tt isEmpty()} method for that purpose.  As
+you can see, its definition says that a list is empty when the
+reference to the {\tt head} of this list is {\tt null}.
+
+\begin{BOXfourleft}{34pt}{The {\tt null} Reference.}A {\tt null}
+reference is useful for defining limit cases, such as an empty list or
+an uninstantiated object.
+\end{BOXfourleft}
+\begin{figure}[h]
+\figaproga{13.2pc}{
+\begin{alltt}
+public class PhoneList \verb|{|
+     private PhoneListNode head;
+
+     public PhoneList() \verb|{|
+         head = null;         {\color{cyan}// Start with empty list}
+     \verb|}|
+     public boolean isEmpty() \verb|{|  {\color{cyan}// Defines an empty list}
+         return head == null;
+     \verb|}|
+     public void insert(PhoneListNode node) \verb|{| \verb|}|
+     public String getPhone(String name) \verb|{| \verb|}|
+     public String remove(String name) \verb|{| \verb|}|
+     public void print() \verb|{| \verb|}|
+\verb|}| {\color{cyan}// PhoneList}
+\end{alltt}
+}\figaprogb{A preliminary version of the {\tt PhoneList} class.
+\label{fig-phonelistprelim}\label{pg-fig-phonelistprelim}}
+\end{figure}
+
+\subsubsection*{Inserting Nodes into a List}
+
+\noindent The {\tt insert()} method will have the task of inserting new
+{\tt PhoneListNode}s into the list.  There are a number of ways to do
+this.  The node could be inserted at the beginning or at
+the end of the list, or in alphabetical order, or possibly in other
+ways.  As we'll see, it is easiest to insert a new node at the
+head of the list.   But for this example, let's develop a method that
+inserts the node at the end  of the list.
+
+There are two cases we need to worry about for this algorithm.   First,
+\marginnote{Insertion algorithm} 
+if the list is empty, we can insert the node by simply setting {\tt
+head} to point to the node [Figure~\ref{fig-insertions}(a)].  Second,
+if the list is not empty, we must move through, or {\em
+traverse}\index{traverse}, the links of the list until we find the
+last node and insert the new node after it
+[Figure~\ref{fig-insertions}(b)]. In this case, we want to set the
+{\tt next} variable of the last node to point to the new node.  This
+gives us the following algorithm:
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{CHPTR16/insertions.eps}{Two cases.  (a) The list is empty before
+the insertion, which takes place at {\tt head}. (b) The list is not empty,
+so the insertion takes place at the end of the list.
+\label{fig-insertions}\label{pg-fig-insertions}}
+\end{figure}
+%\end{figure}
+
+\begin{CDT}{117pt}
+%%%REW\begin{alltt}\fontCDTsmall
+\begin{alltt}\small
+public void insert(PhoneListNode newNode) \verb|{|
+     if (isEmpty())
+         head = newNode;                  {\color{cyan}// Insert at 
+head of list}
+     else \verb|{|
+         PhoneListNode current = head;    {\color{cyan}// Start 
+traversal at head}
+         while (current.getNext() != null){\color{cyan}// While not at 
+the last node}
+             current = current.getNext(); {\color{cyan}//   go to the next node}
+         current.setNext( newNode );      {\color{cyan}// Do the insertion}
+     \verb|}|
+\verb|}| {\color{cyan}// insert()}
+\end{alltt}
+\end{CDT}
+
+\noindent Recall that when nodes are linked, their {\tt next}
+variables are non-{\tt null}. So when a node's {\tt next} variable is
+{\tt null}, that indicates the end of the list---there's no next
+node.   Thus, our algorithm begins by checking if the list is empty.  If
+so, we assign {\tt head} the reference to {\tt newNode}, the
+{\tt PhoneListNode} that's being inserted.
+
+%%%REW\clearpage
+
+If the list is not empty, then we need to find the last node.  In order
+%\begin{marginalnote}\it Traversing a list\end{marginalnote}
+\marginnote{Traversing a list}
+to traverse the list, we will need a temporary variable,
+{\tt current}, which will always point to the current node.   It's important
+to understand the while loop used here:
+
+
+\begin{CDT}{40pt}
+\begin{alltt}
+PhoneListNode current = head;       {\color{cyan}// Initializer}
+while (current.getNext() != null)   {\color{cyan}// Entry condition}
+     current = current.getNext();    {\color{cyan}// Updater}
+\end{alltt}
+\end{CDT}
+
+
+
+\noindent The loop variable, {\tt current}, is initialized by
+setting it to point to the head of the list.  The entry condition
+tests whether the {\tt next} link, leading out of {\tt current}, is
+{\tt null} (Fig.~\ref{fig-inserting}). That is, when the link coming
+out of a node is {\tt null}, then that node is the last node in the
+list [Figure~\ref{fig-inserting}(c)]. Inside the while loop, the
+update expression simply assigns the next node to {\tt current}. In
+that way, {\tt current} will point to each successive node until the
+last node is found.  It's very important that the loop exits when {\tt
+current.getNext()} is {\tt null}---that is, when the next pointer of
+the current node is null.  That way {\tt current} is pointing to
+%\begin{marginalnote}\it Loop exit condition\end{marginalnote}
+\marginnote{Loop-exit condition}
+the last node and can be used to set its {\tt next} variable to the
+node being inserted [Figure~\ref{fig-inserting}(d)].  Thus, after the
+loop is exited, {\tt current} still points to the last node.  At that
+point, the {\tt setNext()} method is used to link {\tt newNode} into
+the list as the new last node.
+
+\begin{BOXthreeleft}{58pt}{List Traversal.}A common error in designing
+list-traversal algorithms is an erroneous loop-entry or loop-exit
+condition.  One way to avoid this error is to hand trace your
+algorithm to make sure your code is correct.
+\end{BOXthreeleft}
+%\begin{figure}
+\begin{figure}[h]
+\figa{CHPTR16/inserting.eps}{The temporary variable {\tt current} is
+used to traverse the list to find its end.
+\label{fig-inserting}\label{pg-fig-inserting}}
+\end{figure}
+%\end{figure}
+
+%%%REW\clearpage
+
+\subsubsection*{Printing the Nodes of a List}
+
+\noindent The {\tt print()} method also uses a traversal strategy to print the
+%\begin{marginalnote}\it List traversal\end{marginalnote}
+\marginnote{List traversal}
+data from each node of the list.  Here again it is necessary to test
+whether the list is empty.  If so, we must print an error message.
+(This would be a good place to throw a programmer-defined exception,
+such as an {\tt EmptyList\-Exception}.)  If the list is not empty, then
+we use a temporary variable to traverse the list, printing
+each node's data along the way:
+
+
+\begin{CDT}{106pt}
+%%%REW\begin{alltt}\fontCDTsmallsmall
+\begin{alltt}\small
+public void print() \verb|{|
+     if (isEmpty())
+         System.out.println("Phone list is empty");
+     PhoneListNode current = head;     {\color{cyan}// Start traversal at head}
+     while (current != null) \verb|{|         {\color{cyan}// While 
+not at end of list}
+         System.out.println( current.toString() ); {\color{cyan}// 
+print node's data}
+         current = current.getNext();       {\color{cyan}//  go to the 
+next node}
+     \verb|}|
+\verb|}| {\color{cyan}// print()}
+\end{alltt}
+\end{CDT}
+
+\noindent Note the differences between this while loop and
+the one used in the {\tt insert()} method.  In this case, we exit the
+loop when {\tt current} becomes {\tt null}; there's no action to be
+taken after the loop is exited.  The printing takes place within the
+loop.  Thus, in this case, the entry condition, {\tt (current != null)},
+signifies that the task has been completed.
+
+\vspace{-3pt}\begin{BOXfour}{82pt}{Terminating a Traversal.}In designing
+list-traversal algorithms where the reference, {\it p}, points to the
+nodes in the list, if you need to refer to the last node in the list
+after the traversal loop exits, then your exit condition should be
+{\tt p.getNext() == null}.  If you have finished processing the nodes
+when the loop exits, your exit condition should be {\tt p == null}.
+\end{BOXfour}
+
+\vspace{-3pt}\subsubsection*{Looking up a Node in a List}
+
+\noindent Because the record associated with a person can be located
+anywhere in the list, the traversal strategy must also be used to look
+\marginnote{List traversal}
+up someone's phone number in the {\tt PhoneList}. Here again we start
+at the {\tt head} of the list and traverse through the {\tt next} links
+until we find the node containing the desired phone number.  This
+method takes the name of the person as a parameter.  There are three
+cases to worry about: (1) The list is empty; (2) the normal case where
+the person named is found in the list; and (3) the person named is not
+in the list.  Because the method returns a {\tt String}, we can return
+error messages in the first and third cases:
+
+\begin{CDT}{150pt}
+%%%REW\begin{alltt}\fontCDTsmallsmallsmall
+\begin{alltt}\small
+public String getPhone(String name) \verb|{|
+     if (isEmpty())                    {\color{cyan}// Case 1: Empty list}
+         return "Phone list is empty";
+     else \verb|{|
+         PhoneListNode current = head;
+         while ((current.getNext() != null) &&
+                 (!current.getName().equals(name)))
+             current = current.getNext();
+         if (current.getName().equals(name))
+             return current.getData(); {\color{cyan}// Case 2: Found the name}
+         else                          {\color{cyan}// Case 3: No such person}
+             return ("Sorry.  No entry for " + name);
+     \verb|}|
+\verb|}| {\color{cyan}// getPhone()}
+\end{alltt}
+\end{CDT}
+
+\noindent Note the while loop in this case.   As in the {\tt insert()}
+method, when the loop exits, we need a reference to the {\tt current}
+node so that we can print its phone number [{\tt current.getData()}].  But
+here there are three ways to exit the loop: (1) We reach the end of
+the list without finding the named person; (2) we find the named
+person in the interior of the list; or (3) we find the named person
+%\begin{marginalnote}\it Compound exit condition\end{marginalnote}
+\marginnote{Compound exit condition}
+in the last node of the list.  In any case, it is necessary to test
+whether the name was found or not after the loop is exited.  Then
+appropriate action can be taken.
+
+\secEXRHone{Self-Study Exercise}
+\begin{EXR}
+\addtocounter{EXRcount}{3}\item  What if the exit condition for the while loop
+in {\tt getPhone()} were stated as
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+((current.getNext() != null) ||
+     (!current.getName().equals(name)))
+\end{verbatim}
+\end{CDT}
+\end{EXR}
+
+\subsubsection*{Removing a Node from a List}
+
+\noindent By far the most difficult task is that of removing a node from a
+%\begin{marginalnote}\it Node removal algorithm\end{marginalnote}
+\marginnote{Node-removal algorithm}
+list.  In the {\tt PhoneList} we use the person's name to identify the
+node, and we return a {\tt String} that can be used to report either
+success or failure.   There are four cases to worry about in designing
+this algorithm: (1) The list is empty, (2) the first node is being
+removed, (3) some other node is being removed, and (4) the named person is
+not in the list.   The same traversal strategy we used in
+{\tt getPhone()} is used here, with the same basic while loop for cases 3
+and 4.
+
+
+As Figure~\ref{fig-remove} shows, the first two cases are
+easily handled.  If the list is empty, we just return an error message.  We
+use {\tt current} as the traversal variable.  If the named node is the
+first node, we simply need to set {\tt head} to
+{\tt current.getNext()}, which has the effect of making {\tt head} point to
+\begin{figure}[h]
+%%%REW\figbprogalefttwo{17.8pc}{
+\figbproga{17.8pc}{
+\begin{alltt}
+public String remove(String name) \verb|{| {\color{cyan}// Remove an 
+entry by name}
+     if (isEmpty())                              {\color{cyan}// Case 
+1: empty list}
+         return "Phone list is empty";
+     PhoneListNode current = head;
+     PhoneListNode previous = null;
+     if (current.getName().equals(name)) \verb|{| 
+{\color{cyan}// Case 2: remove first node}
+         head = current.getNext();
+         return "Removed " + current.toString() ;
+     \verb|}|
+     while ((current.getNext() != null) && 
+(!current.getName().equals(name)))  \verb|{|
+         previous = current;
+         current = current.getNext();
+     \verb|}|
+     if (current.getName().equals(name)) \verb|{| 
+{\color{cyan}// Case 3: remove named node}
+         previous.setNext(current.getNext());
+         return "Removed " + current.toString();
+     \verb|}| else
+         return ("Sorry.  No entry for " + name); {\color{cyan}// Case 
+4: node not found}
+\verb|}| {\color{cyan}// remove()}
+\end{alltt}
+%%%REW}\figbprogblefttwo{The {\tt remove()} method.
+}\figbprogb{The {\tt remove()} method.
+\label{fig-remove}\label{pg-fig-remove}}
+\end{figure}
+the second node in the list [Figure~\ref{fig-removal}(a)]. Once the node
+is cut out from the chain of links, there will be no further reference
+to it.  In this case, Java will recapture the memory it uses when it
+does garbage collection.
+
+\BOXtwo{Garbage Collection.}{Java's garbage collector
+handles the disposal of unused objects automatically.  This helps to
+simplify linked-list applications.   In languages such as C++, the
+programmer would have to {\it dispose} of the memory occupied by the
+deleted node.}
+
+
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{CHPTR16/removal.eps}{Removing different nodes from a linked list.
+\label{fig-removal}\label{pg-fig-removal}}
+\end{figure}
+%\end{figure}
+
+\noindent In order to remove some other node besides the first, two traversal
+%\begin{marginalnote}\it Tandem traversal\end{marginalnote}
+\marginnote{Tandem traversal}
+variables are needed: {\tt previous} and {\tt current}.  They
+proceed together down the list, with {\tt previous} always pointing to
+the node just before the {\tt current} node.  The reason, of course, is
+that to remove the {\tt current} node, you need to adjust the link
+pointing to it contained in the \mbox{\tt previous} node
+[Figure~\ref{fig-removal}(b)].  That is, the new value of
+{\tt previous.next} will be the current value of {\tt current.next}.
+We use the {\tt getNext()} and \mbox{\tt setNext()} methods to
+effect this change:
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+previous.setNext(current.getNext());
+\end{verbatim}
+\end{CDT}
+
+\vspace{-6pt}\subsubsection*{Testing the List}
+
+\noindent In developing list-processing programs, it is 
+important to design
+%\begin{marginalnote}\it Designing test data\end{marginalnote}
+\marginnote{Designing test data}
+good test data.  As we have seen, both the insertion and removal operations
+involve several distinct cases.  Proper testing of these methods
+ideally would test every possible case.  Of course, there are often so
+many combinations of list operations that exhaustive testing might not
+be feasible.  At the very least you should design test data that test
+each of the different conditions identified in your algorithms.   For
+example, in testing removals from a list, you should test all four
+cases that we discussed.  In testing insertions or lookups, you
+should test all three cases that we identified.
+
+
+
+\begin{BOXoneleft}{46pt}{Test Data.}Test data for validating
+list-processing algorithms should (at least) test each of the cases
+identified in each of the removal and insertion methods.
+\end{BOXoneleft}
+
+The {\tt main()} program in Figure~\ref{fig-testlist} illustrates the
+kinds of tests that should be performed.  This method could be
+incorporated directly into the {\tt PhoneList} class, or it could be
+made part of a separate class.
+
+
+\secEXRHone{Self-Study Exercises}
+\begin{EXR}
+\addtocounter{EXRcount}{4}\item  Trace through the {\tt main()} 
+method line by line and predict its
+output.
+
+\item  Design a test of {\tt PhoneList} that shows that
+new elements can be inserted into a list after
+some or all of its previous nodes have been removed.
+\end{EXR}
+
+%%%REW figure needed to be forced: h -> h! and \small added
+
+\begin{figure}[h!]
+\figaproga{37.1pc}{ \small
+\begin{alltt}\baselineskip=10.5pt
+public static void main(String argv[]) \verb|{|
+                     {\color{cyan}// Create list and insert nodes}
+     PhoneList list = new PhoneList();
+     list.insert( new PhoneListNode("Roger M", "997-0020"));
+     list.insert( new PhoneListNode("Roger W", "997-0086"));
+     list.insert( new PhoneListNode("Rich P", "997-0010"));
+     list.insert( new PhoneListNode("Jane M", "997-2101"));
+     list.insert( new PhoneListNode("Stacy K", "997-2517"));
+
+                     {\color{cyan}// Test whether insertions worked}
+     System.out.println( "Phone Directory" );
+     list.print();
+                     {\color{cyan}// Test whether lookups work}
+     System.out.println("Looking up numbers by name");
+     System.out.println(list.getPhone("Roger M"));
+     System.out.println(list.getPhone("Rich P"));
+     System.out.println(list.getPhone("Stacy K"));
+     System.out.println(list.getPhone("Mary P"));
+     System.out.println(list.remove("Rich P"));
+
+     System.out.println("Phone Directory");
+     list.print();
+         {\color{cyan}// Test removals, printing list after each removal}
+     System.out.println(list.remove("Roger M"));
+     System.out.println("Phone Directory");
+     list.print();
+     System.out.println(list.remove("Stacy K"));
+     System.out.println("Phone Directory");
+     list.print();
+     System.out.println(list.remove("Jane M"));
+     System.out.println("Phone Directory");
+     list.print();
+     System.out.println(list.remove("Jane M"));
+     System.out.println("Phone Directory");
+     list.print();
+     System.out.println(list.remove("Roger W"));
+     System.out.println("Phone Directory");
+     list.print();
+     System.out.println(list.remove("Roger W"));
+     System.out.println("Phone Directory");
+     list.print();
+\verb|}| {\color{cyan}// main()}
+\end{alltt}
+}\figaprogb{A {\tt main()} method containing a set of tests for the
+{\tt PhoneList} class.
+\label{fig-testlist}\label{pg-fig-testlist}}
+\end{figure}
+
+
+
+%\begin{objectorienteddesign}{OBJECT-ORIENTED DESIGN:  The List 
+Abstract Data Type (ADT)}
+\vspace{6pt}\secHfour{OBJECT-ORIENTED DESIGN:  \\The List Abstract 
+Data Type (ADT)}
+%\addcontentsline{toc}{section}{\S~~~ Object-Oriented Design: The 
+List Abstract Data Type (ADT)}
+
+\noindent The {\tt PhoneList} example from the previous section
+illustrates the basic concepts of the linked list.  Keep in mind that
+there are other implementations that could have been described.  For
+example, some linked lists use a reference to both the first and last
+elements of the list.  Some lists use nodes that have two pointers,
+one to the next node and one to the previous node.  This enables
+traversals in two directions---front to back and back to front---as
+well as making it easier to remove nodes from the list.  The example
+we showed was intended mainly to illustrate the basic techniques
+involved in list processing.
+
+Also, the {\tt PhoneList} example is limited to a particular type of
+%\begin{marginalnote}\it A generic list structure\end{marginalnote}
+\marginnote{A generic list structure}
+data---namely, a {\tt PhoneListNode}. Let's develop a more general
+linked list class and a more general node class that can be used to
+store and process lists of any kind of data.
+
+An {\bf Abstract Data Type (ADT)}\index{Abstract Data Type (ADT)} 
+involves two components: the data
+that are being stored and manipulated and the methods and operations
+that can be performed on those data.  For example, an {\tt int} is an
+ADT.~The data are the integers ranging from some
+{\tt MININT} to some {\tt MAXINT}. The operations are the various integer
+operations: addition, subtraction, multiplication, and division.
+These operations prescribe the ways that {\tt int}s can be used.  There
+are no other ways to manipulate integers.
+
+Moreover, in designing an ADT, it's important to hide the
+implementation of the operations from the users of the operations.
+%\begin{marginalnote}\it Information hiding\end{marginalnote}
+\marginnote{\vspace{-12pt}Information hiding}
+Thus, our programs have used all of these integer operations on {\tt
+int}s, but we have no real idea how they are implemented---that is,
+what exact algorithm they use.
+
+Objects can be designed as ADTs, because we can easily
+distinguish an object's use from its implementation.  Thus, the
+{\tt private} parts of an object---its instance variables and private
+methods---are hidden from the user while the object's interface---its 
+{\tt public} methods---are available.  As with the integer
+operators, the object's public methods prescribe just how the object
+can be used.
+
+So let's design a list ADT. We want it to be able to store any kind of
+%\begin{marginalnote}\it Design specifications\end{marginalnote}
+\marginnote{Design specifications}
+data, and we want to prescribe the operations that can be performed on
+those data---the insert, delete, and so on.  Also, we want to design
+the ADT so that it can be extended to create more specialized
+kinds of lists.
+
+%%%REW\subsubsection*{The {\ttHthree Node} Class}
+\subsubsection*{The {\tt Node} Class}
+
+\vspace{-6pt}\begin{BOXone}{58pt}{Generalizing a Type.}An effective 
+strategy for
+designing a list abstract data type is to start with a specific list and
+generalize it.   The result should be a more abstract version of the
+original list.
+\end{BOXone}
+
+\noindent Our approach will be to generalize the classes we created in the {\tt
+Phone\-List} example.  Thus, the {\tt PhoneListNode} will become a
+generic {\tt Node} that can store any kind of data
+(Fig.~16--13).  Some of the changes are merely name changes.
+Thus, wherever we had {\tt PhoneListNode}, we now have just {\tt Node}.
+The link access methods have not changed significantly.  What has
+%\begin{figure}
+%\begin{graphic}
+\marginfig{CHPTR16/listnode.eps}{The {\tt Node} class is a generalization of
+the {\tt PhoneListNode} class.
+\label{fig-listnode}\label{pg-fig-listnode}}
+%\end{graphic}
+%\end{figure}
+changed is that instead of instance variables for the name, phone
+number, and so on, we now have just a single data reference to an {\tt
+Object}. This is as general as you can get, because, as we pointed out
+earlier, {\tt data} can refer to any object, even to
+primitive data.
+
+The implementation of the {\tt Node} class is shown in
+Figure~\ref{fig-nodeclass}.  Note that the data access methods, {\tt
+getData()} and {\tt setData()}, use references to {\tt Object} for
+their parameter and return type.  Note also how we've defined the {\tt
+toString()} method.  It just invokes {\tt data.toString()}. Because
+{\tt toString()} is defined in {\tt Object}, every type of data will
+have this method.  And because {\tt toString()} is frequently
+overridden in defining new objects, it is useful here.
+
+\begin{figure}[h]
+\vspace{-6pt}\figaproga{21.3pc}{
+\begin{alltt}\baselineskip10.5pt
+public class Node \verb|{|
+     private Object data;        {\color{cyan}// Stores any kind of data}
+     private Node next;
+
+     public Node(Object obj) \verb|{|  {\color{cyan}// Constructor}
+         data = obj;
+         next = null;
+     \verb|}|                               {\color{cyan}// Data access methods}
+     public void setData(Object obj) \verb|{|
+         data = obj;
+     \verb|}|
+     public Object getData() \verb|{|
+         return data;
+     \verb|}|
+     public String toString() \verb|{|
+         return data.toString();
+     \verb|}|                               {\color{cyan}// Link access methods}
+     public void setNext( Node nextPtr ) \verb|{|
+         next = nextPtr;
+     \verb|}|
+     public Node getNext() \verb|{|
+         return next;
+     \verb|}|
+\verb|}| {\color{cyan}// Node}
+\end{alltt}
+}\figaprogb{The {\tt Node} class is a more abstract version of
+the {\tt Phone- ListNode} class.
+\label{fig-nodeclass}\label{pg-fig-nodeclass}}
+\end{figure}
+
+%%%REW\vspace{-6pt}\subsubsection*{The {\ttHthree List} Class}
+\vspace{-6pt}\subsubsection*{The {\tt List} Class}
+
+
+\noindent Let's now generalize the {\tt PhoneList} class
+(Fig.~16--15).  The {\tt List} class will still contain a
+reference to the {\tt head} of the list, which will now be a list of
+{\tt Node}s.  It will still define its constructor, its
+%\begin{figure}
+%\begin{graphic}
+\marginfigvspace{-90pt}{CHPTR16/listuml.eps}{The {\tt List} class 
+contains a pointer to the
+head of the list and public methods to insert and remove
+objects from both the front and rear of the list.
+\label{fig-listuml}\label{pg-fig-listuml}}
+%\end{graphic}
+%\end{figure}
+{\tt isEmpty()} method, and its {\tt print()} method in the same way as in the
+{\tt PhoneList}.
+
+However, in designing a generic {\tt List} class, we want to design
+%\begin{marginalnote}\it Generic list methods\end{marginalnote}
+%¥¥¥\marginnote{\vspace{9pt}Generic list methods}
+some new methods, particularly because we want to use this class as the
+basis for more specialized lists.  The {\tt PhoneList.insert()} method
+was used to insert nodes at the end of a list.  In addition to this
+method, let's design a method that inserts at the head of the
+list.  Also, {\tt PhoneList} had a method to remove nodes by
+name.  However, now that we have generalized our data, we don't know if
+the list's {\tt Object}s have a name field, so we'll scrap this method
+in favor of two new methods that remove a node from the beginning or
+end of the list, respectively.
+
+\begin{figure}[p]
+\figbprogalefttwo{41.6pc}{
+\begin{alltt}
+public class List \verb|{|
+     private Node head;
+
+     public List() \verb|{|
+         head = null;
+     \verb|}|
+
+     public boolean isEmpty() \verb|{|
+         return head == null;
+     \verb|}|
+
+     public void print() \verb|{|
+         if (isEmpty())
+             System.out.println("List is empty");
+         Node current = head;
+         while (current != null) \verb|{|
+             System.out.println(current.toString());
+             current = current.getNext();
+         \verb|}|
+     \verb|}| {\color{cyan}// print()}
+
+     public void insertAtFront(Object obj) \verb|{|
+        Node newnode =  new Node(obj);
+        newnode.setNext(head);
+        head = newnode;
+     \verb|}|
+
+     public void insertAtRear(Object obj) \verb|{|
+         if (isEmpty())
+             head = new Node(obj);
+         else \verb|{|
+             Node current = head;                 {\color{cyan}// 
+Start at head of list}
+             while (current.getNext() != null)    {\color{cyan}// Find 
+the end of the list}
+                 current = current.getNext();
+             current.setNext(new Node(obj));  {\color{cyan}// Create 
+and insert the newNode}
+         \verb|}|
+     \verb|}| {\color{cyan}// insertAtRear()}
+
+     public Object removeFirst() \verb|{|
+         if (isEmpty())              {\color{cyan}// Empty List}
+             return null;
+         Node first = head;
+         head = head.getNext();
+         return first.getData();
+     \verb|}| {\color{cyan}// removeFirst()}
+\end{alltt}
+%¥¥¥¥riga bianca
+}\figbprogblefttwo{The {\tt List} ADT, Part I.
+\label{fig-listadt}\label{pg-fig-listadt}}
+\end{figure}
+
+\begin{figure}[tb]
+\addtocounter{figure}{-1}\figaproga{15.5pc}{
+\begin{alltt}\baselineskip=10pt
+     public Object removeLast() \verb|{|
+         if (isEmpty())  {\color{cyan}// empty list}
+             return null;
+         Node current = head;
+         if (current.getNext() == null) \verb|{|     {\color{cyan}// 
+Singleton list}
+             head = null;
+             return current.getData();
+         \verb|}|
+
+         Node previous = null;                {\color{cyan}// All other cases}
+         while (current.getNext() != null) \verb|{|
+             previous = current;
+             current = current.getNext();
+         \verb|}|
+         previous.setNext(null);
+         return current.getData();
+      \verb|}| {\color{cyan}// removeLast()}
+\verb|}| {\color{cyan}// List}
+\end{alltt}
+}\figaprogb{{\it (continued)} The {\tt List} ADT, Part II.
+\label{fig-listadt2}\label{pg-fig-listadt2}}
+\vspace{-9pt}\end{figure}
+
+We already know the basic strategies for implementing these
+new methods, which are shown in the definition in
+Figure~\ref{fig-listadt}.
+We have renamed the {\tt insertAtRear()} method,
+which otherwise is very similar to the {\tt PhoneList.\-insert()}
+method.  The key change is that now its parameter must be an
+{\tt Object}, because we want to be able to insert any kind of object into
+our list.  At the same time, our list consists of {\tt Node}s, so we
+have to use the {\tt Object} to create a {\tt Node} in our insert
+methods:
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+head = new Node(obj);
+\end{verbatim}
+\end{CDT}
+
+\noindent Recall that the {\tt Node} constructor takes an {\tt Object}
+argument and simply assigns it to the {\tt data} reference.  So when we
+insert an {\tt Object} into the list, we make a new {\tt Node} and set
+its {\tt data} variable to point to that {\tt Object}.  Note that
+we check whether the list is empty {\it before} traversing to the last node.
+
+The new {\tt insertAtFront()} method (Fig.~\ref{fig-listadt}) is
+simple to implement, since no traversal of the list is necessary.  You
+just need to create a new {\tt Node} with the {\tt Object} as its
+data element and then link the new node into the head of the list:
+
+\begin{CDT}{40pt}
+\begin{verbatim}
+Node newnode = new Node(obj);
+newnode.setNext(head);
+head = newnode;
+\end{verbatim}
+\end{CDT}
+
+\noindent See Figure~\ref{fig-insertions}a for a graphical 
+representation of this
+type of insertion.
+
+The new {\tt removeFirst()} method is also quite simple to implement.
+In this case, you want to return a reference to the {\tt Object} that's
+stored in the first node, but you need to adjust {\tt head} so that it
+points to whatever the previous {\tt head.next} was pointing to before
+the removal.  This requires the use of a temporary variable, as shown
+in the method.
+
+%%%REW\begin{figure}[tbh]
+\begin{figure}[tbh]
+\vspace{-9pt}\figaproga{23.5pc}{
+\begin{alltt}\baselineskip=10.25pt
+public static void main( String argv[] ) \verb|{|
+                 {\color{cyan}// Create list and insert heterogeneous nodes}
+     List list = new List();
+     list.insertAtFront(new PhoneRecord("Roger M", "997-0020"));
+     list.insertAtFront(new Integer(8647));
+     list.insertAtFront(new String("Hello World"));
+     list.insertAtRear(new PhoneRecord("Jane M", "997-2101"));
+     list.insertAtRear(new PhoneRecord("Stacy K", "997-2517"));
+
+                 {\color{cyan}// Print the list}
+     System.out.println("Generic List");
+     list.print();
+                  {\color{cyan}// Remove objects and print resulting list}
+     Object o;
+     o = list.removeLast();
+     System.out.println(" Removed " + o.toString());
+     System.out.println("Generic List:");
+     list.print();
+     o = list.removeLast();
+     System.out.println(" Removed " + o.toString());
+     System.out.println("Generic List:");
+     list.print();
+     o = list.removeFirst();
+     System.out.println(" Removed " +o.toString());
+     System.out.println("Generic List:");
+     list.print();
+\verb|}| {\color{cyan}// main()}
+\end{alltt}
+}\figaprogbleft{A series of tests for the {\tt List} ADT.
+\label{fig-testlistadt}\label{pg-fig-testlistadt}}
+\end{figure}
+
+
+The new {\tt removeLast()} method is a bit more complicated.  It handles
+three cases: (1) The empty list case, (2) the single node list,
+and (3) all other lists.  If the list is empty, it 
+returns {\tt null}. Obviously, it shouldn't even be called
+in this case.  In designing subclasses of {\tt List} we will
+first invoke {\tt isEmpty()} before attempting to remove
+a node.
+
+If the list contains a single node, we treat it as a special case and
+set {\tt head} to {\tt null}, thus resulting in an empty list.
+In the typical case, case 3, we traverse the list to find the last
+node, again using the strategy of maintaining both a {\tt previous}
+and a {\tt current} pointer.  When we find the last node, we must
+adjust {\tt previous.next} so that it no longer points to~it.
+
+
+\begin{figure}[tb]
+\figaproga{16.8pc}{
+\begin{alltt}
+public class PhoneRecord \verb|{|
+     private String name;
+     private String phone;
+
+     public PhoneRecord(String s1, String s2) \verb|{|
+         name = s1;
+         phone = s2;
+     \verb|}|
+     public String toString() \verb|{|
+         return name + " " + phone;
+     \verb|}|
+     public String getName( ) \verb|{|
+         return name;
+     \verb|}|
+     public String getPhone( ) \verb|{|
+         return phone;
+     \verb|}|
+\verb|}| {\color{cyan}// PhoneRecord}
+\end{alltt}
+}\figaprogb{A {\tt PhoneRecord} class.
+\label{fig-phonerecord}\label{pg-fig-phonerecord}}
+\end{figure}
+%\end{objectorienteddesign}
+
+
+\vspace{2pt}\subsubsection*{Testing the List ADT}
+\noindent Testing the list ADT follows the same strategy used in the
+{\tt PhoneList} example.  However, one of the things we want to test is that
+%\begin{marginalnote}\it Heterogeneous lists\end{marginalnote}
+\marginnote{Heterogeneous lists}
+we can indeed create lists of heterogeneous types---lists that include
+{\tt Integer}s mixed with {\tt Float}s, mixed with other types of
+objects.  The {\tt main()} method in Figure~\ref{fig-testlistadt}
+illustrates this feature.
+
+%\begin{figure}
+\begin{figure}[tb]
+\figa{CHPTR16/phonerecorduml.eps}{The {\tt PhoneRecord} class stores 
+data for a phone
+directory.
+\label{fig-phonerecorduml}\label{pg-fig-phonerecorduml}}
+\end{figure}
+%\end{figure}
+
+\begin{BOXone}{46pt}{The {\tt List} ADT.}One advantage of defining
+a {\tt List} ADT is that it lets you avoid having to write the
+relatively difficult list-processing algorithms each time you need a
+list structure.
+\end{BOXone}
+
+The list we create here involves various types of data.  The {\tt
+Phone\-Record} class is a scaled-down version of the {\tt
+PhoneListNode} we used in the previous example
+(Fig.~\ref{fig-phonerecorduml}).  Its definition is shown in
+Figure~\ref{fig-phonerecord}.  Note how we use an {\tt Object}
+reference to remove objects from the list in {\tt main()}.  We use the
+{\tt Object.toString()} method to display the object that was removed.
+
+%%%REW\newpage
+
+\vspace{-6pt}\secEXRHone{Self-Study Exercises}
+\begin{EXR}
+\addtocounter{EXRcount}{6}\item  Trace through the {\tt main()} 
+method line by line and predict its
+output.
+
+\item  Design a test of the {\tt List} program that shows that
+it is possible to insert new elements into a list after
+some or all of its previous nodes have been removed.
+\end{EXR}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{CHPTR16/stack.eps}{A stack is a list that permits
+insertions and removals only at its top.
+\label{fig-stack}\label{pg-fig-stack}}
+\end{figure}
+%\end{figure}
+
+\section{The Stack ADT}
+\noindent A {\bf stack}\index{stack} is a special type of list that 
+allows insertions and
+removals to be performed only to the front of the list.  Therefore, it enforces {\bf
+last-in--first-out (LIFO)}\index{last-in--first-out (LIFO)} behavior 
+on the list.  Think of a stack of
+dishes at the salad bar.
+%\begin{marginalnote}\it Stack operations\end{marginalnote}
+\marginnote{Stack operations}
+When you put a dish on the stack, it goes onto the top of
+the stack.  When you remove a dish from the stack, it comes from the
+top of the stack.  These operations are conventionally called {\bf
+push}\index{push}, for insert, and {\bf pop}\index{pop}, for remove, 
+respectively
+(Fig.~\ref{fig-stack}).  Thus, the stack ADT stores a list of data
+and supports the following operations:
+
+
+\begin{BL}
+\item  Push---inserts an object onto the top of the stack.
+\item  Pop---removes the top object from the stack.
+\item  Empty---returns {\tt true} if the stack is empty.
+\item  Peek---retrieves the top object without removing it.
+\end{BL}
+
+
+Stacks are useful for a number of important computing tasks.   For
+%\begin{marginalnote}\it Stack applications\end{marginalnote}
+\marginnote{Stack applications}
+example, during program execution, method call and return happens in a
+LIFO fashion.  The last method called is the first method
+exited.  Therefore, a stack---sometimes called the run-time stack---is used to
+manage method calls during program execution.  When a method
+is called, an activation block is created, which includes the method's
+parameters, local variables, and return address.  The activation block is
+%\begin{figure}
+%\begin{graphic}
+\marginfig{CHPTR16/stackuml.eps}{As a subclass of {\tt List}, a {\tt Stack}
+inherits all of its public (+) and protected (\#) elements.
+Therefore, {\tt push()} can be defined in terms of {\tt insertAtFront()}
+and {\tt pop()} can be defined in terms of {\tt removeFirst()}.
+\label{fig-stackuml}\label{pg-fig-stackuml}}
+%\end{graphic}
+%\end{figure}
+pushed onto the stack.  When that method call returns, the return
+address is retrieved from the activation block and the whole block is
+popped off the stack.  The {\tt Exception.printStackTrace()} method
+uses the run-time stack to print a trace of the method calls
+that led to an exception.
+
+%%%REW\vspace{-6pt}\subsection{The {\ttHtwo Stack} Class}
+\vspace{-6pt}\subsection{The {\tt Stack} Class}
+
+\noindent Given our general definition of {\tt List} and {\tt Node}, it is
+practically trivial to define the stack ADT as a subclass of {\tt
+List} (Fig.~16--21).  As a subclass of {\tt List}, a {\tt
+Stack} will inherit all of the public and protected methods defined in
+{\tt List}. Therefore, we can simply use the {\tt insertAtFront()} and
+{\tt removeFirst()} methods for the push and pop operations,
+respectively (Fig.~\ref{fig-stackadt}). Because the {\tt isEmpty()}
+method is defined in {\tt List}, there's no need to override it in
+{\tt Stack}.  In effect, the {\tt push()} and {\tt pop()} methods
+merely rename the {\tt insertAtFront()} and {\tt removeFirst()}
+methods. Note that the {\tt Stack()} constructor calls the superclass
+constructor. This is necessary so that the list can be initialized.
+
+
+Do we have to make any changes to the {\tt List} class in order to use
+it this way?  Yes.  We want to change the declaration of {\tt head}
+from {\tt private} to {\tt protected}, so it can be accessed in the
+\begin{figure}[h]
+\figaproga{10.4pc}{
+\begin{alltt}
+public class Stack extends List \verb|{|
+     public Stack() \verb|{|
+         super();          {\color{cyan}// Initialize the list}
+     \verb|}|
+     public void push( Object obj ) \verb|{|
+         insertAtFront( obj );
+     \verb|}|
+     public Object pop() \verb|{|
+         return removeFirst();
+     \verb|}|
+\verb|}| {\color{cyan}// Stack}
+\end{alltt}
+}\figaprogb{The {\tt Stack} ADT.
+\label{fig-stackadt}\label{pg-fig-stackadt}}
+\end{figure}
+{\tt Stack} class.  And we want to declare {\tt List}'s {\tt public}
+%\begin{marginalnote}\it Protected methods are inherited\end{marginalnote}
+%\marginnote{Protected methods are inherited}
+access methods, such as {\tt insertAtFront()} and {\tt removeFirst()},
+as {\tt protected}.  That will allow them to be used in {\tt Stack},
+and in any classes that extend {\tt List}, but not by other
+classes.  This is essential.  Unless we do this we haven't really
+restricted the stack operations to push and pop and, therefore, we
+haven't really defined a stack ADT.  Remember, an ADT defines the data
+and the operations on the data.   A stack ADT must restrict access to
+the data to just the push and pop operations.
+
+\BOXtwoleft{Protected Elements.}{An object's
+{\tt protected} elements are hidden from all other objects except instances
+of the same class or its subclasses.}
+
+\vspace{-6pt}\begin{BOXoneleft}{46pt}{Information Hiding.}Use the 
+{\tt private} and
+{\tt protected} qualifiers to hide an ADT's implementation details
+from other objects.  Use {\tt public} to define the ADT's
+interface.
+\end{BOXoneleft}
+
+\vspace{-6pt}\secEXRHone{Self-Study Exercise}
+\begin{EXR}
+\addtocounter{EXRcount}{8}\item  Define the {\tt peek()} method for the
+{\tt Stack} class.  It should
+take no parameters and return an {\tt Object}. It should return the
+{\tt Object} on the top of the stack.
+\end{EXR}
+
+
+%%%REW\subsection{Testing the {\ttHtwo Stack} Class}
+\subsection{Testing the {\tt Stack} Class}
+\noindent Now let's test our {\tt stack} class by 
+using a {\tt stack} to reverse the letters in a {\tt String}.  The
+algorithm is this: Starting at the front of the {\tt String}, push
+%\begin{marginalnote}\it Reversing a string\end{marginalnote}
+\marginnote{Reversing a string}
+each letter onto the stack until you reach the end of the
+{\tt String}. Then pop letters off the stack and concatenate them, left to
+right, into another {\tt String}, until the stack is empty
+(Fig.~\ref{fig-stackadttest}).
+
+Note that because our {\tt Node}s store {\tt Object}s,
+we must convert each {\tt char} into a {\tt Character}, using the
+wrapper class.  Note also that we can use the {\tt toString()} method
+to convert from {\tt Object} to {\tt String} as we are popping the
+stack.
+
+\begin{figure}[h]
+\figaproga{15pc}{
+\begin{alltt}
+public static void main( String argv[] ) \verb|{|
+     Stack stack = new Stack();
+     String string = "Hello this is a test string";
+
+     System.out.println("String: " + string);
+     for (int k = 0; k < string.length(); k++)
+         stack.push(new Character( string.charAt(k)));
+
+     Object o = null;
+     String reversed = "";
+     while (!stack.isEmpty()) \verb|{|
+         o  = stack.pop();
+         reversed = reversed + o.toString();
+     \verb|}|
+     System.out.println("Reversed String: " + reversed);
+\verb|}| {\color{cyan}// main()}
+\end{alltt}
+}\figaprogbleft{A method to test the {\tt Stack} ADT, which is used
+here to reverse a String of letters.
+\label{fig-stackadttest}\label{pg-fig-stackadttest}}
+\end{figure}
+
+\section{The {Queue} ADT}
+\noindent A {\bf queue}\index{queue} is a special type of list that
+limits insertions to the end of the list and removals to the front of
+the list.  Therefore, it enforces {\bf first-in--first-out
+(FIFO)}\index{first-in--first-out (FIFO)} behavior on the list.  Think
+of the waiting line at the salad bar.  You enter the line at the rear
+and you leave the line at the front.  These operations are
+conventionally called {\bf enqueue}\index{enqueue}, for insert, and
+{\bf dequeue}\index{dequeue}, for remove, respectively
+(Fig.~\ref{fig-queue}).  Thus, the queue ADT stores a list of data and
+supports the following operations:
+
+\begin{BL}
+\item  Enqueue---insert an object onto the rear of the list.
+\item  Dequeue---remove the object at the front of the list.
+\item  Empty---return true if the queue is empty.
+\end{BL}
+
+%\begin{figure}
+\begin{figure}[tb]
+\figaleft{CHPTR16/queue.eps}{A queue is a list that permits insertions
+at the rear and removals at the front only.
+\label{fig-queue}\label{pg-fig-queue}}
+\end{figure}
+%\end{figure}
+
+
+%\begin{figure}
+%\begin{graphic}
+\marginfig{CHPTR16/queueuml.eps}{The {\tt Queue}'s {\tt enqueue()} and
+{\tt dequeue()} methods can use the {\tt List}'s
+{\tt insertAtRear()} and {\tt removeFirst()} methods,
+respectively.
+\label{fig-queueuml}\label{pg-fig-queueuml}}
+%\end{graphic}
+%\end{figure}
+
+Queues are useful for a number of computing tasks.  For example, the
+%\begin{marginalnote}\it Queue operations\end{marginalnote}
+%\marginnote{Queue operations}
+ready, waiting, and blocked queues used by the CPU scheduler all use a
+FIFO protocol.   Queues are also useful in implementing certain kinds
+of simulations.  For example, the waiting line at a bank or a bakery
+can be modeled using a queue.
+
+%%%REW\subsection{The {\ttHtwo Queue} Class}
+\subsection{The {\tt Queue} Class}
+
+
+\spstrict\noindent The {\tt Queue} class is also trivial to derive 
+from {\tt List}
+(Fig.~16--25).  Here we just restrict operations to the {\tt
+insertAtRear()} and {\tt removeFirst()} methods
+(Fig.~\ref{fig-queueadt}).  To test the methods of this class, we
+replace the {\tt push()} and {\tt pop()} operations of \spnormalstr
+\begin{figure}[h]%
+\figaproga{10.4pc}{
+\begin{alltt}
+public class Queue extends List \verb|{|
+     public Queue() \verb|{|
+         super();          {\color{cyan}// Initialize the list}
+     \verb|}|
+     public void enqueue(Object obj) \verb|{|
+         insertAtRear( obj );
+     \verb|}|
+     public Object dequeue() \verb|{|
+         return removeFirst();
+     \verb|}|
+\verb|}|{\color{cyan}// Queue}
+\end{alltt}
+}\figaprogb{The {\tt Queue} ADT.
+\label{fig-queueadt}\label{pg-fig-queueadt}}
+\end{figure}%
+the last example to {\tt enqueue()} and {\tt dequeue()}, respectively
+(Fig.~\ref{fig-queueadttest}).  In this case, the letters of the test
+string will come out of the queue in the same order they went in---FIFO.
+
+
+\begin{figure}[tb]
+\figaproga{15pc}{
+\begin{alltt}
+public static void main(String argv[]) \verb|{|
+     Queue queue = new Queue();
+     String string = "Hello this is a test string";
+     System.out.println("String: " + string);
+     for (int k = 0; k < string.length(); k++)
+         queue.enqueue( new Character(string.charAt(k)));
+     System.out.println("The current queue:");
+     queue.print();
+
+     Object o = null;
+     System.out.println("Dequeuing:");
+     while (!queue.isEmpty()) \verb|{|
+         o  = queue.dequeue();
+         System.out.print( o.toString() );
+     \verb|}|
+\verb|}| {\color{cyan}// main()}
+\end{alltt}
+}\figaprogb{A method to test the {\tt Queue} ADT. Letters inserted
+in a queue come out in the same order they went in.
+\label{fig-queueadttest}\label{pg-fig-queueadttest}}
+\end{figure}
+
+
+\vspace{2pt}\secEXRHone{Self-Study Exercise}
+\begin{EXR}
+\addtocounter{EXRcount}{9}\item  Define a {\tt peekLast()} method for 
+the {\tt Queue} class.  It
+should take no parameters and return an {\tt Object}. It should 
+return a reference
+to the {\tt Object} stored in the last {\tt Node} of the list without
+removing~it.
+\end{EXR}
+
+
+
+\begin{BOXoneleft}{46pt}{ADTs.}ADTs encapsulate and manage
+the difficult tasks involved in manipulating the data structure.
+But because of their extensibility, they can be used in
+a wide range of applications.
+\end{BOXoneleft}
+
+
+%\bigskip\begin{minipage}{\hsize}\section*{The LISP 
+Language}{./art/16/16b1.eps}
+%{./art/16/16b1.eps}
+
+\section*{Special Topic: The LISP Language}
+
+\noindent One of the very earliest computer languages, and the one
+that's most often associated with artificial intelligence (AI), is
+LISP, which stands for {\it LIS}t {\it P}rocessor.  LISP has been, and
+still is, used to build programs for human learning, natural language
+processing, chess playing, human vision processing, and a wide range
+of other applications.
+
+The earliest (pure) versions of
+LISP had no control structures and the only data structure they
+contained were the list structure.  Repetition in the language was done
+by recursion.    %%\\
+\hspace*{1pc}Lists are used for everything in LISP, including  LISP programs
+themselves.  LISP's unique syntax is  simple.  A LISP program
+consists of symbols, such as {\it 5} and {\it x}, and lists of
+symbols, such as {\it (5)}, \mbox{\it (1 2 3 4 5)}, and {\it ((this 5)
+(that 10))}, where a list is anything enclosed within
+parentheses.  The null list is represented by {\tt ()}.\\
+\hspace*{1pc}Programs in LISP are like mathematical functions.  For 
+example, here's
+a definition of a function that computes the square of two numbers:
+%%%\begin{CDTfive}{18pt}
+%%%\begin{alltt}
+%%%(define (square x) (* x x) )
+%%%\end{alltt}
+%%%\end{CDTfive}
+\begin{verbatim}
+(define (square x) (* x x) )
+\end{verbatim}
+\noindent The expression {\it (square x)} is a list giving the name of
+the function and its parameter.  The expression {\it (* x x)} gives
+the body of the function.  LISP uses {\it prefix notation}, in which
+the operator is the first symbol in the expression, as in {\it (* x
+x)}. This is equivalent to {\it (x * x)} in Java's {\it infix
+notation}, where the operator occurs between the two operands.  To run
+this program, you would simply input an expression like {\it (square
+25)} to the LISP interpreter, and it would evaluate it to 625.  %%\\
+\hspace*{1pc}LISP provides three basic list operators.  The 
+expression {\it (car x)}
+returns the first element of the (nonempty) list x.  The expression
+{\it (cdr x)} returns the tail of the list {\it x}.   Finally, {\it (cons z
+x)} constructs a list by making {\it z} the head of the list and {\it
+x} its tail.  For example, if {\it x} is the list {\it (1 3 5)},
+then {\it (car x)} is 1, {\it (cdr x)} is {\it (3 5)}, and {\it (cons 7 x)}
+is {\it (7 1 3 5)}.        %%\\
+\hspace*{1pc}Given these basic list operators, it is practically 
+trivial to define
+a stack in LISP:
+%%%\begin{CDTfive}{29pt}
+%%%\begin{alltt}
+%%%(define (push x stack) (cons x stack))        %%\\
+%%%(define (pop stack) (setf stack (cdr stack)) (car stack))
+%%%\end{alltt}
+%%%\end{CDTfive}
+\begin{verbatim}
+(define (push x stack) (cons x stack))
+(define (pop stack) (setf stack (cdr stack)) (car stack))
+\end{verbatim}
+\noindent The push operation creates a new stack by forming the {\it cons}
+of the element {\it x} and the previous version of the
+stack.  The pop operation returns the {\it car} of the stack but
+first changes the stack (using {\tt setf}) to the tail of the original
+stack.       %%\\
+\hspace*{1pc}These simple examples show that you can do an awful lot 
+of computation
+using just a simple list structure.  The success of LISP, particularly
+its success as an AI language, shows the great power and generality
+inherent in recursion and lists. 
+%%}{44pc}
+%%%REW\end{table}
+%\end{minipage}\bigskip
+
+
+\section{From the Java Library: The Java Collections Framework and Generic Types}
+\WWWjava
+
+\tBOXseven{The Java class library} contains implementations of some
+abstract data types.  The Java utility package, {\tt java.util.*},
+contains a good number of classes and interfaces designed to
+facilitate storing and manipulating groups of objects.  This family of
+related interfaces and classes is called the {\bf Java collections
+framework}.  It contains structures that correspond to the ADTs that
+we have just discussed, plus other data structures.  Java 1.5 has
+reimplemented the Java collections framework using {\bf generic types}
+that allow a programmer to specify a type for the objects that are
+stored in the structure.
+
+\subsection{Generic types in Java}
+Declaring classes that use the generic type construct introduced in Java 1.5
+\marginnote{generic types}
+involves using new syntax to refer to the class name. Such classes and
+interfaces, including those in the collections framework, use angle
+brackets containing one or more variables (separated by commas) to
+refer to unspecified type names.  For example, you would use {\tt <E>}
+or {\tt <K,V>} to refer to unspecified type names. Thus, names of
+classes or interfaces implemented with generic types are written with
+the syntax {\tt ClassName<E>}.
+
+Let's reconsider the {\tt Vector} class, which was introduced in
+Chapter~9.  The {\tt Vector} class, which is part of the Java collections
+framework, has a generic type implementation in Java 1.5.
+\marginfig{CHPTR16/libvectoruml.eps}{The {\tt java.util.\-Vector}
+class is implemented with a generic type in Java 1.5.
+\label{fig-libvectoruml}\label{pg-fig-libvectoruml}}
+Figure~16--28 describes the {\tt Vector<E>} class. Notice that the
+{\tt E} refers to an unspecified type name, that is, the name of a
+class or interface.  This type is specified when a corresponding
+variable is declared. The type must also be included after a
+constructor's type name when an object is instantiated and assigned to
+the variable.  The following code demonstrates how to create a {\tt
+Vector<E>} object for storing {\tt String} objects.
+\begin{verbatim}
+   Vector<String> strVec = new Vector<String>();
+   strVec.addElement("alpha");
+   strVec.addElement("beta");
+   String str = strVec.elementAt(0);
+\end{verbatim}
+
+\noindent In effect, the {\tt <E>} serves as parameter for the
+type of objects that will be stored in the {\tt Vector}. 
+Java 1.5 still allows the use of the unparametrized {\tt
+Vector} class which is equivalent to instantiating a {\tt
+Vector<Object>} object.  If you use a {\tt Vector} object, the above
+code would be written as follows.
+\begin{verbatim}
+   Vector strVec = new Vector();
+   strVec.addElement("alpha");
+   strVec.addElement("beta");
+   String str = (String)strVec.elementAt(0);
+\end{verbatim}
+
+One benefit a generic type provides is type checking of method arguments
+at compile time.  If {\tt strVec} is a {\tt Vector<String>} object, then the
+statement
+\begin{verbatim}
+   strVec.addElement(new Integer(57));
+\end{verbatim}
+\noindent will generate a compile-time error.  By contrast, if {\tt
+strVec} was just a plain {\tt Vector} object, no error would be found
+at compile time.  Thus, if a programmer wishes to create an array of
+{\tt String} objects, using generic types will help guarantee that the
+objects being stored are actually of type {\tt String}. In this way,
+using generic types helps to reduce the number of programming errors
+and thereby makes programs safer and more robust.
+
+A second benefit of using generic types is that the return type of
+objects retrieved from the data structure will be of the specified
+type rather than of type {\tt Object}.  If you compare the last
+statement in each of the two code segments above, you can see that
+using a generic type eliminates the need to cast an {\tt Object} to a
+{\tt String}.  This is a big convenience for the programmer, because
+forgetting to cast objects from one type to another is a common
+programming error.
+
+\subsection*{The {\tt java.util.Stack<E>} class}
+
+The Java collections framework includes the {\tt Stack<E>} class,
+implemented as a subclass of the {\tt Vector<E>} class.  It contains
+the methods shown in Figure~16--29.  For the most part, its methods
+provide the same functionality as the methods we developed earlier in
+this chapter.  
+
+\marginfig{CHPTR16/libstackuml.eps}{The {\tt java.util.\-Stack<E>}
+class is a subclass of {\tt Vector<E>}.
+\label{fig-libstackuml}\label{pg-fig-libstackuml}}
+
+\noindent Note that the methods provide the functionality of a stack ADT but the
+details of its implementation are hidden from the user.  An object of
+this class can be declared, instantiated, and used in a manner 
+like the {\tt Vector<E>} code.
+\begin{verbatim}
+   Stack<String> stk = new Stack<String>();
+   stk.push("alpha");
+   stk.push("beta");
+   String str = stk.pop();
+\end{verbatim}
+
+\vspace{2pt}\secEXRHone{Self-Study Exercise}
+\begin{EXR}
+\addtocounter{EXRcount}{10}\item  Write a class with only a {\tt main()} method
+that modifies Figure~\ref{fig-stackadttest} so that it uses the parameterized
+{\tt java.util.Stack<E>} class instead of the {\tt Stack} class used there.
+\end{EXR}
+
+\subsection{The {\tt List<E>} interface and the {\tt LinkedList<E>} class}
+
+The {\tt java.util.LinkedList<E>} is an implementation of a linked
+list (Fig.~16\mbox{--}30).  Like our implementation earlier in this
+chapter, it contains methods that can be used to define the standard
+stack and queue methods.
+
+Many of the standard list-processing methods are defined as part of
+the {\tt java.util.List<E>} interface.  The advantage of defining list
+operations as an interface is that they can be implemented by a number
+of data structures.  Code for using the list methods can be written to
+work independently of the data structure being used.  
+
+\marginfig{CHPTR16/liblinlist.eps}{The {\tt LinkedList<E>} class
+implements the  {\tt List<E>} interface. Only a partial list of 
+methods are shown.
+\label{fig-liblinlist}\label{pg-fig-liblinlist}}
+
+\noindent For example, the collections framework contains {\tt
+LinkedList<E>} and {\tt ArrayList<E>}, both of which implement the
+{\tt List<E>} interface.  In this section, we will demonstrate how to
+make appropriate use of the {\tt List<E>} interface and data
+structures that implement it.
+
+%%%REW\begin{BOXonenospec}{46pt}{Code Reuse.} Given the relative difficulty
+\begin{BOXone}{46pt}{Code Reuse.}Given the relative difficulty
+of writing correct and efficient list-processing algorithms, applications
+that depend on lists should make use of library classes whenever possible.
+%%%REW\end{BOXonenospec}
+\end{BOXone}
+
+Suppose that a programmer is developing an application to track
+activity of employees working at a small company's phone-in help desk.
+The programmer has decided to use the {\tt LinkedList<E>} data
+structure to store objects of the {\tt PhoneRecord} class that was
+defined earlier in this chapter and will use methods of the {\tt
+List<E>} interface to manipulate
+\begin{figure}[tb]\small
+\begin{verbatim}
+public static void testList() {
+     List<PhoneRecord> theList = new LinkedList<PhoneRecord>();
+     // new ArrayList<PhoneRecord>(); could also be used.
+     theList.add(new PhoneRecord("Roger M", "090-997-2918"));
+     theList.add(new PhoneRecord("Jane M", "090-997-1987"));
+     theList.add(new PhoneRecord("Stacy K", "090-997-9188"));
+     theList.add(new PhoneRecord("Gary G", "201-119-8765"));
+     theList.add(new PhoneRecord("Jane M", "090-997-1987"));
+     System.out.println("Testing a LinkedList List");
+     for (PhoneRecord pr : theList)
+         System.out.println(pr);
+} // testList
+\end{verbatim}
+\caption{A method that demonstrates the interface {\tt List<E>}
+and the class {\tt LinkedList<E>}.}
+\label{fig-listtest}\label{pg-fig-listtest}
+\end{figure}
+
+\noindent the data.  A list seems to be an appropriate structure for this problem since
+\begin{itemize}
+\item  {An unknown (but relatively small) amount of data will be involved.}
+\item  {The company wants the data stored in the order it is generated.}
+\item  {The main use of the data will be to print out the list's 
+phone records.}
+\end{itemize}
+
+\noindent The programmer might write a short method like that in
+Figure~\ref{fig-listtest} to demonstrate how the {\tt List<E>} and
+{\tt LinkedList<E>} structures will be used.
+
+Note that the statement
+\begin{verbatim}
+     List<PhoneRecord> theList = new LinkedList<PhoneRecord>();
+\end{verbatim}
+
+\noindent declares a variable {\tt theList} of interface type {\tt
+List<E>} but assigns an object of class type {\tt LinkedList<E>}.
+This is appropriate because the class implements the interface and the
+code uses only methods from the interface.  The class {\tt
+ArrayList<E>} in the collections framework also implements the {\tt
+List<E>} interface.  It uses an array rather than a linked list to
+store elements and has a constructor with an {\tt int} parameter that
+sets the size of the array.  If the programmer knew that {\tt theList}
+would contain close to, but always less than, 100 elements, then it
+might be better to declare:
+
+\begin{verbatim}
+     List<PhoneRecord> theList = new ArrayList<PhoneRecord>(100);
+\end{verbatim}
+
+\noindent Also note the unusual looking {\tt for} loop at the end of
+the method.  This is a new feature of Java 1.5 which can be used to simplify
+the coding of loops that iterate through every object in a collection
+of objects. The statement 
+\marginnote{The for--each loop}
+
+\begin{verbatim}
+     for (PhoneRecord pr : theList) { *** }
+\end{verbatim}
+
+\noindent should be thought of as executing the enclosed statements
+{\em for each} {\tt PhoneRecord} object, {\tt pr}, in the {\tt
+theList} data structure.  In previous versions of Java, an interface
+named {\tt Iterator} had to be used to enumerate all the elements in a
+collection.  The {\tt Iterator} approach is more flexible---for
+example, it allows you to iterate through just some of the members of
+the collection--- and will therefore still have to be used for more
+complex loops.
+
+The output of the method will be:
+\begin{verbatim}
+Roger M 090-997-2918
+Jane M 090-997-1987
+Stacy K 090-997-9188
+Gary G 201-119-8765
+Jane M 090-997-1987
+\end{verbatim}
+
+In the next section we will examine two other structures in the collections
+framework, the {\tt Set} interface and the {\tt Map} interface.
+
+\end{javalibrary}
+
+
+\section{ Using the {\tt Set} and {\tt Map} interfaces}
+
+The {\tt Set} and {\tt Map} interfaces are similar to the {\tt List}
+interface in that there are multiple classes in the collections framework
+that implement them.
+
+\subsection{Using the {\tt Set} interface.}
+
+The {\tt Set} interface is modeled after the {\em set theory}
+principles taught in mathematics.  In mathematics, sets are groups of
+elements with a clearly defined algorithm for deciding if any given
+element is in any given set.  Elements can be added to sets and can be
+removed from sets. Sets cannot have duplicate elements; if an element
+is added to a set that already contains an element equal to it, the
+new set still has a single such element.  The elements of a set have
+no natural order; two sets that have the same elements listed in
+different orders are considered to be the same set.
+
+In computer science and in Java, data structures that model sets are
+designed for large collections of data.  Such data structures have a
+method that determines if an object is in a given set with an
+efficient algorithm. For large data sets, using such a method is much
+faster than iterating through a list. Sometimes, you may or may not be
+able to list the elements of a set data structure in some natural
+\marginfig{CHPTR16/libset.eps}{A partial list of methods of the {\tt 
+Set<E>} interface.
+\label{fig-libset}\label{pg-fig-libset}}
+\noindent order, depending on how the data structure is implemented. An
+incomplete listing of the methods of the {\tt Set<E>} interface is
+given in the UML diagram in Figure~16--32.
+
+{\tt TreeSet<E>} and {\tt HashSet<E>} are two classes in the
+collections framework that implement the {\tt Set<E>} interface. They
+both provide fast operations to check whether an element is in a set.
+They also provide quick insertion of an element into the set or
+removal of an element from a set.  For large sets---those having at
+least several thousand elements---where there are large numbers of
+insertions, deletions, and tests for whether elements are in a set,
+linked lists would be much slower.
+
+When using the {\tt Set<E>} interface for a user-defined class {\tt
+E}, you will likely want to override the definition of the {\tt
+equals()} method from the {\tt Object} class in {\tt E} because that
+method is used when computing the value of {\tt
+aSet.contains(anElement)}. When using the {\tt TreeSet<E>} class for a
+user defined class {\tt E}, you should implement the {\tt compareTo()}
+method of the {\tt Comparable} interface because it is used to order
+the elements of {\tt E}. In the next section, we will discuss the
+specific manner in which elements are ordered.  Finally, when using
+the {\tt HashSet<E>} class for a user defined class {\tt E}, you
+should override the {\tt hashCode()} method of the {\tt Object} class
+because it is used {\tt HashSet<E>}.  {\em Hash codes} are indexes
+that are computed from the particular object that is being stored in
+the {\tt HashSet}. Given an object's hash code, the object can
+be retrieved directly, as we do with object's stored in an array.
+However, we will not discuss hash codes in any detail in this text.
+
+Let's think about a simple example for using a set data
+structure. Suppose that a programmer is developing an application for
+a large company for maintaining a {\em no--call} list.  The programmer
+has decided to use the {\tt TreeSet<E>} data structure to store
+objects of the {\tt PhoneRecord} class that was defined earlier in
+this chapter and will use methods of the {\tt Set<E>} interface to
+manipulate
+
+\begin{figure}[tbh]\small
+\begin{verbatim}
+public static void testSet() {
+     Set<PhoneRecord> theSet = new TreeSet<PhoneRecord>();
+     // new HashSet<PhoneRecord>(); could also be used.
+     theSet.add(new PhoneRecord("Roger M", "090-997-2918"));
+     theSet.add(new PhoneRecord("Jane M", "090-997-1987"));
+     theSet.add(new PhoneRecord("Stacy K", "090-997-9188"));
+     theSet.add(new PhoneRecord("Gary G", "201-119-8765"));
+     theSet.add(new PhoneRecord("Jane M", "090-987-6543"));
+
+     System.out.println("Testing TreeSet and Set");
+     PhoneRecord ph1 =
+         new PhoneRecord("Roger M", "090-997-2918");
+     PhoneRecord ph2 =
+         new PhoneRecord("Mary Q", "090-242-3344");
+     System.out.print("Roger M contained in theSet is ");
+     System.out.println(theSet.contains(ph1));
+     System.out.print("Mary Q contained in theSet is ");
+     System.out.println(theSet.contains(ph2));
+     for (PhoneRecord pr : theSet)
+         System.out.println(pr);
+} // testSet
+\end{verbatim}
+\caption{A method that demonstrates use of the interface {\tt Set<E>}
+and the class {\tt TreeSet<E>}.}
+\label{fig-settest}\label{pg-fig-settest}
+\end{figure}
+
+\noindent the data.  A {\tt TreeSet} seems to be an appropriate
+structure for this problem, since
+\begin{itemize}
+\item  {A large amount of data will be involved.}
+\item  {The company wants the {\tt PhoneRecord} data stored in 
+alphabetical order.}
+\item  {The main use of the data will be to test whether names are in the set.}
+\end{itemize}
+\noindent The programmer might write a short method like that in
+Figure~\ref{fig-settest} to demonstrate how the {\tt Set<E>} and {\tt
+TreeSet<E>} structures will be used.
+
+In order for the {\tt testSet()} method to work as we would like, we
+need to have the {\tt PhoneRecord} class implement the {\tt
+Comparable} interface and to override the {\tt equals()} method.  For
+this example, it is reasonable to assume that the {\tt name} field of
+{\tt PhoneRecord} objects should be unique so that it can be used to
+decide if two {\tt PhoneRecord} objects are equal.  The {\tt name}
+field of {\tt PhoneRecord} can also be used to define the other two
+methods discussed above.  Thus, add the following code to the {\tt
+PhoneRecord} class.
+\begin{verbatim}
+     public boolean equals(Object ob){
+         return name.equals(((PhoneRecord)ob).getName());
+     } //equals()
+
+     public int compareTo(Object ob){
+        return name.compareTo(((PhoneRecord)ob).getName());
+     } // compareTo()
+
+     public int hashCode(){
+         return name.hashCode();
+     } // hashCode()
+\end{verbatim}
+
+
+The output of the {\tt TestSet()} method is listed below:
+\begin{verbatim}
+Testing TreeSet and Set
+Roger M is contained in theSet is true
+Mary Q is contained in theSet is false
+Gary G 201-119-8765
+Jane M 090-997-1987
+Roger M 090-997-2918
+Stacy K 090-997-9188
+\end{verbatim}
+\noindent Notice that {\tt Jane M} {\tt PhoneRecord} appears only once in the
+listing of elements in the set.
+
+\subsection{Using the {\tt Map<K,V>} interface.}
+
+The {\tt Map<K,V>} interface is modeled after looking up definitions
+for words in a dictionary. In computer science, maps are considered to
+be a collection of pairs of elements. A pair consists of a {\bf key}
+that corresponds to a word being looked up and a {\bf value}
+corresponding to the definition of the word.  Pairs can be added to
+maps and can be removed from maps. Maps cannot
+\marginfig{CHPTR16/libmap.eps}{A partial list of methods of {\tt Map<K,V>}.
+\label{fig-libmap}\label{pg-fig-libmap}}
+\noindent have distinct pairs with the same keys; if you attempt to add a pair
+to a map that already contains a pair with the same key, the second
+pair will replace the first.  An incomplete listing of the methods of
+the {\tt Map<K,V>} interface is given in the UML diagram in
+Figure~16--34.  {\tt TreeMap<K,V>} and {\tt HashMap<K,V>} are two
+classes in the collections framework that implement the {\tt Map<K,V>}
+interface.
+
+Let's now consider a simple example of using a map data
+structure. Suppose that our programmer has been hired by a large
+company to develop an application that maintains an electronic phone
+list for company employees.  The programmer has decided to use the
+{\tt TreeMap<E>} data structure to store pairs of names and telephone
+numbers and will use methods of the {\tt Map<V,K>} interface to
+manipulate
+\begin{figure}[tbh] \small
+\begin{verbatim}
+public static void testMap() {
+     Map<String, String> theMap =
+         new TreeMap<String,String>();
+     // new HashMap<K,V>(); could also be used
+     theMap.put("Roger M", "090-997-2918");
+     theMap.put("Jane M", "090-997-1987");
+     theMap.put("Stacy K", "090-997-9188");
+     theMap.put("Gary G", "201-119-8765");
+     theMap.put("Jane M", "090-233-0000");
+     System.out.println("Testing TreeMap and Map");
+     System.out.print("Stacy K has phone ");
+     System.out.print(theMap.get("Stacy K");
+     System.out.print("Jane M has phone ");
+     System.out.print(theMap.get("Jane M");
+} // testList
+\end{verbatim}
+\caption{A method that demonstrates use of the interface {\tt Map<K,V>}
+and the class {\tt TreeMap<K,V>} .}
+\label{fig-maptest}\label{pg-fig-maptest}
+\end{figure}
+the data.  A {\tt TreeMap} seems like an appropriate data structure
+for this problem, since
+\begin{itemize}
+\item  {A large amount of data will be involved.}
+\item  {The company wants the {\tt PhoneRecord} data stored in 
+alphabetical order.}
+\item  {The main use of the data will be to use names to access 
+telephone numbers.}
+\end{itemize}
+\noindent The programmer might write a short method like that in
+Figure~\ref{fig-maptest} to demonstrate how the {\tt Map<K,V>} and
+{\tt TreeMap<K,V>} structures will be used.
+
+The output for this test program is:
+\begin{verbatim}
+Stacy K has phone 090-997-9188
+Jane M has phone 090-233-0000
+\end{verbatim}
+\noindent Notice the the second phone number for {\tt Jane M} is the one that
+is stored in the data structure.
+
+\section{ The Binary Search Tree Data Structure}
+
+To gain some appreciation of what binary search trees are and why they
+are useful in implementing the {\tt Set} and {\tt Map} interfaces, let's
+make a few comments about implementing very simple versions of these 
+structures.
+
+Like a linked list, a {\em binary tree} is a data structure consisting
+of a collection of nodes that are linked together by references from
+one node to another.  However, unlike a linked list, each node in a
+binary tree contains references to two other other nodes, ({\tt left}
+and {\tt right}), corresponding to the left- and right-subtrees
+growing out of a particular node.  A {\em subtree} is a tree that is
+part of larger tree. This creates a tree-like structure, as shown in
+Figure~16--36. Note that some of the references to other nodes might
+be null.  The trunk of the tree corresponds to the node labeled {\tt
+root}. In computer science, trees are almost always drawn upside down.
+Thus the trunk of the tree, {\tt root}, is at the top of the figure.
+
+\begin{figure}[tb]
+\figaleft{CHPTR16/btree.eps}{A binary search tree of {\tt PhoneTreeNode}s.
+\label{fig-btree}\label{pg-fig-btree}}
+\end{figure}
+
+If we assume that the objects contained in a tree are from a class
+that implements the {\tt Comparable} interface, then a {\bf binary
+search tree} is a binary tree in which the objects are ordered so that
+the object at a particular node is greater than the objects stored in
+its left subtree and less than the objects stored in its right
+subtree.
+
+Figure~16--36 shows a binary search tree with the phone list data that
+we have used throughout the chapter.  Objects are compared by
+comparing the names alphabetically.  From the figure it is easy to see
+that searching for a object should start at the root of the tree. At
+each node, examining the name at the node will tell you whether you
+have found the object there.  Otherwise, by checking the name at the
+node, you can decide which subtree the data could be in, and you can
+traverse either left or right through each level of the tree. One can
+deduce that if the tree is balanced---that is, if at most nodes the
+size of the left subtree is about the same size as the right
+subtree---searching the tree much faster than searching a linked
+list. This is one of the main advantages of using a binary search tree
+over a linked list.  
+
+The {\tt TreeSet} and {\tt TreeMap} classes implement sophisticated
+algorithms for inserting and removing data from a tree, which
+guarantees that the tree remains relatively balanced. The details of
+these algorithms are beyond the scope of this book, but would a
+subject of study in a standard {\em Data Structures and Algorithms}
+course.
+
+We will conclude this subsection by giving a brief outline of an
+implementation of a simple binary search tree that stores our phone
+list data.  Like our {\tt LinkedList} example, you need to define a
+node class and a tree class.  The node class with unimplemented
+methods, would look like:
+\begin{verbatim}
+public class PhoneTreeNode {
+     private String name;
+     private String phone;
+     private PhoneTreeNode left;
+     private PhoneTreeNode right;
+
+     public PhoneTreeNode(String nam, String pho){  }
+     public void setData(String nam, String pho){  }
+     public String getName(){  }
+     public boolean contains(String nam, String pho){  }
+     public void insert(String nam, String pho){  }
+     //other methods
+} // PhoneTreeNode
+\end{verbatim}
+
+The tree structure itself contains a reference to a node:
+\begin{verbatim}
+public class PhoneTree {
+     private PhoneTreeNode root;
+
+     public PhoneTree(){  }
+     public boolean contains(String nam, String pho){  }
+     public void insert(String nam, String pho){  }
+     //other methods
+} // PhoneTreeNode
+\end{verbatim}
+
+We will implement only the two {\tt contains()} methods.  The {\tt PhoneTree}
+version is very simple
+\begin{verbatim}
+     public boolean contains(String nam, String pho){
+         if (root == null) return false;
+         else return root.contains(nam, pho);
+     } // contains() in PhoneTree
+\end{verbatim}
+\noindent The implementation of the {\tt contains()} method is only slightly
+more involved.
+\begin{verbatim}
+     public boolean contains(String nam, String pho){
+         if (name.equals(nam))
+             return true;
+         else if(name.compareTo(nam) < 0) { // name < nam
+             if (right == null) return false;
+             else return right.contains(nam, pho);
+         } else {  // name > nam
+             if (left == null) return false;
+             else return left.contains(nam, pho);
+         }
+     } // contains() in PhoneTreeNode
+\end{verbatim}
+
+
+In this chapter, we gave you a brief introduction to the concept of a
+dynamic data structure and tried to illustrate how they work and why
+they are useful for organizing and managing large amounts of data. We
+also introduced you to an important new language feature introduced in
+Java 1.5, the concept of generic types.  Obviously, we have only
+scratched the surface of the important topic of data structures and
+the algorithms used to manage them.  For a broader and deeper
+treatment of this subject, you will have to take a {\em Data
+Structures and Algorithms} course, which is a fundamental course in
+most computer science curricula.
+
+%\section*{}{Chapter Summary}
+\secSMHleft{Chapter Summary}
+%\addcontentsline{toc}{section}{\S~~~ Chapter Summary}
+
+\secKTH{Technical Terms}
+\begin{KT}
+Abstract Data Type (ADT)
+
+binary search tree
+
+data structure
+
+dequeue
+
+dynamic structure
+
+enqueue
+
+first-in--first-out (FIFO)
+
+generic type
+
+Java collections framework
+
+key
+
+last-in--first-out (LIFO)
+
+link
+
+list
+
+linked list
+
+pop
+
+push
+
+queue
+
+reference
+
+self-referential object
+
+stack
+
+static structure
+
+traverse
+
+value
+
+vector
+
+\end{KT}
+
+\secSMHtwo{Summary of Important Points}
+
+\begin{SMBL}
+\item  A {\it data structure} is used to organize
+data and make them more efficient to process.  An array is
+an example of a {\it static structure}, since its size
+does not change during a program's execution.  A vector
+is an example of a {\it dynamic structure}, one whose
+size can grow and shrink during a program's execution.
+
+\item  A {\it linked list} is a linear structure in which
+the individual nodes of the list are joined together by references.  A
+{\it reference} is a variable that refers to an object.  Each node in
+the list has a {\it link} variable that refers to another node.  An
+object that can refer to the same kind of object is said to be {\it
+self-referential}.
+
+\item  The {\tt Node} class is an example of a self-referential class.
+It contains a link variable that refers to a {\tt Node}. By assigning
+references to the link variable, {\tt Node}s can be chained together
+into a linked list.  In addition to their link variables, {\tt Node}s
+contain data variables, which should be accessible through public
+methods.
+
+\item  Depending on the use of a linked list, nodes can be
+inserted at various locations in the list: at the head,
+the end, or in the middle of the list.
+
+\item  Traversal algorithms must be used to access the elements
+of a singly linked list.  To traverse a list you start at the
+first node and follow the links of the chain until you
+reach the desired node.
+
+\item  Depending on the application, nodes can be
+removed from the front, rear, or middle of a linked list.
+Except for the front node, traversal algorithms are used to locate the
+desired node.
+
+\item  In developing list algorithms, it is important to test
+them thoroughly.  Ideally, you should test every possible combination
+of insertions and removals that the list can support.  Practically, you
+should test every independent case of insertions and removals that the
+list supports.
+
+\item  An {\it Abstract Data Type (ADT)} is a concept
+that combines two elements: A collection of data, and the operations
+that can be performed on the data.  For the list ADT, the data are the
+values ({\tt Object}s or {\tt int}s) contained in the nodes that make
+up the list, and the operations are insertion, removal, and tests of
+whether the list is empty.
+
+\item  In designing an ADT, it's important to provide a public
+interface that can be used to access the ADT's data.  The ADT's
+implementation details should not matter to the user and should,
+therefore, be hidden.  A Java class definition, with its {\tt public}
+and {\tt private} aspects, is perfectly suited to implement an ADT.
+
+\item  A {\it stack} is a list that allows insertions and removals
+only at the front of the list.  A stack insertion is called a {\it
+push} and a removal is called a {\it pop}. The first element in a
+stack is usually called the top of the stack.   The {\tt Stack} ADT can
+easily be defined as a subclass of {\tt List}. Stacks are used
+for managing the method call and return in most programming languages.
+
+\item  A {\it queue} is a list that only allows insertions at the
+rear and removals from the front of a list.  A queue insertion is
+called {\it enqueue}, and a removal is called {\it dequeue}.  The
+{\tt Queue} ADT can easily be defined as a subclass of {\tt List}. Queues
+are used for managing the various lists used by the CPU scheduler---such as
+the ready, waiting, and blocked queues.
+
+\item  A {\it binary search tree} is a binary tree in which the ordered data
+stored at any node is greater than all data stored in the left 
+subtree and is less
+than all data stored in the right subtree.
+\end{SMBL}
+
+
+%\section*{}{Answers to Self-Study Exercises}
+\secANSH
+%\addcontentsline{toc}{section}{\S~~~ Answers to Self-Study Exercises}
+\begin{ANS}
+\item  \mbox{ }
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+Node node = new Node(new String("Hello"));
+\end{verbatim}
+\end{CDT}
+
+
+\item  \mbox{ }
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+Node node = new Node(new Student("William"));
+\end{verbatim}
+\end{CDT}
+
+\item  \mbox{ }
+
+\begin{CDT}{29pt}
+\begin{verbatim}
+PhoneListNode newNode = new PhoneListNode("Bill C", "111-202-3331");
+nodeptr.setNext(newNode);
+\end{verbatim}
+\end{CDT}
+
+\item  The following condition is too general.  It will cause the 
+loop to exit as soon
+as a nonnull node is encountered, whether or not the node matches the
+one being sought.
+
+\begin{CDT}{18pt}
+\begin{verbatim}
+((current.getNext() != null)||(!current. getName().equals(name)))
+\end{verbatim}
+\end{CDT}
+
+\item  The {\tt PhoneList} program will generate the
+following output, which has been edited slightly
+to improve its readability:
+
+\begin{CDT}{381pt}
+\begin{verbatim}
+Phone Directory
+---------------
+Roger M 997-0020        Roger W 997-0086        Rich P  997-0010
+Jane M  997-2101        Stacy K 997-2517
+Looking up numbers by name
+   Roger M 997-0020
+   Rich P 997-0010
+   Stacy K 997-2517
+   Sorry. No entry for Mary P
+Removed Rich P  997-0010
+Phone Directory
+---------------
+Roger M 997-0020        Roger W 997-0086        Jane M  997-2101
+Stacy K 997-2517
+Removed Roger M 997-0020
+Phone Directory
+---------------
+Roger W 997-0086        Jane M  997-2101        Stacy K 997-2517
+Removed Stacy K 997-2517
+Phone Directory
+---------------
+Roger W 997-0086        Jane M  997-2101
+Removed Jane M  997-2101
+Phone Directory
+---------------
+Roger W 997-0086
+Sorry. No entry for Jane M
+Phone Directory
+---------------
+Roger W 997-0086
+Removed Roger W 997-0086
+Phone Directory
+---------------
+Phone list is empty
+\end{verbatim}
+\end{CDT}
+
+\item  Executing the following method calls will test
+whether it is possible to insert items into a
+list after items have been removed:
+
+\begin{CDT}{150pt}
+\begin{alltt}
+       {\color{cyan}// Create and insert some nodes}
+PhoneList list = new PhoneList();
+list.insert(new PhoneListNode("Roger M", "997-0020"));
+list.insert(new PhoneListNode("Roger W", "997-0086"));
+System.out.println(list.remove("Roger M") );
+list.insert(new PhoneListNode("Rich P", "997-0010"));
+System.out.println(list.remove("Roger W"));
+list.insert(new PhoneListNode("Jane M", "997-2101"));
+list.insert(new PhoneListNode("Stacy K", "997-2517"));
+System.out.println(list.remove("Jane M"));
+System.out.println(list.remove("Stacy K"));
+list.print();
+       {\color{cyan}// List should be empty}
+\end{alltt}
+\end{CDT}
+
+\item  The  List ADT program will produce the
+following output:
+
+\begin{CDT}{249pt}
+\begin{verbatim}
+Generic List
+---------------
+Hello World
+8647
+Roger M 997-0020
+Jane M 997-2101
+Stacy K 997-2517
+  Removed Stacy K 997-2517
+Generic List:
+Hello World
+8647
+Roger M 997-0020
+Jane M 997-2101
+  Removed Jane M 997-2101
+Generic List:
+Hello World
+8647
+Roger M 997-0020
+  Removed Hello World
+Generic List:
+8647
+Roger M 997-0020
+
+\end{verbatim}
+\end{CDT}
+
+\item  Executing the following method calls will test
+whether it is possible to insert items into a
+  {\tt List} after items have been removed:
+
+\begin{CDT}{194pt}
+\begin{alltt}
+       {\color{cyan}// Create and insert some nodes}
+List list = new List();
+list.insertAtFront(new PhoneRecord("Roger M", "997-0020"));
+list.insertAtFront(new PhoneRecord("Roger W", "997-0086"));
+System.out.println("Current List Elements");
+list.print();
+Object o = list.removeLast();   {\color{cyan}// Remove last element}
+list.insertAtFront(o);        {\color{cyan}// Insert at the front of the list}
+System.out.println("Current List Elements");
+list.print();
+o = list.removeFirst();
+System.out.println("Removed " + o.toString());
+o = list.removeFirst();
+System.out.println("Removed " + o.toString());
+list.insertAtRear(o);
+System.out.println("Current List Elements");
+list.print();                   {\color{cyan}// List should have one element}
+\end{alltt}
+\end{CDT}
+
+\item  The {\tt peek()} method should just return the
+first node without deleting it:
+
+\begin{CDT}{40pt}
+\begin{verbatim}
+public Object peek() {
+     return head;
+}
+\end{verbatim}
+\end{CDT}
+
+\item  The {\tt peekLast()} method can be modeled after the
+{\tt List.re\-moveLast()} method:
+
+\begin{CDT}{117pt}
+\begin{alltt}
+public Object peekLast() \verb|{|
+     if (isEmpty())
+         return null;
+     else \verb|{|
+         Node current = head;             {\color{cyan}// Start at head of list}
+         while (current.getNext() != null){\color{cyan}// Find the end 
+of the list}
+             current = current.getNext();
+         return  current;                 {\color{cyan}// Return last node}
+     \verb|}|
+\verb|}| {\color{cyan}// peekLast()}
+\end{alltt}
+\end{CDT}
+
+\item  The following class tests the {\tt java.util.Stack<E>} class:
+
+\begin{CDT}{147pt}
+\begin{alltt}
+import java.util.*;
+public class StackTest\verb|{|
+public static void main( String argv[] ) \verb|{|
+     Stack<Character> stack = new Stack<Character>();
+     String string = "Hello this is a test string";
+
+     System.out.println("String: " + string);
+     for (int k = 0; k < string.length(); k++)
+         stack.push(new Character(string.charAt(k)));
+
+     Character ch = null;
+     String reversed = "";
+     while (!stack.empty()) \verb|{|
+         ch  = stack.pop();
+         reversed = reversed + ch.charValue();
+     \verb|}|
+     System.out.println("Reversed String: " + reversed);
+\verb|}| {\color{cyan}// main()}
+\verb|}| {\color{cyan}// StackTest class}
+\end{alltt}
+\end{CDT}
+
+
+\end{ANS}
+
+%\section*{}{Exercises}
+\secEXRHtwoleft{Exercises}
+\marginnote{\raggedright\vspace{9pt}{\bf Note:} For programming 
+exercises, {\bf first} draw
+a UML class diagram describing all classes and
+their inheritance relationships and/or associations.}
+%\addcontentsline{toc}{section}{\S~~~ Exercises}
+\begin{EXRtwo}
+
+\item  Explain the difference between each of the following pairs of terms:
+\begin{EXRtwoLL}
+\begin{multicols}{2}
+\item  {\it Stack} and {\it queue}.
+\item  {\it Static structure} and {\it dynamic structure}.
+\item  {\it Data structure} and {\it Abstract Data Type}.
+\item  {\it Push} and {\it pop}.
+\item  {\it Enqueue} and {\it dequeue}.
+\item  {\it Linked list} and {\it node}.
+\end{multicols}
+\end{EXRtwoLL}
+
+\item  Fill in the blanks.
+\begin{EXRtwoLL}\baselineskip=12.5pt
+\item  An {\it Abstract Data Type} consists of two
+main parts: \rule{40pt}{0.5pt} and \rule{40pt}{0.5pt}\,.
+\item  An object that contains a variable that refers to an object of
+the same class is a \rule{40pt}{0.5pt}\,.
+\item  One application for a \rule{40pt}{0.5pt} is to manage the method
+call and returns in a computer program.
+\item  One application for a \rule{40pt}{0.5pt} is to balance the parentheses
+in an arithmetic expression.
+\item  A \rule{40pt}{0.5pt} operation is one that starts at the beginning
+of a list and processes each element.
+\item  A vector is an example of a \rule{40pt}{0.5pt} data structure.
+\item  An array is an example of a \rule{40pt}{0.5pt} data structure.
+\item  By default, the initial value of a reference variable
+is \rule{40pt}{0.5pt}\,.
+\end{EXRtwoLL}\baselineskip=11pt
+
+\item  Add a {\tt removeAt()} method to the {\tt List} class to
+return the object at a certain index location in the list.  This method
+should take an {\tt int} parameter, specifying the object's position
+in the list, and it should return an {\tt Object}.
+
+\item  Add an {\tt insertAt()} method to the {\tt List} class that
+will insert an object at a certain position in the list.  This method
+should take two parameters, the {\tt Object} to be inserted, and an
+{\tt int} to designate where to insert it.   It should return a
+{\tt boolean} to indicate whether the insertion was successful.
+
+
+\item  Add a {\tt removeAll()} method to the {\tt List} class.
+This {\tt void} method should remove all the members of the list.
+
+\item  Write an {\tt int}  method named {\tt size()} that returns the
+number of elements in a {\tt List}.
+
+\item  Write an {\tt boolean}  method named {\tt contains(Object o)} 
+that returns
+{\tt true} if its {\tt Object} parameter is contained in the list.
+
+\item  The {\it head} of a list is the first element in the list.
+The {\it tail} of a list consists of all the elements except the
+head.  Write a method named {\tt tail()} that returns a reference to
+the tail of the list.  Its return value should be {\tt Node}.
+
+\item  Write a program that uses the {\tt List} ADT
+to store a list of 100 random floating-point numbers.   Write methods
+to calculate the average of the numbers.
+
+\item  Write a program that uses the {\tt List} ADT
+to store a list of {\tt Student} records, using a variation of the Student
+class defined in Chapter 14.  Write a method to calculate the mean
+grade point average for all students in the list.
+
+\item  Write a program that creates a copy of a {\tt List}.
+It is necessary to copy each node of the list.  This will require that
+you create new nodes that are copies of the nodes in the original
+list.  To simplify this task, define a copy constructor for your node
+class and then use that to make copies of each node of the list.
+
+\item  Write a program that uses a {\tt Stack} ADT to determine
+if a string is a palindrome---spelled the same way backward and
+forward.
+
+\item  Design and write a program that uses a {\tt Stack} to determine
+whether a parenthesized expression is well-formed.  Such an expression
+is well formed only if there is a closing parenthesis for each opening
+parenthesis.
+
+\item  Design and write a program that uses {\tt Stack}s to determine
+whether an expression involving both parentheses and square brackets
+is well formed.
+
+\item  Write a program that links two lists together, appending
+the second list to the end of the first list.
+
+\item  Design a {\tt Stack} class that uses
+a {\tt Vector} instead of a linked list to store its elements.  This
+is the way Java's {\tt Stack} class is defined.
+
+\item  Design a {\tt Queue} class that uses
+a {\tt Vector} instead of a linked list to store its elements.
+
+\item  {\bf Challenge:} Design a {\tt List} class, similar in
+functionality to the one we designed in this chapter, that uses an
+{\it array} to store the list's elements.  Set it up so that the middle
+of the array is where the first element is placed.  That way you can still
+insert at both the front and rear of the list.   One limitation of this
+approach is that, unlike a linked list, an array has a fixed
+size.  Allow the user to set the initial size of the array in a
+constructor, but if the array becomes full, don't allow any further
+insertions.
+
+\item  {\bf Challenge:} Add a method to the program in the previous
+exercise that lets the user increase the size of the array used to
+store the list.
+
+\item  {\bf Challenge:} Recursion is a useful technique for list processing.
+Write recursive versions of the {\tt print()} method and the lookup-by-name
+method for the {\tt PhoneList}. ({\it Hint}: The base case in processing
+a list is the empty list.  The recursive case should handle the head of
+the list and then recurse on the tail of the list.  The tail of the
+list is everything but the first element.)
+
+
+\item  {\bf Challenge:} Design an {\tt OrderedList} class.  An ordered
+list is one that keeps its elements in order.  For example, if it's an
+ordered list of integers, then the first integer is less than or equal
+to the second, the second is less than or equal to the third, and so
+on.  If it's an ordered list of employees, then perhaps the employees
+are stored in order according to their social security numbers.  The
+{\tt OrderedList} class should contain an {\tt insert(Object o)}
+method that inserts its object in the proper order.  One major
+challenge in this project is designing your class so that it will work
+for any kind of object.  ({\it Hint:} Define an {\tt Orderable} interface
+that defines an abstract {\tt precedes()} method.  Then
+define a subclass of {\tt Node} that implements {\tt Orderable}. This
+will let you compare any two {\tt Node}s to see which one comes before
+the other.)
+\end{EXRtwo}
+%
