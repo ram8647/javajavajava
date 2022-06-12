@@ -48,19 +48,6 @@
       These designations follow two important object-oriented design conventions,
       whose justification will become apparent as we discuss the <c>Riddle</c> class:
     </p>
-    <principle>
-      <title>EFFECTIVE DESIGN: Private Variables</title>
-      <p>
-        Instance variables are usually declared <c>private</c> so that they cannot be directly accessed by other objects.
-      </p>
-    </principle>
-    <principle>
-      <title>EFFECTIVE DESIGN: Public Methods</title>
-      <p>
-        An object's <c>public</c> methods can be used by other objects to interact with the object.
-        The <c>public</c> methods and variables of an object make up its <term>interface</term>.
-      </p>
-    </principle>
     <p>
       <xref ref="list-riddleclass2">Listing</xref>
       shows the Java class definition that corresponds to the design given in the UML diagram.
@@ -91,11 +78,25 @@ public class Riddle {
     <p>
       The <c>private</c> and <c>public</c> modifiers are known as <term>access modifiers</term>. 
       They control access to an object's elements, such as its variables or methods, by other objects <mdash/>
-      preventing access to private elements (<term>information hiding principle</term>) and permitting access
-      to the public elements (<term>interface principle</term>).  
+      preventing access to private elements and permitting access
+      to the public elements.  
       Note also that the <c>Riddle</c> class itself is declared <c>public</c>, which allows access to its 
       objects through its public variables and methods.
     </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Private Variables</title>
+      <p>
+        Instance variables are usually declared <c>private</c> so that they cannot be directly accessed by other objects.
+        This is an example of <term> information hiding</term>.
+      </p>
+    </principle>
+    <principle>
+      <title>EFFECTIVE DESIGN: Public Methods</title>
+      <p>
+        An object's <c>public</c> methods can be used by other objects to interact with the object.
+        The <c>public</c> methods and variables of an object make up its <term>interface</term>.
+      </p>
+    </principle>
     <p>
       Recall that a class definition is like a blueprint or a cookie cutter.
       The <c>Riddle</c> class defines the type of information (attributes) that each <c>Riddle</c> object has,
@@ -205,7 +206,7 @@ Riddle riddle2 = new Riddle(
     </p>
   </subsection>
   <subsection>
-    <title>Interacting with <c>Riddle</c> s</title>
+    <title>Interacting with <c>Riddles</c></title>
     <p>
       Once we have created <c>Riddle</c> instances with values assigned to their <c>question</c> and <c>answer</c> instance variables,
       we can ask each riddle to tell us either of its values.
