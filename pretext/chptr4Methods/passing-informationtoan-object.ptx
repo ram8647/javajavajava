@@ -45,9 +45,9 @@
       but you would probably not want a public
 <c>getAccountPassword()</c> method or a public <c>setAccountBalance()</c> method.
     </p>
-    <p>
-      <subsection><title>Defining and Invoking a Method</title></subsection>
-      
+    
+      <subsection><title>Defining and Invoking a Method</title>
+    <p>  
       There are two steps to using a method. First, you must define the method, writing a method definition, such as
     </p>
 <program language="java"><input>
@@ -84,8 +84,8 @@ public void printStr(String s)
       }
     }
     </input> </program>
-
-    <subsection><title>Parameters</title></subsection>
+</subsection>
+    <subsection><title>Parameters</title>
     <p>
       Let's turn back to our Nim game. In the <c>OnRowNim</c> class, we defined three mutator methods named <c>takeOne()</c>,
 <c>takeTwo()</c>, and <c>takeThree</c> in the previous chapter.
@@ -228,7 +228,7 @@ public void setGame(int sticks, int starter)
 } // setGame()
 </input></program>
 
-
+</subsection>
       <subsection><title>Local vs. Class Scope</title>
   
     <p>
@@ -472,8 +472,51 @@ public static void main (String argv[])
       The state of <c>game</c> at this point is shown in (d).
       Notice that the value of <c>nSticks</c> has been reduced to 4.
     </p>
+
+     <activity>
+            <statement><p>Click on Next below to trace through the Nim code</p></statement>
+           <program  xml:id="nimTrace" interactive="codelens" language="java"><input>
+/*
+ * File: OneRowNim.java
+ * Author: Java Java Java
+ * Description: Defines an object that plays OneRowNim. This version
+ *   uses a single method to takeSticks().
+ */
+        
+public class OneRowNim
+{   private int nSticks = 7;         // Start with 7 sticks
+    private int player = 1;          // Player 1 plays first
+
+    /** 
+     * takeSticks() will remove num sticks
+     * @param num -- the number of sticks to remove.
+     */
+    public void takeSticks(int num)
+    {   nSticks = nSticks - num;
+        player = 3 - player;
+    }  // takeSticks()
+
+    public void report()
+    {   System.out.println("Number of sticks left: " + nSticks);
+        System.out.println("Next turn by player " + player);
+    } // report()
+
+    public static void main (String argv[])
+    { 
+      OneRowNim game = new OneRowNim(); // Declare a OneRowNim instance called game
+      game.report();               // Report state of game
+      game.takeSticks(1);     // remove 1 stick
+      game.report();
+      game.takeSticks(2);     // remove 2 sticks
+      game.report();
+      // Add code here to take 3 sticks and report
+
+    } // end of main
+} // OneRowNim class
+</input></program>
+        </activity>
   </subsection>
-  <subsection xml:id="self-study-exercisesA12">
+  <subsection xml:id="ScannerNim">
     <title>Passing keyboard input to <c>takeSticks()</c></title>
     <p>
       To complete this section,
@@ -545,12 +588,12 @@ Next turn by player 2
                       <feedback>
                         <p>Correct. Parameter variables declared in the method header have local scope and only exist inside the method body.</p>
                       </feedback>
+                  </condition>
                   <condition string=".*">
                         <feedback>
                             <p>Incorrect.</p>
                         </feedback>
                     </condition>
-                  </condition>
                   </var>
                   </setup>
                   </exercise>
