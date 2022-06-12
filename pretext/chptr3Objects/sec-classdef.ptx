@@ -17,30 +17,30 @@
       <em>Methods</em> are used to process the information.
       To design an object you need to answer five basic questions:
     </p>
-    <sidebyside>
-      \begin{NL}
-      \item  What role will the object perform in the program?
-      \item  What data or information will it need?
-      \item  What actions will it take?
-      \item  What interface will it present to other objects?
-      \item  What information will it hide from other objects?
-      \end{NL}
-    </sidebyside>
+      <ol>
+      <li><p>What role will the object perform in the program?</p></li>
+      <li><p>  What data or information will it need?</p></li>
+      <li><p>  What actions will it take?</p></li>
+      <li><p>  What interface will it present to other objects?</p></li>
+      <li><p>  What information will it hide from other objects?</p></li>
+      </ol>
     <p>
-      <image width="73%" source="chptr02/riddle.png"/>
     </p>
   </introduction>
   <subsection>
     <title>The <c>Riddle</c>Class</title>
     <p>
       Recall our definition of the <c>Riddle</c> class from Chapter<nbsp/>1,
-      which is summarized in the UML diagram in Figure<nbsp/>2.11.
-      A
-<c>Riddle</c> has two attributes, <c>question</c> and <c>answer</c>. Each of these variables stores a string of characters,
-      which Java treats as data of type <c>String</c>. The <c>Riddle</c> class contains three methods.
-      The <c>Riddle()</c> constructor method assigns initial values (<c>q</c> and <c>a</c>) to its <c>question</c> and <c>answer</c> variables.
-      The <c>getQuestion()</c> and <c>getAnswer()</c> methods return the data stored in <c>question</c> ands <c>answer</c> respectively.
+      which is summarized in the UML diagram in <xref ref="fig_riddle">Figure</xref>.
+      A <c>Riddle</c> has two attributes, <c>question</c> and <c>answer</c>. Each of these variables stores a <c>String</c>. 
+      It contains three methods, the <c>Riddle()</c> constructor, the <c>getQuestion()</c> and 
+      <c>getAnswer()</c> methods.
     </p>
+
+    <figure xml:id="fig_riddle">
+     <caption>The <c>Riddle</c> class.</caption>
+      <image width="40%" source="chptr02/riddle.png"/>
+    </figure>  
     <p>
       The instance variables <c>question</c> and <c>answer</c> are designated as <c>private</c>(<m>-</m>),
       but the <c>Riddle()</c>, <c>getQuestion()</c> and <c>getAnswer()</c> methods are designated as <c>public</c>
@@ -49,120 +49,113 @@
       whose justification will become apparent as we discuss the <c>Riddle</c> class:
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Private Variables</title>
+      <title>EFFECTIVE DESIGN: Private Variables</title>
       <p>
         Instance variables are usually declared <c>private</c> so that they cannot be directly accessed by other objects.
       </p>
     </principle>
     <principle>
-      <title>EFFECTIVE DESIGN:Public Methods</title>
+      <title>EFFECTIVE DESIGN: Public Methods</title>
       <p>
         An object's <c>public</c> methods can be used by other objects to interact with the object.
-        The
-<c>public</c> methods and variables of an object make up its <term>interface</term>.
+        The <c>public</c> methods and variables of an object make up its <term>interface</term>.
       </p>
     </principle>
     <p>
-      <xref ref="fig-riddleclass2">Figure</xref>
+      <xref ref="list-riddleclass2">Listing</xref>
       shows the Java class definition that corresponds to the design given in the UML diagram.
-      It contains the
+      It contains the two <c>private</c> instance variables and defines the three <c>public</c> methods listed in the UML diagram.
     </p>
-    <figure xml:id="fig-riddleclass2">
+    <listing xml:id="list-riddleclass2">
       <caption>Definition of the <c>Riddle</c> class.</caption>
  <program language="java"><input>
-public class Riddle
-{ private String question; //Instance variables
+public class Riddle {
+  private String question; //Instance variables
   private String answer;
-  public Riddle(String q, String a) // Constructor
-  { question = q;
+
+  public Riddle(String q, String a) {  // Constructor
+    question = q;
     answer = a;
   } // Riddle constructor
-  public String getQuestion() // Instance method
-  { return question;
+
+  public String getQuestion() {  // Instance method
+    return question;
   } // getQuestion()
-  public String getAnswer() // Instance method
-  { return answer;
-  } //getAnswer()} //Riddle class
+
+  public String getAnswer() {   // Instance method
+    return answer;
+  } //getAnswer()
+} //Riddle class
  </input></program>
-    </figure>
+    </listing>
     <p>
-      two <c>private</c> instance variables and defines the three <c>public</c> methods listed in the UML diagram.
-      In a Java class definition,
-      access to a class element, such as a variable or a method,
-      is controlled by labeling it with either the <c>private</c>, or <c>public</c> access modifier.
-      An <term>access modifier</term> is a declaration  that controls access to a class or one of its elements.
-      Note also that the <c>Riddle</c> class itself is declared <c>public</c>. This lets other classes have access to the class and to its public variables and methods.
+      The <c>private</c> and <c>public</c> modifiers are known as <term>access modifiers</term>. 
+      They control access to an object's elements, such as its variables or methods, by other objects <mdash/>
+      preventing access to private elements (<term>information hiding principle</term>) and permitting access
+      to the public elements (<term>interface principle</term>).  
+      Note also that the <c>Riddle</c> class itself is declared <c>public</c>, which allows access to its 
+      objects through its public variables and methods.
     </p>
     <p>
-      Recall that a class is like a blueprint or a cookie cutter.
-      The <c>Riddle</c> class defines the type of information (attributes) that each individual <c>Riddle</c> has,
+      Recall that a class definition is like a blueprint or a cookie cutter.
+      The <c>Riddle</c> class defines the type of information (attributes) that each <c>Riddle</c> object has,
       but it doesn't contain any actual values.
-      It defines the methods (operations) that each <c>Riddle</c> can perform,
+      It defines the methods (operations) that each <c>Riddle</c> object can perform,
       but it doesn't actually perform the methods.
-      In short, a class serves as a template,
-      providing a detailed blueprint of the  objects
-      (or instances)
-      of that class.
     </p>
   </subsection>
   <subsection xml:id="fig-userint">
-    <title>The <c>RiddleUser</c>Class</title>
+    <title>The <c>RiddleUser</c> Class</title>
     <p>
-      Now that we have defined the <c>Riddle</c> class,
-      we can test that it works correctly by creating <c>Riddle</c> objects and
-      <q>asking</q>
-      them to tell us their riddles.
-      To do this we need to define a <c>main()</c> method,
-      which can be defined either within the <c>Riddle</c> class itself or in a second class named something like <c>RiddleUser</c>.
+      To test <c>Riddle</c> we need to define a <c>main()</c> method,
+      which can be defined either within the <c>Riddle</c> class itself or 
+      in a second class.
     </p>
     <p>
-      One advantage of using a second class is that it gets us in the  habit of thinking about the need for a separate class to serve as a user interface,
-      with a separate set of tasks from the <c>Riddle</c> class.
-      A <term>user interface</term> is an object or class that handles the interaction between a program's user and the rest of the program's computational tasks.
-      This concept is illustrated in Figure<nbsp/>2.13.
-      Note that we use the general term
-      <em>computational object</em>
-      to distinguish the rest of the program's computations from the user interface.
-      Obviously, the exact nature of the computation will vary from program to program,
-      just as will the details of the user interface.
-      The computation done by our <c>Riddle</c> class is just the storing and displaying of a riddle's question and answer.
-      <image width="73%" source="chptr02/ui.png"/> By separating user interface tasks from riddle tasks this design employs the divide-and-conquer principle:
-      the <c>RiddleUser</c> class will create <c>Riddle</c> objects and handle interactions with the user,
-      and the <c>Riddle</c> class will handle the storing and transmission of riddle information.
+      One advantage of using a second class is that it gets us in the  habit of thinking about the 
+      need for a separate object to serve as a user interface.
+      A <term>user interface</term> is an object that handles the interaction between a program's 
+      user and the rest of the program's tasks (<xref ref="fig-interface">"Figure</xref>).
+    </p>
+    <p>     
+      We use the general term
+      <term>computational object</term>
+      to distinguish the rest of the program's tasks from its user interface.
+      The <c>Riddle's</c> task is just to manage simple riddles.
+    </p>
+    <figure xml:id="fig-interface">
+      <caption>The <c>RiddleUser</c> class.</caption>
+      <image width="40%" source="chptr02/ui.png"/> 
+    </figure>
+    <p>  
       Thus, as shown in <xref ref="fig-p63f2">Figure</xref>,
-      this particular Java program will involve interaction between two types of objects:
-      a <c>RiddleUser</c> and one
+      this program will involve interaction between two types of objects:
+      a <c>RiddleUser</c> and one or more <c>Riddles</c>. The 
+      relationship between them, represented by a one-way <q>Uses</q> arrow,is that  
+      the <c>RiddleUser</c> will create a <c>Riddle</c> instance and use its methods to display
+      a riddle for the user.
     </p>
     <figure xml:id="fig-p63f2">
       <caption>This UML class diagram represents an <em>association</em>
       between the <c>RiddleUser</c> and <c>Riddle</c> classes.  The <c>RiddleUser</c> class will <em>use</em> one or more objects of the <c>Riddle</c> class.</caption>
-      <image width="73%" source="chptr02/riddleuser.png"/>
+      <image width="40%" source="chptr02/riddleuser.png"/>
     </figure>
-    <p>
-      or more <c>Riddles</c>. Note that we characterize the relationship between <c>Riddle</c> and <c>RiddleUser</c> with a one-way arrow labeled
-      <q>Uses.</q>
-      This is because the <c>RiddleUser</c> will create an instance of <c>Riddle</c> and use its methods to display
-      (for the user)
-      a riddle.
+    <p>  
+      This design employs the <term>divide-and-conquer principle</term>. The problem has been divided into
+      two distinct tasks, the user interface (<c>RiddleUser</c>) and the computation (<c>Riddle</c>). Each 
+      type of object manages its own task and they work together to solve a problem.
     </p>
     <p>
       Because almost all of our programs will involve some form of a user interface,
-      we can generalize this design approach and follow it throughout the book.
-      One way to think about this approach is as a division of labor between a user interface class and a second
-      <em>computational</em> class,
-      which performs whatever computations are needed by the particular program.
-      In this case the computations are the simple
-<c>Riddle</c> methods that we have defined.
-      In subsequent programs the computations will become more complex,
-      which will make all the more clear that they should be separated from the user interface.
+      we will follow this design approach throughout the book.  It will serve us well.
+      especially as our problems and our programs become more complex.
     </p>
   </subsection>
   <subsection>
     <title>Object Instantiation: Creating <c>Riddle</c>Instances</title>
     <p>
       <xref ref="fig-riddleuser">Figure</xref>
-      shows the complete definition of the
-<c>RiddleUser</c> class,
+      shows the complete definition of the <c>RiddleUser</c> class,
       which serves as a very simple user interface.
       It creates two <c>Riddle</c> objects,
       named <c>riddle1</c> and <c>riddle2</c>. It then asks each object to request each riddle's question and answer and displays them on the console.
