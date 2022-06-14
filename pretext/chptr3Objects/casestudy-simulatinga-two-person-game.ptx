@@ -101,7 +101,7 @@
       </p>
       <figure xml:id="fig-onerownimclass">
         <caption>The <c>OneRowNim</c> class.</caption>
-        <image width="40%" source="chptr02/onerow3.png"/> 
+        <image width="30%" source="chptr02/onerow3.png"/> 
       </figure>
     </subsubsection>
   </subsection>
@@ -128,7 +128,7 @@
       </p>
       <figure xml:id="fig-onerownim1">
         <caption><c>OneRowNim</c> is a sub-class of <c>Object</c>.</caption>
-      <image width="73%" source="chptr02/onerow1.png"/>
+      <image width="30%" source="chptr02/onerow1.png"/>
       </figure>
  <program language="java"><input>
 public class OneRowNim  // Class header
@@ -167,11 +167,13 @@ public class ClassName
         Although Java does not impose any particular order on variable and method declarations,
         in this book we'll define the class's class-level variables at the beginning of the class definition,
         followed by method definitions.
+      </p>
+      <p>
         Class-level variables are distinguished from  local variables.
         A <term>local variable</term> is a variable that is defined within a method.
-        Examples would be the variables <c>q</c> and <c>a</c> that were defined in the <c>Riddle(String q, String a)</c> constructor (Fig.
-        <xref ref="fig-riddleclass2"></xref>).
-        As we will see better in Chapter 3, Java handles each type of variable differently.
+        Examples would be the variables <c>q</c> and <c>a</c> that were defined in the <c>Riddle(String q, String a)</c> 
+        constructor (<xref ref="fig_riddle">Figure</xref>).
+        As we will see better in the next chapter, Java handles each type of variable differently.
       </p>
       <p>
         A declaration for a variable at class level must follow the rules for declaring variables that were described in <xref ref="subsec_vardecl">Section</xref>
@@ -201,7 +203,18 @@ public class ClassName
         in which case Java's default accessibility will apply.
       </p>
       <p>
-        Java determines accessibility in a top-down manner.
+        The <c>Riddle</c> class (<xref ref="lstng_riddleclass">Listing</xref>) that we considered earlier has the following two examples of valid declarations of instance variables:
+      </p>
+ <program language="java"><input>
+private String question;
+private String answer;
+ </input></program>
+
+ <subsubsection>
+  <title>Default Accessibility</title>
+
+      <p>
+        Java determines <term>default accessibility</term> in a top-down manner.
         Instance variables and methods are contained in classes,
         which are contained in packages.
         To determine whether a instance variable or method is accessible, Java starts by determining whether its containing package is accessible,
@@ -210,7 +223,7 @@ public class ClassName
         and methods is defined according to the rules shown in Table<nbsp/>2.2.
       </p>
       <table>
-        \vspace{6pt}\TBT{0pc}{Java's accessibility rules.}
+        <caption>Java's accessibility rules.</caption>
         
         <tabular>
           <row>
@@ -248,7 +261,7 @@ public class ClassName
             <cell>Accessible to its subclasses and to</cell>
           </row>
           <row>
-            <cell><nbsp/><nbsp/> instance method</cell>
+            <cell><nbsp/><nbsp/>instance method</cell>
             <cell></cell>
             <cell><nbsp/><nbsp/>  other classes in its package.</cell>
           </row>
@@ -269,6 +282,8 @@ public class ClassName
         \endTB
         \vspace{-6pt}
       </table>
+  </subsubsection>
+      <!--
       <p>
         Recall the distinction we made in Chapter 0 between class variables and instance variables.
         A class variable is associated with the class itself,
@@ -278,13 +293,8 @@ public class ClassName
         but only the class itself contains the single copy of a class variable.
         To designate a variable as a class variable it must be declared <c>static</c>.
       </p>
-      <p>
-        The <c>Riddle</c> class that we considered earlier has the following two examples of valid declarations of instance variables:
-      </p>
- <program language="java"><input>
-private String question;
-private String answer;
- </input></program>
+    -->
+
     </subsubsection>
     <subsubsection>
       <title>Class Level Variables for <c>OneRowNim</c></title>
@@ -303,29 +313,20 @@ public class OneRowNim
 {
   private int nSticks = 7;
   private int player = 1;
+
   //Method definitions go here} // OneRowNim
  </input></program>
       <p>
         To summarize, despite its apparent simplicity,
         a class level variable declaration actually accomplishes five tasks:
       </p>
-      <p>
-        \begin{NL} \item Sets aside a portion of the object's memory that can be used to store a certain type of data.
-      </p>
-      <p>
-        \item Specifies the type of data that can be stored in that location.
-      </p>
-      <p>
-        \item Associates an identifier
-        (or name)
-        with that location.
-      </p>
-      <p>
-        \item Determines which objects have access to the variable's name.
-      </p>
-      <p>
-        \item Assigns an initial value to the location. \end{NL}
-      </p>
+      <ul>
+      <li><p>Sets aside a portion of the object's memory that can be used to store a certain type of data.</p></li>
+      <li><p>Specifies the type of data that can be stored in that location.</p></li>
+      <li><p>Associates an identifier (or name) with that location.</p></li>
+      <li><p>Determines which objects have access to the variable's name.</p></li>
+      <li><p>Assigns an initial value to the location.</p></li>
+      </ul>
     </subsubsection>
     <subsubsection>
       <title><em>OneRowNim</em>'s Methods</title>
@@ -342,7 +343,8 @@ public class OneRowNim
       </p>
  <program language="java"><input>
 public void methodName()  // Method header
-{                  // Beginning of method body}                  // End of method body
+{                  // Beginning of method body
+}                  // End of method body
  </input></program>
     </subsubsection>
     <subsubsection>
@@ -364,10 +366,10 @@ public void methodName()  // Method header
             <cell><c>__________</c></cell>
           </row>
           <row>
-            <cell>{MethodModifiers}<m>_{opt}</m></cell>
-            <cell>{ResultType}</cell>
-            <cell>{MethodName}</cell>
-            <cell>{(FormalParameterList)}</cell>
+            <cell>MethodModifiers<m>_{opt}</m></cell>
+            <cell>ResultType</cell>
+            <cell>MethodName</cell>
+            <cell>(FormalParameterList)</cell>
           </row>
           <row>
             <cell><c>__________</c></cell>
@@ -376,28 +378,34 @@ public void methodName()  // Method header
             <cell><c>public</c><c>static</c></cell>
             <cell><c>void</c></cell>
             <cell><c>main</c></cell>
-            <cell><c>
-(String argv[])</c>\cr
-    <c>public</c></cell>
-            <cell><c>void</c></cell>
-            <cell><c>paint</c></cell>
-            <cell><c>(Graphics g)</c>\cr
-    <c>public</c></cell>
-            <cell></cell>
-            <cell><c>Riddle</c></cell>
-            <cell><c>(String q, String a)</c>\cr
-    <c>public</c></cell>
-            <cell><c>String</c></cell>
-            <cell><c>getQuestion</c></cell>
-            <cell><c>()</c>\cr
-    <c>public</c></cell>
-            <cell><c>String</c></cell>
-            <cell><c>getAnswer</c></cell>
-            <cell><c>()</c>\cr</cell>
+            <cell><c>(String argv[])</c></cell>
           </row>
           <row>
-            <cell><c>__________</c>
-              \endUNTB</cell>
+            <cell><c>public</c></cell>
+            <cell><c>void</c></cell>
+            <cell><c>paint</c></cell>
+            <cell><c>(Graphics g)</c></cell>
+          </row>
+          <row>
+            <cell><c>public</c></cell>
+            <cell></cell>
+            <cell><c>Riddle</c></cell>
+            <cell><c>(String q, String a)</c></cell>
+          </row>
+          <row>
+            <cell><c>public</c></cell>
+            <cell><c>String</c></cell>
+            <cell><c>getQuestion</c></cell>
+            <cell><c>()</c></cell>
+          </row>
+          <row>
+            <cell><c>public</c></cell>
+            <cell><c>String</c></cell>
+            <cell><c>getAnswer</c></cell>
+            <cell><c>()</c></cell>
+          </row>
+          <row>
+            <cell><c>__________</c></cell>
           </row>
         </tabular>
       </table>
@@ -406,16 +414,17 @@ public void methodName()  // Method header
         and <c>public</c> methods are accessible to all other classes.
       </p>
       <principle>
-        <title>EFFECTIVE DESIGN:Public versus Private Methods</title>
+        <title>EFFECTIVE DESIGN: Public vs. Private Methods</title>
         <p>
           If a method is used to communicate with an object,
           or if it passes information to or from an object,
           it should be declared <c>public</c>. If a method is intended to be used solely for internal operations within the object,
-          it should be declared <c>private</c>. These methods are sometimes called
+          it should be declared <c>private</c>. Private methods are sometimes called
           <term>utility methods</term>
           or <term>helper methods</term>.
         </p>
       </principle>
+  <!--
       <p>
         Recall the distinction from Chapter 0 between instance methods and class methods.
         Methods declared at the class level are assumed to be instance methods unless they are also declared <c>static</c>. The
@@ -444,10 +453,7 @@ public void methodName()  // Method header
           must be declared <c>static</c>.
         </p>
       </principle>
-      <p>
-        All four of the methods in the <c>OneRowNim</c> class are instance methods (Fig.<nbsp/>2.19).
-        They all perform actions
-      </p>
+    -->
       <figure xml:id="fig-ornmheaders">
         <caption>The Instance variables and method headers for the <c>
 OneRowNim</c> class.</caption>
@@ -462,7 +468,8 @@ public class OneRowNim
  </input></program>
       </figure>
       <p>
-        associated with a particular instance of <c>OneRowNim</c>. That is,
+        All four of the methods in the <c>OneRowNim</c> class are instance methods (Fig.<nbsp/>2.19).
+        They all perform actions associated with a particular instance of <c>OneRowNim</c>. That is,
         they are all used to manage a particular One Row Nim game.
         Moreover, all four methods should be declared <c>public</c>, because they are designed for communicating with other objects rather than for performing internal calculations.
         Three of the methods are described as changing the values of the instance variables <c>nSticks</c> and
