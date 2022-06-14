@@ -3,13 +3,10 @@
   <introduction>
     <p>
       In this section,
-      we will design and write the definition for a class that keeps track of the details of a well known,
-      two-person game.
-      We will focus on details of designing the definition of a class in the Java language.
-      Our objective is to understand what the program is doing and how it works without necessarily understanding why it works the way it does.
-      We will get to
-      <q>why</q>
-      later in the book.
+      we will design a class definition that keeps track of the details of a well known,
+      two-person game.  Our objective is to understand what the program is doing and 
+      how it works without necessarily understanding why it works the way it does.
+      We will get to <q>why</q> later in the book.
     </p>
     <p>
       The game we will consider is played by two persons with a row of sticks or coins or other objects.
@@ -18,94 +15,94 @@
       two, or three sticks from the row on his or her turn.
       The player who removes the last stick from the row loses.
       The game can be played with any number of sticks but starting with twenty one sticks is quite common.
-      This game is sometimes referred to as the game of "Nim", but there is a similar game involving multiple rows of sticks that is more frequently given that name.
+      This game is sometimes referred to as the game of "Nim", but there is a similar 
+      game involving multiple rows of sticks that is more frequently given that name.
       Thus we will refer to this game as "One Row Nim".
     </p>
   </introduction>
   <subsection>
     <title>Designing a OneRowNim class</title>
-    <subsubsection>
-      <title>Problem Specification</title>
-      <p>
-        Let's design a class named <c>OneRowNim</c> that simulates the game of One Row Nim with a row of sticks.
-        An object constructed with this class should manage data that corresponds to having some specified number of sticks when the game begins.
-        It should keep track of whose turn it is and it should allow a player to diminish the number of sticks remaining by one, two,
-        or three.
+      <project>
+      <term>Specification:</term> Design a class named <c>OneRowNim</c> that simulates the game of One Row Nim with a row of sticks.
+        A <c>OneRowNim</c> object should manage data that corresponds to having some specified number 
+        of sticks when the game begins. 
+        It should keep track of whose turn it is and allow players to <q>take away</q> one, two,
+        or three sticks.
         Finally, a <c>OneRowNim</c> object should be able to decide when the game is over and which player has won.
-      </p>
-    </subsubsection>
+      </project>
+
+
     <subsubsection>
       <title>Problem Decomposition</title>
       <p>
-        Let's design <c>OneRowNim</c> so that it can be used in with different kinds of user interfaces.
-        One user interface could manage a game played by two persons who alternately designate their moves to the computer.
-        Another user interface could let a human player play against moves made by the computer.
-        In either of these cases we could have a human player designate a move by typing from the keyboard after being prompted in a console window or,
-        alternatively,
-        by inputting a number into a text field or selecting a radio button on a window.
-        In this chapter,
-        we will be concerned only with designing an object for managing the game.
-        We will design user interfaces for the game in subsequent chapters.
+        Let's design <c>OneRowNim</c> so that it can be used in with different kinds of user interfaces:
+        <ul>
+        <li><p>Person vs. persomn.</p></li>
+        <li><p>Person vs. computer.</p></li>
+        <li><p>Keyboard and console interface.</p></li>
+        <li><p>Graphical interface.</p></li>
+        </ul>
+      </p>
+      <p>
+        In this chapter, we will work on the <c>OneRowNim</c> class.
+        We will design the user interfaces in a subsequent chapter.
       </p>
     </subsubsection>
     <subsubsection>
       <title>Class Design: <c>OneRowNim</c></title>
       <p>
         As we saw in the <c>Riddle</c> example,
-        class definitions can usually be broken down into two parts: (1) the information or attributes that the object needs which must be stored in variables,
-        and (2) the behavior or actions the object can take which are defined in methods.
-        In this chapter,
-        we will focus on choosing appropriate instance variables and on designing methods as blocks of reusable code.
-        Recall that a parameter is a variable that temporarily stores data values that are being passed to a method when that method is called.
-        In this chapter,
-        we will restrict our design to methods that do not have parameters and do not return values.
-        We will return to the problem of designing changes to this class in the next chapter after an in-depth discussion of method parameters and return values.
+        class definitions are broken down into two parts: 
+        <ol>
+          <li><p>The information or attributes that the object needs (<term>variables</term>).</p></li>
+          <li><p>The behavior or actions the object can take (<term>methods</term>).</p></li>
+        </ol> 
       </p>
       <p>
         The <c>OneRowNim</c> object should manage two pieces of information  that vary as the game is played.
-        One is the number of sticks remaining in the row and the other is which player has the next turn.
-        Clearly, the number of sticks remaining corresponds to a positive integer that can be stored in a variable of type <c>int</c>. One suitable name for such a variable is <c>nSticks</c>. For this chapter,
-        let us assume that the game starts with 7 sticks,
-        rather than 21, to simplify discussion of the program.
+        One is the number of sticks remaining in the row and the other is which player has the next turn. We can 
+        represent both of these as whole numbers, which correspond to <c>int</c> in Java:
+        <tabular>
+          <row><cell>Variable Name</cell> <cell>Type</cell> <cell> Values</cell></row>
+          <row><cell>-------------</cell> <cell> <c>----</c></cell> <cell>------</cell></row>
+          <row><cell>nSticks</cell> <cell> <c> int</c></cell> <cell> 0 through 21</cell></row>
+          <row><cell>player</cell> <cell> <c> int</c></cell> <cell> 1 or 2</cell></row>
+        </tabular>          
       </p>
       <p>
-        Data designating which player takes the next turn could be stored in different ways.
-        One way to do this is to think of the players as player one and player two and store a 1 or 2 in an <c>int</c> variable.
-        Let's use <c>player</c> as the name for such a variable and assume that player one has the first turn.
+        As this table suggests, we will represent our two players as the numbers 1 or 2.
       </p>
       <p>
-        The values of these two variable for a particular <c>OneRowNim</c> object at a particular time describes the object's state.
-        An object's state at the beginning of a game is a 7 stored in <c>nSticks</c> and 1 stored in <c>player</c>. After player one removes,
-        say, two sticks on the first turn,
-        the values 5 and 2 will be stored in the two variables.
+        During the playing of the game, the values of these two variables will represent the state of the game:
+        whose turn it is, and whose turn it is.
       </p>
     </subsubsection>
     <subsubsection xml:id="fig-ornuml">
       <title>Method Decomposition</title>
       <p>
-        Now that we have decided what information the <c>OneRowNim</c> object should manage,
-        we need to decide what actions it should be able to perform.
-        We should think of methods that would be needed to communicate with a user interface that is both prompting some human players as well as receiving moves from them.  Clearly,
-        methods are needed for taking a turn in the game.
-        If a message to a <c>OneRowNim</c> object has no argument to indicate the number of sticks taken,
-        there will need to be three methods corresponding to taking one, two,
-        or three sticks.
-        The method names
-<c>takeOne()</c>, <c>takeTwo()</c>, and <c>takeThree()</c> are descriptive of this action.
-        Each of these methods will be responsible for reducing the value of <c>nSticks</c> as well as changing the value of <c>player</c>.
+        Now that we have decided the variables for <c>OneRowNim</c>, we need to design its methods. One action needed
+        is the taking away of 1-3 sticks. The easiest way to do this is to have three methods corresponding to taking one, two,
+        or three sticks: <c>takeOne()</c>, <c>takeTwo()</c>, and <c>takeThree()</c>.  Each method will be responsible 
+        for reducing the value of <c>nSticks</c> as well as switching to the other <c>player</c>.
       </p>
       <p>
-        We should also have a method that gives the information that a user needs when considering a move.
-        Reporting the number of sticks remaining and whose turn it is to the console window would be an appropriate action.
-        We can use <c>report()</c> as a name for this action.
+        (Once we learn how to use parameters and return values (next chapter), we'll be able to replace these three 
+        methods with a single method that can take away 1, 2 or 3 sticks.) 
       </p>
       <p>
-        Figure<nbsp/>2.16 is a UML class diagram that summarizes this <image width="73%" source="chptr02/onerow3.png"/> design of the <c>OneRowNim</c> class.
-        Note that the methods are declared public (<m>+</m>) and will thereby form the interface for a <c>OneRowNim</c> object.
-        These will be the methods that other objects will use to interact with it.
-        Similarly, we have followed the convention of designating an object's instance variables<mdash/>the OneRowNim 's instance variables<mdash/>be kept hidden from other objects,
-        and so we have designated them as private(<m>-</m>).
+        We also need a method that gives the information that a user needs when considering a move.  The <c>report()</c>
+        method will report the number of sticks remaining and whose turn it is.
       </p>
+      <p>
+        <xref ref="fig-onerownimclass">Figure</xref> is a UML class diagram that summarizes our design decisions.
+        Note that the instance variables are declared private (<m>-</m>) to hide them from other objects, and the methods 
+        are declared public (<m>+</m>) and will thereby form the <c>OneRowNim</c> interface.
+        These will be the methods that other objects will use to interact with it. 
+      </p>
+      <figure xml:id="fig-onerownimclass">
+        <caption>The <c>OneRowNim</c> class.</caption>
+        <image width="40%" source="chptr02/onerow3.png"/> 
+      </figure>
     </subsubsection>
   </subsection>
   <subsection>
@@ -124,10 +121,15 @@
         Like all classes that are designed to create objects that could be used by other objects or classes,
         the class <c>OneRowNim</c> should be preceded by the <c>public</c> modifier.
         Because the class <c>OneRowNim</c> has not been described as having any relationship to any other Java class,
-        its header can omit the <c>extends</c> clause so it will be a direct subclass of <c>Object</c>(Figure<nbsp/>2.17).
-        <image width="73%" source="chptr02/onerow1.png"/> Thus,
+        its header can omit the <c>extends</c> clause so it will be a direct subclass of <c>Object</c> 
+        (<xref ref="fig-onerownim1">(Figure</xref>).
+         Thus,
         the class header for <c>OneRowNim</c> will look like:
       </p>
+      <figure xml:id="fig-onerownim1">
+        <caption><c>OneRowNim</c> is a sub-class of <c>Object</c>.</caption>
+      <image width="73%" source="chptr02/onerow1.png"/>
+      </figure>
  <program language="java"><input>
 public class OneRowNim  // Class header
 {                       // Beginning of class body
