@@ -71,7 +71,8 @@ public void printStr(String s)
     </p>
     
     <p>Try this out in the active code below. Try changing the string in the main method and run it again.</p>
-    <program language="java"  xml:id="printStr" interactive='activecode'><input>
+    <exercise label="printStr">
+    <program language="java" interactive='activecode'><input>
     public class SimpleClass
     {
       public void printStr(String s)
@@ -84,10 +85,12 @@ public void printStr(String s)
       }
     }
     </input> </program>
+    </exercise>
+
 </subsection>
     <subsection><title>Parameters</title>
     <p>
-      Let's turn back to our Nim game. In the <c>OnRowNim</c> class, we defined three mutator methods named <c>takeOne()</c>,
+      Let's turn back to our Nim game. In the <c>OneRowNim</c> class, we defined three mutator methods named <c>takeOne()</c>,
 <c>takeTwo()</c>, and <c>takeThree</c> in the previous chapter.
       All three of these method change the values of the instance variables <c>nSticks</c> and <c>player</c> and  
      have very similar code.
@@ -148,13 +151,13 @@ public void takeSticks(int num)
       <image width="60%" source="chptr03/parameter-mapping.png"/>
     </figure>
 
-  <exercise xml:id="nimTakeSticksExercise">
+  <exercise label="nimTakeSticksExercise">
     <statement>
       <p>Run the following code to see player 1 take 1 stick and player 2 take 2 sticks. 
         Scroll down to the main method and call the takeSticks method with the argument 3 to take 3 sticks and call report. 
         What would happen if you took more sticks than are left? Try it and see. Our program needs to add some error-checking!</p>
     </statement>
-<program language="java"  xml:id="nimTakeSticks" interactive='activecode'><input>
+<program language="java" interactive='activecode'><input>
 /*
  * File: OneRowNim.java
  * Author: Java Java Java
@@ -275,6 +278,14 @@ public void setGame(int sticks, int starter)
       and all methods have scope that extends throughout the entire class,
       that is, <term>class scope</term>.
       They can be used in the body of any method and in the expressions that assign initial values to class level variables.
+      </p>
+
+<figure xml:id="fig-scope">
+      <caption>Argument to Parameter Mapping</caption>
+      <image width="100%" source="chptr03/scope.png"/>
+    </figure>      
+      
+      <p>
       There are two restrictions to remember.
       First, instance variables and instance methods cannot be used in the body of a class <c>static</c> method,
       unless an instance of the class is created there and then the dot notation of qualified names must be used to  refer to the variable or method.
@@ -633,12 +644,12 @@ Next turn by player 2
           </p>
         </li>
       </ol>
-      <exercise>xml:id="setNamesEx">
+      <exercise label="setNamesEx">
         <statement>
           <p>Add private instance variables for the player names, a setNames method with 2 parameters to set these 
             instance variables, and call the method from main with the arguments Xena and Yogi.</p>
         </statement>
-      <program language="java"  xml:id="nimSetNameEx" interactive='activecode'><input>
+      <program language="java" interactive='activecode'><input>
         /*
          * File: OneRowNim.java
          * Author: Java Java Java

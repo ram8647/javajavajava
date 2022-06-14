@@ -12,7 +12,7 @@
       A second problem is with the definition of <c>takeSticks()</c>:
     </p>
  <program language="java"><input>
-public void takeSticks(int num)
+  public void takeSticks(int num)
   {   nSticks - num;
       player = 3 - player;
   }
@@ -22,7 +22,7 @@ public void takeSticks(int num)
       The call <c>game.takeSticks(5)</c> will remove 5 sticks even though the rules of One Row Nim say that you must remove 1, 2, or 3.
       While one might assume that the user interface should prevent the user from breaking this rule,
       it is a far better design if it was dealt with in <c>OneRowNim</c>. To do this we need a Java structure that executes different statements depending on whether the parameter is greater than 3, less than 1, or between 1 and 3.
-      The Java <em>if-else</em> statement has this capability.
+      The Java <term>if-else</term> statement has this capability.
       A fuller treatment of control structures appears in Chapter 6, but in this section,
       we will briefly introduce a couple of simple control structures.
       This will enable us to write programs that take more interesting actions.
@@ -33,68 +33,104 @@ public void takeSticks(int num)
     <p>
       A <term>selection</term> control structure,
       allows a program to select between two or more alternative paths of execution.
-      The if statement is the most basic selection control structure in Java.
+      The <term>if statement</term> is the most basic selection control structure in Java.
       Most programming languages have its equivalent. 
     </p>
     <principle>
       <title>If Statement</title>
       <p>
-        The <term>if statement</term> has the following syntax:
+        The <term>if statement</term><idx><h>if statement</h></idx> has the following syntax:
       </p>
       <p>
-        <m>\matrix{ if \amp ( \; \textit{boolean\;expression} \; ) \cr \;\;\;\; \amp \textit{contained statement} \; ; \cr}</m>
+        <program language="java"><input>
+        if (<em>boolean expression</em>) 
+            <em>contained statement</em>;
+      </input></program>
       </p>
     </principle>
     <p>
       The statement contained in the if statement can be any valid Java statement,
       including a compound statement.
-      (Recall from Chapter 1 that a compound statement is a set of statements contained within curly braces.)
-      The <c>boolean expression</c> is an expression that is either <c>true</c> or <c>false</c>. We have seen examples of boolean expressions that involve <c>int</c> variables, <c>int</c> values,
+      Recall from Chapter 2 that a compound statement is a set of statements contained within curly braces.
+      The <c>boolean expression</c> is an expression that is either <c>true</c> or <c>false</c>. 
+      We have seen examples of boolean expressions that involve <c>int</c> variables, <c>int</c> values,
       and the inequality or equality operators.
       A method call to a method with a <c>boolean</c> result type is another example of a <c>boolean</c> expression.
       Given this description of if statement syntax,
-      the following are examples of valid if statements:
-    </p>
- <program language="java"><input>
-if (true) System.out.println("Hello");
-if (nSticks &lt;= 0) System.out.println("game is over");
- </input></program>
-    <p>
-      For readability,
+      the following are examples of valid if statements.   For readability,
       we usually write an if statement with its contained statement indented on the next line:
     </p>
  <program language="java"><input>
-if (true)
-      System.out.println("Hello");
-  if (nSticks &lt;= 0)
-      System.out.println("game is over");
+if (true) 
+   System.out.println("Hello");
+if (nSticks &lt;= 0) 
+   System.out.println("game is over");
  </input></program>
+    
+    
     <p>
       The following are all examples of syntax errors involving the if statement:
     </p>
  <program language="java"><input>
 if true                   // Parentheses are missing
-    System.out.println("Hello");
+   System.out.println("Hello");
 if (nSticks &lt;= 0) return   // Semicolon missing
 if ("true") return;  // "true" is not a boolean
 if (true) "Hello";    // "Hello" is  not a statement
  </input></program>
     <p>
       Semantically, the if statement
-          <idx><h>if statement</h></idx>
       has the following interpretation: First,
       the boolean condition is evaluated.
       If it is true, then the contained statement is executed;
       if it is false, then the contained statement is not executed.
-      This is shown in Figure<nbsp/>3.11.
-      The flowchart clearly shows that program flow will take <image width="73%" source="chptr03/3f12.png"/> one or the other of the alternative paths coming out of the diamond-shaped boolean condition box.
+      This is shown in <xref ref="fig-if-flow">Figure</xref> below.   The flowchart clearly shows that program flow will take 
+       one or the other of the alternative paths coming out of the diamond-shaped boolean condition box.
       The branch through the rectangular statement box will be taken when the boolean condition is true;
       otherwise the statement will be skipped.
+
+      <figure xml:id="fig-if-flow">
+        <caption>Flowchart of if statement.</caption>
+      <image width="50%" source="chptr03/3f12.png"/>
+      </figure>
+      
     </p>
+
+    <exercise label="ifRainEx">
+      <statement><p>Try the following code. Try changing the boolean isRaining to <c>false</c> and run again. 
+        What does it print out? Trace through the code with CodeLens.</p></statement>
+      <program interactive="activecode"><input>
+      public class RainMonitor
+         public static void main(String[] args)
+         {
+           boolean isRaining = true;
+           if (isRaining)
+              System.out.println("Take an umbrella!");
+           System.out.println("Drive carefully");
+         }
+      }
+    </input></program>  
+    </exercise>
+</subsection>
+    <subsection><title>Relational Operators</title>
+    
     <p>
-      As another example,
-      consider the definition of a <c>getPlayerString()</c> method for the <c>OneRowNim</c> class:
-    </p>
+      Most if statements have a boolean condition that uses relational operators like <c>==</c> (equal), 
+      <c>!=</c> (not equal), <c>&lt;</c>, <c>&gt;</c>, <c>&lt;=</c>, <c>&gt;=</c>.
+      The double equal sign <c>==</c> is used in if statements and other control structures to <em>test</em> a variable's value. 
+      One equal sign (<c>-</c>) is used to assign a value to a variable like <c>player = 1;</c>, but two equal signs (<c>==</c>)
+      are used to test the variable's value, so that <c>player == 1</c> will return <c>true</c> or <c>false</c>.
+      </p>
+      <principle>
+        <title>DEBUGGING TIP: Equality and Assignment</title>
+        <p>
+          A common semantic error among beginning programmers is to use the assignment operator (=) when the equality operator (==) is intended.
+        </p>
+      </principle>
+
+      <p>As another example,
+      consider the definition of a <c>getPlayerString()</c> method for the <c>OneRowNim</c> class. 
+</p>    
  <program language="java"><input>
 public String getPlayerString()
 {
@@ -102,19 +138,23 @@ public String getPlayerString()
     return "Player One"; // Exit the method
   if (player == 2)
     return "Player Two"; // Exit the method
-  return "Player error";   // Exit the method}
+  return "Player error";   // Exit the method
+}
  </input></program>
+
+
+
     <p>
       The flowchart in <xref ref="fig-getplayerflow">Figure</xref>
       shows the program flow of the entire <c>getPlayerString()</c> method.
-      It is important to note
+     
     </p>
     <figure xml:id="fig-getplayerflow">
       <caption>Flowchart of the <c>getPlayerString()</c> method.</caption>
       <image width="73%" source="chptr03/player.png"/>
     </figure>
     <p>
-      that when a <c>return</c>
+      It is important to note that when a <term>return</term>
           <idx><h>return statement</h></idx>
       statement is executed in a method,
       control is returned immediately to the calling method.
@@ -128,18 +168,54 @@ public String getPlayerString()
       and the string
       <q>Player Two</q>
       should be returned and the method exited.
-      Thus, if we have a consistent state <mdash/>that is,
+      Thus, if we have a consistent state <mdash/> that is,
       if <c>player</c> has value 1 or 2<mdash/>then the third <c>return</c> statement should never be reached.
     </p>
+    
+
+    <exercise label="ifNumEx">
+      <statement><p>Run the following active code a couple times until you see all the possible outputs. It prints out whether a random number is positive or equal to 0. Add another if statement that tests if it is a negative number.
+      </p></statement>
+      <program interactive="activecode"><input>
+    public class TestNumbers
+    {
+       public static void main(String[] args)
+       {
+           // Get a random number from -10 up to 10.
+           int number = (int) (Math.random() * 21) - 10;
+           System.out.println("The number is " + number);
+    
+           // is it positive?
+           if (number > 0)
+           {
+               System.out.println(number + " is positive!");
+           }
+           // is it 0?
+           if (number == 0)
+           {
+               System.out.println(number + " is zero!");
+           }
+           // is it negative?
+           // Add another if statement
+    
+       }
+    }
+  </input>
+   </program>
+    </exercise>
+    </subsection>
+    <subsection><title>Compound Statements inside Ifs</title>
     <p>
       The following example shows the more common case where the statement contained in an if statement can be a compound statement: 
     </p>
  <program language="java"><input>
 if (player == 1)
-{   String s = "Player One";
-    System.out.print (s);
-    System.out.println (" plays next");
-    System.out.println (" The game is not over");}
+{   
+    String s = "Player One";
+    System.out.print(s);
+    System.out.println(" plays next");
+    System.out.println("The game is not over");
+}
  </input></program>
     <p>
       If <c>player == 1</c> is true,
@@ -150,15 +226,22 @@ if (player == 1)
       the compound statement itself is not followed by a semicolon because it is already enclosed in braces.
     </p>
     <p>
-      A common programming error is to forget the braces around the compound statement.
+      <principle>
+        <title>DEBUGGING TIP: Compound Statements in Control Structures</title>
+        <p>
+          A common semantic error among beginning programmers is to forget the braces (curly brackets) around the compound statement..
+          Indentation can improve the readability of a program but doesn't affect its logic.
+        </p>
+      </principle>
+      
       Merely indenting the statements following the if clause doesn't alter the logic of the if statement.
       For example,
       the following if statement still has only one statement in its if clause:
     </p>
  <program language="java"><input>
 if (condition1)
-  System.out.println("One");
-  System.out.println("Two"); //Not part of if statement
+   System.out.println("One");
+   System.out.println("Two"); //Not part of if statement
  </input></program>
     <p>
       This segment will always print
@@ -170,18 +253,15 @@ if (condition1)
  <program language="java"><input>
 if (condition1)
 {  System.out.println("One");
-   System.out.println("Two");}
+   System.out.println("Two");
+}
  </input></program>
-    <principle>
-      <title>DEBUGGING TIP:Indentation</title>
-      <p>
-        Indentation can improve the readability of a program but doesn't affect its logic.
-        Braces must be used to group statements in the if clause.
-      </p>
-    </principle>
+    
   </subsection>
+  
+  
   <subsection xml:id="sec-ifelse">
-    <title>The <c>if-else</c>Statement</title>
+    <title>The <c>if-else</c> Statement</title>
     <p>
       A second version of the if statement incorporates an <c>else</c> clause into the structure.
       This allows us to execute either of two separate statements
@@ -209,7 +289,12 @@ else
         has the following syntax:
       </p>
       <p>
-        <m>\matrix{ \texttt{if} \amp ( \; \textit{boolean\;expression } \; ) \cr \;\;\;\;\;\;\; \amp \textit{statement1 } \; ; \cr \;\;\texttt{else } \amp \cr \;\;\;\;\;\;\; \amp \textit{statement2 } \; ; \cr}</m>
+        <program language="java"><input>
+        if (<em>boolean expression</em>) 
+           <em>statement 1</em>;       
+        else
+           <em>statement 2</em>; 
+           </input></program>
       </p>
     </principle>
     <p>
@@ -234,9 +319,14 @@ else
       <em>boolean expression</em> is true,
       execute <em>statement1</em>;
       otherwise execute <em>statement2</em>.
-      This <image width="73%" source="chptr03/3f14.png"/> interpretation is shown in <xref ref="fig-ifelsechart">Figure</xref>.
+      This 
+      interpretation is shown in <xref ref="fig-ifelsechart">Figure</xref>. 
+      <figure xml:id="fig-ifelsechart"><caption>If-Else Flowchart</caption>
+      <image width="50%" source="chptr03/3f14.png"/> 
+    </figure>
     </p>
   </subsection>
+
   <subsection xml:id="sec-multi">
     <title>The Nested if/else Multiway Selection Structure</title>
     <p>
@@ -246,21 +336,20 @@ else
       including another if statement or if-else statement.
       In other words,
       it is possible to embed one or more if-else statements inside another if-else statement,
-      thereby creating a <em>nested
+      thereby creating a <term>nested if-else</term>
           <idx><h>nested if-else</h></idx>
-      </em> control structure.
+       control structure.
       As with most things,
       making a control structure too complex isn't a good idea,
       but there is a standard nested if-else control structure that is very useful.
-      It is known as <em>multiway selection
-          <idx><h>multiway selection</h></idx>
-      </em>.
+      It is known as <term>multiway selection</term>
+          <idx><h>multiway selection</h></idx>.
       As shown in <xref ref="fig-multiway">Figure</xref>,
       the multiway structure is used when you want to select one and only one option from several alternatives.
     </p>
     <figure xml:id="fig-multiway">
       <caption>Flowchart of a nested if-else statement.</caption>
-      <image width="73%" source="chptr03/multi.png"/>
+      <image width="70%" source="chptr03/multi.png"/>
     </figure>
     <p>
       Suppose we have an <c>int</c> variable <c>num</c> that will contain one of the values <m>1</m>,
@@ -270,16 +359,32 @@ else
       there are three alternatives plus an error state.
       Here is the Java code for this example:
     </p>
- <program language="java"><input>
-if (num == 1)
-   System.out.println("One");
-else if (num == 2)
-   System.out.println("Two");
-else if (num == 3)
-   System.out.println("Three");
-else
-   System.out.println("Error: Unknown value");
+
+    
+  <exercise label="nestedIfEx">
+    <statement><p>Run the following active code a couple times until you see all the possible outputs. 
+      It prints out the English word for a random number between 0-2. 
+      Change the random range to 4 and add another if statement to print out "three".
+    </p></statement>
+    <program interactive="activecode"><input>
+  public class PrintNumbers
+  {
+     public static void main(String[] args)
+     {
+         // Get a random number from 0 up to 3 (but not including 3)
+         int number = (int) (Math.random() * 3);
+         System.out.println("The number is " + number);
+  
+         if (num == 0)
+            System.out.println("Zero");
+         else if (num == 1)
+            System.out.println("One");
+        else if (num == 2)
+            System.out.println("Two");
+        else
+            System.out.println("Error: Unknown value");
  </input></program>
+    </exercise>
     <p>
       Note that the multiway structure has a single entry point and that only one of the four possible alternatives is  executed.
       The code will print exactly one of the strings.
@@ -297,11 +402,13 @@ player = 3 - player;
     </p>
  <program language="java"><input>
 public String takeSticks(int num)
-{   nSticks = nSticks - num;
+{   
+  nSticks = nSticks - num;
   if (player == 1)
     player = 2;   // From 1 to 2
   else
-    player = 1;   // From 2 to 1}
+    player = 1;   // From 2 to 1
+  }
  </input></program>
     <p>
       In some respects this version of <c>takeSticks()</c> involves four lines of code instead of one but is simpler to understand.
@@ -322,13 +429,15 @@ public String takeSticks(int num)
 <c>boolean</c> parameter.
  <program language="java"><input>
 public String getStatus(boolean isDone)
-{   if (isDone)
+{   
+  if (isDone)
         return "Done";
-    else
-        return "Not Done";}
+   else
+        return "Not Done";
+ }
  </input></program>Draw a flowchart for the if-else version of the <c>getStatus()</c> method,
             using the figures in this section as a guide.
-            The if-else structure should be drawn exactly as shown in Figure<nbsp/>3.11.
+            The if-else structure should be drawn exactly as shown in <xref ref="fig-ifelsechart">Figure</xref>.
             It should have a single entry point that leads directly to the top of a diamond-shaped box that contains a boolean condition.
             There should be two branches coming out of the condition box.
             The one going to the right is the true case,
@@ -341,7 +450,7 @@ public String getStatus(boolean isDone)
         </li>
         <li>
           <p>
-            Identify the error in the following statements:
+            Identify the error in the following statements and fix them in the activecode below.
  <program language="java"><input>
 if (isHeavy == true)
     System.out.println("Heavy");
@@ -356,7 +465,8 @@ else
         </li>
         <li>
           <p>
-            Suppose we have an <c> int</c> instance variable named <c>player</c> in some class describing a three person game.
+            Suppose we have an <c> int</c> instance variable named <c>player</c> in some class describing a 
+            three person game.
             Write a method named
 <c>getPlayerName()</c> that returns a <c>String</c>. It should return
             <q>Ann</q>,
@@ -366,15 +476,12 @@ else
             when the value of <c>player</c> is respectively 1, 2, 3, or any other value.
           </p>
         </li>
-        <li>
-          <p>
-            How does a parameter for a primitive type differ from a parameter for a reference type?
-          </p>
-        </li>
+        
       </ol>
     </p>
   </subsection>
-  <subsection xml:id="self-study-exerciseN12">
+
+  <subsection xml:id="while-loops">
     <title>The While Structure</title>
     <p>
       A <term>repetition structure</term>
@@ -418,11 +525,13 @@ else
 public int sumSquares(int max)
 { int num = 1;
   int sum = 0;
-  while (num &lt;=  max) { // While num &lt;= max
+  while (num &lt;=  max)  // While num &lt;= max
+  {
     sum = sum + num*num; // Add square to sum
     num = num + 1;       // Add 1 to num
   } //while
-  return sum;           // Return the sum}
+  return sum;           // Return the sum
+ }
  </input></program>
     <p>
       Note that in this example,

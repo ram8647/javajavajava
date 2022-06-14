@@ -13,33 +13,35 @@
     </p>
  <program language="java"><input>
 public int getSticks()
-{   return nSticks;}
+{   return nSticks;
+}
 public int getPlayer()
-{   return player;}
+{   return player;
+}
  </input></program>
     <p>
-      Recall that a method's <em>ResultType</em>
+      A method's <term>Result Type</term> or <term>Return Type</term>
       is specified just in front of the <em>MethodName</em>.
       We want the two methods to return
 <c>int</c> values that represent <c>OneRowNim</c>'s instance variables.
       Therefore, their result types are both declared <c>int</c>.
     </p>
     <p>
-      Before we discuss how the value that is returned by a method is used when the method is called,
-      let's consider one more method definition.
       Many methods that return a value do a computation rather than simply returning the value of an instance variable.
       For example,
-      suppose we wish to define a method for the <c>OneRowNim</c> class that will notify the user of an instance of the class whether the game is over.
+      suppose we wish to define a method for the <c>OneRowNim</c> class that will notify the user of an 
+      instance of the class whether the game is over.
       Thus we want a method that, when called,
-      returns a <c>true</c> or <c>false</c> depending on whether or not all the sticks have been taken.
-<c>gameOver()</c> is a descriptive name of such a method and the method should have a <c>boolean</c> result type.
+      returns a <c>true</c> or <c>false</c> value depending on whether or not all the sticks have been taken.
+We can name this method <c>gameOver()</c> and give it a <c>boolean</c> result type.
       This method should return
 <c>true</c> when the instance variable <c>nSticks</c> no longer contains a positive <c>int</c> value.
       Thus we can define:
     </p>
  <program language="java"><input>
 public boolean gameOver()
-{   return (nSticks &lt;= 0);}
+{   return (nSticks &lt;= 0);
+}
  </input></program>
     <p>
       The expression <c>(nSticks &lt;= 0)</c> evaluates to a <c>false</c> value if <c>nSticks</c> stores a positive value and it evaluates to
@@ -99,7 +101,7 @@ game1.getSticks();
       The method <c>getSticks()</c> does nothing but return the value of <c>nSticks</c>, so simply calling the method accomplishes nothing.
     </p>
   </subsection>
-  <subsection xml:id="self-study-exercisesC12">
+  <subsection xml:id="OneNimWithGet">
     <title>An Expanded <c>OneRowNim</c>Class</title>
     <p>
       Let's add the new methods that return values to our
@@ -110,7 +112,7 @@ game1.getSticks();
       The inconvenience of a small amount of redundancy is outweighed by the added flexibility of being able to call all three methods.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Using Redundancy</title>
+      <title>EFFECTIVE DESIGN:U sing Redundancy</title>
       <p>
         Incorporating some redundancy into a class,
         such as providing more than one way to access the value of an instance variable,
@@ -124,51 +126,52 @@ game1.getSticks();
     <table xml:id="fig-ornuml2">
       <caption>A UML class diagram for the expanded <c>OneRowNim</c>.</caption>
       <tabular>
-        <row bottom="minor">
+        <row bottom="minor" left="minor">
           <cell></cell>
         </row>
-        <row>
+        <row left="minor">
           <cell>OneRowNim</cell>
         </row>
-        <row bottom="minor">
+        <row bottom="minor" left="minor">
           <cell></cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>-</m> nSticks: int</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>-</m> player: int</cell>
         </row>
-        <row bottom="minor">
+        <row bottom="minor" left="minor">
           <cell></cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> OneRowNim()</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> OneRowNim(in sticks:int)</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> OneRowNim(in sticks:int,in starter:int)</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> takeSticks(in num:int)</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> getSticks():int</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> getPlayer():int</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> gameOver():boolean</cell>
         </row>
-        <row>
+        <row left="minor">
           <cell><m>+</m> report()</cell>
         </row>
         <row bottom="minor">
           <cell></cell>
         </row>
+        <col right="minor"></col>
       </tabular>
     </table>
     <p>
@@ -203,6 +206,78 @@ Sticks remaining: 11
 <c>player</c> stores the value 1 after one turn.
     </p>
     
+    <p>Trace through the code in the following activity.</p>
+
+    <activity>
+      <statement><p>Click on Next to step through the code.</p></statement>
+      <program xml:id="OneRowNimWithGetTrace" interactive="codelens" language="java">
+      <input>
+      /*
+      * File: OneRowNim.java
+      * Author: Java Java Java
+      * Description: This version of OneRowNim includes several constructor
+      *  methods and several instance methods.
+      */
+     
+     public class OneRowNim
+     {   private int nSticks = 7;         // Start with 7 sticks
+         private int player = 1;          // Player 1 plays first
+     
+         public OneRowNim()
+         {   nSticks = 7;
+             player = 1;
+         }
+     
+         public OneRowNim(int sticks)
+         {   nSticks = sticks;
+         }
+     
+         public OneRowNim(int sticks, int starter)
+         {   nSticks = sticks; // Set the number of sticks
+             player = starter; // Set who starts
+         }
+     
+         /** 
+          * takeSticks() will remove num sticks
+          * @param num -- the number of sticks to remove.
+          */
+         public void takeSticks(int num)
+         {   nSticks = nSticks - num;
+             player = 3 - player;
+         }  // takeSticks()
+     
+         public int getSticks()
+         {   return nSticks;
+         }
+     
+         public int getPlayer()
+         {   return player;
+         }
+     
+         public boolean gameOver()
+         {   return (nSticks &lt;= 0);
+         }
+     
+         public void report()
+         {   System.out.println("Number of sticks left: " + nSticks);
+             System.out.println("Next turn by player " + player);
+         } // report()
+     
+         public static void main(String[] args) 
+         {   OneRowNim game = new OneRowNim(13,2);
+             game.takeSticks(2);
+             System.out.print("The game is over is: ");
+             System.out.println(game.gameOver());
+             System.out.print("The next turn is by player: ");
+             System.out.println(game.getPlayer());
+             System.out.print("Sticks remaining: ");
+             System.out.println(game.getSticks());
+         } // main()
+     } // OneRowNim class     
+      </input>
+  </program>
+  </activity>
+
       </subsection><subsection><title>Self-Study Exercises</title>
     <p>
         <ol>
@@ -219,18 +294,106 @@ System.out.println(myGame.gameOver());
         </li>
         <li>
           <p>
-            Suppose that an <c>int</c> instance variable named <c>nMoves</c> is added to the <c>OneRowNim</c> class that counts the number of moves taken in a One Row Nim game.
-            Write a Java method for the <c>OneRowNim</c> class to <em>get</em>
+             Suppose that an <c>int</c> instance variable named <c>nMoves</c> is added to the <c>OneRowNim</c> class that counts the number of moves taken in a One Row Nim game.
+             In the active code below or in your own development environment, write a Java method for the <c>OneRowNim</c> class to <em>get</em>
             the value stored in <c>nMoves</c>.
           </p>
         </li>
         <li>
           <p>
-            Write a method for the <c>OneRowNim</c> class called <c>playerOneGoesNext()</c> that returns a <c>boolean</c> value.
+            In the active code below or in your own development environment, write a method for the <c>OneRowNim</c> class called <c>playerOneGoesNext()</c> that returns a <c>boolean</c> value.
             The value returned should be true if and only if player one has the next turn.
           </p>
         </li>
       </ol>
     </p>
+
+
+    <exercise label="OneRowNimWithGetExercise">
+      <statement><p>Write a <em>get</em> method that returns
+        the value stored in <c>nMoves</c>.
+        Write a method <c>playerOneGoesNext()</c> that returns a <c>boolean</c> value true if player one has the next turn.
+      </p></statement>
+      <program xml:id="OneRowNimWithGetEx" interactive="activecode" language="java">
+      <input>
+      /*
+      * File: OneRowNim.java
+      * Author: Java Java Java
+      * Description: This version of OneRowNim includes several constructor
+      *  methods and several instance methods.
+      */
+     
+     public class OneRowNim
+     {   private int nSticks = 7;         // Start with 7 sticks
+         private int player = 1;          // Player 1 plays first
+         private int nMoves = 0;
+
+         public OneRowNim()
+         {   nSticks = 7;
+             player = 1;
+             nMoves = 0;
+         }
+     
+         public OneRowNim(int sticks)
+         {   nSticks = sticks;
+         }
+     
+         public OneRowNim(int sticks, int starter)
+         {   nSticks = sticks; // Set the number of sticks
+             player = starter; // Set who starts
+         }
+     
+         /** 
+          * takeSticks() will remove num sticks
+          * @param num -- the number of sticks to remove.
+          */
+         public void takeSticks(int num)
+         {   nSticks = nSticks - num;
+             player = 3 - player;
+             nMoves++;
+         }  // takeSticks()
+     
+         public int getSticks()
+         {   return nSticks;
+         }
+     
+         public int getPlayer()
+         {   return player;
+         }
+     
+         /** Write a get Method that returns nMoves */
+
+
+         public boolean gameOver()
+         {   return (nSticks &lt;= 0);
+         }
+     
+         /** Write a method playerOneGoesNext() that returns if player is equal (==) to 1. */
+
+
+         public void report()
+         {   System.out.println("Number of sticks left: " + nSticks);
+             System.out.println("Next turn by player " + player);
+         } // report()
+     
+         public static void main(String[] args) 
+         {   OneRowNim game = new OneRowNim(13,2);
+             game.takeSticks(2);
+             System.out.print("Is the game over? ");
+             System.out.println(game.gameOver());
+             System.out.print("The next turn is by player: ");
+             System.out.println(game.getPlayer());
+             System.out.print("Sticks remaining: ");
+             System.out.println(game.getSticks());
+             System.out.print("Number of Moves: ");
+             System.out.println(game.getnMoves());
+             System.out.print("Is it player one's turn? ");
+             System.out.println(game.playerOneGoesNext());
+         } // main()
+     } // OneRowNim class     
+      </input>
+  </program>
+</exercise>
+
   </subsection>
 </section>

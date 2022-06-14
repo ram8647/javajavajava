@@ -1,36 +1,43 @@
 <section xml:id="sec-constructors">
-  <title>Constructor Methods</title>
+  <title>Constructors</title>
   <introduction>
     <p>
       In the previous section,
       we looked at several examples of mutator methods that change the values of private instance variables of an object.
       It is possible to define mutator methods to set the initial values of instance variables after an object is created,
-      but initial values can also be set by constructors.
+      but initial values can also be set by <term>constructors</term>.
     </p>
     <p>
-      As you recall from Chapter 0, a <em>constructor
+     A <term>constructor
           <idx><h>constructor</h></idx>
-      </em> method is used to create an  instance
+     </term>  is used to create an  instance
       (or object)
       of a class and to assign initial values to instance variables.
-      A constructor declaration looks just like a method definition except it must have the same name as the class,
-      and it cannot declare a result type.
+      A constructor declaration looks just like a method definition except:
+      </p>
+      <p>
+        <ol><li>it must have the same name as the class,</li>
+        <li>and it does not have a return type.</li></ol>
+      </p>
+      <p>
       Unlike the class level variables and methods of a class,
       constructors are not considered members of the class.
       Therefore, they are not inherited by a class's subclasses.
-      Access to constructors is governed by the access modifiers <c>public</c> and <c>private</c>. Here is a simple constructor for our <c>OneRowNim</c> class:
+      Constructors usually are <c>public</c>.  
+      Here is a simple constructor for our <c>OneRowNim</c> class. Notice there is no return type void in between the public and the classname. 
     </p>
  <program language="java"><input>
 public OneRowNim()
 {   nSticks = 7;
-    player = 1;}
+    player = 1;
+}
  </input></program>
     <p>
       This constructor merely sets the initial values of the instance  variables, <c>nSticks</c> and <c>player</c>. In our current version of
 <c>OneRowNim</c> these variables are given initial values by using initializer statements when they are first declared:
     </p>
  <program language="java"><input>
-private int nSticks = 7;
+ private int nSticks = 7;
  private int player = 1;
  </input></program>
     <p>
@@ -45,7 +52,7 @@ private int nSticks = 7;
       For now, let's stick with initializing the instance variables when they are declared.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Constructors</title>
+      <title>EFFECTIVE DESIGN: Constructors</title>
       <p>
         Constructors provide a flexible way to initialize an object's instance variables when the object is created.
       </p>
@@ -79,7 +86,7 @@ OneRowNim game2 // Declare
       </p>
     </principle>
     <principle>
-      <title>DEBUGGING TIP:When to Use Return</title>
+      <title>DEBUGGING TIP: When to Use Return</title>
       <p>
         All method definitions except constructors must declare a return type.
       </p>
@@ -93,7 +100,8 @@ OneRowNim game2 // Declare
     </p>
  <program language="java"><input>
 public OneRowNim(int sticks)
-{   nSticks = sticks;}
+{   nSticks = sticks;
+}
  </input></program>
     <p>
       Now that we have this constructor we can use it when we create instances of <c>OneRowNim</c>:
@@ -103,13 +111,13 @@ OneRowNim game1 = new OneRowNim(21);
 OneRowNim game2 = new OneRowNim(13);
  </input></program>
     <p>
-      The effect of these statements is the same as if we had used the <c>setSticks()</c> method that was discussed briefly on <xref ref="meth-setsticks">page</xref>.
+      The effect of these statements is the same as if we had used the <c>setSticks()</c> method that was discussed briefly in the last section.
       The difference is that we can now set the number of sticks when we create the object.
     </p>
     <p>
       Should we keep the preceding constructor,
       or keep the <c>setSticks()</c> method or keep both in our class definition?
-      The constructor can only be invoked as part of a <c>new</c> statement when the object is created but the <c>setSticks()</c> method could be called anytime we want.
+      The constructor can only be invoked as part of a <c>new</c> statement when the object is created, but the <c>setSticks()</c> method could be called anytime we want.
       In many cases,
       having redundant methods for doing the same task in different ways would be an asset,
       because it allows for more flexibility in how the class could be used.
@@ -134,16 +142,79 @@ public void OneRowNim(int sticks)
         </li>
         <li>
           <p>
-            Change the <c>OneRowNim(int sticks)</c> constructor so that it sets the number of sticks and also have it also set player two as the player who takes the first turn.
+            In the active code below or in your own development environment, change the <c>OneRowNim(int sticks)</c> constructor so that it sets the number of sticks and also have it also set player two as the player who takes the first turn.
+          </p>
+        </li>
+        <li>
+          <p>
+            In the active code below or in your own development environment, write a constructor that takes 2 parameters to set the number of sticks and to set the player.
           </p>
         </li>
       </ol>
+
+      <exercise label="constructorEx">
+        <statement>
+          <p>Change the <c>OneRowNim(int sticks)</c> constructor to also set the player to 2. Write a constructor that takes 2 parameters to set the number of sticks and to set the player.</p>
+        </statement>
+      <program language="java" interactive='activecode'><input>
+        /*
+         * File: OneRowNim.java
+         * Author: Java Java Java
+         * Description: Defines an object that plays OneRowNim. 
+         */
+                
+        public class OneRowNim
+        {   private int nSticks;
+            private int player;
+            /** Constructors */
+            public OneRowNim()
+            {   nSticks = 7;
+                player = 1;
+            }
+            public OneRowNim(int sticks)
+            {   nSticks = sticks;
+                // add code here to set the player to 2
+
+            }
+
+           /**
+              Write a Constructor with two parameters to set the number of sticks
+              and to set initial player.
+            */
+
+
+
+            /** 
+             * takeSticks() will remove num sticks
+             * @param num -- the number of sticks to remove.
+             */
+            public void takeSticks(int num)
+            {   nSticks = nSticks - num;
+                player = 3 - player;
+            }  // takeSticks()
+            
+            /** 
+             * report() prints the game status
+             */
+            public void report()
+            {   System.out.println("Number of sticks left: " + nSticks);
+                System.out.println("Next turn by player " + player);   
+            } // report()
+        
+            public static void main (String argv[])
+            { 
+              OneRowNim game = new OneRowNim(10, 2); // This will invoke the 2 parameter constructor 
+              game.report();            
+            } // end of main
+        } // OneRowNim class
+        </input></program>
+        </exercise>
    
  </subsection>
   <subsection xml:id="sec-defaultconstructors">
     <title>Default Constructors</title>
     <p>
-      As we noted in Chapter 2, Java automatically provides a
+      Java automatically provides a
       <em>default constructor</em>
       when a class does not contain a constructor.
     </p>
@@ -175,6 +246,7 @@ public OneRowNim() { }
 OneRowNim game = new OneRowNim();
  </input></program>
   </subsection>
+ 
   <subsection>
     <title>Constructor Overloading and Method Signatures</title>
     <p>
@@ -185,7 +257,8 @@ OneRowNim game = new OneRowNim();
  <program language="java"><input>
 public OneRowNim() {} // Constructor #1
 public OneRowNim(int sticks)   // Constructor #2
-{   nSticks = sticks;}
+{   nSticks = sticks;
+}
  </input></program>
     <p>
       The first is an explicit representation of the default constructor.
@@ -200,7 +273,7 @@ public OneRowNim(int sticks)   // Constructor #2
       when two different  methods have the same name,
       it is known as <term>method overloading</term>.
       In this case, <c>OneRowNim</c> is used as the name for two distinct constructor methods.
-      What distinguishes one constructor from another is its <em>signature</em>,
+      What distinguishes one constructor from another is its <term>signature</term>,
       which consists of its name together with the number and types of formal parameters it takes.
       Thus, our <c>OneRowNim</c> constructors have the following distinct signatures:
     </p>
@@ -214,9 +287,7 @@ OneRowNim(int)
     </p>
     <p>
       The same point applies  to methods in general.
-      Two methods can have the same name as long as they have distinct signatures.
-      A <term>method signature</term> consists of its name,
-      and the number, types, and order of its formal parameters.
+      Two methods can have the same name as long as they have distinct <term>method signatures</term>.
       A class may not contain two methods with the same signature,
       but it may contain several methods with the same name,
       provided each has a distinct signature.
@@ -230,7 +301,7 @@ OneRowNim(int)
       </p>
     </principle>
     <p>
-      There is no limit to the amount of overloading that can be done in designing constructors and methods.
+      There is no limit to the amount of <term>overloading</term> that can be done in designing constructors and methods.
       The only restriction is that each method have a distinct signature.
       For example,
       suppose in addition to the two constructors we have already defined,
@@ -240,7 +311,8 @@ OneRowNim(int)
  <program language="java"><input>
 public OneRowNim(int sticks, int starter)
 {   nSticks = sticks; // Set the number of sticks
-    player = starter; // Set who starts}
+    player = starter; // Set who starts
+}
  </input></program>
     <p>
       When calling this constructor,
@@ -296,11 +368,11 @@ OneRowNim game5 = new OneRowNim(12, 2, 5);
       the Java compiler would complain that there is no constructor method that matches the invocation.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Method Call</title>
+      <title>DEBUGGING TIP: Method Call</title>
       <p>
         The signature of the method call<mdash/>its name and the number, types,
         and order of its arguments<mdash/>must exactly match the signature of the method definition.
       </p>
     </principle>
   </subsection>
-</section>
+</section>  
