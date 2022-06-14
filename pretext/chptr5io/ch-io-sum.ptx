@@ -1,0 +1,273 @@
+<section xml:id="ch-io-sum">
+    <title>Chapter Summary</title>
+    <subsection>
+      <title>Technical Terms</title> 
+      <p>
+       <tabular>
+       <row>
+      <cell>abstract class</cell>
+      <cell>input operation</cell>
+       </row>
+       <row>
+      <cell>abstract interface</cell>
+      <cell>input stream</cell>
+       </row>
+       <row>
+      <cell>abstract method</cell>
+      <cell>interface</cell>
+       </row>
+       <row>
+      <cell>AWT</cell>
+      <cell>layout manager</cell>
+       </row>
+       <row>
+      <cell>binary file</cell>
+      <cell>listener</cell>
+       </row>
+       <row>
+      <cell>buffer</cell>
+      <cell>model-view-controller (MVC) architecture</cell>
+       </row>
+       <row>
+      <cell>command-line interface</cell>
+      <cell>output operation</cell>
+       </row>
+       <row>
+      <cell>container</cell>
+      <cell>output stream</cell>
+       </row>
+       <row>
+      <cell>control element</cell>
+      <cell>stream</cell>
+       </row>
+       <row>
+      <cell>event-driven programming</cell>
+      <cell>Swing</cell>
+       </row>
+       <row>
+      <cell>event loop</cell>
+      <cell>text file</cell>
+       </row>
+       <row>
+      <cell>graphical user interface (GUI)</cell>
+      <cell>top-level container</cell>
+       </row>
+       <row>
+      <cell>helper method</cell>
+      <cell>user interface</cell>
+       </row>
+       <row>
+      <cell>inheritance</cell>
+      <cell>wrapper class</cell>
+       </row>
+      </tabular>
+    </p>
+</subsection>
+<subsection>
+ <title>Important Points</title>
+    <ul>
+        <li>
+          <p>
+            An input operation is any action that transfers data from the user to the computer's main memory via one of the computer's input devices.
+            An output operation is any action that transfers data from the computer's main memory to one of the computer's output devices.
+          </p>
+        </li>
+        <li>
+          <p>
+            The user interface is that part of the program that handles the input and output interactions between the user and the program.
+            As an interface,
+            it limits or constrains the manner in which the user can interact with the program.
+          </p>
+        </li>
+        <li>
+          <p>
+            In a command-line interface, user input is taken from the keyboard,
+            and the program's output is displayed on some kind of console.
+          </p>
+        </li>
+        <li>
+          <p>
+            A buffer is a portion of main memory where input is held until it is needed by the program.
+            Using a buffer between the keyboard and the program allows you to use the Backspace key to delete a character.
+          </p>
+        </li>
+        <li>
+          <p>
+            A wrapper class contains methods for converting primitive data into objects and for converting data from one type to another.
+          </p>
+        </li>
+        <li>
+          <p>
+            Designing appropriate prompts is an important aspect of designing a good user interface.
+          </p>
+        </li>
+        <li>
+          <p>
+            I/O operations must watch out for certain types of I/O exceptions.
+          </p>
+        </li>
+        <li>
+          <p>
+            GUI programming involves a computational model known as event-driven programming,
+            which means that GUI programs react to events that are generated mostly by the user's interactions with elements in the GUI.
+          </p>
+        </li>
+        <li>
+          <p>
+            Java has two packages of GUIs, the older <c>java.awt</c> and the newer <c>javax.swing</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Swing components are based on the object-oriented model-view-controller (MVC) architecture.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>extends</c> keyword is used to specify subclass/superclass relationships in the Java class hierarchy.
+          </p>
+        </li>
+        <li>
+          <p>
+            A top-level container is a GUI container that cannot be added to another container;
+            it can only have components added to it.
+            All GUI programs must be contained in a top-level container.
+          </p>
+        </li>
+        <li>
+          <p>
+            There are generally three kinds of GUI components,
+            corresponding to the three main functions of a user interface:
+            input, output, and control.
+          </p>
+        </li>
+        <li>
+          <p>
+            Events are handled by special objects called listeners.
+            A listener is a specialist that listens constantly for a certain type of event.
+          </p>
+        </li>
+        <li>
+          <p>
+            An interface is a special Java class that contains only methods and constants
+            (final variables).
+          </p>
+        </li>
+    </ul>
+</subsection>  
+<subsection>
+<title>Solutions to Self-Study Exercises</title>
+  <p>
+    <ol>
+      <li>
+        <p>
+            The following modification of the <c>GreeterApp</c> class is an implementation of the High Low Game: 
+ <program language="java"><input>
+public class HighLowApp
+{ private KeyboardReader reader;
+  private int secretNumber;
+  public HighLowApp()
+  { reader = new KeyboardReader();
+    secretNumber = 1 + (int)(Math.random() * 100);
+  } // HighLowApp() constructor
+  public void run()
+  { int userGuess = -1;
+    reader.display("Guess my secret number between 1 and 100.");
+    while (userGuess != secretNumber)
+    {   reader.prompt("Please input your guess here > ");
+      userGuess = reader.getKeyboardInteger();
+      if (userGuess > secretNumber)
+        reader.display("Your guess was too high.");
+      if (userGuess &lt; secretNumber)
+        reader.display("Your guess was too low.");
+    } // while
+    reader.display("Congratulations. Your guess was correct.");
+  } // run()
+  public static void main(String args[])
+  { HighLowApp app = new HighLowApp();
+    app.run();
+  } // main()
+}// HighLowApp
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+            The following modification of <c>GreeterGUI</c> eliminates the <c>JButton</c>.
+ <program language="java"><input>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class GreeterGUI2 extends JFrame
+                         implements ActionListener
+{ private JTextArea display;
+  private JTextField inField;
+  private Greeter greeter;
+  public GreeterGUI2(String title)
+  {   greeter = new Greeter();
+      buildGUI();
+      setTitle(title);
+      pack();
+      setVisible(true);
+  } // GreeterGUI2()
+  private void buildGUI()
+  {   Container contentPane = getContentPane();
+      contentPane.setLayout(new BorderLayout());
+      display = new JTextArea(10,30);
+      inField = new JTextField(10);
+      inField.addActionListener(this);
+      JPanel inputPanel = new JPanel();
+      inputPanel.add(new
+              JLabel("Input your name and type enter: "));
+      inputPanel.add(inField);
+      contentPane.add("Center", display);
+      contentPane.add("South", inputPanel);
+  } // buildGUI()
+  public void actionPerformed(ActionEvent e)
+  {   if (e.getSource() == inField)
+      {   String name = inField.getText();
+          display.append(greeter.greet(name) + "\n");
+      }
+  } // actionPerformed()
+} // GreeterGUI2
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+            Java code that prints out the sum of the squares of a set of integers read from a file named "numbers.txt":
+ <program language="java"><input>
+import java.io.*;
+import java.util.Scanner;
+public class NumberFileReader
+{   private Scanner fileScan; // For file input
+    public NumberFileReader(String fName)
+    {   try
+        {   File theFile = new File(fName);
+            fileScan = new Scanner(theFile);
+        } catch (IOException e)
+        {    e.printStackTrace();
+        } //catch()
+    } //NumberFileReader()
+    public void readNumbers()
+    {   int num = 0;      // To store integers read
+        int sum = 0:      // To store sum of squares
+        while (fileScan.hasNextInt())
+        {   num = fileScan.nextInt();
+            sum = sum + num * num;
+        } // while
+        System.out.println("The sum of squares = " + sum);
+    } // readNumbers()
+    public static void main(String[] args)
+    {   NumberFileReader nfr =
+            new NumberFileReader("numbers.txt");
+        nfr.readNumbers()
+    } //main()
+}  //NumberFileReader
+ </input></program>
+        </p>
+      </li>
+     </ol>
+  </p>
+</subsection>
+</section>
