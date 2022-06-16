@@ -1,0 +1,228 @@
+<section xml:id="pg-sec-scannerclass">
+  <title>From the Java Library: <c>java.util.Scanner</c></title>
+  <introduction>
+    <p>
+      If we wish to write useful interactive programs,
+      we must be able to receive information from the user as well as send information to him or her.
+      We saw, in the previous chapter,
+      that output from a program can be sent to the console window by simply using the <c>System.out.print()</c> and <c>System.out.println()</c> statements.
+      In this section we describe two simple ways that Java can handle keyboard input.
+      Receiving input from the keyboard,
+      together with sending output to the console window,
+      creates one of the standard user interfaces for programs.
+    </p>
+    <p>
+      Recall, that in Java,
+      any source or destination for I/O is considered a stream of bytes or characters.
+      To perform keyboard input,
+      we will extract characters from <c>System.in</c>, the input stream connected to the keyboard.
+      Getting keyboard input from <c>System.in</c> involves two complications that are not present in dealing with <c>System.out.println()</c>. First,
+      normal keyboard input data requested of a user consists of a sequence of characters or digits which represent a word,
+      phrase, integer, or real number.
+      Normally, an entire sequence of characters typed by the user will represent data to be stored in a single variable with the user hitting the return or enter key to signal the end of a piece of requested data.
+      Java has a special class, <c>BufferedReader</c>, that uses an input stream and has a method that collects characters until it reads the character or characters that correspond to hitting the return or enter key.
+      A second <image width="73%" source="chptr02/scanneruml.png"/> complication for reading input involves the problem of how to handle receiving data that is not in the same format as expected.
+      The
+<c>BufferedReader</c> class handles this problem by using certain <em>exceptions</em>,
+      a special kind of error message,
+      that must be handled by the programmer.
+      Chapter 11 is devoted to exceptions and we will avoid their use,
+      as far as possible, until that time.
+    </p>
+    <p>
+      There is an alternate way to handle keyboard input in the Java 2 Platform Standard Edition 5.0 (Java SE 5.0).
+      A <c>Scanner</c> class has been added to the <c>java.util</c> package which permits keyboard input without forcing the programmer to handle exceptions.
+      We introduce the
+<c>Scanner</c> class in the next subsection and then describe how a user defined class introduced in Chapter<nbsp/>4 can function in an equivalent fashion to permit simple keyboard input.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Keyboard Input with the <c>Scanner</c>Class</title>
+    <p>
+      A partial definition of <c>Scanner</c> is shown in Figure<nbsp/>2.25.
+      Note that the <c>Scanner</c> methods listed are but a small subset of the public methods of this class.
+      The Scanner class is in the <c>java.util</c> package so classes that use it should import it with the following statement:
+    </p>
+ <program language="java"><input>
+import java.util.Scanner;
+ </input></program>
+    <p>
+      The <c>Scanner</c> class is designed to be a very flexible way to recognize chunks of data that fit specified patterns from any input stream.
+      To use the <c>Scanner</c> class for keyboard input,
+      we must create a <c>Scanner</c> instance and associate it with <c>System.in</c>. The class has a constructor for this purpose,
+      so the statement
+    </p>
+ <program language="java"><input>
+Scanner sc = new Scanner(System.in);
+ </input></program>
+    <p>
+      declares and instantiates an object that can be used for keyboard input.
+      After we create a <c>Scanner</c> object,
+      we can make a call to <c>nextInt()</c>,
+<c>nextDouble()</c>, or <c>next()</c> to read,
+      respectively,
+      an integer, real number, or string from the keyboard.
+      The program in <xref ref="fig-scannerprog">Figure</xref>
+      demonstrates how an integer would be read and used.
+      When the <c>nextInt()</c>
+    </p>
+    <figure xml:id="fig-scannerprog">
+      <caption>A very brief program with a Scanner object used for keyboard input</caption>
+ <program language="java"><input>
+import java.util.Scanner;
+public class TestScanner
+{
+  public static void main(String[] args)
+  {               // Create Scanner object
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Input an integer:"); // Prompt
+    int num = sc.nextInt();         // Read an integer
+    System.out.println(num + " squared = " + num*num);
+  } //main()} // TestScanner class
+ </input></program>
+    </figure>
+    <p>
+      method is executed,
+      no further statements are executed until an <c>int</c> value is returned by the method.
+      Normally this does not happen until the user has typed in the digits of an integer and hit the return or enter key.
+      Thus executing the <c>main()</c> method of the <c>TestScanner</c> class will result in the output
+    </p>
+ <program language="java"><input>
+Input an integer:
+ </input></program>
+    <p>
+      to the console window and the program will wait for the user to type in an integer and hit the return or enter key.
+      After this has been done the output will look something like:
+    </p>
+ <program language="java"><input>
+Input an integer:123
+123 squared = 15129
+ </input></program>
+    <p>
+      Keyboard input of real numbers and strings are handled in a similar manner.
+    </p>
+    <p>
+      Keyboard input will allow us to create examples of command line interfaces for interactive programs.
+      For example, the code
+    </p>
+ <program language="java"><input>
+Scanner sc = new Scanner(System.in);
+Riddle riddle = new Riddle(
+  "What is black and white and red all over?",
+  "An embarrassed zebra.");
+System.out.println("Here is a riddle:");
+System.out.println(riddle.getQuestion());
+System.out.print("To see the answer, ");  // Prompt
+System.out.println("type a letter and enter.");
+String str = sc.next();         // Wait for input
+System.out.println(riddle.getAnswer());
+ </input></program>
+    <p>
+      will display a riddle question and prompt the user to type a letter and to hit the enter key to see the answer.
+      In the next chapter,
+      we will develop new methods for the <c>OneRowNim</c> class that will be able to use <c>int</c> values input from the keyboard for the next move.
+    </p>
+    <p>
+      We must mention that,
+      since the <c>Scanner</c> class is designed as a flexible tool for recognizing chunks of data from any input stream,
+      it has some properties that may be unexpected and not totally compatible with simple keyboard input.
+      A <c>Scanner</c> object has a set of character strings that separate or <term>delimit</term>
+      the chunks of data that it is looking for.
+      By default, this set of delimiters consists of any non-empty sequence of
+      <em>white space</em> characters,
+      that is, the space, tab, return, and newline characters.
+      This will allow a user to input several integers separated by spaces before hitting the enter key.
+      This might be handled by code like:
+    </p>
+ <program language="java"><input>
+System.out.print("Input two integers and an enter:");
+int num1 = sc.nextInt();
+int num2 = sc.nextInt();
+ </input></program>
+    <p>
+      White space as delimiters also means that the <c>next()</c> method cannot return an empty string nor can it return a string that contains any spaces.
+      For example, consider the code:
+    </p>
+ <program language="java"><input>
+System.out.print("Input the first president of the USA:");
+String str = sc.next();
+ </input></program>
+    <p>
+      If one types "George Washington" and hits the enter key,
+      the string
+<c>str</c> will store only "George". In order to get a <c>Scanner</c> object to read strings that contain spaces,
+      we must use the <c>useDelimiter()</c> method to define the set of delimiters as just that character string generated by hitting the enter key.
+      For example, for some Windows operating systems, the statement
+    </p>
+ <program language="java"><input>
+sc = sc.useDelimiter("\r\n");
+ </input></program>
+    <p>
+      will result in the <c>next()</c> method returning the entire string of characters input from the keyboard up to but not including those generated by hitting the enter key.
+    </p>
+    <p>
+      You should also be aware that just because we can use a <c>Scanner</c> object to write Java code that ignores exceptions does not mean that exceptions will not be generated by keyboard input.
+      If the user enters letters rather than digits for the <c>nextInt()</c> method to process,
+      the program will be terminated with an error message.
+    </p>
+    <p>
+      It must be stressed that the strategy for handling keyboard input outlined above is a temporary strategy until the topic of exceptions is covered in Chapter<nbsp/>11.
+      Real software applications that use keyboard input should carefully handle the possibility that a user will enter something unexpected.
+      In Java, this can only be done by handling exceptions.
+    </p>
+  </subsection>
+  <subsection xml:id="fig-kbreaderuml">
+    <title>Keyboard Input with the <c>KeyboardReader</c>Class</title>
+    <p>
+      <image width="73%" source="chptr02/kbreaderuml.png"/> If you are using an older version of Java that does not have the <c>Scanner</c> class,
+      a user-defined class can be used instead.
+      A <c>KeyboardReader</c> class that uses the <c>BufferedReader</c> class will be developed in Chapter<nbsp/>4.
+      It has methods that read data from the keyboard in a manner very similar to those of the <c>Scanner</c> class.
+      A partial list of its public methods is given in the UML class diagram shown in Figure<nbsp/>2.27.
+      To use the <c>KeyboardReader</c> class for keyboard input,
+      copy the source code <c>KeyboardReader.java</c> from Chapter<nbsp/>4 into the same directory as the source code of your current Java class
+      (and add it to your current project if you are using a integrated development environment).
+    </p>
+    <p>
+      To use a <c>KeyboardReader</c> object,
+      we need to create an instance of the class with a constructor.
+      Then calling one of the three methods will return an <c>int</c>, <c>double</c>, or <c>String</c> when data is input from the keyboard.
+      Any of the three methods of a <c>KeyboardReader</c> object will attempt to process the entire string input from the keyboard up to the point that the enter key is hit.
+      That is, the character or characters generated by hitting the return or enter key is the delimiter used by <c>KeyboardReader</c>. The <c>TestKeyboardReader</c> class definition in <xref ref="fig-kbreaderprog">Figure</xref>
+    </p>
+    <figure xml:id="fig-kbreaderprog">
+      <caption>A very brief program with a KeyboardReader object used for keyboard input.</caption>
+ <program language="java"><input>
+public class TestKeyboardReader
+{
+  public static void main(String[] args)
+  {             // Create KeyboardReader object
+    KeyboardReader kb = new KeyboardReader();
+    System.out.print("Input an integer:"); // Prompt
+    int num = kb.getKeyboardInteger(); // Read an integer
+    System.out.println(num + " squared = " + num*num);
+  } //main()} // TestKeyboardReader class
+ </input></program>
+    </figure>
+    <p>
+      reads an integer from the keyboard and squares it just like the <c>TestScanner</c> class.
+      In the remainder of the text,
+      any time the <c>Scanner</c> class is used for keyboard input,
+      the same program can be run using the <c>KeyboardReader</c> class after making the obvious substitutions.
+    </p>
+  </subsection>
+  <subsection>
+  <title>Self-Study Exercise</title>
+    <p>
+      <ol>
+        <li>
+          <p>
+            Modify the <c>main()</c> method of the <c>TestScanner</c> class so that it reads a real number from the keyboard rather than an integer.
+          </p>
+        </li>
+      </ol>
+    </p>
+
+  </subsection>
+
+</section>

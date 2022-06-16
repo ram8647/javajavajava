@@ -291,9 +291,9 @@ else
       <p>
         <program language="java"><input>
         if (<em>boolean expression</em>) 
-           <em>statement 1</em>;       
+           <em>statement1</em>;       
         else
-           <em>statement 2</em>; 
+           <em>statement2</em>; 
            </input></program>
       </p>
     </principle>
@@ -352,10 +352,11 @@ else
       <image width="70%" source="chptr03/multi.png"/>
     </figure>
     <p>
-      Suppose we have an <c>int</c> variable <c>num</c> that will contain one of the values <m>1</m>,
-      <m>2</m>,
-      or <m>3</m> unless there has been an error assigning a value to it.
-      Suppose that we want to write code that will write out the English word for the value in <c>num</c>. In the example shown in <xref ref="fig-multiway">Figure</xref>
+      Suppose we have an <c>int</c> variable <c>num</c> that will contain one of the values <m>0</m>,
+      <m>1</m>,
+      or <m>2</m> unless there has been an error assigning a value to it.
+      Suppose that we want to write code that will write out the English word for the value in <c>num</c>. 
+      In the example shown in <xref ref="fig-multiway">Figure</xref>
       there are three alternatives plus an error state.
       Here is the Java code for this example:
     </p>
@@ -383,6 +384,8 @@ else
             System.out.println("Two");
         else
             System.out.println("Error: Unknown value");
+     }
+  }
  </input></program>
     </exercise>
     <p>
@@ -448,46 +451,82 @@ public String getStatus(boolean isDone)
             There should be a single exit arrow pointing directly down.
           </p>
         </li>
-        <li>
-          <p>
-            Identify the error in the following statements and fix them in the activecode below.
- <program language="java"><input>
-if (isHeavy == true)
-    System.out.println("Heavy");
-else ;
-    System.out.println("Light");
-if (isLong == true)
-    System.out.println("Long")
-else
-    System.out.println("Short");
+        </ol>
+        </p>
+        
+        <exercise label="ifDebugEx">
+          <statement><p> Identify the errors in the following statements and fix them in the activecode below.
+          </p></statement>
+          <program interactive="activecode"><input>
+            public class PrintHeavyLight
+            {
+               public static void main(String[] args)
+               {
+                   isHeavy = false;
+                   isLong = true;
+
+                   if (isHeavy = true)
+                      System.out.println("Heavy");
+                   else ;
+                      System.out.println("Light");
+                   if (isLong == false)
+                      System.out.println("Long")
+                  else
+                      System.out.println("Short");
+               }
+              }
  </input></program>
           </p>
-        </li>
-        <li>
-          <p>
-            Suppose we have an <c> int</c> instance variable named <c>player</c> in some class describing a 
-            three person game.
-            Write a method named
-<c>getPlayerName()</c> that returns a <c>String</c>. It should return
-            <q>Ann</q>,
-            <q>Bill</q>,
-            <q>Cal</q>, or
-            <q>Error</q>
-            when the value of <c>player</c> is respectively 1, 2, 3, or any other value.
-          </p>
-        </li>
         
-      </ol>
-    </p>
+          <exercise label="ifDebugEx">
+            <statement><p>Write a method named
+  <c>getPlayerName()</c> that returns a <c>String</c>. It should return
+              <q>Ann</q>,              <q>Bill</q>,
+              <q>Cal</q>, or
+              <q>Error</q>
+              when the value of <c>player</c> is respectively 1, 2, 3, or any other value.
+            </p></statement>
+            <program interactive="activecode"><input>
+              public class Game
+              {
+                 private int player = 1;
+ 
+                 public void setPlayer(int num) { player = num; }
+
+                 /** Write a method named <c>getPlayerName()</c> that returns a <c>String</c>. 
+                 It should return<q>Ann</q>, <q>Boyd</q>, <q>Cal</q>, or <q>Error</q>
+                 when the value of <c>player</c> is respectively 1, 2, 3, or any other value.
+                 */
+                 public String getPlayerName()
+                 {
+                   // Write a multiway if statement here
+
+
+                 }
+
+                 public static void main(String[] args)
+                 {
+                    Game g = new Game();  
+                    System.out.println("Player 1 is " + g.getPlayerName(); 
+                    g.setPlayer(2);
+                    System.out.println("Player 2 is " + g.getPlayerName(); 
+                    g.setPlayer(3);
+                    System.out.println("Player 3 is " + g.getPlayerName(); 
+                    g.setPlayer(4);
+                    System.out.println("Is there a player 4? " + g.getPlayerName(); 
+                 }
+                }
+   </input></program>
+        
+  
   </subsection>
 
   <subsection xml:id="while-loops">
     <title>The While Structure</title>
     <p>
-      A <term>repetition structure</term>
+      A <term>repetition</term> or <term>loop</term> structure
       is a control structure that repeats a statement or sequence of statements in a controlled way.
-      Repetition structures are also referred to as
-      <term>loop structures</term>.
+     
       Many types of programming tasks require a repetition structure.
       Consider some examples.
       <ul>
@@ -521,17 +560,31 @@ else
       We will use the while statement to sum the squares of integers from <m>1</m> to a number specified as a parameter of the method.
       Thus, the method call <c>sumSquares(3)</c> should return the value <m>14</m> since <m>1*1 + 2*2 + 3*3 = 1 + 4 + 9 = 14</m>.
     </p>
+    <exercise label="squareOfInts">
+      <statement><p>Run the following code to see the sum of squares method in action. 
+        Click on the CodeLens button to trace through it. Change the main method to change num and run again.
+      </p></statement>
+      <program interactive="activecode"><input>
  <program language="java"><input>
-public int sumSquares(int max)
-{ int num = 1;
-  int sum = 0;
-  while (num &lt;=  max)  // While num &lt;= max
+  public class Sum
   {
-    sum = sum + num*num; // Add square to sum
-    num = num + 1;       // Add 1 to num
-  } //while
-  return sum;           // Return the sum
- }
+    public int sumSquares(int max)
+    { int num = 1;
+      int sum = 0;
+      while (num &lt;=  max)  // While num &lt;= max
+      {
+        sum = sum + num*num; // Add square to sum
+        num = num + 1;       // Add 1 to num
+      } //while
+      return sum;           // Return the sum
+    }
+    public static void main(String[] args)
+    {
+       Sum s = new Sum(); 
+       int num = 4; 
+       System.out.println( "The sumSquared of " + num + " is "" +  s.sumSquared(num) );
+    }
+  }
  </input></program>
     <p>
       Note that in this example,
@@ -552,7 +605,10 @@ public int sumSquares(int max)
         The <term>while statement</term> has the following syntax:
       </p>
       <p>
-        <m>\matrix{ \texttt{while} \amp ( \; \textit{loop\;entry\;condition } \; ) \cr \;\;\;\;\;\;\; \amp \textit{loop body } \; ; \cr}</m>
+        <m>while ( <em>loop entry condition </em> ) 
+           {
+              <em>loop body </em> 
+            }</m>
       </p>
     </principle>
     <p>
@@ -587,7 +643,8 @@ public int sumSquares(int max)
 InitializerStatements;         // Initializer
 while (loop entry condition) { // Bound test
      Statements;                // Loop body
-     UpdaterStatements;         // Updater}
+     UpdaterStatements;         // Updater
+}
  </input></program>
     <p>
       As its form suggests,
@@ -616,16 +673,12 @@ while (loop entry condition) { // Bound test
       The semantics of the while structure are shown in <xref ref="fig-whileflow">Figure</xref>.
     </p>
     <p>
-      \secEXRHone{Self-Study Exercise}
-      <ol>
-        <li>
-          <p>
-            Modify the definition of the
+    <subsection><title>While Loop Self-Study Exercises</title></subsection>
+     
+          <p> Modify the definition of the
 <c>sumSquares()</c> method to define a method named <c>sumCubes()</c> that sums the cubes of integers from a minimum value up to a maximum value and returns that sum.  <c>sumCubes()</c> should have two parameters that will store the minimum and maximum values.
             Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2 + 3*3*3 = 8 + 27 = 35</m>.
-          </p>
-        </li>
-      </ol>
+          
     </p>
   </subsection>
 </section>
