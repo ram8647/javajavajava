@@ -1,8 +1,8 @@
 <section xml:id="sec-tostring">
-  <title><c>java.lang.Object</c></title>
+  <title>java.lang.Object Methods</title>
 
   <p>
-    The most general class in Java's class hierarchy is the <c>java.lang.Object</c> class.
+    The most general class in Java's class hierarchy is the <term>java.lang.Object</term> class.
     It is the superclass of all classes that occur in Java programs.
     By default, it is the direct superclass of any class that does not explicitly specify a pedigree in its class definition.
   </p>
@@ -23,7 +23,8 @@
  <program language="java"><input>
 public class Object
 {
-    public String toString() ;}
+    public String toString() ;
+}
  </input></program>
   <p>
     The <c>toString()</c>
@@ -37,7 +38,7 @@ public class Object
     To illustrate the default behavior of <c>toString()</c>, let's use it with a <c>OneRowNim</c> instance:
   </p>
  <program language="java"><input>
-OneRowNim g1 = new OneRowNim(11);
+  OneRowNim g1 = new OneRowNim(11);
   OneRowNim g2 = new OneRowNim(13);
   System.out.println(g1.toString());
   System.out.println(g2.toString());
@@ -48,7 +49,7 @@ OneRowNim g1 = new OneRowNim(11);
     which produces the following output:
   </p>
  <program language="java"><input>
-OneRowNim@1dc6077b
+  OneRowNim@1dc6077b
   OneRowNim@1dc60776
  </input></program>
   <p>
@@ -61,7 +62,8 @@ OneRowNim@1dc6077b
     What <c>String</c> should the <c>g1.toString()</c> method return?
     Let's have it return a <c>String</c> that reports the <c>OneRowNim</c> instances's current state,
     which are the values stored in the two instance variables.
-    To override a method,
+    </p>
+<p>    To <term>override</term> a method,
     you simply define a method with the same signature in the subclass.
     If you call <c>toString()</c> with an instance of the subclass,
     its version of the method will be used.
@@ -70,21 +72,23 @@ OneRowNim@1dc6077b
     Thus, <c>OneRowNim.toString()</c> will have the following signature:
   </p>
  <program language="java"><input>
-public String toString();
+public String toString()
  </input></program>
   <p>
     Let us describe the state of a <c>oneRowNim</c> instance very briefly in the string returned by the <c>toString()</c> method:
   </p>
  <program language="java"><input>
 public String toString()
-{ return "nSticks = " + nSticks + ", player = " + player;}
+{ 
+  return "nSticks = " + nSticks + ", player = " + player;
+}
  </input></program>
   <p>
     If we add the <c>toString()</c> method to the <c>OneRowNim</c> class and then run the program shown in <xref ref="fig-orntostring">Figure</xref>,
     we get the following output:
   </p>
  <program language="java"><input>
-nSticks = 9, player = 2
+  nSticks = 9, player = 2
   nSticks = 13, player = 1
  </input></program>
   <figure xml:id="fig-orntostring">
@@ -98,10 +102,21 @@ public class TestToString
     g1.takeSticks(2);
     System.out.println(g1.toString());
     System.out.println(g2.toString());
-  } //main} //TestToString
+  } //main
+} //TestToString
  </input></program>
   </figure>
-  <p>
+
+  <p>Since <c>System.out.println</c> looks for a String to print out, 
+    it will automatically look for a toString() method of an object and invoke it. 
+    It is possible to leave out the method call to toString() inside <c>System.out.println</c> methods.
+  </p>
+  <program language="java"><input>
+        // Equivalent code
+        System.out.println(g1.toString());
+        System.out.println(g1);
+     </input></program>
+    <p>
     While this new method may not play an important role in the
 <c>OneRowNim</c> class,
     it does provide a very brief,
@@ -109,4 +124,39 @@ public class TestToString
     This is the reason that the
 <c>toString()</c> method was included in the <c>Object</c> class.
   </p>
+
+  <exercise label="toString">
+  <statement><p>Add a toString() method to the Student class below that prints out 
+    the name, email, and id instance variables. Run to test.
+  </p></statement>
+  <program interactive="activecode"><input>
+    /** Add a toString() method to the Student class below.
+    class Student
+    {
+       private String name;
+       private String email;
+       private int id;
+    
+       public Student(String initName, String initEmail, int initId)
+       {
+          name = initName;
+          email = initEmail;
+          id = initId;
+       }
+    
+       /* Write a toString() method here */
+       
+       
+    }
+    public class TesterClass
+    {
+       // main method for testing
+       public static void main(String[] args)
+       {
+          Student s1 = new Student("Skyler", "skyler@sky.com", 123456);
+          System.out.println(s1);
+       }
+     }    
+  </input></program>
+  </exercise>
 </section>
