@@ -30,12 +30,27 @@ public  void  drawLine(int x1, int y1, int x2, int y2)
  <program language="java"><input>
 public void drawSticks(Graphics g,int x,int y,int num)
  </input></program>
-  <p>
-    The length of the line segments and and the distance between them are not specified by parameters so we need to choose some fixed values for these quantities.
-    Let us assume that the line segments are 10 pixels apart and 50 pixels long.
-    We now have enough information to complete the definition of an applet to solve this problem.
-    Such a class definition is reproduced in <xref ref="fig-drawsticksprog">Figure</xref>.
-  </p>
+  <p>The body of the method could use a while loop with a counter variable <c>k</c> to draw <c>num</c> lines.
+    The counter <c>k</c> is initialized to 0 before the loop and incremented at the end of the loop. The loop 
+    runs as long as <c>k &lt; num</c>.</p>
+
+    <program language="java"><input>
+        public void drawSticks(Graphics g, int x, int y, int num)
+        {   
+            int k = 0;
+            while (k &lt; num)
+            {   g.drawLine(x, y, x, y + 50);
+                x = x + 10;
+                k = k + 1;
+            } // while
+        } // drawSticks()
+      
+       </input></program>   
+<p>
+    The complete class is in <xref ref="fig-drawsticksprog">Figure</xref>. You can run it online at
+    <url href="https://replit.com/@BerylHoffman/DrawSticks" visual="" target="_blank">DrawSticks on repl</url>. 
+</p>
+  
   <figure xml:id="fig-drawsticksprog">
     <caption>A Swing Class with a method for drawing a set of sticks.</caption>
  <program language="java"><input>
@@ -80,9 +95,16 @@ public class DrawSticksCanvas extends Canvas
   </p>
   <p>
     An image of the <c>DrawSticksCanvas</c> as it appears in a window is shown in <xref ref="fig-drawstickseps">Figure</xref>.
-  </p>
+    Try it online at
+    <url href="https://replit.com/@BerylHoffman/DrawSticks" visual="" target="_blank">DrawSticks on repl</url>. 
+</p>
   <p>
-    \marginfigscaled{chptr03/drawsticks.png}{0.70}{The DrawSticksCanvas as displayed in a Java window.}{fig-drawstickseps}
+    <figure xml:id="fig-drawstickseps">
+      <caption>The DrawSticksCanvas as displayed in a Java window.</caption>
+    <image width="80%" source="chptr03/drawsticks.png"/>
+    </figure>
+
+
   </p>
   <p>
     As we have seen in this example,

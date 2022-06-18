@@ -1,5 +1,7 @@
 <section xml:id="testingan-improved">
-  <title>Testing an Improved <c>OneRowNim</c></title>
+  <title>Testing an Improved OneRowNim</title>
+  
+<subsection><title>Using If/Else Structures</title>
   <p>
     Let's use the control structures that we have discussed to improve the definition of the <c>takeSticks()</c> method of <c>OneRowNim</c>. We noted earlier that our current definition allows <m>4</m> or more sticks to be removed from <c>nSticks</c> even though the rules of One Row Nim indicate that a player must take one,
     two, or three sticks on a turn.
@@ -26,13 +28,81 @@ public boolean takeSticks(int num)
        nSticks = nSticks - num;
        player = 3 - player;
        return true;
-    } //else} //takeSticks
+    } //else
+ } //takeSticks
  </input></program>
   <p>
     Notice that the new definition of the <c>takeSticks()</c> method has a boolean return type.
     Also notice that the <c>if/else</c> multiway structure is used to handle the three cases of the parameter <c>num</c> being less than one,
-    more than three, or a valid number.
+    more than three, or a valid number. Try the code below to see it running.
   </p>
+  <exercise label="nimErrorCheck">
+    <statement><p>Run the code below. Try taking 1, 2, and -1 sticks by changing the code in main.</p></statement>
+  <program language="java"><input>
+    public class OneRowNim
+    {   private int nSticks = 7;
+        private int player = 1;
+        public OneRowNim()
+        {
+        } // OneRowNim() constructor
+        public OneRowNim(int sticks)
+        {   nSticks = sticks;
+        }  // OneRowNim() constructor2
+        public OneRowNim(int sticks, int starter)
+        {   nSticks = sticks;
+            player = starter;
+        }  // OneRowNim() constructor3
+        
+        /** New version of takeSticks */
+        public boolean takeSticks(int num)
+        {   if (num &lt; 1) 
+                return false;       // Error
+            else if ( num > 3) 
+                  return false; // Error
+            else              // this is a valid move
+            {   
+                nSticks = nSticks - num;
+                player = 3 - player;
+                return true;
+            } // else
+        } // takeSticks()
+
+        public int getSticks()
+        {   return nSticks;
+        } // getSticks()
+        public int getPlayer()
+        {   return player;
+        } // getPlayer()
+        public boolean gameOver()
+        {   return (nSticks &lt;= 0);
+        } // gameOver()
+        public int getWinner()
+        {   if (nSticks &lt; 1) return getPlayer();
+            else return 0;  //game is not over
+        } // getWinner()
+        public void report()
+        {   System.out.println("Number of sticks left: " +
+                                                 getSticks());
+            System.out.println("Next turn by player " +
+                                                 getPlayer());
+        }   // report()
+
+        public static void main(String[] args) 
+        {   
+            OneRowNim game = new OneRowNim();
+            game.report();
+            // Try error conditions
+            System.out.println("Can I take 0 sticks? " + game.takeSticks(0));
+            System.out.println("Can I take 4 sticks? " + game.takeSticks(4));
+            game.report();
+            // Try taking 3 sticks
+            System.out.println("Can I take 3 sticks? " + game.takeSticks(3));
+            game.report();
+        } // main()
+      } // OneRowNim class
+     </input></program>
+    </exercise>
+ 
   <p>
     Let us add one more method to the <c>OneRowNim</c> class.
     Let's define a method called <c>getWinner()</c> that will return the number of the winning player if the game is over.
@@ -43,7 +113,7 @@ public boolean takeSticks(int num)
     A common strategy is to have a method return a special value to indicate that it is in a state in which it cannot return the value requested.
     Returning a <m>0</m> value is a good way to indicate that the game is not over so a winner cannot be identified.
     With this information,
-    the {if/else} statement can be used in the definition of
+    the <c>if/else</c> statement can be used in the definition of
 <c>getWinner()</c>.
   </p>
  <program language="java"><input>
@@ -51,7 +121,8 @@ public int getWinner()
 {   if (nSticks &lt; 1)
         return player;
     else
-        return 0;} // getWinner()
+        return 0;
+} // getWinner()
  </input></program>
   <p>
     We now have the final version
@@ -59,7 +130,7 @@ public int getWinner()
     of the <c>OneRowNim</c> class whose implementation is given in <xref ref="fig-ornclass">Figure</xref>.
     We have turned a very simple class into one that contains quite a few elements.
     Compared to our first version
-    (in Chapter<nbsp/>1),
+    (in Chapter 1),
     this Chapter's version of <c>OneRowNim</c> presents an interface
     (to other objects)
     that is easy and convenient to use.
@@ -113,9 +184,13 @@ public class OneRowNim
                                              getSticks());
         System.out.println("Next turn by player " +
                                              getPlayer());
-    }   // report()} // OneRowNim class
+    }   // report()
+  } // OneRowNim class
  </input></program>
   </figure>
+</subsection>
+
+  <subsection><title>Using a While Loop</title>
   <p>
     Let's use a while statement to test the new methods of the class.
     A pseudocode description of how a game is played might look like:
@@ -130,8 +205,93 @@ Choose the initial number of sticks for the game
   Report who the winner is
  </input></program>
   <p>
-    Translating this pseudocode into Java code in a <c>main()</c> method in a separate class gives us the class shown in <xref ref="fig-tornclass">Figure</xref>.
-    We will use the <c>Scanner</c> class
+  Here is a version with a main method that chooses a random number of sticks each time through the loop.
+  </p>
+  
+  <exercise label="nimRandom">
+    <statement><p>Run the code below a couple times. Use the Show CodeLens button to step through it to understand how the loop in main works.
+      What would happen if you changed the random number to be * 4 instead of * 3? Try it and see.
+    </p></statement>
+  <program language="java"><input>
+  public class OneRowNim
+  {   private int nSticks = 7;
+      private int player = 1;
+      public OneRowNim()
+      {
+      } // OneRowNim() constructor
+      public OneRowNim(int sticks)
+      {   nSticks = sticks;
+      }  // OneRowNim() constructor2
+      public OneRowNim(int sticks, int starter)
+      {   nSticks = sticks;
+          player = starter;
+      }  // OneRowNim() constructor3
+      
+      /** New version of takeSticks */
+      public boolean takeSticks(int num)
+      {   if (num &lt; 1) 
+              return false;       // Error
+          else if ( num > 3) 
+                return false; // Error
+          else              // this is a valid move
+          {   
+              nSticks = nSticks - num;
+              player = 3 - player;
+              return true;
+          } // else
+      } // takeSticks()
+
+      public int getSticks()
+      {   return nSticks;
+      } // getSticks()
+      public int getPlayer()
+      {   return player;
+      } // getPlayer()
+   
+     public boolean gameOver()
+      {   return (nSticks &lt;= 0);
+      } // gameOver()
+   
+      public int getWinner()
+      {   if (nSticks &lt; 1) 
+              return getPlayer();
+          else 
+              return 0;  //game is not over
+      } // getWinner()
+      
+      public void report()
+      {   System.out.println("Number of sticks left: " +
+                                               getSticks());
+          System.out.println("Next turn by player " +
+                                               getPlayer());
+      }   // report()
+
+      public static void main(String[] args) 
+      {   
+          OneRowNim game = new OneRowNim();
+          while(game.gameOver() == false)
+          {   
+            game.report();  
+            // Get a random number from 1 to 3
+            int number = (int) (Math.random() * 3) + 1;
+            System.out.println("Pick up random number of sticks: " + number);
+            if (game.takeSticks(number) == false)
+                System.out.println("Error: can't take " + number + " sticks!");   
+            System.out.println();
+          } // while
+          game.report();  // The game is now over
+          System.out.print("Game won by player ");
+          System.out.println(game.getWinner());
+      } // main()
+    } // OneRowNim class
+  </input>
+</program>
+</exercise>
+
+  <p>  Another version of main is shown in <xref ref="fig-tornclass">Figure</xref>.
+   This version uses the <c>Scanner</c> class  introduced in the previous chapter to get moves from the keyboard for both players.
+    Before each move <c>game.report()</c> describes the state of the game before the user is prompted to input a move for one of the players.
+ You can try this code here: <url href="https://replit.com/@BerylHoffman/OneRowNim3" visual="" target="_blank">OneRowNim.java on repl</url>. Run the following code multiple times and enter 1, 2, or 3. 
   </p>
   <figure xml:id="fig-tornclass">
     <caption>The <c>TestOneRowNim</c> class with a while loop.</caption>
@@ -140,10 +300,12 @@ import java.util.Scanner;
 public class TestOneRowNim
 {
   public static void main(String argv[])
-  { Scanner sc = Scanner.create(System.in);
+  { 
+    Scanner sc = new Scanner(System.in);
     OneRowNim game = new OneRowNim(11);
     while(game.gameOver() == false)
-    {   game.report();  // Prompt the user
+    {   
+      game.report();  // Prompt the user
       System.out.print("Input 1, 2, or 3: ");
       int sticks = sc.nextInt(); // Get move
       game.takeSticks(sticks);   // Do move
@@ -152,14 +314,11 @@ public class TestOneRowNim
     game.report();  // The game is now over
     System.out.print("Game won by player ");
     System.out.println(game.getWinner());
- } // main()} // TestOneRowNim
+ } // main()
+} // TestOneRowNim
  </input></program>
   </figure>
-  <p>
-    introduced in the previous chapter to get moves from the keyboard for both players.
-    Before each move <c>game.report()</c> describes the state of the game before the user is prompted to input a move for one of the players.
-    A reader interested in seeing the lengthy output to the console when the {TestOneRowNim} class is run is encouraged to actually run the program.
-  </p>
+  
   <p>
     Note that the return value of the <c>takeSticks()</c> method is ignored in this test program.
     We will make use of the return value in test programs in the next chapter when better user interfaces are developed for <c>OneRowNim</c>. Note,
@@ -167,7 +326,7 @@ public class TestOneRowNim
     the public methods for <c>OneRowNim</c> provide other objects with an interface that they can use to communicate with individual <c>OneRowNim</c> objects.
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Interfaces</title>
+    <title>EFFECTIVE DESIGN: Interfaces</title>
     <p>
       Well-designed objects provide a useful public interface and protect the object's private elements from other objects.
     </p>
@@ -182,4 +341,5 @@ public class TestOneRowNim
     accessor,
     and mutator<mdash/>that make up the object's interface.
   </p>
+  </subsection>
 </section>

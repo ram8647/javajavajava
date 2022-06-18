@@ -609,7 +609,7 @@ public String getStatus(boolean isDone)
         <m>while ( <em>loop entry condition </em> ) 
            {
               <em>loop body </em> 
-            }</m>
+           }</m>
       </p>
     </principle>
  
@@ -628,7 +628,7 @@ public String getStatus(boolean isDone)
       We can restate the above guidelines as a design principle:
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Loop Structure</title>
+      <title>EFFECTIVE DESIGN: Loop Structure</title>
       <p>
         A properly designed while structure must include an initializer,
         a loop entry condition, and an updater.
@@ -679,10 +679,46 @@ while (loop entry condition) { // Bound test
     <subsection><title>While Loop Self-Study Exercises</title>
      
           <p> Modify the definition of the
-<c>sumSquares()</c> method to define a method named <c>sumCubes()</c> that sums the cubes of integers from a minimum value up to a maximum value and returns that sum. 
+<c>sumSquares()</c> method to define a method named <c>sumCubes()</c> that sums the cubes of integers 
+from a minimum value up to a maximum value and returns that sum. 
  <c>sumCubes()</c> should have two parameters that will store the minimum and maximum values.
-            Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2 + 3*3*3 = 8 + 27 = 35</m>.
+Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2 + 3*3*3 = 8 + 27 = 35</m>.
           
     </p>
+
+    <exercise label="sumCubes">
+      <statement><p>Using the <c>sumSquares</c> method below as a guide, define a method named <c>sumCubes(min, max)</c> that sums the cubes of integers 
+        from a minimum value up to a maximum value and returns that sum. 
+      </p></statement>
+      <program interactive="activecode"><input>
+  public class SumC
+  {
+    public int sumSquares(int max)
+    { int num = 1;
+      int sum = 0;
+      while (num &lt;=  max)  // While num &lt;= max
+      {
+        sum = sum + num*num; // Add square to sum
+        num = num + 1;       // Add 1 to num
+      } //while
+      return sum;           // Return the sum
+    }
+
+    /** Write <c>sumCubes(min, max)</c> that sums the cubes of integers 
+    from a minimum value up to a maximum value and returns that sum.  */
+
+
+
+    public static void main(String[] args)
+    {
+       SumC s = new SumC(); 
+       int num = 4; 
+       System.out.println( "The sumSquared of " + num + " is "" +  s.sumSquared(num) );
+       System.out.println( "The sumCubed of " + num + " is "" +  s.sumCubed(1,num) );
+       System.out.println( "The sumCubed of 2 to 3 should be 35. Your method returns: " + s.sumCubed(2,3) );
+    }
+  }
+ </input></program>
+ </exercise>
   </subsection>
 </section>
