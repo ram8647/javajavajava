@@ -80,7 +80,8 @@ while (grade != 9999) {    // Loop test: sentinel
   count++;
   reader.prompt("Input a grade (e.g., 85.3) " +
       "or 9999 to indicate the end of the list >> ");
-  grade = reader.getKeyboardDouble(); // Update:input} // while
+  grade = reader.getKeyboardDouble(); // Update:input
+} // while
  </input></program>
   <p>
     You can see that it is somewhat redundant to repeat the same statements needed to do the initializating and the updating of the <c>grade</c> variable.
@@ -96,13 +97,14 @@ private double promptAndRead() {
   double grade = reader.getKeyboardDouble();
                           // Confirm input
   System.out.println("You input " + grade + "\n");
-  return grade;}
+  return grade;
+}
  </input></program>
   <p>
     Note that we have declared this as a <c>private</c> method.
     It will be used to help us perform our task but won't be available to other objects.
     Such private methods are frequently called
-    <em>helper methods</em>.
+    <term>helper methods</term>.
   </p>
   <p>
     This is a much more modular design.
@@ -114,13 +116,13 @@ private double promptAndRead() {
     Input errors are now localized to the <c>promptAndRead()</c> method.
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Modularity</title>
+    <title>EFFECTIVE DESIGN: Modularity</title>
     <p>
       Encapsulating code in a method is a good way to avoid redundancy in a program.
     </p>
   </principle>
   <principle>
-    <title>DEBUGGING TIP:Localization</title>
+    <title>DEBUGGING TIP: Localization</title>
     <p>
       Encapsulating code in a method removes the need to have the same code at several locations in a program.
       By localizing the code in this way,
@@ -144,7 +146,8 @@ public double inputAndAverageGrades() {
   if (count > 0)      // Guard against divide-by-zero
     return runningTotal / count;// Return the average
   else
-    return 0;         // Special (error) return value}
+    return 0;         // Special (error) return value
+  }
  </input></program>
   <p>
     Note that we have declared this as a <c>public</c> method.
@@ -159,6 +162,8 @@ public double inputAndAverageGrades() {
   </p>
   <p>
     The complete <c>Average.java</c> application is shown in <xref ref="fig-avg">Figure</xref>.
+    Try it online at  
+      <url href="https://replit.com/@BerylHoffman/Average-1" visual="" target="_blank">Average on repl</url>. 
     Its overall design is similar to application programs we designed in previous chapters.
     The only instance variable it uses is the <c>KeyboardReader</c> variable.
     The other variables are declared locally, within the methods.
@@ -201,7 +206,8 @@ public class Average {                            // Console I/O
       System.out.println("You didn't enter any grades.");
    else
       System.out.println("Your average is " + average);
- } // main()} // Average
+ } // main()
+} // Average
  </input></program>
   </figure>
   <p>
@@ -210,7 +216,7 @@ public class Average {                            // Console I/O
     and to confirm the user's input after the program has read it.
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:User Interface</title>
+    <title>EFFECTIVE DESIGN: User Interface</title>
     <p>
       Whenever you ask a user for input,
       the user should know <term>why</term>

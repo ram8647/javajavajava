@@ -1,9 +1,9 @@
 <section xml:id="the-multiway-selection-structure">
-  <title>The <c>switch</c>Multiway Selection Structure</title>
+  <title>The <c>switch</c> Multiway Selection Structure</title>
 <subsection><title>Switch</title>
   <p>
     Another selection structure to add to our repertoire is the
-    <em>switch/break structure</em>.
+    <term>switch/break structure</term>.
     It is meant to provide a shorthand way of coding the following type of multiway selection structure:
   </p>
  <program language="java"><input>
@@ -32,7 +32,8 @@ switch (integralExpression)
    case integralValue3:
        // some statements
    default:
-       some statements}
+       some statements
+}
  </input></program>
   <p>
     The <em>integralExpression</em>
@@ -48,37 +49,44 @@ switch (integralExpression)
     is executed according to the following rules:
   </p>
   <p>
-    \begin{NL} \item[Rule 1.] The <em>integralExpression</em>
-    is evaluated. \item[Rule 2.] Control passes to the statements following the <c>case</c> label whose value equals the
+    <ol><li><p>
+    The <em>integralExpression</em>
+    is evaluated. </p></li>
+    <li><p>Control passes to the statements following the <c>case</c> label whose value equals the
     <em>integralExpression</em> or, if no cases apply,
     to the <c>default</c> clause.
-  </p>
-  <p>
-    \item[Rule 3.] Beginning at the selected label or at the default,
+  </p></li>
+  <li> <p>
+    Beginning at the selected label or at the default,
     all of the statements up to the end of the <c>switch</c> are executed. \end{NL}
-  </p>
+  </p></li>
+</ol>
+</p>
+ 
   <p>
     Consider the following example:
   </p>
  <program language="java"><input>
 int m = 2;
 switch (m)
-{  case 1:
+{  
+  case 1:
       System.out.print(" m = 1");
    case 2:
       System.out.print(" m = 2");
    case 3:
       System.out.print(" m = 3");
    default:
-      System.out.print(" default case");}
+      System.out.print(" default case");
+}
  </input></program>
   <p>
     In this case, because <em>m</em>
     equals 2, the following output would be produced:
   </p>
- <program language="java"><input>
+ <pre>
 m = 2 m = 3 default case
- </input></program>
+ </pre>
   <p>
     Obviously, this output does not match the following if-else multiway selection structure,
         <idx><h>multiway-selection structure</h></idx>
@@ -100,7 +108,7 @@ else
     The reason for this disparity is that the <c>switch</c> executes <em>all</em>
     statements following the label that matches the value of the
     <em>integralExpression</em>
-    (see again Rule 3 on the previous page).
+    (see again Rule 3 above).
   </p>
   <p>
     In order to use the switch as a multiway selection,
@@ -119,7 +127,8 @@ switch (m)
        System.out.print(" m = 3");
        break;
    default:
-       System.out.print(" default case");}
+       System.out.print(" default case");
+}
  </input></program>
   <p>
     In this example,
@@ -134,7 +143,7 @@ switch (m)
     <image width="73%" source="chptr03/switchfl.png"/>
   </figure>
   <principle>
-    <title>PROGRAMMING TIP:Multiway Selection</title>
+    <title>PROGRAMMING TIP: Multiway Selection</title>
     <p>
       A typical use for the
 <c>switch</c> statement is to use it together with <c>break</c> to code a multiway selection structure.
@@ -144,11 +153,11 @@ switch (m)
     <title><c>break</c></title>
     <p>
       The <c>break</c> statement transfers control out of its enclosing <term>block</term>,
-      where a block is any sequence of statements contained within curly brackets \{ and \}.
+      where a block is any sequence of statements contained within curly brackets { and }.
     </p>
   </principle>
   <principle>
-    <title>DEBUGGING TIP:Switch without <c>break</c></title>
+    <title>DEBUGGING TIP: Switch without <c>break</c></title>
     <p>
       A common error in coding the switch-based multiway selection is forgetting to put a <c>break</c> statement at the end of each clause.
       This may cause more than one case to be executed.
@@ -207,7 +216,7 @@ switch (m)
         <p>
           Flavors of ice cream are represented as integers where 0 is vanilla, 1 is chocolate,
           and 2 is strawberry.
-          Write a <c>switch</c> statement that checks an integer variable <c>flavor</c> and prints out the name of the ice cream flavor or prints
+          In the active code below, write a <c>switch</c> statement that checks an integer variable <c>flavor</c> and prints out the name of the ice cream flavor or prints
           <q>Error</q>
           in the default case.
         </p>
@@ -220,5 +229,31 @@ switch (m)
         </p>
       </li>
     </ol>
+
+
+    <exercise label="flavorsEx">
+      <statement><p>
+        Write a <c>switch</c> statement that checks an integer variable <c>flavor</c> and 
+        prints out the name of the ice cream flavor (where 0 is vanilla, 1 is chocolate,
+        and 2 is strawberry) or prints
+          <q>Error</q>
+          in the default case. Test by changing the flavor variable's value.
+      </p></statement>
+      <program language="java"><input>
+        public class Flavors 
+        {
+          public static void main(String args[]) 
+          {
+            /*  Write a switch statement below that checks flavor and 
+            prints out the name of the ice cream flavor 
+            (where 0 is vanilla, 1 is chocolate,and 2 is strawberry) 
+            or prints Error in the default case.
+            */
+            int flavor = 1;
+
+
+          }
+        }
+        </input></program></exercise>
   </subsection>
 </section>
