@@ -1,0 +1,143 @@
+ <section xml:id="bool-onerownim">
+    <title>Using Booleans in OneRowNim</title>
+    <p>
+      Now that we have introduced the <c>boolean</c> data type,
+      let's use it to improve the <c>OneRowNim</c> class,
+      the latest version of which, from Chapter<nbsp/>3,
+      is given in <xref ref="fig-ornclass">Listing</xref>.
+      Previously we used an <c>int</c> variable,
+<c>player</c>, to represent who's turn it is.
+      For a two-person game, such as One Row Nim,
+      a <c>boolean</c> variable is well suited for this purpose,
+      because it can toggle between true and false.
+      For example,
+      let's declare a variable, <c>onePlaysNext</c>, and initialize it to true,
+      to represent the fact that player one will play first:
+    </p>
+ <program language="java"><input>
+private boolean onePlaysNext = true;
+ </input></program>
+    <p>
+      When <c>onePlaysNext</c> is true,
+      it will be player one's turn.
+      When it is false, it will be player two's turn.
+      Note that we are deliberately remaining uncommitted as to whether one or the other player is the computer.
+    </p>
+    <p>
+      Given this new variable,
+      it is necessary to redefine the methods that had previously used the <c>player</c> variable.
+      The first method that needs revision is the constructor:
+    </p>
+ <program language="java"><input>
+public OneRowNim(int sticks, int starter)
+{   nSticks = sticks;
+    onePlaysNext = (starter == 1);
+}  // OneRowNim() constructor3
+ </input></program>
+    <p>
+      In the constructor,
+      the <c>starter</c> parameter is used with a value of 1 or 2 to set which player goes first.
+      Note how we use an assignment statement to set <c>onePlaysNext</c> to true if
+        <c>starter</c> equals 1;
+      otherwise it is set to false.
+      The assignment statement first evaluates the expression on its right hand side (<c>starter == 1</c>).
+      Because this is a boolean expression,
+      it will have a value of true or false,
+      which will be assigned to <c>onePlaysNext</c>. Thus,
+      the assignment statement is equivalent to the following if/else statement:
+    </p>
+ <program language="java"><input>
+if (player == 1)
+   onePlaysNext = true;
+else
+   onePlaysNext = false;
+ </input></program>
+    <p>
+      The remaining changes are shown in <xref ref="fig-newonerow">Listing</xref>.
+      There are only two instance methods that need revision to accommodate the use of <c>boolean</c> variables.
+      The <c>takeSticks()</c> method contains two revisions.
+      The first uses the boolean OR operator to test whether a move is valid:
+    </p>
+ <program language="java"><input>
+public boolean takeSticks(int num)
+{   if (num &lt; 1 || num > 3 || num > nSticks)
+        return false;                // Error
+    else                             // Valid move
+    {   nSticks = nSticks - num;
+        onePlaysNext = !onePlaysNext;
+        return true;
+    } //else
+} // takeSticks()
+ </input></program>
+    <p>
+      It also uses the boolean NOT operator to toggle the value of <c>onePlaysNext</c>, to switch to the other player's turn:
+    </p>
+ <program language="java"><input>
+onePlaysNext = !onePlaysNext;
+ </input></program>
+    <p>
+      Finally, the <c>getPlayer()</c> method now uses a if/else statement 
+      to return either 1 or 2 depending on who's turn it is:
+    </p>
+ <program language="java"><input>
+public int getPlayer()
+{   if (onePlaysNext)
+        return 1;
+    else return 2;
+} // getPlayer()
+ </input></program>
+
+<p>
+      The rfull listing of the revise <c>OneRowNim</c> is
+      given in <xref ref="fig-newonerow">Listing</xref>.
+</p>
+    <listing xml:id="fig-newonerow">
+      <caption>The revised <c>OneRowNim</c> uses a <c>boolean</c>
+      variable to keep track of who's turn it is.</caption>
+ <program language="java"><input>
+public class OneRowNim
+{    private int nSticks = 7;
+     private boolean onePlaysNext = true;
+     public OneRowNim()
+     {
+     } //OneRowNim() constructor1
+     public OneRowNim(int sticks)
+     {   nSticks = sticks;
+     }  // OneRowNim() constructor2
+     public OneRowNim(int sticks, int starter)
+     {   nSticks = sticks;
+         onePlaysNext = (starter == 1);
+     }  // OneRowNim() constructor3
+     public boolean takeSticks(int num)
+     {   if (num &lt; 1 || num > 3 || num > nSticks)
+             return false;                // Error
+         else                             // Valid move
+         {   nSticks = nSticks - num;
+             onePlaysNext = !onePlaysNext;
+             return true;
+         } //else
+     } // takeSticks()
+     public int getSticks()
+     {   return nSticks;
+     }{ // getSticks()}
+     public int getPlayer()
+     {   if (onePlaysNext) return 1;
+         else return 2;
+     } // getPlayer()
+     public boolean gameOver()
+     {   return (nSticks &lt;= 0);
+     } // gameOver()
+     public int getWinner()
+     {   if (nSticks &lt; 1) return getPlayer();
+         else return 0;  // game is not over
+     } // getWinner()
+     public void report()
+     {   System.out.println("Number of sticks left: "
+                             + getSticks());
+         System.out.println("Next turn by player "
+                             + getPlayer());
+     }   // report()
+} // OneRowNim class
+ </input></program>
+    </listing>
+</section>

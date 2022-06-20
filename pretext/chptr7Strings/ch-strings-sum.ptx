@@ -1,0 +1,362 @@
+<section xml:id="ch-strings-sum">
+    <title>Chapter Summary</title>
+    <subsection>
+        <title>Technical Terms</title>
+        <tabular>
+         <row>
+           <cell>baseline</cell>
+           <cell>concatenation</cell>
+           <cell>copy cosntructor</cell>
+        </row>
+        <row>
+    <cell>data structure</cell>
+    <cell>delimited string</cell>
+    <cell>delimiter</cell>
+</row>
+<row>    
+    <cell>empty string</cell>
+    <cell>garbage collection</cell>
+    <cell>glyph</cell>
+</row>
+<row>
+    <cell>lexicographic order</cell>
+    <cell>logical font</cell>
+    <cell>off-by-one error</cell>
+</row>
+<row>
+    <cell>orphan object</cell>
+    <cell>physical font</cell>
+    <cell>read only</cell>
+</row>
+<row>    
+    <cell>string</cell>
+    <cell>string index</cell>
+    <cell>string literal</cell>
+</row>
+<row>
+    <cell>token</cell>
+    <cell>unit indexed</cell>
+    <cell>zero indexed</cell>
+</row>
+    </tabular>
+    </subsection>
+    <subsection>
+            <title>Important Points}</title>
+    <p>
+      <ul>
+        <li>
+          <p>
+            A <c>String<idx><h>String</h></idx></c> literal is a sequence of 0 or more characters enclosed within double quotation marks.
+            A <c>String</c> object is a sequence of 0 or more characters,
+            plus a variety of class and instance methods and variables.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <c>String</c> object is created automatically by Java the first time it encounters a
+            <em>literal string</em>, such as
+            <q>Socrates,</q>
+            in a program.
+            Subsequent occurrences of the literal do not cause additional objects to be instantiated.
+            Instead, every occurrence of the literal
+            <q>Socrates</q>
+            refers to the initial object.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <c>String</c> object is created whenever the <c>new</c> operator is used in conjunction with a <c>String()</c> constructor<mdash/>for example, <c>new String("hello")</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>String</c> concatenation operator is the overloaded <m>+</m> symbol;
+            it is used to combine two <c>String</c> s into a single
+<c>String</c>:
+            <q>hello</q>
+            +
+            <q>world</q>
+             <c>==></c>
+            <q>helloworld</q>. Strings are indexed starting at 0.
+            The <c>indexOf()</c> and <c>lastIndexOf()</c> methods
+              <idx><h>String methods</h></idx>
+            are used for finding the first or last occurrence of a character or substring within a <c>String</c>. The <c>valueOf()</c> methods convert a nonstring into a <c>String</c>. The <c>length()</c> method determines the number of characters in a <c>String</c>. The <c>charAt()</c> method returns the single character at a particular index position.
+            The various <c>substring()</c> methods return the substring at particular index positions in a <c>String</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            The overloaded <c>equals()</c> method returns <c>true</c> if two
+            <c>String</c> s contain the same exact sequence of characters.
+            The <c>==</c> operator,
+            when used on <c>String</c> s, returns true if two references designate the same <c>String</c> object.
+            String objects are <em>immutable</em>.
+            They cannot be modified.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <c>StringBuffer</c> is a string object that can be 
+            modified using methods such as <c>insert()</c> and <c>append()</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            A <c>StringTokenizer</c> is an object that can be used to 
+            break a <c>String</c> into a collection of <em>tokens</em>
+            separated by <em>delimiters</em>.
+            The whitespace characters<mdash/>tabs,
+            blanks, and newlines<mdash/>are the default delimiters.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>FontMetrics</c> class is used to obtain the specific 
+            dimensions of the the various <c>Font</c> s.
+            It is useful when you wish to center text.  <c>Font</c> s are 
+            inherently platform dependent.
+            For maximum portability, it is best to use default fonts.
+          </p>
+        </li>
+      </ul>
+    </p>
+</subsection>
+<subsection xml:id="ch-strings-ss-ans">
+    <title>Answers to Self-Study Exercises</title>
+    <p>
+        <ol>
+          <li>
+            <ol>
+              <li><p>silly</p></li>
+              <li><p>silly</p></li>
+              <li><p>silly stuff</p></li>
+            </ol>
+          </li>
+          <li>
+            <ol>
+              <li><p><c>String str1 = "";</c></p></li>
+              <li><p><c>String str2 = new String("stop");</c></p></li>
+              <li><p><c>String str3 = str1 + str2;</c></p></li>
+            </ol>
+          </li>
+          <li>
+            <ol>
+              <li><p>15</p></li>
+              <li><p><c>"551"</c></p></li>
+              <li><p><c>"5175"</c></p></li>
+            </ol>
+          </li>
+          <li xml:id="ans-strobjects2">
+            <p>
+              See <xref ref="fig-strobjects3">Figure</xref>.
+              <figure xml:id="fig-strobjects3">
+                <caption>Answer to Exercise 7.4. Note that <em>s1</em> is <c>null</c> 
+                    because it has not been instantiated and has not been assigned a 
+                    literal value.</caption>
+                <image width="73%" source="chptr07/p392f1.png"/>
+              </figure>
+            </p>
+          </li>
+          <li>
+            <ol>
+              <li><p><c>"45"</c></p></li>
+              <li><p><c>"121"</c></p></li>
+              <li><p><c>"X"</c></p></li>
+            </ol>
+          </li>
+          <li>
+            <ol>
+              <li><p><c>String.valueOf(100)</c></p></li>
+              <li><p><c>String.valueOf('V');</c></p></li>
+              <li><p><c>String s = new String(String.valueOf(X * Y));</c></p></li>
+            </ol>
+          </li>
+          <li>
+            <ol>
+              <li><p>0</p></li>
+              <li><p>1</p></li>
+              <li><p><m>-1</m></p></li>
+            </ol>
+        </li>
+        <li>
+            <ol>
+              <li>
+                <p>
+                  16
+                </p>
+              </li>
+              <li>
+                <p>
+  <c>"16"</c>
+                </p>
+              </li>
+              <li>
+                <p>
+                  1
+                </p>
+              </li>
+              <li>
+                <p>
+                  15
+                </p>
+              </li>
+              <li>
+                <p>
+                  1
+                </p>
+              </li>
+              <li>
+                <p>
+                  13
+                </p>
+              </li>
+              <li>
+                <p>
+                  7
+                </p>
+              </li>
+              <li>
+                <p>
+                  3
+                </p>
+              </li>
+              <li>
+                <p>
+                  7
+                </p>
+              </li>
+              <li>
+                <p>
+                  7
+                </p>
+              </li>
+              <li>
+                <p>
+                  3
+                </p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>
+              Evaluate the following expression:
+            </p>
+   <program language="java"><input>
+  String tricky = "abcdefg01234567";
+  tricky.indexOf(String.valueOf(tricky.indexOf("c")));
+  tricky.indexOf(String.valueOf(2));
+  tricky.indexOf("2");
+  Answer: 9
+   </input></program>
+            </li>
+            <li>
+              <ol>
+                <li><p><c>"uvwxyz"</c></p></li>
+                <li><p><c>"bcde"</c></p></li>
+                <li><p><c>"xyz"</c></p></li>
+                <li><p><c>"xy"</c></p></li>
+                <li><p><c>"xyz"</c></p></li>
+              </ol>
+        </li>
+        <li>
+            <ol>
+              <li><p><c>"uvwxyz"</c></p></li>
+              <li><p><c>"bcde"</c></p></li>
+              <li><p><c>"xyz"</c></p></li>
+              <li><p><c>"xyz"</c></p></li>
+              <li><p><c>"xyz"</c></p></li>
+            </ol>
+          </li>
+          <li>
+            <p>
+              A class to test the string methods.
+            </p> 
+   <program language="java"><input>
+public class StringProcessorTest {
+    public static void main(String[] args) {
+      KeyboardReader kb = new KeyboardReader();
+      kb.prompt("Input a String or - stop - to quit: ");
+      String str = kb.getKeyboardInput();
+      while (!str.equals("stop")){
+        kb.display("Testing printLetters()\n");
+        StringProcessor.printLetters(str);
+        kb.display("testing countChars()\n");
+        kb.display("Total occurences of e = ");
+        kb.display(StringProcessor.countChar(str,'e') + "\n");
+        kb.display("Testing reverse()\n");
+        kb.display(StringProcessor.reverse(str)+ "\n");
+        kb.display("Testing capitalize()\n");
+        kb.display(StringProcessor.capitalize(str) + "\n\n");
+        kb.prompt("Input a String or - stop - to quit: ");
+        str = kb.getKeyboardInput();
+      } // while
+    } //main()
+} // StringProcessorTest class
+   </input></program>
+          </li>
+          <li>
+            <p>
+              Method to remove all blanks from a string:</p>
+   <program language="java"><input>
+   // Pre: s is a non null string
+   // Post: s is returned with all its blanks removed
+   public String removeBlanks(String s) {
+     StringBuffer result = new StringBuffer();
+     for (int k = 0; k &lt; s.length();  k++)
+       if (s.charAt(k) != ' ')      // If this is not a blank
+         result.append(s.charAt(k));  //  append it to result
+     return result.toString();
+   }
+   </input></program>
+          </li>
+          <li>
+            <p>
+              A Alpha Z Zero Zeroes a alpha bath bin z zero
+            </p>
+          </li>
+          <li>
+            <p>
+              To modify <c>precedes</c> so that it also returns 
+              true when its two string arguments are equal,
+              just change the operator in the final return statement to <c>&lt;=</c>:
+            </p>
+   <program language="java"><input>
+  if (s1.charAt(k) &lt;= s2.charAt(k) )
+        return true;
+   </input></program>
+            </li>
+            <li>
+              <ol>
+                <li><p>true</p></li>
+                <li><p>true</p></li>
+                <li><p>false</p></li>
+                <li><p>false</p></li>
+                <li><p>false</p></li>
+                <li><p>true</p></li>
+                <li><p>false</p></li>
+                <li><p>false</p></li>
+                <li><p>false</p></li>
+              </ol>
+          </li>
+          <li>
+            <p>
+              The variables in <c>TestStringEquals</c> are declared <c>static</c> because they are used in <c>static</c> methods.
+              Whenever you call a method directly from <c>main()</c>, it must be <c>static</c> because
+  <c>main()</c> is static.
+              Remember that <c>static</c> elements are associated with the class,
+              not with its instances.
+              So <c>main()</c> can only use static elements because they don't 
+              depend on the existence of instances.
+            </p>
+        </li>
+        <li>
+              <ol>
+                <li><p><c>String s3 = s1.substring(s1.indexOf('n'))</c><c>+ s1.substring(0,s1.indexOf('n'));</c></p></li>
+                <li><p><c>String s4 = s2.substring(6) + " " + s2.substring(0,5);</c></p></li>
+                <li><p><c>String s5 = s2.substring(0,6) + s1.substring(0,3);</c></p></li>
+              </ol>
+        </li>
+        </ol>
+      </p>
+</subsection>
+</section>

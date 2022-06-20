@@ -11,24 +11,31 @@
     <p>
       As an example of how to use <c>Math</c> class methods,
       let's consider the problem of rounding numbers.
-      When dealing with applications that involve monetary values<mdash/>dollars and cents<mdash/>it is often necessary to round a calculated result to two decimal places.
+      When dealing with applications that involve monetary 
+      values<mdash/>dollars and cents<mdash/>it is often necessary to 
+      round a calculated result to two decimal places.
+    </p>
+    <p>
       For example,
       suppose a program computes the value of a certificate of deposit (CD) to be 75.19999.
       Before we output this result,
-      we would want to round it to two decimal places<mdash/>to 75.20.  The following algorithm can be used to accomplish this:
+      we would want to round it to two decimal places<mdash/>to 75.20. 
+      The following algorithm can be used to accomplish this:
     </p>
- <program language="java"><input>
+ <algorithm>
+  <title>Rounding to 2 decimal places</title>
+  <program language="java"><input>
 1. Multiply the number by 100, giving 7519.9999.
 2. Add 0.5 to the number giving 7520.4999.
 3. Drop the fractional part giving 7520
 4. Divide the result by 100, giving 75.20
  </input></program>
+ </algorithm>
     <p>
-      Step 3 of this algorithm can be done using the
-<c>Math.floor(R)</c> method,
+      Step 3 of this algorithm can be done using the <c>Math.floor(R)</c> method,
       which rounds its real argument,
       <em>R</em>, to the largest integer not less than <em>R</em>
-      (from Table<nbsp/>5.11).
+      (from <xref ref="tab-math">Table</xref>).
       If the number to be rounded is stored in the <c>double</c> variable <em>R</em>,
       then the following expression will round <c>R</c> to two decimal places:
     </p>
@@ -37,9 +44,10 @@ R = Math.floor(R * 100.0 + 0.5) / 100.0;
  </input></program>
     <p>
       Alternatively,
-      we could use the <c>Math.round()</c> method (Table<nbsp/>5.11).
+      we could use the <c>Math.round()</c> method ( <xref ref="tab-math">Table</xref>).
       This method rounds a floating-point value to the nearest integer.
-      For example, <c>Math.round(65.3333)</c> rounds to 65 and <c>Math.round(65.6666)</c> rounds to 66.
+      For example, <c>Math.round(65.3333)</c> rounds to 65 and <c>Math.round(65.6666)</c> 
+      rounds to 66.
       The following expression uses it to round to two decimal places:
     </p>
  <program language="java"><input>
@@ -50,9 +58,10 @@ R = Math.round(100.0 * R) / 100.0;
       Otherwise, the division will give an integer result and we'll lose the two decimal places.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Division</title>
+      <title>DEBUGGING TIP: Division</title>
       <p>
-        Using the correct type of literal in division operations is necessary to ensure that you get the correct type of result.
+        Using the correct type of literal in division operations 
+        is necessary to ensure that you get the correct type of result.
       </p>
     </principle>
   </subsection>
@@ -61,7 +70,8 @@ R = Math.round(100.0 * R) / 100.0;
     <introduction>
       <p>
         To illustrate some of the issues that arise in using numeric data,
-        let's design a program that performs temperature conversions from Fahrenheit to Celsius and vice versa.
+        let's design a program that performs temperature conversions 
+        from Fahrenheit to Celsius and vice versa.
       </p>
     </introduction>
     <subsubsection>
@@ -70,13 +80,13 @@ R = Math.round(100.0 * R) / 100.0;
         This problem requires two classes,
         a <c>Temperature</c> class and a <c>TemperatureUI</c> class.
         The <c>Temperature</c> class will perform the temperature conversions,
-        and <c>TemperatureUI</c> will serve as the user interface (Fig.
-        <xref ref="fig-convapplobjs"></xref>).
+        and <c>TemperatureUI</c> will serve as the user interface 
+        (<xref ref="fig-convapplobjs">Figure</xref>).
       </p>
       <figure xml:id="fig-convapplobjs">
         <caption>Interacting objects: The user interacts with the user
         interface (<c>TemperatureUI</c>), which interacts with the <c>Temperature</c> object.</caption>
-        <image width="73%" source="chptr05/f5-2.png"/>
+        <image width="70%" source="chptr05/f5-2.png"/>
       </figure>
     </subsubsection>
     <subsubsection>
@@ -89,13 +99,17 @@ R = Math.round(100.0 * R) / 100.0;
         (or Fahrenheit)
         temperature as a parameter, perform the conversion, and return the result.
         Therefore, the <c>Temperature</c> class does not need any instance variables.
+      </p>
+      <p>
         Note that in this respect the <c>Temperature</c> class resembles the <c>Math</c> class.
-        Unlike <c>OneRowNim</c>, which stores the game's state<mdash/>the number of sticks remaining and whose turn it is<mdash/>the <c>Math</c> and <c>Temperature</c> classes are stateless.
+        Unlike <c>OneRowNim</c>, which stores the game's state <mdash/> the number of 
+        sticks remaining and whose turn it is <mdash/> the <c>Math</c> 
+        and <c>Temperature</c> classes are stateless. They just perform certain calculations
+        for us.
       </p>
       <p>
         Thus, following the design of the <c>Math</c> class,
-        the <c>
-Temperature</c> class will have two public static methods:
+        the <c>Temperature</c> class will have two public static methods:
         one to convert from Fahrenheit to Celsius and one to convert from Celsius to Fahrenheit.
         Recall that static methods are associated with the class rather than with its instances.
         Therefore, we needn't instantiate a <c>Temperature</c> object to use these methods.
@@ -104,62 +118,79 @@ Temperature</c> class will have two public static methods:
       <p>
         The methods will use the standard conversion formulas:
         <m>F = \frac{9}{5}C + 32</m> and <m>C = \frac{5}{9}(F - 32)</m>.
-        Each of these methods should have a single parameter to store the temperature value that is being converted.
+        Each of these methods should have a single parameter to store the 
+        temperature value that is being converted.
       </p>
       <p>
-        Because we want to be able to handle temperatures such as 98.6, we should use real-number data for the methods' parameters.
+        Because we want to be able to handle temperatures such as 98.6, 
+        we should use real-number data for the methods' parameters.
         Generally speaking,
-        because Java represents real literals such as 98.6 as <c>double</c> s, the <c>double</c> type is more widely used than <c>float</c>. Because <c>double</c> s are more widely used in Java,
-        using <c>double</c> wherever a floating point value is needed will cut down on the number of implicit data conversions that a program would have to perform.
-        Therefore, each of our conversion methods should take a <c>double</c> parameter and return a <c>double</c> result.
-        These considerations lead
+        because Java represents real literals such as 98.6 as <c>double</c>, 
+        the <c>double</c> type is more widely used than <c>float</c>. 
+        Moreover, using <c>double</c> wherever a floating point value is 
+        needed will cut down on the number of implicit data 
+        conversions that a program would have to perform.
+        Therefore, each of our conversion methods should take 
+        a <c>double</c> parameter and return a <c>double</c> result.
       </p>
       <principle>
-        <title>PROGRAMMING TIP:Numeric Types</title>
+        <title>PROGRAMMING TIP: Numeric Types</title>
         <p>
           Java uses the <c>int</c> type for integer literals and <c>double</c> for real-number literals.
-          When possible,
-          using <c>int</c> and <c>double</c> for numeric variables and parameters reduces the number of implicit conversions a program would have to perform.
+          Therefore using <c>int</c> and <c>double</c> for numeric 
+          variables and parameters reduces the number of implicit conversions 
+          a program would have to perform.
         </p>
       </principle>
+      <p>
+        These considerations lead to the design shown in <xref ref="fig-temperatureUML">Figure</xref>.
+      </p>
+      <figure xml:id="fig-temperatureUML">
+        <caption>The Temperature class.</caption>
+       <image width="50%" source="chptr05/temp-uml.png"/>
+      </figure>
     </subsubsection>
     <subsubsection xml:id="fig-p242f2">
       <title>Implementation: <c>Temperature</c></title>
       <p>
-        The implementation of the <c>Temperature</c> class is shown in <xref ref="fig-temperature">Figure</xref>.
+        The implementation of the <c>Temperature</c> class is shown in 
+        <xref ref="fig-temperature">Figure</xref>.
+      </p>
+     <figure xml:id="fig-temperature">
+        <caption>The <c>Temperature</c> class.</caption>
+        <program language="java"><input>
+          public class Temperature
+          {
+              public Temperature() {}
+              public static double fahrToCels(double temp)
+              {
+                  return (5.0 * (temp - 32.0) / 9.0);
+              }
+              public static double celsToFahr(double temp)
+              {
+                  return (9.0 * temp / 5.0 + 32.0);
+              }
+          } // Temperature
+        </input></program>
+      </figure>
+      <p>
         Note that because <c>celsToFahr()</c> uses the <c>double</c> value <c>temp</c> in its calculation,
         it uses floating-point literals (9.0, 5.0, and 32.0) in its conversion expression.
         This helps to reduce the reliance on Java's built-in promotion rules,
         which can lead to subtle errors.
         For example,
-        <image width="73%" source="chptr05/p242f2.png"/> to the design shown in <xref ref="fig-p242f2">Figure</xref>,
-        suppose we had written what looks like an equivalent expression using integer literals:
+        suppose we had written the <c>celsToFahr()</c> method using this calculation:
       </p>
- <program language="java"><input>
-return(9 / 5 * temp + 32); // Error: equals (temp + 32)
- </input></program>
-      <figure xml:id="fig-temperature">
-        <caption>The <c>Temperature</c> class.</caption>
- <program language="java"><input>
-public class Temperature
-{
-    public Temperature() {}
-    public static double fahrToCels(double temp)
-    {
-        return (5.0 * (temp - 32.0) / 9.0);
-    }
-    public static double celsToFahr(double temp)
-    {
-        return (9.0 * temp / 5.0 + 32.0);
-    }} // Temperature
- </input></program>
-      </figure>
+      <program language="java"><input>
+        return (9 / 5 * temp + 32);    // Error: equals (temp + 32)
+      </input></program>
       <p>
-        Because 9 divided by 5 gives the integer result 1, this expression is always equivalent to <c>temp + 32</c>, which is not the correct conversion formula.
-        This kind of subtle semantic error  can be avoided if you avoid mixing types wherever possible.
+        Because 9 divided by 5 gives the integer result 1, this expression 
+        is always equivalent to <c>temp + 32</c>, which is not the correct conversion formula.
+        This kind of subtle semantic error can be avoided if you avoid mixing types wherever possible.
       </p>
       <principle>
-        <title>PROGRAMMING TIP:Don't Mix Types</title>
+        <title>PROGRAMMING TIP: Don't Mix Types</title>
         <p>
           You can reduce the incidence of semantic errors caused by implicit type conversions if,
           whenever possible,
@@ -205,21 +236,24 @@ public class Temperature
         </ul>
       </p>
       <p>
-        The first two tests use the <c>celsToFahr()</c> method to test the freezing point and boiling point temperatures,
+        The first two tests use the <c>celsToFahr()</c> method to 
+        test the freezing point and boiling point temperatures,
         two boundary values for this problem.
-        A <term>boundary value</term> is a value at the beginning or end of the range of values that a variable or calculation is meant to represent.
+        A <term>boundary value</term> is a value at the beginning 
+        or end of the range of values that a variable or calculation is meant to represent.
         The second pair of tests performs similar checks with the <c>fahrToCels()</c> method.
-        One advantage of using these particular values is that we know what results the methods should return.
+        One advantage of using these particular values is that we know what 
+        results the methods should return.
       </p>
       <principle>
-        <title>EFFECTIVE DESIGN:Test Data</title>
+        <title>EFFECTIVE DESIGN: Test Data</title>
         <p>
           Developing appropriate test data is an important part of program design.
           One type of test data should check the boundaries of the particular calculations you are making.
         </p>
       </principle>
       <principle>
-        <title>DEBUGGING TIP:Test, Test, Test!</title>
+        <title>DEBUGGING TIP: Test, Test, Test!</title>
         <p>
           The fact that your program runs correctly on some data is no guarantee of its correctness.
           The more testing,
@@ -227,14 +261,13 @@ public class Temperature
         </p>
       </principle>
     </subsubsection>
-    <subsubsection xml:id="self-study-exercisesF16">
+    <subsubsection xml:id="tempui">
       <title>The <c>TemperatureUI</c>Class</title>
       <p>
         The purpose of the <c>TemperatureUI</c> class is to serve as a user interface<mdash/>that is,
         as an interface between the user and a <c>Temperature</c> object.
         It will accept a Fahrenheit or Celsius temperature from the user,
-        pass it to one of the public methods of the
-<c>Temperature</c> object for conversion,
+        pass it to one of the public methods of the <c>Temperature</c> object for conversion,
         and display the result that is returned.
       </p>
       <p>
@@ -242,86 +275,100 @@ public class Temperature
         the user interface can take various forms,
         ranging from a command-line interface to a graphical interface.
         <xref ref="fig-tempcmdline">Figure</xref>
-        shows a design for the user interface based on the command-line interface developed in Chapter<nbsp/>4.
-        The <c>TemperatureUI</c> uses a <c>KeyboardReader</c> to handle interaction with the user and uses <c>static</c> methods in the
-<c>Temperature</c> class to perform the temperature conversions.
+        shows a design for the user interface based on the command-line 
+        interface developed in Chapter<nbsp/>4.
+        The <c>TemperatureUI</c> uses a <c>KeyboardReader</c> to 
+        handle interaction with the user and uses <c>static</c> methods in the
+        <c>Temperature</c> class to perform the temperature conversions.
       </p>
       <figure xml:id="fig-tempcmdline">
         <caption>A command-line user interface.</caption>
         <image width="73%" source="chptr05/tempui.png"/>
       </figure>
+</subsubsection>
+<subsubsection xml:id="ss-5.7.1">
+  <title>Self-Study Exercises</title>
       <p>
-  <!--      </subsection><subsection><title>Self-Study Exercises</title> -->
         <ol>
           <li>
             <p>
               Following the design in <xref ref="fig-tempcmdline">Figure</xref>,
-              implement the <c>TemperatureUI</c> class and use it to test the methods in <c>Temperature</c> class.
+              implement the <c>TemperatureUI</c> class and use it to test the 
+              methods in <c>Temperature</c> class.
               The <c>run()</c> method should use an
               <em>input-process-output</em>
               algorithm: Prompt the user for input,
               perform the necessary processing, and output the result.
-              Note that because
-<c>Temperature</c>'s conversion methods are class methods,
+            </p>
+            <p>
+              Remember, because <c>Temperature</c>'s conversion methods are class methods,
               you do not need to instantiate a <c>Temperature</c> object in this project.
               You can invoke the conversion methods directly through the <c>Temperature</c> class:
- <program language="java"><input>
-double fahr = Temperature.celsToFahr(98.6);
- </input></program>
             </p>
+            <program language="java"><input>
+              double fahr = Temperature.celsToFahr(98.6);
+            </input></program>
           </li>
-          <li xml:id="fig-convapplgui">
+          <li>
             <p>
               Following the design for the GUI developed in Chapter<nbsp/>4,
-              <image width="73%" source="chptr05/5f5.png"/> implement a GUI to use for testing the <c>Temperature</c> class.
-              The GUI should have the layout shown in <xref ref="fig-convapplgui">Figure</xref>.
+              implement a 
+              GUI to use for testing the <c>Temperature</c> class.
+              The GUI should have the layout shown in 
+              <xref ref="fig-convapplgui">Figure</xref>.
             </p>
+            <figure xml:id="fig-convapplgui">
+             <caption>NEED TO UPDATE THIS IMAGE.</caption>
+             <image width="40%" source="chptr05/5f5.png"/>
+            </figure>
           </li>
         </ol>
       </p>
     </subsubsection>
   </subsection>
-  <subsection xml:id="self-study-exerciseQ16">
+  <subsection xml:id="class-constants">
     <title>Example: Using Class Constants</title>
     <p>
-      As we noted in <xref ref="chapter-intro">Chapter</xref>,
-      in addition to instance variables,
-      which are associated with instances (objects) of a class, Java also allows class variables,
+      In addition to instance variables,
+      which are associated with instances (objects) of a class, Java also allows 
+      <term>class variables</term>,
       which are associated with the class itself.
-      One of the most common uses of such variables is to define named constants to replace literal values.
-      A <term>named constant</term> is a variable that cannot be changed once it has been given an initial value.
+      One of the most common uses of such variables is to define 
+      named constants to replace literal values.
+      A <term>named constant</term> is a variable that cannot be 
+      changed once it has been given an initial value.
       In this section,
       we use our running example, <c>OneRowNim</c>, to illustrate using class constants.
     </p>
     <p>
-      Recall that methods and variables that are associated with a class must be declared with the <c>static</c> modifier.
-      If a variable is declared
-<c>static</c>, there is exactly one copy of that variable created no matter how many times its class is instantiated.
+      Methods and variables that are associated with a class 
+      are declared with the <c>static</c> modifier.
+      If a variable is declared <c>static</c>, there is exactly one copy of 
+      that variable created no matter how many times its class is instantiated.
       To turn a variable into a constant,
       it must be declared with the <c>final</c> modifier.
       Thus, the following would be examples of a
       <term>class constants</term>,
       constant values that are associated with the class rather than with its instances:
     </p>
- <program language="java"><input>
-public static final int PLAYER_ONE = 1;
-public static final int PLAYER_TWO = 2;
-public static final int MAX_PICKUP = 3;
-public static final int MAX_STICKS = 7;
- </input></program>
+    <program language="java"><input>
+      public static final int PLAYER_ONE = 1;
+      public static final int PLAYER_TWO = 2;
+      public static final int MAX_PICKUP = 3;
+      public static final int MAX_STICKS = 7;
+    </input></program>
     <p>
       The <c>final</c> modifier indicates that the value of a variable cannot be changed.
       When <c>final</c> is used in a variable declaration,
       the variable must be assigned an initial value.
-      After a
-<c>final</c> variable is properly declared,
+      After a <c>final</c> variable is properly declared,
       it is a syntax error to attempt to try to change its value.
       For example, given the preceding declarations,
       the following assignment statement would cause a compiler error:
     </p>
- <program language="java"><input>
-PLAYER_ONE = 5;// Syntax error; PLAYER_ONE is a constant
- </input></program>
+    <program language="java"><input>
+      PLAYER_ONE = 5;  // Syntax error; PLAYER_ONE is a constant
+    </input></program>
     <p>
       Note how we use uppercase letters and underscore characters (_) in the names of constants.
       This is a convention that professional Java programmers follow,
@@ -329,23 +376,22 @@ PLAYER_ONE = 5;// Syntax error; PLAYER_ONE is a constant
       This makes the program easier to read and understand.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Readability</title>
+      <title>PROGRAMMING TIP: Readability</title>
       <p>
         To make your programs more readable,
         use uppercase font for constant identifiers.
       </p>
     </principle>
     <p>
-      Another way that named constants improve the readability of a program is by replacing the reliance on literal values.
-      For example,
-      for the
-<c>OneRowNim</c> class,
+      Another way that named constants improve the readability 
+      of a program is by replacing the reliance on literal values.
+      For example, for the <c>OneRowNim</c> class,
       compare the following two <c>if</c> conditions:
     </p>
- <program language="java"><input>
-if (num &lt; 1 || num > 3 || num > nSticks) ...
-if (num &lt; 1 || num > MAX_PICKUP || num > nSticks) ...
- </input></program>
+    <program language="java"><input>
+      if (num &lt; 1 || num > 3 || num > nSticks) ...
+      if (num &lt; 1 || num > MAX_PICKUP || num > nSticks) ...
+    </input></program>
     <p>
       Clearly, the second condition is easier to read and understand.
       In the first condition,
@@ -355,42 +401,44 @@ if (num &lt; 1 || num > MAX_PICKUP || num > nSticks) ...
     </p>
     <p>
       Thus, to make <c>OneRowNim</c> more readable,
-      we should replace all occurrences of the literal value 3 with the constant MAX_PICKUP. This same principle would apply to some of the other literal values in the program.
+      we should replace all occurrences of the literal value 3 with 
+      the constant MAX_PICKUP. This same principle would apply to some of 
+      the other literal values in the program.
       Thus,  instead of using 1 and 2 to represent the two players,
-      we could use PLAYER_ONE and PLAYER_TWO to make methods such as the following easier to read and understand:
+      we could use PLAYER_ONE and PLAYER_TWO to make methods 
+      such as the following easier to read and understand:
     </p>
- <program language="java"><input>
-public int getPlayer()
-{   if (onePlaysNext)
-         return PLAYER_ONE;
-    else return PLAYER_TWO;} // getPlayer()
- </input></program>
+    <program language="java"><input>
+      public int getPlayer()
+      {   if (onePlaysNext)
+              return PLAYER_ONE;
+          else return PLAYER_TWO;
+      } // getPlayer()
+    </input></program>
     <principle>
-      <title>PROGRAMMING TIP:Readability</title>
+      <title>PROGRAMMING TIP: Readability</title>
       <p>
         To make your programs more readable,
         use named constants instead of literal values.
       </p>
     </principle>
     <p>
-      Another advantage of named constants
-      (over literals)
+      Another advantage of named constants (over literals)
       is that their use makes the program easier to modify and maintain.
-      For example,
-      suppose that we decide to change <c>OneRowNim</c> so that the  maximum number of sticks that can be picked up is 4 instead of 3.
-      If we used literal values,
-      we would have to change all occurrences of 4 that were used to represent the maximum pick up.
+      For example, suppose that we decide to change <c>OneRowNim</c> 
+      so that the  maximum number of sticks that can be picked up is 4 instead of 3.
+      If we used literal values, we would have to change all 
+      occurrences of 4 that were used to represent the maximum pick up.
       If we used a named constant, we need only change its declaration to:
     </p>
- <program language="java"><input>
-public static final int MAX_PICKUP = 4;
- </input></program>
+    <program language="java"><input>
+      public static final int MAX_PICKUP = 4;
+    </input></program>
     <principle>
-      <title>EFFECTIVE DESIGN:Maintainability</title>
+      <title>EFFECTIVE DESIGN: Maintainability</title>
       <p>
         Constants should be used instead of literal values in a program.
         This will make the program easier to modify and maintain.
-            <idx><h>Maintainability Principle</h></idx>
       </p>
     </principle>
     <p>
@@ -402,142 +450,166 @@ public static final int MAX_PICKUP = 4;
       the idea of associating constants with a class makes good sense.
       In addition to saving memory resources,
       by creating just a single copy of the constant,
-      constants such as MAX_STICKS and PLAYER_ONE make more conceptual sense to associate with the class itself rather than with any particular <c>OneRowNim</c> instance.
+      constants such as MAX_STICKS and PLAYER_ONE make more conceptual sense to 
+      associate with the class itself rather than with any particular <c>OneRowNim</c> instance.
     </p>
     <p>
       Class constants are used extensively in the Java class library.
-      For example,
-      as we saw in Chapter<nbsp/>2, Java's various built-in colors are represented as constants of the <c>java.awt.Color</c> class<mdash/><c>Color.blue</c> and <c>Color.red</c>. Similarly, <c>java.awt.Label</c> uses <c>int</c> constants to specify how a label's text should be aligned: <c>Label.CENTER</c>.
+      For example, Java's various 
+      built-in colors are represented as constants of the 
+      <c>java.awt.Color</c> class <mdash/><c>Color.blue</c> and <c>Color.red</c>. 
+      Similarly, <c>java.awt.Label</c> uses <c>int</c> constants 
+      to specify how a label's text should be aligned: <c>Label.CENTER</c>.
     </p>
     <p>
       Another advantage of class constants is that they can be used <em>before</em>
-      instances of the class exist.
-      For example, a class constant
-      (as opposed to an instance constant)
-      may be used during object instantiation:
+      instances of the class exist.  For example, a class constant
+      (as opposed to an instance constant) may be used during object instantiation:
     </p>
- <program language="java"><input>
-OneRowNim game = new OneRowNim(OneRowNim.MAX_STICKS);
- </input></program>
+    <program language="java"><input>
+      OneRowNim game = new OneRowNim(OneRowNim.MAX_STICKS);
+    </input></program>
     <p>
       Note how we use the name of the class to refer to the class constant.
-      Of course, MAX_STICKS has to be a public variable in order to be accessible outside the class.
-      To use MAX_STICKS as a constructor argument it has to be a class constant because at this point in the program there are no instances of <c>OneRowNim</c>. A new version of <c>OneRowNim</c> that uses class constants is shown in <xref ref="fig-constnim">Figure</xref>.
+      Of course, MAX_STICKS has to be a public variable in order 
+      to be accessible outside the class.
+      To use MAX_STICKS as a constructor argument it has to be 
+      a class constant because at this point in the 
+      program there are no  <c>OneRowNim</c> instances. 
+      A new version of <c>OneRowNim</c> that uses class constants 
+      is shown in <xref ref="list-constnim">Listing</xref>.
     </p>
     <p>
-      It is important to note that Java also allows class constants to be referenced through an instance of the class.
-      Thus, once we have instantiated <c>game</c>, we can refer to MAX_STICKS with either <c>OneRowNim.MAX_STICKS</c> or <c>game.MAX_STICKS</c>.
+      It is important to note that Java also allows class 
+      constants to be referenced through an instance of the class.
+      Thus, once we have instantiated <c>game</c>, we can 
+      refer to MAX_STICKS with either <c>OneRowNim.MAX_STICKS</c> 
+      or <c>game.MAX_STICKS</c>.
     </p>
-    <figure xml:id="fig-constnim">
+    <listing xml:id="list-constnim">
       <caption>This version of <c>OneRowNim</c> uses named constants.</caption>
- <program language="java"><input>
-public class OneRowNim
-{   public static final int PLAYER_ONE = 1;
-    public static final int PLAYER_TWO = 2;
-    public static final int MAX_PICKUP = 3;
-    public static final int MAX_STICKS = 11;
-    public static final boolean GAME_OVER = false;
-     private int nSticks = MAX_STICKS;
-     private boolean onePlaysNext = true;
-     public OneRowNim()
-     {
-     } //OneRowNim() constructor1
-     public OneRowNim(int sticks)
-     {   nSticks = sticks;
-     }  // OneRowNim() constructor2
-     public OneRowNim(int sticks, int starter)
-     {   nSticks = sticks;
-         onePlaysNext = (starter == PLAYER_ONE);
-     }  // OneRowNim() constructor3
-     public boolean takeSticks(int num)
-     {   if (num &lt; 1 || num > MAX_PICKUP || num > nSticks)
-             return false;                // Error
-         else                             // Valid move
-         {   nSticks = nSticks - num;
-             onePlaysNext = !onePlaysNext;
-             return true;
-         } //else
-     }//takeSticks()
-     public int getSticks()
-     {   return nSticks;
-     } //getSticks()
-     public int getPlayer()
-     {   if (onePlaysNext)
-             return PLAYER_ONE;
-         else return PLAYER_TWO;
-     } //getPlayer()
-     public boolean gameOver()
-     {   return (nSticks &lt;= 0);
-     } // gameOver()
-     public int getWinner()
-     {   if (nSticks &lt; 1)
-             return getPlayer();
-         else return 0;         // Game is not over
-     } // getWinner()
-     public String report()
-     {   return ("Number of sticks left: " + getSticks()
-          + "\nNext turn by player " + getPlayer() + "\n");
-     }   // report()} // OneRowNim class
- </input></program>
-    </figure>
+      <program language="java"><input>
+        public class OneRowNim
+        {   public static final int PLAYER_ONE = 1;
+            public static final int PLAYER_TWO = 2;
+            public static final int MAX_PICKUP = 3;
+            public static final int MAX_STICKS = 11;
+            public static final boolean GAME_OVER = false;
+            private int nSticks = MAX_STICKS;
+            private boolean onePlaysNext = true;
+            public OneRowNim()
+            {
+            } //OneRowNim() constructor1
+            public OneRowNim(int sticks)
+            {   nSticks = sticks;
+            }  // OneRowNim() constructor2
+            public OneRowNim(int sticks, int starter)
+            {   nSticks = sticks;
+                onePlaysNext = (starter == PLAYER_ONE);
+            }  // OneRowNim() constructor3
+            public boolean takeSticks(int num)
+            {   if (num &lt; 1 || num > MAX_PICKUP || num > nSticks)
+                    return false;                // Error
+                else                             // Valid move
+                {   nSticks = nSticks - num;
+                    onePlaysNext = !onePlaysNext;
+                    return true;
+                } //else
+            }//takeSticks()
+            public int getSticks()
+            {   return nSticks;
+            } //getSticks()
+            public int getPlayer()
+            {   if (onePlaysNext)
+                    return PLAYER_ONE;
+                else return PLAYER_TWO;
+            } //getPlayer()
+            public boolean gameOver()
+            {   return (nSticks &lt;= 0);
+            } // gameOver()
+            public int getWinner()
+            {   if (nSticks &lt; 1)
+                    return getPlayer();
+                else return 0;         // Game is not over
+            } // getWinner()
+            public String report()
+            {   return ("Number of sticks left: " + getSticks()
+                  + "\nNext turn by player " + getPlayer() + "\n");
+            }   // report()
+          } // OneRowNim class
+      </input></program>
+    </listing>
+<subsubsection xml:id="ss-5.7.2">
+  <title>Self-Study Exercise</title>
     <p>
-      \secEXRHone{Self-Study Exercise}
       <ol>
         <li>
           <p>
-            Implement a command-line interface class named
-<c>KBTestOneRowNim</c>, that uses our new version of <c>OneRowNim</c>. Make use of the <c>MAX_STICKS</c> and <c>MAX_PICKUP</c> in the user interface.
+            Implement a command-line interface class named <c>KBTestOneRowNim</c>, 
+            that uses our new version of <c>OneRowNim</c>. 
+            Make use of the <c>MAX_STICKS</c> and <c>MAX_PICKUP</c> in the user interface.
           </p>
         </li>
       </ol>
     </p>
+  </subsubsection>
   </subsection>
-  <subsection xml:id="mbox-design-information-hiding">
+  <subsection xml:id="OOD-information-hiding">
     <title>OBJECT-ORIENTED DESIGN:
     Information Hiding</title>
     <p>
-      The fact that our new versions of <c>OneRowNim</c><mdash/>we've developed two new versions in this chapter<mdash/>are
-      <em>backward compatible</em>
-      with the previous version is due in large part to  the way we have divided up its public and private elements.
+      The fact that our new versions of <c>OneRowNim</c> <mdash/> we've developed two new versions 
+      in this chapter<mdash/> are  <em>backward compatible</em>
+      with the previous version is due in large part to  the way we have 
+      divided up its public and private elements.
       Because the new versions still present the same public interface,
       programs that use the <c>OneRowNim</c> class,
-      such as the <c>OneRowNimApp</c> from Chapter<nbsp/>4 (Fig.<nbsp/>4.24),
+      such as the <c>OneRowNimApp</c> from Chapter<nbsp/> 4 (<xref ref="list-4.24">Listing</xref>),
       can continue to use the class without changing a single line of their own code.
       To confirm this,
       see the Self-Study Exercise at the end of this section.
     </p>
     <p>
-      Although we have made significant changes to the underlying  representation of <c>OneRowNim</c>, the implementation details<mdash/>its data and algorithms<mdash/>are hidden from other objects.
+      Although we have made significant changes to the underlying  representation 
+      of <c>OneRowNim</c>, the implementation details <mdash/> its data and 
+      algorithms <mdash/> are hidden from other objects.
       As long as <c>OneRowNim</c>'s public interface remains compatible with the old version,
-      changes to its private elements won't cause any inconvenience to those objects that were dependent on the old version.
-      This ability to change the underlying implementation without affecting the outward functionality of a class is one of the great benefits of the information hiding principle.
+      changes to its private elements won't cause any inconvenience to 
+      those objects that were dependent on the old version.
+      This ability to change the underlying implementation without 
+      affecting the outward functionality of a class is one of the 
+      great benefits of the information hiding principle.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Information Hiding</title>
+      <title>EFFECTIVE DESIGN: Information Hiding</title>
       <p>
-        In designing a class,
-        other objects should be given access just to the information they need and nothing more.
+        In designing a class, other objects should be given access 
+        just to the information they need and nothing more.
       </p>
     </principle>
     <p>
-      The lesson to be learned here is that the public parts of a class should be restricted to just those parts that must be accessible to other objects.
+      The lesson to be learned here is that the public parts of a 
+      class should be restricted to just those parts that must be accessible to other objects.
       Everything else should be private.
       Things work better, in Java programming and in the real world,
       when objects are designed with the principle of information hiding in mind.
     </p>
+<subsubsection xml:id="ss-5.7.3">
+  <title>Self-Study Exercise</title>
     <p>
-      \secEXRHone{Self-Study Exercise}
       <ol>
         <li>
           <p>
-            To confirm that our new version of <c>OneRowNim</c> still works correctly with the user interfaces we developed in Chapter<nbsp/>4,
-            compile and run it with <c>OneRowNimApp</c>(Fig.<nbsp/>4.24).
+            To confirm that our new version of <c>OneRowNim</c> 
+            still works correctly with the user interfaces we developed in Chapter<nbsp/>4,
+            compile and run it with <c>OneRowNimApp</c>  (<xref ref="list-4.24">Listing</xref>).
           </p>
         </li>
       </ol>
     </p>
+  </subsubsection>
   </subsection>
-  <subsection xml:id="self-study-exerciseS16">
+  <subsection xml:id="winningORN">
     <title>Example: A Winning Algorithm for One Row Nim</title>
     <p>
       Now that we have access to numeric data types and operators,
@@ -550,6 +622,8 @@ public class OneRowNim
       If you have played One Row Nim,
       you have probably noticed that in a game with 21 sticks,
       you can always win the game if you leave your opponent with 1, 5, 9, 13, 17, or 21 sticks.
+    </p>
+    <p>
       This is obvious for the case of 1 stick.
       For the case where you leave your opponent 5 sticks,
       no matter what the opponent does,
@@ -563,28 +637,28 @@ public class OneRowNim
     </p>
     <p>
       What relationship is common to the numbers in this set?
-      Notice that if you take the remainder after dividing each of these numbers by 4 you always get 1:
+      Notice that if you take the remainder after dividing each of these 
+      numbers by 4 you always get 1:
     </p>
- <program language="java"><input>
-1 % 4  == 1
-   5 % 4  == 1
-   9 % 4  == 1
-  13 % 4  == 1
-  17 % 4  == 1
-  21 % 4  == 1
- </input></program>
+    <program language="java"><input>
+      1 % 4  == 1
+      5 % 4  == 1
+      9 % 4  == 1
+      13 % 4  == 1
+      17 % 4  == 1
+      21 % 4  == 1
+    </input></program>
     <p>
-      Thus, we can base our winning strategy on the goal of leaving the opponent with a number of sticks,
-      <em>N</em>,
-      such that <em>N % 4</em> equals 1.
+      Thus, we can base our winning strategy on the goal of leaving the 
+      opponent with a number of sticks,
+      <em>N</em>, such that <em>N % 4</em> equals 1.
     </p>
     <p>
       To determine how many sticks to take in order to leave the opponent with <em>N</em>,
       we need to use a little algebra.
-      Let's suppose that
-<c>sticksLeft</c> represents the number of sticks left before our turn.
+      Let's suppose that <c>sticksLeft</c> represents the number of sticks left before our turn.
       The first thing we have to acknowledge is that if
-      <em>sticksLeft \4 == 1</em>,
+      <em>sticksLeft % 4 == 1</em>,
       then we have been left with 1, 5, 9, 13, and so on,
       sticks, so we cannot force a win.
       In that case, it doesn't matter how many sticks we pick up.
@@ -593,87 +667,97 @@ public class OneRowNim
     <p>
       So, let's suppose that <em>sticksLeft % 4 != 1</em>,
       and let <c>M</c> be the number of sticks to pickup in order to leave our opponent with
-<c>N</c>, such that <em>N % 4 == 1</em>.
+      <c>N</c>, such that <em>N % 4 == 1</em>.
       Then we have the following two equations:
     </p>
- <program language="java"><input>
-sticksLeft - M == N
-N % 4 == 1
- </input></program>
+    <program language="java"><input>
+      sticksLeft - M == N
+      N % 4 == 1
+    </input></program>
     <p>
       We can combine these into a single equation,
       which can be simplified as follows:
     </p>
- <program language="java"><input>
-(sticksLeft - M)  % 4 == 1
- </input></program>
+    <program language="java"><input>
+      (sticksLeft - M)  % 4 == 1
+    </input></program>
     <p>
-      If <em>sticksLeft - M</em> leaves a remainder of 1 when divided by 4, that means that <em>sticksLeft - M</em>
-      is equal some integer quotient,
+      If <em>sticksLeft - M</em> leaves a remainder of 1 when divided by 4, 
+      that means that <em>sticksLeft - M</em>
+      is equal to some integer quotient,
       <em>Q</em> times 4 plus 1:
     </p>
- <program language="java"><input>
-(sticksLeft - M)   ==  (Q * 4) + 1
- </input></program>
+    <program language="java"><input>
+      (sticksLeft - M)   ==  (Q * 4) + 1
+    </input></program>
     <p>
       By adding <c>M</c> to both sides and subtracting 1 from both sides of this equation, we get:
     </p>
- <program language="java"><input>
-(sticksLeft - 1)   ==  (Q * 4) + M
- </input></program>
+    <program language="java"><input>
+      (sticksLeft - 1)   ==  (Q * 4) + M
+    </input></program>
     <p>
       This equation is saying that <em>(sticksLeft - 1) % 4 == M</em>.
       That is, that when you divide <em>sticksLeft-1</em>
       by 4, you will get a remainder of <c>M</c>, which is the number of sticks you should pick up.
       Thus, to decide how many sticks to take, we want to compute:
     </p>
- <program language="java"><input>
-M == (sticksLeft -1) % 4
- </input></program>
+    <program language="java"><input>
+      M == (sticksLeft -1) % 4
+    </input></program>
     <p>
       To verify this, let's look at some examples:
     </p>
- <program language="java"><input>
-sticksLeft     (sticksLeft -1) % 4     sticksLeft
-   Before                                  After
-  ----------------------------------------------------
-    9            (9-1) % 4 == 0         Illegal Move
-    8            (8-1) % 4 == 3         5
-    7            (7-1) % 4 == 2         5
-    6            (6-1) % 4 == 1         5
-    5            (5-1) % 4 == 0         Illegal Move
- </input></program>
+    <program language="java"><input>
+    sticksLeft     (sticksLeft -1) % 4     sticksLeft
+      Before                                  After
+      ----------------------------------------------------
+        9            (9-1) % 4 == 0         Illegal Move
+        8            (8-1) % 4 == 3         5
+        7            (7-1) % 4 == 2         5
+        6            (6-1) % 4 == 1         5
+        5            (5-1) % 4 == 0         Illegal Move
+    </input></program>
     <p>
       The examples in this table show that when we use
       <em>(sticksLeft-1 % 4)</em> to calculate our move,
       we always leave our opponent with a losing situation.
-      Note that when <c>sticksLeft</c> equals 9 or 5, we can't apply this strategy because it would lead to an illegal move.
+      Note that when <c>sticksLeft</c> equals 9 or 5, we can't apply 
+      this strategy because it would lead to an illegal move.
     </p>
     <p>
       Let's now convert this algorithm into Java code.
       In addition to incorporating our winning strategy,
       this <c>move()</c> method makes use of two important
-<c>Math</c> class methods:
+      <c>Math</c> class methods:
     </p>
- <program language="java"><input>
-public int move()
-{ int sticksLeft = nim.getSticks();// Get number of sticks
-  if (sticksLeft % (nim.MAX_PICKUP + 1) != 1)// If winnable
-    return (sticksLeft - 1) % (nim.MAX_PICKUP +1);
-  else {                         // Else pick random
-    int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
-    return 1 + (int)(Math.random() * maxPickup);
-  }}
- </input></program>
+    <program language="java"><input>
+      public int move()
+      { int sticksLeft = nim.getSticks();   // Get number of sticks
+        if (sticksLeft % (nim.MAX_PICKUP + 1) != 1)   // If winnable
+          return (sticksLeft - 1) % (nim.MAX_PICKUP +1);
+        else {                                // Else pick random
+          int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
+          return 1 + (int)(Math.random() * maxPickup);
+        }
+      }
+    </input></program>
     <p>
       The <c>move()</c> method will return an <c>int</c> representing the best move possible.
       It begins by getting the number of sticks left from the <c>OneRowNim</c> object,
       which is referred to as <c>nim</c> in this case.
       It then checks whether it can win by computing
       <em>(sticksLeft-1) % 4</em>.
-      However, note that rather than use the literal value 4, we use the named constant <c>MAX_PICKUP</c>, which is accessible through the <c>nim</c> object.
-      This is an especially good use for the class constant because it makes our algorithm completely general <mdash/> that is,
-      our winning strategy will continue to work even if the game is changed so that the maximum pickup is 5 or 6.
+      However, note that rather than use the literal value 4, we use the 
+      named constant <c>MAX_PICKUP</c>, which is accessible through the <c>nim</c> object.
+    </p>
+    <p>
+      This is an especially good use for the class constant 
+      because it makes our algorithm completely general <mdash/> that is,
+      our winning strategy will continue to work even if the game is 
+      changed so that the maximum pickup is 5 or 6.
+    </p>
+    <p>
       The <c>then</c> clause computes and returns
       <em>(sticksLeft-1) \nim.MAX_PICKUP+1</em>,
       but here again it uses the class constant.
@@ -686,27 +770,29 @@ public int move()
       then the most we can pick up is 3, so we want a random number between 1 and 3.
       However, if there are 2 sticks left,
       then the most we can pick up is 2 and we want a random number between 1 and 2.
-      Note how we use the <c>Math.min()</c> method to decide the maximum number of sticks that can be picked up:
+      Note how we use the <c>Math.min()</c> method to decide 
+      the maximum number of sticks that can be picked up:
     </p>
- <program language="java"><input>
-int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
- </input></program>
+    <program language="java"><input>
+     int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
+    </input></program>
     <p>
       The <c>min()</c> method returns the minimum value between its two arguments.
     </p>
     <p>
-      Finally, note how we use the <c>Math.random()</c> method to calculate a random number between 1 and the maximum:
+      Finally, note how we use the <c>Math.random()</c> method to calculate 
+      a random number between 1 and the maximum:
     </p>
- <program language="java"><input>
-1 + (int)(Math.random() * maxPickup);
- </input></program>
+    <program language="java"><input>
+      1 + (int)(Math.random() * maxPickup);
+    </input></program>
     <p>
       The <c>random()</c> method returns a real number between 0 and 0.999999 <mdash/> that is,
       a real number between 0 and 1 but not including 1:
     </p>
- <program language="java"><input>
-0 &lt;= Math.random() &lt; 1.0
- </input></program>
+    <program language="java"><input>
+      0 &lt;= Math.random() &lt; 1.0
+    </input></program>
     <p>
       If we multiply <c>Math.random()</c> times 2, the result would be a value between 0 and 1.9999999.
       Similarly, if we multiplied it by 3, the result would be a value between 0 and 2.9999999.
@@ -714,47 +800,56 @@ int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
       we have to convert it into an integer,
       which is done by using the <c>(int)</c> cast operator:
     </p>
- <program language="java"><input>
-(int)(Math.random() * maxPickup);
- </input></program>
+    <program language="java"><input>
+      (int)(Math.random() * maxPickup);
+    </input></program>
     <p>
-      Recall that when a <c>double</c> is cast into an <c>int</c>, Java just throws away the fractional part.
-      Therefore, this expression will give us a value between 0 and <c>maxPickup-1</c>. If <c>maxPickup</c> is 3, this will give a value between 0 and 2, whereas we want a random value between 1 and 3.
+      Recall that when a <c>double</c> is cast into an <c>int</c>, 
+      Java just throws away the fractional part.
+      Therefore, this expression will give us a value between 0 
+      and <c>maxPickup-1</c>. If <c>maxPickup</c> is 3, this will 
+      give a value between 0 and 2, whereas we want a random value between 1 and 3.
       To achieve this desired value,
       we merely add 1 to the result.
       Thus, using the expression
     </p>
- <program language="java"><input>
-1 + (int)(Math.random() * maxPickup)
- </input></program>
+    <program language="java"><input>
+    1 + (int)(Math.random() * maxPickup)
+    </input></program>
     <p>
       gives us a random number between 1 and <c>maxPickup</c>, where
-<c>maxPickup</c> is either 1, 2, or 3, depending on the situation of the game at that point.
+      <c>maxPickup</c> is either 1, 2, or 3, depending on the situation of the game at that point.
     </p>
+<subsubsection xml:id="ss-5.7.4">
+  <title>Self-Study Exercises</title>
+  <figure xml:id="fig-nimplayer">
+   <caption>The <c>NimPlayer</c> class.</caption>
+   <image width="40%" source="chptr05/nimplayer.png"/>
+  </figure>
     <p>
-  <!--    </subsection><subsection><title>Self-Study Exercises</title><image width="73%" source="chptr08/nimplayer.png"/> -->
       <ol>
         <li>
           <p>
-            Implement a class named <c>NimPlayer</c> that incorporates the <c>move()</c> method designed in this section.
-            The class should implement the design shown in Figure<nbsp/>5.9.
+            Implement a class named <c>NimPlayer</c> that incorporates 
+            the <c>move()</c> method designed in this section.
+            The class should implement the design shown in <xref ref="fig-nimplayer">Figure</xref>.
             That is, in addition to the <c>move()</c> method,
-            it should have an instance variable, <c>nim</c>, which will serve as a reference to the <c>OneRowNim</c> game.
+            it should have an instance variable, <c>nim</c>, which will 
+            serve as a reference to the <c>OneRowNim</c> game.
             Its constructor method should take a <c>OneRowNim</c> parameter,
             allowing the <c>NimPlayer</c> to be given a reference when it is instantiated.
           </p>
         </li>
         <li>
           <p>
-            Modify <c>OneRowNim</c>'s command-line interface to play One Row Nim between the user and the computer,
-            where the <c>NimPlayer</c> implemented in the previous exercise represents the computer.
+            Modify <c>OneRowNim</c>'s command-line interface to play One Row Nim 
+            between the user and the computer,
+            where the <c>NimPlayer</c> implemented in the previous exercise 
+            represents the computer.
           </p>
         </li>
       </ol>
     </p>
-    <p>
-      
-      <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
-    </p>
+  </subsubsection>
   </subsection>
 </section>
