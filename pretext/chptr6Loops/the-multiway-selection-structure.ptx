@@ -112,7 +112,7 @@ else
   </p>
   <p>
     In order to use the switch as a multiway selection,
-    you must force it to <c>break<idx><h>break</h></idx></c> out of the case clause after executing that clause's statements:
+    you must force it to <c>break</c><idx><h>break</h></idx> out of the case clause after executing that clause's statements:
   </p>
  <program language="java"><input>
 int m = 2;
@@ -163,14 +163,19 @@ switch (m)
       This may cause more than one case to be executed.
     </p>
   </principle>
-  </subsection><subsection><title>Self-Study Exercises</title>
-    <ol>
-      <li>
-        <p>
-          Identify any errors in the following switch structures (if there is no error,
-          specify the output):
- <program language="java"><input>
-(a) int k = 0;
+  </subsection>
+  
+  <exercises><title>Self-Study Exercises</title>
+   
+        <exercise label="switchbug1">
+         <statement><p>Identify and fix the errors in the following switch structure (if there is no error,
+          specify the output).</p></statement> 
+ <program language="java" interactive="activecode"><input>
+public class Bugs 
+{
+  public static void main(String args[]) 
+  {
+    int k = 0;
     switch (k)
     case 0:
         System.out.println("zero");
@@ -181,9 +186,20 @@ switch (m)
     default:
         System.out.println("default");
         break;
+  }
+}
  </input></program>
- <program language="java"><input>
-(b) int k = 0;
+</exercise>
+
+ <exercise label="switchbug2">
+  <statement><p>Identify and fix the errors in the following switch structure (if there is no error,
+   specify the output).</p></statement> 
+<program language="java" interactive="activecode"><input>
+public class Bugs 
+{
+  public static void main(String args[]) 
+  {
+    int k = 0;
     switch (k + 1)
     {   case 0:
             System.out.println("zero");
@@ -195,9 +211,20 @@ switch (m)
             System.out.println("default");
             break;
     }
- </input></program>\
- <program language="java"><input>
-(c) int k = 6;
+  }
+}
+ </input></program>
+</exercise>
+
+<exercise label="switchbug3">
+         <statement><p>Identify and fix the errors in the following switch structure (if there is no error,
+          specify the output).</p></statement> 
+ <program language="java" interactive="activecode"><input>
+public class Bugs 
+{
+  public static void main(String args[]) 
+  {
+    int k = 6;
     switch (k / 3.0)
     {   case 2:
             System.out.println("zero");
@@ -209,27 +236,13 @@ switch (m)
             System.out.println("default");
             break;
     }
+  }
+}
  </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          Flavors of ice cream are represented as integers where 0 is vanilla, 1 is chocolate,
-          and 2 is strawberry.
-          In the active code below, write a <c>switch</c> statement that checks an integer variable <c>flavor</c> and prints out the name of the ice cream flavor or prints
-          <q>Error</q>
-          in the default case.
-        </p>
-      </li>
-      <li>
-        <p>
-          Modify your solution to the previous exercise to use constants
-          (final variables)
-          to represent the ice cream flavors.
-        </p>
-      </li>
-    </ol>
+        </exercise>
 
+    
+  
 
     <exercise label="flavorsEx">
       <statement><p>
@@ -237,9 +250,11 @@ switch (m)
         prints out the name of the ice cream flavor (where 0 is vanilla, 1 is chocolate,
         and 2 is strawberry) or prints
           <q>Error</q>
-          in the default case. Test by changing the flavor variable's value.
+          in the default case. Test by changing the flavor variable's value.  Then, modify your solution to use constants
+          (final variables)
+          to represent the ice cream flavors.
       </p></statement>
-      <program language="java"><input>
+      <program language="java" interactive="activecode"><input>
         public class Flavors 
         {
           public static void main(String args[]) 
@@ -255,5 +270,5 @@ switch (m)
           }
         }
         </input></program></exercise>
-  </subsection>
+</exercises>
 </section>
