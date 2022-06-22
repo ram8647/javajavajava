@@ -2,85 +2,95 @@
   <title>String Basics</title>
   <introduction>
     <p>
-      Before we cover the new material on <c>String</c> s, let's first review what we know about this topic.
-      In Java, <c>String</c> s are considered full-fledged objects.
-      A <c>String</c> object is a sequence of the characters that make up the string,
-      plus the methods that are used to manipulate the string.
-      The <c>java.lang.String</c> class (Fig.
-      <xref ref="fig-p349f1"></xref>)  is a direct subclass of <c>Object</c>, and it contains many public methods that can be used to perform useful operations on strings
+      To review, in Java, strings are considered full-fledged objects.
+      A <c>String</c> is a sequence of the characters (data)
+      plus the actions (methods) that are used to manipulate the string.
+      The <c>java.lang.String</c> class (<xref ref="fig-string-UML">Figure</xref>)  
+      is a direct subclass of <c>Object</c>, and it contains many public methods 
+      that can be used to perform useful operations on strings
       (such as concatenation).
-      We will discuss a selection of the more commonly used methods,
-      but for a full listing and description of the <c>String</c> methods<nbsp/>see
     </p>
- <program language="java"><input>
-http://java.sun.com/j2se/1.5.0/docs/api/
- </input></program>
+    <figure xml:id="fig-string-UML">
+      <caption>The <c>String</c> class.</caption>
+      <image width="40%" source="chptr07/stringclass.png"/>
+    </figure>
     <p>
-       }
+      We will discuss a selection of the more commonly used methods,
+      but for a full description of the <c>String</c> class see the
+      <url href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html">
+      official Java documentation</url>.
     </p>
     <p>
       Like other object variables, <c>String</c> variables serve as <em>references</em>
       to their respective objects.
-      However, unlike other Java objects, <c>String</c> s have certain characteristics in common with the primitive data types.
+      However, unlike other Java objects, the <c>String</c> type has certain 
+      characteristics in common with the primitive data types.
+    </p>
+    <p>
       For example,
       as we have already seen, Java allows for literal strings.
-      A <term>string literal</term> is a sequence of zero or more characters contained in double quotes, such as
+      A <term>string literal</term> is a sequence of zero or more characters 
+      contained in double quotes, such as
       <q>Socrates</q>
-      and ``''
+      and <q></q>
       (the <term>empty string</term>).
       Java allows us to perform operations on literal strings,
       such as concatenation.
       As we have already seen,
-      the expression <c>"Hello" + "world"</c> results in the string <c>"Helloworld"</c>. Java also allows us to use string literals to initialize <c>String</c> variables with an assignment statement.
-      These exceptional features greatly simplify the use of
-<c>String</c> s in our programs.
-      Given how much we use <c>String</c> s, incorporating these features into Java seems like a good design decision.
+      the expression <c>"Hello" + "world"</c> results in the string 
+      <c>"Helloworld"</c>. Java also allows us to use string literals to initialize <c>String</c> variables with an assignment statement.
+    </p>
+    <p>
+      Given how much we use <c>String</c> objects, these exceptional features 
+      represent a good design decision for Java.
     </p>
   </introduction>
-  <subsection xml:id="fig-emptystring">
+  <subsection xml:id="emptystring">
     <title>Constructing Strings</title>
     <p>
       To create <c>String</c> objects,
       the <c>String</c> class provides many constructors,
       including the following:
     </p>
- <program language="java"><input>
-public String();        // Creates an empty string
-   // Copy constructor: Creates a copy of a string
-public String(String initial_value);
- </input></program>
+    <program language="java"><input>
+      public String();        // Creates an empty string
+        // Copy constructor: Creates a copy of a string
+      public String(String initial_value);
+    </input></program>
     <p>
-      When we create an object using the first constructor, as in
+      When we create an object using the default constructor, as in
     </p>
- <program language="java"><input>
-String name = new String();
- </input></program>
+    <program language="java"><input>
+     String name = new String();
+    </input></program>
     <p>
-      Java will create a <c>String</c> object and make <c>name</c><image width="73%" source="chptr07/p349f2.png"/> the reference to it.
-      <xref ref="fig-emptystring">Figure</xref>
-      shows a hypothetical representation of a <c>String</c> object.
-      In addition to storing the sequence of characters that make up the string, Java also stores an integer value representing the number of characters in the string.
-      We have chosen to represent these two elements as the private instance variables,
-<c>value</c>, for the sequence of characters,
-      and <c>count</c> for the number of characters.
-      In fact, we don't know exactly how Java stores the sequence of characters.
+      Java will create a <c>String</c> object and make <c>name</c>
+      the reference to it (e.g., <xref ref="fig-emptystr">Figure</xref>).
+      In addition to storing the sequence of characters that make up the string, 
+      Java also stores an integer value representing the number of characters in the string.
+      For the default constructor, the object's value is the empty string 
+      and its count is 0.
+    </p>
+    <p>
+      Although we have chosen to represent these two elements as the instance 
+      variables, <c>value</c> and <c>count</c>, 
+      we don't know exactly how Java stores the sequence of characters.
       That information is hidden.
-      As <xref ref="fig-emptystring">Figure</xref> illustrates,
-      when we use the default constructor,
-      the value of the is the empty string and its count is 0.
     </p>
+      <figure xml:id="fig-emptystr">
+        <caption></caption>
+        <image width="35%" source="chptr07/p349f2.png"/> 
+      </figure>
     <p>
-      The second constructor is the <em>copy constructor</em>
-      for the <c>String</c> class.
-      A <term>copy constructor</term> is a constructor that makes a duplicate,
-      sometimes called a clone, of an object.
+      The second constructor in <xref ref="fig-string-UML">Figure</xref> is 
+      the <term>copy constructor</term>, used to clone or duplicate an object.
       Many Java classes have copy constructors.
       Consider the following statements:
     </p>
- <program language="java"><input>
-String s1 = new String("Hello"););
-String s2 = new String(s1);
- </input></program>
+    <program language="java"><input>
+      String s1 = new String("Hello");
+      String s2 = new String(s1);
+    </input></program>
     <p>
       These two statements would result in two distinct <c>String</c> objects,
       both storing the word
@@ -91,75 +101,73 @@ String s2 = new String(s1);
       we used the literal string
       <q>Hello</q>
       in the constructor.
-      When Java encounters a <image width="73%" source="chptr07/p349f3.png"/> \caption{The literal <c>String</c>
-      <q>Socrates.</q>
-      } new literal string in a program,
+    </p>
+    <figure xml:id="fig-socrates"> 
+      <image width="35%" source="chptr07/p349f3.png"/> 
+      <caption>The literal <c>String</c> <q>Socrates.</q></caption>
+    </figure>
+    <p>
+      When Java encounters a
+      new literal string in a program,
       it constructs an object for it.
       For example, if your program contained the literal
       <q>Socrates,</q>
-      Java would create an object for it and treat the literal itself as a reference to the object (Fig.
-      <xref ref="fig-literalstr"></xref>).
+      Java would create an object for it and treat the literal 
+      itself as a reference to the object (<xref ref="fig-socrates">Figure</xref>).
     </p>
     <p>
       We often use a string literal to assign a value to a <c>String</c> variable:
     </p>
- <program language="java"><input>
-String s;      // The value of s is initially null
-s = "Socrates";// s now refers to "Socrates" object
- </input></program>
+    <program language="java"><input>
+      String s;      // The value of s is initially null
+      s = "Socrates";// s now refers to "Socrates" object
+    </input></program>
     <p>
       In this case, the reference variable <em>s</em>
-      is initially
-<c>null</c><mdash/>that is,
+      is initially <c>null</c> <mdash/> that is,
       it has no referent, no object, to refer to.
       However, after the assignment statement,
       <em>s</em> would refer to the literal object
       <q>Socrates,</q>
-      which is depicted in <xref ref="fig-literalstr">Figure</xref>.
+      which is depicted in <xref ref="fig-socrates">Figure</xref>.
       Given these two statements, we still have only one object,
       the <c>String</c> object containing the word
-      <q>Socrates.</q>. But now we have two references to it: the literal string
+      <q>Socrates</q>. But now we have two references to it: the literal string
       <q>Socrates,</q>
       and the reference variable <em>s</em>.
     </p>
     <p>
       Assignment statements can also be used as initializers when declaring a <c>String</c> variable:
-      <image width="73%" source="chptr07/p350f1.png"/> \caption{The variables <c>name1</c>, <c>name2</c>, and <c>name3</c> serve as references to the literal <c>String</c> objects
-      <q>Socrates</q>
-      and ``''. }
     </p>
- <program language="java"><input>
-String name1 = "";  // Reference to the empty string
-String name2 = "Socrates";// References to "Socrates"
-String name3 = "Socrates";
- </input></program>
+    <program language="java"><input>
+      String name1 = "";         // Reference to the empty string
+      String name2 = "Socrates"; // References to "Socrates"
+      String name3 = "Socrates";
+    </input></program>
     <p>
       In this example, Java does not construct new <c>String</c> objects.
       Instead, as <xref ref="fig-literalrefs">Figure</xref> shows,
-      it simply makes the variables
-<c>name1</c>, <c>name2</c>, and <c>name3</c> serve as references to the same objects that are referred to by the literal strings
-      <q>'' and ``Socrates.</q>
-      This is a direct consequence of Java's policy of creating only one object to serve as the referent of a literal string,
+      it simply makes the variables <c>name1</c>, <c>name2</c>, and <c>name3</c> 
+      serve as references to the same objects that are referred to by the literal strings
+      <q></q> and <q>Socrates.</q>
+    </p>
+    <p>
+      This is a direct consequence of Java's policy of creating only one object 
+      to serve as the referent of a literal string,
       no matter how many occurrences there are of that literal in the program.
       Thus, these declarations result in no new objects,
       just new references to existing objects.
-      The justification for this policy is that it saves lots of memory in our programs.
-      Instead of creating a
-<c>String</c> object for each occurrence of the literal
-      <q>Socrates,</q>
-      Java creates one object and lets all occurrences of
-      <q>Socrates</q>
-      refer to that object.
+      By npt duplicating lierals, this policy saves lots of memory in our programs.
     </p>
+    <figure xml:id="fig-literalrefs">
+      <caption> The variables <c>name1</c>, <c>name2</c>, 
+      and <c>name3</c> serve as references to the literals 
+      <q>Socrates</q>   and ``''.</caption>
+      <image width="50%" source="chptr07/p350f1.png"/>
+    </figure>
     <p>
       Finally, consider the following declarations,
-      which do invoke the
-<c>String</c> constructors:
-      <image width="73%" source="chptr07/p351f1.png"/> \caption{Together with the objects in <xref ref="fig-literalrefs">Figure</xref>,
-      there are now four different <c>String</c> objects with eight different references to them,
-      including the literals
-      <q>Socrates</q>
-      and ``''. }
+      which do invoke the <c>String</c> constructors:
     </p>
  <program language="java"><input>
 String name4 = new String();    // Creates an object
@@ -168,16 +176,21 @@ String name6 = name4;
  </input></program>
     <p>
       In this case,
-      as shown in <xref ref="fig-strobjects">Figure</xref>, Java creates two new objects and sets <c>name4</c> to refer to the first and <c>name5</c> to refer to the second.
+      as shown in <xref ref="fig-strobjects">Figure</xref>, Java creates two new 
+      objects and sets <c>name4</c> to refer to the first and <c>name5</c> to refer to the second.
       It gives <c>name4</c> the empty string as its value,
-      and it gives <c>name5</c>
-      <q>Socrates</q>
-      as its value.
-      But these two objects must be distinguished from the objects corresponding to the literals (
-      <q>''<nbsp/>and ``Socrates</q>
-      ) themselves.
-      The declaration of <c>name6</c> just creates a second reference to the object referred to by <c>name4</c>.
+      and it gives <c>name5</c> <q>Socrates</q> as its value.
+      But these two objects must be distinguished from the objects 
+      corresponding to the literals <q></q> and <q>Socrates</q> themselves.
+      The declaration of <c>name6</c> just creates a second reference to the 
+      object referred to by <c>name4</c>.
     </p>
+    <figure xml:id="fig-strobjects">
+    <image width="50%" source="chptr07/p351f1.png"/> 
+    <caption>Together with the objects in <xref ref="fig-literalrefs">Figure</xref>,
+      there are now four different <c>String</c> objects with eight different references to them,
+      including the literals  <q>Socrates</q>  and <q></q>.</caption>
+    </figure>  
     <principle>
       <title>Strings</title>
       <p>
@@ -190,7 +203,8 @@ String name6 = name4;
       <title>String Declaration and Instantiation</title>
       <p>
         Unless a <c>String()</c> constructor is called explicitly,
-        no new <c>String</c> object is created when declaring a <c>String</c> variable and assigning it an initial value.
+        no new <c>String</c> object is created when declaring 
+        a <c>String</c> variable and assigning it an initial value.
       </p>
     </principle>
   </subsection>
@@ -371,22 +385,26 @@ String string4 = string2 + " "
  </input></program>
     <p>
       The position of a particular character in a string is called its
-      <em><image width="73%" source="chptr07/7f5.png"/> string index</em>.
+      <term>string index</term>.
+    </p>
+    <figure xml:id="fig-0index">
+      <image width="59%" source="chptr07/7f5.png"/>
+      <caption>Strings are 0-indexed in Java.</caption>
+    </figure>
+    <p>
       All <c>String</c> s in Java are <term>zero indexed</term>
           <idx><h>zero indexed</h></idx>
-      <mdash/>that is, the index of the first character is zero.
-      (Remember, zero indexing is contrasted with <em>unit indexing</em>,
+      <mdash/> that is, the index of the first character is zero.
+      (Remember, zero indexing is contrasted with <term>unit indexing</term>,
       in which we start counting at 1.)
       For example, in
       <q>Socrates,</q>
       the letter <em>S</em> occurs at index 0, the letter
       <em>o</em> occurs at index 1, <em>r</em>
       occurs at index 3, and so on.
-      Thus, the
-<c>String</c>
+      Thus, the <c>String</c>
       <q>Socrates</q>
-      contains eight characters indexed from 0 to 7 (Fig.
-      <xref ref="fig-zeroindex"></xref>).
+      contains eight characters indexed from 0 to 7 (<xref ref="fig-0index">Figure</xref>).
       Zero indexing is customary in programming languages.
       We will see other examples of this when we talk about arrays and vectors.
     </p>
@@ -398,10 +416,10 @@ String string4 = string2 + " "
       </p>
     </principle>
     <principle>
-      <title>DEBUGGING TIP:Zero Versus Unit Indexing</title>
+      <title>DEBUGGING TIP: Zero Versus Unit Indexing</title>
       <p>
         Syntax and semantic errors will result if you forget that strings are zero indexed.
-        In a string of <term>N</term> characters,
+        In a string of <em>N</em> characters,
         the first character occurs at index 0 and the last at index <m>N-1</m>.
         This is different from the <c>String.length()</c> method,
         which gives the number of characters in the string, counting from 1.
@@ -414,7 +432,8 @@ String string4 = string2 + " "
       The <c>String.valueOf()</c> method is a <em>class method</em>
       that is used to convert a value of some primitive type into a <c>String</c> object.
       For example,
-      the expression, <c>String.valueOf(128)</c> converts its <c>int</c> argument to the<nbsp/><c>String</c>
+      the expression, <c>String.valueOf(128)</c> converts 
+      its <c>int</c> argument to the<nbsp/><c>String</c>
       <q>128.</q>
     </p>
     <p>
@@ -454,6 +473,8 @@ String pi = new String(""+Math.PI);// Creates "3.14"
     <p>
       In this case, because it is part of a concatenation expression,
       the value of <c>Math.PI</c> will automatically be promoted to a <c>String</c> value.
+    </p>
+    <p>
       The point of the <c>valueOf()</c> method is twofold.
       First, it may be the method that the Java compiler relies on to perform string promotions such as this one.
       Second, using it in a program<mdash/>even when it is not completely necessary<mdash/>makes the promotion operation explicit rather than leaving it implicit.
