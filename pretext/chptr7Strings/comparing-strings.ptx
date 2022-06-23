@@ -11,7 +11,7 @@
     <subsection><title>Lexicographic Order</title>
     <p>
       Strings are compared according to their
-      <em>lexicographic order</em><mdash/>that is,
+      <term>lexicographic order</term> <mdash/> that is,
       the order of their characters.
       For the letters of the alphabet,
       lexicographic order just means alphabetical order.
@@ -26,9 +26,11 @@
     </p>
     <p>
       For Java and other programming languages,
-      the definition of lexicographic order is extended to cover all the characters that make up the character set.
+      the definition of lexicographic order is extended to cover all the 
+      characters that make up the character set.
       We know, for example,
-      that in Java's Unicode character set the uppercase letters come before the lowercase letters (Table<nbsp/>5.13).
+      that in Java's Unicode character set the uppercase letters come 
+      before the lowercase letters (Table<nbsp/>5.13).
       So, the letter <em>H</em> comes before the letter
       <em>h</em> and the letter <em>Z</em>
       comes before the letter <em>a</em>.
@@ -49,15 +51,17 @@
       comes before
       <q>aardvark,</q>
       because <em>Z</em> comes before <em>a</em>.
+    </p>
+    <p>
       To determine lexicographic order for strings,
       we must perform a character-by-character comparison,
       starting at the first character and proceeding left to right.
       As an example,
       the following strings are arranged in lexicographic order:
     </p>
- <program language="java"><input>
+ <pre>
 "" "!" "0" "A" "Andy" "Z" "Zero" "a" "an" "and" "andy" "candy" "zero"
- </input></program>
+ </pre>
     <p>
       We can define <term>lexicographic order</term>
           <idx><h>lexicographic order</h></idx>
@@ -81,19 +85,19 @@
       Perhaps a more precise way to define lexicographic order is to define a Java method:
     </p>
  <program language="java"><input>
-public boolean precedes(String s1, String s2) {
-                           // Pick shorter length
-  int minlen = Math.min(s1.length(), s2.length());
-               // For each char in shorter string}
-  for (int k=0; k &lt; minlen; k++) {
-    if (s1.charAt(k) != s2.charAt(k))// If chars unequal
-       //  return true if s1's char precedes s2's
-      return s1.charAt(k) &lt; s2.charAt(k);
+public boolean precedes(String s1, String s2) 
+{
+  int minlen = Math.min(s1.length(), s2.length()); // Pick shorter length
+                           
+  for (int k=0; k &lt; minlen; k++)    // For each char in shorter string
+  {
+    if (s1.charAt(k) != s2.charAt(k))        // If chars unequal
+      return s1.charAt(k) &lt; s2.charAt(k); //  return true if s1's ch &lt; s2's
   }
-            // If all characters so far are equal
-        //  then s1 &lt; s2 if it is shorter than s2
+                                       // If all characters so far are equal
+                                       //  then s1 &lt; s2 if it is shorter than s2
   return s1.length() &lt; s2.length();  
-} // precedes()}
+} // precedes()
  </input></program>
     <p>
       This method does a character-by-character comparison of  the two strings,
@@ -107,7 +111,8 @@ public boolean precedes(String s1, String s2) {
       we need to use the shorter length as the loop bound.
     </p>
     <p>
-      Note that the loop will terminate early if it finds that the respective characters from <em>s1</em>
+      Note that the loop will terminate early if it finds that the respective 
+      characters from <em>s1</em>
       and <em>s2</em> are unequal.
       In that case, <em>s1</em> precedes <em>s2</em>
       if <em>s1</em>'s <em>k</em>th character precedes <em>s2</em>'s.
@@ -128,24 +133,24 @@ public boolean precedes(String s1, String s2) {
       <ol>
         <li>
           <p>
-            Arrange the following strings in lexicographic order:
- <program language="java"><input>
+            Arrange the following strings in lexicographic order: 
+<pre>
 zero bath bin alpha Alpha Zero Zeroes a A z Z
- </input></program>
+ </pre>
           </p>
         </li>
         <li>
           <p>
             Modify the <c>precedes()</c> method so that it will also return true when
             <em>s1</em> and <em>s2</em>
-            are equal<mdash/>for example,
+            are equal <mdash/> for example,
             when <em>s1</em> and <em>s2</em> are both
             <q>hello</q>.
           </p>
         </li>
       </ol>
   </subsection>
-  <subsection xml:id="fig-venus">
+  <subsection xml:id="sub-venus">
     <title>Object Identity Versus Object Equality</title>
     <p>
       Java provides several methods for comparing <c>String</c> s:
@@ -175,19 +180,25 @@ String s2 = "Hello";
       <q>equals</q>
       means
       <q>identical.</q>
-      Two
-<c>Object</c> s are equal only if their names are references to the same object.
-      <image width="73%" source="chptr07/7f11.png"/> This is like the old story of the morning star and the evening star,
-      which were thought to be different objects before it was discovered that both were just the planet Venus.
+      Two objects are equal only if their names are references to the same object.
+    </p>
+    <p>
+      This is like the old story of the morning star and the evening star,
+      which were thought to be different objects before it was discovered that both 
+      were just the planet Venus.
       After the discovery, it was clear that
       <q>the morning star</q>
       and
       <q>the evening star</q>
       and
       <q>Venus</q>
-      were just three different references to one and the same object (Fig.
-      <xref ref="fig-venus"></xref>).
+      were just three different references to one and the same object 
+      (<xref ref="fig-venus">Figure</xref>).
     </p>
+    <figure xml:id="fig-venus">
+      <caption>Venus is the morning star and the evening str.</caption>
+         <image width="40%" source="chptr07/7f11.png"/>
+    </figure>
     <p>
       We can create an analogous situation in Java by using the following
 <c>JButton</c> definitions:
@@ -198,50 +209,59 @@ JButton b2 = new Button("a");
 JButton b3 = b2;
  </input></program>
     <p>
-      Given these three declarations, <c>b1.equals(b2)</c> and <c>b1.equals(b3)</c> would be <c>false</c>, but <c>b2.equals(b3)</c> would be <c>true</c> because
+      Given these three declarations, <c>b1.equals(b2)</c> and 
+      <c>b1.equals(b3)</c> would be <c>false</c>, 
+      but <c>b2.equals(b3)</c> would be <c>true</c> because
       <em>b2</em> and <em>b3</em>
-      are just two names for the same object (Fig.<nbsp/>7.13).
+      are just two names for the same object (<xref ref="fig-buttons">Figure</xref>).
       So, in this case,
-      <image width="73%" source="chptr07/7f12.png"/> \caption{For most objects,
-      equality means identity.
-      JButtons <c>b2</c> and <c>b3</c> are identical (and,
-      hence, equal),
-      but JButtons <c>b1</c> and <c>b2</c> are not identical
-      (and, hence, unequal). }
       <q>equals</q>
       really means
       <q>identical.</q>
     </p>
+    <figure xml:id="fig-buttons">
+    <caption>For most objects,
+      equality means identity.
+      JButtons <c>b2</c> and <c>b3</c> are identical (and,
+      hence, equal),  but JButtons <c>b1</c> and <c>b2</c> are not identical
+      (and, hence, unequal).</caption>
+     <image width="40%" source="chptr07/7f12.png"/> 
+    </figure>
     <p>
       Moreover, in Java, when it is used to compare two objects,
-      the equality operator (==) is interpreted in the same way as the default <c>Object.equals()</c> method.
+      the equality operator (==) is interpreted in the same way as the 
+      default <c>Object.equals()</c> method.
       So, it really means object identity.
       Thus, <c>b1 == b2</c> would be <c>false</c>, because <c>b1</c> and <c>b2</c> are different objects,
-      but <c>b2 == b3</c> would be <c>true</c> because
-<c>b2</c> and <c>b3</c> refer to the same object.
+      but <c>b2 == b3</c> would be <c>true</c> because <c>b2</c> and <c>b3</c> refer to the same object.
     </p>
     <p>
-      These points are illustrated in the program shown in <xref ref="fig-equals">Figure</xref>.
-      This program uses methods <c>isEquals()</c>
+      These points are illustrated in the program shown in <xref ref="lst-equals">Listing</xref>.
+      This program uses methods <c>isEquals()</c> 
+      and <c>isIdentical()</c> to perform the comparisons and print the results.
     </p>
-    <figure xml:id="fig-equals">
-      <caption>The <c>TestEquals</c> program tests Java's default
-<c>equals()</c> method, which is defined in the <c>Object</c> class.</caption>
+    <listing xml:id="lst-equals">
+      <caption>The <c>TestEquals</c> program tests Java's default <c>equals()</c> method, 
+      which is defined in the <c>Object</c> class.</caption>
       
  <program language="java"><input>
 import java.awt.*;
-public class TestEquals {
+public class TestEquals 
+{
   static Button b1 = new Button ("a");
   static Button b2 = new Button ("b");
   static Button b3 = b2;
-  private static void isEqual(Object o1, Object o2) {
+  private static void isEqual(Object o1, Object o2) 
+  {
     if (o1.equals(o2))
       System.out.println(o1.toString() + " equals " + o2.toString());
     else
       System.out.println(o1.toString() + " does NOT equal " +
                                                       o2.toString());
   } // isEqual()
-  private static void isIdentical(Object o1, Object o2) {
+  
+  private static void isIdentical(Object o1, Object o2) 
+  {
     if (o1 == o2)
       System.out.println(o1.toString() + " is identical to " +
                                                       o2.toString());
@@ -249,24 +269,23 @@ public class TestEquals {
       System.out.println(o1.toString() + " is NOT identical to " +
                                                       o2.toString());
   } // isIdentical()
-  public static void main(String argv[]) {
+  
+  public static void main(String argv[]) 
+  {
     isEqual(b1, b2);         // not equal
     isEqual(b1, b3);         // not equal
     isEqual(b2, b3);         // equal
     isIdentical(b1, b2);     // not identical
     isIdentical(b1, b3);     // not identical
     isIdentical(b2, b3);     // identical
-  } // main()} // TestEquals
+  } // main()
+} // TestEquals
  </input></program>
-    </figure>
+    </listing>
     <p>
-      and <c>isIdentical()</c> to perform the comparisons and print the results.
-      This program will produce the following output:
+      This program will produce the following output:      
     </p>
-    <p>
-      
-    </p>
- <program language="java"><input>
+ <pre>
 java.awt.Button[button0,0,0,0x0,invalid,label=a]
    does NOT equal java.awt.Button[button1,0,0,0x0,invalid,label=b]
 java.awt.Button[button0,0,0,0x0,invalid,label=a]
@@ -279,13 +298,24 @@ java.awt.Button[button0,0,0,0x0,invalid,label=a]
    is NOT identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
 java.awt.Button[button1,0,0,0x0,invalid,label=b]
    is identical to java.awt.Button[button1,0,0,0x0,invalid,label=b]
- </input></program>
+ </pre>
   </subsection>
-  <subsection xml:id="self-study-exercisesG20">
+  <subsection xml:id="str-id-vs-eq">
     <title>String Identity Versus String Equality</title>
     <p>
-      In comparing Java <c>String</c> s, we must be careful to distinguish between object identity and string equality.
-      Thus, consider the following declarations,
+      In comparing Java <c>String</c> objects, we must be careful to distinguish between 
+      object identity and string equality.
+      Thus, consider the following declarations:
+    </p>
+   <program language="java"><input>
+      String s1 = new String("hello");
+      String s2 = new String("hello");
+      String s3 = new String("Hello");
+      String s4 = s1;            // s1 and s4 are now identical
+      String s5 = "hello";
+      String s6 = "hello";
+    </input></program>
+    <p>
       which create the situation shown in <xref ref="fig-strings">Figure</xref>.
     </p>
     <figure xml:id="fig-strings">
@@ -293,21 +323,13 @@ java.awt.Button[button1,0,0,0x0,invalid,label=b]
       and identity<idx><h>String identity</h></idx> are different.   Two distinct
       (nonidentical) String objects are equal if they store the same string
       value.  So <c>s1, s2, s4, s5,</c> and <c>s6</c> are equal.   Strings
-<c>s1</c> and <c>s4</c> are identical, and so are strings <c>s5</c> and
-<c>s6</c>.</caption>
-      <image width="73%" source="chptr07/p375f1.png"/>
+      <c>s1</c> and <c>s4</c> are identical, and so are strings <c>s5</c> and
+      <c>s6</c>.</caption>
+      <image width="60%" source="chptr07/p375f1.png"/>
     </figure>
- <program language="java"><input>
-String s1 = new String("hello");
-String s2 = new String("hello");
-String s3 = new String("Hello");
-String s4 = s1;            // s1 and s4 are now identical
-String s5 = "hello";
-String s6 = "hello";
- </input></program>
     <p>
       Given these declarations,
-      we would get the  following results if we compare the equality of the <c>String</c> s:
+      we would get the  following results if we compare the equality of the <c>String</c>s:
     </p>
  <program language="java"><input>
 s1.equals(s2) ==> true  s1.equalsIgnoreCase(s3)  ==> true
@@ -323,40 +345,47 @@ s1 == s4  ==> true             s1 == s5  ==> false
 s5 == s6  ==> true
  </input></program>
     <p>
-      The only true identities among these <c>String</c> s are
+      The only true identities among these <c>String</c>s are
       <em>s1</em> and <em>s4</em>,
       and <em>s5</em> and <em>s6</em>.
       In the case of <em>s5</em> and <em>s6</em>,
       both are just references to the literal string,
       <q>hello</q>, as we described in <xref ref="sec-strconstr">Section</xref>.
-      The program in <xref ref="fig-equals2">Figure</xref> illustrates these points.
+      The program in <xref ref="lst-equals2">Listing</xref> illustrates these points.
     </p>
-    <figure xml:id="fig-equals2">
+    <listing xml:id="lst-equals2">
       <caption>Program illustrating the difference between
       string equality and identity.</caption>
       
  <program language="java"><input>
 import java.awt.*;
-public class TestStringEquals {
-  static String s1 = new String("hello"); // s1 and s2 are equal, not identical
-  static String s2 = new String("hello");
+public class TestStringEquals
+{
+  static String s1 = new String("hello"); // s1 and s2 are equal, 
+  static String s2 = new String("hello"); //   not identical
   static String s3 = new String("Hello"); // s1 and s3 are not equal
   static String s4 = s1;                  // s1 and s4 are identical
   static String s5 = "hello";             // s1 and s5 are not identical
   static String s6 = "hello";             // s5 and s6 are identical
-  private static void testEqual(String str1, String str2) {
+
+  private static void testEqual(String str1, String str2) 
+  {
     if (str1.equals(str2))
       System.out.println(str1 + " equals " + str2);
     else
       System.out.println(str1 + " does not equal " + str2);
   } // testEqual()
-  private static void testIdentical(String str1, String str2) {
+
+  private static void testIdentical(String str1, String str2) 
+  {
     if (str1 == str2)
       System.out.println(str1 + " is identical to " + str2);
     else
       System.out.println(str1 + " is not identical to " + str2);
   } // testIdentical()
-  public static void main(String argv[]) {
+  
+  public static void main(String argv[]) 
+  {
     testEqual(s1, s2);        // equal
     testEqual(s1, s3);        // not equal
     testEqual(s1, s4);        // equal
@@ -367,7 +396,11 @@ public class TestStringEquals {
     testIdentical(s1, s4);    // identical
     testIdentical(s1, s5);    // not identical
     testIdentical(s5, s6);    // identical
-  } // main()}// TestStringEquals
+  } // main()
+}// TestStringEquals
+
+ </input></program>
+ <pre>
            ------Program Output-----
            hello equals hello
            hello does not equal Hello
@@ -379,18 +412,23 @@ public class TestStringEquals {
            hello is identical to hello
            hello is not identical to hello
            hello is identical to hello
- </input></program>
-    </figure>
-    </subsection><subsection><title>Self-Study Exercises</title>
+</pre>
+    </listing>
+</subsection>
+<subsection>
+  <title>Self-Study Exercises</title>
     <ol>
       <li>
         <p>
           Given the  <c>String</c> declarations,
+        </p>
  <program language="java"><input>
 String s1 = "java", s2 = "java", s3 = "Java";
 String s4 = new String(s2);
 String s5 = new String("java");
- </input></program>evaluate the following expressions:
+ </input></program>
+        <p>
+          evaluate the following expressions:
         </p>
         <ol>
           <li>
@@ -448,10 +486,14 @@ String s5 = new String("java");
       <li>
         <p>
           Given the following declarations,
+        </p>
  <program language="java"><input>
 String s1 = "abcdefghijklmnopqrstuvwxyz";
 String s2 = "hello world";
- </input></program>write Java expressions to carry out each of the following operations:
+ </input></program>
+          <p>
+            write Java expressions to carry out each of the following operations:
+          </p>
           <ol>
             <li>
               <p>
@@ -469,7 +511,6 @@ String s2 = "hello world";
               </p>
             </li>
           </ol>
-        </p>
       </li>
     </ol>
   </subsection>
