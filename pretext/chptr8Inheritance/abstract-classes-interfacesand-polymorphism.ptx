@@ -3,21 +3,21 @@
   and Polymorphism</title>
   <introduction>
     <p>
-      In Java, there are three kinds of polymorphism:
+      In Java, there are three kinds of <term>polymorphism</term>>:
       <ul>
         <li>
           <p>
-            Overriding an inherited method.
+            <term>Overriding</term> an inherited method.
           </p>
         </li>
         <li>
           <p>
-            Implementing an abstract method.
+            Implementing an <term>abstract</term> method.
           </p>
         </li>
         <li>
           <p>
-            Implementing a Java interface.
+            Implementing a Java <term>interface</term>.
           </p>
         </li>
       </ul>
@@ -30,12 +30,13 @@
   </introduction>
   <subsection xml:id="fig-animals">
     <title>Implementing an Abstract Method</title>
-    <p>
-      An important feature of polymorphism is the ability to invoke a polymorphic method that has been defined only abstractly in the superclass.
+    <!--<p>
+      An important feature of polymorphism is the ability to 
+      invoke a polymorphic method that has been defined only abstractly in the superclass.
       To illustrate this feature,
       we will develop a hierarchy of simulated animals that make characteristic animal sounds,
       an example that is widely used to illustrate polymorphism.
-    </p>
+    </p>-->
     <p>
       As we all know from our childhood,
       animals have distinctive ways of  speaking.
@@ -53,7 +54,7 @@
       <xref ref="fig-animals">Figure</xref>
       provides a summary of the design we will implement.
       The
-<c>Animal</c> class is an <c>abstract</c> class.
+<c>Animal</c> class is an <term>abstract</term> class.
       That's why its name is italicized in the UML diagram.
       The reason that this class is abstract is because its <c>speak()</c> method is an
       <term>abstract method</term>,
@@ -72,7 +73,8 @@ public abstract class Animal {
     public String toString() {
         return "I am a " + kind + " and I go " + speak();
     }
-    public abstract String speak();   // Abstract method}
+    public abstract String speak();   // Abstract method
+  }
  </input></program>
     <p>
       Note how we declare the abstract method (<c>speak()</c>) and the abstract class.
@@ -138,16 +140,20 @@ public class Cat extends Animal {
     }
     public String speak() {
         return "meow";
-    }}
+    }
+  }
 public class Cow extends Animal {
     public Cow() {
         kind = "cow";
     }
     public String speak() {
         return "moo";
-    }}
+    }
+  }
  </input></program>
     </figure>
+
+
     <p>
       In each case the subclass extends the <c>Animal</c> class and provides its own constructor and its own implementation of the <c>speak()</c> method.
       Note that in their respective constructors,
@@ -163,11 +169,78 @@ public class Cow extends Animal {
     </p>
     <p>
       Given these definitions,
-      we can now demonstrate the power and flexibility of inheritance and polymorphism.
+      we can now demonstrate the power and flexibility of inheritance and polymorphism. Run the code below to see it in action.
+      </p>
+<exercise label="animals">
+<statement>Run the following code. Can you change what the cow and dog say?</statement>
+<program language="java" interactive="activecode"><input>
+  /*
+  * File: Animal.java
+  * Author: Java, Java, Java
+  * Description: Animal is an abstract class. It's speak()
+  *  method is abstract and meant to be implemented in 
+  *  Animal subclasses, such as Dog, Cat.
+  */
+ 
+ public abstract class Animal {
+     protected String kind; // Cow, pig, cat, etc.
+ 
+     /**
+      * Animal() default constuctor
+      */
+     public Animal()  {  }
+ 
+     /**
+      * toString() method overrides the Object toString() method.
+      */
+     public String toString() {
+         return "I am a " + kind + " and I go " + speak();
+     }
+ 
+     /**
+      * speak() returns an appropriate String representing
+      *  the way a certain kind of animal speaks. It is 
+      *  implemented in the Animal subclasses.
+      */
+     public abstract String speak();   // Abstract method
+ 
+     /** 
+      * main() creates instances of Animal subclasses and invokes
+      *  their speak() methods, illustrating inheritance and 
+      *  polymorphism.
+      */
+     public static void main(String args[]) {
+         Animal animal = new Cow();
+         System.out.println(animal.toString());
+         
+         animal = new Cat();
+         System.out.println(animal.toString());
+     }
+ }
+class Cat extends Animal {
+  public Cat() {
+      kind = "cat";
+  }
+  public String speak() {
+      return "meow";
+  }
+}
+class Cow extends Animal {
+  public Cow() {
+      kind = "cow";
+  }
+  public String speak() {
+      return "moo";
+  }
+}
+</input></program>
+</exercise>
+
+<p>
       Consider the following code segment:
     </p>
  <program language="java"><input>
-Animal animal = new Cow();
+ Animal animal = new Cow();
  System.out.println(animal.toString()); // A cow goes moo
  animal = new Cat();
  System.out.println(animal.toString()); // A cat goes meow
@@ -209,7 +282,8 @@ public String talk(Animal a) {
   else if (a instanceof Cat)
      return "I am a " + kind + " and I go " + a.meow();
   else
-    return "I don't know what I am";}
+    return "I don't know what I am";
+  }
  </input></program>
     <p>
       In this example,
@@ -239,23 +313,132 @@ public String talk(Animal a) {
       This lends a great degree of predictability to the subclasses in the hierarchy,
       making it easier to use them in applications.
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
-            Following the examples in this section,
-            define an <c>Animal</c> subclass named <c>Pig</c>, which goes
-            <q>oink.</q>
-          </p>
-        </li>
-        <li>
-          <p>
-            Show how you would have to modify the <c>talk()</c> method defined above to incorporate the <c>Pig</c> class.
-          </p>
-        </li>
-      </ol>
- </subsection>
-  <subsection>
+    </subsection>
+    <exercises><title>Self-Study Exercises</title>          
+            <exercise label="PigEx">
+              <statement><p>
+                Define an <c>Animal</c> subclass named <c>Pig</c>, which goes
+                <q>oink.</q>
+              </p></statement>
+              <program language="java" interactive="activecode"><input>
+                /*
+                *  Animal is an abstract class. It's speak()
+                *  method is abstract and meant to be implemented in 
+                *  Animal subclasses, such as Dog, Cat.
+                */
+               
+               public abstract class Animal {
+                   protected String kind; // Cow, pig, cat, etc.
+               
+                   /**
+                    * Animal() default constuctor
+                    */
+                   public Animal()  {  }
+               
+                   /**
+                    * toString() method overrides the Object toString() method.
+                    */
+                   public String toString() {
+                       return "I am a " + kind + " and I go " + speak();
+                   }
+               
+                   /**
+                    * speak() returns an appropriate String representing
+                    *  the way a certain kind of animal speaks. It is 
+                    *  implemented in the Animal subclasses.
+                    */
+                   public abstract String speak();   // Abstract method
+               
+                   /** 
+                    * main() creates instances of Animal subclasses and invokes
+                    *  their speak() methods, illustrating inheritance and 
+                    *  polymorphism.
+                    */
+                   public static void main(String args[]) {
+                       Animal animal = new Cow();
+                       System.out.println(animal.toString());
+                       
+                       animal = new Pig();
+                       System.out.println(animal.toString());
+                   }
+               }
+              class Cat extends Animal {
+                public Cat() {
+                    kind = "cat";
+                }
+                public String speak() {
+                    return "meow";
+                }
+              }
+              class Cow extends Animal {
+                public Cow() {
+                    kind = "cow";
+                }
+                public String speak() {
+                    return "moo";
+                }
+              }
+              </input></program>
+              </exercise>
+              
+      <exercise label="talk">
+<statement><p>Modify the <c>talk()</c> method  
+  to incorporate the <c>Pig</c> class.</p></statement>
+  <program language="java" interactive="activecode"><input>
+   public class Animal {
+   
+    protected String kind; // Cow, pig, cat, etc.
+
+    public String talk(Animal a) {
+      if (a instanceof Cow)
+         return "I am a " + kind + " and I go " + a.moo();
+      else if (a instanceof Cat)
+         return "I am a " + kind + " and I go " + a.meow();
+      else
+        return "I don't know what I am";
+      }
+
+    public static void main(String args[]) {
+      Animal animal = new Cow();
+      System.out.println( animal.talk(animal) );
+      
+      animal = new Cat();
+      System.out.println( animal.talk(animal) );
+  }
+}
+  class Cat extends Animal {
+    public Cat() {
+        kind = "cat";
+    }
+    public String meow() {
+        return "meow";
+    }
+  }
+   class Pig extends Animal {
+    public Pig() {
+      kind = "pig";
+  }
+  public String oink() {
+      return "oink";
+  }  
+   } 
+  
+  class Cow extends Animal {
+    public Cow() {
+        kind = "cow";
+    }
+    public String moo() {
+        return "moo";
+    }
+   }
+  </input>
+   </program>
+      </exercise>  
+            
+         
+            </exercises>
+ 
+   <subsection>
     <title>Implementing a Java Interface</title>
     <p>
       A third form of polymorphism results through the implementation of Java <term>interfaces</term>,
@@ -283,14 +466,16 @@ public String talk(Animal a) {
       <caption>Defining and using the  <c>Speakable</c> interface.</caption>
  <program language="java"><input>
 public interface Speakable {
-    public String speak();}
+    public String speak();
+  }
 public class Animal {
     protected String kind; // Cow, pig, cat, etc.
     public Animal()  {  }
     public String toString() {
         return "I am a " + kind + " and I go " +
                ((Speakable)this).speak();
-    }}
+    }
+  }
  </input></program>
     </figure>
     <p>
@@ -334,7 +519,8 @@ public class Cow extends Animal implements Speakable {
  </input></program>
     <p>
       which casts <c>this</c> object into a <c>Speakable</c> object.
-      The reason that this cast is required is because an <c>Animal</c> does not necessarily have a <c>speak()</c> method.
+      The reason that this cast is required is because an <c>Animal</c> does not 
+      necessarily have a <c>speak()</c> method.
       A <c>speak()</c> method is not defined in the <c>Animal</c> class.
       However, the <c>Cat</c> subclass of <c>Animal</c> does implement a <c>sleep()</c> method as part of its
 <c>Speakable</c> interface.
@@ -361,7 +547,115 @@ Animal animal = new Cow();
  animal = new Cat();
  System.out.println(animal.toString()); // A cat goes meow
  </input></program>
-    <p>
+    
+ <p>Try it out below.</p>
+ <exercise label="animalsInterface">
+  <statement><p>
+   Run the code below to see an Interface implementation.
+  </p></statement>
+  <program language="java" interactive="activecode"><input>
+    /*
+    * File: Animal.java
+    * Author: Java, Java, Java
+    * Description: Animal is a superclass. It is meant to be
+    *  overridden by subclasses such as Cat, Dog that implement
+    *  the Speakable interface.
+    */
+   public class Animal {
+       protected String kind;  // Cow, pig, cat, etc.
+   
+       /**
+        * Animal() default constuctor
+        */
+       public Animal()  {
+       }
+   
+       /**
+        * toString() method overrides the Object toString() method. 
+        *  Note how it invokes the speak() method defined in the 
+        *  Speakable interface. 
+        */
+       public String toString() {
+           return "I am a " + kind + " and I go " + ((Speakable) this).speak();
+       }
+   
+       /** 
+        * main() creates instances of Animal subclasses and invokes
+        *  their toString() methods, illustrating inheritance and 
+        *  polymorphism.
+        */
+       public static void main(String args[]) {
+           Animal animal = new Cow();
+           System.out.println(animal.toString());
+          
+           animal = new Cat();
+           System.out.println(animal.toString());
+       }
+   }
+   /*
+   * File: Speakable.java
+   * Author: Java, Java, Java
+   * Description: Speakable is an abstract interface. It
+   *  defines the speak() method, which is meant to be
+   *  implemented by Animal subclasses.
+   */
+  
+   interface Speakable {
+      /**
+       * speak() returns a String that represents
+       *  how an Animal speaks.
+       */
+      public abstract String speak();  
+  }
+
+  /*
+ * File: Cat.java
+ * Author: Java, Java, Java
+ * Description: Cat is a subclass of Animal and it implements 
+ *  the Speakable interface.
+ */
+class Cat extends Animal implements Speakable {
+
+    /**
+     * Cat() constructor sets its kind variable
+     */
+    public Cat() {
+        kind = "cat";
+    }
+
+    /**
+     * speak() implements the speak() method of the Speakable interface.
+     *  When a cat speaks it says meow.
+     */
+    public String speak() {
+        return "meow";
+    }
+}
+
+/*
+ * File: Cow.java
+ * Author: Java, Java, Java
+ * Description: Cow is a subclass of Animal.
+ */
+ class Cow extends Animal implements Speakable {
+    /**
+     * Cow() constructor sets its kind variable
+     */
+    public Cow() {
+        kind = "cow";
+    }
+
+    /**
+     * speak() implements the speak() method from the Speakable interface. 
+     *  When a cow speaks it says moo.
+     */
+    public String speak() {
+        return "moo";
+    }
+}   
+  </input></program>
+  </exercise>
+ <p>
       Although the design is different,
       both approaches produce the same result.
       We will put off, for now,
