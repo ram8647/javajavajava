@@ -1,0 +1,450 @@
+    <section xml:id="ch-arrays-sum">
+    <title>Chapter Summary</title>
+    <subsection xml:id="ch-arrays-terms">
+        <title>Technical Terms</title>
+    <tabular>
+    <row>
+    <cell>
+      array initializer
+    </cell>
+    <cell>
+      array length
+    </cell>
+</row>
+<row>
+        <cell>
+      binary search
+    </cell>
+    <cell>
+      data structure
+    </cell>
+</row>
+<row>
+        <cell>
+      element
+    </cell>
+    <cell>
+      element type
+    </cell>
+</row>
+<row>
+        <cell>
+      insertion sort
+    </cell>
+    <cell>
+      multidimensional array
+    </cell>
+</row>
+<row>
+        <cell>
+      one-dimensional array
+    </cell>
+    <cell>
+      polymorphic sort method
+    </cell>
+</row>
+<row>
+        <cell>
+      selection sort
+    </cell>
+    <cell>
+      sequential search
+    </cell>
+</row>
+<row>
+        <cell>
+      sorting
+    </cell>
+    <cell>
+      subscript
+    </cell>
+</row>
+<row>
+        <cell>
+      two-dimensional array
+    </cell>
+</row>
+</tabular>
+</subsection>
+<subsection xml:id="ch-arrays-important">
+    <title>Important Points</title>
+      <ul>
+        <li>
+          <p>
+            An <term>array</term>
+              <idx><h>array</h></idx>
+            is a named collection of contiguous storage locations,
+            each of which stores a data item of the same data type.
+            Each element of an array is referred to by a <em>subscript
+              <idx><h>subscript</h></idx>
+            </em><mdash/>that is, by its position in the array.
+            If the array contains <em>N</em> elements,
+            then its length is <em>N</em> and its indexes are <c>0, 1, <ellipsis /> N-1</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Array elements are referred to using the following subscript notation
+            <em>arrayname[subscript]</em>,
+            where <em>arrayname</em> is any valid identifier,
+            and <em>subscript</em> is an integer value in the range 0 to <c>arrayname.length - 1</c>. The array's <c>length</c> instance variable can be used as a bound for loops that process the array.
+          </p>
+        </li>
+        <li>
+          <p>
+            An <em>array declaration</em> provides the name and type of the array.
+            An array instantiation uses the keyword <c>new</c> and causes the compiler to allocate memory for the array's elements:
+ <program language="java"><input>
+int arr[]; // Declare a one-dimensional array variable
+arr = new int[15];// Allocate 15 int locations for it
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Multidimensional arrays have arrays as their components:
+ <program language="java"><input>
+int twoDarr[][]; // Declare a two-dimensional array variable
+twoDarr = new int[10][15]; // Allocate 150 int locations
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            An array's values must be initialized by assigning values to each array location.
+            An <em>initializer
+              <idx><h>array initializer</h></idx>
+            </em> expression may be included as part of the array declaration.
+          </p>
+        </li>
+        <li>
+          <p>
+            Insertion sort and selection sort are examples of array sorting algorithms.
+            Both algorithms require several passes over the array.
+          </p>
+        </li>
+        <li>
+          <p>
+            When an array is passed as a argument to a method,
+            a reference to the array is passed rather than the entire array itself.
+          </p>
+        </li>
+        <li>
+          <p>
+            Swapping two elements of an array,
+            or any two locations in memory,
+            requires the use of a temporary variable.
+          </p>
+        </li>
+        <li>
+          <p>
+            Sequential search and binary search are examples of array searching algorithms.
+            Binary search requires that the array be sorted.
+          </p>
+        </li>
+        <li>
+          <p>
+            For multidimensional arrays,
+            each dimension of the array has its own <c>length</c> variable.
+          </p>
+        </li>
+        <li>
+          <p>
+            Inheritance and polymorphism are useful design features for developing a hierarchy of computer games.
+          </p>
+        </li>
+      </ul>
+</subsection>
+<subsection xml:id="ch-arrays-solutions">
+    <title>SOLUTIONS TO SELF-STUDY EXERCISES</title>
+      <ol>
+        <li>
+          <p>
+            Space (in bytes) allocated for each of the following?
+            <ol>
+              \scriptsize
+              <li>
+                <title>a</title>
+                <p>
+<c>int a[] = new int[5];       </c>{<c>   // 5 * 4 = 20 bytes</c>}
+                </p>
+              </li>
+              <li>
+                <title>b</title>
+                <p>
+<c>double b[] = new double[10];</c>{<c>   // 10 * 8 = 80 bytes</c>}
+                </p>
+              </li>
+              <li>
+                <title>c</title>
+                <p>
+<c>char c[] = new char[30];    </c>{<c>   // 30 * 2  = 60 bytes</c>}
+                </p>
+              </li>
+              <li>
+                <title>d</title>
+                <p>
+<c>String s[] = new String[10];</c>{<c>   // 10 * 4 (reference) = 40 bytes</c>}
+                </p>
+              </li>
+              <li>
+                <title>e</title>
+                <p>
+<c>Student s[] = new Student[5]; </c>{<c> // 5 * 4 (reference) = 20 bytes</c>}
+                </p>
+              </li>
+            </ol>
+          </p>
+        </li>
+        <li>
+          <p>
+            An array containing 10 <c>float</c> s, 1.0 to 10.0.
+ <program language="java"><input>
+float farr[] = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Prints the first element of <c>farr</c>.
+ <program language="java"><input>
+System.out.println(farr[0]);
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Assigns 100.0 to the last element in <c>farr</c>.
+ <program language="java"><input>
+farr[farr.length-1] = 100.0;
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A loop to print all of the elements of <c>farr</c>.
+ <program language="java"><input>
+for (int j = 0; j &lt; farr.length; j++)
+    System.out.println(farr[j]);
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            An array containing the first 100 square roots.
+ <program language="java"><input>
+double doubarr[] = new double[100];
+for (int k = 0; k &lt; doubarr.length; k++)
+    doubarr[k] = Math.sqrt(k+1);
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Analyzing the letter frequencies in a file.
+ <program language="java"><input>
+import java.io.*;
+import java.util.Scanner;
+public static void main(String[] argv) {
+  Scanner fileScan;  // To read lines of text from the file
+  String str;        // To store the line of text
+  AnalyzeFreq af = new AnalyzeFreq();
+  try {         // Create a Scanner
+    File theFile = new File("freqtest.txt");
+    fileScan = Scanner.create(theFile);
+    fileScan = fileScan.useDelimiter("\r\n"); //For Windows
+    while (fileScan.hasNext()) { // Read and count
+      str = fileScan.next();
+      af.countLetters(str);
+    } //while
+    af.printArray(); // Print frequencies
+  } catch (Exception e) {
+     e.printStackTrace();
+  } //catch()} //main()
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Sort 24 18 90 1 0 85 34 18 with insertion sort.
+ <program language="java"><input>
+24 18 90 1  0  85 34 18 // Initial
+  18 24 90 1  0  85 34 18 // Pass 1
+  18 24 90 1  0  85 34 18 // Pass 2
+  1  18 24 90 0  85 34 18 // Pass 3
+  0  1  18 24 90 85 34 18 // Pass 4
+  0  1  18 24 85 90 34 18 // Pass 5
+  0  1  18 24 34 85 90 18 // Pass 6
+  0  1  18 18 24 34 85 90 // Pass 7
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Sort 24 18 90 1 0 85 34 18 with selection sort.
+ <program language="java"><input>
+24 18 90 1   0   85 34 18 // Initial
+0  18 90 1   24  85 34 18 // Pass 1
+0  1  90 18  24  85 34 18 // Pass 2
+0  1  18 90  24  85 34 18 // Pass 3
+0  1  18 18  24  85 34 90 // Pass 4
+0  1  18 18  24  85 34 90 // Pass 5
+0  1  18 18  24  34 85 90 // Pass 6
+0  1  18 18  24  34 85 90 // Pass 7
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Code to swap two <c>Student</c> s.
+ <program language="java"><input>
+Student tempStud = student1;
+student1 = student2;
+student2 = tempStud;
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Implementation of the <c>selectionSort()</c>.
+ <program language="java"><input>
+public void selectionSort(int arr[]) {
+    int smallest;      // Location of smallest element
+    for (int k = 0; k &lt; arr.length-1; k++) {
+        smallest = k;
+        for (int j = k+1; j &lt; arr.length; j++)
+            if (arr[j] &lt; arr[smallest])
+                smallest = j;
+        if (smallest != k) {   // Swap smallest and kth
+            int temp = arr[smallest];
+            arr[smallest] = arr[k];
+            arr[k] = temp;
+        } // if
+    } // outer for
+ } // selectionSort()
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            After <c>mystery(myArr,k)</c>, <c>myArr</c> will store 1,2,3,5,5 and
+            <em>k</em> will store 3.
+          </p>
+        </li>
+        <li>
+          <p>
+            Binary search trace for 21 in 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28:
+ <program language="java"><input>
+key  iteration  low   high    mid
+--------------------------------------
+21   0          0     13      6
+21   1          7     13      10
+21   2          7     9       8
+21   3          9     9       9
+21   4          10    9       failure
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A two-dimensional array with 5 rows of 10 integers.
+ <program language="java"><input>
+int int2d[][] = new int[5][10];
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Prints the last integer in the third row <c>int2d</c> and assigns 100 to its last element.
+ <program language="java"><input>
+System.out.println(int2d[2][9]);
+int2d[4][9] = 100;
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            Prints all of the elements of <c>int2d</c>.
+ <program language="java"><input>
+for (int k = 0; k &lt; int2d.length; k++) {
+     for (int j = 0; j &lt; int2d[k].length; j++)
+         System.out.print( int2d[k][j] + " ");
+     System.out.println();    // new line}
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A <m>52\; \times \;7</m> two-dimensional array of <c>int</c>.
+ <program language="java"><input>
+int sales[][] = new int[52][7];
+for (int k = 0; k &lt; sales.length; k++)
+    for (int j= 0; j &lt; sales[k].length; j++)
+        sales[k][j] = 0;
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A method to calculate average number of newspapers per week.
+ <program language="java"><input>
+double avgWeeklySales(int arr[][]) {
+    double total = 0;
+    for (int k = 0; k &lt; arr.length; k++)
+        for (int j= 0; j &lt; arr[k].length; j++)
+            total += arr[k][j];
+    return total/52;}
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A method to calculate average Sunday newspapers.
+ <program language="java"><input>
+double avgSundaySales(int arr[][]) {
+    double total = 0;
+    for (int k = 0; k &lt; arr.length; k++)
+        total += arr[k][6];
+    return total/52;}
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A <c>compareTo()</c> for <c>LetterFreq</c>.
+ <program language="java"><input>
+public int compareTo(Object lf) {
+     LetterFreq  letFreq = (LetterFreq)lf;
+     if (freq &lt; letFreq.getFreq())
+         return -1;
+     else if (freq > letFreq.getFreq())
+         return +1;
+     else return 0; //The frequencies must be equal.} //compareTo()
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A <c>sort()</c> for <c>AnalyzeFreq</c>.
+ <program language="java"><input>
+public void sort() {
+     java.util.Arrays.sort(freqArr);} //sort()
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            A new <c>AnalyzeFreq.main()</c> that uses <c>sort()</c>.
+ <program language="java"><input>
+public static void main(String[] argv) {
+  AnalyzeFreq af = new AnalyzeFreq();
+  af.countLetters("Now is the time for all good students" +
+     " to study computer-related topics.");
+  af.sort();
+  af.printArray();} //main()
+ </input></program>
+          </p>
+        </li>
+      </ol>
+</subsection>
+</section>
