@@ -1,41 +1,46 @@
 <section xml:id="simple-array-examples">
   <title>Simple Array Examples</title>
   <p>
-    The program in <xref ref="fig-initarrays">Figure</xref>
+    The program in <xref ref="lst-initarrays">Listing</xref>
     creates two arrays of ten elements each and displays their values on the Java console.
-    In this
   </p>
-  <figure xml:id="fig-initarrays">
+  <listing xml:id="lst-initarrays">
     <caption>A program that displays two arrays. Its output
     is shown in Figure<nbsp/>9.6</caption>
     
  <program language="java"><input>
-public class PrintArrays {
+public class PrintArrays 
+{
   static final int ARRSIZE = 10;         // The array's size
   static int intArr[] = new int[ARRSIZE];// Create int array
   static double realArr[] = { 1.1, 2.2, 3.3, 4.4,
      5.5, 6.6, 7.7, 8.8, 9.9, 10.10 }; // And a double array
-  public static void main(String args[]) {
+
+  public static void main (String args[]) 
+  {
     System.out.println("Ints \t Reals");  // Print a heading
                           // For each int and double element
     for (int k = 0; k &lt; intArr.length; k++)
        System.out.println( intArr[k] + " \t " +
                                  realArr[k]);  // Print them
-    } // main()} // PrintArrays
+  } // main()
+} // PrintArrays
  </input></program>
-  </figure>
+  </listing>
   <p>
-    example, the elements of intArr have not been given initial values whereas the elements of realArr have been initialized.
-    Note the use of the integer constant ARRSIZE to store the arrays' size.
+    In this example, the elements of  <c>intArr</c> have not been given 
+    initial values whereas the elements of  <c>realArr</c> have been initialized.
+    Note the use of the integer constant  <c>ARRSIZE</c> to store the arrays' size.
     By using the constant in this way,
     we do not have to use the literal value <c>10</c> anywhere in the program,
     thereby making it easier to read and to modify the program.
     If we want to change the size of the array that the program handles,
-    we can just change the value of <c>ARRSIZE</c>. This is an example  of the maintainability principle.
+    we can just change the value of <c>ARRSIZE</c>. 
+    This is an example  of the maintainability principle.
         <idx><h>Maintainability Principle</h></idx>
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Symbolic Constants</title>
+    <title>EFFECTIVE DESIGN: Symbolic Constants</title>
     <p>
       Using symbolic constants
       (final variables)
@@ -44,14 +49,23 @@ public class PrintArrays {
   </principle>
   <p>
     Note the use of the <c>static</c> qualifier throughout the
-<c>PrintArrays</c> class.
-    This enables us to refer to the array and the other variables from within the <c>main()</c> method.
-    If <c>intArr</c> were not declared <c>static</c>, we would get the compiler error <c>attempt to make static use of a non-static variable.</c>This use of <c>static</c> is justified mainly as a coding convenience rather than a principle of object-oriented design.
-    The only examples we've seen so far in which static elements were a necessary design element were the use of static elements in the <c>Math</c> class<mdash/><c>Math.PI</c> and <c>Math.sqrt()</c><mdash/>and the use of static final variables in <c>TwoPlayerGame</c><mdash/><c>TwoPlayerGame.PLAYER_ONE</c>.
+    <c>PrintArrays</c> class.
+    This enables us to refer to the array and the other variables from within the 
+    <c>main()</c> method.
+    If <c>intArr</c> were not declared <c>static</c>, we would get 
+    the compiler error <c>attempt to make static use of a non-static variable.</c> 
   </p>
   <p>
-    {1pt}}
+    This use of <c>static</c> is justified mainly as a coding convenience 
+    rather than a principle of object-oriented design.
+    The only examples we've seen so far in which static elements 
+    were a necessary design element were the use of static elements 
+    in the <c>Math</c> class <mdash/><c>Math.PI</c> and <c>Math.sqrt()</c> <mdash/> and 
+    the use of static final variables in <c>TwoPlayerGame</c> <mdash/> 
+    e.g., <c>TwoPlayerGame.PLAYER_ONE</c>.
   </p>
+  <table xml:id="tab-output">
+    <title>Output of the <c>PrintArrays</c> program. </title>
   <tabular>
     <row>
       <cell>Ints</cell>
@@ -98,9 +112,7 @@ public class PrintArrays {
       <cell>10.1</cell>
     </row>
   </tabular>
-  <p>
-    {\rule[12pt]{12.5pc}{1pt} FIGURE H<ndash/>\arabic{figure}} Output of the <c>PrintArrays</c> program. }
-  </p>
+  </table>
   <p>
     For large arrays,
     it is not always feasible to initialize them in an initializer statement.
@@ -116,29 +128,52 @@ public class PrintArrays {
     </p>
   </principle>
   <p>
-    The example in <xref ref="fig-squares100">Figure</xref>
-    creates an array of 50 integers and then fills the elements with the values 1, 4, 9, 16, and so on.
+    The example in <xref ref="lst-squares100">Listing</xref>
+    creates an array of 50 integers and then fills the elements with the 
+    values 1, 4, 9, 16, and so on.
     It then prints the entire array.
   </p>
-  <figure xml:id="fig-squares100">
+  <listing xml:id="lst-squares100">
     <caption>A program with an array that stores the squares of the first 50 integers.
-    Its output is shown in Figure<nbsp/>9.8.</caption>
+    Its output is shown in <xref ref="fig-squares">Figure</xref>.</caption>
  <program language="java"><input>
-public class Squares {
+
+public class Squares 
+{
   static final int ARRSIZE = 50;     // The array's size
   static int intArr[] = new int[ARRSIZE]; // Instantiate
-  public static void main(String args[]) {
+
+  public static void main(String args[]) 
+  {
     for (int k = 0; k &lt; intArr.length; k++)// Initialize
       intArr[k] = (k+1) * (k+1);
+
     System.out.print("The first 50 squares are");
+
     for (int k = 0; k &lt; intArr.length; k++) { // Print
       if (k % 5 == 0)             // For each 5th square
         System.out.println(" ");//   print a new line
       System.out.print( intArr[k] + " ");
     } // for
-  } // main()} // Squares
+  } // main()
+} // Squares
  </input></program>
-  </figure>
+  </listing>
+<figure xml:id="fig-squares">
+  <title>Output of the Squares program.</title>
+<pre>
+1 4 9 16 25
+36 49 64 81 100
+121 144 169 196 225
+256 289 324 361 400
+441 484 529 576 625
+676 729 784 841 900
+961 1024 1089 1156 1225
+1296 1369 1444 1521 1600
+1681 1764 1849 1936 2025
+2116 2209 2304 2401 2500
+</pre>
+</figure>
   <p>
     This example illustrates some important points about the use of array variables.
     The array's elements are individual storage
@@ -152,44 +187,52 @@ intArr[k] = (k+1) * (k+1);
  </input></program>
   <p>
     The use of the variable <em>k</em>
-    in this assignment statement allows us to vary the location that is assigned on each iteration of the for loop.
+    in this assignment statement allows us to vary the location that is assigned 
+    on each iteration of the for loop.
     Note that in this example,
     <em>k</em> occurs as the array index on the left-hand side of this expression,
     while <em>k+1</em> occurs on the right-hand side as the value to be squared.
-    The {1pt}}
+    The 
   </p>
   <p>
-    {\rule[12pt]{12.5pc}{1pt} FIGURE H<ndash/>\arabic{figure}} Output of the <c>Squares</c> program. } reason for this is that arrays are indexed starting at 0 but we want our table of squares to begin with the square of 1.
+    reason for this is that arrays are indexed starting at 0 but we 
+    want our table of squares to begin with the square of 1.
     So the square of some number <em>n+1</em>
-    will always be stored in the array whose index is one less than the number itself<mdash/>that  is,
+    will always be stored in the array whose index is one 
+    less than the number itself <mdash/> that  is,
     <em>n</em>.
   </p>
   <p>
-    An array's <c>length</c> variable can always be used as a loop bound when iterating through all elements of the array:
+    An array's <c>length</c> variable can always be used as a 
+    loop bound when iterating through all elements of the array:
   </p>
  <program language="java"><input>
 for (int k = 0; k &lt; intArr.length; k++)
     intArr[k] = (k+1) * (k+1);
  </input></program>
   <p>
-    However, it is important to note that the last element in the array is always at location <c>length-1</c>. Attempting to refer to <c>intArr[length]</c> would cause an <c>IndexOutOfBoundsException</c> because no such element exists.
+    However, it is important to note that the last element in the array is 
+    always at location <c>length-1</c>. Attempting to refer 
+    to <c>intArr[length]</c> would cause an 
+    <c>IndexOutOfBoundsException</c> because no such element exists.
   </p>
   <principle>
-    <title>DEBUGGING TIP:Off-by-One Error</title>
+    <title>DEBUGGING TIP: Off-by-One Error</title>
     <p>
       Because of zero indexing,
       the last element in an array is always <m>length-1</m>.
       Forgetting this fact can cause an off-by-one error.
     </p>
   </principle>
-  <p>
-    \secEXRHone{Self-Study Exercise}
+  <subsection>
+    <title>Self-Study Exercise</title>
     <ol>
       <li>
         <p>
-          Declare an array of 100 <c>double</c> s and write a loop to assign the first 100 square roots to its elements. [Use <c>Math.sqrt(double)</c>.]
+          Declare an array of 100 <c>double</c> s and write a loop 
+          to assign the first 100 square roots to its elements. [Use <c>Math.sqrt(double)</c>.]
         </p>
       </li>
     </ol>
-  </p>
+  </subsection>
 </section>

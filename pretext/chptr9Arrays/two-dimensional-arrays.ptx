@@ -6,7 +6,8 @@
       an array whose components are themselves arrays,
       is necessary or useful for certain kinds of problems.
       For example,
-      you would use this type of array if you are doing a scientific study in which you have to track the amount of precipitation for every day of the year.
+      you would use this type of array if you are doing a scientific study in 
+      which you have to track the amount of precipitation for every day of the year.
     </p>
     <p>
       One way to organize these data would be to create a one-dimensional array,
@@ -23,7 +24,8 @@ double rainfall[] = new double[365];
     <p>
       A better representation for this problem would be to  use a two-dimensional array,
       one dimension for the months and one for the days.
-      The following statement declares the array variable <c>rainfall</c> and creates a 12 by 31 array object as its reference:
+      The following statement declares the array variable <c>rainfall</c> and creates a 
+      12 by 31 array object as its reference:
     </p>
  <program language="java"><input>
 double rainfall[][] = new double[12][31];
@@ -37,15 +39,18 @@ double rainfall[][] = new double[12][31];
       and the days will be indexed from 0 to 30.
     </p>
     <p>
-      The problem with this representation is that when we want to refer to  the rainfall for January 5, we would have to use
+      The problem with this representation is that when we want to refer to  the 
+      rainfall for January 5, we would have to use
 <c>rainfall[0][4]</c>. This is awkward and misleading.
       The problem is that dates<mdash/>1/5/1999<mdash/>are unit indexed,
       while arrays are zero indexed.
       Because it will be difficult to remember this fact,
-      our representation of the rainfall data may cause us to make errors when we start writing our algorithms.
+      our representation of the rainfall data may cause us to make errors when we 
+      start writing our algorithms.
     </p>
     <p>
-      We can easily remedy this problem by just defining our array to have an extra month and an extra day each month:
+      We can easily remedy this problem by just defining our array to have an extra 
+      month and an extra day each month:
     </p>
  <program language="java"><input>
 double rainfall[][] = new double[13][32];
@@ -53,7 +58,8 @@ double rainfall[][] = new double[13][32];
     <p>
       This representation creates an array with 13 months,
       indexed from 0 to 12, with 32 days per month, indexed from 0 to 31.
-      However, we can simply ignore the 0 month and 0 day by using unit indexing in all of the algorithms that process the array.
+      However, we can simply ignore the 0 month and 0 day by using unit indexing 
+      in all of the algorithms that process the array.
       In other words, if we view this array as a two-dimensional table,
       consisting of 13 rows and 32 columns,
       we can leave row 0 and column 0 unused (Fig.
@@ -67,14 +73,17 @@ double rainfall[][] = new double[13][32];
     </figure>
     <p>
       As <xref ref="fig-rainfall">Figure</xref> shows,
-      the very first element of this 416-element array has subscripts (0,0) while the last location has subscripts (12,31).
-      The main advantages of this representation is that the program as a whole will be much easier to read and understand and much less prone to error.
+      the very first element of this 416-element array has subscripts (0,0) 
+      while the last location has subscripts (12,31).
+      The main advantages of this representation is that the program as a 
+      whole will be much easier to read and understand and much less prone to error.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Readability</title>
+      <title>EFFECTIVE DESIGN: Readability</title>
       <p>
         To improve a program's robustness and readability,
-        it may be preferable to use unit array indexing by declaring extra array elements and ignoring those with index 0.
+        it may be preferable to use unit array indexing by declaring extra array 
+        elements and ignoring those with index 0.
       </p>
     </principle>
     <p>
@@ -84,7 +93,8 @@ double rainfall[][] = new double[13][32];
       the first subscript will specify the <em>month</em>
       and the second will specify the
       <em>day</em> within the month.
-      Thus, the following statements assign 1.15 to the <c>rainfall</c> element representing January 5, and then print its  value:
+      Thus, the following statements assign 1.15 to the <c>rainfall</c> element 
+      representing January 5, and then print its  value:
     </p>
  <program language="java"><input>
 rainfall[1][5] = 1.15;   // Rainfall for January 5
@@ -139,42 +149,37 @@ for (int month = 1; month &lt; rainfall.length; month++)
       The length of the first array,
       which  corresponds to the number (13) of months,
       is given by
-<c>rainfall.length</c>. The length of each month's array,
+      <c>rainfall.length</c>. The length of each month's array,
       which corresponds to the number of days (32) in a month,
       is given by
-<c>rainfall[month].length</c>.
+      <c>rainfall[month].length</c>.
     </p>
     <p>
       The outer loop of the nested for loop iterates through months 1 through 12,
       and the inner for loop iterates through days 1 through 31.
       In this way,
       <m>372\; =\; 12\;\times\; 31</m> elements of the array are set to 0.0.
-      In Table<nbsp/>9.1, the boldface numbers along the top represent the day subscripts,
-      while the boldface numbers along the left represent the month subscripts.
+      In <xref ref="tab-rinfall">Table</xref>, the numbers in curly brzces along the 
+      top represent the day subscripts,
+      while the numbers in curly braces along the left represent the month subscripts.
     </p>
-    <table>
-      \TBT{1.5pc}{The initialized <c>rainfall</c> array.  The unused array
-      elements are shown as dashes.}
+    <table xml:id="tab-rinfall">
+      <title>The initialized <c>rainfall</c> array.  The unused array
+      elements are shown as dashes.</title>
       
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+        <row bottom="minor" left="minor">
           <cell></cell>
-          <cell>{\bf0}</cell>
-          <cell>{\bf1}</cell>
-          <cell>{\bf2}</cell>
-          <cell>{\bf3}</cell>
+          <cell>{0}</cell>
+          <cell>{1}</cell>
+          <cell>{2}</cell>
+          <cell>{3}</cell>
           <cell>{<m>\cdots</m>}</cell>
-          <cell>{\bf30}</cell>
-          <cell>{\bf31}</cell>
+          <cell>{30}</cell>
+          <cell>{31}</cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{\bf0}</cell>
+          <cell>{0}</cell>
           <cell><ndash/></cell>
           <cell><ndash/> </cell>
           <cell> <mdash/> </cell>
@@ -185,7 +190,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
             <ndash/></cell>
         </row>
         <row>
-          <cell>{\bf1}</cell>
+          <cell>{1}</cell>
           <cell><mdash/></cell>
           <cell>0.0</cell>
           <cell>0.0</cell>
@@ -195,7 +200,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell>0.0</cell>
         </row>
         <row>
-          <cell>{\bf2}</cell>
+          <cell>{2}</cell>
           <cell><mdash/></cell>
           <cell>0.0</cell>
           <cell>0.0</cell>
@@ -215,7 +220,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell><m>\vdots</m></cell>
         </row>
         <row>
-          <cell>{\bf10}</cell>
+          <cell>{10}</cell>
           <cell><mdash/></cell>
           <cell>0.0</cell>
           <cell>0.0</cell>
@@ -225,7 +230,7 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell>0.0</cell>
         </row>
         <row>
-          <cell>{\bf11}</cell>
+          <cell>{11}</cell>
           <cell><mdash/></cell>
           <cell>0.0</cell>
           <cell>0.0</cell>
@@ -234,8 +239,8 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell>0.0</cell>
           <cell>0.0</cell>
         </row>
-        <row>
-          <cell>{\bf12}</cell>
+        <row bottom="minor">
+          <cell>{12}</cell>
           <cell><mdash/></cell>
           <cell>0.0</cell>
           <cell>0.0</cell>
@@ -243,12 +248,8 @@ for (int month = 1; month &lt; rainfall.length; month++)
           <cell><m>\cdots</m></cell>
           <cell>0.0</cell>
           <cell>0.0</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
         </row>
       </tabular>
-      \endTB
     </table>
     </introduction>
     <subsection><title>Self-Study Exercises</title>
@@ -261,13 +262,16 @@ for (int month = 1; month &lt; rainfall.length; month++)
         </li>
         <li>
           <p>
-            Write a statement that prints the last integer in the third row of the array that you created in the previous exercise.
-            Then write an assignment statement that assigns 100 to the last element in the <c>int2d</c> array.
+            Write a statement that prints the last integer in the third row of the array 
+            that you created in the previous exercise.
+            Then write an assignment statement that assigns 100 to the 
+            last element in the <c>int2d</c> array.
           </p>
         </li>
         <li>
           <p>
-            Write a loop to print all of the elements of <c>int2d</c>, which you declared in the previous exercise.
+            Write a loop to print all of the elements of <c>int2d</c>, 
+            which you declared in the previous exercise.
             Print one row per line with a space between each element on a line.
           </p>
         </li>
@@ -283,21 +287,24 @@ for (int month = 1; month &lt; rainfall.length; month++)
         This method will simply incorporate the nested loop algorithm we developed previously:
       </p>
  <program language="java"><input>
-public void initRain(double rain[][]) {
+public void initRain (double rain[][]) {
     for (int month = 1; month &lt; rain.length; month++)
         for (int day = 1; day &lt; rain[month].length; day++)
-            rain[month][day] = 0.0;} // initRain()
+            rain[month][day] = 0.0;
+} // initRain()
  </input></program>
       <p>
         Note how we declare the parameter for a multidimensional array.
-        In addition to the element type (<c>double</c>), and the name of  the parameter (<c>rain</c>), we must also include a set of brackets for
+        In addition to the element type (<c>double</c>), and the name of  
+        the parameter (<c>rain</c>), we must also include a set of brackets for
         <em>each</em> dimension of the array.
       </p>
       <p>
         Note also that we use the parameter name within the method to refer to the array.
         As with one-dimensional arrays,
         the parameter is a reference to the array,
-        which means that any changes made to the array within the<nbsp/>method will persist when the method is exited.
+        which means that any changes made to the array within 
+        the method will persist when the method is exited.
       </p>
     </introduction>
     <subsubsection>
@@ -309,14 +316,21 @@ public void initRain(double rain[][]) {
         <m>12 \;\times\; 31</m> array and divide by 365.
         Of course, the array itself contains more than 365 elements.
         It contains 416 elements, but we're not using the first month of the array,
-        and within some months<mdash/>those with fewer than 31 days<mdash/>we're not using some of the day elements.
+        and within some months<mdash/>those with fewer than 31 days<mdash/>
+        we're not using some of the day elements.
         For example,
         there's no such day as <c>rainfall[2][30]</c>, which would represent February 30.
-        However, because we initialized all of the array's elements to 0, the rainfall recorded for the non-days will be 0, which won't affect our overall average.
       </p>
       <p>
-        The method for calculating average daily rainfall should take  our two-dimensional array of double as a parameter,
-        and it should return a double . Its algorithm will use a nested for loop to iterate through the elements of the array,
+        However, because we initialized all of the array's 
+        elements to 0, the rainfall recorded for the non-days will be 0, 
+        which won't affect our overall average.
+      </p>
+      <p>
+        The method for calculating average daily rainfall should take  our two-dimensional 
+        array of double as a parameter,
+        and it should return a double . Its algorithm will use a nested for loop 
+        to iterate through the elements of the array,
         adding each element to a running total.
         When the loops exits, the total will be divided by 365 and returned:
       </p>
@@ -326,13 +340,15 @@ public double avgDailyRain(double rain[][]) {
     for (int month = 1; month &lt; rain.length; month++)
         for (int day = 1; day &lt; rain[month].length; day++)
             total += rain[month][day];
-    return total/365;} // avgDailyRain()
+    return total/365;
+} // avgDailyRain()
  </input></program>
-    </subsubsection>
-    <subsubsection>
-      <title>The <c>avgRainForMonth()</c>Method</title>
+</subsubsection>
+<subsubsection>
+  <title>The <c>avgRainForMonth()</c> Method</title>
       <p>
-        One reason we used a two-dimensional array for this problem is so we could calculate the average daily rainfall for a given month.
+        One reason we used a two-dimensional array for this problem is so 
+        we could calculate the average daily rainfall for a given month.
         Let's write a method to solve this problem.
         The algorithm for this method  will not require a nested for loop.
         We will just iterate through the 31 elements of a given month,
@@ -348,7 +364,8 @@ for (int day = 1; day &lt; rainfall[1].length; day++)
  </input></program>
       <p>
         Thus, the month subscript is held constant (at 1) while the day subscript iterates from 1 to 31.
-        Of course, in our method we would use a parameter to represent the month,  thereby allowing us to calculate the average daily rainfall for any given month.
+        Of course, in our method we would use a parameter to represent the month,  
+        thereby allowing us to calculate the average daily rainfall for any given month.
       </p>
       <p>
         Another problem that our method has to deal with is that months don't all have 31 days,
@@ -363,11 +380,13 @@ public double avgRainForMonth(double rain[][],
     double total = 0;
     for (int day = 1; day &lt; rain[month].length; day++)
         total = total + rain[month][day];
-    return total/nDays;} // avgRainForMonth()
+    return total/nDays;
+} // avgRainForMonth()
  </input></program>
       <p>
         Given this definition,
-        we can call this method to calculate and print the average daily rainfall for March as in the following statement:
+        we can call this method to calculate and print the average daily 
+        rainfall for March as in the following statement:
       </p>
  <program language="java"><input>
 System.out.println("March: " +
@@ -378,14 +397,15 @@ System.out.println("March: " +
         we just use the name of the array.
         We do not have to follow the name with subscripts.
       </p>
-    </subsubsection>
-  </subsection>
-  <subsection xml:id="self-study-exercisesE24">
+</subsubsection>
+</subsection>
+<subsection xml:id="sec-passarraypart">
     <title>Passing Part of an Array to a Method</title>
     <p>
       Instead of passing the entire rainfall array to the
-<c>avgRainForMonth()</c> method,
-      we could redesign this method so that it is only passed the particular month that's being averaged.
+      <c>avgRainForMonth()</c> method,
+      we could redesign this method so that it is only passed the particular 
+      month that's being averaged.
       Remember that a two-dimensional array is an array of arrays,
       so if we pass the month of January,
       we are passing an array of 32 days.
@@ -400,11 +420,13 @@ public double avgRainForMonth(double monthRain[],
     double total = 0;
     for (int day = 1; day &lt; monthRain.length; day++)
         total = total + monthRain[day];
-    return total/nDays;} // avgRainForMonth()
+    return total/nDays;
+} // avgRainForMonth()
  </input></program>
     <p>
       Given this definition,
-      we can call it to calculate and print the average daily rainfall for March as in the following statement:
+      we can call it to calculate and print the average daily rainfall for 
+      March as in the following statement:
     </p>
  <program language="java"><input>
 System.out.println("March: " +
@@ -418,8 +440,7 @@ System.out.println("March: " +
       <em>row</em> subscript as well.
       Thus, <c>rainfall[3]</c> refers to one month of data in the two-dimensional array,
       the month of March.
-      But
-<c>rainfall[3]</c> is itself a one-dimensional array.
+      But <c>rainfall[3]</c> is itself a one-dimensional array.
       <xref ref="fig-twodrow">Figure</xref> helps to clarify this point.
     </p>
     <figure xml:id="fig-twodrow">
@@ -428,7 +449,8 @@ System.out.println("March: " +
       <image width="73%" source="chptr09/8f15.png"/>
     </figure>
     <p>
-      It's important to note that deciding whether to use brackets when  passing data to a method is not just a matter of whether you are passing an array.
+      It's important to note that deciding whether to use brackets when  
+      passing data to a method is not just a matter of whether you are passing an array.
       It is a matter of what type of data the method parameter specifies.
       So, whenever you call a method that involves a parameter,
       you have to look at the method definition to see what kind of data that parameter specifies.
@@ -437,7 +459,7 @@ System.out.println("March: " +
     <p>
       For our two-dimensional <c>rainfall</c> array,
       we can refer to the entire array as <c>rainfall</c>. We can refer to one of its months as
-<c>rainfall[j]</c>, where <em>j</em>
+      <c>rainfall[j]</c>, where <em>j</em>
       is any integer between 1 and 12.
       And we can refer to any of its elements as <c>rainfall[j][k]</c>, where <em>j</em>
       is any integer between 1 and 12,
@@ -451,15 +473,24 @@ System.out.println("March: " +
         including array parameters.
       </p>
     </principle>
-    <p>
-      The <c>Rainfall</c> class (Figs.<nbsp/>9.21 and <xref ref="fig-rainfallclass"></xref>)
-    </p>
-    <figure xml:id="fig-p440f1">
+    <figure xml:id="fig-rainfalluml">
       <caption>The <c>Rainfall</c> class.</caption>
       <image width="73%" source="chptr09/p440f1.png"/>
     </figure>
-    <figure xml:id="fig-rainfallclass">
-      <caption>Definition of the <c>Rainfall</c> class.</caption>
+   <p>
+      The <c>Rainfall</c> class (<xref ref="fig-rainfalluml">Figure</xref> and 
+      <xref ref="lst-rainfallclass">Listing</xref>)
+      shows how we can test our array algorithms.
+      It creates the <c>rainfall</c> array in the <c>main()</c> method.
+      It then initializes the array and prints out average daily rainfall and average 
+      daily rainfall for the month of March.
+  <program language="java"><input>
+rain[month][day] = Math.random() * 2.0;
+ </input></program>    
+ </p>
+ 
+<listing xml:id="lst-rainfallclass">
+  <caption>Definition of the <c>Rainfall</c> class.</caption>
       
  <program language="java"><input>
 public class Rainfall {
@@ -475,6 +506,7 @@ public class Rainfall {
       for (int day = 1; day &lt; rain[month].length; day++)
         rain[month][day] = Math.random() * 2.0;    // Random rainfall
   } // initRain()
+
   /**
    * Computes average daily rainfall for a year of rainfall data
    * @param rain is a 2D-array of rainfalls
@@ -490,6 +522,7 @@ public class Rainfall {
         total += rain[month][day];
     return total/365;
   } // avgDailyRain()
+
   /**
    * Computes average daily rainfall for a given month containing nDays
    * @param monthRain is a 1D-array of rainfalls
@@ -504,6 +537,7 @@ public class Rainfall {
       total = total + monthRain[day];
     return total/nDays;
   } // avgRainForMonth()
+
   public static void main(String args[]) {
     double rainfall[][] = new double[13][32];
     Rainfall data = new Rainfall();
@@ -512,39 +546,42 @@ public class Rainfall {
                       +  data.avgDailyRain(rainfall));
     System.out.println("The average daily rainfall for March = "
                       +  data.avgRainForMonth(rainfall[3],31));
-  } // main()}//Rainfall
+  } // main()
+}//Rainfall
  </input></program>
-    </figure>
+</listing>
+
     <p>
-      shows how we can test our array algorithms.
-      It creates the <c>rainfall</c> array in the <c>main()</c> method.
-      It then initializes the array and prints out average daily rainfall and average daily rainfall for the month of March.
       However, note that we have made a slight modification to the <c>initRain()</c> method.
       Instead of just assigning 0 to each element,
       we assign a random value between 0 and 2.0:
+      Using the <c>Math.random()</c> method in this way enables us to generate 
+      some realistic test data.
     </p>
- <program language="java"><input>
-rain[month][day] = Math.random() * 2.0;
- </input></program>
     <p>
-      Using the <c>Math.random()</c> method in this way enables us to generate some realistic test data.
       In this case,
-      we  have scaled the data so that the daily rainfall is between 0 and 2 inches. (Rainfall like this would probably be appropriate for an Amazonian rain forest!) Testing our algorithms with these data provides some indication that our methods are in fact working properly.
+      we  have scaled the data so that the daily rainfall is between 0 and 2 inches. 
+      (Rainfall like this would probably be appropriate for an Amazonian rain forest!) 
+      Testing our algorithms with these data provides some indication that our 
+      methods are in fact working properly.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Generating Test Data</title>
+      <title>EFFECTIVE DESIGN: Generating Test Data</title>
       <p>
         The <c>Math.random()</c> method can be used to generate numeric test data,
         when large amounts of data are required.
         The data can be scaled to fit within the range that the actual data are expected to have.
       </p>
     </principle>
-    </subsection><subsection><title>Self-Study Exercises</title>
+</subsection>
+<subsection>
+<title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
             Suppose you're going to keep track of the daily newspaper sales at the local kiosk.
-            Declare a <m>52\;\times\;7</m> two-dimensional array of <c>int</c> and initialize each of its elements to 0.
+            Declare a <m>52\;\times\;7</m> two-dimensional array of <c>int</c> 
+            and initialize each of its elements to 0.
           </p>
         </li>
         <li>

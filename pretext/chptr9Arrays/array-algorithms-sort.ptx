@@ -2,19 +2,21 @@
   <title>Array Algorithms: Sorting</title>
   <introduction>
     <p>
-      <term>Sorting</term> an array is the process of arranging its elements in ascending or descending order.
+      <term>Sorting</term> an array is the process of arranging its elements in ascending 
+      or descending order.
       Sorting algorithms are among the most widely used algorithms.
       Any time large amounts of data are maintained,
       there is some need to arrange them in a particular order.
       For example,
-      the telephone company needs to arrange its accounts by the last name of the account holder as well as by phone number.
+      the telephone company needs to arrange its accounts by the last 
+      name of the account holder as well as by phone number.
     </p>
   </introduction>
   <subsection>
     <title>Insertion Sort</title>
     <p>
       The first sorting algorithm we'll look at is known as
-      <em>insertion sort</em>,
+      <term>insertion sort</term>,
       so named because as it traverses through the array from the first to the last element,
       it inserts each element into its correct position in the partially sorted array.
     </p>
@@ -23,10 +25,11 @@
       let's think of the array as divided into two parts.
       The <em>sorted</em> part will be the left hand side of the array.
       And the <em>unsorted</em> part will be the right hand side of the array.
-      Initially, the sorted part consists of the first element in the array<mdash/>the element at index 0.
+      Initially, the sorted part consists of the first element in the 
+      array <mdash/> i.e., the element at index 0.
     </p>
     <p>
-      Insertion sort moves through the unsorted portion of the array<mdash/>that is its loop variable,
+      Insertion sort moves through the unsorted portion of the array <mdash/> that is its loop variable,
       <em>k</em>,
       ranges from 1 through <em>N-1</em>.
       On each iteration it inserts the
@@ -37,6 +40,8 @@
     <p>
       In pseudocode, insertion sort can be represented as follows:
     </p>
+    <algorithm>
+    <title>Insertion sort </title>
  <program language="java"><input>
 Insertion Sort of an array, arr, of N elements into ascending order
 1. For k assigned 1 through N-1
@@ -45,9 +50,10 @@ Insertion Sort of an array, arr, of N elements into ascending order
 4.     Move arr[i] one position to the right in the array.
 5.   Insert x at its correct location.
  </input></program>
+ </algorithm>
     <p>
       As is apparent from the pseudocode,
-      we have a nested for loops.
+      we have nested for loops.
       The outer (<em>k</em>) loop, iterates through the array from 1 to <em>N-1</em>.
       The inner loop iterates as many times as necessary,
       starting with the element just to the left of the
@@ -72,6 +78,8 @@ Insertion Sort of an array, arr, of N elements into ascending order
       The outer loop will look at each of the remaining elements,
       one at a time,
       inserting it into its proper position in the sorted portion of the array.
+    </p>
+    <p>
       To insert 20, the number at index 1, the inner loop will move 21 to the right by one position.
       To do this, the algorithm will remove 20 from its location and store it in x.
       It will then move 21 one space to the right.
@@ -123,18 +131,19 @@ k
 19 20 21 24 27 |   Insert x=19 at index 0
  </input></program>
     <p>
-      Clearly, the fact that so many elements may have to moved on each iteration of the outer loop shows that insertion sort is not a very efficient algorithm.
+      Clearly, the fact that so many elements may have to moved on each 
+      iteration of the outer loop shows that insertion sort is not a very efficient algorithm.
     </p>
     <p>
       The <c>Sort</c> class
-      (<xref ref="fig-bubblemeth">Fig</xref>)
+      (<xref ref="lst-insertion">Listing</xref>)
       provides an implementation of the <c>insertionSort()</c> method.
       There are several points worth noting about this code.
       First, because it takes an <c>int</c> array as a parameter,
       the <c>insertionSort()</c> method will sort any array of integers,
       regardless of the array's length.
     </p>
-    <figure xml:id="fig-bubblemeth">
+    <listing xml:id="lst-insertion">
       <caption>Source code for  the <c>insertionSort()</c> method.
       Note in <c>main()</c> how an integer array is passed to the method.</caption>
  <program language="java"><input>
@@ -149,20 +158,23 @@ public class Sort {
       arr[i+1] = temp;       // Insert the element
     }
   } // insertionSort()
+
   public void print(int arr[]) {
     for (int k = 0; k &lt; arr.length; k++)// For each integer
       System.out.print( arr[k] + " \t "); //  Print it
     System.out.println();
   } // print()
+
   public static void main(String args[]) {
     int intArr[] = { 21, 20, 27, 24, 19 };
     Sort sorter = new Sort();
     sorter.print(intArr);
     sorter.insertionSort(intArr); // Passing an array
     sorter.print(intArr);
-  } // main()} //Sort
+  } // main()
+} //Sort
  </input></program>
-    </figure>
+    </listing>
     <p>
       Second, note how empty brackets (<c>[]</c>) are used to  declare an array parameter.
       If the brackets were omitted,
@@ -170,14 +182,16 @@ public class Sort {
       Using the brackets indicates that this method takes an array of integers as its parameter.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Array Parameter</title>
+      <title>DEBUGGING TIP: Array Parameter</title>
       <p>
         When declaring an array parameter,
-        empty brackets must be used either after the array name or after the type name to distinguish it from a non-array parameter.
+        empty brackets must be used either after the array name or after the 
+        type name to distinguish it from a non-array parameter.
       </p>
     </principle>
     <p>
-      Third, note how an array of integers is passed to the <c>insertionSort()</c> method in the <c>main()</c> method:
+      Third, note how an array of integers is passed to the <c>insertionSort()</c> 
+      method in the <c>main()</c> method:
     </p>
  <program language="java"><input>
 sorter.insertionSort(intArr); // Pass intArr to the method
@@ -199,7 +213,7 @@ sorter.insertionSort(intArr[5]);// Err: passing an integer
       and cannot legally be passed to <c>insertionSort()</c>.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Passing an Array Argument</title>
+      <title>DEBUGGING TIP: Passing an Array Argument</title>
       <p>
         It is a syntax error to use empty brackets when passing an array argument to a method,
         where the only the array's name should be used.
@@ -208,10 +222,13 @@ sorter.insertionSort(intArr[5]);// Err: passing an integer
     </principle>
     <p>
       Finally, within the <c>insertionSort()</c> method itself,
-      note that we declare the index for the inner <c>for</c> loop outside of the <c>for</c> statement.
-      This is so it can be used outside the scope of the <c>for</c> loop to insert <c>temp</c> at location <c>arr[i+1]</c>, its correct location.
+      note that we declare the index for the inner <c>for</c> loop 
+      outside of the <c>for</c> statement.
+      This is so it can be used outside the scope of the <c>for</c> 
+      loop to insert <c>temp</c> at location <c>arr[i+1]</c>, its correct location.
       Note also that the index of its correct location is
-<c>i+1</c>, rather than just <c>i</c>. This is because the inner loop might iterate past location 0, which would give <em>i</em>
+      <c>i+1</c>, rather than just <c>i</c>. This is because the inner 
+      loop might iterate past location 0, which would give <em>i</em>
       a value of -1 at that point.
     </p>
   </subsection>
@@ -221,7 +238,9 @@ sorter.insertionSort(intArr[5]);// Err: passing an integer
       There are a large variety of array sorting algorithms.
       Selection sort is different from,
       but comparable to, insertion sort in its overall performance.
-      To illustrate the <em>selection sort</em> algorithm,
+    </p>
+    <p>
+      To illustrate the <term>selection sort</term> algorithm,
       suppose you want to sort a deck of 25 index cards, numbered from 1 to 25.
       Lay the 25 cards out on a table,
       one card next to the  other.
@@ -237,6 +256,9 @@ sorter.insertionSort(intArr[5]);// Err: passing an integer
     <p>
       Translating this strategy into pseudocode gives the following algorithm:
     </p>
+
+     <algorithm>
+    <title>Selection sort </title>
  <program language="java"><input>
 Selection sort of a 25-card deck from small to large
 1. For count assigned 1 to 24  // Outer loop
@@ -247,6 +269,7 @@ Selection sort of a 25-card deck from small to large
 6.   If smallestCard != count // You need to swap
 7       Swap deck[count] and deck[smallestCard]
  </input></program>
+ </algorithm>
     <p>
       For a deck of 25 cards, you need to repeat the outer loop 24 times.
       In other words,
@@ -255,13 +278,16 @@ Selection sort of a 25-card deck from small to large
     </p>
     <p>
       On each iteration of this outer loop,
-      the algorithm assumes that the card specified by the outer loop variable, <c>count</c>, is the smallest card
+      the algorithm assumes that the card specified by the outer loop 
+      variable, <c>count</c>, is the smallest card
       (line 2).
       It usually won't be, of course,
       but we have to start somewhere.
     </p>
     <p>
-      The inner loop then iterates through the remaining cards (from <c>count+1</c> to 25) and compares each one with the card that is currently the smallest
+      The inner loop then iterates through the remaining cards 
+      (from <c>count+1</c> to 25) and compares each one with the card 
+      that is currently the smallest
       (lines 4 and 5).
       Whenever it finds a card that is smaller than the smallest card,
       it designates it as the smallest card
@@ -283,16 +309,21 @@ Selection sort of a 25-card deck from small to large
       whether they are array elements or not,
       requires the use of a temporary variable.
       For example, to swap the <em>j</em>th and
-      <em>k</em>th elements in an <c>int</c> array named <c>arr</c>, you would use the following algorithm: 
+      <em>k</em>th elements in an <c>int</c> array named <c>arr</c>, you 
+      would use the following algorithm: 
     </p>
+    <algorithm>
+    <title>Swap Two Variables </title>
  <program language="java"><input>
 int temp = arr[j]; // Store the jth element in temp
 arr[j] = arr[k];   // Move the kth element into j
 arr[k] = temp;     // Move the jth element into k
  </input></program>
+ </algorithm>
     <p>
       The <c>temp</c> variable temporarily stores the
-      <em>j</em>th element so its value is not lost when its location is overwritten by the <em>k</em>th element.
+      <em>j</em>th element so its value is not lost when its location is 
+      overwritten by the <em>k</em>th element.
       The need for this variable is a subtlety that beginning programmers frequently overlook.
       But consider what would happen if we used the following erroneous algorithm: 
     </p>
@@ -301,13 +332,15 @@ arr[j] = arr[k]; // Erroneous swap code
 arr[k] = arr[j];
  </input></program>
     <p>
-      If <c>arr[j]</c> refers to 4 and <c>arr[k]</c> refers to 2 in the array 1 4 2 8 , then the erroneous algorithm would produce 1 2 2 8 , the wrong result.
+      If <c>arr[j]</c> refers to 4 and <c>arr[k]</c> refers to 2 
+      in the array 1 4 2 8 , then the erroneous algorithm would produce 1 2 2 8 , the wrong result.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Swapping Variables</title>
+      <title>PROGRAMMING TIP: Swapping Variables</title>
       <p>
         When swapping two memory elements,
-        a temporary variable must be used to store one of the elements while its memory location is being overwritten.
+        a temporary variable must be used to store one of the 
+        elements while its memory location is being overwritten.
       </p>
     </principle>
     <p>
@@ -318,9 +351,12 @@ arr[k] = arr[j];
 void swap(int arr[], int el1, int el2) {
     int temp = arr[el1]; // Assign first element to temp
     arr[el1] = arr[el2]; // Overwrite first with second
-    arr[el2] = temp;     // Overwrite second with first} // swap()
+    arr[el2] = temp;     // Overwrite second with first
+} // swap()
  </input></program>
-    </subsection><subsection><title>Self-Study Exercises</title>
+</subsection>
+<subsection>
+  <title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -338,18 +374,19 @@ void swap(int arr[], int el1, int el2) {
         </li>
         <li>
           <p>
-            Write a Java code segment to swap two <c>Student</c> objects,
-<c>student1</c> and <c>student2</c>.
+            Write a Java code segment to swap two <c>Student</c> objects, 
+            <c>student1</c> and <c>student2</c>.
           </p>
         </li>
         <li>
           <p>
-            Write a Java implementation of the <c>selectionSort()</c> method to sort an array of <c>int</c>.
+            Write a Java implementation of the <c>selectionSort()</c> 
+            method to sort an array of <c>int</c>.
           </p>
         </li>
       </ol>
  </subsection>
-  <subsection xml:id="self-study-exerciseP24">
+  <subsection xml:id="paasing-params">
     <title>Passing a Value and Passing a Reference</title>
     <p>
       Recall from Chapter<nbsp/>3 that when an <c>Object</c> is passed to a method,
@@ -362,7 +399,8 @@ void swap(int arr[], int el1, int el2) {
     <principle>
       <title>Primitive vs. Object Parameters</title>
       <p>
-        When a value of a primitive data type<mdash/><c>int, double, char, boolean</c><mdash/> is passed as an argument to a method,
+        When a value of a primitive data type <mdash/> <c>int, double, char, boolean</c> <mdash/> 
+        is passed as an argument to a method,
         a copy of the value is passed;
         when a reference to an <c>Object</c> is passed,
         a copy of the reference is passed.
@@ -370,7 +408,8 @@ void swap(int arr[], int el1, int el2) {
     </principle>
     <p>
       One implication of this distinction is that for arguments of primitive type,
-      the original argument cannot be changed from within the method because the method has only a copy of its value.
+      the original argument cannot be changed from within the method 
+      because the method has only a copy of its value.
       For example,
       the following method takes an <c>int</c> parameter <em>n</em>,
       which is incremented within the method:
@@ -379,13 +418,15 @@ void swap(int arr[], int el1, int el2) {
 public void add1(int n) {
   System.out.print("n = " + n);
   n = n + 1;
-  System.out.println(",  n = " + n);}
+  System.out.println(",  n = " + n);
+}
  </input></program>
     <p>
       But because <em>n</em> is a parameter of primitive type,
       incrementing it within the method has no effect on its associated argument.
       Thus, in the following segment,
-      the value of <em>Num</em><mdash/><em>n</em>'s associated argument<mdash/>will not be affected by what goes on inside the <c>add()</c> method.
+      the value of <em>Num</em> <mdash/> <em>n</em>'s associated argument <mdash/> will 
+      not be affected by what goes on inside the <c>add()</c> method.
       The output produced by the code segment is shown in the comments:
     </p>
  <program language="java"><input>
@@ -418,23 +459,28 @@ Sort sorter = new Sorter();
       As you can see, the object itself
       (the array)
       has been changed from within the method.
-      This shows that changes within <c>insertionSort</c> to the array referenced by <c>arr</c> are actually being made to <c>anArr</c> itself.
-      If fact, because <c>insertionSort()</c> is passed a copy of the reference variable <c>anArr</c>, both <c>arr</c> and <c>anArr</c> are references to the very same object<mdash/>that is,
-      to the same array (Fig.
-      <xref ref="fig-arrayparam"></xref>).
+      This shows that changes within <c>insertionSort</c> to the array 
+      referenced by <c>arr</c> are actually being made to <c>anArr</c> itself.
+      If fact, because <c>insertionSort()</c> is passed a copy of the 
+      reference variable <c>anArr</c>, both <c>arr</c> 
+      and <c>anArr</c> are references to the very same object <mdash/> that is,
+      to the same array (<xref ref="fig-arrayparam">Figure</xref>).
     </p>
     <figure xml:id="fig-arrayparam">
       <caption>When an array is passed to a method, both
       the parameter and the corresponding argument refer to the same object.</caption>
-      <image width="73%" source="chptr09/8f11.png"/>
+      <image width="60%" source="chptr09/8f11.png"/>
     </figure>
     <p>
-      The justification for passing a reference to an object rather than the  entire object itself is a matter of efficiency.
+      The justification for passing a reference to an object rather than the  
+      entire object itself is a matter of efficiency.
       A reference uses just 4 bytes of data,
       whereas an object may use thousands of bytes.
-      It would just be too inefficient to copy hundreds of bytes each time an object is passed to a method.
+      It would just be too inefficient to copy hundreds of bytes 
+      each time an object is passed to a method.
       Instead, the method is passed a reference to the object,
-      thereby giving it access to the object without incurring the expense of copying large amounts of data.
+      thereby giving it access to the object without incurring the 
+      expense of copying large amounts of data.
       Indeed, Java provides no way to pass a copy of an object to a method.
     </p>
     </subsection>
@@ -442,7 +488,9 @@ Sort sorter = new Sorter();
       <ol>
         <li>
           <p>
-            Give the values that will be stored in <c>myArr</c> and <c>k</c> after you invoke <c>mystery(myArr, k)</c>, where <c>myArr</c>, <c>k</c> and <c>mystery()</c> are declared as follows:
+            Give the values that will be stored in <c>myArr</c> 
+            and <c>k</c> after you invoke <c>mystery(myArr, k)</c>, 
+            where <c>myArr</c>, <c>k</c> and <c>mystery()</c> are declared as follows:
  <program language="java"><input>
 int myArr[] = {1,2,3,4,5};    int k = 3;
 void mystery(int a[], int m) {

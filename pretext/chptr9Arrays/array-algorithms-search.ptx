@@ -4,7 +4,7 @@
     <p>
       Suppose we have a large array and we need to find one of its elements.
       We need an algorithm to search the array for a particular value,
-      usually called the <em>key</em>.
+      usually called the <term>key</term>.
       If the elements of the array are not arranged in any particular order,
       the only way we can be sure to find the key,
       assuming it is in the array,
@@ -15,13 +15,15 @@
   <subsection xml:id="fig-p430f1">
     <title>Sequential Search</title>
     <p>
-      This approach is known as a <em>sequential
+      This approach is known as a <term>sequential
           <idx><h>sequential search</h></idx>
-      search</em>,
+      search</term>,
       because each element of the array will be examined in sequence until the key is found
       (or the end of the array is reached).
       A pseudocode description of this algorithm is as follows:
     </p>
+<algorithm>
+<title>Sequential search </title>
  <program language="java"><input>
 1. For each element of the array
 2.    If the element equals the key
@@ -29,36 +31,43 @@
 4. If the key is not found in the array
 5.    Return -1 (to indicate failure)
  </input></program>
+ </algorithm>
     <p>
       This algorithm can easily be implemented in a method that searches an integer array,
       which is passed as the method's parameter.
       If the key is found in the array, its location is returned.
       If it is not found, then <m>-1</m> is returned to indicate failure.
     </p>
+    <figure xml:id="fig-search">
+      <caption>The <c>Search</c>  class.</caption>
+      <image width="50%" source="chptr09/p430f1.png"/>
+    </figure>
     <p>
-      <image width="73%" source="chptr09/p430f1.png"/>
-    </p>
-    <p>
-      The <c>Search</c> class (Figs.<nbsp/>9.15 and <xref ref="fig-search"></xref>) provides the Java implementation of the <c>sequentialSearch()</c> method.
+      The <c>Search</c> class (<xref ref="fig-search">Figure</xref> and 
+      <xref ref="lst-search">Listing</xref>) 
+      provides the Java implementation of the <c>sequentialSearch()</c> method.
       The method takes two parameters:
       the array to be searched and the key to be searched for.
       It uses a for statement to examine each element of the array,
       checking whether it equals the key or not.
       If an element that equals the key is found,
       the method immediately returns that element's index.
-      Note that the last statement in the method will only be reached if no element matching the key is found.
+      Note that the last statement in the method will only be reached 
+      if no element matching the key is found.
     </p>
-    <figure xml:id="fig-search">
+    <listing xml:id="lst-search">
       <caption>The <c>Search</c> class contains both a <c>sequentialSearch()</c>
       and a <c>binarySearch()</c>.</caption>
  <program language="java"><input>
 public class Search {
+
   public int sequentialSearch(int arr[], int key) {
     for (int k = 0; k &lt; arr.length; k++)
       if (arr[k] == key)
         return k;
     return -1;           // Failure if this is reached
   } // sequentialSearch()
+
   public int binarySearch(int arr[], int key) {
     int low = 0;                // Initialize bounds
     int high = arr.length - 1;
@@ -72,33 +81,38 @@ public class Search {
         high = mid - 1;       // Search bottom half
     }  // while
     return -1;     // Post: if low > high search failed
-  } // binarySearch()}//Search
+  } // binarySearch()
+}//Search
  </input></program>
-    </figure>
+    </listing>
     <principle>
-      <title>EFFECTIVE DESIGN:Sentinel Return Value</title>
+      <title>EFFECTIVE DESIGN: Sentinel Return Value</title>
       <p>
-        Like Java's
-<c>indexOf()</c> method,
-        the <c>sequentialSearch()</c> returns a sentinel value (<m>-1</m>) to indicate that the key was not found.
+        Like Java's <c>indexOf()</c> method,
+        the <c>sequentialSearch()</c> returns a sentinel value (<m>-1</m>) 
+        to indicate that the key was not found.
         This is a common design for search methods.
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="fig-p432f1">
+  <subsection xml:id="binary-search">
     <title>Binary Search</title>
     <p>
       If the elements of an array have been sorted into ascending or descending order,
-      it is not necessary to search sequentially through each element of the array in order to find the key.
-      Instead, the search algorithm can make use of the knowledge that the array is ordered and perform what's known as a <em>binary
+      it is not necessary to search sequentially through each element of the array 
+      in order to find the key.
+      Instead, the search algorithm can make use of the knowledge that 
+      the array is ordered and perform what's known as a <term>binary
           <idx><h>binary search</h></idx>
-      search</em>, which is a divide-and-conquer
+      search</term>, which is a divide-and-conquer
           <idx><h>divide-and-conquer</h></idx>
-      algorithm that divides the array in half on each iteration and limits its search to just that half that could contain the key.
+      algorithm that divides the array in half on each iteration and limits its 
+      search to just that half that could contain the key.
     </p>
     <p>
       To illustrate the binary search,
-      recall the familiar guessing game in which you try to guess a secret number between 1 and 100, being told
+      recall the familiar guessing game in which you try to guess a 
+      secret number between 1 and 100, being told
       <q>too high</q>
       or
       <q>too low</q>
@@ -110,7 +124,8 @@ public class Search {
       because if 50 is too high the number must be between 1 and 49.
       If 50 was too low, the next guess should be 75, and so on.
       After each wrong guess,
-      a good guesser should pick the midpoint of the sublist that would contain the secret number.
+      a good guesser should pick the midpoint of the sublist 
+      that would contain the secret number.
     </p>
     <p>
       Proceeding in this way,
@@ -125,14 +140,14 @@ public class Search {
     <p>
       So a binary search is a much more efficient way to search,
       provided the array's elements are in order.
-      Note that
-      <q>order</q>
-      here needn't be numeric order.
+      Note that <q>order</q> here needn't be numeric order.
       We could use binary search to look up a word in a dictionary or a name in a phone book.
     </p>
     <p>
       A pseudocode representation of the binary search is given as follows:
     </p>
+<algorithm>
+<title>Binary search </title>
  <program language="java"><input>
 TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
 1. Assign 0 low and assign N-1 to high initially
@@ -145,30 +160,45 @@ TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
 8.    Else assign mid - 1 to high
 9. If this is reached return -1 to indicate failure
  </input></program>
+</algorithm>
     <p>
       Just as with the sequential search algorithm,
-      this algorithm can easily be implemented in a method that searches an integer array that is passed as the method's parameter (Fig.
-      <xref ref="fig-search"></xref>).
+      this algorithm can easily be implemented in a method that searches an integer 
+      array that is passed as the method's parameter (<xref ref="lst-search">Listing</xref>).
+    </p>
+    <p>
       If the key is found in the array, its location is returned.
       If it is not found, then <m>-1</m> is returned to indicate failure.
-      The <c>binarySearch()</c> method takes the same type of parameters as <c>sequentialSearch()</c>. Its local variables, <c>low</c> and <c>high</c>, are used as pointers,
-      or references,
+      The <c>binarySearch()</c> method takes the same type of parameters as 
+      <c>sequentialSearch()</c>. Its local variables, <c>low</c> and <c>high</c>, 
+      are used as pointers, or references,
       to the current low and high ends of the array, respectively.
-      Note the loop-entry condition: <c>low &lt;= high</c>. If <c>low</c> ever becomes greater than <c>high</c>, this indicates that <c>key</c> is not contained in the array.
+    </p>
+    <p>
+      Note the loop-entry condition: <c>low &lt;= high</c>. If <c>low</c> 
+      ever becomes greater than <c>high</c>, this indicates 
+      that <c>key</c> is not contained in the array.
       In that case, the algorithm returns <m>-1</m>.
     </p>
     <p>
       As a binary search progresses,
-      the array is repeatedly cut in half and
-<c>low</c> and <c>high</c> will be used to point to the low and high index values in that portion of the array that is still being searched.
-      The local variable <c>mid</c> is used to point to the approximate midpoint of the unsearched portion of the array.
+      the array is repeatedly cut in half and <c>low</c> and <c>high</c> will 
+      be used to point to the low and high index values in that portion 
+      of the array that is still being searched.
+    </p>
+    <p>
+      The local variable <c>mid</c> is used to point to the 
+      approximate midpoint of the unsearched portion of the array.
       If the key is determined to be past the midpoint,
       then <c>low</c> is adjusted to <c>mid+1</c>; if the key occurs before the midpoint,
-      then <c>high</c> is set to <c>mid-1</c>. The updated values of <c>low</c> and <c>high</c> limit the search to the unsearched portion of the original array.
+      then <c>high</c> is set to <c>mid-1</c>. 
+      The updated values of <c>low</c> and <c>high</c> 
+      limit the search to the unsearched portion of the original array.
     </p>
     <p>
       Unlike sequential search,
-      binary search does not have to examine every location in the array to determine that the key is not in the array.
+      binary search does not have to examine every location in the array to 
+      determine that the key is not in the array.
       It searches only that part of the array that could contain the key.
       For example,
       suppose we are searching for <m>-5</m> in the following array:
@@ -179,8 +209,8 @@ int sortArr[] =
  </input></program>
     <p>
       The <m>-5</m> is smaller than the smallest array element.
-      Therefore, the algorithm will repeatedly divide the low end of the array in half until the condition
-<c>low > high</c> becomes true.
+      Therefore, the algorithm will repeatedly divide the low end of 
+      the array in half until the condition <c>low > high</c> becomes true.
       We can see this by tracing the values that low, mid,
       and high will take during the search:
     </p>
@@ -200,29 +230,25 @@ Key  Iteration  Low   High    Mid
       which makes the condition <c>low &lt;= high </c> false.
       So the search will terminate.
     </p>
-    <p>
-      <image width="73%" source="chptr09/p432f1.png"/>
-    </p>
-    <p>
-      The <c>TestSearch</c> class (Figs.<nbsp/>9.17 and <xref ref="fig-testsearch"></xref>) provides a program that can be used to test two search methods.
-      It creates an integer array, whose values are in ascending order.
-      It then uses the <c>getInput()</c> method to input an integer from the keyboard and then performs both a <c>sequentialSearch()</c> and a <c>binarySearch()</c> for the number.
-    </p>
-    </subsection>
-    <subsection><title>Self-Study Exercise</title>
-      <ol>
-        <li>
-          <p>
-            For the array containing the elements 2, 4, 6, and so on up to 28 in that order,
-            draw a trace showing which elements are examined if you search for 21 using a binary search.
-          </p>
-        </li>
-      </ol>
     <figure xml:id="fig-testsearch">
+      <caption>The <c>TestSearch</c>  class.</caption>
+            <image width="50%" source="chptr09/p432f1.png"/>
+    </figure>
+    <p>
+      The <c>TestSearch</c> class (<xref ref="fig-testsearch">Figure</xref> 
+      and <xref ref="lst-testsearch">Listing</xref>) 
+      provides a program that can be used to test two search methods.
+      It creates an integer array, whose values are in ascending order.
+      It then uses the <c>getInput()</c> method to input an integer from the 
+      keyboard and then performs both a <c>sequentialSearch()</c> 
+      and a <c>binarySearch()</c> for the number.
+    </p>
+    <listing xml:id="lst-testsearch">
       <caption>The <c>TestSearch</c> class.</caption>
  <program language="java"><input>
 import java.io.*;
 public class TestSearch {
+  
   public static int getInput() {
     KeyboardReader kb = new KeyboardReader();
     kb.prompt("This program searches for values in an array.");
@@ -230,6 +256,7 @@ public class TestSearch {
     "Input any positive integer (or any negative to quit) : ");
     return kb.getKeyboardInteger();
   } // getInput()
+
   public static void main(String args[]) throws IOException {
     int intArr[] = { 2,4,6,8,10,12,14,16,18,20,22,24,26,28};
     Search searcher = new Search();
@@ -252,8 +279,20 @@ public class TestSearch {
                              " is not contained in intArr[]");
       key = getInput();
     } // while
-  } // main()} // TestSearch
+  } // main()
+} // TestSearch
  </input></program>
-    </figure>
+    </listing>
+    </subsection>
+    <subsection><title>Self-Study Exercise</title>
+      <ol>
+        <li>
+          <p>
+            For the array containing the elements 2, 4, 6, and so on up to 28 in that order,
+            draw a trace showing which elements are examined if you search for 21 using a binary search.
+          </p>
+        </li>
+      </ol>
+
   </subsection>
 </section>
