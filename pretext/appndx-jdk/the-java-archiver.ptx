@@ -1,12 +1,13 @@
 <section xml:id="the-java-archiver-tool">
-  <title>The Java Archiver <c>jar</c>Tool</title>
+  <title>The Java Archiver: <c>jar</c></title>
   <p>
     The <c>jar</c> tool can be used to combine multiple files into a single JAR archive file.
     Although the <c>jar</c> tool is a general-purpose archiving and compression tool,
-    it was designed mainly to facilitate the packaging of Java applets and applications into a single file.
+    it was designed mainly to facilitate the packaging of Java applications into a single file.
   </p>
   <p>
-    The main justification for combining files into a single archive and compressing the archive is to improve download time.
+    The main justification for combining files into a single archive and 
+    compressing the archive is to improve download time.
     The <c>jar</c> command takes the following format:
   </p>
   <p>
@@ -19,30 +20,32 @@
     As you may recall, this example used classes,
     such as <c>TwoPlayerGame</c>, and interfaces,
     such as <c>IGame</c>, that were developed in earlier sections of the chapter.
-    So, to help manage the development of <c>WordGuess</c>, it would be useful to have a library containing those files that must be linked together when we compile
-<c>WordGuess</c>.
+    So, to help manage the development of <c>WordGuess</c>, it would be 
+    useful to have a library containing those files that must be linked together 
+    when we compile <c>WordGuess</c>.
   </p>
   <p>
     This is a perfect use of a <c>jar</c> file.
     Let's name our library
-<c>nplayerlib.jar</c>. We choose this name because the library can be used to create game programs that have <em>N</em> players,
+    <c>nplayerlib.jar</c>. We choose this name because the library can be 
+    used to create game programs that have <em>N</em> players,
     including two-player games.
   </p>
   <p>
     For the two-player game, <c>WordGuess</c>, we want to combine all the
-<c>.class</c> files needed by <c>WordGuess.java</c> into a single jar file.
+    <c>.class</c> files needed by <c>WordGuess.java</c> into a single jar file.
     Here's a list of the files we want to archive:
   </p>
- <program language="java"><input>
-CLUIPlayableGame.class
-ComputerGame.class
-GUIPlayableGame.class
-IGame.class
-KeyboardReader.class
-Player.class
-TwoPlayerGame.class
-UserInterface.class
- </input></program>
+ <ul>
+<li>CLUIPlayableGame.class</li>
+<li>ComputerGame.class</li>
+<li>GUIPlayableGame.class</li>
+<li>IGame.class</li>
+<li>KeyboardReader.class</li>
+<li>Player.class</li>
+<li>TwoPlayerGame.class</li>
+<li>UserInterface.class</li>
+ </ul>
   <p>
     Assuming all of these files are contained in a single directory
     (along with other files, perhaps),
@@ -53,7 +56,8 @@ jar cf nplayerlib.jar *.class
  </input></program>
   <p>
     In this case,
-    the <c>cf</c> options specify that we are creating a jar file named <c>animated.jar</c> that will consist of all the files having the <c>.class</c> suffix.
+    the <c>cf</c> options specify that we are creating a jar file 
+    named <c>animated.jar</c> that will consist of all the files having the <c>.class</c> suffix.
     This will create a file named <c>nplayerlib.jar</c>. To list the contents of this file,
     you can use the following command:
   </p>
@@ -62,8 +66,10 @@ jar tf nplayerlib.jar
  </input></program>
   <p>
     Once we have created the jar file,
-    we can copy it into the directory that contains our source code for the <c>WordGuess</c> program.
-    We would then the following commands to include the code contained in the library when we compile and run <c>WordGuess.java</c>
+    we can copy it into the directory that contains our source code for 
+    the <c>WordGuess</c> program.
+    We would then use the following commands to include the code 
+    contained in the library when we compile and run <c>WordGuess.java</c>
   </p>
  <program language="java"><input>
 javac -classpath nplayerlib.jar:. WordGuess.java
@@ -72,13 +78,18 @@ java -classpath nplayerlib.jar:. WordGuess
   <p>
     These commands,
     which use the <c>-classpath</c> option,
-    tell <c>javac</c> and <c>java</c> to include code from the <c>nplayerlib.jar</c>. The notation <c>:.</c>, links code in the current directory (\.) with the library code.
+    tell <c>javac</c> and <c>java</c> to include code from 
+    the <c>nplayerlib.jar</c>. The notation <c>:.</c>, links code in the 
+    current directory (.) with the library code.
   </p>
+  <!--
   <p>
     Once we have created a library,
     we can also use it for Java applets.
     For example,
-    suppose we have developed an applet version of the <c>WordGuess</c> game and linked all of the applet's code into a jar file named <c>wordguessapplet.jar</c>. The following HTML file would allow users to download the applet from their web browser:
+    suppose we have developed an applet version of the <c>WordGuess</c> game and 
+    linked all of the applet's code into a jar file named <c>wordguessapplet.jar</c>. 
+    The following HTML file would allow users to download the applet from their web browser:
   </p>
  <program language="java"><input>
 &lt;html>
@@ -97,7 +108,10 @@ java -classpath nplayerlib.jar:. WordGuess
  </input></program>
   <p>
     When specified in this way,
-    the browser will take care of downloading the archive file and extracting the individual files needed by the applet.
-    Note that the <c>code</c> attribute must still designate the file where the program will start execution.
+    the browser will take care of downloading the archive file and 
+    extracting the individual files needed by the applet.
+    Note that the <c>code</c> attribute must still designate 
+    the file where the program will start execution.
   </p>
+  -->
 </section>
