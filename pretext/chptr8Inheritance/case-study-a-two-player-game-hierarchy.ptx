@@ -7,12 +7,15 @@
       Many games that this characteristic:
       checkers, chess, tic-tac-toe,
       guessing games, and so forth.
+
+      <!--
       However, there are also many games that involve just 1 player:
       blackjack, solitaire, and others.
       There are also games that involve two or more players,
       such as many card games.
       Thus, our redesign of <c>OneRowNim</c> as part of a two-player game hierarchy will not be our last effort to design a hierarchy of game-playing classes.
       We will certainly re-design things as we learn new Java language constructs and as we try to extend our game library to other kinds of games.
+      -->
     </p>
     <p>
       This case study will illustrate how we can apply inheritance and polymorphism,
@@ -55,8 +58,8 @@
       we will develop Java interfaces to serve as interfaces between our two-player games and various user interfaces.
     </p>
   </subsection>
-  <subsection xml:id="fig-onerownim">
-    <title>Designing the <c>TwoPlayerGame</c>Class</title>
+  <subsection xml:id="two-player-game-class">
+    <title>Designing the <c>TwoPlayerGame</c> Class</title>
     <p>
       To begin revising the design of the <c>OneRowNim</c> game,
       we first need to design a top-level class,
@@ -66,7 +69,11 @@
       All subclasses of <c>TwoPlayerGame</c><mdash/>which includes the <c>OneRowNim</c> class<mdash/>would inherit these elements.
       <xref ref="fig-onerownim">Figure</xref>
       shows the current design of <c>OneRowNim</c>. 
-      <image width="50%" source="chptr08/onerownim.png"/>
+
+      <figure xml:id="fig-onerownim">
+        <caption><p>One Row Nim Class</p></caption>
+      <image width="40%" source="chptr08/onerownim.png"/>
+   </figure>
     </p>
     <p>
       What variables and methods should we move up to the <c>TwoPlayerGame</c> class?
@@ -113,7 +120,7 @@
     <figure xml:id="fig-twoplayergame">
       <caption><c>TwoPlayerGame</c> is the
       superclass for <c>OneRowNim</c> and other two player games.</caption>
-      <image width="73%" source="chptr08/twoplayergame.png"/>
+      <image width="85%" source="chptr08/twoplayergame.png"/>
     </figure>
     <p>
       To begin with,
@@ -124,7 +131,7 @@
     </p>
   </subsection>
   <subsection>
-    <title>The <c>TwoPlayerGame</c>Superclass</title>
+    <title>The <c>TwoPlayerGame</c> Superclass</title>
     <p>
       As we have stated,
       the purpose of the <c>TwoPlayerGame</c> class is to serve as the superclass for all two-player games.
@@ -184,7 +191,8 @@ public void addComputerPlayer(IPlayer player) {
       computer1 = player;
    else
       return; // No more than 2 players
-   ++nComputers;}
+   ++nComputers;
+  }
  </input></program>
     <p>
       As we noted earlier,
@@ -209,7 +217,7 @@ public void addComputerPlayer(IPlayer player) {
       the default assumption is that <c>nComputers</c> equals zero and that <c>computer1</c> and <c>computer2</c> are both <c>null</c>. Here's an example of how it could be used:
     </p>
  <program language="java"><input>
-OneRowNim nim = new OneRowNim(11); // 11 sticks
+ OneRowNim nim = new OneRowNim(11); // 11 sticks
  nim.add(new NimPlayer(nim));       // 2 computer players
  nim.add(new NimPlayerBad(nim));
  </input></program>
@@ -243,7 +251,8 @@ public String getRules() {
   MAX_PICKUP +
   " sticks from the current number of sticks.\n" +
   "(4) A player who cannot leave a positive\n\t" +
-  " number of sticks for the other player loses.\n";}
+  " number of sticks for the other player loses.\n";
+}
  </input></program>
     <p>
       The idea is that each <c>TwoPlayerGame</c> subclass will take responsibility for specifying its own set of rules in a form that can be displayed to the user.
@@ -276,18 +285,19 @@ TwoPlayerGame game = new OneRowNim();
       This allows us to use polymorphism to create flexible,
       extensible class hierarchies.
     </p>
-    <p>
-      <xref ref="fig-twoplayercode">Figure</xref>
-      shows the complete implementation of the abstract <c>TwoPlayerGame</c> class.
-      We have already discussed the most important details of its implementation.
-    </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Abstract Methods</title>
+      <title>EFFECTIVE DESIGN: Abstract Methods</title>
       <p>
         Abstract methods allow you to give general definitions in the superclass and to leave the implementation details to the different subclasses.
       </p>
     </principle>
-    <figure xml:id="fig-twoplayercode">
+    <p>
+      <xref ref="fig-twoplayercode">Listing</xref>
+      shows the complete implementation of the abstract <c>TwoPlayerGame</c> class.
+      We have already discussed the most important details of its implementation.
+    </p>
+    
+    <listing xml:id="fig-twoplayercode">
       <caption>The <c>TwoPlayerGame</c> class</caption>
  <program language="java"><input>
 public abstract class TwoPlayerGame {
@@ -326,12 +336,14 @@ public abstract class TwoPlayerGame {
     ++nComputers;
   }
     public abstract boolean gameOver();// Abstract Methods
-    public abstract String getWinner();} //TwoPlayerGame
+    public abstract String getWinner();
+ } //TwoPlayerGame
  </input></program>
-    </figure>
+</listing>
   </subsection>
+
   <subsection>
-    <title>The <c>CLUIPlayableGame</c>Interface</title>
+    <title>The <c>CLUIPlayableGame</c> Interface</title>
     <p>
       Let's turn now to the two interfaces shown in <xref ref="fig-twoplayergame">Figure</xref>.
       Taken together,
@@ -360,7 +372,8 @@ public interface CLUIPlayableGame extends IGame {
     public abstract void play(UserInterface ui);}
 public interface IGame {
     public String getGamePrompt();
-    public String reportGameState();} //IGame
+    public String reportGameState();
+  } //IGame
  </input></program>
     <p>
       Notice that the <c>CLUIPlayableGame</c> interface extends the
@@ -373,7 +386,7 @@ public interface IGame {
     <p>
       
     </p>
- <program language="java"><input>
+ <algorithm>
 Initialize the game.
 While the game is not over
   Report the current state of the game via the UI.
@@ -381,7 +394,7 @@ While the game is not over
   Get the user's move via the UI.
   Make the move.
   Change to the other player.
- </input></program>
+ </algorithm>>
     <p>
       The play loop sets up an interaction between the game and the UI. The <c>UserInterface</c> parameter allows the game to connect directly to a particular UI. To allow us to play our games through a variety of UIs, we define <c>UserInterface</c> as the following Java interface:
     </p>
@@ -414,7 +427,7 @@ public class KeyboardReader implements UserInterface
 <c>TwoPlayerGame</c>.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Flexibility of Java Interfaces</title>
+      <title>EFFECTIVE DESIGN: Flexibility of Java Interfaces</title>
       <p>
         A Java interface provides a means of associating useful methods with a variety of different types of objects,
         leading to a more flexible object-oriented design.
@@ -450,7 +463,7 @@ public class KeyboardReader implements UserInterface
       These are very good design questions,
       exactly the kinds of questions  one should ask when designing a class hierarchy of any sort.
       As we pointed out in the <c>Animal</c> example earlier in the chapter,
-      you can get the same functionality from a abstract interface and from an abstract superclass method.
+      you can get the same functionality from an abstract interface and from an abstract superclass method.
       When should we put the abstract method in the superclass and when does it belong in an interface?
       A very good discussion of these and related object-oriented design issues is available in
       <em>Java Design, 2nd Edition</em>,
@@ -475,7 +488,7 @@ public class KeyboardReader implements UserInterface
       So, one important design guideline is:
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Abstract Methods</title>
+      <title>EFFECTIVE DESIGN: Abstract Methods</title>
       <p>
         Methods defined abstractly in a superclass should contribute in a fundamental way toward the basic definition of that type of object,
         not merely toward one of its roles or its functionality.
@@ -485,14 +498,14 @@ public class KeyboardReader implements UserInterface
   <subsection>
     <title>The Revised <c>OneRowNim</c>Class</title>
     <p>
-      <xref ref="fig-revisednim">Figure</xref>
+      <xref ref="fig-revisednim">Listing</xref>
       provides a listing of the revised
 <c>OneRowNim</c> class,
       one that fits into the <c>TwoPlayerGame</c> class hierarchy.
       Our discussion in this section will focus on just those features of the game that are new or revised.
     </p>
-    <figure xml:id="fig-revisednim">
-      <caption>The revised  <c>OneRowNim</c> class, Part I.</caption>
+    <listing xml:id="fig-revisednim">
+      <caption>The revised  <c>OneRowNim</c> class</caption>
       
  <program language="java"><input>
 public class OneRowNim extends TwoPlayerGame
@@ -537,12 +550,8 @@ public class OneRowNim extends TwoPlayerGame
       return "" + getPlayer() + " Nice game.";
     return "The game is not over yet.";   // Game is not over
   } // getWinner()
- </input></program>
-    </figure>
-    <figure xml:id="fig-revisednim2">
-      <caption>The revised  <c>OneRowNim</c> class, continued from previous page.</caption>
- <program language="java"><input>
-/** From CLUIPlayableGame */
+ 
+  /** From CLUIPlayableGame */
   public String getGamePrompt() {
     return "\nYou can pick up between 1 and " +
                     Math.min(MAX_PICKUP,nSticks) + " : ";
@@ -586,9 +595,10 @@ public class OneRowNim extends TwoPlayerGame
         changePlayer();
     } // while
     ui.report(reportGameState());  // The game is now over
-  } // play()} // OneRowNim class
+  } // play()
+} // OneRowNim class
  </input></program>
-    </figure>
+</listing>
     <p>
       The <c>gameOver()</c> and <c>getWinner()</c> methods,
       which are now inherited from the <c>TwoPlayerGame</c> superclass,
@@ -599,12 +609,11 @@ public class OneRowNim extends TwoPlayerGame
       Similarly, the <c>getGamePrompt()</c> and <c>reportGameState()</c> methods merely encapsulate functionality that was present in the earlier version of the game.
       In our earlier version the prompts to the user were generated directly by the main program.
       By encapsulating  this information in an inherited method,
-      we make it more generally useful to all <c>TwoPlayerGame</c> s.
+      we make it more generally useful to all TwoPlayerGames.
     </p>
     <p>
       The major change to <c>OneRowNim</c> comes in the <c>play()</c> method,
-      which controls the playing of the <c>OneRowNim</c>(Fig.
-      <xref ref="fig-revisednim2"></xref>).
+      which controls the playing of the <c>OneRowNim</c>(<xref ref="fig-revisednim2"></xref>).
       Because this version of the game incorporates computer players,
       the play loop is a bit more complex than in earlier versions of the game.
       The basic idea is still the same: The method loops until the game is over.
@@ -679,23 +688,26 @@ public interface IPlayer {
       this use of polymorphism makes it possible to test different game-playing strategies against each other.
     </p>
   </subsection>
-  <subsection xml:id="fig-nimplayerbad">
+  <subsection>
     <title>The <c>IPlayer</c>Interface</title>
     <p>
       The last element of our design is the <c>IPlayer</c> interface, which,
       as we just saw,
       consists of the <c>makeAMove()</c> method.
       To see how we use this interface,
-      let's design a class to play the game of <c>OneRowNim</c>. We will call the class <c>NimPlayerBad</c> and give it a very weak playing strategy.
+      let's design a class to play the game of <c>OneRowNim</c>. We will call the class
+       <c>NimPlayerBad</c> and give it a very weak playing strategy.
       For each move it will pick a random number between 1 and 3, or between 1 and the total number of sticks left,
       if there are fewer than 3 sticks.
       (We will leave the task of defining
 <c>NimPlayer</c>, a good player,
       as an exercise.)
-      <image width="73%" source="chptr08/nimplayer.png"/>
+      <figure xml:id="fig-nimplayerbad"><caption><p>NimPlayerBad Class</p></caption>
+      <image width="50%" source="chptr08/nimplayer.png"/>
+      </figure>
     </p>
     <p>
-      As an implementer of the <c>IPlayer</c> interface, <c>NimPlayerBad</c> will implement the <c>makeAMove()</c> method.
+      As an implementer of the <c>IPlayer</c> interface, <c>NimPlayerBad</c> (<xref ref="fig-nimplayerbad">Fig</xref>) will implement the <c>makeAMove()</c> method.
       This method will contain
 <c>NimPlayerBad</c>'s strategy (algorithm) for playing the game.
       The result of this strategy will be the number of sticks that the player will pick up.
@@ -711,12 +723,12 @@ public interface IPlayer {
       Thus, we will have a variable of type <c>OneRowNim</c>, and we will assign it a value in a constructor method.
     </p>
     <p>
-      Figure<nbsp/>8.23 shows the design of <c>NimPlayerBad</c>. Note that we have added an implementation of the <c>toString()</c> method.
+      <xref ref="fig-revisednim">Figure</xref>       shows the design of <c>NimPlayerBad</c>. Note that we have added an implementation of the <c>toString()</c> method.
       This will be used to give a string representation of the <c>NimPlayerBad</c>. Also,
       note that we have added a private helper method named
 <c>randomMove()</c>, which will simply generate an appropriate random number of sticks as the player's move.
     </p>
-    <figure xml:id="fig-nimbad">
+    <listing xml:id="fig-nimbad">
       <caption>The <c>NimPlayerBad</c> class.</caption>
       
  <program language="java"><input>
@@ -737,11 +749,12 @@ public class NimPlayerBad implements IPlayer {
     String className =
         this.getClass().toString(); // Gets 'class NimPlayerBad'
     return className.substring(5);  // Cut off the word 'class'
-  } // toString()} // NimPlayerBad
+  } // toString()
+} // NimPlayerBad
  </input></program>
-    </figure>
+</listing>
     <p>
-      The implementation of <c>NimPlayerBad</c> is shown in <xref ref="fig-nimbad">Figure</xref>.
+      The implementation of <c>NimPlayerBad</c> is shown in <xref ref="fig-nimbad">Listing</xref>.
       The <c>makeAMove()</c> method converts the
 <c>randomMove()</c> to a <c>String</c> and returns it,
       leaving it up to
@@ -764,7 +777,7 @@ sticks = Integer.parseInt(computer.makeAMove(""));
 <c>OneRowNim</c> and <c>IPlayer</c> provides a flexible and effective model for this type of interaction.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Interface Associations</title>
+      <title>EFFECTIVE DESIGN: Interface Associations</title>
       <p>
         Java interfaces provide a flexible way to set up associations between two different types of objects.
       </p>
@@ -788,15 +801,376 @@ ui.report("\nPlayer 1 is a " + computer1.toString());
       If <c>computer1</c> is a <c>NimPlayerBad</c>, it would report
       <q>Player1 is a NimPlayerBad.</q>
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
-            Define a class <c>NimPlayer</c> that plays the optimal strategy for <c>OneRowNim</c>. This strategy was described in Chapter<nbsp/>5.
-          </p>
-        </li>
-      </ol>
- </subsection>
+    <p>Try NimPlayerBad in the exercise below.</p>        
+
+    </subsection>
+  <exercises><title>Self-Study Exercises</title>
+      
+           
+            <exercise label="badnim-ex">
+              <statement><p>Run to see NimPlayerBad playing. 
+                Then, add a class <c>NimPlayer</c> (using NimPlayerBad as a guide) that plays the optimal strategy for 
+                <c>OneRowNim</c>. This strategy was described in Chapter<nbsp/>5.</p></statement>
+              <program language="java" interactive="activecode">
+                <input>
+                import java.io.*;
+                /*
+                 * OneRowNim.java
+                 * The full version of One Row Nim. This version can be CLUIPlayable 
+                 */
+                
+                import java.awt.*;
+                
+                class NimPlayerBad implements IPlayer {   
+                  private OneRowNim game;
+                  public NimPlayerBad (OneRowNim game) {  
+                      this.game = game;
+                  }
+                  public String makeAMove(String prompt) {   
+                      return "" + randomMove();
+                  }
+                  private int randomMove() {   
+                      int sticksLeft = game.getSticks();
+                      return 1 + (int)(Math.random() * Math.min(sticksLeft, game.MAX_PICKUP));
+                  }
+                  public String toString() {
+                      String className = this.getClass().toString(); // returns 'class NimPlayerBad'
+                      return className.substring(5);                 // cut off the word 'class'
+                  }
+                } // NimPlayerBad
+
+                public class OneRowNim extends TwoPlayerGame implements CLUIPlayableGame  {   
+                    public static final int MAX_PICKUP = 3;
+                    public static final int MAX_STICKS = 11;
+                    
+                    private int nSticks = MAX_STICKS;
+                
+                    public OneRowNim() { }        // Constructors
+                    public OneRowNim(int sticks) {   
+                  nSticks = sticks;
+                    }  
+                    public OneRowNim(int sticks, int starter) {   
+                  nSticks = sticks;
+                        setPlayer(starter);
+                    } 
+                    public boolean takeSticks(int num) {   
+                  if (num &lt; 1 || num > MAX_PICKUP || num > nSticks) 
+                      return false;                // Error
+                        else                             // Valid move
+                        {   nSticks = nSticks - num;
+                            return true;
+                  } //else
+                    }//takeSticks
+                    public int getSticks() {   
+                  return nSticks;
+                    } //getSticks
+                
+                    public String getRules() {
+                        return "\n*** The Rules of One Row Nim ***\n" +
+                        "(1) A number of sticks between 7 and " + MAX_STICKS + " is chosen.\n" + 
+                        "(2) Two players alternate making moves.\n" + 
+                        "(3) A move consists of subtracting between 1 and\n\t" + 
+                            MAX_PICKUP + " sticks from the current number of sticks.\n" + 
+                        "(4) A player who cannot leave a positive\n\t" + 
+                        " number of sticks for the other player loses.\n";
+                    }
+                    public boolean gameOver() {   /** From TwoPlayerGame */
+                  return (nSticks &lt;= 0);
+                    } // gameOver()
+                    public String getWinner()  {       /** From TwoPlayerGame */
+                  if (gameOver()) //{
+                    return "" + getPlayer() + " Nice game.";
+                  return "The game is not over yet.";   // Game is not over
+                    } // getWinner()
+                
+                    public String getGamePrompt() {
+                        return "\nYou can pick up between 1 and " + Math.min(MAX_PICKUP,nSticks) + " : ";
+                    }
+                    public String reportGameState() {   
+                  if (!gameOver())
+                             return ("\nSticks left: " + getSticks() + " Who's turn: Player " + getPlayer());
+                        else
+                             return ("\nSticks left: " + getSticks() + " Game over! Winner is Player " + getWinner() +"\n");
+                    }   // reportGameState()
+                
+                    /** From CLUIPlayableGame interface */
+                    public void play(UserInterface ui) {
+                        int sticks = 0;
+                        ui.report(getRules());
+                        if (computer1 != null) 
+                            ui.report("\nPlayer 1 is a " + computer1.toString());
+                  if (computer2 != null)
+                      ui.report("\nPlayer 2 is a " + computer2.toString());
+                
+                  while(!gameOver()) {  
+                            IPlayer computer = null;             // Assume no computers playing
+                      ui.report(reportGameState());
+                            switch(getPlayer()) {
+                      case PLAYER_ONE:             // Player 1's turn
+                    computer = computer1;
+                    break;
+                      case PLAYER_TWO:             // Player 2's turn
+                    computer = computer2;
+                    break;
+                      } // cases
+                
+                            if (computer != null) {      // If computer's turn
+                    sticks = Integer.parseInt(computer.makeAMove(""));
+                    ui.report(computer.toString() + " takes " + sticks + " sticks.\n");
+                      } else {                     // otherwise, user's turn
+                    ui.prompt(getGamePrompt());
+                    sticks = Integer.parseInt(ui.getUserInput()); // Get user's move 
+                      }
+                      if (takeSticks(sticks))   // If a legal move
+                    changePlayer();
+                        } // while
+                  ui.report(reportGameState());  // The game is now over
+                    }
+                
+                    public String submitUserMove(String theMove) {
+                        int sticks = Integer.parseInt(theMove);
+                        if (takeSticks(sticks)) {
+                            changePlayer();
+                            if (gameOver()) {
+                                return reportGameState() + "\nGame won by player" + getWinner() + "\n";
+                      } else {
+                                return reportGameState() + getGamePrompt();
+                      }
+                  }
+                        return "\nOops. " + sticks + " is an illegal move." + getGamePrompt();
+                    }
+                
+                    public void draw(Graphics g) {
+                        g.setColor(Color.red);
+                  for (int k = 1; k &lt;= nSticks; k++) {
+                            g.drawLine(10 + k * 10, 10, 10 + k * 10, 60);
+                  }
+                    }
+                
+                    /**
+                     * A OneRowNim Keyboard Application Program
+                    */
+                    public static void main(String args[])  {  
+                  KeyboardReader kb = new KeyboardReader();
+                    CLUIPlayableGame game = new OneRowNim();
+                
+                    kb.prompt("How many computers are playing, 0, 1, or 2? ");
+                  int m = kb.getKeyboardInteger();
+                        for (int k = 0; k &lt; m; k++) {
+                           // kb.prompt("What type of player, NimPlayerBad = 1, or NimPlayer = 2 ? ");
+                      //int choice = kb.getKeyboardInteger();
+                          //  if (choice == 1) {
+                            IPlayer computer = new NimPlayerBad((OneRowNim)game);
+                    
+                            ((TwoPlayerGame)game).addComputerPlayer(computer);
+                     // } else {
+                        //    IPlayer computer = new NimPlayer((OneRowNim)game);
+                      //            IPlayer computer = new NimPlayer(game);
+                          //  ((TwoPlayerGame)game).addComputerPlayer(computer);
+                      //}
+                  }
+                  //        ((CLUIPlayableGame)game).play(kb);
+                       game.play(kb);
+                    } //main()
+                } // OneRowNim class                
+                
+                interface IPlayer {
+                    /**
+                     * makeAMove() defines how a move is made. It is meant
+                     *  to be implemented by any object that plays the game.
+                     * @param prompt is a String that prompts the player for a move.
+                     * @return a String that describes the player's move
+                     */
+                    public String makeAMove(String prompt);
+                }
+                
+                 interface IGame {
+                    public String getGamePrompt();
+                    public String reportGameState();
+                } //IGame
+                
+                interface UserInterface {
+                    public String getUserInput();
+                    public void report(String s);
+                    public void prompt(String s);
+                }
+                
+                
+                interface CLUIPlayableGame extends IGame {
+                
+                    /**
+                     * play() implements the play loop for a game that
+                     *  interfaces to a UserInterface. It is meant to
+                     *  be implented by games that support a command-line
+                     *  interface. 
+                     */
+                    public abstract void play(UserInterface ui);
+                }
+                
+                 abstract class TwoPlayerGame {   
+                    public static final int PLAYER_ONE = 1;  // Class constants
+                    public static final int PLAYER_TWO = 2;
+                
+                    protected boolean onePlaysNext = true;    // Player 1 plays next
+                    protected int nComputers = 0;             // How many computer players
+                    protected IPlayer computer1, computer2;   // Computers are IPlayers
+                 
+                    /**
+                     * setPlayer() sets which player makes the first move.
+                     * @param starter, an int representing PLAYER_ONE or PLAYER_TWOI
+                     */
+                    public void setPlayer(int starter) {   
+                  if (starter == PLAYER_TWO)
+                            onePlaysNext = false;
+                        else onePlaysNext = true;
+                    } //setPlayer()
+                
+                    /**
+                     * getPlayer() returns an int representing whose turn it it.
+                     * @return an int representing PLAYER_ONE or PLAYER_TWO.
+                     */
+                    public int getPlayer() {   
+                  if (onePlaysNext) 
+                      return PLAYER_ONE;
+                        else return PLAYER_TWO;
+                    } //getPlayer()
+                
+                    /**
+                     * changePlayer() toggles between PLAYER_ONE or PLAYER_TWO.
+                     */
+                    public void changePlayer() {   
+                  onePlaysNext = !onePlaysNext;
+                    } //changePlayer
+                
+                    /**
+                     * getNComputers() returns the number of computers playing
+                     * @return an int representing the number of computer players
+                     */
+                    public int getNComputers() {
+                  return nComputers;
+                    }
+                
+                    /**
+                     * getRules() returns a String describing the rules of the game.
+                     * @return a String giving the game's rules.
+                     */
+                    public String getRules() {
+                        return "The rules of this game are: ";
+                    }
+                
+                    /**
+                     * addComputerPlayer() adds to the number of computer players.
+                     * @param player is an IPlayer
+                     */
+                    public void addComputerPlayer(IPlayer player) {
+                        if (nComputers == 0)
+                      computer2 = player;
+                        else if (nComputers == 1)
+                            computer1 = player;
+                        else 
+                      return; // No more than 2 players
+                        ++nComputers;
+                    }
+                
+                    /**
+                     * gameOver() defines when the game is over. It is meant to be
+                     *   implemented in subclasses.
+                     */
+                    public abstract boolean gameOver();  // Abstract Methods
+                
+                    /**
+                     * getWinner() defines who wins the game. It is meant to be 
+                     *   implemented in subclasses.
+                     */
+                    public abstract String getWinner();
+                } //TwoPlayerGame
+                
+                class KeyboardReader implements UserInterface
+                {    private BufferedReader reader;
+                
+                    /**
+                     * KeyboardReader() constructor creates a BufferedReader that
+                     *  is used for command-line and console I/O.
+                     */
+                     public KeyboardReader()
+                     {   reader = new BufferedReader(new InputStreamReader(System.in));
+                     }
+                
+                    /**
+                     * getKeyboardInput() returns input read from the keyboard.
+                     */
+                     public String getKeyboardInput()
+                     {   return readKeyboard();
+                     }
+                
+                    /**
+                     * getKeyboardInput() returns an integer read from the keyboard.
+                     */
+                     public int getKeyboardInteger()
+                     {   return Integer.parseInt(readKeyboard());
+                     }
+                
+                    /**
+                     * getKeyboardInput() returns a double value read from the keyboard.
+                     */
+                     public double getKeyboardDouble()
+                     {   return Double.parseDouble(readKeyboard());
+                     }
+                
+                    /**
+                     * getUserInput() is a method of the UserInterface class. It
+                     *  returns input read from the keyboard.
+                     */
+                    public String getUserInput() {
+                        return getKeyboardInput();
+                    }
+                
+                    /**
+                     * prompt() is a method of the UserInterface class. It
+                     *  prints its parameter.
+                     * @param s is the String prompt
+                     */
+                    public void prompt(String s)    
+                     {   System.out.print(s);
+                     }
+                
+                    /**
+                     * prompt() is a method of the UserInterface class. It
+                     *  prints its parameter.
+                     * @param s is a String representing the state of the game.
+                     */
+                    public void report(String s)    
+                     {   System.out.print(s);
+                     }
+                
+                    /**
+                     * display() prints its parameter.
+                     */
+                     public void display(String s)
+                     {   System.out.print(s);
+                     }
+                
+                    /**
+                     * readKeyboard() reads a line of input from the keyboard
+                     *   where reader is a BufferedReader.
+                     * @return a String storing a line read from the keyboard.
+                     */
+                     private String readKeyboard()
+                     {   String line = "";
+                         try
+                         {   line = reader.readLine();
+                         } catch (IOException e)
+                         {   e.printStackTrace();
+                         }
+                         return line;
+                     }
+                }  
+              </input>
+                </program>
+                </exercise>       
+              </exercises>
+
+
   <subsection>
     <title>Playing <c>OneRowNim</c></title>
     <p>
@@ -847,7 +1221,7 @@ public static void main(String args[]) {
       Thus, one alternative way of coding this is as follows:
     </p>
  <program language="java"><input>
-TwoPlayerGame game = new OneRowNim();
+    TwoPlayerGame game = new OneRowNim();
     ...
     IPlayer computer = new NimPlayer((OneRowNim)game);
     ...
@@ -859,7 +1233,7 @@ TwoPlayerGame game = new OneRowNim();
       If we don't cast <c>game</c> in this way, Java will generate the following syntax error:
     </p>
  <program language="java"><input>
-OneRowNim.java:126: cannot resolve symbol
+ OneRowNim.java:126: cannot resolve symbol
  symbol  : method play (KeyboardReader)
  location: class TwoPlayerGame
         game.play(kb);
@@ -878,7 +1252,7 @@ OneRowNim.java:126: cannot resolve symbol
       Another alternative for the <c>main()</c> method would be the following:
     </p>
  <program language="java"><input>
-CLUIPlayableGame game = new OneRowNim();
+ CLUIPlayableGame game = new OneRowNim();
  ...
  IPlayer computer = new NimPlayer((OneRowNim)game);
  ((TwoPlayerGame)game).addComputerPlayer(computer);
@@ -895,10 +1269,11 @@ CLUIPlayableGame game = new OneRowNim();
       We still need the cast operation for the call to the <c>NimPlayer()</c> constructor.
     </p>
     <p>
-      All three of the code options that we have considered will generate something like the interactive session shown in <xref ref="fig-playnim">Figure</xref>
+      All three of the code options that we have considered will generate something like
+       the interactive session shown in <xref ref="fig-playnim">Listing</xref>
       for a game in which two <c>IPlayer</c> s play each other.
     </p>
-    <figure xml:id="fig-playnim">
+    <listing xml:id="fig-playnim">
       <caption>A typical run of the <c>OneRowNim</c> using a command-line
       user interface.</caption>
  <program language="java"><input>
@@ -921,7 +1296,7 @@ Sticks left: 2 Who's turn: Player 2 NimPlayer takes 1 sticks.
 Sticks left: 1 Who's turn: Player 1 NimPlayerBad takes 1 sticks.
 Sticks left: 0 Game over! Winner is Player 2 Nice game.
  </input></program>
-    </figure>
+</listing>
     <p>
       Given our object-oriented design for the <c>TwoPlayerGame</c> hierarchy,
       we can now write generalized code that can play any <c>TwoPlayerGame</c> that implements the <c>CLUIPlayableGame</c> interface.
@@ -929,7 +1304,7 @@ Sticks left: 0 Game over! Winner is Player 2 Nice game.
     </p>
   </subsection>
   <subsection>
-    <title>Extending the <c>TwoPlayerGame</c>Hierarchy</title>
+    <title>Extending the <c>TwoPlayerGame</c> Hierarchy</title>
     <p>
       Now that we have described the design and the details of the
 <c>TwoPlayerGame</c> class hierarchy,
@@ -954,7 +1329,7 @@ Sticks left: 0 Game over! Winner is Player 2 Nice game.
     <figure xml:id="fig-wordguessuml">
       <caption>Design of the <c>WordGuess</c>
       class as part of <c>TwoPlayerGame</c> hierarchy.</caption>
-      <image width="73%" source="chptr09/wordguess.png"/>
+      <image width="50%" source="chptr09/wordguess.png"/>
     </figure>
     <p>
       Let's call the game class <c>WordGuess</c>. Following the design of
@@ -968,8 +1343,8 @@ Sticks left: 0 Game over! Winner is Player 2 Nice game.
 <c>WordGuess</c> and zero or more <c>IPlayer</c> s.
       A <c>WordGuess</c> uses between zero and two instances of <c>IPlayer</c> s, which in this game are implemented as <c>WordGuesser</c> s.
     </p>
-    <figure xml:id="fig-wordguess-oop">
-      <caption>The <c>WordGuess</c> class, Part I.</caption>
+    <listing xml:id="fig-wordguess-oop">
+      <caption>The <c>WordGuess</c> class</caption>
  <program language="java"><input>
 public class WordGuess extends TwoPlayerGame implements CLUIPlayableGame {
     private String secretWord;
@@ -1031,13 +1406,7 @@ public class WordGuess extends TwoPlayerGame implements CLUIPlayableGame {
         "(5) The game is over when all letters of the word are guessed\n" +
         "(6) The player guessing the last letter of the word wins.\n";
     } //getRules()
- </input></program>
-    </figure>
-    <figure xml:id="fig-wordguess2-oop">
-      <caption>The <c>WordGuess</c> class, continued.</caption>
-      
- <program language="java"><input>
-public boolean gameOver() {   // From TwoPlayerGame
+    public boolean gameOver() {   // From TwoPlayerGame
         return (unguessedLetters &lt;= 0);
     } // gameOver()
     public String getWinner() {  // From TwoPlayerGame
@@ -1094,11 +1463,10 @@ public boolean gameOver() {   // From TwoPlayerGame
         ui.report(reportGameState());  // The game is now over
     } //play()} //WordGuess class
  </input></program>
-    </figure>
+</listing>
     <p>
       Let's turn now to the details of the <c>WordGuess</c> class,
-      whose source code is shown in <xref ref="fig-wordguess-oop">Figures</xref>
-      and <xref ref="fig-wordguess2-oop"></xref>.
+      whose source code is shown in <xref ref="fig-wordguess-oop">Listing</xref>.
       The game needs to have a supply of words from which it can choose a secret word to present to the players.
       The <c>getSecretWord()</c> method will take care of this task.
       It calculates a random number and then uses that number,
@@ -1162,7 +1530,7 @@ public boolean gameOver() {   // From TwoPlayerGame
       until a letter is found that is not contained in <c>previousGuesses</c>. That way,
       the player will not guess letters that have already been guessed.
     </p>
-    <figure xml:id="fig-wordguesser-oop">
+    <listing xml:id="fig-wordguesser-oop">
       <caption>The <c>WordGuesser</c> class.</caption>
  <program language="java"><input>
 public class WordGuesser implements IPlayer {
@@ -1181,8 +1549,401 @@ public class WordGuesser implements IPlayer {
   public String toString() { // returns 'NimPlayerBad'
     String className = this.getClass().toString();
     return className.substring(5);
-  }} // WordGuesser
+  }
+ } // WordGuesser
  </input></program>
-    </figure>
+</listing>
+
+<p>Try the Word Guesser game below</p>
+<exercise label="wordguesser-ex">
+  <statement><p>Run and play the Word Guesser game.</p></statement>
+  <program language="java" interactive="activecode">
+    <input>
+    import java.io.*;
+    /*
+     * The Word Guess Game
+     */
+    
+    public class WordGuess extends TwoPlayerGame implements CLUIPlayableGame {
+        private String secretWord;
+        private StringBuffer currentWord;
+        private StringBuffer previousGuesses;
+        private int unguessedLetters;
+    
+        public WordGuess() {   
+            secretWord = getSecretWord();
+            currentWord = new StringBuffer(secretWord);
+            previousGuesses = new StringBuffer();
+            for (int k = 0; k &lt; secretWord.length(); k++)
+               currentWord.setCharAt(k,'?');
+            unguessedLetters = secretWord.length();
+        } //WordGuess() constructor
+    
+        public String getPreviousGuesses() {
+      return previousGuesses.toString();
+        }
+        public String getCurrentWord() {
+      return currentWord.toString();
+        }
+        private String getSecretWord() {   
+            int num = (int)(Math.random()*10);
+            switch (num)
+            {   case 0: return "SOFTWARE";
+                case 1: return "SOLUTION";
+                case 2: return "CONSTANT";
+                case 3: return "COMPILER";
+                case 4: return "ABSTRACT";
+                case 5: return "ABNORMAL";
+                case 6: return "ARGUMENT";
+                case 7: return "QUESTION";
+                case 8: return "UTILIZES";
+                case 9: return "VARIABLE";
+                default: return "MISTAKES";
+            } //switch
+        } //getSecretWord()
+    
+        /* Returns true if letter is a new correct letter
+        in which case the letter is filled into currentWord.
+        */
+        private boolean guessLetter(char letter) {   
+      previousGuesses.append(letter);
+      if (secretWord.indexOf(letter) == -1)
+                return false; // letter is not in secretWord
+            else // find positions of letter in secretWord
+            {   for (int k = 0; k &lt; secretWord.length(); k++)
+                {   if (secretWord.charAt(k) == letter)
+                    {   if (currentWord.charAt(k) == letter)
+                            return false; //already guessed
+                        currentWord.setCharAt(k,letter);
+                        unguessedLetters--; //one less to find
+                    } //if
+                } //for
+                return true;
+            } //else
+        } //guessLetter()
+    
+        /** Overridden method from TwoPlayerGame */
+        public String getRules() {   
+            return "\n*** The Rules of Word Guess ***\n" +
+            "(1) The game generates a secret word.\n" +
+            "(2) Two players alternate taking moves.\n" +
+            "(3) A move consists of guessing a letter in the word.\n" +
+            "(4) A player continues guessing until a letter is wrong.\n" +
+            "(5) The game is over when all letters of the word are guessed\n" +
+            "(6) The player guessing the last letter of the word wins.\n";
+        } //getRules()
+    
+        /** Implementation of abstract method from TwoPlayerGame */
+        public boolean gameOver() {   
+            return (unguessedLetters &lt;= 0);
+        } // gameOver()
+    
+        /** Implementation of abstract method from TwoPlayerGame */
+        public String getWinner() {   
+            if (gameOver())
+                return "Player " + getPlayer();
+            else return "The game is not over.";
+        } // getWinner()
+    
+        /**********
+        public void createComputerPlayers(int nComputers) {
+      if (nComputers == 1) {
+                computer2 = new WordGuesser(this);
+      } else if (nComputers == 2) {
+                computer1 = new WordGuesser(this);
+                computer2 = new WordGuesser(this);
+      }
+        }
+        ***********/
+            /** From Playable interface */
+        public void play(UserInterface ui) {
+            ui.report(getRules());
+            if (computer1 != null) 
+                ui.report("\nPlayer 1 is a " + computer1.toString());
+      if (computer2 != null)
+          ui.report("\nPlayer 2 is a " + computer2.toString());
+    
+      while(!gameOver()) {  
+               IPlayer computer = null;       // Assume no computers playing
+          ui.report(reportGameState());
+                switch(getPlayer()) {
+          case PLAYER_ONE:             // Player 1's turn
+        computer = computer1;
+        break;
+          case PLAYER_TWO:             // Player 2's turn
+        computer = computer2;
+        break;
+          } // cases
+    
+                if (computer != null) {      // If computer's turn
+        ui.report(submitUserMove(computer.makeAMove("")));
+          } else {                     // otherwise, user's turn
+        ui.prompt(getGamePrompt());
+                    ui.report(submitUserMove(ui.getUserInput()));
+          }
+            } // while
+      ui.report(reportGameState());  // The game is now over
+        }
+    
+        /** Implementation of method from CLUIPlayable */
+        public String reportGameState() {   
+      if (!gameOver())
+          return "\nCurrent word " + currentWord.toString() + " Previous guesses " 
+        + previousGuesses + "\nPlayer " + getPlayer() + " guesses next.";
+      else 
+          return "\nThe game is now over! The secret word is " + secretWord +
+        "\n" + getWinner() + " has won!\n";
+        } // report()
+    
+        /** Implementation of method from CLUIPlayable */
+        public String getGamePrompt()
+        {    return "\nGuess a letter that you think is in the secret word: ";
+        } //prompt()
+    
+        /** Implementation of method from CLUIPlayable */
+        public String submitUserMove(String s) {   
+            char letter = s.toUpperCase().charAt(0);
+            if (guessLetter(letter)) {   //if correct 
+                return "Yes, the letter " + letter +
+                       " IS in the secret word\n";
+             } else {   
+                 changePlayer();
+                 return "Sorry, " + letter + " is NOT a " +
+                        "new letter in the secret word\n";
+             } 
+        } //move()
+    
+        /*** A WordGuess Application Program
+        */
+        public static void main(String args[])  {  
+      KeyboardReader kb = new KeyboardReader();
+            WordGuess game = new WordGuess();
+            kb.prompt("How many computers are playing, 0, 1, or 2? ");
+      int m = kb.getKeyboardInteger();
+            for (int k = 0; k &lt; m; k++) {
+               // IPlayer computer = new WordGuessExpert(game);
+                IPlayer computer = new WordGuesser(game);
+                game.addComputerPlayer(computer);
+      }
+      //        game.setNComputers(m);
+            game.play(kb);
+        } //main()
+        
+    } //WordGuess class
+    
+    class WordGuesser implements IPlayer {
+      private WordGuess game;
+      public WordGuesser (WordGuess game) {
+        this.game = game;
+      }
+      public String makeAMove(String prompt)  {
+        String usedLetters = game.getPreviousGuesses();
+        char letter;
+        do {  // Pick one of 26 letters
+          letter = (char)('A' + (int)(Math.random() * 26));
+        } while (usedLetters.indexOf(letter) != -1);
+        return "" + letter;
+      }
+      public String toString() { // returns 'NimPlayerBad'
+        String className = this.getClass().toString();
+        return className.substring(5);
+      }
+    } // WordGuesser
+    
+    interface IPlayer {
+    
+        /**
+         * makeAMove() defines how a move is made. It is meant
+         *  to be implemented by any object that plays the game.
+         * @param prompt is a String that prompts the player for a move.
+         * @return a String that describes the player's move
+         */
+        public String makeAMove(String prompt);
+    }
+    
+     interface IGame {
+        public String getGamePrompt();
+        public String reportGameState();
+    } //IGame
+    
+    interface UserInterface {
+        public String getUserInput();
+        public void report(String s);
+        public void prompt(String s);
+    }
+    
+    
+    interface CLUIPlayableGame extends IGame {
+    
+        /**
+         * play() implements the play loop for a game that
+         *  interfaces to a UserInterface. It is meant to
+         *  be implented by games that support a command-line
+         *  interface. 
+         */
+        public abstract void play(UserInterface ui);
+    }
+    
+     abstract class TwoPlayerGame {   
+        public static final int PLAYER_ONE = 1;  // Class constants
+        public static final int PLAYER_TWO = 2;
+    
+        protected boolean onePlaysNext = true;    // Player 1 plays next
+        protected int nComputers = 0;             // How many computer players
+        protected IPlayer computer1, computer2;   // Computers are IPlayers
+     
+        /**
+         * setPlayer() sets which player makes the first move.
+         * @param starter, an int representing PLAYER_ONE or PLAYER_TWOI
+         */
+        public void setPlayer(int starter) {   
+      if (starter == PLAYER_TWO)
+                onePlaysNext = false;
+            else onePlaysNext = true;
+        } //setPlayer()
+    
+        /**
+         * getPlayer() returns an int representing whose turn it it.
+         * @return an int representing PLAYER_ONE or PLAYER_TWO.
+         */
+        public int getPlayer() {   
+      if (onePlaysNext) 
+          return PLAYER_ONE;
+            else return PLAYER_TWO;
+        } //getPlayer()
+    
+        /**
+         * changePlayer() toggles between PLAYER_ONE or PLAYER_TWO.
+         */
+        public void changePlayer() {   
+      onePlaysNext = !onePlaysNext;
+        } //changePlayer
+    
+        /**
+         * getNComputers() returns the number of computers playing
+         * @return an int representing the number of computer players
+         */
+        public int getNComputers() {
+      return nComputers;
+        }
+    
+        /**
+         * getRules() returns a String describing the rules of the game.
+         * @return a String giving the game's rules.
+         */
+        public String getRules() {
+            return "The rules of this game are: ";
+        }
+    
+        /**
+         * addComputerPlayer() adds to the number of computer players.
+         * @param player is an IPlayer
+         */
+        public void addComputerPlayer(IPlayer player) {
+            if (nComputers == 0)
+          computer2 = player;
+            else if (nComputers == 1)
+                computer1 = player;
+            else 
+          return; // No more than 2 players
+            ++nComputers;
+        }
+    
+        /**
+         * gameOver() defines when the game is over. It is meant to be
+         *   implemented in subclasses.
+         */
+        public abstract boolean gameOver();  // Abstract Methods
+    
+        /**
+         * getWinner() defines who wins the game. It is meant to be 
+         *   implemented in subclasses.
+         */
+        public abstract String getWinner();
+    } //TwoPlayerGame
+    
+    class KeyboardReader implements UserInterface
+    {    private BufferedReader reader;
+    
+        /**
+         * KeyboardReader() constructor creates a BufferedReader that
+         *  is used for command-line and console I/O.
+         */
+         public KeyboardReader()
+         {   reader = new BufferedReader(new InputStreamReader(System.in));
+         }
+    
+        /**
+         * getKeyboardInput() returns input read from the keyboard.
+         */
+         public String getKeyboardInput()
+         {   return readKeyboard();
+         }
+    
+        /**
+         * getKeyboardInput() returns an integer read from the keyboard.
+         */
+         public int getKeyboardInteger()
+         {   return Integer.parseInt(readKeyboard());
+         }
+    
+        /**
+         * getKeyboardInput() returns a double value read from the keyboard.
+         */
+         public double getKeyboardDouble()
+         {   return Double.parseDouble(readKeyboard());
+         }
+    
+        /**
+         * getUserInput() is a method of the UserInterface class. It
+         *  returns input read from the keyboard.
+         */
+        public String getUserInput() {
+            return getKeyboardInput();
+        }
+    
+        /**
+         * prompt() is a method of the UserInterface class. It
+         *  prints its parameter.
+         * @param s is the String prompt
+         */
+        public void prompt(String s)    
+         {   System.out.print(s);
+         }
+    
+        /**
+         * prompt() is a method of the UserInterface class. It
+         *  prints its parameter.
+         * @param s is a String representing the state of the game.
+         */
+        public void report(String s)    
+         {   System.out.print(s);
+         }
+    
+        /**
+         * display() prints its parameter.
+         */
+         public void display(String s)
+         {   System.out.print(s);
+         }
+    
+        /**
+         * readKeyboard() reads a line of input from the keyboard
+         *   where reader is a BufferedReader.
+         * @return a String storing a line read from the keyboard.
+         */
+         private String readKeyboard()
+         {   String line = "";
+             try
+             {   line = reader.readLine();
+             } catch (IOException e)
+             {   e.printStackTrace();
+             }
+             return line;
+         }
+    }    
+  </input>
+  </program>
+</exercise>
   </subsection>
 </section>
