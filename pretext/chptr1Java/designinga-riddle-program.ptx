@@ -62,7 +62,7 @@
       One useful design guideline for trying to decide what objects are needed is the following:
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Looking for Nouns</title>
+      <title>EFFECTIVE DESIGN: Looking for Nouns</title>
       <p>
         Choosing a program's objects is often a matter of looking for nouns in the problem specification.
       </p>
@@ -83,7 +83,7 @@
       of analysis will come more easily with experience.
     </p>
   </subsection>
-  <subsection xml:id="fig_ruml">
+  <subsection xml:id="obj-design">
     <title>Object Design</title>
     <p>
       Once we have divided a problem into a set of cooperating objects,
@@ -224,7 +224,7 @@
       A useful design guideline for actions is the following:
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Looking for Verbs</title>
+      <title>EFFECTIVE DESIGN: Looking for Verbs</title>
       <p>
         Choosing the behavior of an object is often a matter of looking for verbs in the problem specification.
       </p>
@@ -278,13 +278,13 @@
       The fact that they are stored in variables named <c>question</c> and <c>answer</c>, rather than variables named <c>ques</c> and <c>ans</c>, is irrelevant to other objects.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Object Interface</title>
+      <title>EFFECTIVE DESIGN: Object Interface</title>
       <p>
         An object's interface should consist of just those methods needed to use and communicate with the object.
       </p>
     </principle>
     <principle>
-      <title>EFFECTIVE DESIGN:Information Hiding</title>
+      <title>EFFECTIVE DESIGN: Information Hiding</title>
       <p>
         An object should hide most of the details of its implementation.
       </p>
@@ -514,7 +514,7 @@
  <title>Riddle</title>
  <caption>The <c>Riddle</c> class definition.</caption>
 
-<program language="java" interactive="activecode">
+<program language="java">
 <input>
     public class Riddle extends Object  // Class header
     {                                   // Begin class body
@@ -535,9 +535,42 @@
        } //getAnswer() 
     } // Riddle class                // End class body
     </input></program>
-
 </listing>
 <!--    </figure> -->
+
+<p>Try the Riddle program below.</p>
+
+<activity label="RiddleEx">
+      <statement><p>Run the following code. 
+        Try changing the Riddle question and answer in the main method and run again.</p></statement>
+      <program language="java" interactive="activecode"><input>
+public class Riddle extends Object  // Class header
+{                                   // Begin class body
+    private String question;       // Instance variables
+    private String answer;
+    public Riddle(String q, String a) // Constructor method
+    {
+         question = q;
+         answer = a;
+    } // Riddle()
+    public String getQuestion()   // Instance method
+    {
+        return question;
+    } // getQuestion()
+    public String getAnswer()     // Instance method
+    {
+	       return answer;
+    } //getAnswer() 
+    
+    public static void main(String[] args)
+    {
+        Riddle r = new Riddle("What is black and white and red all over?", "An embarrassed zebra");
+        System.out.println( r.getQuestion() );
+        System.out.println( r.getAnswer() );
+    }
+} // end of Riddle class
+    </input></program></activity>
+
   </subsection>
   <subsection>
     <title>Syntax and Semantics</title>
@@ -551,10 +584,10 @@
       An example of a Java syntax rule is that a Java statement must end with a semicolon.
       For example:
     </p>
-    <c>
+  <program language="java"><input>
     sum = 0;
     sum = 0  // Syntax error, missing semicolon
-    </c>
+  </input></program>
      <p>
       This is comparable to a grammatical error in English:
     </p>
@@ -574,9 +607,9 @@
       The semantics of a programming statement refers to what it does <mdash/> to its
       effect on the program. For example, the meaning of the following statement,
     </p>
-    <c>
+    <program language="java"><input>
     sum = 10 + 15;
-    </c>
+  </input></program>
     <p>
       is to add 10 and 15 and store their sum in the variable <c>sum</c>.
     </p>
@@ -630,9 +663,9 @@
       For example,
       suppose that a program contains the following statement for calculating the area of a rectangle:
     </p>
-    <c>
+    <program language="java"><input>
     area = length + width;
-    </c>
+    </input></program>
     <p>
       Because we are adding length and width instead of multiplying them,
       the area calculation will be incorrect.

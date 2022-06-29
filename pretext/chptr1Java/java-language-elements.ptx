@@ -16,8 +16,7 @@
 </p>
 <listing xml:id="lstng_helloworld"> 
   <caption>The <c>HelloWorld</c> application program.</caption>
-<program language="java" interactive="activecode">
-
+<program language="java">
   <input>
 	/*
 	 * File: HelloWorld.java
@@ -43,6 +42,31 @@
   </input>
   </program>
 </listing>
+
+<p>Try the Hello World program below.</p>
+
+<activity label="HelloWorldEx">
+      <statement><p>Run the following code. 
+        Try changing the greeting to "Hola!" and run again.</p></statement>
+      <program language="java" interactive="activecode"><input>
+public class HelloWorld extends Object // Class header
+{                                      // Start class body
+    private String greeting = "Hello, World!";
+         
+    public void greet()               // Method definition
+    {                                 // Start method body
+        System.out.println(greeting); //  Output statement
+    } // greet()                      // End method body
+        
+    public static void main(String args[])// Method header
+    {
+         HelloWorld helloworld;         // declare
+         helloworld = new HelloWorld(); // create
+         helloworld.greet();            // Method call
+     }  //  main()
+}  // HelloWorld   
+    </input></program></activity>
+
 </subsection>
 <subsection>
   <title>Comments</title>
@@ -146,7 +170,7 @@
 	makes the program easier to read and understand.
   </p>
   <principle>
-    <title>PROGRAMMING TIP:Use of Indentation</title>
+    <title>PROGRAMMING TIP: Use of Indentation</title>
     <p>
 	  Indent the code within a block and align the block's opening and closing braces.
 	  Use a comment to mark the end of a block of code.
@@ -435,6 +459,26 @@ just by how they are written. (For more on Java style conventions,
       Whenever a variable occurs on
       the right hand side of an assignment operator, we are using its value. We are treating it as a value.
 </observation>
+
+<p>Try running the program below.</p>
+
+<activity label="AsgnEx">
+<statement><p>Run the following code. 
+    Click on the "Show Code Lens" button and then the Next button to step through the code.</p></statement>
+<program language="java" interactive="activecode"><input>
+public class AsgnEx 
+{                                   
+     public static void main(String[] args)
+     {
+        int num1, num2;   // Declare the variables in memory
+        num1 = 50;        // (a) Assign 50 to num1
+        num2 = 10 + 15;   // (b) Assign 25 to num2
+        num1 = num2;      // (c) Copy num2's value (25) into num1
+        System.out.println("num1 is " + num1 + " and num2 is " + num2);
+      }
+}            
+</input></program></activity>
+
 </p>
 <!--
     <p> 
@@ -450,7 +494,7 @@ just by how they are written. (For more on Java style conventions,
 -->
 
 <p>
-      Another kind of Java statemrnt is the <term>method-call statement</term>, as in these examples from the 
+      Another kind of Java statement is the <term>method-call statement</term>, as in these examples from the 
 <c>HelloWorld</c> program (<xref ref="lstng_helloworld"></xref>):
 </p>
 <program language="java"><input>
@@ -545,10 +589,10 @@ just by how they are written. (For more on Java style conventions,
 
 
 
-<subsection>
+<exercises>
 <title>Self-Study Exercises</title>
 
-<exercises>
+
       <exercise label="assignmentEx1">
             <title>Fill-In, Assignment statements</title>
       
@@ -577,7 +621,6 @@ just by how they are written. (For more on Java style conventions,
       </exercise>
       <exercise label="assignmenEx2">
             <title>Fill-In, Assignment statements</title>
-      
             <statement>
                   <p> Write a statement that will declare an <c>int</c> variable named <c>num2</c> and assigns 
                         it an initial value of 0: <var/>.
@@ -601,7 +644,6 @@ just by how they are written. (For more on Java style conventions,
 
 </exercises>
 
-</subsection>
 
 <subsection>
 <title>Class Definition</title>
@@ -890,7 +932,7 @@ just by how they are written. (For more on Java style conventions,
       Java can run a program in a <term>JFrame</term>
       so that the output and interaction occurs in a Window
       (or Frame).
-<xref ref="fig_hellojframe">Figure</xref>
+<xref ref="fig_hellojframe">Listing</xref>
       shows a Java program named <c>HelloWorldSwing</c>. This program does more or less the same thing as
       the <c>HelloWorld</c> application<mdash/>
 it displays the
@@ -898,7 +940,7 @@ it displays the
       greeting.
       The difference is that it displays the greeting within a Window rather than directly on the console.
 </p>
-<figure xml:id="fig_hellojframe">
+<listing xml:id="fig_hellojframe">
 <caption>
 <c>HelloWorldCanvas</c> program.</caption>
 
@@ -924,7 +966,7 @@ public class HelloWorldCanvas extends Canvas // Class header
     }  // End of main
 }  // End of HelloWorldCanvas
  </input></program>
-</figure>
+</listing>
 <p>
       As in the case of the <c>HelloWorld</c> console application program, <c>HelloWorldCanvas</c> consists of a class definition.
       It contains a single method definition,
@@ -1016,7 +1058,7 @@ package java.lang;
 </p>
 </subsection>
 <subsection>
-<title>The <c>import</c>Statement</title>
+<title>The <c>import</c> Statement</title>
 <p>
       The <c>import</c> statement makes Java classes available to programs under their abbreviated names.
       Any public class in the Java class library is available to a program by its fully qualified name.

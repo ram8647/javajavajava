@@ -96,7 +96,7 @@ if (true) "Hello";    // "Hello" is  not a statement
       
     </p>
 
-    <exercise label="ifRainEx" title="Ex">
+    <activity label="ifRainEx">
       <statement><p>Try the following code. Try changing the boolean isRaining to <c>false</c> and run again. 
         What does it print out? Trace through the code with Show CodeLens.</p></statement>
       <program language="java" interactive="activecode"><input>
@@ -109,8 +109,26 @@ if (true) "Hello";    // "Hello" is  not a statement
            System.out.println("Drive carefully");
          }
       }
-    </input></program>  
-    </exercise>
+     </input>
+     <tests>
+      import static org.junit.Assert.*;
+      import org.junit.*;;
+      import java.io.*;
+
+      public class RunestoneTests extends CodeTestHelper
+      {
+          @Test
+          public void testMain() throws IOException
+          {
+              String output = getMethodOutput("main");
+              String expect = "Drive Carefully\n";
+              boolean passed = getResults(expect, output, "Expected output from main after changing isRaining to false", true);
+              assertTrue(passed);
+          }
+      }
+      </tests>
+    </program>  
+  </activity> 
 </subsection>
     <subsection><title>Relational Operators</title>
     
@@ -173,7 +191,7 @@ public String getPlayerString()
     </p>
     
 
-    <exercise label="ifNumEx">
+    <activity label="ifNumEx">
       <statement><p>Run the following active code a couple times until you see all the possible outputs. It prints out whether a random number is positive or equal to 0. Add another if statement that tests if it is a negative number.
       </p></statement>
       <program language="java" interactive="activecode"><input>
@@ -202,7 +220,7 @@ public String getPlayerString()
     }
   </input>
    </program>
-    </exercise>
+    </activity>
     </subsection>
     <subsection><title>Compound Statements inside Ifs</title>
     <p>
@@ -362,7 +380,7 @@ else
     </p>
 
     
-  <exercise label="nestedIfEx">
+  <activity label="nestedIfEx">
     <statement><p>Run the following active code a couple times until you see all the possible outputs. 
       It prints out the English word for a random number between 0-2. 
       Change the random range to 4 and add another if statement to print out "three".
@@ -387,7 +405,7 @@ else
      }
   }
  </input></program>
-    </exercise>
+    </activity>
     <p>
       Note that the multiway structure has a single entry point and that only one of the four possible alternatives is  executed.
       The code will print exactly one of the strings.
@@ -561,7 +579,7 @@ public String getStatus(boolean isDone)
       We will use the while statement to sum the squares of integers from <m>1</m> to a number specified as a parameter of the method.
       Thus, the method call <c>sumSquares(3)</c> should return the value <m>14</m> since <m>1*1 + 2*2 + 3*3 = 1 + 4 + 9 = 14</m>.
     </p>
-    <exercise label="squareOfInts">
+    <activity label="squareOfInts">
       <statement><p>Run the following code to see the sum of squares method in action. 
         Click on the CodeLens button to trace through it. Change the main method to change num and run again.
       </p></statement>
@@ -586,7 +604,7 @@ public String getStatus(boolean isDone)
     }
   }
  </input></program>
- </exercise>
+ </activity>
     <p>
       Note that in this example,
       the variable <c>num</c> gets assigned an initial value of <m>1</m> before the <c>while</c> statement.
@@ -721,6 +739,6 @@ Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2
     }
   }
  </input></program>
- </exercise>
+</exercise>
   </subsection>
 </section>
