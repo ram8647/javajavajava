@@ -146,7 +146,7 @@ public class Search {
     <p>
       A pseudocode representation of the binary search is given as follows:
     </p>
-<algorithm>
+<algorithm xml:id="alg-binary">
 <title>Binary search </title>
  <program language="java"><input>
 TO SEARCH AN ARRAY OF N ELEMENTS IN ASCENDING ORDER
@@ -214,6 +214,8 @@ int sortArr[] =
       We can see this by tracing the values that low, mid,
       and high will take during the search:
     </p>
+<figure xml:id="trace-binary">
+<caption>Binary search trace.</caption>
  <program language="java"><input>
 Key  Iteration  Low   High    Mid
 ----------------------------------
@@ -223,6 +225,7 @@ Key  Iteration  Low   High    Mid
  -5   3          0     0       0
  -5   4          0     -1      Failure
  </input></program>
+ </figure>    
     <p>
       As this trace shows,
       the algorithm examines only four locations to determine that <m>-5</m> is not in the array.
@@ -284,15 +287,57 @@ public class TestSearch {
  </input></program>
     </listing>
     </subsection>
-    <subsection><title>Self-Study Exercise</title>
-      <ol>
-        <li>
-          <p>
-            For the array containing the elements 2, 4, 6, and so on up to 28 in that order,
-            draw a trace showing which elements are examined if you search for 21 using a binary search.
-          </p>
-        </li>
-      </ol>
-
+    <subsection>
+    <title>Self-Study Exercise</title>
+     <exercise label="search-1">
+    <title>Binary search</title>
+    <statement>
+        <p>Suppose we use  <xref ref="alg-binary">binary search</xref> to search 
+        for 21 in the following array of numbers:</p>
+        <pre>
+        0  1  2  3  4   5   6   7   8   9   10  11  12  13   subscripts
+        2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28   values
+        </pre>
+          <p>Which of the following shows the value of <term>mid</term> on
+          each iteration of the search?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>7, 11, 9, 8</p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>7, 10, 8, 9 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>7, 10, 8, 9 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>6, 10, 8, 9</p>
+            </statement>
+            <feedback>
+                <p>Correct. </p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      Trace the algorithm as shown in <xref ref="trace-binary">Figure</xref>.
+    </hint>
+    </exercise>
   </subsection>
 </section>

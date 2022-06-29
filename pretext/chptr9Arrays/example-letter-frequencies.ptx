@@ -1,5 +1,5 @@
 <section xml:id="example-counting-frequenciesof-letters">
-  <title>Example: Counting Frequencies of Letters</title>
+  <title>Example: Counting Letter Frequencies</title>
   <introduction>
     <p>
       Suppose you wish to write a program to help break a text message that has been 
@@ -171,7 +171,7 @@ public void countLetters(String str) {
      str = str.toUpperCase();
      for (int k = 0; k &lt; str.length(); k++) {
          let = str.charAt(k);
-         if ((let >= 'A') AmPaMp (let &lt;= 'Z')) {
+         if ((let >= 'A') &amp;&amp; (let &lt;= 'Z')) {
              freqArr[let - 'A'].incrFreq();
          } //if
      } //for
@@ -197,7 +197,7 @@ public void printArray() {
     <listing xml:id="lst-anafreq">
       <caption>The <c>AnalyzeFreq</c> class definition.</caption>
       
- <program language="java"><input>
+ <program language="java" interactive="activecode"><input>
 public class AnalyzeFreq {
 
   private LetterFreq[] freqArr; //An array of frequencies
@@ -213,7 +213,7 @@ public class AnalyzeFreq {
     str = str.toUpperCase();
     for (int k = 0; k &lt; str.length(); k++) {
       let = str.charAt(k);
-      if ((let >= 'A') AmPaMp (let &lt;= 'Z')) {
+      if ((let >= 'A') &amp;&amp; (let &lt;= 'Z')) {
         freqArr[let - 'A'].incrFreq();
       } //if
     } //for
@@ -224,20 +224,31 @@ public class AnalyzeFreq {
       System.out.println(" freq: " + freqArr[k].getFreq());
     } //for
   } 
+
+  public static void main(String[] argv) {
+    AnalyzeFreq af = new AnalyzeFreq();
+    af.countLetters("Now is the time for all good students" +
+         " to study computer related topics.");
+    af.printArray();
+  } //main()
+
 } //AnalyzeFreq
  </input></program>
-    </listing>
+</listing>
     <p>
-      The following <c>main()</c> method,
-      either in this class or in its own class will demonstrate how the class methods are used.
+      The <c>main()</c> method counts the letter frequencies of a simple 
+      sentence. 
     </p>
+<!--
  <program language="java"><input>
 public static void main(String[] argv) {
   AnalyzeFreq af = new AnalyzeFreq();
   af.countLetters("Now is the time for all good students" +
      " to study computer related topics.");
-  af.printArray();} //main()
+  af.printArray();
+} //main()
  </input></program>
+-->
 </subsection>
 <subsection>
 <title>Self-Study Exercises</title>

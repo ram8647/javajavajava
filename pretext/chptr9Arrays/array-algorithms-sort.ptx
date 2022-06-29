@@ -25,17 +25,27 @@
       let's think of the array as divided into two parts.
       The <em>sorted</em> part will be the left hand side of the array.
       And the <em>unsorted</em> part will be the right hand side of the array.
-      Initially, the sorted part consists of the first element in the 
-      array <mdash/> i.e., the element at index 0.
     </p>
+    <pre>
+    Sorted   |  Unsorted   Before inserting the kth element
+    5 14 19  |  1 0 67 4
+                ^
+                k
+    </pre>
     <p>
-      Insertion sort moves through the unsorted portion of the array <mdash/> that is its loop variable,
-      <em>k</em>,
-      ranges from 1 through <em>N-1</em>.
-      On each iteration it inserts the
-      <em>k</em>th element into its correct position in the sorted part of the array.
-      To insert an element into the sorted part of the array,
-      it may be necessary to move elements greater than the one being inserted out of the way.
+      On each iteration insertion sort will insert the first element in the unsorted
+      part of the array, the <em>k</em>th element, into its correct position in the 
+      sorted part of the array.
+    </p>  
+   <pre>
+    Sorted    |  Unsorted  After inserting the kth element
+    1 5 14 19 |  0 67 4
+                 ^ 
+                 k
+    </pre>
+    <p>
+      To insert the <em>k</em>th element into the sorted part of the array,
+      it will be necessary to move elements greater than it out of the way.
     </p>
     <p>
       In pseudocode, insertion sort can be represented as follows:
@@ -45,118 +55,136 @@
  <program language="java"><input>
 Insertion Sort of an array, arr, of N elements into ascending order
 1. For k assigned 1 through N-1
-2.   Remove the element arr[k] and store it in x.
-3.   For i starting at k-1 and for all preceding elements greater than x
-4.     Move arr[i] one position to the right in the array.
-5.   Insert x at its correct location.
+2.   Save the kth element, arr[k], in temp.
+3.   Set i to point to the largest element in the sorted part
+4.   While i >= 0 AND the ith element is greater than temp  
+5.     Shift the ith element to the right
+6.     Set i to point to the next element in the sorted part
+7.   Insert temp, the kth element, at its correct location.
  </input></program>
  </algorithm>
     <p>
-      As is apparent from the pseudocode,
-      we have nested for loops.
-      The outer (<em>k</em>) loop, iterates through the array from 1 to <em>N-1</em>.
-      The inner loop iterates as many times as necessary,
-      starting with the element just to the left of the
-      <em>k</em>th element in order to insert the
-      <em>k</em>th element into its correct position in the sorted portion.
-      Note that the <em>k</em>th element is always removed from the array
-      (and stored in the variable <em>x</em>),
-      to make room for elements that have to be moved to the right.
+      As you see, the algorithm has nested loops, an outer for-loop and an inner while-loop.
+      Each iteration of the outer loop will insert one element,
+      the <em>k</em>th element, into its proper place 
+      in the sorted part of the array. The role of the inner while-loop is to move 
+      the already sorted elements out of the way.
+    </p>
+    <p>
+      The outer (<em>k</em>) loop, iterates from 1 to <em>N-1</em>. 
+      On each iteration, it saves the <em>k</em>th element in temp. It then sets the 
+      while-loop variable, <c>i</c>, to point to the largest element in 
+      the sorted part of the array, the element just to the left of the
+      <em>k</em>th element.
+    </p>
+    <p>
+      The inner loop proceeds from right to left <mdash/> that is, 
+      from <c>k-1</c> towards 0. It shifts all numbers greater than temp to the right.
+      It terminates when it finds a number smaller or equal to temp.
+    </p> 
+    <p>
+      After the while-loop terminates,  temp (the <em>k</em>th element) 
+      is inserted into its proprer place in the sorted part of the array.
     </p>
     <p>
       To see how this works,
-      consider an integer array containing the ages of five friends:
+      consider an integer array containing five numbers:
     </p>
  <program language="java"><input>
-21 |  20  27  24  19      x = 20
+21 |  20  27  24  19      temp = 20
       k
  </input></program>
     <p>
-      For this five-element array,
-      insertion sort initially will assume that the element at index 0 is in the correct position.
       The vertical line marks the boundary between the sorted and unsorted portions of the array.
-      The outer loop will look at each of the remaining elements,
-      one at a time,
-      inserting it into its proper position in the sorted portion of the array.
+      The outer loop will look at each of the remaining elements, starting at arr[1],
+      one at a time, inserting them into their proper positions in the sorted portion 
+      of the array. The outer loop saves the <em>k</em>th element (20) in temp.
     </p>
     <p>
-      To insert 20, the number at index 1, the inner loop will move 21 to the right by one position.
-      To do this, the algorithm will remove 20 from its location and store it in x.
-      It will then move 21 one space to the right.
-      Finally, it will insert 20,
-      which is stored in x, at index 0, where it belongs relative to the other elements in the sorted part of the array.
-      At this point,
-      the sorted portion of the array consists of the first two elements,
-      which are in the correct order, relative to each other.
+      Because 21 is greater than 20, the inner loop will move 21 to 
+      the right by one position. And will then terminate. 
+    </p>
+    <p>
+      The outer loop will complete its work by inserting 20 in the location 
+      previously occupied by 21, in effect swapping 20 and 21.
+      At this point, after one complete iteration of the outer loop, 
+      the first two numbers are in the correct order relative to each other:
     </p>
  <program language="java"><input>
-20  21 |  27  24  19     x = 27
+20  21 |  27  24  19     temp = 27
           k
  </input></program>
     <p>
       For the next element, 27,
-      none of elements in the sorted portion need to be moved,
-      so the inner for loop will iterate zero times.
-      This gives us:
+      none of elements in the sorted portion need to be moved because they are
+      all less than 27. The inner loop will not iterate at all in this case.
+      So after two complete iterations we have:
     </p>
  <program language="java"><input>
-20  21  27 |  24  19    x = 24
+20  21  27 |  24  19    temp = 24
               k
  </input></program>
     <p>
-      For the fourth element, 24,
-      only the previous element, 27,
-      needs to be moved to the right, giving:
+      For the fourth element, 24, only the 27 needs to be shited to the right, giving:
     </p>
  <program language="java"><input>
-20  21  24  27 | 19    x = 19
+20  21  24  27 | 19    temp = 19
                  k
  </input></program>
     <p>
-      At this point,
-      the sorted part of the array consists of the first four elements,
+      At this point, the sorted part of the array consists of the first four elements,
       which are in the correct order relative to each other.
-      Finally, for the last element, 19,
-      all of the elements in the sorted part of the array need to be moved one space to the right.
-      This will require four iterations of the inner loop.
-      We show the state of the array after each iteration of the inner for loop:
+    </p>
+    <p>
+      However, for the last element, 19,
+      all of the elements in the sorted part of the array need to be shifted one 
+      space to the right. Let's trace each iteration of the inner loop starting
+      from this point, where k = 4 and i = 3:
     </p>
  <program language="java"><input>
-k
-20 21 24 27 | 19   Remove 19 and store it x = 19
-20 21 24 27 | 27   Move 27 to the right
-20 21 24 24 | 27   Move 24 to the right
-20 21 21 24 | 27   Move 21 to the right
-20 20 21 24 | 27   Move 20 to the right
-19 20 21 24 27 |   Insert x=19 at index 0
+              k
+20 21 24 27 | 19   Save 19 in temp:              temp=19, i=3
+20 21 24 27 | 27   Move 27 to the right:         temp=19, i=2
+20 21 24 24 | 27   Move 24 to the right:         temp=19, i=1
+20 21 21 24 | 27   Move 21 to the right:         temp=19, i=0
+20 20 21 24 | 27   Move 20 to the right:         temp=19, i=-1 inner loop terminates
+19 20 21 24 27 |   Insert temp=19 at index i+1
  </input></program>
     <p>
-      Clearly, the fact that so many elements may have to moved on each 
-      iteration of the outer loop shows that insertion sort is not a very efficient algorithm.
+      It's important to see that when the inner loop terminates <em>i</em> 
+      will always be one space to the left of where we make the insertion. 
+      That's why the insertion is made at <c>arr[i+1]</c>.
     </p>
     <p>
       The <c>Sort</c> class
       (<xref ref="lst-insertion">Listing</xref>)
       provides an implementation of the <c>insertionSort()</c> method.
-      There are several points worth noting about this code.
-      First, because it takes an <c>int</c> array as a parameter,
-      the <c>insertionSort()</c> method will sort any array of integers,
-      regardless of the array's length.
     </p>
+
+<!-- 
+Here's a Youtube anomation that matches our algorithm: https://www.youtube.com/watch?v=OGzPmgsI-pQ
+<video source="https://www.youtube.com/watch?v=OGzPmgsI-pQ">
+</video>
+-->
+
     <listing xml:id="lst-insertion">
       <caption>Source code for  the <c>insertionSort()</c> method.
       Note in <c>main()</c> how an integer array is passed to the method.</caption>
- <program language="java"><input>
+
+ <program language="java" interactive="activecode"><input>
 public class Sort {
+
   public void insertionSort(int arr[]) {
-    int temp;  // Temporary variable for insertion
+    int temp;                         // Temporary variable 
     for (int k = 1; k &lt; arr.length; k++)  {
-      temp = arr[k]; // Remove element from array
-      int i;         // For larger preceding elements
-      for (i = k-1; i >= 0 AmPaMp arr[i] > temp; i--)
-        arr[i+1] = arr[i]; // Move it right by one
-      arr[i+1] = temp;       // Insert the element
-    }
+        temp = arr[k];                  // Save the kth element in temp
+        int i = k-1;                    // Start at high end of sorted 
+        while (i >= 0 &amp;&amp; arr[i] > temp) { // For each element > temp
+          arr[i+1] = arr[i];            // Move it to the right
+          i--;                          // Move i to the left
+        }
+        arr[i + 1] = temp;              // Insert the kth element
+    } // outer
   } // insertionSort()
 
   public void print(int arr[]) {
@@ -165,7 +193,7 @@ public class Sort {
     System.out.println();
   } // print()
 
-  public static void main(String args[]) {
+  public state111ic void main(String args[]) {
     int intArr[] = { 21, 20, 27, 24, 19 };
     Sort sorter = new Sort();
     sorter.print(intArr);
@@ -175,11 +203,32 @@ public class Sort {
 } //Sort
  </input></program>
     </listing>
+
     <p>
-      Second, note how empty brackets (<c>[]</c>) are used to  declare an array parameter.
-      If the brackets were omitted,
-      then <c>arr</c> would be indistinguishable from an ordinary <c>int</c> parameter.
-      Using the brackets indicates that this method takes an array of integers as its parameter.
+      It's important to see, again, that after the while-loop terminates
+      the variable <em>i</em> will always point one space to the left
+      of where the <em>k</em>th element should be inserted. Thus,
+      the insertion is made at <c>arr[i+1]</c>.
+    </p>
+    <p>
+      Also, note the complex entry condition we use for the inner while-loop:
+    </p>
+      <program language="java"><input>
+      i >= 0 &amp;&amp; arr[i] > temp; 
+      </input></program>
+    <p>
+      This is necessary because we want <c>i</c> to iterate from right to 
+      left, but not to go past 0. But we also want the loop to stop if 
+      <c>arr[i]</c> isn't greater than  <c>temp</c>. We want it to stop as soon as we 
+      find a number that's less than or equal to  <c>temp</c>. That's where 
+      <c>temp</c> needs to be inserted.
+    </p>
+    <p>
+      There are also a couple of syntax points that are important to observe.
+      First, note in the declaration of the <c>insertionSort()</c> method how 
+      empty brackets (<c>[]</c>) are used to  declare an array parameter.
+      If the brackets were omitted, then <c>arr</c> would be indistinguishable 
+      from an ordinary <c>int</c> parameter.
     </p>
     <principle>
       <title>DEBUGGING TIP: Array Parameter</title>
@@ -190,47 +239,64 @@ public class Sort {
       </p>
     </principle>
     <p>
-      Third, note how an array of integers is passed to the <c>insertionSort()</c> 
-      method in the <c>main()</c> method:
+      Second, in the <c>main()</c> method note that brackets are not used
+      when an array of integers is passed to the <c>insertionSort()</c> 
+      method:
     </p>
  <program language="java"><input>
 sorter.insertionSort(intArr); // Pass intArr to the method
  </input></program>
-    <p>
-      That is, when passing an array to a method,
-      you use just the name of the array, without brackets.
-      Both of the following statements would cause syntax errors:
-    </p>
- <program language="java"><input>
-sorter.insertionSort(intArr[]); // Err: Can't have brackets
-sorter.insertionSort(intArr[5]);// Err: passing an integer
- </input></program>
-    <p>
-      In the first case,
-      empty brackets are only used when you declare an array variable,
-      not when you are passing the array to a method.
-      In the second case, <c>intArr[5]</c> is an <c>int</c>, not an array,
-      and cannot legally be passed to <c>insertionSort()</c>.
-    </p>
+
     <principle>
       <title>DEBUGGING TIP: Passing an Array Argument</title>
       <p>
-        It is a syntax error to use empty brackets when passing an array argument to a method,
-        where the only the array's name should be used.
-        Empty rackets are only used when declaring an array variable.
+        When passing an array to a method only the array name is used.
+        Brackets are not used.
       </p>
     </principle>
+  </subsection>
+  <subsection xml:id="ss-insertion-sort">
+    <title>Self Study Exercise</title>
+ <exercise label="insertion-codeLens">
+  <statement>
     <p>
-      Finally, within the <c>insertionSort()</c> method itself,
-      note that we declare the index for the inner <c>for</c> loop 
-      outside of the <c>for</c> statement.
-      This is so it can be used outside the scope of the <c>for</c> 
-      loop to insert <c>temp</c> at location <c>arr[i+1]</c>, its correct location.
-      Note also that the index of its correct location is
-      <c>i+1</c>, rather than just <c>i</c>. This is because the inner 
-      loop might iterate past location 0, which would give <em>i</em>
-      a value of -1 at that point.
+      Run the insertion sort program. Click on Show CodeLens to step through 
+      the code with the Next button.
     </p>
+  </statement>
+  <program language="java" interactive="activecode"><input>
+ublic class Sort {
+
+  public void insertionSort(int arr[]) {
+    int temp;                         // Temporary variable 
+    for (int k = 1; k &lt; arr.length; k++)  {
+        temp = arr[k];                  // Save the kth element in temp
+        int i = k-1;                    // Start at high end of sorted 
+        while (i >= 0 &amp;&amp; arr[i] > temp) { // For each element > temp
+          arr[i+1] = arr[i];            // Move it to the right
+          i--;                          // Move i to the left
+        }
+        arr[i + 1] = temp;              // Insert the kth element
+    } // outer
+  } // insertionSort()
+
+  public void print(int arr[]) {
+    for (int k = 0; k &lt; arr.length; k++)// For each integer
+      System.out.print( arr[k] + " \t "); //  Print it
+    System.out.println();
+  } // print()
+
+  public state111ic void main(String args[]) {
+    int intArr[] = { 21, 20, 27, 24, 19 };
+    Sort sorter = new Sort();
+    sorter.print(intArr);
+    sorter.insertionSort(intArr); // Passing an array
+    sorter.print(intArr);
+  } // main()
+} // Sort
+ </input></program>
+ </exercise>
+
   </subsection>
   <subsection xml:id="sec-selectionsort">
     <title>Selection Sort</title>
@@ -241,17 +307,20 @@ sorter.insertionSort(intArr[5]);// Err: passing an integer
     </p>
     <p>
       To illustrate the <term>selection sort</term> algorithm,
-      suppose you want to sort a deck of 25 index cards, numbered from 1 to 25.
-      Lay the 25 cards out on a table,
-      one card next to the  other.
-      Starting with the first card,
-      look through the deck and find the smallest card,
-      the number 1 card,
-      and exchange it with the card in the first location.
-      Then, go through the deck again starting at the second card,
-      find the next smallest card, the number 2 card,
-      and exchange it with the card in the second location.
-      Repeat this process 24 times.
+      suppose you want to sort a deck of 25 index cards, numbered from 1 to 25,
+      layed out on the table.
+      Starting with the first card, assume it is the smallest card.
+      Compare it with the second, third, fourth and every other card in the deck.
+      Whenever you find a card that is smaller than the first card, swap it with the first card.
+    </p>
+    <p>
+      In this way we will have selected the smallest card and placed it at the first position 
+      in the deck.
+    </p>
+    <p>
+      Complete the process again starting this time with the second card. 
+      Find the smallest card in the remaining deck and swap it with the second card.
+      Repeating this process 24 times a for deck of 25 cards will correctly sort the deck.
     </p>
     <p>
       Translating this strategy into pseudocode gives the following algorithm:
@@ -260,51 +329,41 @@ sorter.insertionSort(intArr[5]);// Err: passing an integer
      <algorithm>
     <title>Selection sort </title>
  <program language="java"><input>
-Selection sort of a 25-card deck from small to large
-1. For count assigned 1 to 24  // Outer loop
-2.   smallestCard = count
-3.   For currentCard assigned count+1 to 25 // Inner loop
-4.     If deck[currentCard] &lt; deck[smallestCard]
-5.        smallestCard = currentCard
-6.   If smallestCard != count // You need to swap
-7       Swap deck[count] and deck[smallestCard]
+Selection sort of an N element array <c>arr</c> from small to large
+1. For k assigned 0 to N-2          // Outer loop
+2.   smallest = k                   // Assume kth is smallest so far
+3.   For j assigned k+1 to N-1       // Inner loop: finds smallest
+4.     If arr[j] &lt; arr[smallest]
+5.        smallest = j               // Remember which is smallest
+6.   Swap arr[k] and arr[smallest]   // Swap kth and smallest
  </input></program>
  </algorithm>
     <p>
-      For a deck of 25 cards, you need to repeat the outer loop 24 times.
-      In other words,
-      you must select the smallest card and insert it in its proper location 24 times.
-      The inner loop takes care of finding the smallest remaining card.
+      For an array of N elements, you need to repeat the outer loop N-1 times.
+      On each iteration of the outer loop,the inner loop takes care of 
+      finding the next smallest element.
     </p>
     <p>
-      On each iteration of this outer loop,
-      the algorithm assumes that the card specified by the outer loop 
-      variable, <c>count</c>, is the smallest card
-      (line 2).
-      It usually won't be, of course,
-      but we have to start somewhere.
+      In the outer loop, the algorithm assumes that 
+      the <em>k</em>th element is the smallest so far (line 2).
+      It usually won't be, of course.  But it will be after the inner loop
+      terminates and <em>k</em>th element is swapped with the smallest.
     </p>
     <p>
-      The inner loop then iterates through the remaining cards 
-      (from <c>count+1</c> to 25) and compares each one with the card 
-      that is currently the smallest
-      (lines 4 and 5).
-      Whenever it finds a card that is smaller than the smallest card,
-      it designates it as the smallest card
-      (line 5).
-      At the end of the loop,
-      the <c>smallestCard</c> variable will remember where the smallest card is in the deck.
+      The inner loop finds smallest by iterating through the rest of the array 
+      (from <c>k+1</c> to N-1) comparing each element with the smallest so far
+      (lines 4) and remembering the location of the element 
+      that is currently the smallest (lines 5).
     </p>
     <p>
-      Finally, when the inner loop is finished,
-      the algorithm swaps the smallest card with the card in the location designated by <c>count</c>.
+      Finally, when the inner loop terminates, the algorithm swaps the smallest 
+      element with <em>k</em>th element.
     </p>
   </subsection>
-  <subsection xml:id="self-study-exercisesC24">
+  <subsection xml:id="sec-swap-vars">
     <title>Algorithm: Swapping Memory Elements</title>
     <p>
-      An important feature of the selection sort algorithm is its need to swap two array elements,
-      or cards, to continue our example.
+      An important feature of the selection sort algorithm is its need to swap two array elements.
       Swapping two memory elements,
       whether they are array elements or not,
       requires the use of a temporary variable.
@@ -357,34 +416,229 @@ void swap(int arr[], int el1, int el2) {
 </subsection>
 <subsection>
   <title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
-            Sort the array, 24 18 90 1 0 85 34 18,
-            using the insertion sort algorithm.
-            Show the order of the elements after each iteration of the outer loop.
-          </p>
-        </li>
-        <li>
-          <p>
-            Sort the array, 24 18 90 1 0 85 34 18,
-            using the selection sort algorithm.
-            Show the order of the elements after each iteration of the outer loop.
-          </p>
-        </li>
-        <li>
-          <p>
-            Write a Java code segment to swap two <c>Student</c> objects, 
-            <c>student1</c> and <c>student2</c>.
-          </p>
-        </li>
-        <li>
-          <p>
-            Write a Java implementation of the <c>selectionSort()</c> 
-            method to sort an array of <c>int</c>.
-          </p>
-        </li>
-      </ol>
+  <exercise label="sort-1">
+    <title>Insertion sort</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high by 
+        <term>insertion sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after one pass</term> 
+          through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>24 18 90 1 0 85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>1 24 18 90 0  85 34 18 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>85 24 90 1  0  18 34 18 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>18 24 90 1  0  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Correct. 18 would be inserted before 24.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through one complete iteration of the outer loop.</p>
+    </hint>
+  </exercise>
+  <exercise label="sort-2">
+    <title>Insertion sort</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high by <term>insertion sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after four passes</term>
+           through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>18 24 90 1  0  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 2 passes.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 24 85 90 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 5 passes.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>0  1  18 24 90 85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Correct. The left side would be sorted up to the 5th element.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18 24 34 85 90</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The array would not be completely sorted after 4 passes.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through four complete iterations of the outer loop. After four passes
+      the numbers up to and including location 4 in the original array should be in the correrct order.</p>
+    </hint>
+  </exercise>
+
+    <exercise label="sort-3">
+    <title>Selection sort</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high 
+        by <term>selection sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after one pass</term>
+           through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>18 24 90 1  0  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. Are you thinking of insertion sort?</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18  24  85 34 90 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 5 passes.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>0  18 90 1   24  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Correct. The smallest number would be swapped into the 1st location.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18 24 34 85 90</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The array would not be completely sorted after 1 pass.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through one complete iteration of the outer loop.</p>
+    </hint>
+  </exercise>
+
+  <exercise label="sort-4">
+    <title>Selection sort</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high 
+        by <term>selection sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after four passes</term>
+           through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>0  1  90 18  24  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 2 passes.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 90  24  85 34 18  </p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 3 passes.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>0  1  18 18  24  85 34 90 </p>
+            </statement>
+            <feedback>
+                <p>Correct. The four smallest numbers would be swapped into their locations.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18 24 34 85 90</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The array would not be completely sorted after 1 pass.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through four complete iterations of the outer loop. After
+      each iteration the next smallest number should be swapped into place.</p>
+    </hint>
+  </exercise>
+
+  <exercise label="swap-algorithm" adaptive="yes">
+   <title>Swapping values in variables</title>
+   <statement>
+       <p>Suppose the  <c>double</c> variables <c>var1</c> and <c>var2</c> have been properly declared
+       and initialized. Arrange the following blocks to swap their values.</p>
+   </statement>
+   <blocks>
+      <block order="1">
+           <p><c>double temp = 0;</c></p>
+       </block>
+      <block order="2">
+           <p><c>temp = var1;</c></p>
+       </block>
+       <block order="3">
+          <p><c>var1 = var2;</c></p>
+       </block>       
+       <block order="4">
+          <p><c>var2 = temp;</c></p>
+       </block>       
+   </blocks>
+   <hint>First, you need to save one of the values in <c>temp</c>.</hint>
+</exercise>
+
  </subsection>
   <subsection xml:id="paasing-params">
     <title>Passing a Value and Passing a Reference</title>
@@ -484,21 +738,141 @@ Sort sorter = new Sorter();
       Indeed, Java provides no way to pass a copy of an object to a method.
     </p>
     </subsection>
-    <subsection><title>Self-Study Exercise</title>
-      <ol>
-        <li>
-          <p>
-            Give the values that will be stored in <c>myArr</c> 
-            and <c>k</c> after you invoke <c>mystery(myArr, k)</c>, 
-            where <c>myArr</c>, <c>k</c> and <c>mystery()</c> are declared as follows:
- <program language="java"><input>
-int myArr[] = {1,2,3,4,5};    int k = 3;
-void mystery(int a[], int m) {
-    ++a[m];
-    --m;}
- </input></program>
+    <subsection xml:id="ss-params">
+    <title>Self-Study Exercise</title>
+      <exercise label="params-1">
+    <title>Array Parameter</title>
+    <statement>
+        <p>Consider the fillowing code segment:</p>
+         <program language="java"><input>
+          int myArr[] = {1,2,3,4,5};    
+          int k = 3;
+          
+          void mystery(int a[], int m) {
+            ++a[m];
+            --m;
+          }
+        </input></program>
+          <p>Which of the following gives the correct values stored in <c>myArr</c> 
+            after  <c>mystery(myArr, k)</c> is called?
           </p>
-        </li>
-      </ol>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>1,2,3,4,5</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The expression will increment one of array elements.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>1,2,4,4,5</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. Are you forgetting that arrays are zero-indexed?</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>1,2,3,5,5</p>
+            </statement>
+            <feedback>
+                <p>Correct. The change in the <c>myArr[3]</c> will persist after the method finishes.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>1,2,3,4,6</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. Try again you've incremented the wrong element.
+                </p>
+            </feedback>
+        </choice>
+      </choices>
+      <hint>
+        <p>This question has to do with how array arguments are passed to a method.</p>
+      </hint>
+    </exercise>
+
+ <exercise label="parameters-2"> 
+    <title>What's the value?</title>
+    <statement>
+        <p>Consider the fillowing code segment:</p>
+         <program language="java"><input>
+          int myArr[] = {1,2,3,4,5};    
+          int k = 3;
+          
+          void mystery(int a[], int m) {
+            ++a[m];
+            --m;
+          }
+        </input></program>
+          <p>After the <c>mystery(myArr, k)</c> method completes the 
+          variable <c>k</c> will have the value <var/>.
+          </p>    
+    </statement>
+    <setup>
+        <var>
+            <condition number="3">
+                <feedback>
+                    <p>Correct. Even though the parameter <c>m</c> is changed within the method,
+                    that change will not affect <c>k</c>, which is a value argument.</p>
+                </feedback>
+            </condition>
+            <condition string=".*">
+                <feedback>
+                    <p>Incorrect. Don't forget that <c>k</c> is a value argument.
+                    Changes to its parameter inside the method will not affect it.</p>
+                </feedback>
+            </condition>
+        </var>
+    </setup>
+    <hint>
+      <p>Hint: Recall the difference between value and reference parameters.</p>                
+    </hint>
+</exercise>   
+
+ <exercise label="selection-sort" adaptive="yes">
+   <title>Selection sort</title>
+   <statement>
+       <p> Arrange the following blocks to complete the implemention of selection sort.
+       <program language="java"><input>
+      public void selectionSort(int arr[]) {
+        int smallest = 0;
+        for (int k = 0; k &lt; arr.length -1; k++)  {
+
+          // Implement here
+
+        } // outer
+      } // selectionSort()       
+       </input></program>
+       </p>
+   </statement>          
+   <blocks>
+      <block>
+           <c>smallest = k; </c>
+       </block>
+      <block>
+           <c>for (int i k+1; i&lt;arr.length; i++) {</c>
+       </block>
+       <block>
+           <c>  if (arr[i] &lt; arr[smallest]) </c>
+       </block>       
+      <block>
+           <c>    smallest = j; </c>
+       </block>
+       <block>
+          <c>}</c>
+       </block> 
+        <block>
+          <c>swap(arr, k, smallest);</c>
+       </block>       
+    </blocks>
+   <hint></hint>
+</exercise>
+
   </subsection>
 </section>

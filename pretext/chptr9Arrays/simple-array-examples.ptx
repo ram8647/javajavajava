@@ -6,9 +6,9 @@
   </p>
   <listing xml:id="lst-initarrays">
     <caption>A program that displays two arrays. Its output
-    is shown in Figure<nbsp/>9.6</caption>
+    is shown in <xref ref="tab-output">Table</xref>.</caption>
     
- <program language="java"><input>
+ <program language="java" interactive="activecode"><input>
 public class PrintArrays 
 {
   static final int ARRSIZE = 10;         // The array's size
@@ -39,32 +39,7 @@ public class PrintArrays
     This is an example  of the maintainability principle.
         <idx><h>Maintainability Principle</h></idx>
   </p>
-  <principle>
-    <title>EFFECTIVE DESIGN: Symbolic Constants</title>
-    <p>
-      Using symbolic constants
-      (final variables)
-      instead of literal values makes the program easier to read and to maintain.
-    </p>
-  </principle>
-  <p>
-    Note the use of the <c>static</c> qualifier throughout the
-    <c>PrintArrays</c> class.
-    This enables us to refer to the array and the other variables from within the 
-    <c>main()</c> method.
-    If <c>intArr</c> were not declared <c>static</c>, we would get 
-    the compiler error <c>attempt to make static use of a non-static variable.</c> 
-  </p>
-  <p>
-    This use of <c>static</c> is justified mainly as a coding convenience 
-    rather than a principle of object-oriented design.
-    The only examples we've seen so far in which static elements 
-    were a necessary design element were the use of static elements 
-    in the <c>Math</c> class <mdash/><c>Math.PI</c> and <c>Math.sqrt()</c> <mdash/> and 
-    the use of static final variables in <c>TwoPlayerGame</c> <mdash/> 
-    e.g., <c>TwoPlayerGame.PLAYER_ONE</c>.
-  </p>
-  <table xml:id="tab-output">
+   <table xml:id="tab-output">
     <title>Output of the <c>PrintArrays</c> program. </title>
   <tabular>
     <row>
@@ -113,6 +88,31 @@ public class PrintArrays
     </row>
   </tabular>
   </table>
+ <principle>
+    <title>EFFECTIVE DESIGN: Symbolic Constants</title>
+    <p>
+      Using symbolic constants
+      (final variables)
+      instead of literal values makes the program easier to read and to maintain.
+    </p>
+  </principle>
+  <p>
+    Note the use of the <c>static</c> qualifier throughout the
+    <c>PrintArrays</c> class.
+    This enables us to refer to the array and the other variables from within the 
+    <c>main()</c> method.
+    If <c>intArr</c> were not declared <c>static</c>, we would get 
+    the compiler error <c>attempt to make static use of a non-static variable.</c> 
+  </p>
+  <p>
+    This use of <c>static</c> is justified mainly as a coding convenience 
+    rather than a principle of object-oriented design.
+    The only examples we've seen so far in which static elements 
+    were a necessary design element were the use of static elements 
+    in the <c>Math</c> class <mdash/><c>Math.PI</c> and <c>Math.sqrt()</c> <mdash/> and 
+    the use of static final variables in <c>TwoPlayerGame</c> <mdash/> 
+    e.g., <c>TwoPlayerGame.PLAYER_ONE</c>.
+  </p>
   <p>
     For large arrays,
     it is not always feasible to initialize them in an initializer statement.
@@ -136,7 +136,7 @@ public class PrintArrays
   <listing xml:id="lst-squares100">
     <caption>A program with an array that stores the squares of the first 50 integers.
     Its output is shown in <xref ref="fig-squares">Figure</xref>.</caption>
- <program language="java"><input>
+ <program language="java" interactive="activecode"><input>
 
 public class Squares 
 {
@@ -192,10 +192,9 @@ intArr[k] = (k+1) * (k+1);
     Note that in this example,
     <em>k</em> occurs as the array index on the left-hand side of this expression,
     while <em>k+1</em> occurs on the right-hand side as the value to be squared.
-    The 
   </p>
   <p>
-    reason for this is that arrays are indexed starting at 0 but we 
+    The reason for this is that arrays are indexed starting at 0 but we 
     want our table of squares to begin with the square of 1.
     So the square of some number <em>n+1</em>
     will always be stored in the array whose index is one 
@@ -226,13 +225,29 @@ for (int k = 0; k &lt; intArr.length; k++)
   </principle>
   <subsection>
     <title>Self-Study Exercise</title>
-    <ol>
-      <li>
-        <p>
-          Declare an array of 100 <c>double</c> s and write a loop 
-          to assign the first 100 square roots to its elements. [Use <c>Math.sqrt(double)</c>.]
-        </p>
-      </li>
-    </ol>
-  </subsection>
+    <exercise label="print-oneD-array">
+  <statement>
+    <p>
+      Create an array of <c>double</c>s and populate it with 
+      the square roots of the first 20 integers <m>\geq</m> 1. [Use <c>Math.sqrt(double)</c>.]
+      Then write a loop to display the arrays elements. 
+    </p>
+  </statement>
+  <program language="java" interactive="activecode"><input>
+public class SquareRoots
+{                   
+  public static void main(String[] args)
+  {
+      // Create array to store the square roots of the first 20 integers.
+      // Then print its values.
+
+
+
+
+
+  }
+}
+</input></program>
+</exercise>
+</subsection>
 </section>
