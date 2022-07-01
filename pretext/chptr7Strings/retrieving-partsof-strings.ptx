@@ -121,78 +121,191 @@ str.substring(0,str.indexOf(':'))  ==> "substring1"
       methods refers to the character just past the last character in the substring.
     </p>
   </principle>
-  </subsection><subsection><title>Self-Study Exercises</title>
-  <ol>
-    <li>
-      <p>
-        Given the <c>String</c> declaration
-      </p>
- <program language="java"><input>
-String s = "abcdefghijklmnopqrstuvwxyz";
- </input></program>
-      <p>
-        evaluate each of the following expressions:
-      </p>
-      <ol>
-        <li>
-          <p>
-            <c>s.substring(20)</c>
-          </p>
-        </li>
-        <li>
-          <p>
-            <c>s.substring(1, 5)</c>
-          </p>
-        </li>
-        <li>
-          <p>
-            <c>s.substring(23)</c>
-          </p>
-        </li>
-        <li>
-          <p>
-            <c>s.substring(23, 25)</c>
-          </p>
-        </li>
-        <li>
-          <p>
-            <c>s.substring(s.indexOf('x'))</c>
-          </p>
-        </li>
-      </ol>
-    </li>
-    <li>
-      <p>
-        Given the preceding declaration of <c>s</c>, evaluate each of the following expressions:
-        <ol>
+  </subsection>
+  <subsection>
+  <title>Self-Study Exercises</title>
+    <exercise label="str-substring-1">
+      <title>String substring() expressions</title>
+        <statement>
+          <p>Given this <c>String</c> declaration</p>
+            <program language="java"><input>
+            String s = "abcdefghijklmnopqrstuvwxyz";
+            </input></program>
+          <p>evaluate each of the following expressions.</p>
+          <p><term>(Note: All your answers should be enclosed within "" marks.)</term></p>
+        <ul>
           <li>
-            <p>
-              <c>s.substring(20, s.length())</c>
-            </p>
+              <c>s.substring(20)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s.substring(s.indexOf('b'), s.indexOf('f'))</c>
-            </p>
+              <c>s.substring(1, 5)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s.substring(s.indexOf("xy"))</c>
-            </p>
+              <c>s.substring(23)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s.substring(s.indexOf(s.charAt(23)))</c>
-            </p>
+              <c>s.substring(23, 25)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s.substring(s.length() - 3)</c>
-            </p>
+              <c>s.substring(s.indexOf('x'))</c> <var/>
           </li>
-        </ol>
-      </p>
-    </li>
-  </ol>
+        </ul>
+    </statement>
+        <setup>
+          <var>
+            <condition string="&quot;uvwxyz&quot;">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Substring starting at index 20 up to 
+                the end of the string.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;bcde&quot;">
+              <feedback>
+                <p>Correct. You don't include the character at index 5.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Remember, you don't include the character at index 5.</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;xyz&quot;">
+              <feedback>
+                <p>Correct. The substring from 'x' to the end of the string. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. The substring should start from 'x' to the end 
+                of the string. </p>
+              </feedback>
+            </condition>
+          </var>   
+          <var>
+              <condition string="&quot;xy&quot;">
+                <feedback>
+                  <p>Correct. The letter 'z' is not included</p>
+                </feedback>
+              </condition>
+              <condition string=".*">
+                <feedback>
+                  <p>Incorrect. Remember, the character at index 25 is not included.</p>
+                </feedback>
+              </condition>
+            </var>           
+          <var>
+              <condition string="&quot;xyz&quot;">
+                <feedback>
+                  <p>Correct. Good job! </p>
+                </feedback>
+              </condition>
+              <condition string=".*">
+                <feedback>
+                  <p>Incorrect. Did you first evaluate <c>indexOf(x)</c>?</p>
+                </feedback>
+              </condition>
+            </var>                                   
+        </setup>
+      </exercise>
+
+    <exercise label="str-substring-2">
+      <title>String substring() expressions</title>
+        <statement>
+          <p>Given this <c>String</c> declaration</p>
+            <program language="java"><input>
+            String s = "abcdefghijklmnopqrstuvwxyz";
+            </input></program>
+          <p>evaluate each of the following expressions.</p>
+          <p><term>(Note: All your answers should be enclosed within "" marks.)</term></p>
+        <ul>
+          <li>
+              <c>s.substring(20, s.length())</c> <var/>
+          </li>
+          <li>
+              <c>s.substring(s.indexOf('b'), s.indexOf('f'))</c> <var/>
+          </li>
+          <li>
+              <c>s.substring(s.indexOf("xy"))</c> <var/>
+          </li>
+          <li>
+               <c>s.substring(s.indexOf(s.charAt(23)))</c> <var/>
+          </li>
+          <li>
+              <c>s.substring(s.length() - 3)</c> <var/>
+          </li>
+        </ul>
+    </statement>
+        <setup>
+          <var>
+            <condition string="&quot;uvwxyz&quot;">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. This is equivalent to <c>s.substring(20)</c>.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;bcde&quot;">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  This is equivalent to <c>s.substring(1, 5)</c>.</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;xyz&quot;">
+              <feedback>
+                <p>Correct. The substring from 'x' to the end of the string. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  This is equivalent to <c>s.substring(23)</c>. </p>
+              </feedback>
+            </condition>
+          </var>   
+          <var>
+              <condition string="&quot;xyz&quot;">
+                <feedback>
+                  <p>Correct.</p>
+                </feedback>
+              </condition>
+              <condition string=".*">
+                <feedback>
+                  <p>Incorrect.  This is equivalent to the preceding expression.</p>
+                </feedback>
+              </condition>
+            </var>           
+          <var>
+              <condition string="&quot;xyz&quot;">
+                <feedback>
+                  <p>Correct. Good job! </p>
+                </feedback>
+              </condition>
+              <condition string=".*">
+                <feedback>
+                  <p>Incorrect. This is equivalent to the preceding expression.</p>
+                </feedback>
+              </condition>
+            </var>                                   
+        </setup>
+      </exercise>
   </subsection>
 </section>

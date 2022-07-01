@@ -161,4 +161,38 @@ public String keywordSearch(String s, String keyword)
     To avoid these inefficiencies,
     use a <c>StringBuffer</c> instead of a <c>String</c> in such contexts.
   </p>
+
+  <subsection>
+    <title>Self-Study Exercise</title>
+
+    <activity label="keyword-search-2">
+      <statement><p>Run the code below to test the revised <c>keywordSearch()</c> method.
+        Add additional calls to <c>keywordSearch()</c>.
+              </p></statement>
+      <program language="java" interactive="activecode"><input>
+   public class KeywordSearch {
+      public String keywordSearch(String s, String keyword) 
+      {
+                                        // Create StringBuffer
+        StringBuffer resultStr = new StringBuffer();
+        int count = 0;
+        int ptr = s.indexOf(keyword);
+        while (ptr != -1) {
+          ++count;
+          resultStr.append(ptr + " ");  // Append to buffer
+          ptr = s.indexOf(keyword, ptr + 1);
+        }
+        resultStr.insert(0, count + ": ");
+        return resultStr.toString(); // Convert buffer to String
+      } // keywordSearch()
+
+        public static void main(String args[]) {
+          KeywordSearch searcher = new KeywordSearch();
+          String result = searcher.keywordSearch("this is a test","is");
+          System.out.println(result);
+        }
+    }
+      </input></program>
+    </activity>
+  </subsection>   
 </section>

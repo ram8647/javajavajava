@@ -311,19 +311,24 @@ public class StringProcessorTest {
           </li>
           <li>
             <p>
-              A Alpha Z Zero Zeroes a alpha bath bin z zero
+              A Alpha Zero a alpha bath zero
             </p>
           </li>
           <li>
             <p>
-              To modify <c>precedes</c> so that it also returns 
-              true when its two string arguments are equal,
-              just change the operator in the final return statement to <c>&lt;=</c>:
+              Define <c>boolean follows(String s1, String s2)</c>:
             </p>
-   <program language="java"><input>
-  if (s1.charAt(k) &lt;= s2.charAt(k) )
-        return true;
-   </input></program>
+            <program language="java"><input>
+              public static boolean follows(String s1, String s2) {
+                    int minlen = Math.min(s1.length(), s2.length()); 
+                                    
+                    for (int k=0; k &lt; minlen; k++) {     
+                      if (s1.charAt(k) != s2.charAt(k)) 
+                          return s1.charAt(k) > s2.charAt(k); 
+                    }
+                    return s1.length() > s2.length();  
+              }
+            </input></program>
             </li>
             <li>
               <ol>
@@ -338,17 +343,6 @@ public class StringProcessorTest {
                 <li><p>false</p></li>
               </ol>
           </li>
-          <li>
-            <p>
-              The variables in <c>TestStringEquals</c> are declared <c>static</c> because they are used in <c>static</c> methods.
-              Whenever you call a method directly from <c>main()</c>, it must be <c>static</c> because
-  <c>main()</c> is static.
-              Remember that <c>static</c> elements are associated with the class,
-              not with its instances.
-              So <c>main()</c> can only use static elements because they don't 
-              depend on the existence of instances.
-            </p>
-        </li>
         <li>
               <ol>
                 <li><p><c>String s3 = s1.substring(s1.indexOf('n'))</c><c>+ s1.substring(0,s1.indexOf('n'));</c></p></li>

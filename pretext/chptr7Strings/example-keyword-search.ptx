@@ -146,4 +146,37 @@ public String keywordSearch(String s, String keyword)
       </p>
     </principle>
   </subsection>
+  <subsection>
+    <title>Self-Study Exercise</title>
+
+    <activity label="keyword-search">
+      <statement><p>Run the code below to confirm the first result of our manual trace.
+        Add additional calls to <c>keywordSearch()</c> to confirm the other results.
+        Then experiment with your own search strings.
+              </p></statement>
+      <program language="java" interactive="activecode"><input>
+   public class KeywordSearch {
+        public String keywordSearch(String s, String keyword) 
+        {
+          String resultStr = "";
+          int count = 0;
+          int ptr = s.indexOf(keyword);
+          while (ptr != -1) {
+            ++count;
+            resultStr = resultStr + ptr + " ";
+            ptr = s.indexOf(keyword, ptr + 1);// Next occurrence
+          }
+          resultStr = count + ": " + resultStr;// Insert the count
+          return resultStr;                  // Return as a String
+        } // keywordSearch()
+
+        public static void main(String args[]) {
+          KeywordSearch searcher = new KeywordSearch();
+          String result = searcher.keywordSearch("this is a test","is");
+          System.out.println(result);
+        }
+    }
+      </input></program>
+    </activity>
+  </subsection>  
 </section>

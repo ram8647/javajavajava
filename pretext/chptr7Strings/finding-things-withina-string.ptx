@@ -115,105 +115,310 @@ string4.indexOf("or") ==>  7  string4.lastIndexOf("or") ==>  7
   </subsection>
   <subsection>
     <title>Self-Study Exercises</title>
-  <ol>
-    <li>
-      <p>
-        Suppose the <c>String</c> variable <c>s</c> has been initialized to
-        <q>mom.</q>
-        Evaluate each of the following expressions:
-      </p>
-      <ol>
-        <li>
+    <exercise label="str-index-1">
+      <title>String indexOf() expressions</title>
+        <statement>
           <p>
-            <c>s.indexOf("m");</c>
+            Suppose the <c>String</c> variable <c>s</c> has been initialized to
+            <q>mom.</q>
+            Evaluate each of the following expressions:
           </p>
-        </li>
-        <li>
+          <ul>
+           <li>
+              <c>s.indexOf("m");</c> <var/>
+            </li>
+            <li>
+              <c>s.indexOf("o");</c>  <var/>
+            </li>
+            <li>
+             <c>s.indexOf("M");</c>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="0">
+              <feedback>
+                <p>Correct. It finds the first 'm'.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you remember zero-indexing?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you remember zero-indexing?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="-1">
+              <feedback>
+                <p>Correct. There is no 'M' in the string.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  There is no 'M' in the string.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+        <hint>
+          <p>The <c>indecOf()</c> method returns the index of its argument's location 
+          in the string.</p>
+        </hint>
+    </exercise>
+
+    <exercise label="str-index-2">
+      <title>String indexOf() expressions</title>
+        <statement>
           <p>
-            <c>s.indexOf("o");</c>
+            Suppose the <c>String</c> variable <c>s</c> has been initialized to:
+            <c>String s1 = "Java, Java, Java";</c>
+            Evaluate each of the following expressions:
           </p>
-        </li>
-        <li>
+          <ul>
+          <li>
+              <c>s1.length()</c> <var/>
+          </li>
+          <li>
+              <c>String.valueOf(s1.length())</c> <var/>
+          </li>
+          <li>
+              <c>s1.indexOf('a')</c> <var/>
+          </li>
+          <li>
+              <c>s1.lastIndexOf('a')</c> <var/>
+          </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="16">
+              <feedback>
+                <p>Correct. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. How many characters are in the string?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;16&quot;">
+              <feedback>
+                <p>Correct. Converts the length to a string.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you forget to "marks?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct. The index of the first 'a' is 1.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you remember about zero-indexing?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="15">
+              <feedback>
+                <p>Correct. The index of the last character is the length - 1.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  The index of the last character is the length - 1</p>
+              </feedback>
+            </condition>
+          </var>                     
+        </setup>
+      </exercise>
+
+    <exercise label="str-index-3">
+      <title>String indexOf() expressions</title>
+        <statement>
           <p>
-            <c>s.indexOf("M");</c>
+            Suppose the <c>String</c> variable <c>s</c> has been initialized to:
+            <c>String s1 = "Java, Java, Java";</c>
+            Evaluate each of the following expressions:
           </p>
-        </li>
-      </ol>
-    </li>
-    <li>
-      <p>
-        Evaluate the expressions given the <c>String</c> declaration
-<c>String s1 = "Java, Java, Java";</c>
-        <ol>
-          \columnsep=0pt \scriptsize
-          <li>
-            <p>
-              <c>s1.length()</c>
-            </p>
+          <ul>
+           <li>
+              <c>s1.indexOf("av")</c> <var/>
           </li>
           <li>
-            <p>
-              <c>String.valueOf(s1.length())</c>
-            </p>
+              <c>s1.lastIndexOf("av")</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s1.indexOf('a')</c>
-            </p>
+              <c>s1.indexOf('a', 5)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s1.lastIndexOf('a')</c>
-            </p>
+              <c>s1.lastIndexOf('a', 5)</c> <var/>
+          </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. What's the index of the 'a' in the  first 
+                occurrence of "av"?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition number="13">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Where is the last occurrence of "av"? </p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="7">
+              <feedback>
+                <p>Correct. We start searching at index 5. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. What is the index of the first occurrence 
+                of "av" after index 5?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="3">
+              <feedback>
+                <p>Correct. We start searching from right to left starting at index 5.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. We start searching from right to left starting at index 5.</p>
+              </feedback>
+            </condition>
+          </var>                     
+        </setup>
+      </exercise>
+
+    <exercise label="str-index-4">
+      <title>String indexOf() expressions</title>
+        <statement>
+          <p>
+            Suppose the <c>String</c> variable <c>s</c> has been initialized to:
+            <c>String s1 = "Java, Java, Java";</c>
+            Evaluate each of the following expressions:
+          </p>
+          <ul>
+          <li>
+              <c>s1.indexOf("av", s1.length() - 10)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s1.indexOf("av")</c>
-            </p>
+              <c>s1.lastIndexOf("av", s1.length() - 4)</c> <var/>
           </li>
           <li>
-            <p>
-              <c>s1.lastIndexOf("av")</c>
-            </p>
+              <c>s1.indexOf("a", s1.indexOf("va"))</c> <var/>
           </li>
-          <li>
-            <p>
-              <c>s1.indexOf('a', 5)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1.lastIndexOf('a', 5)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1.indexOf("av", s1.length() - 10)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1.lastIndexOf("av",</c>
-<c>s1.length() - 4)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1.indexOf("a", s1.indexOf("va"))</c>
-            </p>
-          </li>
-        </ol>
-      </p>
-    </li>
-    <li>
-      <p>
-        Evaluate the following expression:
- <program language="java"><input>
-String tricky = "abcdefg01234567";
-  tricky.indexOf(String.valueOf( tricky.indexOf("c")));
- </input></program>
-      </p>
-    </li>
-  </ol>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="7">
+              <feedback>
+                <p>Correct. Index of "av" starting at 6.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Index of "av" starting at 6.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition number="7">
+              <feedback>
+                <p>Correct. Last index of "av" starting up 12.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Last index of "av" starting up 12.</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="3">
+              <feedback>
+                <p>Correct. First index of "a" starting at 2. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. What is the first index of "a" starting at 2?</p>
+              </feedback>
+            </condition>
+          </var>                        
+        </setup>
+      </exercise>
+
+    <exercise label="str-index-5">
+      <title>Tricky indexOf() expression</title>
+        <statement>
+        <p>
+        Evaluate the following expression: <var/>
+        </p>
+          <program language="java"><input>
+          String tricky = "abcdefg01234567";
+          tricky.indexOf(String.valueOf( tricky.indexOf("c") ));
+          </input></program>          
+        </statement>
+        <setup>
+          <var>
+            <condition number="9">
+              <feedback>
+                <p>Correct. Good job!</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Check out the hint.</p>
+              </feedback>
+            </condition>
+          </var>                       
+        </setup>
+        <hint>
+          <p>Evaluate the expressions starting with the innermost parentheses.</p>
+        </hint>
+      </exercise>
   </subsection>
 </section>

@@ -84,6 +84,8 @@
     <p>
       Perhaps a more precise way to define lexicographic order is to define a Java method:
     </p>
+<listing xml:id="lst-precedes">
+ <caption>The <c>precede()</c> method</caption>
  <program language="java"><input>
 public boolean precedes(String s1, String s2) 
 {
@@ -99,6 +101,7 @@ public boolean precedes(String s1, String s2)
   return s1.length() &lt; s2.length();  
 } // precedes()
  </input></program>
+</listing>
     <p>
       This method does a character-by-character comparison of  the two strings,
       proceeding left to right, starting at the first character in both strings.
@@ -129,26 +132,63 @@ public boolean precedes(String s1, String s2)
       <q>alphabet.</q>
     </p>
     </subsection>
-    <subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
-            Arrange the following strings in lexicographic order: 
-<pre>
-zero bath bin alpha Alpha Zero Zeroes a A z Z
- </pre>
-          </p>
-        </li>
-        <li>
-          <p>
-            Modify the <c>precedes()</c> method so that it will also return true when
-            <em>s1</em> and <em>s2</em>
-            are equal <mdash/> for example,
-            when <em>s1</em> and <em>s2</em> are both
-            <q>hello</q>.
-          </p>
-        </li>
-      </ol>
+    <subsection>
+    <title>Self-Study Exercises</title>
+          <exercise label="swap-algorithm" adaptive="yes">
+            <title>Swapping values in variables</title>
+            <statement>
+                <p> Arrange the following strings in lexicographic order:
+                alpha zero bath Alpha Zero a A</p>
+            </statement>
+            <blocks>
+               <block order="1">
+                    <p>A</p>
+                </block>
+               <block order="2">
+                    <p>Alpha</p>
+                </block>
+                <block order="3">
+                   <p>Zero</p>
+                </block>       
+                <block order="4">
+                   <p>a</p>
+                </block> 
+                <block order="3">
+                   <p>alpha</p>
+                </block>                    
+                <block order="3">
+                   <p>bath</p>
+                </block>       
+                <block order="4">
+                   <p>zero</p>
+                </block>                   
+            </blocks>
+         </exercise>
+
+      <activity label="string-follows">
+      <statement>
+        <p>Using the <xref ref="lst-precedes">precedes() method</xref> as a guide,
+        define and test a follows method. It should return true if and
+        only if s1 follows s2 in lexicographic order.</p>
+       </statement>
+    <program language="java" interactive="activecode"><input>
+    public class StringFollows {
+
+        public boolean follows(String s1, String s2) {
+        
+        }
+
+
+        public static void main(String args[]) {
+ 
+              // Add code to test your methods here 
+
+
+
+        } // main()
+    } // StringFollows
+    </input></program>
+    </activity>         
   </subsection>
   <subsection xml:id="sub-venus">
     <title>Object Identity Versus Object Equality</title>
@@ -417,101 +457,212 @@ public class TestStringEquals
 </subsection>
 <subsection>
   <title>Self-Study Exercises</title>
-    <ol>
-      <li>
-        <p>
-          Given the  <c>String</c> declarations,
+      <exercise label="str-index-1">
+      <title>String equality vs identity</title>
+        <statement>
+      <p>
+        Evaluate the following expressions as true or false (use <term>T</term> or <term>F</term>)
+        based on these  <c>String</c> declarations,
         </p>
- <program language="java"><input>
-String s1 = "java", s2 = "java", s3 = "Java";
-String s4 = new String(s2);
-String s5 = new String("java");
- </input></program>
-        <p>
-          evaluate the following expressions:
-        </p>
-        <ol>
-          <li>
-            <p>
-              <c>s1 == s2</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1.equals(s2)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1 == s3</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1.equals(s3)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s2 == s3</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s2.equals(s4)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s2 == s4</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s1 == s5</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>s4 == s5</c>
-            </p>
-          </li>
-        </ol>
-      </li>
-      <li>
-        <p>
-          Why are the variables in <c>TestStringEquals</c> declared <c>static</c>?
-        </p>
-      </li>
-      <li>
-        <p>
-          Given the following declarations,
-        </p>
- <program language="java"><input>
-String s1 = "abcdefghijklmnopqrstuvwxyz";
-String s2 = "hello world";
- </input></program>
-          <p>
-            write Java expressions to carry out each of the following operations:
-          </p>
-          <ol>
-            <li>
-              <p>
-                Swap the front and back half of <c>s1</c> giving a new string.
-              </p>
+        <program language="java"><input>
+        String s1 = "java", s2 = "java", s3 = "Java";
+        String s4 = new String(s2);
+        String s5 = new String("java");
+        </input></program>
+          <ul>
+           <li>
+              <c>s1 == s2</c> <var/>
             </li>
             <li>
-              <p>
-                Swap "world" and "hello" in <c>s2</c> giving a new string.
-              </p>
+              <c>s1.equals(s2)</c>  <var/>
             </li>
             <li>
-              <p>
-                Combine parts of <c>s1</c> and <c>s2</c> to create a new string "hello abc".
-              </p>
+              <c>s1 == s3</c>  <var/>
             </li>
-          </ol>
-      </li>
-    </ol>
+            <li>
+              <c>s1.equals(s3)</c>  <var/>
+            </li>
+            <li>
+               <c>s2 == s3</c>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition string="T">
+              <feedback>
+                <p>Correct. s1 and s2 both refer to the same object, "java" </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Do s1 and s2 both refer to the same identical object?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="T">
+              <feedback>
+                <p>Correct. s1 and s2 both equal "java"</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Are the strings s1 and s2 equal?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="F">
+              <feedback>
+                <p>Correct. s1 and s3 refer to different objects </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Do s1 and s3 refer to the same identical object?</p>
+              </feedback>
+            </condition>
+          </var>
+         <var>
+            <condition string="F">
+              <feedback>
+                <p>Correct. "java" is not equal to "Java"</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Is "java" equal to "Java"?</p>
+              </feedback>
+            </condition>
+          </var> 
+         <var>
+            <condition string="F">
+              <feedback>
+                <p>Correct, s1 and s3 are different objects.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Are s1 and s3 different objects? </p>
+              </feedback>
+            </condition>
+          </var>                                     
+        </setup>
+        <hint>
+          <p>Review this program <xref ref="lst-equals2">Listing</xref>) and its discussion.</p>
+        </hint>
+    </exercise>
+
+    <exercise label="str-index-2">
+      <title>String equality vs identity</title>
+        <statement>
+      <p>
+        Evaluate the following expressions as true or false (use <term>T</term> or <term>F</term>)
+        based on these  <c>String</c> declarations,
+        </p>
+        <program language="java"><input>
+        String s1 = "java", s2 = "java", s3 = "Java";
+        String s4 = new String(s2);
+        String s5 = new String("java");
+        </input></program>
+          <ul>
+           <li>
+              <c>s2.equals(s4)</c>  <var/>
+          </li>
+          <li>
+              <c>s2 == s4</c>  <var/>
+          </li>
+          <li>
+              <c>s1 == s5</c>  <var/>
+          </li>
+          <li>
+              <c>s4 == s5</c>  <var/>
+          </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition string="T">
+              <feedback>
+                <p>Correct. s2 and s4 both equal "java" </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Do s2 and s4 both equal the same string?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="F">
+              <feedback>
+                <p>Correct. s2 and s4 are different objects.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Do s2 and s4 refer to the same object?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="F">
+              <feedback>
+                <p>Correct. s1 and s5 refer to different objects. </p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Do s1 and s5 refer to the same identical object?</p>
+              </feedback>
+            </condition>
+          </var>
+         <var>
+            <condition string="F">
+              <feedback>
+                <p>Correct. s4 and s5 refer to different objects.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. s4 and s5 refer to different objects.</p>
+              </feedback>
+            </condition>
+          </var>                                      
+        </setup>
+        <hint>
+          <p>Review this program <xref ref="lst-equals2">Listing</xref>) and its discussion.</p>
+        </hint>
+    </exercise>
+
+    <activity label="string-follows">
+      <statement>
+        <p>Use <c>indexOf()</c> and <c>substring()</c> methods to manipulate 
+        the strings s1 and s2 as described. Use 
+        <c>System.out.println()</c> to test your code.</p>
+       </statement>
+    <program language="java" interactive="activecode"><input>
+    public class StringPlay {
+
+        public static void main(String args[]) {
+
+          String s1 = "abcdefghijklmnopqrstuvwxyz";
+          String s2 = "hello world";
+
+          // Combine parts of s1 and s2 to create a new string "hello abc".
+              
+
+          //  Swap "world" and "hello" in <c>s2</c> to give "world hello".
+
+
+          // Swap the front and back halves of <c>s1</c> to give:
+          // nopqrstuvwxyzabcdefghijklm
+        
+        
+        } // main()
+    } // StringPlay
+    </input></program>
+    </activity> 
   </subsection>
 </section>

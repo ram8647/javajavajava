@@ -208,7 +208,7 @@ String name6 = name4;
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="self-study-exercisesA20">
+  <subsection xml:id="sec-concatenation">
     <title>Concatenating Strings</title>
     <p>
       Another way to build a <c>String</c> object is to concatenate two other strings.
@@ -266,97 +266,262 @@ System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
       would print
       <q>The concatenation of 5 and 5 = 55.</q>
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-    <ol>
-      <li>
-        <p>
-          What will be printed by each of the following segments of code?
-        </p>
-        <ol>
-          <li>
-            <p>
-              <c>String s1 = "silly"; System.out.println(s1);</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>String s2 = s1; System.out.println(s2);</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>String s3 = new String (s1 + " stuff");</c>
- <c>    System.out.println(s3);</c>
-            </p>
-          </li>
-        </ol>
-      </li>
-      <li>
-        <p>
-          Write a <c>String</c> declaration that satisfies each of the following descriptions:
-          <ol>
-            <li>
-              <p>
-                Initialize a <c>String</c> variable,
-                <em>str1</em>, to the empty string.
-              </p>
+    </subsection>
+    <subsection>
+    <title>Self-Study Exercises</title>
+      <exercise label="str-basics-1">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              System.out.println(s1);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+      </exercise>
+
+      <exercise label="str-basics-2">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              String s2 = s1;
+              System.out.println(s2);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+      </exercise>       
+
+      <exercise label="str-basics-3">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              String s2 = new String (s1 + " stuff");
+              System.out.println(s2);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly stuff">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect. The answer must exactly match what is printed.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+      </exercise>
+
+      <exercise label="str-basics-4">
+      <title>Creating an empty string</title>
+        <statement>
+          <p>Which the following declarations would create an empty string?</p>
+        </statement>
+        <choices>
+          <choice correct="yes">
+            <statement>
+              <c>String s = "";</c>
+            </statement>
+            <feedback>
+              <p>That's one way to create an empty string.</p>
+            </feedback>
+          </choice>
+          <choice correct="yes">
+            <statement>
+              <c>String s = new String();</c>
+            </statement>
+            <feedback>
+              <p>That's one way to create an empty string.</p>
+            </feedback>
+          </choice>
+          <choice>
+            <statement>
+              <c>String s = " ";</c>
+            </statement>
+            <feedback>
+              <p>There's a space between the quotes.</p>
+            </feedback>
+          </choice>
+          <choice correct="yes">
+            <statement>
+              <c>String s = new String("");</c>
+            </statement>
+            <feedback>
+              <p>That's one way to create an empty string.</p>
+            </feedback>
+          </choice>
+        </choices>
+      </exercise>
+
+      <exercise label="str-basics-5">
+      <title>Evaluate expressions</title>
+        <statement>
+          <p>
+            Evaluate the following expressions given the declarations here. Make sure 
+            you use quote marks to distinguish strings ("100") from numbers (100).
+            <program language="java"><input>
+              int M = 5, N = 10;
+              String s1 = "51", s2 = "75";
+            </input></program>
+          </p>
+          <ul>
+           <li>
+              <c>M + N</c>  <var/>
             </li>
             <li>
-              <p>
-                Instantiate a <c>String</c> object,
-                <em>str2</em>, and initialize it to the word <em>stop</em>.
-              </p>
+              <c>M + s1</c>  <var/>
             </li>
             <li>
-              <p>
-                Initialize a <c>String</c> variable,
-                <em>str</em>,
-                to the concatenation of <em>str1</em> and <em>str2</em>.
-              </p>
+              <c>s1 + s2</c>  <var/>
             </li>
-          </ol>
-        </p>
-      </li>
-      <li>
-        <p>
-          Evaluate the following expressions:
- <program language="java"><input>
-int M = 5, N = 10;
-String s1 = "51", s2 = "75";
- </input></program>
-          <ol>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="15">
+              <feedback>
+                <p>Correct. Just adding two numbers.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;1551&quot;">
+              <feedback>
+                <p>Correct. The number is promoted to a string.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Think about Java's promotion rules.</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;5175&quot;">
+              <feedback>
+                <p>Correct. Concatenating two strings.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+      </exercise>
+
+      <exercise label="str-basics-6">
+      <title>String objects</title>
+        <statement>
+          <p>
+            Given the declarations here: 
+            <program language="java"><input>
+            String s1;
+            String s2 = "Hello";
+            String s3 = s2;
+            </input></program>
+          </p>
+          <ul>
+           <li>
+              <p>How many distinct <c>String</c> objects are created?</p> <var/>
+            </li>
             <li>
-              <p>
-                <c>M + N</c>
-              </p>
+              <p>How many null variables are declared?</p> <var/>
             </li>
             <li>
-              <p>
-                <c>M + s1</c>
-              </p>
+              <p>How many references are there to the "Hello" litreral?</p> <var/>
             </li>
-            <li>
-              <p>
-                <c>s1 + s2</c>
-              </p>
-            </li>
-          </ol>
-        </p>
-      </li>
-      <li>
-        <p>
-          Draw a picture,
-          similar to Figure<nbsp/>7.5, showing the objects and references that are created by the following declarations:
- <program language="java"><input>
-String s1, s2 = "Hello", s3 = "Hello";
-String s4 = "hello";
-String s5 = new String("Hello");
-String s6 = s5;
-String s7 = s3;
- </input></program>
-        </p>
-      </li>
-    </ol>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct. The only object is the "Hello" literal.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct. s1 is null variable.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Which variable is not pointing to an object?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="3">
+              <feedback>
+                <p>Correct. s2, s3 and "Hello" all point to the string literal object "Hello".</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. This is challenging. Check out the hint.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+        <hint>
+          <p>Review the discussion around <xref ref="fig-strobjects">Figure</xref>.</p>
+        </hint>
+      </exercise>
+
   </subsection>
   <subsection xml:id="fig-zeroindex">
     <title>Indexing <c>String</c> s</title>
@@ -481,52 +646,115 @@ String pi = new String(""+Math.PI);// Creates "3.14"
       This  helps to make the code more readable.
       (Also, see Exercise 7.9.)
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-    <ol>
-      <li>
-        <p>
-          Evaluate each of the following expressions:
-        </p>
-        <ol>
-          <li>
-            <p>
-              <c>String.valueOf (45)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>String.valueOf (128 - 7)</c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>String.valueOf ('X')</c>
-            </p>
-          </li>
-        </ol>
-      </li>
-      <li>
-        <p>
-          Write an expression to satisfy each of the following descriptions:
-          <ol>
-            <li>
-              <p>
-                Convert the integer value 100 to the string "100".
-              </p>
+    </subsection>
+    <subsection>
+    <title>Self-Study Exercises</title>
+      <exercise label="str-basics-7">
+      <title>String.valueOf()</title>
+        <statement>
+          <p>
+            Evaluate each of the following expressions. 
+            Use quote marks to distinguish strings ("100") from numbers (100).
+          </p>
+          <ul>
+           <li>
+              <c>String.valueOf(45)</c>  <var/>
             </li>
             <li>
-              <p>
-                Convert the character 'V' to the string "V".
-              </p>
+              <c>String.valueOf (128-7)</c>  <var/>
             </li>
             <li>
-              <p>
-                Initialize a new String object to X times Y.
-              </p>
+              <c>String.valueOf('X')</c>  <var/>
             </li>
-          </ol>
-        </p>
-      </li>
-    </ol>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition string="&quot;45&quot;">
+              <feedback>
+                <p>Correct. The number 45 is converted into the string "45".</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you remember to put quotes around strings?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;121&quot;">
+              <feedback>
+                <p>Correct. The number 121 is converted into the string "121"</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you remember to put quotes around strings?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;X&quot;">
+              <feedback>
+                <p>Correct. The character 'X' is converted to the string "X".</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you remember to put quotes around strings?.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+        <hint>
+          <p>The <c>String.valueOf()</c> method converts its argument into a string.</p>
+        </hint>
+      </exercise>
+
+      <exercise label="str-basics-8">
+      <title>String.valueOf()</title>
+        <statement>
+          <p>
+            Write an expression to satisfy each of the following descriptions:
+          </p>
+          <ul>
+           <li>
+               <p>Convert the integer value 100 to the string "100".</p> <var/>
+            </li>
+            <li>
+              <p>Convert the product of two <c>ints x and y</c> into a String.</p>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition string="String.valueOf(100)">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you use <c>String.valueOf()</c>?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="String.valueOf(x * y)">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you use <c>String.valueOf()</c>?</p>
+              </feedback>
+            </condition>
+          </var>                    
+        </setup>
+        <hint>
+          <p>The <c>String.valueOf()</c> method converts its argument into a string.</p>
+        </hint>
+      </exercise>      
   </subsection>
 </section>

@@ -198,30 +198,83 @@ public String capitalize(String s)
     </subsection>
     <subsection>
     <title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
-            Write a Java program to test the methods described in this section.
-            Organize the methods themselves into a single class,
-            named <c>StringProcessor</c>, and design a second class to serve as the user interface.
-            Because these methods are similar to the utility methods of the <c>Math</c> class,
-            it would be useful to declare them static.
-            The user interface should prompt the user to input a string and 
-            should then print out the result of passing that string 
-            to each of the methods we developed.
-          </p>
-        </li>
-        <li>
-          <p>
-            Add a method to the <c>StringProcessor</c> class that will 
-            remove all blanks from a string.
-            It should take a <c>String</c> parameter and should return a <c>String</c> result.
-          </p>
-        </li>
-      </ol>
-    </subsection>
+      <activity label="string-processor">
+      <statement>
+        <p>Run this program to see how it works and then modify it to perform the following tasks.</p>
+          <ol>
+          <li><p>Add <c>countChar()</c> as a static method and write code to test it in the main while loop.</p></li>
+          <li><p>Add <c>reverse()</c> as a static method and write code to test it in the main while loop.</p></li>
+          <li><p>Define and test a new method, <c>removeBlanks()</c>, that accepts a string parameter and returns
+          a string with all blank characters removed.</p></li>
+          </ol>
+      </statement>
+    <program language="java" interactive="activecode"><input>
+    import java.io.*;
+    
+    public class StringProcessor {
+
+        public static void printLetters(String str) {
+            for (int k = 0; k &lt; str.length(); k++) // For each char
+              System.out.println(str.charAt(k));      //  Print it
+        }
+
+        // Add static countChar() abd reverse() methods 
+
+
+
+        // Add static removeBlanks() method
+
+        public static void main(String args[]) {
+            KeyboardReader kb = new KeyboardReader();
+            kb.prompt("Input a String or - stop - to quit: ");
+            String str = kb.getKeyboardInput();
+            while (!str.equals("stop")){
+              kb.display("Testing printLetters()\n");
+              StringProcessor.printLetters(str);
+ 
+              // Add code to test your methods here 
+
+
+
+
+
+              kb.prompt("Input a String or - stop - to quit: ");
+              str = kb.getKeyboardInput();
+            } // while
+        } // main()
+    } // StringProcessor
+
+    class KeyboardReader {   
+      private BufferedReader reader;
+
+      public KeyboardReader() {
+          reader = new BufferedReader
+            (new InputStreamReader(System.in));
+      }
+      public String getKeyboardInput() {   
+        return readKeyboard();
+      }
+      public void prompt(String s) {   
+        System.out.print(s);
+      }
+      public void display(String s) {   
+        System.out.print(s);
+      }
+      private String readKeyboard() {   
+        String line = "";
+          try {  
+            line = reader.readLine();
+          } catch (IOException e) {  
+            e.printStackTrace();
+          }
+          return line;
+      }
+  }
+    </input></program>
+    </activity>
+  </subsection>
   <subsection>
-    <title>Miscellaneous <c>String</c>Methods</title>
+    <title>Miscellaneous <c>String</c> Methods</title>
     <p>
       In addition to the several <c>String</c> class methods we have 
       discussed <mdash/> <c>valueOf()</c>, <c>equals()</c>, <c>indexOf()</c>,
