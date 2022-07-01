@@ -399,6 +399,128 @@ n * m;
       </table>
     </subsubsection>
   </subsection>
+
+<exercises>
+  <title>Self-Study Exercises</title>
+  
+
+<exercise label="eval-div-mod">
+  <title>Evaluate div and mod</title>
+  <statement>
+      <p>Match the integer expressions with their values.</p>
+  </statement>
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise>6 / 2</premise>
+          <response>3</response>
+      </match>
+      <match>
+          <premise>9 / 2</premise>
+          <response>4</response>
+      </match>
+      <match>
+          <premise>6 / 8</premise>
+          <response>0</response>
+      </match>
+      <match>
+          <premise>9 % 2</premise>
+          <response>1</response>
+      </match>
+      <match>
+        <premise>8 % 6</premise>
+        <response>2</response>
+      </match>
+      <match>
+        <premise>5 % 8</premise>
+        <response>5</response>
+      </match>
+      <match>
+        <premise>3 % 4</premise>
+        <response>3</response>
+      </match>
+     
+  </matches>
+</exercise>
+
+ 
+<exercise label="eval-dec-div">
+  <title>Evaluate Decimal Expressions</title>
+  <statement>
+      <p>Match the expressions with their values, paying special attention to the data type of the results.</p>
+  </statement>
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise>8 / 2.0</premise>
+          <response>4.0</response>
+      </match>
+      <match>
+          <premise>9 / 2.0</premise>
+          <response>4.5</response>
+      </match>
+      <match>
+          <premise>6 / 8</premise>
+          <response>0</response>
+      </match>
+      <match>
+          <premise>0.0 / 2</premise>
+          <response>0.0</response>
+      </match>
+      <match>
+        <premise>8.0 / 6.0</premise>
+        <response>1.33</response>
+      </match>
+  </matches>
+</exercise>
+ 
+
+<exercise label="eval-type-promotion">
+  <title>Evaluate Type Promotion</title>
+  <statement>
+      <p>
+        Suppose that the following variable declarations are made:
+<program language="java"><input>
+    byte m = 3;  short n = 4;  int p = 5;  long q = 6;  double r = 7.0;
+      </input></program>
+        
+      Use type promotion rules to determine
+       the type of  expression and then evaluate each of the following
+       expressions:        
+      </p>
+    </statement>
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise> m + n     </premise>
+          <response>7</response>
+      </match>
+      <match>
+          <premise>p * q</premise>
+          <response>30</response>
+      </match>
+      <match>
+          <premise>m + n + r</premise>
+          <response>14.0</response>
+      </match>
+      <match>
+          <premise> p * q * m</premise>
+          <response>90</response>
+      </match>
+      <match>
+        <premise>r - m</premise>
+        <response>4.0</response>
+      </match>
+  </matches>
+</exercise>
+</exercises>
+
   <subsection xml:id="op-precedence">
     <title>Operator Precedence</title>
     <table xml:id="tab-op-precedence">
@@ -648,11 +770,88 @@ k = k + 1;          // Final value of i is 0 and k is 1
         as we'll see later.
       </p>
     </principle>
-    <p>
-      \secEXRHone{Self-Study Exercise}
-    </p>
+    <exercises xml:id="self-study-exercisesD16">
+<title>Self-Study Exercises </title> 
+
+<exercise label="fillin-binary">
+  <title>Fill-In Binary</title>
+  <statement>
+    <p>List all of the binary values 
+      that can be represented in 4 bits---that is, all values in the range
+      0000 to 1111 in order separated by commas: <var/> </p>
+  </statement>
+  <setup>
+      <var>
+          <condition string="0000, 0001, 0010, 0011, 0100, 0101, 0110, 0111, 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111">
+              <feedback>
+                <p>Correct. Parameter variables declared in the method header have local scope and only exist inside the method body.</p>
+              </feedback>
+          </condition>
+          <condition string=".*">
+                <feedback>
+                    <p>Incorrect. Start from 0000, 0001, ...</p>
+                </feedback>
+            </condition>
+          </var>
+          </setup>
+          <hint><p>Start from 0000, 0001, ...</p></hint>
+          </exercise>
+
+          <exercise label="fillin-6bit">
+            <title>6-bit Values</title>
+            <statement>
+              <p>If a 6-bit representation were used for an integer type, how
+                 many different integers could be represented? <var/> </p>
+            </statement>
+            <setup>
+                <var>
+                    <condition string="64">
+                        <feedback>
+                          <p>In 6 bits, you can represent 2^6 = 64 different values.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                          <feedback>
+                              <p>Incorrect. Remember each bit can be 0 or 1 and you have 6 bits.</p>
+                          </feedback>
+                      </condition>
+                    </var>
+                    </setup>
+                    <hint><p>With 3 bits, you can represent 3^2 = 32 values.</p></hint>
+                    </exercise>
+                    <exercise label="fillin-data-type">
+                      <title>Data Type</title>
+                      <statement>
+                        <p>If you were writing a program to process scientific data that
+                         had to be accurate to at least 12 significant (decimal) digits,
+                         what type of data would you use?<var/> </p>
+                      </statement>
+                      <setup>
+                          <var>
+                              <condition string="double">
+                                  <feedback>
+                                    <p>If you have to represent up to 12 significant digits, you should use the data type
+                                      <c>double</c>, which goes up to 17 digits.</p>
+                                  </feedback>
+                              </condition>
+                              <condition string=".*">
+                                    <feedback>
+                                        <p>Incorrect. Some data types you could use are 
+                                          <c>byte</c>, <c>short</c>, <c>int</c>, <c>double</c>, and 
+                                          <c>long</c>.</p>
+                                    </feedback>
+                                </condition>
+                              </var>
+                              </setup>
+                              <hint><p>Some data types you could use are 
+                                <c>byte</c>, <c>short</c>, <c>int</c>, <c>double</c>, and 
+                                <c>long</c></p></hint>
+                              </exercise>
+
+
+</exercises>
   </subsection>
-  <subsection xml:id="self-study-exercisesD16">
+  <subsection xml:id="assignment-operators">
     <title>Assignment Operators</title>
     <p>
       In addition to the simple assignment

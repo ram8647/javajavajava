@@ -49,8 +49,8 @@ else
 ...                     //  Or, do something else
  </input></program>
 </introduction>
-
-<subsection xml:id="self-study-exercisesA16">
+xml:id="self-study-exercisesA16"
+<subsection xml:id="boolean-operators">
 <title>Boolean (or Logical) Operations</title>
 <p>
       Like all the other simple data types,
@@ -225,15 +225,101 @@ and certain actions or operations that can be performed on those data.
       but it is false when both <em>o1</em> and <em>o2</em> are true
       (row 1).
 </p>
+
 <p>
-      The NOT operation (column 6)
-      is a <term>unary operator</term>
-      <mdash/>
-      it takes only one operand<mdash/>
-      and it simply reverses the truth value of its operand.
-      Thus, if <em>o1</em> is true, !<em>o1</em>
-      is false, and vice versa.
+  The NOT operation (column 6)
+  is a <term>unary operator</term>
+  <mdash/>
+  it takes only one operand<mdash/>
+  and it simply reverses the truth value of its operand.
+  Thus, if <em>o1</em> is true, !<em>o1</em>
+  is false, and vice versa.
 </p>
+
+<exercises><title>Self-Study Exercises</title>
+
+  <p>Evaluate the following boolean expressions and figure out whether they are true or false.</p>
+  <exercise label="boolTF1">
+  <title>&amp;&amp; Operator</title>
+    <statement>
+        <p>(3 &lt; 5) &amp;&amp; (5 > 1)</p>
+    </statement>
+    <choices>
+        <choice correct="yes">
+            <statement>
+                <p>true</p>
+            </statement>
+            <feedback>
+                <p>Both sides of the And operator are true.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>false</p>
+            </statement>
+            <feedback>
+                <p>Both sides of the And operator are true.</p>
+            </feedback>
+        </choice>
+        </choices>
+        <solution><p>true</p></solution>
+        </exercise>
+
+        <exercise label="boolTF2">
+          <title>|| Operator</title>
+          <statement>
+              <p>(3 > 5) || (5 > 1)</p>
+          </statement>
+          <choices>
+              <choice correct="yes">
+                  <statement>
+                      <p>true</p>
+                  </statement>
+                  <feedback>
+                      <p>One side of the Or operator is true, so the whole expression is true.</p>
+                  </feedback>
+              </choice>
+              <choice correct="no">
+                  <statement>
+                      <p>false</p>
+                  </statement>
+                  <feedback>
+                      <p>One side of the Or operator is true, so the whole expression is true.</p>
+                  </feedback>
+              </choice>
+              </choices>
+              <solution><p>true</p></solution>
+  
+              </exercise>
+
+              <exercise label="boolTF3">
+                <title>! Operator</title>
+                <statement>
+                    <p>!(3 &lt; 5)</p>
+                </statement>
+                <choices>
+                    <choice correct="no">
+                        <statement>
+                            <p>true</p>
+                        </statement>
+                        <feedback>
+                            <p>Since 3 is less than 5, the negation of that is false.</p>
+                        </feedback>
+                    </choice>
+                    <choice correct="yes">
+                        <statement>
+                            <p>false</p>
+                        </statement>
+                        <feedback>
+                            <p>Since 3 is less than 5, the negation of that is false.</p>
+                        </feedback>
+                    </choice>
+                    </choices>
+                   
+                    <solution><p>false</p></solution>
+                    </exercise>
+</exercises>
+
 </subsection>
 <subsection>
 <title>Precedence and Associativity</title>
@@ -391,7 +477,7 @@ EXPRESSION               EVALUATION
 (true || true)  || true  ==> true  || true ==> true
  </input></program>
 </subsection>
-<subsection xml:id="self-study-exerciseN16">
+<subsection xml:id="short-circuit-evaluation">
 <title>Short-Circuit Evaluation</title>
 <p>
       Another important feature of the boolean operators is that they 
@@ -453,5 +539,104 @@ if ((game != null) &amp;&amp; (!game.gameOver())
       neither method call involving <c>game</c> is made,
       thus avoiding the exception.
 </p>
+
+<exercises><title>Self-Study Exercises</title>
+<p> Suppose the following variable declarations are made:
+<program language="java"><input>
+ boolean A = true, B = true, C = true;
+ boolean X = false, Y = false, Z = false;
+</input></program>
+Given these declarations, evaluate each of the following expressions  (don't forget to take operator precedence and
+ associativity into account):</p>
+
+           
+<!---          
+A ^ X || C            
+!A && !B            
+!A && B && X && Y!     
+ -->
+
+<exercise label="boolTF4">
+  <title>Expression 1</title>
+  <statement>
+      <p>A || B &amp;&amp; C </p>
+  </statement>
+  <choices>
+      <choice correct="yes">
+          <statement>
+              <p>true</p>
+          </statement>
+          <feedback>
+              <p>(A=true or B=true) and C=true.</p>
+          </feedback>
+      </choice>
+      <choice correct="no">
+          <statement>
+              <p>false</p>
+          </statement>
+          <feedback>
+              <p>(A=true or B=true) and C=true.</p>
+          </feedback>
+      </choice>
+      </choices>
+     
+      <solution><p>true</p></solution>
+      </exercise>
+
+      <exercise label="boolTF5">
+        <title>Expression 2</title>
+        <statement>
+            <p>A ^ B  &amp;&amp; C </p>
+        </statement>
+        <choices>
+            <choice correct="no">
+                <statement>
+                    <p>true</p>
+                </statement>
+                <feedback>
+                    <p>(A=true xor B=true) and C=true.</p>
+                </feedback>
+            </choice>
+            <choice correct="yes">
+                <statement>
+                    <p>false</p>
+                </statement>
+                <feedback>
+                    <p>(A=true xor B=true) and C=true.</p>
+                </feedback>
+            </choice>
+            </choices>
+           
+            <solution><p>false</p></solution>
+            </exercise>
+
+            <exercise label="boolTF6">
+              <title>Expression 3</title>
+              <statement>
+                  <p>(!X ^ A)  &amp;&amp; (B ^ !Y) </p>
+              </statement>
+              <choices>
+                  <choice correct="no">
+                      <statement>
+                          <p>true</p>
+                      </statement>
+                      <feedback>
+                          <p>(!X = true xor A=true)=false and (b=true xor !Y=true)=false.</p>
+                      </feedback>
+                  </choice>
+                  <choice correct="yes">
+                      <statement>
+                          <p>false</p>
+                      </statement>
+                      <feedback>
+                          <p>(!X = true xor A=true)=false and (b=true xor !Y=true)=false.</p>
+                      </feedback>
+                  </choice>
+                  </choices>
+                 
+                  <solution><p>false</p></solution>
+                  </exercise>
+      
+</exercises>
 </subsection>
 </section>
