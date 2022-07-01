@@ -31,9 +31,13 @@
       We will need to use only the <c>File()</c> constructor in this section.
       The <c>File</c> instance created with the statement
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 File theFile = new File("riddles.txt");
- </input></program>
+    </input>
+</program>
+
     <p>
       <image width="73%" source="chptr04/scanner2uml.png"/>
     </p>
@@ -58,13 +62,17 @@ File theFile = new File("riddles.txt");
       this <c>create()</c> throws an exception that must be handled.
       The following code will create a <c>Scanner</c> object that will be connected to an input stream that can read from a file:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 try
 {   File theFile = new File("riddles.txt");
     fileScan = new Scanner(theFile);
     fileScan = fileScan.useDelimiter("\r\n");} catch (IOException e)
 {    e.printStackTrace();} //catch()
- </input></program>
+    </input>
+</program>
+
     <p>
       We will discuss the <c>try-catch</c> commands when exceptions are covered in Chapter<nbsp/>10.
       Until then, the <c>try-catch</c> structures can be copied exactly as above,
@@ -87,10 +95,11 @@ try
       The program in <xref ref="fig-fileprog">Figure</xref>
       is the complete listing of a class that reads riddles from a file
     </p>
-    <figure xml:id="fig-fileprog">
+    <listing xml:id="fig-fileprog">
       <caption>A program which reads riddles from a file and displays them.</caption>
-      
- <program language="java"><input>
+
+<program language="java">
+    <input>
 import java.io.*;
 import java.util.Scanner;
 public class RiddleFileReader
@@ -134,28 +143,38 @@ public class RiddleFileReader
            riddle = rfr.readRiddle();
        } // while
    } //main()}  //RiddleFileReader class
- </input></program>
-    </figure>
+    </input>
+</program>
+
+    </listing>
     <p>
       and displays them.
       Note that, in the body of the method <c>readRiddles()</c>, the statements:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 String ques = null;
 String ans = null;
 Riddle theRiddle = null;
- </input></program>
+    </input>
+</program>
+
     <p>
       make explicit the fact that variables that refer to objects are assigned <c>null</c> as a value when they are declared.
       The statements:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 if (fileScan.hasNext())
     ques = fileScan.next();
 if (fileScan.hasNext())
 {   ans =  fileScan.next();
     theRiddle = new Riddle(ques, ans);}
- </input></program>
+    </input>
+</program>
+
     <p>
       will read <c>String</c> s into the variables <c>ques</c> and <c>ans</c> only if the file contains lines of data for them.
       Otherwise the
@@ -169,27 +188,35 @@ if (fileScan.hasNext())
       For example The following three riddles saved in a text file would form a good example to test the <c>RiddleFileReader</c> class.
     </p>
     <p>
-      
+
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 What is black and white and red all over?
   An embarrassed zebra
   What is black and white and read all over?
   A newspaper
   What other word can be made with the letters of ALGORITHM?
   LOGARITHM
- </input></program>
+    </input>
+</program>
+
     <p>
       When the <c>main()</c> method is executed,
       the user will see output in the console window that looks like:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 What is black and white and red all over?
   Input any letter to see answer: X
   An embarrassed zebra
   What is black and white and read all over?
   Input any letter to see answer:
- </input></program>
+    </input>
+</program>
+
     <p>
       Files are covered in depth in Chapter<nbsp/>11.
       Information on writing data to a file and reading data from a file without using the <c>Scanner</c> class can be found in that chapter.

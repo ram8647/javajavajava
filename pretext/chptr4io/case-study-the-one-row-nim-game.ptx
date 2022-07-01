@@ -62,7 +62,9 @@
       and we refer to the <c>KeyboardReader</c> instance as the <c>reader</c> object.
       We use the notation <c>game:get the number of sticks left</c> to indicate that we are sending a message to the <c>game</c> object.
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 Create a game object with 21 sticks
  Create a reader object
  sticksLeft = game:get the number of sticks left
@@ -80,7 +82,9 @@ Create a game object with 21 sticks
         reader: report that the user wins
  else
        reader: report that the computer wins
- </input></program>
+    </input>
+</program>
+
     <p>
       In this algorithm,
       the initializations we perform consist of creating the game and reader objects and initializing <c>sticksLeft</c>. We use a while loop structure to control the game.
@@ -132,11 +136,12 @@ Create a game object with 21 sticks
       If left up to the user interface,
       it is possible that a programming mistake could lead to the loss of the game's integrity.
     </p>
-    <figure xml:id="fig-ornapp">
+    <listing xml:id="fig-ornapp">
       <caption>Definition of <c>OneRowNimApp</c>, a command-line interface
       to the <c>OneRowNim</c>.</caption>
-      
- <program language="java"><input>
+
+<program language="java">
+    <input>
 public class OneRowNimApp
 { private KeyboardReader reader;
   private OneRowNim game;
@@ -179,8 +184,10 @@ public class OneRowNimApp
   { OneRowNimApp app = new OneRowNimApp();
     app.run();
   } //main()} // OneRowNimApp
- </input></program>
-    </figure>
+    </input>
+</program>
+
+    </listing>
     <p>
       The <c>run()</c> method calls <c>userMove()</c> and <c>computerMove()</c> to perform the specific set of actions associated with each type of move.
       The <c>userMove()</c> method uses the <c>KeyboardReader()</c> to prompt the user and input his or her move.
@@ -232,11 +239,15 @@ public class OneRowNimApp
       the GUI will still need a reference to its associated computational object,
       in this case the game:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 private OneRowNim game;
     ...
     game = new OneRowNim();
- </input></program>
+    </input>
+</program>
+
     <p>
       The biggest difference between this GUI and the one we used with the greeter application occurs in the details of the interaction between the GUI and the game.
       These details are the responsibility of the <c>actionPerformed()</c> method,
@@ -258,7 +269,9 @@ private OneRowNim game;
       it performs the computer's move.
       Thus, the basic algorithm is as follows:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 Let the user move.
     If game:game is not over and computer turn
        let the computer move.
@@ -267,7 +280,9 @@ Let the user move.
     If game:game is over
         Stop accepting moves.
         Report the winner.
- </input></program>
+    </input>
+</program>
+
     <p>
       After the user's move,
       it is possible that the user picked up the last stick,
@@ -279,9 +294,11 @@ Let the user move.
       As the pseudocode shows,
       it is the <c>OneRowNim</c> object's responsibility to keep track of whether the game is over and whose turn it is.
     </p>
-    <figure xml:id="fig-orngui">
+    <listing xml:id="fig-orngui">
       <caption>The <c>OneRowNimGUI</c> class.</caption>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -342,8 +359,10 @@ public class OneRowNimGUI extends JFrame implements ActionListener
       if (game.gameOver()) endGame();
     } // if
   } // actionPerformed()} // OneRowNimGUI
- </input></program>
-    </figure>
+    </input>
+</program>
+
+    </listing>
     <p>
       <xref ref="fig-orngui">Figure</xref>
       shows the complete implementation of the
@@ -375,9 +394,13 @@ public class OneRowNimGUI extends JFrame implements ActionListener
       The primary difference here is that for the user move we input the user's choice from a <c>JTextField</c> rather than from the keyboard.
       We use <c>getText()</c> to retrieve the user's input from the <c>JTextField</c> and we use <c>Integer.parseInt()</c> to convert to an <c>int</c> value:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 int userTakes = Integer.parseInt(inField.getText());
- </input></program>
+    </input>
+</program>
+
     <p>
       Another difference is that we use a <c>JTextField</c> to display the program's messages to the user.
     </p>
@@ -402,12 +425,16 @@ gameOver()</c> and <c>getWinner()</c> to control the interaction with the user.
       <q>turn off</q>
       that component:
     </p>
- <program language="java"><input>
+
+<program language="java">
+    <input>
 if (game.gameOver())
 {  goButton.setEnabled(false);  // End the game
    inField.setEnabled(false);
    ...}
- </input></program>
+    </input>
+</program>
+
     <p>
       Although it doesn't apply in this situation,
       the <c>setEnabled()</c> method can be used repeatedly in a GUI to turn components on and off as the context of the interaction dictates.
