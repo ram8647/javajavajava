@@ -1,0 +1,372 @@
+<section xml:id="handling-textina-graphics-context-optional">
+  <title>Handling Text in a Graphics Context
+  (Optional)</title>
+  <introduction>
+    <p>
+      In order to create attractive GUIs, it is often necessary to be able to 
+      select and control the font that is used.
+      Even a simple drawing task, such as being able to center a message in a panel,
+      requires that we know the font's dimensions and be able to manipulate 
+      them.
+      In this section,
+      we learn how to work with Java's fonts and font control methods.
+    </p>
+    <figure xml:id="fig-fontmethods">
+      <caption>Font methods.</caption>
+      <image width="50%" source="chptr07/fontmethods.png"/>
+    </figure>
+    <p>
+      Each graphics context has an associated <c>Font</c> and <c>FontMetrics</c> object,
+      and the <c>Graphics</c> class (<xref ref="fig-fontmethods"></xref>) provides 
+      several methods to access them.
+      A <c>FontMetrics</c> is an object that encapsulates important data about a font,
+      such as its height and width.
+    </p>
+    <p>
+      Java assigns a default font to each <c>Graphics</c> object.
+      The particular font used is system dependent,
+      but to override the default one can simply invoke the <c>setFont()</c> method:
+    </p>
+ <program language="java"><input>
+g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
+ </input></program>
+    <p>
+      In this case,
+      the <c>Font()</c> constructor is used to specify a 12-point,
+      italicized, <em>TimesRoman</em> font.
+      Once the font is set, it will be used in all subsequent drawings.
+    </p>
+  </introduction>
+  <subsection xml:id="subsec-font">
+    <title>The <c>Font</c> and <c>FontMetrics</c>Classes</title>
+    <p>
+      The <c>Font</c> class (<xref ref="fig-font">Figure</xref>) provides a platform-independent 
+      representation of an individual font.
+      A font is distinguished by its name, size, and style,
+      and the <c>Font</c> class includes <c>protected</c> instance variables for these properties,
+      as well as a constructor method that allows these three characteristics to be specified.
+    </p>
+    <p>
+    <figure xml:id="fig-font">
+      <caption>The <c>Font</c> class.</caption>
+      <image width="40%" source="chptr07/font.png"/>
+    </figure>
+    </p>
+    <p>
+      In order to understand how fonts work,
+      it is necessary to distinguish between a <em>character</em>,
+      which is a symbol that represents a certain letter or digit,
+      and a <term>glyph</term>, which is a shape used to display the character.
+      When you display a string, such as
+      <q>Hello</q>, Java maps each individual character into a corresponding shape,
+      as defined by the particular font that is selected.
+    </p>
+    <p>
+      Java distinguishes between <em>physical</em>
+      and <em>logical</em> fonts.
+      A <term>physical font</term> is an actual font library that contains 
+      the data and tables needed to associate the correct glyph with a given character.
+      Generally speaking, a given platform
+      (host computer plus operating system)
+      will have a collection of such fonts available.
+    </p>
+    <p>
+      A <term>logical font</term> is one of five font families that are 
+      supported by the Java runtime environment.
+      These include Serif, SansSerif, Monospaced, Dialog, and DialogInput.
+      Java also supports the following font styles: <c>PLAIN</c>, <c>BOLD</c>, 
+      <c>ITALIC</c>, and <c>BOLD+ITALIC</c>. 
+    </p>
+    <p>
+      Whereas the physical fonts are platform dependent,
+      the logical fonts and styles are platform independent.
+      When used in a program,
+      they are mapped to real fonts available on the host system.
+      If the host system does not have an exact match for the specified font,
+      it will supply a substitute.
+      For example,
+      if you specify a 48-point, italic, Monospaced font,
+    </p>
+ <program language="java"><input>
+Font myFont = new Font("Monospaced", Font.ITALIC, 48);
+ </input></program>
+    <p>
+      the system may map this to a 24-point, italic Courier font,
+      if that is the largest fixed-spaced font available.
+    </p>
+    <p>
+      The <c>Font()</c> constructor is designed to work with any set of arguments.
+      Thus, if you supply the name of a font that is not available,
+      the system will supply a default font as a substitute.
+      For example,
+      on my system, specifying a nonexistent font named Random,
+    </p>
+ <program language="java"><input>
+g.setFont(new Font("Random", Font.ITALIC, 12) );
+g.drawString("Hello, World!! (random, italic, 12)", 30, 45);
+ </input></program>
+    <p>
+      produces the same font used as the mapping for a font named <em>Dialog</em>.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Font Portability</title>
+      <p>
+        The fact that <c>Font()</c> will produce a font for virtually any set 
+        of arguments is important in ensuring that a Java program will run on any platform.
+        This is another example of how Java has been designed for portability.
+      </p>
+    </principle>
+    <p>
+      The <c>Component.setFont()</c> method can be used to assign a 
+      specific font to a button or window or other graphics component.
+      All AWT and JFC components have an associated font,
+      which can be accessed using the <c>Component.setFont()</c> 
+      and <c>Component.getFont()</c> methods.
+      For example,
+      the following code could be used to override a <c>Button</c>'s font:
+    </p>
+ <program language="java"><input>
+Button b = new Button("Label");
+b.setFont(new Font("Times", Font.ITALIC, 14));
+ </input></program>
+    <p>
+      If 14-point,
+      italic, Times font is not available on the host system,
+      a substitute will be supplied.
+    </p>
+  </subsection>
+  <subsection xml:id="subsec-fontmetrics">
+    <title>Font Metrics</title>
+    <p>
+      To illustrate how to use the <c>FontMetrics</c> class,
+      let's write a 
+      <q>Hello, World!</q>
+      application that centers its message both horizontally and vertically in its window.
+      The message should be centered regardless of the size of the application window.
+      Thus, we will have to position the text relative to the window size.
+   </p>
+    <p>
+      The message should also be centered no matter what font is used.
+      This will require us to know certain characteristics of the font itself,
+      such as the height and width of its characters,
+      whether the characters have a fixed or variable width,
+      and so on.
+      In order to get access to these properties,
+      we will use the <c>FontMetrics</c> class.
+    </p>
+    <figure xml:id="fig-fontmeasures">
+    <caption>An illustration of the various font measurements.</caption>
+    <image width="60%" source="chptr07/fontmetrics.png"/>
+    </figure>
+    <p>
+      <xref ref="fig-fontmeasures">Figure</xref> illustrates the various 
+      properties that are associated with a font.
+      The <term>baseline</term>
+          <idx><h>baseline</h></idx>
+      of a font refers to the line on which the bottom of most characters occurs.
+      When drawing a string, the <em>x-</em>
+      and <em>y-</em>coordinates determine the baseline of the string's first character.
+      Thus, in
+    </p>
+ <program language="java"><input>
+g.drawString("Hello, World!", 10, 40);
+ </input></program>
+    <p>
+      the bottom left of the <em>H</em> in
+      <q>Hello, World!</q>
+      would be located at (10, 40).
+    </p>
+    <p>
+      All characters ascend some distance above the baseline.
+      This is known as the character's <term>ascent</term>.
+          <idx><h>ascent</h></idx>
+      Some characters, such as <em>y</em>,
+      may extend below the baseline,
+      into what's known as the <em>descent</em>.
+      Each font has a <em>maximum descent</em>.
+      Similarly, some characters, such as accent characters,
+      may extend above the <em>maximum ascent</em>
+      into a space known as the <em>leading</em>.
+    </p>
+    <p>
+      The <em>height</em> of a font is defined as the sum
+      (in pixels)
+      of the ascent, descent, and leading values.
+      The height is a property of the font itself rather than of any individual character.
+      Except for fixed-width fonts,
+      in which the width of all characters is the same,
+      the characters that make up a font have varying widths.
+      The width of an individual character is known as its <em>advance</em>.
+    </p>
+    <p>
+      The <c>FontMetrics</c> class (<xref ref="fig-fontmetrics">Figure</xref>) provides methods 
+      for accessing a font's properties.
+      These can be useful to control the layout of text on a GUI. For example,
+      when drawing multiple lines of text,
+      the <c>getHeight()</c> method is useful for determining how much space 
+      should be left between lines.
+      When drawing character by character,
+      the <c>charWidth()</c> method can be used to determine how much 
+      space must be left between characters.
+      Alternatively,
+      the <c>stringWidth()</c> method can be used to determine the 
+      number of pixels required to draw the entire string.
+    </p>
+    <figure xml:id="fig-fontmetrics">
+      <image width="50%" source="chptr07/fontmetrics2.png"/> 
+      <caption>The <c>FontMetrics</c> class.</caption>
+    </figure> 
+  </subsection>
+  <subsection xml:id="subsec-dimension">
+    <title>Example: Centering a Line of Text</title>
+    <p>
+      Given this background,
+      let's take on the task of centering a message in an application window.
+      In order for this application to work for any font,
+      we must take care not to base its design on characteristics of the  
+      particular font that we happen to be using.
+      To underscore this point,
+      let's design it to work for a font named Random,
+      which, as we noted earlier,
+      will be mapped to some font by the system on which the application is run.
+      In other words,
+      we will let the system pick a font for this application's message.
+      An interesting experiment would be to run the application on 
+      different platforms to see what fonts are chosen.
+    </p>
+    <p>
+      The only method we need for this application is the <c>paint()</c> method.
+      Let's begin by setting the font used by the graphics context to a random font.
+      To get the characteristics of this font,
+      we create a <c>FontMetrics</c> object and get the font metrics for the font we just created:
+    </p>
+ <program language="java"><input>
+g.setFont(new Font("Random", Font.BOLD, 24));
+FontMetrics metrics = g.getFontMetrics();
+ </input></program>
+    <p>
+      The next step is to determine the <c>JFrame</c>'s dimensions using the <c>getSize()</c> method.
+      This method returns an object of type <c>Dimension</c>. The 
+      <c>java.awt.Dimension</c> class (<xref ref="fig-dimension">Figure</xref>) represents the size
+      (width and height)
+      of a GUI component.
+      A <c>Dimension</c> makes it possible to manipulate an object's width 
+      and height as a single entity.
+    </p>
+    <figure xml:id="fig-dimension">
+      <caption>The <c>Dimension</c>  class.</caption>
+      <image width="50%" source="chptr07/dimension.png"/> 
+    </figure>
+    <p>
+      Note that the <c>height</c> and <c>width</c> variables are defined as <c>public</c>, 
+      which is an exception from the usual convention of defining 
+      instances variables as <c>private</c> or <c>protected</c>. 
+      The justification for this exception is probably to simplify the syntax 
+      of referring to an object's width and height.
+      For example,
+      the following syntax can be used to refer to a component's dimensions:
+    </p>
+ <program language="java"><input>
+Dimension d = new Dimension(100, 50);
+System.out.println("width = " + d.width +
+                   " height = " + d.height);
+ </input></program>
+    <p>
+      Note the redundancy built into the <c>Dimension</c> class.
+      For example,
+      in addition to being able to set a <c>Dimension</c>'s 
+      instance variables directly,
+      public access methods are provided.
+      Also, by defining more than one version of some access methods,
+      the class achieves a higher level of flexibility.
+      The same can be said for providing several different constructors,
+      including a copy constructor.
+      Finally, note how it overrides the <c>equals()</c> and <c>toString()</c> methods.
+      These are all examples of good object-oriented design.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Redundancy</title>
+      <p>
+        Redundancy is often a desirable characteristic of object design.
+        It makes the object easier to use and more widely applicable.
+      </p>
+    </principle>
+    <p>
+      The <c>Dimension</c> object is used to calculate the <em>x-</em>
+      and <em>y-</em>coordinates for the string.
+      In order to center the string horizontally,
+      we need to know its width,
+      which is supplied by the <c>metrics</c> object.
+      If the <c>JFrame</c> is <c>d.width</c> pixels wide,
+      then the following expression subtracts the width of the string 
+      from the width of the <c>JFrame</c> and then divides the leftover space in half:
+    </p>
+ <program language="java"><input>
+// Calculate coordinates
+int x = (d.width - metrics.stringWidth(str)) / 2;
+ </input></program>
+    <p>
+      Similarly, the following expression adds the height of the 
+      string to the height of the <c>JFrame</c> and divides the leftover space in half:
+    </p>
+ <program language="java"><input>
+int y = (d.height + metrics.getHeight()) / 2;
+ </input></program>
+    <p>
+      Taken together,
+      these calculations give the coordinates for the lower left pixel of the first character in
+      <q>Hello, World!!</q>
+      The only remaining task is to draw the string (<xref ref="lst-centertext">Listing</xref>).
+      Because the <c>paint()</c> method is called automatically whenever the <c>JFrame</c> is resized,
+      this application,
+      whose output is shown in <xref ref="fig-centertextscreen">Figure</xref>,
+      will re-center its message whenever it is resized by the user.
+    </p>
+    <listing xml:id="lst-centertext">
+      <caption>The <c>CenterText</c> application.</caption>
+      
+ <program language="java"><input>
+import java.awt.*;
+import javax.swing.*;
+public class CenterText extends JFrame 
+{
+                // Print hello world! in center of frame
+  public void paint(Graphics g) {
+    String str = "Hello, World!";
+    g.setFont(new Font("Random", Font.PLAIN, 24)); // Random font
+    FontMetrics metrics = g.getFontMetrics(); //  And its metrics
+    Dimension d = getSize();       // Get the frame's size
+              // Clear the frame
+    g.setColor(getBackground());
+    g.fillRect(0,0,d.width,d.height);
+    g.setColor(Color.black);
+                                  // Calculate coordinates
+    int x = (d.width - metrics.stringWidth(str)) / 2;
+    int y = (d.height + metrics.getHeight()) / 2;
+    g.drawString( str, x, y );          // Draw the string
+  } // paint()
+
+  public static void main(String args[]) 
+  {
+    CenterText ct = new CenterText();
+    ct.setSize(400,400);
+    ct.setVisible(true);
+  }
+} // CenterText
+ </input></program>
+    </listing>
+    <principle>
+      <title>PROGRAMMING TIP: Generality</title>
+      <p>
+        By using a component's size and font as the determining factors,
+        you can center text on virtually any component.
+        These values are available via the component's <c>getFont()</c> and <c>getSize()</c> methods.
+      </p>
+    </principle>
+    <figure xml:id="fig-centertextscreen">
+      <caption>The <c>CenterText</c> application keeps its
+      message centered no matter how its window is resized.</caption>
+      <image width="73%" source="chptr07/centertextscreen.png"/>
+    </figure>
+  </subsection>
+</section>

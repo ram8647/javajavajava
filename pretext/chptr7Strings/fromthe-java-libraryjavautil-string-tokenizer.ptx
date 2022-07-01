@@ -1,0 +1,112 @@
+<section xml:id="fromthe-java-libraryjavautil-string-tokenizer">
+  <title>From the Java Library:
+  java.util.StringTokenizer</title>
+  <p>
+    One of the most widespread string-processing tasks is that of breaking 
+    up a string into its components,
+    or <term>tokens</term>.
+  </p>
+  <p>
+    For example, when processing a sentence,
+    you may need to break the sentence into its constituent words,
+    which are considered the sentence tokens.
+    When processing a name-password string, such as
+    <q>boyd:14irXp</q>, you may need to break it into a name and a password.
+  </p>
+  <p>
+    Tokens are separated from each other by one or more characters which are
+    known as <term>delimiters</term>.
+    Thus, for a sentence, <em>white space</em>,
+    including blank spaces, tabs,
+    and line feeds, serve as the delimiters.
+    For the password example, the colon character serves as a delimiter.
+  </p>
+  <figure xml:id="fig-strtoken">
+    <image width="50%" source="chptr07/p377f1.png"/>
+    <caption>The <c>StringTokenizer</c> class.</caption>
+  </figure>
+  <p>
+    Java's <c>java.util.StringTokenizer</c>
+        <idx><h>StringTokenizer class</h></idx>
+    class is specially designed for breaking strings into their tokens 
+    (<xref ref="fig-strtoken">Figure</xref>).
+    When instantiated with a <c>String</c> parameter,
+    a <c>StringTokenizer</c> breaks the string into tokens,
+    using white space as delimiters.
+    For example,
+    if we instantiated a <c>StringTokenizer</c> as in the code
+  </p>
+ <program language="java"><input>
+StringTokenizer sTokenizer
+  = new StringTokenizer("This is an English sentence.");
+ </input></program>
+  <p>
+    it would break the string into the following tokens,
+    which would be stored internally in the <c>StringTokenizer</c> in the order shown:
+  </p>
+ <pre>
+This
+is
+an
+English
+sentence.
+ </pre>
+  <p>
+    Note that the period is part of the last token (<q>sentence.</q>).
+    This is because punctuation marks are not considered delimiters by default.
+  </p>
+  <p>
+    If you wanted to include punctuation symbols as delimiters,
+    you could use the second <c>StringTokenizer()</c> constructor,
+    which takes a second <c>String</c> parameter (<xref ref="fig-strtoken">Figure</xref>).
+    The second parameter specifies a string of those characters that should be used as delimiters.
+    For example, in the instantiation,
+  </p>
+ <program language="java"><input>
+StringTokenizer sTokenizer
+    = new StringTokenizer("This is an English sentence.",
+                          "\b\t\n,;.!");
+ </input></program>
+  <p>
+    various punctuation symbols (periods,
+    commas, and so on) are included among the delimiters.
+    Note that escape sequences (<c>\b\t\n</c>) are used to specify blanks, tabs,
+    and newlines.
+  </p>
+  <p>
+    The <c>hasMoreTokens()</c> and <c>nextToken()</c> methods can be used to process 
+    a delimited string,
+    one token at a time.
+    The first method returns <c>true</c> as long as more tokens remain;
+    the second gets the next token in the list.
+    For example,
+    here's a code segment that will break a standard URL string into its constituent parts:
+  </p>
+ <program language="java"><input>
+String url = "http://java.trincoll.edu/&#126;jjj/index.html";
+StringTokenizer sTokenizer = new StringTokenizer(url,":/");
+while (sTokenizer.hasMoreTokens()) {
+    System.out.println(sTokenizer.nextToken());}
+ </input></program>
+  <p>
+    This code segment will produce the following output:
+  </p>
+ <pre>
+http
+java.trincoll.edu
+&#126;jjj
+index.html
+ </pre>
+  <p>
+    The only delimiters used in this case were the
+    <q><c>:</c></q>
+    and
+    <q><c>/</c></q>
+    symbols.
+    And note that <c>nextToken()</c> does not return the empty string between
+    <q><c>:</c></q>
+    and
+    <q><c>/</c></q>
+    as a token.
+  </p>
+</section>

@@ -1,0 +1,455 @@
+<section xml:id="agui-based-game-optional-graphics">
+  <title>A GUI-Based Game (Optional Graphics)</title>
+  <introduction>
+    <p>
+      Most modern computer games do not use a command-line interface.
+      This section addresses this shortcoming by expanding our <c>ComputerGame</c> 
+      hierarchy so that it works with Graphical User Interfaces (GUIs) as well as 
+      Command-Line User Interfaces (CLUIs).
+    </p>
+    <p>
+      The Sliding Tile Puzzle is a puzzle game.
+      It is played by one player, a human.
+      The puzzle consists of six tiles arranged on a board containing seven spaces.
+      Three of the tiles are labeled <em>L</em>
+      and three are labeled <em>R</em>.
+      Initially the tiles are arranged as <em>RRR_LLL</em>.
+      In other words,
+      the <em>R</em> tiles are arranged to the left of the <em>L</em> tiles,
+      with the blank space in the middle.
+      The object of the puzzle is to rearrange the tiles into <em>LLL_RRR</em>.
+      The rules are that tiles labeled
+      <em>R</em> can only move right.
+      Tiles labeled <em>L</em> can only move left.
+      Tiles may move directly into the blank space or they can jump over one tile into the blank space.
+    </p>
+    <p>
+      Our purpose in this section is to develop a GUI that plays this game.
+      An appropriate GUI is shown <xref ref="fig-capture">Figure</xref>.
+      Here the tiles and the blank space are represented by an array of buttons.
+      To make a move the user clicks on the 'tile' he or she wishes to move.
+      The GUI will assume that the user wants to move that tile into the blank space.
+      If the proposed move is legal,
+      the GUI will carry out the move.
+      Otherwise, it will just ignore it.
+      For example, if the user were to click on the third <em>R</em>
+      button from the left, a legal move,
+      the GUI would rearrange the labels on the buttons so that their new 
+      configuration would be <em>RR_RLLL</em>.
+      On the other hand,
+      if the user were to click on the rightmost <em>L</em> button,
+      the GUI would ignore that move, because it is illegal.
+    </p>
+    <figure xml:id="fig-capture">
+      <caption>The Sliding Tile Puzzle.</caption>
+      <image width="90%" source="chptr09/captureGUI.png"/>
+    </figure>
+  </introduction>
+  <subsection xml:id="sec-GUIplayable">
+    <title>The <c>GUIPlayableGame</c>Interface</title>
+    <p>
+      How should we extend our game-playing hierarchy to accommodate GUI-based games?
+      As we learned in Chapter<nbsp/>4,
+      one difference between GUI-based applications and CLUI-based applications,
+      is the locus of control.
+      In a CLUI-based application,
+      control resides in the computational object which,
+      for games, is the game object.
+      That's why the <c>play()</c> method in our CLUI-based games contains the game's control loop.
+      By contrast,
+      control resides in the GUI's event loop in GUI-based applications.
+      That's why, we learned how to manage Java's event hierarchy in Chapter<nbsp/>4.
+      Thus, in the GUI shown in <xref ref="fig-capture">Figure</xref>,
+      the GUI will <em>listen</em> and take <em>action</em>
+      when the user clicks one of its buttons.
+    </p>
+    <p>
+      However, given that control will reside in the GUI, there is still 
+      a need for communication between the GUI and the game object.
+      In the CLUI-based games,
+      we have used the <c>CLUIPlayableGame</c> interface to manage the communication 
+      between the game and the user interface.
+      We will follow the same design strategy in this case.
+      Thus, we will design a <c>GUIPlayableGame</c> interface that 
+      can be implemented by any game that wishes to use a GUI 
+      (<xref ref="fig-GUIplayable">Figure</xref>).
+    </p>
+    <figure xml:id="fig-GUIplayable">
+     <caption>The  <c>GUIPlayableGame</c>  interface.</caption>
+        <image width="40%" source="chptr09/GUIplayable.png"/>
+    </figure>
+    <p>
+      What method(s) should this interface contain?
+      One way to answer this question is to think about the type of interaction 
+      that must take place when the user clicks one of the tiles.
+      If the user clicks the third <em>R</em> button,
+      the GUI should pass this information to the game.
+      The game should then decide whether or not that is a legal move and 
+      communicate this back to the GUI. Assuming it is a legal move,
+      the game should also update its representation of the game's state to 
+      reflect that the tile array has changed.
+      And it should somehow  communicate the game's state to the GUI. 
+    </p>
+    <p>
+      Because it is impossible to know in advance just what form of data a game's moves might take,
+      we will use Java <c>String</c> s to communicate between the user interface and the game object.
+      Thus, a method with the following signature will enable us to submit 
+      a <c>String</c> representing the user's move to the game and receive in 
+      return a <c>String</c> representing the game object's response to the move:
+    </p>
+ <program language="java"><input>
+submitUserMove(String move): String;
+ </input></program>
+    <p>
+      In addition to this method,
+      a GUI interface could use the <c>reportGameState()</c> 
+      and <c>getGamePrompt()</c> methods that are part of the <c>IGame</c> interface.
+      The design shown in <xref ref="fig-GUIplayable">Figure</xref> leads to the following 
+      definition for the <c>GUIPlayableGame</c> interface:
+    </p>
+ <program language="java"><input>
+public interface GUIPlayableGame extends IGame {
+    public String submitUserMove(String theMove);
+}
+ </input></program>
+    <p>
+      Because it extends <c>IGame</c>, this interface inherits the
+      <c>getGamePrompt()</c> and <c>reportGameState()</c> from the <c>IGame</c> interface.
+      The GUI should be able to communicate with any game that implements this interface.
+    </p>
+  </subsection>
+  <subsection xml:id="sec-slidingpuzzle">
+    <title>The <c>SlidingTilePuzzle</c></title>
+    <p>
+      Let's now discuss the design and details of the
+      <c>SlidingTilePuzzle</c> itself.
+      Its design is summarized in <xref ref="fig-slidingtilepuzzle">Figure</xref>.
+      Most of the methods should be familiar to you,
+      because the design closely follows the design we employed in the <c>WordGuess</c> example.
+      It has implementations of inherited methods from 
+      the <c>ComputerGame</c> class and the <c>GUIPlayableGame</c> interface.
+    </p>
+    <figure xml:id="fig-slidingtilepuzzle">
+     <caption>The <c>SlidingTilePuzzle</c>  design.</caption>
+      <image width="40%" source="chptr09/slidingtilepuzzle.png"/> 
+    </figure>
+    <p>
+      We will represent the sliding tile puzzle in a one-dimensional 
+      array of <c>char</c>. We will store the puzzle's solution in a 
+      Java <c>String</c> and we will use an <c>int</c> variable to keep 
+      track of where the blank space is in the array.
+      This leads to the following class-level declarations:
+    </p>
+ <program language="java"><input>
+ private char puzzle[] = {'R','R','R',' ','L','L','L'};
+ private String solution = "LLL RRR";
+ private int blankAt = 3;
+ </input></program>
+    <p>
+      Note how we initialize the <c>puzzle</c> array with the initial configuration 
+      of seven characters.
+      Taken together, these statements initialize the puzzle's state.
+    </p>
+    <p>
+      Because a puzzle is a one-person game and our sliding tile puzzle will be played by a human,
+      this leads to a very simple constructor definition:
+    </p>
+ <program language="java"><input>
+public SlidingTilePuzzle() {
+     super(1);
+}
+ </input></program>
+    <p>
+      We call the <c>super()</c> constructor (<c>ComputerGame()</c>) to create a one-person game.
+    </p>
+    <p>
+      The puzzle's state needs to be communicated to the GUI as a <c>String</c>. This is the purpose of the <c>reportGameState()</c> method:
+    </p>
+ <program language="java"><input>
+public String reportGameState() {
+     StringBuffer sb = new StringBuffer();
+     sb.append(puzzle);
+     return sb.toString();
+ }
+ </input></program>
+    <p>
+      We use a <c>StringBuffer()</c> to convert the puzzle,
+      a <c>char</c> array,
+      into a <c>String</c>.
+    </p>
+    <p>
+      The most important method for communicating with the GUI is the <c>submitUserMove()</c> method:
+    </p>
+ <program language="java"><input>
+public String submitUserMove(String usermove) {
+  int tile = Integer.parseInt(usermove);
+  char ch = puzzle[tile];
+  if (ch == 'L' &amp;&amp; (blankAt == tile-1 || blankAt == tile-2))
+    swapTiles(tile,blankAt);
+  else if (ch == 'R' &amp;&amp; (blankAt == tile+1 || blankAt == tile+2))
+    swapTiles(tile,blankAt);
+  else
+    return "That's an illegal move.\n";
+  return "That move is legal.\n";
+}
+ </input></program>
+    <p>
+      This is the method that processes the user's move,
+      which is communicated through the GUI. As we saw,
+      the puzzle's 'tiles' are represented by an array of buttons in the GUI. 
+      The buttons are indexed 0 through 6 in the array.
+      When the user clicks a button,
+      the GUI should pass its index,
+      represented as a <c>String</c> to the
+      <c>submitUserMove()</c> method.
+      Given the index number of the tile that was selected by the user,
+      this method determines if the move is legal.
+    </p>
+    <p>
+      The <c>Integer.parseInt()</c> method is used to extract the tile's index from the method's parameter.
+      This index is used to get a 'tile' from the <c>puzzle</c> array.
+    </p>
+    <p>
+      The logic in this method reflects the rules of the game.
+      If the tile is an <em>L</em>,
+      then it can only move into a blank space that is either 1 or 2 spaces to its left.
+      Similarly, an <em>R</em> tile can only move into a blank space that is 1 or 2 spaces to its right.
+      All other moves are illegal.
+    </p>
+    <p>
+      For legal moves,
+      we simply swap the tile and the blank space in the array,
+      a task handled by the <c>swap()</c> method.
+      In either case,
+      the method returns a string reporting whether the move was legal or illegal.
+    </p>
+    <p>
+      <xref ref="lst-puzzlecode">Figure</xref>
+      shows the full implementation for the <c>SlidingTilePuzzle</c>, 
+      the remaining details of which are straight forward.
+    </p>
+    <listing xml:id="lst-puzzlecode">
+      <caption>Implementation of the <c>SlidingTilePuzzle</c> class.</caption>
+ <program language="java"><input>
+public class SlidingTilePuzzle extends ComputerGame
+                            implements GUIPlayableGame {
+  private char puzzle[] = {'R','R','R',' ','L','L','L'};
+  private String solution = "LLL RRR";
+  private int blankAt = 3;
+
+  public SlidingTilePuzzle() { super(1); }
+
+  public boolean gameOver() { // True if puzzle solved
+    StringBuffer sb = new StringBuffer();
+    sb.append(puzzle);
+    return sb.toString().equals(solution);
+  }
+  public String getWinner() {
+    if (gameOver())
+      return "\nYou did it! Very Nice!\n";
+    else return "\nGood try. Try again!\n";
+  }
+  public String reportGameState() {
+    StringBuffer sb = new StringBuffer();
+    sb.append(puzzle);
+    return sb.toString();
+  }
+  public String getGamePrompt() {
+    return "To move a tile, click on it.";
+  } //prompt()
+  public String submitUserMove(String usermove) {
+    int tile = Integer.parseInt(usermove);
+    char ch = puzzle[tile];
+    if (ch=='L' &amp;&amp; (blankAt==tile-1 || blankAt==tile-2))
+      swapTiles(tile,blankAt);
+    else if (ch=='R' &amp;&amp; (blankAt==tile+1 || blankAt==tile+2))
+      swapTiles(tile,blankAt);
+    else
+      return "That's an illegal move.\n";
+    return "That move is legal.\n";
+  }
+  private void swapTiles(int ti, int bl) {
+    char ch = puzzle[ti];
+    puzzle[ti] = puzzle[bl];
+    puzzle[bl] = ch;
+    blankAt = ti;   // Reset the blank
+  }
+} //SlidingTilePuzzle
+ </input></program>
+    </listing>
+</subsection>
+<subsection xml:id="sec-slidingGUI">
+    <title>The <c>SlidingGUI</c>Class</title>
+    <p>
+      Let's now implement a GUI that can be used to play the sliding tile puzzle.
+      We will model the GUI itself after those we designed in Chapter<nbsp/>4.
+    </p>
+    <figure xml:id="fig-slidingGUI">
+     <caption>The  <c>SlidingGUI</c>  design.</caption>
+        <image width="40%" source="chptr09/slidingGUI.png"/> 
+    </figure>
+    <p>
+      <xref ref="fig-slidingGUI">Figure</xref> provides a summary of the design.
+      As an implementor of the 
+      <c>ActionListener</c> interface, <c>SlidingGUI</c> implements the <c>actionPerformed()</c> method,
+      which is where the code that controls the puzzle is located.
+      The main data structure is an array of seven <c>JButton</c> s, representing 
+      the seven tiles in the puzzles.
+      The buttons' labels will reflect the state of the puzzle.
+      They will be rearranged after every legal move by the user.
+      The <c>reset</c> button is used to reinitialize the game.
+      This allows users to play again or to start over if they get stuck.
+    </p>
+    <p>
+      The <c>puzzleState</c> is a <c>String</c> variable that stores the puzzle's current state,
+      which is updated repeatedly from the <c>SlidingTilePuzzle</c> by calling its <c>reportGameState()</c> method.
+      The private <c>labelButtons()</c> method will read the <c>puzzleState</c> and use its letters to set the labels of the GUI's buttons.
+    </p>
+    <p>
+      The implementation of <c>SlidingGUI</c> is shown in <xref ref="lst-GUIsource">Listing</xref>.
+      Its constructor and <c>buildGUI()</c> methods are responsible for setting up the GUI. 
+      We use of a <c>for</c> loop in <c>buildGUI()</c> to create the <c>JButton</c> s, associate an
+      <c>ActionListener</c> with them,
+      and add them to the GUI. Except for the fact that we have an array of buttons,
+      this is very similar to the GUI created in Chapter<nbsp/>4.
+      Recall that associating an <c>ActionListener</c> with the buttons allows 
+      the program to respond to button clicks in its <c>actionPerformed()</c> method.
+    </p>
+    <p>
+      Note how an instance of the <c>SlidingTilePuzzle</c> is created in the constructor,
+      and how its state is retrieved and stored in the <c>puzzleState</c> variable:
+    </p>
+ <program language="java"><input>
+puzzleState = sliding.reportGameState();
+ </input></program>
+    <p>
+      The <c>labelButtons()</c> method transfers the letters in <c>puzzleState</c> onto the buttons.
+    </p>
+    <listing xml:id="lst-GUIsource">
+      <caption>Implementation of the <c>SlidingGUI</c> class.</caption>
+ <program language="java"><input>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class SlidingGUI extends JFrame implements ActionListener {
+  private JButton tile[] = new JButton[7];
+  private JButton reset = new JButton("Reset");
+  private SlidingTilePuzzle sliding;
+  private String puzzleState;
+  private Label label;
+  private String prompt = "Goal: [LLL RRR]. " +
+    " Click on the tile you want to move." +
+    " Illegal moves are ignored.";
+
+  public SlidingGUI(String title) {
+    sliding = new SlidingTilePuzzle();
+    buildGUI();
+    setTitle(title);
+    pack();
+    setVisible(true);
+  } // SlidingGUI()
+
+  private void buildGUI() {
+    Container contentPane = getContentPane();
+    contentPane.setLayout(new BorderLayout());
+    JPanel buttons = new JPanel();
+    puzzleState = sliding.reportGameState();
+    for (int k = 0; k &lt; tile.length; k++) {
+      tile[k] = new JButton(""+puzzleState.charAt(k));
+      tile[k].addActionListener(this);
+      buttons.add(tile[k]);
+    }
+    reset.addActionListener(this);
+    label = new Label(prompt);
+    buttons.add(reset);
+    contentPane.add("Center", buttons);
+    contentPane.add("South", label);
+  } // buildGUI()
+
+  private void labelButtons(String s) {
+    for (int k = 0; k &lt; tile.length; k++)
+      tile[k].setText(""+ s.charAt(k));
+  } // labelButtons()
+  public void actionPerformed(ActionEvent e) {
+    String result = "";
+    if (e.getSource() == reset) { // Reset clicked?
+      sliding = new SlidingTilePuzzle();
+      label.setText(prompt);
+    }
+    for (int k = 0; k &lt; tile.length; k++) // Tile clicked?
+      if (e.getSource() == tile[k])
+        result = ((GUIPlayableGame)sliding).submitUserMove(""+ k);
+    if (result.indexOf("illegal") != -1)
+      java.awt.Toolkit.getDefaultToolkit().beep();
+    puzzleState = sliding.reportGameState();
+    labelButtons(puzzleState);
+    if (sliding.gameOver())
+      label.setText("You did it! Very nice!");
+  } // actionPerformed()
+
+  public static void main(String args[]) {
+    new SlidingGUI("Sliding Tile Puzzle");
+  } // main()
+} // SlidingGUI
+ </input></program>
+    </listing>
+    <p>
+      The most important method in the GUI is the <c>actionPerformed()</c> method.
+      This method controls the GUI's actions and is called automatically whenever one of the 
+      GUI's buttons is clicked.
+      First, we check whether the <c>reset</c> button has been clicked.
+      If so, we reset the puzzle by creating a new instance of 
+      <c>SlidingTilePuzzle</c> and re-initializing the prompt label.
+    </p>
+    <p>
+      Next we use a for loop to check whether one of the tile buttons has been clicked.
+      If so, we use the loop index, <em>k</em>,
+      as the tile's identification and submit this to the puzzle as the user's move:
+    </p>
+    <p>
+      
+    </p>
+ <program language="java"><input>
+if (e.getSource() == tile[k])
+  result = ((GUIPlayableGame)sliding).submitUserMove(""+ k);
+ </input></program>
+    <p>
+      The cast operation is necessary here because we declared
+      <c>sliding</c> as a <c>SlidingTilePuzzle</c> rather than as 
+      a <c>GUIPlayableGame</c>. Note also that we have to convert <em>k</em>
+      to a <c>String</c> when passing it to <c>submitUserMove()</c>.
+    </p>
+    <p>
+      As a result of this method call,
+      the puzzle returns a <c>result</c>, which is checked to see if the user's move was illegal.
+      If <c>result</c> contains the word
+      <q>illegal</q>, the computer beeps to signal an error:
+    </p>
+ <program language="java"><input>
+if (result.indexOf("illegal") != -1)
+    java.awt.Toolkit.getDefaultToolkit().beep();
+ </input></program>
+    <p>
+      The <c>java.awt.Toolkit</c> is a class that contains lots of useful methods,
+      including the <c>beep()</c> method.
+      Note that no matter what action is performed, a reset or a tile click,
+      we update <c>puzzleState</c> by calling <c>reportGameState()</c> and use it to relabel the tile buttons.
+      The last task in the <c>actionPerformed()</c> method is to invoke the puzzle's <c>gameOver()</c> method to check if the user has successfully completed the puzzle.
+      If so, we display a congratulatory message in the GUI's window.
+    </p>
+    <p>
+      Finally, the <c>main()</c> for a GUI is very simple,
+      consisting of a single line of code:
+    </p>
+ <program language="java"><input>
+new SlidingGUI("Sliding Tile Puzzle");
+ </input></program>
+    <p>
+      Once a <c>SlidingGUI</c> is created,
+      with the title of
+      <q>Sliding Tile Puzzle,</q>
+      it will open a window and manage the control of the puzzle.
+    </p>
+
+  </subsection>
+</section>

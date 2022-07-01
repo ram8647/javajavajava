@@ -1,7 +1,7 @@
 <section xml:id="object-oriented-design-inheritanceand-polymorphism">
   <title>Object-Oriented Design: Inheritance and Polymorphism</title>
   <p>
-    This use of <c>Object</c>'s <c>toString()</c> method provides our first  look at Java's inheritance mechanism and how it promotes the generality and extensibility of the object-oriented approach.
+    This use of <c>Object</c>'s <c>toString()</c> method provides our first  look at Java's <term>inheritance</term> mechanism and how it promotes the generality and extensibility of the object-oriented approach.
     As a subclass of <c>Object</c>, our <c>OneRowNim</c> class automatically inherits <c>toString()</c> and any other <c>public</c> or <c>protected</c> methods defined in <c>Object</c>. We can simply use these methods as is,
     insofar as they are useful to us.
     As we saw in this case,
@@ -19,23 +19,20 @@
     Two important lessons from this example are
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Inheritance</title>
+    <title>EFFECTIVE DESIGN: Inheritance</title>
     <p>
       The higher up in the class hierarchy that a method is defined,
       the more widespread its use can be.
     </p>
   </principle>
   <principle>
-    <title>EFFECTIVE DESIGN:Overriding <c>toString()</c></title>
+    <title>EFFECTIVE DESIGN: Overriding <c>toString()</c></title>
     <p>
       The <c>toString()</c> method can be overridden in any user defined Java class.
       It is a useful thing to do in any class where the state of an object can be defined briefly.
     </p>
   </principle>
-  <p>
-    Obviously there is much more that needs to be explained about Java's inheritance mechanism.
-    Therefore, we will be revisiting this topic on numerous occasions in subsequent chapters.
-  </p>
+
   <p>
     Another important concept of object-oriented design is polymorphism.
     The <c>toString()</c> method is an example of a polymorphic method.
@@ -44,13 +41,15 @@
     <q>many,</q>
     and <em>morph</em>, which means
     <q>form.</q>
-    The <c>toString()</c> method is polymorphic because it has different behavior when invoked on different objects.
+    The <c>toString()</c> method is polymorphic because it has different behavior when invoked on 
+    different objects.
   </p>
   <p>
     For example,
     suppose we design a class, <c>Student</c>, as a subclass of <c>Object</c> and define its <c>toString()</c> method to return the student ID number.
     Given this design,
-    then <c>obj.toString()</c> will return a student ID if <c>obj</c> is an instance of <c>Student</c>, but if it is an instance of <c>OneRowNim</c>, it will return a the description of its state that we defined above.
+    then <c>obj.toString()</c> will return a student ID if <c>obj</c> is an instance of <c>Student</c>, 
+    but if it is an instance of <c>OneRowNim</c>, it will return a the description of its state that we defined above.
     The following code segment illustrates this point:
   </p>
  <program language="java"><input>
@@ -65,6 +64,8 @@ System.out.println(obj.toString());
     In this case,
     the variable <c>obj</c> is used to refer to a
 <c>Student</c> and then to a <c>OneRowNim</c> instance.
-    This is okay because both classes are subclasses of <c>Object</c>. When <c>toString()</c> is invoked on <c>obj</c>, Java will figure out what subclass of <c>Object</c> the instance belongs to and invoke the appropriate <c>toString()</c> method.
+    This is okay because both classes are subclasses of <c>Object</c>. 
+    When <c>toString()</c> is invoked on <c>obj</c>, Java will figure out what subclass of <c>Object</c> 
+    the instance belongs to and invoke the appropriate <c>toString()</c> method.
   </p>
 </section>

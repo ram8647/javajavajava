@@ -153,15 +153,15 @@ public class Riddle {
     </p>
   </subsection>
   <subsection>
-    <title>Object Instantiation: Creating <c>Riddle</c>Instances</title>
+    <title>Object Instantiation: Creating <c>Riddle</c> Instances</title>
     <p>
-      <xref ref="fig-riddleuser">Figure</xref>
+      <xref ref="fig-riddleuser">Listing</xref>
       shows the complete definition of the <c>RiddleUser</c> class,
       which serves as a very simple user interface.
       It creates two <c>Riddle</c> objects,
       named <c>riddle1</c> and <c>riddle2</c>. It then asks each object to request each riddle's question and answer and displays them on the console.
     </p>
-    <figure xml:id="fig-riddleuser">
+    <listing xml:id="fig-riddleuser">
       <caption>The <c>RiddleUser</c> class.</caption>
       
  <program language="java"><input>
@@ -181,9 +181,55 @@ public class RiddleUser
     System.out.println(riddle1.getAnswer());
     System.out.println("The answer to the second is:");
     System.out.println(riddle2.getAnswer());
-  } // main()} // RiddleUser
+  } // main()
+} // RiddleUser
  </input></program>
-    </figure>
+</listing>
+
+<activity label="riddleUser">
+<statement><p>Run the code below. Add another Riddle to RiddleUser main and print it out. 
+        </p></statement>
+<program language="java" interactive="activecode"><input>
+public class RiddleUser
+{
+  public static void main(String argv[])
+  { 
+    Riddle riddle1 = new Riddle(
+      "What is black and white and red all over?",
+      "An embarrassed zebra.");
+    Riddle riddle2 = new Riddle(
+      "What is black and white and read all over?",
+      "A newspaper.");
+    System.out.println("Here are two riddles:");
+    System.out.println(riddle1.getQuestion());
+    System.out.println(riddle2.getQuestion());
+    System.out.println("The answer to the first riddle is:");
+    System.out.println(riddle1.getAnswer());
+    System.out.println("The answer to the second is:");
+    System.out.println(riddle2.getAnswer());
+  } // main()
+} // RiddleUser
+
+class Riddle 
+{                                  
+    private String question;       // Instance variables
+    private String answer;
+    public Riddle(String q, String a) // Constructor method
+    {
+         question = q;
+         answer = a;
+    } // Riddle()
+    public String getQuestion()   // Instance method
+    {
+        return question;
+    } // getQuestion()
+    public String getAnswer()     // Instance method
+    {
+	       return answer;
+    } //getAnswer() 
+  } // end of class Riddle
+</input>  </program></activity>
+
     <p>
       Let's now discuss the statements that make up <c>RiddleUser</c>'s
 <c>main()</c> method.
@@ -274,56 +320,175 @@ What is black and white and red all over?
       The object's methods can then be called as a way of getting the object to perform certain tasks.
     </p>
   
-      </subsection><subsection><title>Self-Study Exercises</title>
+      </subsection>
+<exercises><title>Self-Study Exercises</title>
+      
       <p>
-      <ol>
-        <li>
-          <p>
-            Identify the following elements in the <c>Riddle</c> class (
-            <xref ref="fig_riddle">Figure</xref>):
-            <ul>
-              <li>
+            Identify the following elements in the <c>Riddle</c> class (<xref ref="fig_riddle">Figure</xref>). </p>
+            
+            <exercise label="riddleName">
+              <title>Class Name</title>   
+              <statement>
+                    <p> What's the name of the class in <xref ref="fig_riddle">Figure</xref>)? <var/>
+                    </p>
+              </statement>
+              <setup>
+                    <var>
+                          <condition string="Riddle">
+                                <feedback>
+                                      <p>Correct.</p>
+                                </feedback>
+                          </condition>
+                          <condition string="riddle">
+                            <feedback>
+                                  <p>Capitalization matters!</p>
+                            </feedback>
+                      </condition>
+                          <condition string=".*">
+                                <feedback>
+                                      <p>Incorrect.</p>
+                                </feedback>
+                          </condition>
+                    </var>
+              </setup>
+        </exercise>
+       
+        
+         
+        <exercise label="clickInstanceVars">     
+          <title>Riddle Instance Variables</title>        
+                    <statement>
+                        <p>Click on the names of the two instance variables in the class below.</p>
+                    </statement>
+                
+                    <areas language="java">
+                        <cline>public class <area correct="no">Riddle</area></cline>{
+                        <cline>    private String <area correct="yes">question</area>;</cline>
+                        <cline>    private String <area correct="yes">answer</area>;</cline>
+                        <cline>    public  <area correct="no">Riddle</area>(String q, String a) { question = q; answer = a; }</cline>
+                        <cline>    public String  <area correct="no">getQuestion()</area> { return question;  }</cline>
+                        <cline>    public String  <area correct="no">getAnswer()</area> { return answer;  }</cline>
+                        <cline>}</cline>
+                      </areas>
+                
+                    <feedback>
+                        <p>Correct!</p>
+                    </feedback>
+                </exercise>
+                 
+                <exercise label="clickMethods">    
+                  <title>Riddle Methods</title>         
+                  <statement>
+                      <p>Click on the names of the three methods in the class below.</p>
+                  </statement>
+              
+                  <areas language="java">
+                    <cline>public class <area correct="no">Riddle</area></cline>{
+                      <cline>    private String <area correct="no">question</area>;</cline>
+                      <cline>    private String <area correct="no">answer</area>;</cline>
+                      <cline>    public  <area correct="yes">Riddle</area>(String q, String a) { question = q; answer = a; }</cline>
+                      <cline>    public String  <area correct="yes">getQuestion()</area> { return question;  }</cline>
+                      <cline>    public String  <area correct="yes">getAnswer()</area> { return answer;  }</cline>
+                      <cline>}</cline>
+                    </areas>
+              
+                  <feedback>
+                      <p>Correct!</p>
+                  </feedback>
+              </exercise>                 
+
+  
+          
+            <exercise label="clickInstances">     
+              <title>Riddle Instances</title>     
+              <statement>
+                  <p>Click on the names of two <c>Riddle</c> instances in the class below.</p>
+              </statement>
+          
+              <areas language="java">
+              <cline>public class <area correct="no">RiddleUser</area> {</cline>
+              <cline><area correct="no">public static void main(String argv[]) {</area></cline>
+                  <cline>     Riddle <area correct="yes">riddle1</area> = new <area correct="no">Riddle</area>("What is black and white and red all over?","An embarrassed zebra.");
+                  </cline>
+                  <cline>     Riddle <area correct="yes">riddle2</area> = new <area correct="no">Riddle</area>("What is black and white and read all over?","A newspaper.");
+                  </cline>
+                  <cline>     System.out.println("Here are two riddles:");</cline>
+                  <cline>     System.out.println(<area correct="no">riddle1.getQuestion()</area>);</cline>
+                  <cline>     System.out.println(<area correct="no">riddle2.getQuestion()</area>);</cline>
+              
+                  <cline>     System.out.println("The answer to the first riddle is:" + <area correct="no">riddle1.getAnswer()</area>);
+                  </cline>
+                  <cline>     System.out.println("The answer to the second riddle is:" + <area correct="no">riddle2.getAnswer()</area>);
+ </cline>
+              <cline>}</cline>
+                </areas>
+          
+              <feedback>
+                  <p>Correct!</p>
+              </feedback>
+          </exercise>       
+          
+                
+                <exercise label="clickCalls">  
+                  <title>Riddle Method Calls</title>           
+                  <statement>
+                      <p>Click on all six method calls of the <c>Riddle</c> objects in the program below.</p>
+                  </statement>
+              
+                  <areas language="java">
+                  <cline>public class <area correct="no">RiddleUser</area> {</cline>
+                  <cline><area correct="no">public static void main(String argv[]) {</area></cline>
+                      <cline>     Riddle <area correct="no">riddle1</area> = new <area correct="yes">Riddle</area>("What is black and white and red all over?","An embarrassed zebra.");
+                      </cline>
+                      <cline>     Riddle <area correct="no">riddle2</area> = new <area correct="yes">Riddle</area>("What is black and white and read all over?","A newspaper.");
+                      </cline>
+                      <cline>     System.out.println("Here are two riddles:");</cline>
+                      <cline>     System.out.println(<area correct="yes">riddle1.getQuestion()</area>);</cline>
+                      <cline>     System.out.println(<area correct="yes">riddle2.getQuestion()</area>);</cline>
+                  
+                      <cline>     System.out.println("The answer to the first riddle is:" + <area correct="yes">riddle1.getAnswer()</area>);
+                      </cline>
+                      <cline>     System.out.println("The answer to the second riddle is:" + <area correct="yes">riddle2.getAnswer()</area>);
+     </cline>
+                  <cline>}</cline>
+                    </areas>
+              
+                  <feedback>
+                      <p>Correct!</p>
+                  </feedback>
+              </exercise>
                 <p>
-                  The name of the class.
+                  
                 </p>
-              </li>
-              <li>
-                <p>
-                  The names of two instance variables.
-                </p>
-              </li>
-              <li>
-                <p>
-                  The names of three methods.
-                </p>
-              </li>
-            </ul>
-          </p>
-        </li>
-        <li>
-          <p>
-            Identify the following elements in the <c>RiddleUser</c> class (Fig.
-            <xref ref="fig-riddleuser"></xref>):
-            <ul>
-              <li>
-                <p>
-                  The names of two <c>Riddle</c> instances.
-                </p>
-              </li>
-              <li>
-                <p>
-                  All six method calls of the <c>Riddle</c> objects in the program.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Two examples of qualified names.
-                </p>
-              </li>
-            </ul>
-          </p>
-        </li>
-      </ol>
-    </p>
-  </subsection>
+                
+                <exercise label="clickQNames">   
+                  <title>Riddle Qualified Names</title>          
+                  <statement>
+                      <p>Click on the four examples of qualified names using the dot notation in the class below.</p>
+                  </statement>
+              
+                  <areas language="java">
+                  <cline>public class <area correct="no">RiddleUser</area> {</cline>
+                  <cline><area correct="no">public static void main(String argv[]) {</area></cline>
+                      <cline>     Riddle <area correct="no">riddle1</area> = new <area correct="no">Riddle</area>("What is black and white and red all over?","An embarrassed zebra.");
+                      </cline>
+                      <cline>     Riddle <area correct="no">riddle2</area> = new <area correct="no">Riddle</area>("What is black and white and read all over?","A newspaper.");
+                      </cline>
+                      <cline>     System.out.println("Here are two riddles:");</cline>
+                      <cline>     System.out.println(<area correct="yes">riddle1.getQuestion()</area>);</cline>
+                      <cline>     System.out.println(<area correct="yes">riddle2.getQuestion()</area>);</cline>
+                  
+                      <cline>     System.out.println("The answer to the first riddle is:" + <area correct="yes">riddle1.getAnswer()</area>);
+                      </cline>
+                      <cline>     System.out.println("The answer to the second riddle is:" + <area correct="yes">riddle2.getAnswer()</area>);
+     </cline>
+                  <cline>}</cline>
+                    </areas>
+              
+                  <feedback>
+                      <p>Correct!</p>
+                  </feedback>
+              </exercise>     
+   
+   </exercises>
 </section>

@@ -1,0 +1,77 @@
+<section xml:id="the-java-documentation-tool">
+  <title>The Java Documenter: <c>javadoc</c></title>
+  <p>
+    The <c>javadoc</c> tool parses the declarations and documentation 
+    comments in a Java source file and generates a set of HTML pages that 
+    describes the following elements:
+    public and protected classes,
+    inner classes, interfaces, constructors, methods, and fields.
+  </p>
+  <p>
+    The <c>javadoc</c> tool can be used on a single file or an entire package of files.
+    Recall that a Java documentation comment is one that begins 
+    with <c>/**</c> and ends with <c>*/</c>. These are the comments that are parsed by <c>javadoc</c>.
+  </p>
+  <p>
+    The <c>javadoc</c> tool has many features,
+    and it is possible to use Java <em>doclets</em>
+    to customize your documentation.
+    For full details on using the tool,
+    it is best to consult 
+    <url href="https://www.oracle.com/java/technologies/javase/javadoc-tool.html" visual="">Oracle's 
+    javadoc Web site</url>.
+    To illustrate how it might be used,
+    let's look at a simple example.
+  </p>
+  <program language="java"><input>
+  /**
+ * A simple hello program
+ * @author Java Java Java
+ * @version 1.0
+ */
+public class Hello {
+
+    /**
+     * Prints a simple greeting.
+     * 
+     * @param None
+     * @return void
+     */
+    public void sayHello() {
+        System.out.println("Hello");
+    }
+
+    public static void main(String args[]) {
+        Hello hello = new Hello();
+        hello.sayHello();
+    }
+}
+</input></program>
+  <p>
+    The <c>Hello</c> program contains documentation comments.
+    To process it we would use the following command:
+  </p>
+ <program language="java"><input>
+javadoc Hello.java
+ </input></program>
+  <p>
+<c>javadoc</c> would generate the following HTML documents:
+  </p>
+ <program language="java"><input>
+Hello.html            -The main documentation file
+allclasses-frame.html -Names and links to all the classes used in
+                       Hello
+overview-tree.html    -A tree showing Hello's place
+                       in the class hierarchy
+packages.html         -Details on the packages used in Hello
+index.html            -Top-level HTML document for
+                       Hello documentation
+index-all.html        -Summary of all methods and variables in
+                       Hello
+ </input></program>
+  <p>
+    To see how everything looks, 
+    <url href="http://turing.cs.trincoll.edu/~ram/jjj/src/hello/Hello.html" visual="">check out the 
+    online Hello documentation</url>. 
+  </p>
+</section>

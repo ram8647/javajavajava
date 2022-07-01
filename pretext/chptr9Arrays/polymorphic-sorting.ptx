@@ -1,0 +1,238 @@
+<section xml:id="objectorienteddesign2pt-polymorphic-sorting-optional">
+  <title>OBJECT-ORIENTED DESIGN:
+  Polymorphic Sorting (Optional)</title>
+  <introduction>
+    <p>
+      One limitation of the sort routines developed so far is that they only 
+      work on one particular type of data.
+      If you've written an insertion sort to sort <c>int</c>s, 
+      you can't use it to sort <c>double</c>s.
+    </p>
+    <p>
+      What would be far more desirable is a
+      <term>polymorphic sort method</term><mdash/>that is,
+      one method that could sort any kind of data.
+      This is easily done by making use of Java wrapper classes,
+      such as <c>Integer</c> and <c>Double</c>, together with 
+      the <c>java.lang.Comparable</c> interface,
+      which is specially designed for this purpose.
+    </p>
+    <p>
+      The <c>java.lang.Comparable</c> interface consists of the compareTo() method:
+    </p>
+ <program language="java"><input>
+public abstract interface Comparable {
+  public int compareTo (Object o);  // Abstract method}
+ </input></program>
+    <p>
+      By implementing <c>compareTo()</c>, a class 
+      can impose an order on its objects.
+      The <c>Comparable</c> interface is implemented by all of Java's wrapper classes <mdash/> that is,
+      by <c>Integer</c>, <c>Double</c>, <c>Float</c>, <c>Long</c>, and so on (Fig.<nbsp/>9.24).
+    </p>
+    <figure xml:id="fig-wrappers">
+      <caption>: Java wrapper classes, such as <c>Integer</c> and <c>Float</c>, implement the 
+      Comparable interface.</caption>
+      <image width="50%" source="chptr09/p443f1.png"/>
+    </figure> 
+    <p>
+      As we saw in Chapter<nbsp/>8, Java interfaces allow us to create a form of
+      <em>multiple inheritance</em>.
+      For example, as <xref ref="fig-wrappers">Figure</xref> shows,
+      an <c>Integer</c> is both an Object and a <c>Comparable</c>. One implication 
+      of this is that an <c>Integer</c> can be used in any method that 
+      takes either an <c>Object</c> parameter or a <c>Comparable</c> parameter.
+    </p>
+    <p>
+      The <c>compareTo()</c> method takes an <c>Object</c> parameter and returns 
+      an <c>int</c>. It is meant to be invoked as <c>o1.compareTo(o2)</c>, where
+      <em>o1</em> and <em>o2</em>
+      are objects of the same type.
+      Classes that implement <c>compareTo()</c> must abide by the following 
+      rules for its return value:
+    </p>
+ <program language="java"><input>
+if (o1 &lt; o2)       then o1.compareTo(o2) &lt; 0
+if (o1.equals(o2)) then o1.compareTo(o2) == 0
+if (o1 > o2)       then o1.compareTo(o2) > 0
+ </input></program>
+    <p>
+      In other words,
+      if <c>o1 &lt; o2</c>, then <c>o1.compareTo(o2)</c> will return a negative integer.
+      If <c>o1 > o2</c>, then <c>o1.compareTo(o2)</c> will return a positive integer.
+      And if <c>o1</c> and
+      <c>o2</c> are equal,
+      then <c>o1.compareTo(o2)</c> will return<nbsp/>0.
+    </p>
+    <p>
+      For a class that implements <c>Comparable</c>, we can use the compareTo() 
+      method to help sort its elements.
+      For example,
+      the following revised version of <c>insertionSort()</c> method can be used 
+      to sort any array of <c>Comparable</c> objects<mdash/>that is,
+      any array of objects whose class implements <c>Comparable</c>:
+    </p>
+ <program language="java"><input>
+public void sort(Comparable[] arr) {
+  Comparable temp;   // Temporary variable for insertion
+
+  for (int k = 1; k &lt; arr.length; k++)  {
+    temp = arr[k];    // Remove it from array
+    int i;
+    for (i = k-1; i >= 0 &amp;&amp; arr[i].compareTo(temp) > 0; i--)
+      arr[i+1] = arr[i];   // Move it right by one
+    arr[i+1] = temp;        // Insert the element
+  }
+} // sort()
+ </input></program>
+    <p>
+      In this version,
+      the parameter is an array of <c>Comparable</c>. Thus,
+      we can pass it any array whose elements implement <c>Comparable</c>, 
+      including an array of <c>Integer</c> or <c>Float</c>, and so on.
+      Then, to compare elements of a <c>Comparable</c> array,
+      we use the <c>compareTo()</c> method:
+    </p>
+ <program language="java"><input>
+for (i = k-1; i >= 0 &amp;&amp; arr[i].compareTo(temp) > 0; i--)
+ </input></program>
+    <p>
+      Note that our algorithm no longer refers to <c>int</c>s, as in the original insertion sort.
+      Indeed, it doesn't mention the specific type<mdash/><c>Integer</c>, 
+      <c>Float</c>, or whatever <mdash/> of the objects that it is sorting.
+      It refers only to <c>Comparable</c> s.
+      Therefore, we can use this method to sort any type of object,
+      as long as the object's class implements the <c>Comparable</c> interface.
+      Thus, by using <c>Comparable</c>, we have a more general <c>insertionSort()</c> method,
+      one that can sort any one-dimensional array of <c>Comparable</c> s.
+    </p>
+    <p>
+      The <c>TestSort</c> class (<xref ref="fig-testsortuml">Figure</xref> and 
+      <xref ref="lst-testsort">Listing</xref>) 
+      provides an example of how to use the polymorphic <c>sort()</c> method.
+    </p>
+    <figure xml:id="fig-testsortuml">
+     <caption>{The <c>TestSort</c> class. </caption>
+    <image width="50%" source="chptr09/p445f1.png"/>
+    </figure>
+    <p>
+      It contains three methods: The <c>sort()</c> method that we just described;
+      a polymorphic <c>print()</c> method,
+      which can be used to print the values of any array of <c>Comparable</c>; and a <c>main()</c> method.
+      The <c>main()</c> method creates arrays of <c>Integer</c> and <c>Float</c> 
+      and then uses the polymorphic <c>sort()</c> method to sort them.
+      Note how the <c>print()</c> method uses the polymorphic <c>toString()</c> 
+      method to print the elements of a <c>Comparable</c> array.
+    </p>
+    <listing xml:id="lst-testsort">
+      <caption><c>TestSort</c> uses the polymorphic <c>sort()</c> method
+      to sort either <c>Integer</c>s or <c>Float</c>s.</caption>
+ <program language="java"><input>
+public class TestSort {
+  public static int MAXSIZE = 25;
+
+  public void sort(Comparable[] arr) {
+    Comparable temp;      // Temporary variable for insertion
+
+    for (int k = 1; k &lt; arr.length; k++) { // For each element
+      temp = arr[k];                     // Remove it
+      int i;
+      for (i = k-1; i >= 0 AmPaMp arr[i].compareTo(temp) > 0; i--)
+        arr[i+1] = arr[i]; // Move larger to the right
+      arr[i+1] = temp;       // Insert the element
+    }
+  } // sort()
+  
+  public void print(Comparable arr[]) {
+    for (int k = 0; k &lt; arr.length; k++) {
+      if (k % 5 == 0)  System.out.println();  // New row
+        System.out.print(arr[k].toString() + "\t");
+    }
+    System.out.println();
+  }
+  
+  // Sorts two different types of array with the same method.
+  public static void main(String args[]) {
+    Integer iArr[] = new Integer[TestSort.MAXSIZE];
+    Float fArr[] = new Float[TestSort.MAXSIZE];
+    for (int k = 0; k &lt; TestSort.MAXSIZE; k++) { // Create data
+      iArr[k] = new Integer((int) (Math.random() * 10000));
+      fArr[k] = new Float(Math.random() * 10000);
+    }
+    TestSort test = new TestSort();
+    test.sort(iArr);     // Sort and print Integers
+    test.print(iArr);
+    test.sort(fArr);     // Sort and print Floats
+    test.print(fArr);
+  } // main()
+}
+ </input></program>
+    </listing>
+    <p>
+      This example of polymorphic sorting illustrates once again the great power of 
+      inheritance and polymorphism in object-oriented programming.
+      The <c>Integer</c> and <c>Float</c> classes use class inheritance to 
+      inherit features from the <c>Object</c> class,
+      and they use interface implementation to inherit the <c>compareTo()</c> 
+      method from the <c>Comparable</c> class.
+      By implementing versions of the <c>toString()</c> and <c>compareTo()</c> 
+      methods that are appropriate for these wrapper classes, Java makes it 
+      easier to use <c>Integer</c> and <c>Float</c> objects in a variety of contexts.
+    </p>
+    <p>
+      Taken together,
+      inheritance and polymorphism enable us to design very general and extensible algorithms.
+      In this example,
+      we defined a <c>sort()</c> method that can sort an array containing any 
+      kind of object as long as the object implements the <c>Comparable</c> interface.
+    </p>
+  </introduction>
+  <subsection xml:id="fig-p446f1">
+    <title>The <c>java.util.Arrays.sort()</c> Method</title>
+    <p>
+      While sorting algorithms provide a good way to introduce the concepts of array processing,
+      real-world programmers never write their own sort algorithms.
+      Instead they use library methods,
+      which have been written and optimized by programming experts.
+      Moreover, library sort routines use sort algorithms that are much more 
+      efficient than the ones we've discussed.
+    </p>
+    <p>
+      The <c>java.util.Arrays</c> class contains a polymorphic sort method that is very simple to use.
+      For example,
+      here's how we would use it to sort the two arrays declared in the <c>TestSort</c> program:
+    </p>
+ <program language="java"><input>
+java.util.Arrays.sort(iArr);
+java.util.Arrays.sort(fArr);
+ </input></program>
+    <p>
+      That's all there is to it!
+      Obviously, learning how to use Java's class and method library,
+      saves real-word programmers lots of effort.
+    </p>
+    </subsection><subsection><title>Self-Study Exercises</title>
+      <ol>
+        <li>
+          <p>
+            Add a definition of a <c>compareTo()</c> method to the
+            <c>LetterFreq</c> class so that it implements the <c>Comparable</c> interface.
+            The method should define one object to be less than another object 
+            if its <c>freq</c> instance variable is less.
+          </p>
+        </li>
+        <li>
+          <p>
+            Add a definition of a <c>sort()</c> method that can be added to the definition of the <c>AnalyzeFreq</c> class.
+            Make it so the array in the class can be sorted into ascending order using the ordering of <c>LetterFreq</c> defined in the previous exercise.
+            Use the <c>java.util.Arrays.sort()</c> method.
+          </p>
+        </li>
+        <li>
+          <p>
+            Rewrite the <c>main()</c> of the <c>AnalyzeFreq</c> class to make use of the <c>sort()</c> method of the previous exercise.
+          </p>
+        </li>
+      </ol>
+  </subsection>
+</section>

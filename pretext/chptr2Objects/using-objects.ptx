@@ -140,6 +140,23 @@
        <caption>The empty string has a value of "" and a its length is 0.</caption>
        <image width="25%" source="chptr02/emptystr.png"/> 
       </figure>
+
+      <p>Try running the program below.</p>
+
+<activity label="str1">
+<statement><p>Run the following code. Add another string that is the empty string 
+  and print out its length.</p></statement>
+<program language="java" interactive="activecode"><input>
+public class StringEx 
+{                                   
+   public static void main(String[] args)
+   {
+      String str = new String("Hello"); // Declare and create a String containing the word "hello"
+      System.out.println("String " + str + " has the length " + str.length() );
+   }
+}          
+</input></program></activity>    
+
 </subsection>
 <subsection>
 <title>Default Values</title>
@@ -171,7 +188,7 @@
       illustrates this difference with a simple example.
     </p>
     <figure xml:id="fig-varmemory">
-    <caption>NEEDS NEW IMAGE The difference between primitive variables and object variables.</caption>
+    <caption>The difference between primitive variables and object variables.</caption>
     <program language="java">
     <input>
       int num = 5;
@@ -179,7 +196,7 @@
       String s = new String("hello");
 	</input>
     </program> 
-    <image width="50%" source=""/>
+    <image width="80%" source="chptr02/primitive-vs-reference.png"/>
     </figure>
     <p>
       The main reason for this difference is that primitive types have a fixed size. But objects do not. An <c>int</c>
@@ -197,7 +214,7 @@
       which indicates that it points to nothing. It has no object to point to (<xref ref="fig-defaults">Figure</xref>).
     </p> 
     <figure xml:id="fig-defaults">
-    <caption>NEEDS NEW IMAGE Default values for primitive variables and object variables.</caption>
+    <caption>Default values for primitive variables and object variables.</caption>
     <program language="java">
     <input>
       int num;      // num has the value 0
@@ -205,7 +222,7 @@
       String s;     // s has the value null
 	</input>
     </program> 
-    <image width="50%" source=""/>
+    <image width="70%" source="chptr02/default-values.png"/>
     </figure>  
 <!--      It is possible to check whether or not a reference variable contains a reference to an actual object by checking 
       whether or not it contains this
@@ -361,10 +378,39 @@ public class StringPuns {
     </program>
     </listing>
 </subsection>
-<subsection>
-<title>Self-Study Exercises</title>
+
+<p>Try running the program below.</p>
+
+<activity label="stringPuns">
+<statement><p>Run the following code. 
+    Click on the "Show Code Lens" button and then the Next button to step through the code.</p></statement>
+<program language="java" interactive="activecode"><input>
+  public class StringPuns {
+    public static void main(String args[]) {
+      String s = new String("string");
+      String s1 = s.concat(" puns.");
+      System.out.println("Here are the top 5 " + s1);
+      String s2 = "5. Hey baby, wanna ";
+      String s3 = s + " along with me.";
+      System.out.println(s2 + s3);
+      System.out.println("4. I've got the world on a " + s + ".");
+      String s4 = new String("two");
+      String s5 = ". You have more class than a ";
+      System.out.print(s4.length());
+      System.out.println(s5 + s + " of pearls.");
+      System.out.print("2. It is ");
+      System.out.print(s.equals("string"));
+      System.out.println(" that I am no " + s + " bean.");
+      String s6 = " quintet.";
+      System.out.println("1. These puns form a " + s + s6);
+    } // main()
+  } //  StringPuns class     
+</input></program></activity>
+
 <exercises>
-  <exercise label="assignment">
+<title>Self-Study Exercises</title>
+
+  <exercise label="concatEx">
         <title>Fill-In, Concatenation</title>
   
         <statement>
@@ -394,5 +440,5 @@ public class StringPuns {
         </setup>
   </exercise>
 </exercises>
-  </subsection>
+  
 </section>

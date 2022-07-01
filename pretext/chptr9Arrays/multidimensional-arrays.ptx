@@ -1,0 +1,113 @@
+<section xml:id="multidimensional-arrays-optional">
+  <title>Multidimensional Arrays (Optional)</title>
+  <introduction>
+    <p>
+      Java doesn't limit arrays to just two dimensions.
+      For example,
+      suppose we decide to extend our rainfall survey to cover a ten-year period.
+      For each year we now need a two-dimensional array.
+      This results in a three-dimensional array consisting of an array of years,
+      each of which contains an array of months,
+      each of which contains an array of days:
+    </p>
+ <program language="java"><input>
+final int NYEARS = 10;
+final int NMONTHS = 13;
+final int NDAYS = 32;
+double rainfall[][] = new double[NYEARS][NMONTHS][NDAYS];
+ </input></program>
+    <p>
+      Following the design convention of not using the 0 month and 0 days,
+      we end up with a <m>10 \;\times\; 13 \;\times\; 32</m> array.
+      Note the use of <c>final</c> variables to represent the size of each dimension of the array.
+      This helps to make the program more readable.
+    </p>
+    <p>
+      In <xref ref="fig-threedarray">Figure</xref>,
+      each year of the rainfall data is represented as a separate page.
+      On each page,
+      there is a two-dimensional table that consists of 12 rows (1 per month) and 31 columns (1 per day).
+    </p>
+    <figure xml:id="fig-threedarray">
+      <caption>Three-dimensional data might be viewed as a
+      collection of pages, each of which contains a two-dimensional table.</caption>
+      <image width="73%" source="chptr09/8f17.png"/>
+    </figure>
+    <p>
+      You might imagine that our study could be extended to cover rainfall data from a number of different cities.
+      That would result in a four-dimensional array,
+      with the first dimension now being the city.
+      Of course, for this to work,
+      cities would have to be represented by integers,
+      because array subscripts must be integers.
+    </p>
+    <p>
+      As you might expect,
+      algorithms for processing each element in a three-dimensional table would require a three-level nested loop.
+      For example,
+      the following algorithm would be used to initialize all elements of our three-dimensional rainfall array:
+    </p>
+ <program language="java"><input>
+for (int year = 0; year &lt; rainfall.length; year++)
+ for (int month = 0; month &lt; rainfall[year].length; month++)
+  for (int day = 0; day &lt; rainfall[year][month].length; day++)
+   rainfall[year][month][day] = 0.0;
+ </input></program>
+    <p>
+      Note again the proper use of the <c>length</c>
+          <idx><h>array length</h></idx>
+      attribute for each of the three dimensions of the array.
+      In the outer loop, <c>rainfall.length</c>, we're referring to the number of years.
+      In the middle loop, <c>rainfall[year].length</c>, we're referring to number of months within a given year.
+      In the inner loop,
+<c>rainfall[year][month].length</c>, we're referring to the number of days within a month.
+    </p>
+    <p>
+      If we added a fourth dimension to our array and wanted to extend this algorithm to initialize it,
+      we would simply embed the three-level loop within another for loop that would iterate over each city.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Array Initializers</title>
+    <p>
+      It is possible to use an initializer
+          <idx><h>initializer, array</h></idx>
+      with a <term>multidimensional array</term>.
+          <idx><h>multidimensional array</h></idx>
+      For instance,
+      the following examples create several small arrays and initialize their elements:
+    </p>
+ <program language="java"><input>
+int a[][] = {{1,2,3}, {4,5,6}};
+char c[][] = {{'a','b'}, {'c','d'}};
+double d[][][] =
+    {{1.0,2.0,3.0}, {4.0,5.0}, {6.0,7.0,8.0,9.0}};
+ </input></program>
+    <p>
+      The first of these declarations creates a <m>2\; \times \;3</m> array of integers.
+      The second example creates a <m>2\; \times\; 2</m> array of characters,
+      and the third example creates an array of <c>double</c> consisting of three rows,
+      each of which has a different number of elements.
+      The first row contains three elements,
+      the second contains two elements,
+      and the last row contains four elements.
+      As this last example shows,
+      the rows in a multidimensional array don't all have to have the same length.
+    </p>
+    <p>
+      Using initializers, as in these examples,
+      is feasible only for relatively small arrays.
+      To see why, just imagine what the initializer expression would be for our three-dimensional <c>rainfall</c> array.
+      It would require <m>4,160 \;=\; 10 \; \times \; 13 \; \times \; 32</m> zeroes,
+      separated by commas!
+    </p>
+    <principle>
+      <title>PROGRAMMING TIP: Array Initializers</title>
+      <p>
+        Initializer (assignment) expressions can be used to assign initial values to 
+        relatively small arrays.
+        For larger arrays, an initializer method should be designed.
+      </p>
+    </principle>
+  </subsection>
+</section>

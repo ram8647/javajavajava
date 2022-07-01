@@ -1,0 +1,88 @@
+<section xml:id="sec-vectors">
+  <title>From the Java Library: java.util.Vector</title>
+  <p>
+    The <c>java.util.Vector</c> class implements an array of objects that can grow in size as needed.
+    One limitation of regular arrays is that their lengths remain fixed.
+    Once the array is full <mdash/> once every element is used <mdash/>
+    you can't allocate additional elements.
+  </p>
+    <figure xml:id="fig-vector">
+    <caption>The  <c>Vector</c> class.</caption>
+      <image width="50%" source="chptr09/p446f1.png"/>
+    </figure>
+  <p>
+    The <c>Vector</c> class contains methods for storing and retrieving objects,
+    and for accessing objects by their index position within the
+    <c>Vector</c>(<xref ref="fig-vector">Figure</xref>).
+  </p>
+  <p>
+    One use for a <c>Vector</c> would be when a program needs to store input from the user or a file without knowing in advance how many items there are.
+    Using a <c>Vector</c> is less efficient than an array in terms of processing speed,
+    but it gives you the flexibility of growing the data structure to meet the storage requirements.
+  </p>
+  <p>
+    As an illustration of this idea,
+    the program in <xref ref="lst-vectordemo">Listing</xref>
+    creates a random number of integers and then stores them in a <c>Vector</c>. 
+    The <c>Vector</c>, which is declared and instantiated in <c>main()</c>, is initially empty.
+    Integers from 0 to the random <c>bound</c> are then inserted into the <c>Vector</c>. In this case,
+    insertions are done with the
+    <c>addElement()</c> method,
+    which causes the <c>Vector</c> object to insert the element at the next available location,
+    increasing its size, if necessary.
+  </p>
+  <listing xml:id="lst-vectordemo">
+    <caption>Demonstration of the <c>Vector</c> class.</caption>
+    
+ <program language="java"><input>
+import java.util.Vector;
+public class VectorDemo {
+  
+  public static void printVector(Vector v) {
+    for (int k=0; k &lt; v.size(); k++)
+      System.out.println(v.elementAt(k).toString());
+  } // printVector()
+  
+  public static void main(String args[]) {
+    Vector vector = new Vector();  // An empty vector
+    int bound = (int)(Math.random() * 20);
+    for (int k = 0; k &lt; bound; k++ )   // Insert a random
+      vector.addElement(new Integer(k));// number of Integers
+    printVector(vector);            // Print the elements
+  } // main()
+} // VectorDemo
+ </input></program>
+  </listing>
+  <p>
+    Once all the integers have been inserted,
+    the <c>printVector()</c> method is called.
+    Note that it uses the <c>size()</c> method to determine how many 
+    elements the <c>Vector</c> contains.
+    This is similar to using the <c>length()</c> method to 
+    determine the number of characters in a <c>String</c>.
+  </p>
+  <p>
+    Finally, note that a <c>Vector</c> stores objects.
+    It cannot be used to store primitive data values.
+    You cannot store an <c>int</c> in a <c>Vector</c>. Therefore,
+    we need to use the <c>Integer</c> wrapper class to convert <c>int</c>s 
+    into <c>Integer</c>s before they can be inserted into the <c>Vector</c>. 
+    Because you can't just print an <c>Integer</c>, or any other <c>Object</c>, 
+    the <c>toString()</c> method is used to print the string representation of the object.
+  </p>
+  <p>
+    By defining <c>Vector</c> to store <c>Object</c> s, Java's designers have  
+    made it as general as possible and,
+    therefore, as widely useful as possible.
+  </p>
+  <principle>
+    <title>EFFECTIVE DESIGN: Generality</title>
+    <p>
+      Defining a data collection,
+      such as an array or a <c>Vector</c>, in terms of the <c>Object</c> class makes it capable of storing and processing any type of value,
+      including values of primitive data types.
+      This is because the
+<c>Object</c> class is the root of<nbsp/>the<nbsp/>Java class hierarchy.
+    </p>
+  </principle>
+</section>

@@ -1,0 +1,99 @@
+<section xml:id="file-namesand-layout">
+  <title>File Names and Layout</title>
+  <introduction>
+    <p>
+      Java source files should have the <c>.java</c> suffix,
+      and Java bytecode files should have the <c>.class</c> suffix.
+    </p>
+    <p>
+      A Java source file can only contain a single <c>public</c> class.
+      Private classes and interfaces associated with a public class can be included in the same file.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Source File Organization Layout</title>
+    <p>
+      All source files should begin with a comment block that contains important 
+      identifying information about the program,
+      such as the name of the file,
+      author, date, copyright information,
+      and a brief description of the classes in the file.
+      In the professional software world, the details of this
+      <q>boilerplate</q>
+      comment will vary from one software house to another.
+      For the purposes of an academic computing course,
+      the following type of comment block would be appropriate:
+    </p>
+ <program language="java"><input>
+ /*
+  * Filename: Example.java
+  * Author: J. Programmer
+  * Date:  April, 20 2022
+  * Description: This program illustrates basic
+  *  coding conventions.
+  */
+ </input></program>
+    <p>
+      The beginning comment block should be followed by any package and import statements 
+      used by the program:
+    </p>
+ <program language="java"><input>
+package java.mypackage;
+import java.awt.*;
+ </input></program>
+    <p>
+      The <em>package</em> statement should only be used if the code in the file belongs to the package.
+      None of the examples in this book use the package statement.
+      The <em>import</em> statement allows you to use abbreviated names to refer 
+      to the library classes used in your program.
+      For example,
+      in a program that imports <c>java.awt.*</c> we can 
+      refer to the <c>java.awt.Button</c> class as simply <c>Button</c>. 
+      If the import statement were omitted,
+      we would have to use the fully qualified name.
+    </p>
+    <p>
+      The <c>import</c> statements should be followed by the class 
+      definitions contained in the file.
+      <xref ref="lst-example1">Listing</xref>
+      illustrates how a simple Java source file should be formatted and documented.
+    </p>
+    <listing xml:id="lst-example1">
+      <caption>A sample Java source file with javadoc comments.</caption>
+ <program language="java"><input>
+/*
+ * Filename: Example.java
+ * Author: J. Programmer
+ * Date:  April, 20 2022
+ * Description: This program illustrates basic
+ *     coding conventions.
+ */
+import java.awt.*;
+/**
+ * The Example class is an example of a simple class definition.
+ * @author J. Programmer
+ */
+public class Example {
+  /** Doc comment for instance variable, var1 */
+  public int var1;
+  /**
+   * Constructor method documentation comment describes
+   *   what the constructor does.
+   */
+  public Example () {
+   // ... method implementation goes here
+  }
+  /**
+   *  An instanceMethod() documentation comment describes
+   *   what the method does.
+   *  @param N is a parameter than ....
+   *  @return This method returns blah blah
+   */
+  public int instanceMethod( int N ) {
+   // ... method implementation goes here}
+  }
+} // Example
+ </input></program>
+    </listing>
+  </subsection>
+</section>

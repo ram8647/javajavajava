@@ -59,9 +59,8 @@
         One is the number of sticks remaining and the other is which player has the next turn. We can 
         represent both of these as whole numbers, which correspond to <c>int</c> in Java:
         <tabular>
-          <row><cell>Variable Name</cell> <cell>Type</cell> <cell> Values</cell></row>
-          <row><cell>-------------</cell> <cell> <c>----</c></cell> <cell>------</cell></row>
-          <row><cell>nSticks</cell> <cell> <c> int</c></cell> <cell> 0 through 21</cell></row>
+          <row bottom="minor"><cell>Variable Name</cell> <cell>Type</cell> <cell> Values</cell></row>
+           <row><cell>nSticks</cell> <cell> <c> int</c></cell> <cell> 0 through 21</cell></row>
           <row><cell>player</cell> <cell> <c> int</c></cell> <cell> 1 or 2</cell></row>
         </tabular>          
       </p>
@@ -225,63 +224,50 @@ private String answer;
         To determine whether a instance variable or method is accessible, Java starts by determining whether its containing package is accessible,
         and then whether its containing class is accessible.
         Access to classes, instance variables,
-        and methods is defined according to the rules shown in Table<nbsp/>2.2.
+        and methods is defined according to the rules shown in the table below.
       </p>
       <table>
-        <caption>Java's accessibility rules.</caption>
+        <title>Java's accessibility rules.</title>
         
         <tabular>
-          <row>
-            <cell><c>__________</c></cell>
+          <row bottom="minor">
           </row>
-          <row>
-            <cell>{Element}</cell>
-            <cell>{Modifier}</cell>
-            <cell>{Rule}</cell>
-          </row>
-          <row>
-            <cell><c>__________</c></cell>
+          <row bottom="minor">
+            <cell>Element</cell>
+            <cell>Modifier</cell>
+            <cell>Rule</cell>
           </row>
           <row>
             <cell>Class</cell>
             <cell><c>public</c></cell>
             <cell>Accessible if its package is accessible.</cell>
           </row>
-          <row>
+          <row bottom="minor">
             <cell></cell>
             <cell>by default</cell>
             <cell>Accessible only within its package.</cell>
           </row>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
+         
           <row>
             <cell>Instance variable</cell>
             <cell><c>public</c></cell>
             <cell>Accessible to all other objects.</cell>
           </row>
           <row>
-            <cell><nbsp/><nbsp/> or</cell>
+            <cell>or method</cell>
             <cell><c>protected</c></cell>
-            <cell>Accessible to its subclasses and to</cell>
+            <cell>Accessible to its subclasses and to other classes in its package</cell>
           </row>
-          <row>
-            <cell><nbsp/><nbsp/>instance method</cell>
-            <cell></cell>
-            <cell><nbsp/><nbsp/>  other classes in its package.</cell>
-          </row>
+         
           <row>
             <cell></cell>
             <cell><c>private</c></cell>
             <cell>Accessible only within the class.</cell>
           </row>
-          <row>
+          <row bottom="minor">
             <cell></cell>
             <cell>by default</cell>
             <cell>Accessible only within the package.</cell>
-          </row>
-          <row>
-            <cell><c>__________</c></cell>
           </row>
         </tabular>
       </table>
@@ -377,18 +363,16 @@ public void methodName()  // Method header
       <table>
         
         <tabular>
-          <row>
-            <cell><c>__________</c></cell>
+          <row bottom="minor">
+      
           </row>
-          <row>
+          <row bottom="minor">
             <cell>MethodModifiers<m>_{opt}</m></cell>
             <cell>ResultType</cell>
             <cell>MethodName</cell>
-            <cell>(FormalParameterList)</cell>
+            <cell>FormalParameterList</cell>
           </row>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
+         
           <row>
             <cell><c>public</c><c>static</c></cell>
             <cell><c>void</c></cell>
@@ -413,15 +397,13 @@ public void methodName()  // Method header
             <cell><c>getQuestion</c></cell>
             <cell><c>()</c></cell>
           </row>
-          <row>
+          <row bottom="minor">
             <cell><c>public</c></cell>
             <cell><c>String</c></cell>
             <cell><c>getAnswer</c></cell>
             <cell><c>()</c></cell>
           </row>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
+        
         </tabular>
       </table>
       <p>
@@ -474,12 +456,13 @@ public void methodName()  // Method header
 OneRowNim</c> class.</caption>
  <program language="java"><input>
 public class OneRowNim
-{ private int nSticks = 7; // Start with 7 sticks.
+{ 
+  private int nSticks = 7; // Start with 7 sticks.
   private int player = 1;  // Player 1 plays first.
 
   public void takeOne(){ } // Method bodies still need
-    public void takeTwo(){ } //  to be defined.
-    public void takeThree(){ }
+  public void takeTwo(){ } //  to be defined.
+  public void takeThree(){ }
   public void report(){ }
 } //OneRowNim class
  </input></program>
@@ -611,7 +594,7 @@ public class OneRowNim
       </p>
     </subsubsection>
   </subsection>
-  <subsection xml:id="self-study-exercisesC10">
+  <subsection>
     <title>Testing the <c>OneRowNim</c>Class</title>
     <p>
   <!--
@@ -642,23 +625,27 @@ public class OneRowNim
       The following pseudocode outlines an appropriate sequence of statements in a <c>main()</c> method:
     </p>
     <pre>
-      Declare a variable of type <c>OneRowNim</c> named <c>game</c>.
-      Instantiate a <c>OneRowNim</c> object to which <c>game</c> refers.
-      Tell <c>game</c> to report.
-      Tell <c>game</c> to remove three sticks.
-      Tell <c>game</c> to report.
-      Tell <c>game</c> to remove three sticks.
-      Tell <c>game</c> to report.
-      Tell <c>game</c> to remove one stick.
-      Tell <c>game</c> to report.
+      Declare a variable of type OneRowNim named game.
+      Instantiate a OneRowNim object to which game refers.
+      Tell game to report.
+      Tell game to remove three sticks.
+      Tell game to report.
+      Tell game to remove three sticks.
+      Tell game to report.
+      Tell game to remove one stick.
+      Tell game to report.
     </pre>
     <p>
       It is now an easy task to convert the steps in the pseudocode outline into Java statements.
       The resulting <c>main()</c> method is shown with the complete definition of the <c>OneRowNimTester</c> class:
     </p>
- <program language="java"><input>
+ <activity label="oneRowNim1">
+  <statement><p>Run the following program to see the game in action. 
+    Change the code in main to call takeOne() instead of takeThree().</p></statement>
+    <program language="java" interactive="activecode"><input>
 public class OneRowNimTester
-{ public static void main(String args[])
+{ 
+  public static void main(String args[])
   {   OneRowNim1 game = new OneRowNim();
       game.report();
       game.takeThree();
@@ -669,7 +656,33 @@ public class OneRowNimTester
       game.report();
   } //main()
 }
- </input></program>
+class OneRowNim
+{ 
+  private int nSticks = 7; // Start with 7 sticks.
+  private int player = 1;  //Player 1 plays first.
+
+  public void takeOne()
+  { nSticks = nSticks - 1;
+    player = 3 - player;
+  } // takeOne()
+
+  public void takeTwo()
+  { nSticks = nSticks - 2;
+    player = 3 - player;
+  } // takeTwo()
+
+  public void takeThree()
+  { nSticks = nSticks - 3;
+    player = 3 - player;
+  }  // takeThree()
+
+  public void report()
+  { System.out.println("Number of sticks left: " + nSticks);
+    System.out.println("Next turn by player " + player);
+  }   // report()
+} // OneRowNim1 class
+ </input></program></activity>
+
     <p>
       When it is run, <c>OneRowNimTester</c> produces the following output:
     </p>
@@ -688,42 +701,126 @@ public class OneRowNimTester
       This output indicates that player 1 removed the final stick and so player 2 is the winner of this game.
     </p>
 
-      </subsection><subsection><title>Self-Study Exercises</title>
-      <p>
-      <ol>
-        <li>
-          <p>
-            Add a new declaration to the <c>Riddle</c> class for a <c>private String</c> instance variable named <c>hint</c>. Assign the variable an initial value of <c>"This riddle is too easy for a hint"</c>.
-          </p>
-        </li>
-        <li>
-          <p>
-            Write a header for a new method definition for <c>Riddle</c> named <c>getHint()</c>. Assume that this method requires no parameters and that it simply returns the <c>String</c> value stored in the <c>hint</c> instance variable.
-            Should this method be declared <c>public</c> or <c>private</c>?
-          </p>
-        </li>
-        <li>
-          <p>
-            Write a header for the definition of a new <c>public</c> method for
-<c>Riddle</c> named <c>setHint()</c> which sets the value of the <c>hint</c> instance variable to whatever <c>String</c> value it receives as a parameter.
-            What should the result type be for this method?
-          </p>
-        </li>
-        <li>
-          <p>
-            Create a partial definition of a <c>Student</c> class.
-            Create instance variables for the first name,
-            last name, and an integer student identification number.
-            Write the headers for three methods.
-            One method uses three parameters to set values for the three instance variables.
-            One method returns the student identification number.
-            The last method returns a <c>String</c> containing the student's first name and last name.
-            Write only the headers for these methods.
-          </p>
-        </li>
-      </ol>
-    </p>
-  </subsection>
+      </subsection>
+      <exercises><title>Self-Study Exercises</title>
+     
+ 
+          
+            <exercise label="addHintToRiddle">
+              <title>Add Hint to Riddle Class</title>
+              <statement><p>
+                1) Add a new declaration to the <c>Riddle</c> class for a <c>private String</c> instance variable named <c>hint</c>. Assign the variable an initial value of <c>"This riddle is too easy for a hint"</c>.
+                2) Write a header for a new method definition for <c>Riddle</c> named <c>getHint()</c>. 
+                Assume that this method requires no parameters and that it simply returns the <c>String</c> value stored in the <c>hint</c> instance variable.
+                          Should this method be declared <c>public</c> or <c>private</c>?
+                3) Write a header for the definition of a new <c>public</c> method for
+              <c>Riddle</c> named <c>setHint()</c> which sets the value of the <c>hint</c>
+               instance variable to whatever <c>String</c> value it receives as a parameter.
+                          What should the result type be for this method?
+                           </p></statement>
+              <program language="java" interactive="activecode"><input>
+              class Riddle 
+              {                                  
+                  private String question;       // Instance variables
+                  private String answer;
+                  // 1) Add a new instance variable for hint here
+
+                  public Riddle(String q, String a) // Constructor method
+                  {
+                       question = q;
+                       answer = a;
+                  } // Riddle()
+                  public String getQuestion()   // Instance method
+                  {
+                      return question;
+                  } // getQuestion()
+                  public String getAnswer()     // Instance method
+                  {
+                       return answer;
+                  } //getAnswer() 
+                  public void setAnswer(String a)  
+                  {
+                       answer = a;
+                  } 
+                  public void setQuestion(String q)  
+                  {
+                       question = q;
+                  } 
+
+                  // 2) Write a method called getHint() here that returns hint
+
+                  // 3) Write a method called setHint() here that sets the hint to its parameter
+
+
+                } // end of class Riddle
+
+                public class RiddleUser
+                {
+                  public static void main(String argv[])
+                  { 
+                    Riddle riddle1 = new Riddle(
+                      "What is black and white and red all over?",
+                      "An embarrassed zebra.");
+                    Riddle riddle2 = new Riddle(
+                      "What is black and white and read all over?",
+                      "A newspaper.");
+                    System.out.println("Here are two riddles:");
+                    System.out.println(riddle1.getQuestion());
+                    System.out.println(riddle2.getQuestion());
+                    System.out.println("The answer to the first riddle is:");
+                    System.out.println(riddle1.getAnswer());
+                    System.out.println("The answer to the second is:");
+                    System.out.println(riddle2.getAnswer());
+                    System.out.println(riddle1.getHint());
+                    riddle2.setHint("Hint: This is not a zebra!")
+                    System.out.println(riddle2.getHint());
+
+                  } // main()
+                } // RiddleUser
+              </input>  </program></exercise>
+              
+
+              <exercise label="studentClassEx">
+                <title>Student Class</title>
+                <statement><p>Create a partial definition of a <c>Student</c> class.
+                  1) Create instance variables for the first name,
+                  last name, and an integer student identification number.
+                  2) Write the headers for three methods.
+                  One method uses three parameters to set values for the three instance variables.
+                  3) One method returns the student identification number.
+                  4) The last method returns a <c>String</c> containing the student's first name and last name.
+                                   
+                             </p></statement>
+                <program language="java" interactive="activecode"><input>
+                public class Student 
+                {                     
+
+                   // 1) 3 Instance variables for first name, last name, id.
+
+                   
+
+                   // 2) setStudent method
+
+                   // 3) getStudentID method
+
+                   // 4) getStudentName method
+
+
+                  public static void main(String argv[])
+                  {
+                    Student s = new Student();
+                    s.setStudent("Sal", "McMuffin", 1001);
+                    System.out.println("Student info: ");
+                    System.out.println("Name: " + s.getStudentName() );
+                    System.out.println("Name: " + s.getStudentID() );
+                  }
+                }
+              </input>                </program></exercise>           
+         
+        
+
+</exercises>
+
   <subsection xml:id="sec-methodcall">
     <title>Flow of Control: Method Call and Return</title>
     <p>
@@ -827,7 +924,7 @@ public class OneRowNim
       Control then shifts back to the second statement in <c>main()</c>, which has the label 4.
     </p>
     <figure xml:id="fig-gstate1">
-      <caption>The iniyial state of <c>game</c>.</caption>
+      <caption>The initial state of <c>game</c>.</caption>
       <image width="40%" source="chptr02/gstate1.png"/>
     </figure>
     <p>
@@ -858,7 +955,7 @@ Next turn by player 1
       the two statements in that method are never executed.
     </p>
     <figure xml:id="fig-gstate2">
-      <caption>The iniyial state of <c>game</c> after line 9 is executed.</caption>
+      <caption>The initial state of <c>game</c> after line 9 is executed.</caption>
       <image width="40%" source="chptr02/gstate2.png"/>
     </figure>
   </subsection>

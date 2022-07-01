@@ -1,0 +1,760 @@
+<section xml:id="string-basics">
+  <title>String Basics</title>
+  <introduction>
+    <p>
+      To review, in Java, strings are considered full-fledged objects.
+      A <c>String</c> is a sequence of the characters (data)
+      plus the actions (methods) that are used to manipulate the string.
+      The <c>java.lang.String</c> class (<xref ref="fig-string-UML">Figure</xref>)  
+      is a direct subclass of <c>Object</c>, and it contains many public methods 
+      that can be used to perform useful operations on strings
+      (such as concatenation).
+    </p>
+    <figure xml:id="fig-string-UML">
+      <caption>The <c>String</c> class.</caption>
+      <image width="40%" source="chptr07/stringclass.png"/>
+    </figure>
+    <p>
+      We will discuss a selection of the more commonly used methods,
+      but for a full description of the <c>String</c> class see the
+      <url href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html">
+      official Java documentation</url>.
+    </p>
+    <p>
+      Like other object variables, <c>String</c> variables serve as <em>references</em>
+      to their respective objects.
+      However, unlike other Java objects, the <c>String</c> type has certain 
+      characteristics in common with the primitive data types.
+    </p>
+    <p>
+      For example,
+      as we have already seen, Java allows for literal strings.
+      A <term>string literal</term> is a sequence of zero or more characters 
+      contained in double quotes, such as
+      <q>Socrates</q>
+      and <q></q>
+      (the <term>empty string</term>).
+      Java allows us to perform operations on literal strings,
+      such as concatenation.
+      As we have already seen,
+      the expression <c>"Hello" + "world"</c> results in the string 
+      <c>"Helloworld"</c>. Java also allows us to use string literals to initialize <c>String</c> variables with an assignment statement.
+    </p>
+    <p>
+      Given how much we use <c>String</c> objects, these exceptional features 
+      represent a good design decision for Java.
+    </p>
+  </introduction>
+  <subsection xml:id="emptystring">
+    <title>Constructing Strings</title>
+    <p>
+      To create <c>String</c> objects,
+      the <c>String</c> class provides many constructors,
+      including the following:
+    </p>
+    <program language="java"><input>
+      public String();        // Creates an empty string
+        // Copy constructor: Creates a copy of a string
+      public String(String initial_value);
+    </input></program>
+    <p>
+      When we create an object using the default constructor, as in
+    </p>
+    <program language="java"><input>
+     String name = new String();
+    </input></program>
+    <p>
+      Java will create a <c>String</c> object and make <c>name</c>
+      the reference to it (e.g., <xref ref="fig-emptystr">Figure</xref>).
+      In addition to storing the sequence of characters that make up the string, 
+      Java also stores an integer value representing the number of characters in the string.
+      For the default constructor, the object's value is the empty string 
+      and its count is 0.
+    </p>
+    <p>
+      Although we have chosen to represent these two elements as the instance 
+      variables, <c>value</c> and <c>count</c>, 
+      we don't know exactly how Java stores the sequence of characters.
+      That information is hidden.
+    </p>
+      <figure xml:id="fig-emptystr">
+        <caption></caption>
+        <image width="35%" source="chptr07/p349f2.png"/> 
+      </figure>
+    <p>
+      The second constructor in <xref ref="fig-string-UML">Figure</xref> is 
+      the <term>copy constructor</term>, used to clone or duplicate an object.
+      Many Java classes have copy constructors.
+      Consider the following statements:
+    </p>
+    <program language="java"><input>
+      String s1 = new String("Hello");
+      String s2 = new String(s1);
+    </input></program>
+    <p>
+      These two statements would result in two distinct <c>String</c> objects,
+      both storing the word
+      <q>Hello</q>.
+    </p>
+    <p>
+      Note that in the first of the preceding statements,
+      we used the literal string
+      <q>Hello</q>
+      in the constructor.
+    </p>
+    <figure xml:id="fig-socrates"> 
+      <image width="35%" source="chptr07/p349f3.png"/> 
+      <caption>The literal <c>String</c> <q>Socrates.</q></caption>
+    </figure>
+    <p>
+      When Java encounters a
+      new literal string in a program,
+      it constructs an object for it.
+      For example, if your program contained the literal
+      <q>Socrates,</q>
+      Java would create an object for it and treat the literal 
+      itself as a reference to the object (<xref ref="fig-socrates">Figure</xref>).
+    </p>
+    <p>
+      We often use a string literal to assign a value to a <c>String</c> variable:
+    </p>
+    <program language="java"><input>
+      String s;      // The value of s is initially null
+      s = "Socrates";// s now refers to "Socrates" object
+    </input></program>
+    <p>
+      In this case, the reference variable <em>s</em>
+      is initially <c>null</c> <mdash/> that is,
+      it has no referent, no object, to refer to.
+      However, after the assignment statement,
+      <em>s</em> would refer to the literal object
+      <q>Socrates,</q>
+      which is depicted in <xref ref="fig-socrates">Figure</xref>.
+      Given these two statements, we still have only one object,
+      the <c>String</c> object containing the word
+      <q>Socrates</q>. But now we have two references to it: the literal string
+      <q>Socrates,</q>
+      and the reference variable <em>s</em>.
+    </p>
+    <p>
+      Assignment statements can also be used as initializers when declaring a <c>String</c> variable:
+    </p>
+    <program language="java"><input>
+      String name1 = "";         // Reference to the empty string
+      String name2 = "Socrates"; // References to "Socrates"
+      String name3 = "Socrates";
+    </input></program>
+    <p>
+      In this example, Java does not construct new <c>String</c> objects.
+      Instead, as <xref ref="fig-literalrefs">Figure</xref> shows,
+      it simply makes the variables <c>name1</c>, <c>name2</c>, and <c>name3</c> 
+      serve as references to the same objects that are referred to by the literal strings
+      <q></q> and <q>Socrates.</q>
+    </p>
+    <p>
+      This is a direct consequence of Java's policy of creating only one object 
+      to serve as the referent of a literal string,
+      no matter how many occurrences there are of that literal in the program.
+      Thus, these declarations result in no new objects,
+      just new references to existing objects.
+      By npt duplicating lierals, this policy saves lots of memory in our programs.
+    </p>
+    <figure xml:id="fig-literalrefs">
+      <caption> The variables <c>name1</c>, <c>name2</c>, 
+      and <c>name3</c> serve as references to the literals 
+      <q>Socrates</q>   and ``''.</caption>
+      <image width="50%" source="chptr07/p350f1.png"/>
+    </figure>
+    <p>
+      Finally, consider the following declarations,
+      which do invoke the <c>String</c> constructors:
+    </p>
+ <program language="java"><input>
+String name4 = new String();    // Creates an object
+String name5 = new String("Socrates");
+String name6 = name4;
+ </input></program>
+    <p>
+      In this case,
+      as shown in <xref ref="fig-strobjects">Figure</xref>, Java creates two new 
+      objects and sets <c>name4</c> to refer to the first and <c>name5</c> to refer to the second.
+      It gives <c>name4</c> the empty string as its value,
+      and it gives <c>name5</c> <q>Socrates</q> as its value.
+      But these two objects must be distinguished from the objects 
+      corresponding to the literals <q></q> and <q>Socrates</q> themselves.
+      The declaration of <c>name6</c> just creates a second reference to the 
+      object referred to by <c>name4</c>.
+    </p>
+    <figure xml:id="fig-strobjects">
+    <image width="50%" source="chptr07/p351f1.png"/> 
+    <caption>Together with the objects in <xref ref="fig-literalrefs">Figure</xref>,
+      there are now four different <c>String</c> objects with eight different references to them,
+      including the literals  <q>Socrates</q>  and <q></q>.</caption>
+    </figure>  
+    <principle>
+      <title>Strings</title>
+      <p>
+        Java <c>String</c> s are full-fledged objects,
+        but they have some properties in common with primitive types.
+        They can have literal values and they can be used in assignment statements.
+      </p>
+    </principle>
+    <principle>
+      <title>String Declaration and Instantiation</title>
+      <p>
+        Unless a <c>String()</c> constructor is called explicitly,
+        no new <c>String</c> object is created when declaring 
+        a <c>String</c> variable and assigning it an initial value.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="sec-concatenation">
+    <title>Concatenating Strings</title>
+    <p>
+      Another way to build a <c>String</c> object is to concatenate two other strings.
+      Recall from <xref ref="chapter-objects">Chapter</xref>
+      that there are two ways to perform string concatenation in Java: We can use the <c>concat()</c> method or the concatenation operator,
+      <m>+</m>.
+    </p>
+ <program language="java"><input>
+String lastName = "Onassis";
+String jackie =
+   new String("Jacqueline " + "Kennedy " + lastName);
+System.out.println("Jacqueline".concat(lastName));
+ </input></program>
+    <p>
+      The second of these statements uses the
+      <em>concatenation  operator</em>,
+      <m>+</m>,
+      to create the <c>String</c>
+      <q>Jacqueline Kennedy Onassis.</q>
+      The third statement uses the <c>String</c> method, <c>concat()</c>, to print
+      <q>JacquelineOnassis.</q>
+    </p>
+    <p>
+      Using the + symbol as the string concatenation operator is  another example of
+      <em>operator overloading</em><mdash/>using the same operator for two or more different operations<mdash/>which we encountered in Chapter<nbsp/>5.
+    </p>
+    <principle>
+      <title>String Concatenation</title>
+      <p>
+        When surrounded on either side by a <c>String</c>, the + symbol is used as a binary
+        <term>concatenation</term> operator.
+        It has the effect of joining two strings together to form a single string.
+      </p>
+    </principle>
+    <p>
+      Note that primitive types are automatically promoted to <c>String</c> s when they are mixed with concatenation operators.
+      Thus, the statement
+    </p>
+ <program language="java"><input>
+System.out.println("The sum of 5 and 5 = "+ (5 + 5));
+ </input></program>
+    <p>
+      will print the string
+      <q>The sum of 5 and 5 = 10.</q>
+      Note that the integer addition<mdash/>(5 + 5)<mdash/>is performed first,
+      before the integer result is converted into a String.
+      If we had left off the parentheses around the addition operation,
+      the second plus sign would also be interpreted as a concatenation operator.
+      Thus,
+    </p>
+ <program language="java"><input>
+System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
+ </input></program>
+    <p>
+      would print
+      <q>The concatenation of 5 and 5 = 55.</q>
+    </p>
+    </subsection>
+    <subsection>
+    <title>Self-Study Exercises</title>
+      <exercise label="str-basics-1">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              System.out.println(s1);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+      </exercise>
+
+      <exercise label="str-basics-2">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              String s2 = s1;
+              System.out.println(s2);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+      </exercise>       
+
+      <exercise label="str-basics-3">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              String s2 = new String (s1 + " stuff");
+              System.out.println(s2);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly stuff">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect. The answer must exactly match what is printed.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+      </exercise>
+
+      <exercise label="str-basics-4">
+      <title>Creating an empty string</title>
+        <statement>
+          <p>Which the following declarations would create an empty string?</p>
+        </statement>
+        <choices>
+          <choice correct="yes">
+            <statement>
+              <c>String s = "";</c>
+            </statement>
+            <feedback>
+              <p>That's one way to create an empty string.</p>
+            </feedback>
+          </choice>
+          <choice correct="yes">
+            <statement>
+              <c>String s = new String();</c>
+            </statement>
+            <feedback>
+              <p>That's one way to create an empty string.</p>
+            </feedback>
+          </choice>
+          <choice>
+            <statement>
+              <c>String s = " ";</c>
+            </statement>
+            <feedback>
+              <p>There's a space between the quotes.</p>
+            </feedback>
+          </choice>
+          <choice correct="yes">
+            <statement>
+              <c>String s = new String("");</c>
+            </statement>
+            <feedback>
+              <p>That's one way to create an empty string.</p>
+            </feedback>
+          </choice>
+        </choices>
+      </exercise>
+
+      <exercise label="str-basics-5">
+      <title>Evaluate expressions</title>
+        <statement>
+          <p>
+            Evaluate the following expressions given the declarations here. Make sure 
+            you use quote marks to distinguish strings ("100") from numbers (100).
+            <program language="java"><input>
+              int M = 5, N = 10;
+              String s1 = "51", s2 = "75";
+            </input></program>
+          </p>
+          <ul>
+           <li>
+              <c>M + N</c>  <var/>
+            </li>
+            <li>
+              <c>M + s1</c>  <var/>
+            </li>
+            <li>
+              <c>s1 + s2</c>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="15">
+              <feedback>
+                <p>Correct. Just adding two numbers.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;1551&quot;">
+              <feedback>
+                <p>Correct. The number is promoted to a string.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Think about Java's promotion rules.</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;5175&quot;">
+              <feedback>
+                <p>Correct. Concatenating two strings.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+      </exercise>
+
+      <exercise label="str-basics-6">
+      <title>String objects</title>
+        <statement>
+          <p>
+            Given the declarations here: 
+            <program language="java"><input>
+            String s1;
+            String s2 = "Hello";
+            String s3 = s2;
+            </input></program>
+          </p>
+          <ul>
+           <li>
+              <p>How many distinct <c>String</c> objects are created?</p> <var/>
+            </li>
+            <li>
+              <p>How many null variables are declared?</p> <var/>
+            </li>
+            <li>
+              <p>How many references are there to the "Hello" litreral?</p> <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct. The only object is the "Hello" literal.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition number="1">
+              <feedback>
+                <p>Correct. s1 is null variable.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Which variable is not pointing to an object?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition number="3">
+              <feedback>
+                <p>Correct. s2, s3 and "Hello" all point to the string literal object "Hello".</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. This is challenging. Check out the hint.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+        <hint>
+          <p>Review the discussion around <xref ref="fig-strobjects">Figure</xref>.</p>
+        </hint>
+      </exercise>
+
+  </subsection>
+  <subsection xml:id="fig-zeroindex">
+    <title>Indexing <c>String</c> s</title>
+    <p>
+      Programmers often need to take strings apart or put them together or rearrange them.
+      Just think of the many word-processing tasks,
+      such as cut and paste, that involve such operations.
+      To help simplify such operations,
+      it is useful to know how many characters a string contains and to number,
+      or <em>index</em>, the characters that make up the string.
+    </p>
+    <p>
+      The number of characters in a string is called its <em>length</em>.
+      The <c>String</c> instance method, <c>length()</c>, returns an integer that gives the <c>String</c>'s length.
+      For example,
+      consider the following
+<c>String</c> declarations and the corresponding values of the
+<c>length()</c> method for each case:
+    </p>
+ <program language="java"><input>
+String string1 = "";           string1.length()  ==> 0
+String string2 = "Hello";      string2.length()  ==> 5
+String string3 = "World";      string3.length()  ==> 5
+String string4 = string2 + " "
+    + string3;                 string4.length()  ==> 11
+ </input></program>
+    <p>
+      The position of a particular character in a string is called its
+      <term>string index</term>.
+    </p>
+    <figure xml:id="fig-0index">
+      <image width="59%" source="chptr07/7f5.png"/>
+      <caption>Strings are 0-indexed in Java.</caption>
+    </figure>
+    <p>
+      All <c>String</c> s in Java are <term>zero indexed</term>
+          <idx><h>zero indexed</h></idx>
+      <mdash/> that is, the index of the first character is zero.
+      (Remember, zero indexing is contrasted with <term>unit indexing</term>,
+      in which we start counting at 1.)
+      For example, in
+      <q>Socrates,</q>
+      the letter <em>S</em> occurs at index 0, the letter
+      <em>o</em> occurs at index 1, <em>r</em>
+      occurs at index 3, and so on.
+      Thus, the <c>String</c>
+      <q>Socrates</q>
+      contains eight characters indexed from 0 to 7 (<xref ref="fig-0index">Figure</xref>).
+      Zero indexing is customary in programming languages.
+      We will see other examples of this when we talk about arrays and vectors.
+    </p>
+    <principle>
+      <title>String Indexing</title>
+      <p>
+        Strings are indexed starting at 0.
+        The first character in a string is at position 0.
+      </p>
+    </principle>
+    <principle>
+      <title>DEBUGGING TIP: Zero Versus Unit Indexing</title>
+      <p>
+        Syntax and semantic errors will result if you forget that strings are zero indexed.
+        In a string of <em>N</em> characters,
+        the first character occurs at index 0 and the last at index <m>N-1</m>.
+        This is different from the <c>String.length()</c> method,
+        which gives the number of characters in the string, counting from 1.
+      </p>
+    </principle>
+  </subsection>
+  <subsection xml:id="self-study-exercisesB20">
+    <title>Converting Data to Strings</title>
+    <p>
+      The <c>String.valueOf()</c> method is a <em>class method</em>
+      that is used to convert a value of some primitive type into a <c>String</c> object.
+      For example,
+      the expression, <c>String.valueOf(128)</c> converts 
+      its <c>int</c> argument to the<nbsp/><c>String</c>
+      <q>128.</q>
+    </p>
+    <p>
+      There are different versions of <c>valueOf()</c>, each of which has the following type of signature:
+    </p>
+ <program language="java"><input>
+static public String valueOf(Type);
+ </input></program>
+    <p>
+      where <c>Type</c> stands for any primitive data type,
+      including <c>boolean</c>, <c>char</c>, <c>int</c>, <c>double</c>, and so on.
+    </p>
+    <p>
+      The <c>valueOf()</c> method is most useful for initializing
+<c>String</c> s.
+      Because <c>valueOf()</c> is a class method,
+      it can be used as follows to instantiate new <c>String</c> objects:
+    </p>
+ <program language="java"><input>
+String number = String.valueOf(128); // Creates "128"
+String truth = String.valueOf(true); // Creates "true"
+String bee = String.valueOf('B');    // Creates "B"
+String pi = String.valueOf(Math.PI);  // Creates "3.14159"
+ </input></program>
+    <p>
+      We have already seen that Java automatically promotes primitive type values to <c>String</c> where necessary,
+      so why do we need the <c>valueOf()</c> methods?
+      For example,
+      we can initialize a
+<c>String</c> to
+      <q>3.14159</q>
+      as follows:
+    </p>
+ <program language="java"><input>
+String pi = new String(""+Math.PI);// Creates "3.14"
+ </input></program>
+    <p>
+      In this case, because it is part of a concatenation expression,
+      the value of <c>Math.PI</c> will automatically be promoted to a <c>String</c> value.
+    </p>
+    <p>
+      The point of the <c>valueOf()</c> method is twofold.
+      First, it may be the method that the Java compiler relies on to perform string promotions such as this one.
+      Second, using it in a program<mdash/>even when it is not completely necessary<mdash/>makes the promotion operation explicit rather than leaving it implicit.
+      This  helps to make the code more readable.
+      (Also, see Exercise 7.9.)
+    </p>
+    </subsection>
+    <subsection>
+    <title>Self-Study Exercises</title>
+      <exercise label="str-basics-7">
+      <title>String.valueOf()</title>
+        <statement>
+          <p>
+            Evaluate each of the following expressions. 
+            Use quote marks to distinguish strings ("100") from numbers (100).
+          </p>
+          <ul>
+           <li>
+              <c>String.valueOf(45)</c>  <var/>
+            </li>
+            <li>
+              <c>String.valueOf (128-7)</c>  <var/>
+            </li>
+            <li>
+              <c>String.valueOf('X')</c>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition string="&quot;45&quot;">
+              <feedback>
+                <p>Correct. The number 45 is converted into the string "45".</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you remember to put quotes around strings?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;121&quot;">
+              <feedback>
+                <p>Correct. The number 121 is converted into the string "121"</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you remember to put quotes around strings?</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;X&quot;">
+              <feedback>
+                <p>Correct. The character 'X' is converted to the string "X".</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.  Did you remember to put quotes around strings?.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+        <hint>
+          <p>The <c>String.valueOf()</c> method converts its argument into a string.</p>
+        </hint>
+      </exercise>
+
+      <exercise label="str-basics-8">
+      <title>String.valueOf()</title>
+        <statement>
+          <p>
+            Write an expression to satisfy each of the following descriptions:
+          </p>
+          <ul>
+           <li>
+               <p>Convert the integer value 100 to the string "100".</p> <var/>
+            </li>
+            <li>
+              <p>Convert the product of two <c>ints x and y</c> into a String.</p>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition string="String.valueOf(100)">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you use <c>String.valueOf()</c>?</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="String.valueOf(x * y)">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Did you use <c>String.valueOf()</c>?</p>
+              </feedback>
+            </condition>
+          </var>                    
+        </setup>
+        <hint>
+          <p>The <c>String.valueOf()</c> method converts its argument into a string.</p>
+        </hint>
+      </exercise>      
+  </subsection>
+</section>

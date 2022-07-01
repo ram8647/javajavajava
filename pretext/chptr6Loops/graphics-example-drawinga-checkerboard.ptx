@@ -1,0 +1,281 @@
+<section xml:id="graphics-example-drawinga-checkerboard">
+  <title>Graphics Example: Drawing a Checkerboard</title>
+  <introduction>
+    <p>
+      In this section we will combine some of the graphics methods we have learned 
+      ith the nested for-loop structure to draw a checkerboard with checkers on it 
+      (<xref ref="fig-checkerboard">Figure</xref>).
+      
+      <figure xml:id="fig-checkerboard">
+        <caption>Checkerboard</caption>
+      <image width="73%" source="chptr06/checkerboard.png"/> 
+      </figure>
+      For this example,
+      we will just concentrate on drawing the checkerboard.
+      We will not worry about providing a full checkerboard representation,
+      of the sort we would need if we were writing a program to play the game of checkers.
+      So, our design will not involve instance variables for whose turn it is,
+      how many checkers each player has,
+      where the checkers are located on the board,
+      and other elements of the game's state.
+      Still, our visible representation of the board should be designed 
+      so that it will eventually be useful when we do develop a checkers game in 
+      <xref ref="chapter-inheritance">Chapter</xref>.
+    </p>
+  </introduction>
+  <subsection>
+    <title>Problem Description and Specification</title>
+    <p>
+      The specification for this problem is to develop a program that will draw a 
+      checkerboard and place the checkers on it in their appropriate starting positions.
+      As with many of our programs,
+      our design will involve two classes,
+      one which defines the user interface and the other which represents the computational object.
+      For this problem,
+      the computational object will be defined in the <c>CheckerBoard</c> class.
+      The details of its design are described in the next section.
+    </p>
+    <p>
+      Because the purpose of this example is to focus on how we use loops and drawing methods,
+      we will employ a very simple JFrame interface,
+      whose implementation is given in <xref ref="fig-checkerapplet">Figure</xref>.
+      
+    </p>
+    <figure xml:id="fig-checkerapplet">
+      <caption>The <c>CheckerBoardFrame</c> class.</caption>
+ <program language="java"><input>
+import java.awt.*;
+import javax.swing.*;
+public class CheckerBoardFrame extends JFrame {
+   private CheckerBoard theBoard;
+   public CheckerBoardFrame() {
+       theBoard = new CheckerBoard();
+   }
+   public  void paint(Graphics g) {
+       super.paint(g);
+       theBoard.draw(g);
+   } // paint()
+   public static void main(String[] args){
+        CheckerBoardFrame c = new CheckerBoardFrame();
+        c.setSize(500,500);
+        c.setVisible(true);
+    }
+  } // CheckerBoardFrame
+ </input></program>
+    </figure>
+    <p>
+      As shown there,
+      the program simply creates a <c>CheckerBoard</c> instance in its <c>CheckerBoardFrame()</c> constructor,
+      and then invokes the <c>CheckerBoard</c>'s
+<c>draw</c> method in its <c>paint()</c> method.
+      The reason we invoke the <c>draw()</c> method in <c>paint()</c> is because we need to have access to the JFrame's <c>Graphics</c> context,
+      which is passed as an argument to the <c>draw()</c> method.
+      Recall that the <c> main()</c> method is invoked when CheckerBoardFrame is run,and then the <c>paint()</c> methods are invoked automatically by calling the <c>setVisible(true)</c> method in <c>main()</c>. Thus,
+      the action taken by this program is simply to draw a visual representation of the checkerboard.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Class Design: <c>CheckerBoard</c></title>
+    <p>
+      <figure  xml:id="fig-checkeruml">
+        <caption>The <c>CheckerBoard</c> class</caption>
+      <image width="50%" source="chptr06/checkeruml.png"/> 
+      </figure>
+      
+     The <c>draw()</c> method must be public and a part of the <c>CheckerBoard</c>'s interface.
+     The task of drawing a checkerboard involves two distinct subtasks: (1) drawing the board itself,
+      which will involve drawing a square with smaller squares of alternating colors;
+      and, (2) drawing the checkers on the checkerboard.
+      A good design for the <c>draw()</c> method would be simply to invoke helper methods that encapsulate these two subtasks.
+      This is good method design because it results in relatively small methods,
+      each of which performs a very well-defined task.
+      Let's call these methods <c>drawBoard()</c> and <c>drawCheckers()</c>, respectively.
+      Their signatures are shown in <xref ref="fig-checkeruml">Figure</xref>,
+      which summarizes the design of the <c>CheckerBoard</c> class.
+    </p>
+    <p>
+      Before getting into the details of the <c>drawBoard</c> and <c>drawCheckers()</c> methods,
+      we must first discuss <c>CheckerBoard</c>'s several instance variables.
+      The first two variables <c>LEFT_X</c> and
+<c>UPPER_Y</c>, give the absolute position of the upper left corner of the checkerboard on the JFrame's drawing panel.
+      The <c>SQ_SIDE</c> variable gives the size of the checkerboard's individual squares.
+<c>N_ROWS</c> and <c>N_COLS</c> give the number of rows and columns in the checkerboard
+      (typically, 8 by 8).
+      All of these variables are integers.
+      The final four variables, <c>SQ_COLOR1</c>, <c>SQ_COLOR2</c>,
+<c>CHECKER_COLOR1</c>, and <c>CHECKER_COLOR2</c>, specify the colors of the checkerboard and the checkers.
+    </p>
+    <p>
+      Note that the names of all the instance variables are written in uppercase letters.
+      This is to identify them as symbolic constants<mdash/>that is,
+      as final variables whose values do not chage once they are initialized.
+      Because their actual values are not important,
+      we do not show them in the UML diagram and we won't discuss them here.
+      Recall that the advantage of defining class constants,
+      rather than sprinkling literal values throughout the program,
+      is that they make it easy to modify the program if we decide to change the size,
+      location, or color of the checkerboard.
+    </p>
+  </subsection>
+  <subsection>
+    <title>Method Design</title>
+    <p>
+      Returning now to the design of <c>CheckerBoard</c>'s instance methods,
+      the complete definition of the <c>CheckerBoard</c> class is given in <xref ref="fig-checkerclass">Figure</xref>.
+      Note how simple its <c>draw()</c> method is.</p>
+      <program language="java"><input>
+        public void draw(Graphics g) { // Draw board and checkers
+          drawBoard(g);
+          drawCheckers(g);
+      }
+      </input></program>
+<p>      As we noted earlier, in order to using Java's drawing commands,
+      it is necessary to have a reference to a <c>Graphics</c> object.
+      This is passed to the <c>draw()</c> method when the <c>draw()</c> method is invoked in the program.
+      Because the <c>draw()</c> method delegates the details of the drawing algorithm to its helper methods, <c>drawBoard()</c> and <c>drawCheckers()</c>, it has to pass them a reference to the <c>Graphics</c> object.
+    </p>
+    <figure xml:id="fig-checkerclass">
+      <caption>The <c>CheckerBoard</c> class.</caption>
+      
+ <program language="java"><input>
+import java.awt.*;
+public class CheckerBoard {
+  // Default values for a standard checkerboard
+  private final int LEFT_X = 10;        // Position of left
+  private final int UPPER_Y = 10;           // upper corner
+  private final int SQ_SIDE = 40;     //Size of each square
+  private final int N_ROWS = 8;        // Checkerboard rows
+  private final int N_COLS = 8;     // Checkerboard columns
+  private final Color SQ_COLOR1 = Color.lightGray; //Colors
+  private final Color SQ_COLOR2 = Color.gray;  //of squares
+  private final Color CHECKER_COLOR1 = Color.white;  // and
+  private final Color CHECKER_COLOR2 = Color.black; //checkers
+  
+  private void drawBoard(Graphics g) {
+    for(int row = 0; row &lt; N_ROWS; row++)        // For each row
+      for(int col = 0; col &lt; N_COLS; col++) { // For each square
+        if ((row + col) % 2 == 0)            // Alternate colors
+          g.setColor(SQ_COLOR1);                        // Light
+        else
+          g.setColor(SQ_COLOR2);                      // or dark
+        g.fillRect(LEFT_X+col*SQ_SIDE,
+              UPPER_Y+row*SQ_SIDE,SQ_SIDE,SQ_SIDE);
+      } //for
+  } //drawBoard()
+  
+  private void drawCheckers(Graphics g) {   // Place checkers
+    for(int row = 0; row &lt; N_ROWS; row++)   // For each row
+      for(int col = 0; col &lt; N_COLS; col++)// For each square
+        if ((row + col)%2 == 1) {// One player has top 3 rows
+          if (row &lt; 3) {
+              g.setColor(CHECKER_COLOR1);
+              g.fillOval(LEFT_X+col*SQ_SIDE,
+                  UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+          }//if
+          if (row >= N_ROWS - 3) { // Other has bottom 3 rows
+              g.setColor(CHECKER_COLOR2);
+              g.fillOval(LEFT_X+col*SQ_SIDE,
+                   UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+          }//if
+        }//if
+  }//drawCheckers()
+
+  public void draw(Graphics g) { // Draw board and checkers
+      drawBoard(g);
+      drawCheckers(g);
+  }//draw()
+} //CheckerBoard
+ </input></program>
+    </figure>
+    <p>
+      The <c>drawBoard()</c> method uses a nested <c>for</c> loop to draw an
+      <m>8 \times 8</m> array of rectangles of alternating colors.
+      The loop variables, <c>row</c> and <c>col</c>, both range from 0 to 7.
+      The expression used to determine alternating colors tests whether the sum of the row and column subscripts is even:
+      <m>((row + col) \% 2 == 0)</m>.
+      If their sum is even, we use one color;
+      if odd, we use the other color.
+    </p>
+    <p>
+      As the table below shows for a <m>4 \times 4</m> board,
+      the sum of a board's row and column subscripts alternates between even and odd values.
+      Thus, in row 2 column 3, the sum of the subscripts is 5.
+    </p>
+    <pre>
++ | 0 1 2 3 
+------------
+0 | 0 1 2 3
+1 | 1 2 3 4
+2 | 2 3 4 5
+3 | 3 4 5 6
+</pre>
+     
+    <p>
+      To switch from one color to the other,
+      we use the <c>Graphics</c><c>setColor()</c> method to alternate between the two colors designated for the checkerboard, <c>SQ_COLOR1</c> and <c>SQ_COLOR2</c>. We then use the following method call to draw the colored squares:
+    </p>
+ <program language="java"><input>
+g.fillRect(LEFT_X+col*SQ_SIDE, UPPER_Y+row*SQ_SIDE, SQ_SIDE, SQ_SIDE);
+ </input></program>
+    <p>
+      Note how we use the loop variables, <c>row</c><c>col</c>, together with the constants specifying the top left corner of the board (<c>UPPER_Y</c> and <c>LEFT_X</c>) and the size of the squares (<c>SQ_SIDE</c>) to calculate the location and size of each square.
+      The calculation here is illustrated in <xref ref="fig-checkerlayout">Figure</xref>.
+      The first two parameters in <c>fillRect(left,top,width,height)</c> specify the coordinates for the rectangle's top-left corner.
+      These are calculated as a function of the rectangle's row and column position within the checkerboard and the rectangle's width and height,
+      which are equal for the squares of a checkerboard.
+    </p>
+    <figure xml:id="fig-checkerlayout">
+      <caption>Calculating the
+      locations of the checkerboard squares.</caption>
+      <image width="73%" source="chptr06/checkerlayout.png"/>
+    </figure>
+    <p>
+      The <c>drawCheckers()</c> method also uses a nested <c>for</c> loop to trace through the checkerboard's rows and columns.
+      In this case, however,
+      we draw checkers on just the dark-colored squares<mdash/>that is,
+      those that satisfy the expression
+      <m>(row+col) \% 2 == 1)</m><mdash/>on the first three rows of each player's side of the board.
+      So, each player's checkers initially are located in the first three rows and last three rows of the checker board:
+    </p>
+ <program language="java"><input>
+if ((row + col)%2 == 1) {// One player has top 3 rows
+    if (row &lt; 3){
+        g.setColor(CHECKER_COLOR1);
+        g.fillOval(LEFT_X+col*SQ_SIDE,
+           UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+    }//if
+    if (row >= N_ROWS - 3) { // Other has bottom 3 rows
+        g.setColor(CHECKER_COLOR2);
+        g.fillOval(LEFT_X+col*SQ_SIDE,
+           UPPER_Y+row*SQ_SIDE,SQ_SIDE-2,SQ_SIDE-2);
+    }//if
+  }//if
+ </input></program>
+    <p>
+      Because the checkers are circles,
+      we use the <c>fillOval()</c> method to draw them.
+      Note that the parameters for <c>fillOval(left, top, width, height)</c> are identical to those for <c>fillRect()</c>. The parameters specify an enclosing rectangle in which the oval is inscribed.
+      In this case, of course, the enclosing rectangle is a square,
+      which causes <c>fillOval()</c> to draw a circle.
+    </p>
+    <p>
+      Our design of the <c>CheckerBoard</c> class illustrates an important principle of method design.
+      First, rather than placing all of the commands for drawing the checkerboard and the checkers into one method,
+      we broke up this larger task into distinct subtasks.
+      This resulted in small methods,
+      each of which has a well defined purpose.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Method Decomposition</title>
+      <p>
+        Methods should be designed to have a clear focus.
+        If you find a method becoming too long,
+        you should break its algorithm into subtasks and define a separate method for each subtask.
+      </p>
+    </principle>
+
+    <p>Try the Checkerboard class online at  
+      <url href="https://replit.com/@BerylHoffman/Checkerboard" visual="" target="_blank">Checkerboard on repl</url>. 
+      </p>
+  </subsection>
+</section>

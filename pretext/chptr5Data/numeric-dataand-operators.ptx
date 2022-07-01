@@ -6,57 +6,55 @@
       integers, which have no fractional part,
       and real numbers or <em>floating-point numbers</em>,
       which contain a fractional component.
-      Java recognizes four different kinds of integers: <c>byte</c>, <c>short</c>, <c>int</c>, and <c>long</c>, which are distinguished by the number of
+    </p>
+    <p>
+      Java recognizes four different kinds of integers: <c>byte</c>, <c>short</c>, <c>int</c>, and 
+      <c>long</c>, which are distinguished by the number of
       <em>bits</em> used to represent them.
       A <term>binary digit</term>, or <term>bit</term>,
-      is a 0 or a 1. (Recall that computers read instructions as series of 0s and 1s.) Java has two different kinds of real numbers, <c>float</c> and <c>double</c>, which are also distinguished by the number of bits used to represent them.
-      See Table<nbsp/>5.3.
+      is a 0 or a 1. (Recall that computers read instructions 
+      as series of 0s and 1s.) Java has two different kinds of real numbers, <c>float</c> and <c>double</c>, which are also distinguished by the number of bits used to represent them.
+      See <xref ref="tab-numerics">Table</xref>.
     </p>
-    <table>
-      \TBT{0pc}{Java's numeric types}
-      
+    <table xml:id="tab-numerics">
+      <title>Java's numeric types</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+      <row bottom="minor" left="minor">
           <cell><term> Type</term></cell>
           <cell><term>Bits</term></cell>
           <cell><term>Range of Values</term></cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
+          <cell><c>byte</c></cell>
+          <cell><nbsp/>8</cell>
+          <cell><m>-128  to  +127</m></cell>
         </row>
         <row>
-          <cell><em>byte</em></cell>
-          <cell><nbsp/>8</cell>
-          <cell><m>-128  \hbox{ to }  +127</m>\cr
-            <em>short</em></cell>
+          <cell><c>short</c></cell>
           <cell>16</cell>
-          <cell><m>-32768  \hbox{ to }   32767</m>\cr
-            <em>int</em></cell>
+          <cell><m>-32768 \hbox{ to } 32767</m></cell>
+        </row>
+        <row>
+          <cell><c>int</c></cell>
           <cell>32</cell>
-          <cell><m>-2147483648   \hbox{ to }   2147483647</m>\cr
-            <em>long</em></cell>
+          <cell><m>-2147483648 \hbox{ to } 2147483647</m></cell>
+        </row>
+        <row>
+          <cell><c>long</c></cell>
           <cell>64</cell>
           <cell><m>-2^{63}  \hbox{ to }  2^{63}-1</m></cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell><em>float</em></cell>
+          <cell><c>float</c></cell>
           <cell>32</cell>
-          <cell><m>-3.40292347E+38 \hbox{ to } +3.40292347E+38</m>\cr
-            <em>double</em></cell>
-          <cell>64</cell>
-          <cell><m>-1.79769313486231570E+308  \hbox{ to } +1.79769313486231570E+308</m></cell>
+          <cell><m>-3.40292347E+38 \hbox{ to }  +3.40292347E+38</m></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
+        <row bottom="minor">
+          <cell><c>double</c></cell>
+          <cell>64</cell>
+          <cell><m>-1.79769313486231570E+308   \hbox{ to }  +1.79769313486231570E+308</m></cell>
         </row>
       </tabular>
-      \endTB
     </table>
     <p>
       The more bits a data type has,
@@ -65,11 +63,16 @@
       respectively.
       Two bits can represent four possible values: 00, 01, 10, and 11;
       three bits can represent eight possible values: 000, 001, 010, 100, 101, 110, 011, 111.
-      And, in general,
-      an <em>n</em>-bit quantity can represent <m>2^n</m> different values.
     </p>
     <p>
-      As illustrated in Table<nbsp/>5.3, the various integer types represent positive or negative whole numbers.
+    <definition>
+      An <em>n</em>-bit quantity can represent <m>2^n</m> different values.
+    </definition>
+    </p>
+    <p>
+      <xref ref="tab-numerics">Table</xref>
+      As illustrated in <xref ref="tab-numerics">Table</xref>, the various integer types 
+      represent positive or negative whole numbers.
       Perhaps the most commonly used integer type in Java is the <c>int</c> type,
       which is represented in 32 bits.
       This means that Java can represent <m>2^{32}</m> different <c>int</c> values,
@@ -79,8 +82,7 @@
       a <c>byte</c>, can represent <m>2^8</m> or 256  different values,
       ranging from <m>-128</m> to <m>+127</m>.
       A 16-bit integer,
-      a
-<c>short</c>, can represent <m>2^{16}</m> different values,
+      a <c>short</c>, can represent <m>2^{16}</m> different values,
       which range from <m>-32768</m> to <m>32767</m>.
       And a 64-bit integer,
       a <c>long</c>, can represent whole number values ranging from <m>-2^{63}</m> to <m>2^{63}-1</m>.
@@ -90,7 +92,7 @@
       a 32-bit <c>float</c> type can represent <m>2^{32}</m> different real numbers and a 64-bit <c>double</c> value can represent <m>2^{64}</m> different real numbers.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Platform Independence</title>
+      <title>EFFECTIVE DESIGN: Platform Independence</title>
       <p>
         In Java, a data type's size
         (number of bits)
@@ -100,7 +102,8 @@
       </p>
     </principle>
     <p>
-      It is worth noting that just as model airplanes are representations of real airplanes, Java's numeric types are representations or  models of the numbers we deal with in mathematics.
+      It is worth noting that just as model airplanes are representations of real airplanes, 
+      Java's numeric types are representations or  models of the numbers we deal with in mathematics.
       In designing Java's data types,
       various trade-offs have been made in order to come up with practical implementations.
     </p>
@@ -125,20 +128,20 @@
       For example,
       a decimal number represented as a double value can have a maximum of 17
       <em>significant digits</em>,
-      and a <c>float</c> can have a maximum 8.
+      and a <c>float</c> can have a maximum of  8.
       A significant digit is one that contributes to the number's value.
       If you tried to store values such as 12345.6789 or 0.123456789 in a <c>float</c> variable,
       they would be rounded off to 12345.679 and 0.12345679,
       respectively, causing a possible error.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Significant Digits</title>
+      <title>DEBUGGING TIP: Significant Digits</title>
       <p>
         In using numeric data,
-        be sure the data type you choose has enough precision to represent the values your program needs.
+        be sure the data type you choose has enough precision to represent 
+        the values your program needs.
       </p>
     </principle>
-<!--      </subsection><subsection><title>Self-Study Exercises</title> -->
   </introduction>
   <subsection>
     <title>Numeric Operations</title>
@@ -150,56 +153,51 @@
         (/), as well as the <em>modulus</em> (%) operator.
         Note that in Java,
         the multiplication symbol is <c>*</c> and not the <times/>.
-        The arithmetic operators are binary operators,  meaning that they each take two operands.
-        Table<nbsp/>5.4
+        The arithmetic operators are binary operators,  meaning that they each take two operands. 
+        <xref ref="tab-numops">Table</xref> compares expressions involving the 
+        Java operators with their standard algebraic counterparts.
       </p>
-      <table>
-        \TBT{2pc}{The standard arithmetic operators<idx><h>arithmetic operators</h></idx> in Java}
-        
+      <table xml:id="tab-numops">
+        <title>The standard arithmetic operators arithmetic operators in Java.</title>  
         <tabular>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
-          <row>
+          <row bottom="minor" left="minor">
             <cell><term>Operation</term></cell>
             <cell><term>Operator</term></cell>
             <cell><term>Java</term></cell>
             <cell><term>Algebra</term></cell>
           </row>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
-          <row>
+           <row>
             <cell><em>Addition</em></cell>
             <cell><m>+</m></cell>
             <cell><m>x  +  2</m></cell>
-            <cell><m>x  +  2</m>\cr
-              <em>Subtraction</em></cell>
-            <cell><m>-</m></cell>
-            <cell><m>m  -  2</m></cell>
-            <cell><m>m  -  2</m>\cr
-              <em>Multiplication</em></cell>
-            <cell>*</cell>
-            <cell><m>m</m>   *   <m>2</m></cell>
-            <cell><m>2m  \hbox{or }  2 \times m</m>\cr
-              <em>Division</em></cell>
-            <cell>/</cell>
-            <cell><m>x  /  y</m></cell>
-            <cell><m>x  \div  y  \hbox{or }  \frac{x}{y}</m>\cr
-              <em>Modulus</em></cell>
-            <cell>%</cell>
-            <cell><m>x  \%  y</m></cell>
-            <cell><m>x  \hbox{modulo }  y \hbox{(for  integers</m>x<m>and</m>y<m>)}</m></cell>
+            <cell><m>x  +  2</m></cell>
           </row>
           <row>
-            <cell><c>__________</c></cell>
+            <cell><em>Subtraction</em></cell>
+            <cell><m>-</m></cell>
+            <cell><m>m  -  2</m></cell>
+            <cell><m>m  -  2</m></cell>
+          </row>
+          <row>
+            <cell><em>Multiplication</em></cell>
+            <cell>*</cell>
+            <cell><m>m</m>   *   <m>2</m></cell>
+            <cell><m>2m  \hbox{ or }  m \times 2</m></cell>
+          </row>
+          <row>
+            <cell><em>Division</em></cell>
+            <cell>/</cell>
+            <cell><m>x  /  y</m></cell>
+            <cell><m>x  \div  y  \hbox{ or }  \frac{x}{y}</m></cell>
+          </row>
+          <row bottom="minor">
+            <cell><em>Modulus</em></cell>
+            <cell>%</cell>
+            <cell><m>x  \%  y</m></cell>
+            <cell><m>x  \hbox{ modulo }  y</m> (for  integers <m>x</m> and <m>y</m>)</cell>
           </row>
         </tabular>
-        \endTB
       </table>
-      <p>
-        compares expressions involving the Java operators with their standard algebraic counterparts.
-      </p>
       <p>
         Although these operations should seem familiar,
         there are some important differences between their use in algebra and their use in a Java program.
@@ -227,9 +225,10 @@
         the result of dividing 7 by 2 cannot be 3.5.
       </p>
       <principle>
-        <title>DEBUGGING TIP:Integer Division</title>
+        <title>DEBUGGING TIP: Integer Division</title>
         <p>
-          A common source of error among beginning programmers is forgetting that integer division always gives an integer result.
+          A common source of error among beginning programmers 
+          is forgetting that integer division always gives an integer result.
         </p>
       </principle>
       <p>
@@ -249,7 +248,8 @@
       <p>
         What if you want to keep the remainder of an integer division?
         Java  provides the modulus operator (%), which takes two operands.
-        The expression (7 % 5) gives the remainder after dividing 7 by 5<mdash/>2 in this case.
+        The expression (7 % 5) gives the remainder after dividing 7 by 5 <mdash/> that is, 
+        2 in this case.
         In general, the expression <m>(m \; \% \; n)</m>
         (read <em>m</em> mod <em>n</em>)
         gives the remainder after <em>m</em>
@@ -286,7 +286,7 @@ if (N % 2 == 0)
         we could use the mod operator to define divisibility by 3, 4, 10, or by any number.
       </p>
     </introduction>
-    <subsubsection xml:id="self-study-exercisesC16">
+    <subsubsection xml:id="promotion-rules">
       <title>Numeric Promotion Rules</title>
       <p>
         Java is considered a <em>strongly typed</em>
@@ -319,8 +319,8 @@ if (N % 2 == 0)
         </p>
       </principle>
       <p>
-        This rule is actually an instance of a more general rule,
-        for whenever an expression involves operands of different types,
+        This rule is actually an instance of a more general rule: 
+        whenever an expression involves operands of different types,
         some operands must be converted before the expression can be evaluated.
         Consider the following example:
       </p>
@@ -331,13 +331,17 @@ n * m;
  </input></program>
       <p>
         In this case,
-        <em>(n * m)</em> involves two different integer types, <c>byte</c> and <c>short</c>. Before evaluating this expression Java must first promote the <c>byte</c> to a
-<c>short</c> and carry out the operation as the multiplication of two
-<c>short</c> s.
-        Conversion of <c>short</c> to <c>byte</c> would not be possible because there's no way to represent the value 32000 as a <c>byte</c>.
+        <em>(n * m)</em> involves two different integer 
+        types, <c>byte</c> and <c>short</c>. Before evaluating this 
+        expression Java must first promote the <c>byte</c> to a
+        <c>short</c> and carry out the operation as the multiplication of two
+        <c>short</c> s.
+        Conversion of <c>short</c> to <c>byte</c> would not be possible 
+        because there's no way to represent the value 32000 as a <c>byte</c>.
       </p>
       <p>
-        It is important to note that this conversion rule applies regardless of the actual values of the operands.
+        It is important to note that this conversion rule applies 
+        regardless of the actual values of the operands.
         In applying the rule, Java looks at the operand's type,
         not its value.
         So even if <em>m</em> were assigned a value that could be represented as a byte
@@ -346,101 +350,87 @@ n * m;
         This leads to following the general rule:
       </p>
       <principle>
-        <title>Type Promotion\index{promotion rule}</title>
+        <title>Type Promotion Rule</title>
         <p>
           In general, when two different types are involved in an operation,
-          the smaller type<mdash/>the one with fewer bits<mdash/>is converted to the larger type before the operation is performed.
+          the smaller type <mdash/> i.e.,the one with fewer bits <mdash/> 
+          is converted to the larger type before the operation is performed.
           To do otherwise would risk losing information.
         </p>
       </principle>
       <p>
-        Table<nbsp/>5.5 summarizes the actual promotion rules used by Java in evaluating expressions involving mixed operands.
+        <xref ref="tab-promotion">Table</xref> summarizes the actual promotion rules used 
+        by Java in evaluating expressions involving mixed operands.
         Note that the last rule implies that integer expressions involving <c>byte</c> or
-<c>short</c> or <c>int</c> are performed as <c>int</c>. This explains why integer literals<mdash/>such as <m>56</m> or <m>-108</m><mdash/>are represented as
-<c>int</c> types in Java.
+        <c>short</c> or <c>int</c> are performed as <c>int</c>. 
+        This explains why integer literals <mdash/> such as <m>56</m> or <m>-108</m> <mdash/> 
+        are represented as <c>int</c> types in Java.
       </p>
-      <table>
-        \TBT{2.5pc}{Java promotion rules for mixed arithmetic operators.
-        If two rules apply, choose the one that occurs first in this table.}
-        
+      <table xml:id="tab-promotion">
+        <title>Java promotion rules for mixed arithmetic operators.
+        If two rules apply, choose the one that occurs first in this table.</title>
         <tabular>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
-          <row>
-            <cell>{If either operand is}</cell>
+          <row bottom="minor"  left="minor">
+            <cell>If either operand is</cell>
             <cell></cell>
-            <cell>{The other is promoted to}</cell>
-          </row>
-          <row>
-            <cell><c>__________</c></cell>
+            <cell>The other is promoted to</cell>
           </row>
           <row>
             <cell><c>double</c></cell>
             <cell></cell>
-            <cell><c>double</c>\cr
-<c>float</c></cell>
+            <cell><c>double</c></cell>
+          </row>
+          <row>
+            <cell><c>float</c></cell>
             <cell></cell>
-            <cell><c>float</c>\cr
-<c>long</c></cell>
+            <cell><c>float</c></cell>
+          </row>
+          <row>
+            <cell><c>long</c></cell>
             <cell></cell>
-            <cell><c>long</c>\cr
-<c>byte</c><em>or</em><c>short</c></cell>
+            <cell><c>long</c></cell>
+          </row>
+          <row  bottom="minor">
+            <cell><c>byte</c><em>or</em><c>short</c></cell>
             <cell></cell>
             <cell><c>int</c></cell>
           </row>
-          <row>
-            <cell><c>__________</c></cell>
-          </row>
         </tabular>
-        \endTB
       </table>
     </subsubsection>
   </subsection>
-  <subsection xml:id="self-study-exerciseO16">
+  <subsection xml:id="op-precedence">
     <title>Operator Precedence</title>
-    <p>
-      The built-in precedence order for arithmetic<idx><h>arithmetic  precedence</h></idx> operators is shown in Table<nbsp/>5.6.
-      Parenthesized
-    </p>
-    <table>
-      \TBT{3.5pc}{Precedence order of the arithmetic operators<idx><h>arithmetic operators</h></idx>}
-      
+    <table xml:id="tab-op-precedence">
+      <title>Precedence order of the arithmetic operators.</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{Precedence}</cell>
-          <cell></cell>
-          <cell>\cr
-            {Order}</cell>
-          <cell>{Operator}</cell>
-          <cell>{Operation}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
+        <row bottom="minor" left="minor">
+          <cell>Precedence Order</cell>
+          <cell>Operator</cell>
+          <cell>Operation</cell>
         </row>
         <row>
           <cell>1</cell>
           <cell><m>( \; )</m></cell>
-          <cell><em>Parentheses</em>\cr
-            2</cell>
+          <cell><em>Parentheses</em></cell>
+        </row>
+        <row>
+          <cell>2</cell>
           <cell><m>\ast \;\; / \;\; \%</m></cell>
-          <cell><em>Multiplication, Division, Modulus</em>\cr
-            3</cell>
+          <cell><em>Multiplication, Division, Modulus</em></cell>
+        </row>
+        <row bottom="minor">
+          <cell>3</cell>
           <cell><m>+ \;\; -</m></cell>
           <cell><em>Addition, Subtraction</em></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      \endTB
     </table>
     <p>
+      The built-in precedence order for arithmetic operators is shown in 
+      <xref ref="tab-op-precedence">Table</xref>.
+      Parenthesized 
       expressions have highest precedence
-          <idx><h>precedence</h></idx>
       and are evaluated first.
       Next come the multiplication, division,
       and modulus operators, followed by addition and subtraction.
@@ -491,7 +481,7 @@ System.out.println(5/(3/2.0)); // 3.33
       then the parentheses here helped avoid a subtle semantic error.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Parenthesize!</title>
+      <title>PROGRAMMING TIP: Parenthesize!</title>
       <p>
         To avoid subtle bugs caused by Java's precedence and promotion rules,
         use parentheses to specify the order of evaluation in an expression.
@@ -501,7 +491,7 @@ System.out.println(5/(3/2.0)); // 3.33
       \secEXRHone{Self-Study Exercise}
     </p>
   </subsection>
-  <subsection xml:id="self-study-exerciseP16">
+  <subsection xml:id="incr-decr-ops">
     <title>Increment and Decrement Operators</title>
     <p>
       Java provides a number of unary operators that are used to increment or decrement an integer variable.
@@ -600,43 +590,41 @@ k = k + 1;          // Final value of i is 0 and k is 1
       <em>k</em> in the expression in which <em>k</em>
       is contained and then it will decrement
       <em>k</em>'s value by 1.
-      Table<nbsp/>5.7 summarizes the increment and decrement operators.
-      The unary increment and decrement operators have higher precedence than any of the binary arithmetic operators.
     </p>
-    <table>
-      \TBT{4pc}{Java's increment and decrement operators}
-      
+    <p>
+      <xref ref="tab-incrdecr">Table</xref> summarizes the increment and decrement operators.
+      The unary increment and decrement operators have higher precedence than 
+      any of the binary arithmetic operators.
+    </p>
+    <table xml:id="tab-incrdecr">
+      <title>Java's increment and decrement operators</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{Expression}</cell>
-          <cell>{Operation}</cell>
-          <cell>{Interpretation}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
+        <row bottom="minor" left="minor">
+          <cell>Expression</cell>
+          <cell>Operation</cell>
+          <cell>Interpretation</cell>
         </row>
         <row>
           <cell><m>j = ++k</m></cell>
           <cell><em>Preincrement</em></cell>
-          <cell><m>k=k+1;j=k;</m>\cr
-            <m>j = k++</m></cell>
+          <cell><m>k=k+1;j=k;</m></cell>
+        </row>
+        <row>
+          <cell><m>j = k++</m></cell>
           <cell><em>Postincrement</em></cell>
-          <cell><m>j=k;k=k+1;</m>\cr
-            <m>j = --k</m></cell>
+          <cell><m>j=k;k=k+1;</m></cell>
+        </row>
+        <row>
+          <cell><m>j = --k</m></cell>
           <cell><em>Predecrement</em></cell>
-          <cell><m>k=k-1;j=k;</m>\cr
-            <m>j = k--</m></cell>
+          <cell><m>k=k-1;j=k;</m></cell>
+        </row>
+        <row bottom="minor">
+          <cell><m>j = k--</m></cell>
           <cell><em>Postdecrement</em></cell>
           <cell><m>j=k;k=k-1;</m></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      \endTB
     </table>
     <principle>
       <title>Pre- and Postincrement/Decrement</title>
@@ -652,7 +640,7 @@ k = k + 1;          // Final value of i is 0 and k is 1
       </p>
     </principle>
     <principle>
-      <title>PROGRAMMING TIP:Increment and Decrement Operators</title>
+      <title>PROGRAMMING TIP: Increment and Decrement Operators</title>
       <p>
         Because of their subtle behavior,
         be careful in how you use the unary increment and decrement operators.
@@ -668,8 +656,9 @@ k = k + 1;          // Final value of i is 0 and k is 1
     <title>Assignment Operators</title>
     <p>
       In addition to the simple assignment
-          <idx><h>assignment operator =</h></idx>
-      operator (=), Java supplies a number of shortcut assignment operators that allow you to combine an arithmetic operation and an assignment in one operation.
+      operator (=), Java supplies a number of 
+      shortcut assignment operators that allow you to 
+      combine an arithmetic operation and an assignment in one operation.
       These operations can be used with either integer or floating-point operands.
       For example,
       the <c>+=</c> operator allows you to combine addition and assignment into one expression.
@@ -703,72 +692,70 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
       to the current value of the variable on its left-hand side.
     </p>
     <p>
-      Table<nbsp/>5.8 lists the other assignment operators that can be used in combination with the arithmetic operators.
+      <xref ref="tab-assign">Table</xref> lists the other assignment operators that can 
+      be used in combination with the arithmetic operators.
       For each of these operations,
-      the interpretation is the same: Evaluate the
+      the interpretation is the same: Evaluate the expression on the 
+      right-hand side of the operator and then perform the arithmetic operation
+      (such as addition or multiplication)
+      to the current value of the variable on the left of the operator.
     </p>
-    <table>
-      \TBT{0pc}{Java's assignment operators<idx><h>assignment operators</h></idx>}
-      
+    <table xml:id="tab-assign">
+      <title>Java's assignment operators assignment operators</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+        <row bottom="minor" left="minor">
           <cell>{Operator}</cell>
           <cell>{Operation}</cell>
           <cell>{Example}</cell>
           <cell>{Interpretation}</cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
           <cell><m>=</m></cell>
           <cell><em>Simple assignment</em></cell>
           <cell><m>m = n;</m></cell>
-          <cell><m>m = n;</m>\cr
-            <m>+\!=</m></cell>
+          <cell><m>m = n;</m></cell>
+        </row>
+        <row>
+          <cell><m>+\!=</m></cell>
           <cell><em>Addition then assignment</em></cell>
           <cell><m>m\ +\!=\ 3;</m></cell>
-          <cell><m>m = m + 3;</m>\cr
-            <m>-\!=</m></cell>
+          <cell><m>m = m + 3;</m></cell>
+        </row>
+        <row>
+          <cell><m>-\!=</m></cell>
           <cell><em>Subtraction then assignment</em></cell>
           <cell><m>m\ -\!=\ 3;</m></cell>
-          <cell><m>m = m - 3;</m>\cr
-            <m>\ast \!=</m></cell>
+          <cell><m>m = m - 3;</m></cell>
+        </row>
+        <row>
+          <cell><m>\ast \!=</m></cell>
           <cell><em>Multiplication then assignment</em></cell>
           <cell><m>m\ \ast \!=\ 3;</m></cell>
-          <cell><m>m = m\,\ast \,3;</m>\cr
-            <m>/\!=</m></cell>
+          <cell><m>m = m\,\ast \,3;</m></cell>
+        </row>
+        <row>
+          <cell><m>/\!=</m></cell>
           <cell><em>Division then assignment</em></cell>
           <cell><m>m\ /\!=\ 3;</m></cell>
-          <cell><m>m = m / 3;</m>\cr
-            <m>\%\!=</m></cell>
+          <cell><m>m = m / 3;</m></cell>
+        </row>
+        <row bottom="minor">
+          <cell><m>\%\!=</m></cell>
           <cell><em>Remainder then assignment</em></cell>
           <cell><m>m\ \%\!=\ 3;</m></cell>
           <cell><m>m = m \% 3;</m></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      \endTB
     </table>
-    <p>
-      expression on the right-hand side of the operator and then perform the arithmetic operation
-      (such as addition or multiplication)
-      to the current value of the variable on the left of the operator.
-    </p>
     <p>
  <!--     </subsection><subsection><title>Self-Study Exercises</title> -->
     </p>
   </subsection>
-  <subsection xml:id="self-study-exercisesE16">
+  <subsection xml:id="relationals">
     <title>Relational Operators</title>
     <p>
       There are several <em>relational</em>
-      operations that can be performed on integers:
+      operations that can be performed on numbers:
       <m>\lt</m>, <m>></m>, <m>\lt =</m>,
       <m>> =</m>, <m>= =</m>, and <m>!\!=</m>.
       These correspond to the algebraic operators <m>\lt</m>,
@@ -777,48 +764,47 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
       Each of these operators takes two operands
       (integer or real)
       and returns a boolean result.
-      They are defined in Table<nbsp/>5.9.
+      They are defined in <xref ref="tab-relations">Table</xref>.
     </p>
-    <table>
-      \TBT{4pc}{Relational operators<idx><h>relational operators</h></idx>}
-      
+    <table xml:id="tab-relations">
+      <title>Relational operators.</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+        <row bottom="minor" left="minor">
           <cell>{Operator}</cell>
           <cell>{Operation}</cell>
           <cell>{Java Expression}</cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
           <cell><m>\lt</m></cell>
           <cell><em>Less than</em></cell>
-          <cell><m>5 \lt   10</m>\cr
-            <m>></m></cell>
+          <cell><m>5 \lt   10</m></cell>
+        </row>
+        <row>
+        <cell><m>></m></cell>
           <cell><em>Greater than</em></cell>
-          <cell><m>10  >  5</m>\cr
-            <m>\lt  =</m></cell>
+          <cell><m>10  >  5</m></cell>
+        </row>
+        <row>
+          <cell><m>\lt  =</m></cell>
           <cell><em>Less than or equal to</em></cell>
-          <cell><m>5 \lt  = 10</m>\cr
-            <m>> =</m></cell>
+          <cell><m>5 \lt  = 10</m></cell>
+        </row>
+        <row>
+          <cell><m>> =</m></cell>
           <cell><em>Greater than or equal to</em></cell>
-          <cell><m>10 > =  5</m>\cr
-            <m>= =</m></cell>
+          <cell><m>10 > =  5</m></cell>
+        </row>
+        <row>
+          <cell><m>= =</m></cell>
           <cell><em>Equal  to</em></cell>
-          <cell><m>5 = = 5</m>\cr
-            <m>!\!=</m></cell>
+          <cell><m>5 = = 5</m></cell>
+        </row>
+        <row bottom="minor">
+          <cell><m>!\!=</m></cell>
           <cell><em>Not equal to</em></cell>
           <cell><m>5\ !\!=\ 4</m></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      
     </table>
     <p>
       Note that several of these relational operators require two symbols in Java.
@@ -830,7 +816,7 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
       It is an error in Java for a space to appear between the <m>\lt</m> and = in <m>\lt =</m>.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Equality and Assignment</title>
+      <title>DEBUGGING TIP: Equality and Assignment</title>
       <p>
         A common semantic error among beginning programmers is to use the assignment operator (=) when the equality operator (==) is intended.
       </p>
@@ -850,51 +836,47 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
       than the arithmetic operators.
       Therefore, in evaluating an expression that involves both arithmetic and relational operators,
       the arithmetic operations are done first.
-      Table<nbsp/>5.10 includes all of the numeric operators introduced so<nbsp/>far.
+      <xref ref="tab-rel-precedence">Table</xref> includes all of the numeric operators introduced so<nbsp/>far.
     </p>
-    <table>
-      \TBT{3pc}{Numeric operator precedence including relations}
-      
+    <table xml:id="tab-rel-precedence">
+      <title>Numeric operator precedence including relations</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{Precedence}</cell>
-          <cell></cell>
-          <cell>\cr
-            {Order}</cell>
-          <cell>{Operator}</cell>
-          <cell>{Operation}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
+        <row bottom="minor" left="minor">
+          <cell>Precedence Order</cell>
+          <cell>Operator</cell>
+          <cell>Operation</cell>
         </row>
         <row>
           <cell>1</cell>
           <cell><m>(\,)</m></cell>
-          <cell><em>Parentheses</em>\cr
-            2</cell>
+          <cell><em>Parentheses</em></cell>
+        </row>
+        <row>
+          <cell>2</cell>
           <cell><m>+\!+\ \ --</m></cell>
-          <cell><em>Increment,  decrement</em>\cr
-            3</cell>
+          <cell><em>Increment,  decrement</em></cell>
+        </row>
+        <row>
+          <cell>3</cell>
           <cell><m>\ast \ \ /\ \ \%</m></cell>
-          <cell><em>Multiplication,  division,  modulus</em>\cr
-            4</cell>
+          <cell><em>Multiplication,  division,  modulus</em></cell>
+        </row>
+        <row>
+          <cell>4</cell>
           <cell><m>+\ \ -</m></cell>
-          <cell><em>Addition,  subtraction</em>\cr
-            5</cell>
+          <cell><em>Addition,  subtraction</em></cell>
+        </row>
+        <row>
+          <cell>5</cell>
           <cell><m>\lt \,\,\,\,>\ \ \lt  =\ \ > =</m></cell>
-          <cell><em>Relational  operators</em>\cr
-            6</cell>
+          <cell><em>Relational  operators</em></cell>
+        </row>
+        <row bottom="minor">
+          <cell>6</cell>
           <cell><m>= =\ \ !\!=</m></cell>
           <cell><em>Equality  operators</em></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      \endTB
     </table>
     <p>
       To take an example,

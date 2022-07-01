@@ -9,34 +9,39 @@
       <em>unsigned</em> integer.
       This means that a total of <m>2^{16}</m> or 65536  different Unicode characters can be represented,
       corresponding to the integer values 0 to 65535.
-      The <term>Unicode</term> character set is an international standard that has been developed to enable computer languages to represent characters in a wide variety of languages,
-      not just English.
-      Detailed information about this encoding can be obtained at
     </p>
- <program language="java"><input>
-http://www.unicode.org/
- </input></program>
+    <p>
+      The <term>Unicode</term> character set is an international standard that has 
+      been developed to enable computer languages to represent characters in a wide variety of languages,
+      not just English. (See <url href="http://www.unicode.org/" visual="">http://www.unicode.org/</url> for
+      detailed information.)
+    </p>
     <p>
       It is customary in programming languages to use unsigned integers to represent characters.
       This means that all the digits (<m>0, \dots,9</m>),
       alphabetic letters (<m>a,\dots,z, A,\dots, Z</m>), punctuation symbols
       (such as . ; , `` `' ! _ -),
-      and nonprinting control characters (LINE_FEED, ESCAPE, CARRIAGE_RETURN, <m>\dots</m>) that make up the computer's character set are represented in the computer's memory by integers.
+      and nonprinting control characters (LINE_FEED, ESCAPE, CARRIAGE_RETURN, 
+      <m>\dots</m>) that make up the computer's character set are 
+      represented in the computer's memory by integers.
+    </p>
+    <p>
       A more traditional set of characters is the
       <em>ASCII (American Standard  Code for Information Interchange)</em> character set.
-      ASCII is based on a 7-bit code and, therefore,
+      <url href="https://en.wikipedia.org/wiki/ASCII" visual="">ASCII</url> is based on 
+      a 7-bit code and, therefore,
       defines <m>2^7</m> or 128 different characters,
       corresponding to the integer values 0 to 127.
-      In order to make Unicode backward compatible with ASCII
-          <idx><h>ASCII character set</h></idx>
-      systems, the first 128 Unicode characters are identical to the ASCII characters.
+      In order to make Unicode backward compatible with ASCII systems, 
+      the first 128 Unicode characters are identical to the ASCII characters.
       Thus, in both the ASCII and Unicode encoding,
-      the printable characters have the integer values shown in Table<nbsp/>5.13.
+      the printable characters have the integer values shown in 
+      <xref ref="fig-ASCII">Figure</xref>.
     </p>
-    <figure>
-      \TBT{0pc}{ASCII<idx><h>ASCII</h></idx> codes for selected characters}
+    <figure xml:id="fig-ASCII">
+      <caption>ASCII codes for selected characters.</caption>
  <program language="java"><input>
-Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
+ Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
  Char   SP !  "  #  $  %  &amp;  '  (  )   *  +  ,  -  .  /
  Code   48 49 50 51 52 53 54 55 56 57
  Char   0  1  2  3  4  5  6  7  8  9
@@ -57,55 +62,58 @@ Code   32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
  </input></program>
     </figure>
   </introduction>
-  <subsection xml:id="self-study-exerciseU16">
+  <subsection xml:id="char-to-int">
     <title>Character to Integer Conversions</title>
     <p>
       Is <sq>A</sq> a character or an integer?
-      The fact that character data are stored as integers in the computer's memory can cause some confusion about whether a given piece of data is a character or an integer.
+      The fact that character data are stored as integers in the computer's 
+      memory can cause some confusion about whether a given piece of data is a character or an integer.
       In other words, when is a character, for example <sq>A</sq>,
       treated as the integer (65) instead of as the character <sq>A</sq>?
-      The rule in Java is that a character literal<mdash/><sq>a</sq> or <sq>A</sq> or <sq>0</sq> or <sq>?</sq><mdash/>is always treated as a character,
-      unless we explicitly tell Java to treat it as an integer.
+      The rule in Java is that a character literal <mdash/> <sq>a</sq> or <sq>A</sq> or 
+      <sq>0</sq> or <sq>?</sq> <mdash/> is always treated as a character,
+      unless we explicitly tell Java to treat it as  an integer.
       So if we display a literal's value
     </p>
- <program language="java"><input>
-System.out.println('a');
- </input></program>
+    <program language="java"><input>
+     System.out.println('a');
+    </input></program>
     <p>
       the letter <sq>a</sq> will be displayed.
       Similarly, if we assign <sq>a</sq> to a
-<c>char</c> variable and then display the variable's value,
+      <c>char</c> variable and then display the variable's value,
     </p>
- <program language="java"><input>
-char ch = 'a';
-System.out.println(ch);         // Displays 'a'
- </input></program>
+    <program language="java"><input>
+      char ch = 'a';
+      System.out.println(ch);         // Displays 'a'
+    </input></program>
     <p>
       the letter <sq>a</sq> will be shown.
       If, on the other hand, we wish to output a character's integer value,
       we must use an explicit cast operator as follows:
     </p>
- <program language="java"><input>
-System.out.println((int)'a') ;   // Displays 97
- </input></program>
+    <program language="java"><input>
+     System.out.println((int)'a') ;   // Displays 97
+    </input></program>
     <p>
       A <term>cast operation</term>,
       such as <c>(int)</c>, converts one type of data ('a') into another (97).
       This is known as a <term>type conversion</term>.
       Similarly, if we wish to store a character's integer value in a variable,
-      we can <em>cast</em> the <c>char</c> into an
-<c>int</c> as follows:
+      we can <em>cast</em> the <c>char</c> into an <c>int</c> as follows:
     </p>
- <program language="java"><input>
-int k = (int)'a';       // Converts 'a' to 97
-System.out.println(k);  // Displays 97
- </input></program>
+    <program language="java"><input>
+      int k = (int)'a';       // Converts 'a' to 97
+      System.out.println(k);  // Displays 97
+    </input></program>
     <p>
       As these examples show, a <em>cast</em>
-      is a type conversion operator.  Java allows a wide variety of both explicit and implicit type conversions.
+      is a type conversion operator.  Java allows a wide variety of both 
+      explicit and implicit type conversions.
       Certain conversions
-      (for example, promotions)
-      take place when methods are invoked,
+      (for example, <term>promotions</term>, in which, say, a <c>float</c> is
+      promoted to a <c>double</c>)
+      take place automatically when methods are invoked,
       when assignment statements are executed,
       when expressions are evaluated, and so on.
     </p>
@@ -113,52 +121,56 @@ System.out.println(k);  // Displays 97
       Type conversion in Java is governed by several rules and exceptions.
       In some cases Java allows the programmer to make implicit cast conversions.
       For example,
-      in the following assignment a <c>char</c> is converted to an <c>int</c> even though no explicit cast operator is used:
+      in the following assignment a <c>char</c> is converted 
+      to an <c>int</c> even though no explicit cast operator is used:
     </p>
- <program language="java"><input>
-char ch;
-int k;
-k = ch; // convert a char into an int
- </input></program>
+    <program language="java"><input>
+      char ch;
+      int k;
+      k = ch; // convert a char into an int
+    </input></program>
     <p>
       Java permits this conversion because no information will be lost.
-      A  character <c>char</c> is represented in 16 bits whereas an <c>int</c> is represented in 32 bits.
+      A  character <c>char</c> is represented in 16 bits whereas an 
+      <c>int</c> is represented in 32 bits.
       This is like trying to put a small object into a large box.
       Space will be left over,
       but the object will fit inside without being damaged.
       Similarly, storing a 16-bit <c>char</c> in a 32-bit <c>int</c> will leave the extra 16 bits unused.
-      This <em>widening primitive conversion</em>
-      changes one primitive type (<c>char</c>) into a wider one (<c>int</c>), where a type's
-      <em> width</em>
-      is the number of bits used in its representation.
+      This <term>widening primitive conversion</term>
+      changes one primitive type (<c>char</c>) into a wider 
+      one (<c>int</c>), where a type's
+      <em> width</em> is the number of bits used in its representation.
     </p>
     <p>
       On the other hand,
       trying to assign an <c>int</c> value to a <c>char</c> variable leads to a syntax error:
     </p>
- <program language="java"><input>
-char ch;
-int k;
-ch = k;    // Syntax error: can't assign int to char
- </input></program>
+    <program language="java"><input>
+      char ch;
+      int k;
+      ch = k;    // Syntax error: can't assign int to char
+    </input></program>
     <p>
-      Trying to assign a 32-bit <c>int</c> to 16-bit <c>char</c> is like trying to fit a big object into an undersized box.
+      Trying to assign a 32-bit <c>int</c> to 16-bit <c>char</c> is like 
+      trying to cram a big object into an undersized box.
       The object won't fit unless we shrink it in some way.
       Java will allow us to assign an <c>int</c> value to a <c>char</c> variable,
       but only if we perform an explicit cast on it:
     </p>
- <program language="java"><input>
-ch = (char)k; // Explicit cast of int k into char ch
- </input></program>
+    <program language="java"><input>
+      ch = (char)k; // Explicit cast of int k into char ch
+    </input></program>
     <p>
       The <c>(char)</c> cast operation performs a careful
       <q>shrinking</q>
-      of the <c>int</c> by lopping off the last 16 bits of the <c>int</c>. This can be done without loss of information provided that
+      of the <c>int</c> by lopping off the last 16 bits of the <c>int</c>. 
+      This can be done without loss of information provided that
       <em>k</em>'s value is in the range 0 to 65535<mdash/>that is,
       in the range of values that fit into  a <c>char</c> variable.
-      This <em>narrowing primitive conversion</em>
+      This <term>narrowing primitive conversion</term>
       changes a wider type (32-bit <c>int</c>) to a narrower type (16- bit
-<c>char</c>).
+      <c>char</c>).
       Because of the potential here for information loss,
       it is up to the programmer to determine that the cast can be performed safely.
     </p>
@@ -166,67 +178,75 @@ ch = (char)k; // Explicit cast of int k into char ch
       <title>Type Conversion</title>
       <p>
         Java permits <term>implicit</term> type conversions
-            <idx><h>type conversion rule</h></idx>
-        from a narrower type to a wider type.
-        A <term>cast</term> operator must be used when converting a wider type into a narrower type.
+        from a narrower type to a wider type. A <term>cast</term> operator 
+        must be used when converting a wider type into a narrower type.
       </p>
     </principle>
     <p>
       The cast operator can be used with any primitive type.
       It applies to the variable or expression that immediately follows it.
       Thus, parentheses must be used to cast the expression <em>m + n</em>
-      into a
-<c>char</c>:
+      into a <c>char</c>:
     </p>
- <program language="java"><input>
-char ch = (char)(m + n);
- </input></program>
+    <program language="java"><input>
+     char ch = (char)(m + n);
+    </input></program>
     <p>
-      The following statement would cause a syntax error because the cast operator would only be applied to <c>m</c>:
+      The following statement would cause a syntax error because the cast 
+      operator would only be applied to <c>m</c>:
     </p>
- <program language="java"><input>
-char ch = (char)m + n; // Error: right side is an int
- </input></program>
+    <program language="java"><input>
+      char ch = (char)m + n; // Error: right side is an int
+    </input></program>
     <p>
       In the expression on the right-hand side,
-      the character produced by <c>(char)m</c> will be promoted to an <c>int</c> because it is part of an integer operation whose result will still be an <c>int</c>. Therefore,
+      the character produced by <c>(char)m</c> will be promoted to an 
+      <c>int</c> because it is part of an integer operation whose 
+      result will still be an <c>int</c>. Therefore,
       it cannot be assigned to a <c>char</c> without an explicit cast.
-    </p>
-    <p>
-      \secEXRHone{Self-Study Exercise}
     </p>
   </subsection>
   <subsection>
     <title>Lexical Ordering</title>
     <p>
-      The order in which the characters of a character set are arranged,
+      The order in which the characters are arranged,
       their <term>lexical order</term>,
       is an important feature of the character set.
       It especially comes into play for such tasks as arranging strings in alphabetical order.
     </p>
     <p>
-      Although the actual integer values assigned to the individual characters by ASCII and UNICODE encoding seem somewhat arbitrary,
+      Although the actual integer values assigned to the individual 
+      characters by ASCII and UNICODE encoding seem somewhat arbitrary,
       the characters are, in fact, arranged in a particular order.
       For example,
-      note that various sequences of digits, <c>'0' \ldots '9'</c>, and letters, <c>'a' \ldots 'z'</c> and <c>'A' \ldots 'Z'</c>, are represented by sequences of integers (Table 5.11).
-      This makes it possible to represent the lexical order of the characters in terms of the <em>less than</em>
+      note that various sequences of digits, <c>'0' ... '9'</c>, and 
+      letters, <c>'a' ... 'z'</c> and <c>'A' ... 'Z'</c>, are 
+      represented by sequences of integers (<xref ref="fig-ASCII">Figure</xref>).
+    </p>
+    <p>
+      This makes it possible to represent the lexical order of the characters in terms 
+      of the <em>less than</em>
       relationship among integers.
-      The fact that <sq>a</sq> comes before <sq>f</sq> in alphabetical order is represented by the fact that 97
+      The fact that <sq>a</sq> comes before <sq>f</sq> in alphabetical order 
+      is represented by the fact that 97
       (the integer code for <sq>a</sq>)
       is less than 102
       (the integer code for <sq>f</sq>).
-      Similarly, the digit <sq>5</sq> comes before the digit <sq>9</sq> in an alphabetical sequence because 53
+      Similarly, the digit <sq>5</sq> comes before the digit <sq>9</sq> 
+      in an alphabetical sequence because 53
       (the integer code for <sq>5</sq>)
       is less than 57
       (the integer code for <sq>9</sq>).
     </p>
     <p>
       This ordering relationship extends throughout the character set.
-      Thus, it is also the case that <sq>A</sq> comes before <sq>a</sq> in the lexical ordering because 65
+      Thus, it is also the case that <sq>A</sq> comes before <sq>a</sq> 
+      in the lexical ordering because 65
       (the integer code for <sq>A</sq>)
       is less than 97
       (the integer code for <sq>a</sq>).
-      Similarly, the character <sq>[</sq> comes before <sq><c>}</c></sq> because its integer code (91) is less than 125,
+      Similarly, the character <sq>[</sq> comes before <sq><c>}</c></sq> 
+      because its integer code (91) is less than 125,
       the integer code for <sq><c>}</c></sq>.
     </p>
   </subsection>
@@ -240,62 +260,62 @@ char ch = (char)m + n; // Error: right side is an int
       <em>ch1</em> and <em>ch2</em>,
       the expression <em>ch1 <m>\lt</m> ch2</em>
       is true if and only if the integer value of <em>ch1</em>
-      is } less than the integer value of <em>ch2</em>.
+      is less than the integer value of <em>ch2</em>.
       In this case we say that <em>ch1</em><em>precedes</em><em>ch2</em> in lexical order.
       Similarly, the expression <em>ch1 <m>></m> ch2</em>
       is true if and only if the integer value of <em>ch1</em>
       is greater than the integer value of <em>ch2</em>.
       In this case we say that <em>ch1</em><em>follows</em><em>ch2</em>.
       And so on for the other relational operators.
-      This means that we can perform comparison operations on any two character operands (Table<nbsp/>5.14).
+      This means that we can perform comparison operations on any 
+      two character operands (<xref ref="tab-relops">Table</xref>).
     </p>
-    <table>
-      \TBT{2.5pc}{Relational operations<idx><h>relational operators</h></idx> on characters}
-      
+    <table xml:id="tab-relops">
+      <title>Relational operations on characters.</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{Operation}</cell>
-          <cell>{Operator}</cell>
-          <cell>{Java}</cell>
-          <cell>{True Expression}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
+        <row bottom ="minor" left="minor">
+          <cell>Operation</cell>
+          <cell>Operator</cell>
+          <cell>Java</cell>
+          <cell>True Expression</cell>
         </row>
         <row>
           <cell><em>Precedes</em></cell>
           <cell><m>\lt</m></cell>
           <cell><m>ch1\ \lt \ ch2</m></cell>
-          <cell><m>'a'\ \lt \ 'b'</m>\cr
-            <em>Follows</em></cell>
+          <cell><m>'a'\ \lt \ 'b'</m></cell>
+        </row>
+        <row>
+          <cell><em>Follows</em></cell>
           <cell><m>></m></cell>
           <cell><m>ch1\ >\ ch2</m></cell>
-          <cell><m>'c'\ >\ 'a'</m>\cr
-            <em>Precedes or equals</em></cell>
+          <cell><m>'c'\ >\ 'a'</m></cell>
+        </row>
+        <row>
+        <cell> <em>Precedes or equals</em></cell>
           <cell><m>\lt =</m></cell>
           <cell><m>ch1\ \lt =\ ch2</m></cell>
-          <cell><m>'a'\ \lt =\ 'a'</m>\cr
-            <em>Follows or equals</em></cell>
+          <cell><m>'a'\ \lt =\ 'a'</m></cell>
+        </row>
+        <row>
+          <cell><em>Follows or equals</em></cell>
           <cell><m>>=</m></cell>
           <cell><m>ch2\ >=\ ch1</m></cell>
-          <cell><m>'a'\ >=\ 'a'</m>\cr
-            <em>Equal to</em></cell>
+          <cell><m>'a'\ >=\ 'a'</m></cell>
+        </row>
+        <row>
+          <cell><em>Equal to</em></cell>
           <cell><m>= =</m></cell>
           <cell><m>ch1\ ==\ ch2</m></cell>
-          <cell><m>'a'\ ==\ 'a'</m>\cr
-            <em>Not equal to</em></cell>
+          <cell><m>'a'\ ==\ 'a'</m></cell>
+        </row>
+        <row bottom="minor">
+          <cell><em>Not equal to</em></cell>
           <cell><m>!\!=</m></cell>
           <cell><m>ch1\ !\!=\ ch2</m></cell>
           <cell><m>'a'\ !\!=\ 'b'</m></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      \endTB
     </table>
   </subsection>
 </section>
