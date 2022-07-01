@@ -8,10 +8,10 @@
       and the program's output is displayed on some kind of console (Fig.
       <xref ref="fig-command-line"></xref>).
     </p>
-    <listing xml:id="lstng_riddleclass">
+    <figure xml:id="fig-command-line">
       <caption>A command-line user interface.</caption>
       <image width="73%" source="chptr04/cmdline.png"/>
-    </listing>
+    </figure>
     <p>
       The command-line approach might also be called
       <em>console interface</em>.
@@ -21,10 +21,10 @@
       For today's computers the console might be a window provided by your programming environment,
       as in <xref ref="fig-console">Figure</xref>.
     </p>
-    <listing xml:id="fig-console">
+    <figure xml:id="fig-console">
       <caption>The Java console window.</caption>
       <image width="73%" source="chptr04/console.png"/>
-    </listing>
+    </figure>
     <p>
       In Chapter<nbsp/>3 we described how to use the <c>System.out.print()</c> and
 <c>System.out.println()</c> methods to output strings to the console.
@@ -41,10 +41,10 @@
       An <em>output stream</em> carries data from the program's memory to some kind of output device,
       such as a printer or a file.
     </p>
-    <listing xml:id="fig-streams">
+    <figure xml:id="fig-streams">
       <caption>Input and output streams.</caption>
       <image width="73%" source="chptr04/streams.png"/>
-    </listing>
+    </figure>
     <p>
       Each Java program has three standard streams available to it at startup: <c>System.in</c>, <c>System.out</c>, and <c>System.err</c>.
 <c>System.in</c> is a predefined input stream that is typically associated with the keyboard (Fig.
@@ -69,10 +69,10 @@
       it would contain every keystroke, including the Backspaces,
       and then it would be up to the program to eliminate the characters that were supposed to be deleted.
     </p>
-    <listing xml:id="fig-buffrdr">
+    <figure xml:id="fig-buffrdr">
       <caption>The <c>BufferedReader</c> class.</caption>
       <image width="73%" source="chptr04/buffrdr.png"/>
-    </listing>
+    </figure>
     <p>
       <xref ref="fig-buffrdr">Figure</xref>
       provides a UML diagram of the <c>BufferedReader</c> class and shows its relationship to other the classes that will be used for keyboard input . Note that along with <c>InputStreamReader</c>, <c>BufferedReader</c> is one of several subclasses of the <c>Reader</c> class.
@@ -207,10 +207,10 @@
       or real numbers<mdash/>from keyboard.
       We also want this class to hide some of the messy details involved in performing keyboard input.
     </p>
-    <listing xml:id="fig-keybrdrdr">
+    <figure xml:id="fig-keybrdrdr">
       <caption>Design of the <c>KeyboardReader</c> class.</caption>
       <image width="73%" source="chptr04/keybrdrdr.png"/>
-    </listing>
+    </figure>
     <p>
       <xref ref="fig-keybrdrdr">Figure</xref>
       presents the design of <c>KeyboardReader</c> class.
@@ -276,7 +276,7 @@
       <xref ref="fig-keybrdrdrclass">Figure</xref> gives the full implementation
       (for now)
       of the <c>KeyboardReader</c> class.
-      Lets go through it line by
+     
     </p>
     <listing xml:id="fig-keybrdrdrclass">
       <caption>Definition of the <c>KeyboardReader</c> class.</caption>
@@ -313,13 +313,14 @@
         {  e.printStackTrace();
         }
         return line;
-    }}
+    }
+  }
     </input>
 </program>
 
     </listing>
     <p>
-      line.
+      Lets go through it line by line.
       The first thing to notice is the use of the <c>import</c> statement.
       Recall that importing a Java package enables us to refer to elements in the package by their short names (<c>BufferedReader</c>), rather than by their fully qualified names (<c>java.io.BufferedReader</c>).
     </p>
@@ -329,8 +330,7 @@
 
 <program language="java">
     <input>
-    reader = new BufferedReader
-        (new InputStreamReader (System.in));
+    reader = new BufferedReader (new InputStreamReader (System.in));
     </input>
 </program>
 
@@ -424,10 +424,10 @@ Hi, please input your name here > Kim
       Its <c>run()</c> method will contain the algorithm that controls the application,
       and its <c>greet()</c> method will handle the task of greeting the user.
     </p>
-    <listing xml:id="fig-greeter">
+    <figure xml:id="fig-greeter">
       <caption>Using <c>KeyboardReader</c> as the user interface.</caption>
       <image width="73%" source="chptr04/greeter.png"/>
-    </listing>
+    </figure>
     <p>
       The full implementation of the <c>GreeterApp</c> class is shown in <xref ref="fig-greeterapp">Figure</xref>.
       It begins by declaring an instance
@@ -454,7 +454,8 @@ public class GreeterApp
     public static void main(String args[])
     {   GreeterApp app = new GreeterApp();
         app.run();
-    }} // GreaterApp
+    }
+  } // GreaterApp
     </input>
 </program>
 
