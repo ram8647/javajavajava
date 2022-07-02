@@ -88,13 +88,13 @@ public int getPlayer()
  </input></program>
 
 <p>
-      The full listing of the revise <c>OneRowNim</c> is
-      given in <xref ref="fig-newonerow">Listing</xref>.
+      The full listing of the revised <c>OneRowNim</c> is
+      given in <xref ref="fig-newonerow">Listing</xref>. Run to see this code in action.
 </p>
     <listing xml:id="fig-newonerow">
       <caption>The revised <c>OneRowNim</c> uses a <c>boolean</c>
       variable to keep track of who's turn it is.</caption>
- <program language="java"><input>
+ <program language="java" interactive="activecode"><input>
 public class OneRowNim
 {    private int nSticks = 7;
      private boolean onePlaysNext = true;
@@ -119,7 +119,7 @@ public class OneRowNim
      } // takeSticks()
      public int getSticks()
      {   return nSticks;
-     }{ // getSticks()}
+     } // getSticks()
      public int getPlayer()
      {   if (onePlaysNext) return 1;
          else return 2;
@@ -137,6 +137,23 @@ public class OneRowNim
          System.out.println("Next turn by player "
                              + getPlayer());
      }   // report()
+     public static void main(String[] args) 
+     {   
+         OneRowNim game = new OneRowNim();
+         while(game.gameOver() == false)
+         {   
+           game.report();  
+           // Get a random number from 1 to 3
+           int number = (int) (Math.random() * 3) + 1;
+           System.out.println("Pick up random number of sticks: " + number);
+           if (game.takeSticks(number) == false)
+               System.out.println("Error: can't take " + number + " sticks!");   
+           System.out.println();
+         } // while
+         game.report();  // The game is now over
+         System.out.print("Game won by player ");
+         System.out.println(game.getWinner());
+     } // main()
 } // OneRowNim class
  </input></program>
     </listing>

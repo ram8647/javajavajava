@@ -70,7 +70,6 @@
     </definition>
     </p>
     <p>
-      <xref ref="tab-numerics">Table</xref>
       As illustrated in <xref ref="tab-numerics">Table</xref>, the various integer types 
       represent positive or negative whole numbers.
       Perhaps the most commonly used integer type in Java is the <c>int</c> type,
@@ -143,9 +142,87 @@
       </p>
     </principle>
   </introduction>
+
+  <exercises><title>Self-Study Exercises</title>
+    <exercise label="fillin-binary">
+      <title>Fill-In Binary</title>
+      <statement>
+        <p>List all of the binary values 
+          that can be represented in 4 bits---that is, all values in the range
+          0000 to 1111 in order separated by commas: <var/> </p>
+      </statement>
+      <setup>
+          <var>
+              <condition string="0000, 0001, 0010, 0011, 0100, 0101, 0110, 0111, 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111">
+                  <feedback>
+                    <p>Correct. Parameter variables declared in the method header have local scope and only exist inside the method body.</p>
+                  </feedback>
+              </condition>
+              <condition string=".*">
+                    <feedback>
+                        <p>Incorrect. Start from 0000, 0001, ...</p>
+                    </feedback>
+                </condition>
+              </var>
+              </setup>
+              <hint><p>Start from 0000, 0001, ...</p></hint>
+              </exercise>
+    
+              <exercise label="fillin-6bit">
+                <title>6-bit Values</title>
+                <statement>
+                  <p>If a 6-bit representation were used for an integer type, how
+                     many different integers could be represented? <var/> </p>
+                </statement>
+                <setup>
+                    <var>
+                        <condition string="64">
+                            <feedback>
+                              <p>In 6 bits, you can represent 2^6 = 64 different values.</p>
+                            </feedback>
+                        </condition>
+                        <condition string=".*">
+                              <feedback>
+                                  <p>Incorrect. Remember each bit can be 0 or 1 and you have 6 bits.</p>
+                              </feedback>
+                          </condition>
+                        </var>
+                        </setup>
+                        <hint><p>With 3 bits, you can represent 3^2 = 32 values.</p></hint>
+                        </exercise>
+                        <exercise label="fillin-data-type">
+                          <title>Data Type</title>
+                          <statement>
+                            <p>If you were writing a program to process scientific data that
+                             had to be accurate to at least 12 significant (decimal) digits,
+                             what type of data would you use?<var/> </p>
+                          </statement>
+                          <setup>
+                              <var>
+                                  <condition string="double">
+                                      <feedback>
+                                        <p>If you have to represent up to 12 significant digits, you should use the data type
+                                          <c>double</c>, which goes up to 17 digits.</p>
+                                      </feedback>
+                                  </condition>
+                                  <condition string=".*">
+                                        <feedback>
+                                            <p>Incorrect. Some data types you could use are 
+                                              <c>byte</c>, <c>short</c>, <c>int</c>, <c>double</c>, and 
+                                              <c>long</c>.</p>
+                                        </feedback>
+                                    </condition>
+                                  </var>
+                                  </setup>
+                                  <hint><p>Some data types you could use are 
+                                    <c>byte</c>, <c>short</c>, <c>int</c>, <c>double</c>, and 
+                                    <c>long</c></p></hint>
+                                  </exercise>    
+  
+  </exercises>
   <subsection>
     <title>Numeric Operations</title>
-    <introduction>
+    <subsubsection><title>Arithmetic Operators</title>
       <p>
         The operations that can be done on numeric data include the standard algebraic operations:
         <em>addition</em> (+), <em>subtraction</em> (<m>-</m>),
@@ -257,10 +334,10 @@
         Here are several examples:
       </p>
  <program language="java"><input>
-7 % 5   ==> 7 mod 5 equals 2
-5 % 7   ==> 5 mod 7 equals 5
--7 % 5  ==> -7 mod 5 equals -2
-7 % -5  ==> 7 mod -5 equals 2
+ 7 % 5   ==> 7 mod 5 equals 2
+ 5 % 7   ==> 5 mod 7 equals 5
+-7 % 5   ==> -7 mod 5 equals -2
+ 7 % -5  ==> 7 mod -5 equals 2
  </input></program>
       <p>
         The best way to interpret these examples is to perform long division on the operands keeping both the quotient and the remainder.
@@ -285,7 +362,31 @@ if (N % 2 == 0)
         More generally,
         we could use the mod operator to define divisibility by 3, 4, 10, or by any number.
       </p>
-    </introduction>
+
+      <activity label="modDemo">
+       <statement><p>Try the expressions containing the % operator below to see how they can be used to check for even or odd numbers. 
+        All even numbers are divisible (with no remainder) by 2. Add another if statement
+      that checks whether age2 is even using the % operator. Then, test if it's divisible by 3.</p></statement>
+      <program language="java" interactive="activecode"><input>
+        public class BoolMod
+        {
+           public static void main(String[] args)
+           {
+             int age1 = 20;
+             int age2 = 21;
+             int divisor = 2;
+             System.out.println("Remainder of " + age1 + "/" + divisor + " is " + (age1 % divisor) );
+             System.out.println("Remainder of " + age2 + "/" + divisor + " is " + (age2 % divisor) );
+             if (age1 % 2 == 0)
+                System.out.println(age1 + " is even");
+             else
+                System.out.println(age1 + " is odd");   
+           }
+        }
+      </input></program>
+      </activity>
+    </subsubsection>
+
     <subsubsection xml:id="promotion-rules">
       <title>Numeric Promotion Rules</title>
       <p>
@@ -414,8 +515,8 @@ n * m;
   </feedback>
   <matches>
       <match>
-          <premise>6 / 2</premise>
-          <response>3</response>
+          <premise>10 / 2</premise>
+          <response>5</response>
       </match>
       <match>
           <premise>9 / 2</premise>
@@ -434,12 +535,8 @@ n * m;
         <response>2</response>
       </match>
       <match>
-        <premise>5 % 8</premise>
-        <response>5</response>
-      </match>
-      <match>
-        <premise>3 % 4</premise>
-        <response>3</response>
+        <premise>6 % 8</premise>
+        <response>6</response>
       </match>
      
   </matches>
@@ -499,23 +596,23 @@ n * m;
   <matches>
       <match>
           <premise> m + n     </premise>
-          <response>7</response>
+          <response>7 (int)</response>
       </match>
       <match>
           <premise>p * q</premise>
-          <response>30</response>
+          <response>30 (long)</response>
       </match>
       <match>
           <premise>m + n + r</premise>
-          <response>14.0</response>
+          <response>14.0 (double)</response>
       </match>
       <match>
           <premise> p * q * m</premise>
-          <response>90</response>
+          <response>90 (long)</response>
       </match>
       <match>
         <premise>r - m</premise>
-        <response>4.0</response>
+        <response>4.0 (double)</response>
       </match>
   </matches>
 </exercise>
@@ -609,9 +706,70 @@ System.out.println(5/(3/2.0)); // 3.33
         use parentheses to specify the order of evaluation in an expression.
       </p>
     </principle>
-    <p>
-      \secEXRHone{Self-Study Exercise}
-    </p>
+
+  <exercises>
+    <title>Self-Study Exercises</title>  
+ 
+  <exercise label="eval-expr1">
+    <title>Evaluate Expressions</title>
+    <statement>
+      <p>Parenthesize and then evaluate each of the  expressions
+        that follow, taking care to observe operator precedence rules.  </p>
+    </statement>
+    <feedback>
+        <p></p>
+    </feedback>
+    <matches>
+        <match>
+            <premise>4 + 5.0 * 6 </premise>
+            <response>34.0</response>
+        </match>
+        <match>
+            <premise> (4 + 5) * 6 </premise>
+            <response>54</response>
+        </match>
+        <match>
+            <premise> 4 + 5 / 6 </premise>
+            <response>4</response>
+        </match>
+        <match>
+            <premise>  (4 + 5) / 6 </premise>
+            <response>1</response>
+        </match>
+    </matches>
+  </exercise>
+  
+  <exercise label="eval-expr2">
+    <title>Evaluate Expressions</title>
+    <statement>
+      <p>Parenthesize and then evaluate each of the  expressions
+        that follow, taking care to observe operator precedence rules.   </p>
+    </statement>
+    <feedback>
+        <p></p>
+    </feedback>
+    <matches>
+        <match>
+          <premise>  4 + 5 % 3</premise>
+          <response>6</response>
+        </match>
+        <match>
+          <premise>(4 + 5) % 3</premise>
+          <response>0</response>
+        </match>
+        <match>
+          <premise> 9 % 2 * 7 / 3  </premise>
+          <response>2</response>
+        </match>
+        <match>
+          <premise>  5.0 / 2 * 3 </premise>
+          <response>7.5</response>
+        </match>
+    </matches>
+  </exercise>
+  </exercises>
+     
+
   </subsection>
   <subsection xml:id="incr-decr-ops">
     <title>Increment and Decrement Operators</title>
@@ -770,86 +928,47 @@ k = k + 1;          // Final value of i is 0 and k is 1
         as we'll see later.
       </p>
     </principle>
+
     <exercises xml:id="self-study-exercisesD16">
 <title>Self-Study Exercises </title> 
 
-<exercise label="fillin-binary">
-  <title>Fill-In Binary</title>
+<exercise label="eval-inc">
+  <title>Evaluate Increment/Decrement Expressions</title>
   <statement>
-    <p>List all of the binary values 
-      that can be represented in 4 bits---that is, all values in the range
-      0000 to 1111 in order separated by commas: <var/> </p>
+    <p>
+      What value will <c>j</c> and <c>k</c> have after each of the
+        calculations that follow? Assume that <c>k</c>> has the value 0 and <c>j</c>
+         has the value 5 before each operation is performed.
+      </p>
   </statement>
-  <setup>
-      <var>
-          <condition string="0000, 0001, 0010, 0011, 0100, 0101, 0110, 0111, 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111">
-              <feedback>
-                <p>Correct. Parameter variables declared in the method header have local scope and only exist inside the method body.</p>
-              </feedback>
-          </condition>
-          <condition string=".*">
-                <feedback>
-                    <p>Incorrect. Start from 0000, 0001, ...</p>
-                </feedback>
-            </condition>
-          </var>
-          </setup>
-          <hint><p>Start from 0000, 0001, ...</p></hint>
-          </exercise>
-
-          <exercise label="fillin-6bit">
-            <title>6-bit Values</title>
-            <statement>
-              <p>If a 6-bit representation were used for an integer type, how
-                 many different integers could be represented? <var/> </p>
-            </statement>
-            <setup>
-                <var>
-                    <condition string="64">
-                        <feedback>
-                          <p>In 6 bits, you can represent 2^6 = 64 different values.</p>
-                        </feedback>
-                    </condition>
-                    <condition string=".*">
-                          <feedback>
-                              <p>Incorrect. Remember each bit can be 0 or 1 and you have 6 bits.</p>
-                          </feedback>
-                      </condition>
-                    </var>
-                    </setup>
-                    <hint><p>With 3 bits, you can represent 3^2 = 32 values.</p></hint>
-                    </exercise>
-                    <exercise label="fillin-data-type">
-                      <title>Data Type</title>
-                      <statement>
-                        <p>If you were writing a program to process scientific data that
-                         had to be accurate to at least 12 significant (decimal) digits,
-                         what type of data would you use?<var/> </p>
-                      </statement>
-                      <setup>
-                          <var>
-                              <condition string="double">
-                                  <feedback>
-                                    <p>If you have to represent up to 12 significant digits, you should use the data type
-                                      <c>double</c>, which goes up to 17 digits.</p>
-                                  </feedback>
-                              </condition>
-                              <condition string=".*">
-                                    <feedback>
-                                        <p>Incorrect. Some data types you could use are 
-                                          <c>byte</c>, <c>short</c>, <c>int</c>, <c>double</c>, and 
-                                          <c>long</c>.</p>
-                                    </feedback>
-                                </condition>
-                              </var>
-                              </setup>
-                              <hint><p>Some data types you could use are 
-                                <c>byte</c>, <c>short</c>, <c>int</c>, <c>double</c>, and 
-                                <c>long</c></p></hint>
-                              </exercise>
-
-
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise>k = j;    </premise>
+          <response> k==5, j==5   </response>
+      </match>
+      <match>
+          <premise> k = j++;  </premise>
+          <response>k==5, j==6 </response>
+      </match>
+      <match>
+          <premise> k = ++j; </premise>
+          <response>k==6, j==6 </response>
+      </match>
+      <match>
+          <premise>   k = j--; </premise>
+          <response>k==5, j==4 </response>
+      </match>
+      <match>
+        <premise>   k = --j;</premise>
+        <response> k==4, j==4</response>
+      </match>
+  </matches>
+</exercise>
 </exercises>
+
   </subsection>
   <subsection xml:id="assignment-operators">
     <title>Assignment Operators</title>
@@ -903,10 +1022,10 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
       <title>Java's assignment operators assignment operators</title>
       <tabular>
         <row bottom="minor" left="minor">
-          <cell>{Operator}</cell>
-          <cell>{Operation}</cell>
-          <cell>{Example}</cell>
-          <cell>{Interpretation}</cell>
+          <cell>Operator</cell>
+          <cell>Operation</cell>
+          <cell>Example</cell>
+          <cell>Interpretation</cell>
         </row>
         <row>
           <cell><m>=</m></cell>
@@ -946,9 +1065,76 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
         </row>
       </tabular>
     </table>
+
+    <activity label="asgnOpsDemo">
+      <statement><p>Run the code below to see what the ++ and shorcut operators do. Click on the 
+        Show Code Lens button to trace through the code and the variable values change in the visualizer. </p></statement>
+       <program language="java" interactive="activecode">
+        <input>
+        public class Test2
+        {
+           public static void main(String[] args)
+           {
+             int score = 0;
+             System.out.println(score);
+             score++;
+             System.out.println(score);
+             score *= 2;
+             System.out.println(score);
+             int penalty = 5;
+             score -= penalty/2;
+             System.out.println(score);
+           }
+        }          
+      </input>
+       </program>
+      </activity>
+
+<exercises>
+<title>Self-Study Exercises </title> 
+
+
+<exercise label="eval-shortcut-expr">
+  <title>Evaluate Shortcut Expressions</title>
+  <statement>
     <p>
- <!--     </subsection><subsection><title>Self-Study Exercises</title> -->
-    </p>
+      What value will <c>j</c> and <c>k</c> have after each of the
+        calculations that follow? Assume that <c>k</c>> has the value 10 and <c>j</c>
+         has the value 5 before each operation is performed.
+      </p>
+  </statement>
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise>k += j; </premise>
+          <response>  k==15, j==5    </response>
+      </match>
+      <match>
+          <premise> k -= j++;  </premise>
+          <response>k==5, j==6  </response>
+      </match>
+      <match>
+          <premise> k *= ++j * 2;  </premise>
+          <response> k==120, j==6 </response>
+      </match>
+      <match>
+          <premise>   k /= 25 * j--;  </premise>
+          <response>k==0, j==4  </response>
+      </match>
+      <match>
+        <premise>  k %= j - 3; </premise>
+        <response> k==0, j==5</response>
+      </match>
+  </matches>
+</exercise>
+<exercise label="inc4">
+ <statement><p> Write four different statements that add 1 to the
+   variable <c>k</c> (which has been declared as an int).</p></statement>
+</exercise>
+</exercises>
+
   </subsection>
   <subsection xml:id="relationals">
     <title>Relational Operators</title>
@@ -969,9 +1155,9 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
       <title>Relational operators.</title>
       <tabular>
         <row bottom="minor" left="minor">
-          <cell>{Operator}</cell>
-          <cell>{Operation}</cell>
-          <cell>{Java Expression}</cell>
+          <cell>Operator</cell>
+          <cell>Operation</cell>
+          <cell>Java Expression</cell>
         </row>
         <row>
           <cell><m>\lt</m></cell>
@@ -1020,6 +1206,33 @@ r = r + (3.5 + 2.0 * 9.3);  // i.e., r = r + 22.1;
         A common semantic error among beginning programmers is to use the assignment operator (=) when the equality operator (==) is intended.
       </p>
     </principle>
+
+    <activity label="relOpDemo">
+      <statement><p>Run the code below and try changing the value of x to get each of the three possible lines in the conditional to print.</p></statement>
+     <program language="java" interactive="activecode">
+      <input>
+      public class TestElseIf
+      {
+        public static void main(String[] args)
+        {
+          int x = 2;
+          if (x &lt; 0)
+          {
+            System.out.println("x is negative");
+          }
+          else if (x == 0)
+          {
+              System.out.println("x is 0");
+          }
+          else
+          {
+            System.out.println("x is positive");
+          }
+        }
+      }
+     </input>
+     </program>
+    </activity>
     <p>
       Among the relational operators,
       the inequalities (<m>\lt</m>, <m>></m>, <m>\lt =</m>,
@@ -1123,6 +1336,99 @@ Step 3. true == 2      // Syntax error results here
       the == operator requires that both  of its operands be of the same type.
       This is another example of Java's strong type checking.
     </p>
+    
+    <exercises>
+      <title>Self-Study Exercises </title> 
+      
+      
+      <exercise label="eval-inc-expr2">
+        <title>Evaluate Precedence with Increment Expressions</title>
+        <statement>
+          <p>
+            For each of these questions, what is 
+ the value of <c>m</c>? Assume that j equals 3, k equals 2, 
+ and m equals 10, before each question.  Don't forget about
+ precedence.  </p>
+        </statement>
+        <feedback>
+            <p></p>
+        </feedback>
+        <matches>
+            <match>
+                <premise>m = j++ + k; </premise>
+                <response>  m = 5   </response>
+            </match>
+            <match>
+                <premise> m = ++j + k;  </premise>
+                <response>m = 6  </response>
+            </match>
+            <match>
+                <premise> m += j + k;    </premise>
+                <response> m = 15 </response>
+            </match>
+            <match>
+                <premise>   m *= j++ + k++;   </premise>
+                <response>m = 50 </response>
+            </match>
+            <match>
+              <premise>   m *= ++j + ++k;  </premise>
+              <response>  m = 70</response>
+            </match>
+        </matches>               
+      </exercise>
+
+      <exercise label="eval-tf1">
+        <title>Evaluate True/False/Illegal</title>
+        <statement>
+          <p>
+            Evaluate each of the following expressions, taking care to observe operator precedence rules.  If an expression is illegal, mark it illegal and explain why. </p>
+        </statement>
+        <feedback>
+            <p></p>
+        </feedback>
+        <matches>
+            <match>
+                <premise>4 + 5 ==  6 * 2 </premise>
+                <response>  false   </response>
+            </match>
+            <match>
+                <premise>4 + 5 / 6 >= 10 % 2  </premise>
+                <response> true  </response>
+            </match>
+            <match>
+                <premise>(4 = 5) / 6   </premise>
+                <response> illegal </response>
+            </match>
+            </matches>
+            </exercise>
+            <exercise label="eval-tf2">
+              <title>Evaluate True/False/Illegal</title>
+              <statement>
+                <p>
+                  Evaluate each of the following expressions, taking care to observe operator precedence rules.  If an expression is illegal, mark it illegal and explain why. </p>
+              </statement>
+              <feedback>
+                  <p></p>
+              </feedback>
+              <matches>
+                  <match>
+                      <premise>(4 + 5) &lt;= 6 / 3          </premise>
+                      <response>  false   </response>
+                  </match>
+                  <match>
+                      <premise>4 + 5 % 3 != 7 - 2  </premise>
+                      <response> true  </response>
+                  </match>
+                  <match>
+                      <premise>(4 + 5) % 3 = 10 -4   </premise>
+                      <response> illegal </response>
+                  </match>
+                  </matches>
+                  </exercise>
+
+                  <!-- Extra false exercise 9 % 2 * 7 / 3 > 17 -->
+      </exercises>
+      
     
   </subsection>    
 </section>

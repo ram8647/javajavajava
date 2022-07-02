@@ -101,6 +101,7 @@ if (true) "Hello";    // "Hello" is  not a statement
         What does it print out? Trace through the code with Show CodeLens.</p></statement>
       <program language="java" interactive="activecode"><input>
       public class RainMonitor
+      {
          public static void main(String[] args)
          {
            boolean isRaining = true;
@@ -122,7 +123,9 @@ if (true) "Hello";    // "Hello" is  not a statement
           {
               String output = getMethodOutput("main");
               String expect = "Drive Carefully\n";
-              boolean passed = getResults(expect, output, "Expected output from main after changing isRaining to false", true);
+              boolean passed = output.equals(expect);
+              getResults(expect, output, 
+              "Expected output from main after changing isRaining to false", passed);
               assertTrue(passed);
           }
       }
@@ -391,8 +394,8 @@ else
      public static void main(String[] args)
      {
          // Get a random number from 0 up to 3 (but not including 3)
-         int number = (int) (Math.random() * 3);
-         System.out.println("The number is " + number);
+         int num = (int) (Math.random() * 3);
+         System.out.println("The number is " + num);
   
          if (num == 0)
             System.out.println("Zero");
