@@ -62,12 +62,10 @@
     </p>
   </principle>
 </introduction>
-<subsection xml-id="ss-5-8-1">
+<exercises xml-id="ss-5-8-1">
     <title>Self-Study Exercise</title>
-    <p>
-    <ol>
-      <li xml:id="ex-bankcd">
-        <p>
+    
+      <p>
           A Certificate of Deposit (CD) is an investment instrument 
           that accumulates interest at a given rate for an initial principal 
           over a fixed number of years.
@@ -103,6 +101,9 @@
           <caption>The <c>BankCD</c> class.</caption>
          <image width="40%" source="chptr05/bankcd.png"/>
         </figure>
+      
+        <exercise label="bankCDex" xml:id="ex-bankcd">
+          <statement>
         <p> 
           Implement a <c>BankCD</c> class that calculates the maturity value of a CD. 
           <xref ref="fig-bankcd">Figure</xref> gives the design of the class.
@@ -110,20 +111,31 @@
           and years.
           Its constructor method sets the initial values of 
           these variables when a <c>BankCD</c> is instantiated.
-          Its two public methods calculate the maturity value 
+          Its two public methods <c>calcYearly()</c> and <c>calcMonthly()</c> calculate and return the maturity value 
           using yearly and daily compounding interest,
           respectively.
           Use the <c>Math.pow()</c> method to calculate maturity values.
           For example,
           the following expression calculates maturity value with annual compounding:
-        </p>
-          <program language="java"><input>
-           principal * Math.pow(1 + rate, years)
-          </input></program>
-      </li>
-      <li>
+      <c>principal * Math.pow(1 + rate, years)</c>
+        </p></statement>
+        <program language="java" interactive="activecode"><input>
+         public class BankCD
+         {
+
+
+          public static void main(String argv[])
+          {
+             BankCD cd = new BankCD(1000, 0.05, 10);
+             System.out.println("Yearly Interest: " + cd.calcYearly());
+             System.out.println("Monthly Interest: " + cd.calcMonthly());
+          }
+         }
+        </input>   </program>
+        </exercise>
+      
         <p>
-          Design a command-line user interface to the <c>BankCD</c> 
+         2. Using a development environment that allows user input, design a command-line user interface to the <c>BankCD</c> 
           class that lets the user input principal,
           interest rate, and years,
           and reports the CD's maturity value with both yearly and daily compounding.
@@ -143,9 +155,6 @@
         The maturity value compounded yearly is</m>3,639.43
         The maturity value compounded daily is: $3,692.30
         ************************ OUTPUT ********************
-        </pre>
-      </li>
-    </ol>
-  </p>
-</subsection>
+      </pre>
+</exercises>
 </section>

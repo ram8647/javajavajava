@@ -55,7 +55,7 @@ R = Math.round(100.0 * R) / 100.0;
  </input></program>
     <p>
       Note that it is important here to divide by <m>100.0</m> and not by <m>100</m>.
-      Otherwise, the division will give an integer result and we'll lose the two decimal places.
+      Otherwise, the division will give an integer result and we'll lose the decimal places.
     </p>
     <principle>
       <title>DEBUGGING TIP: Division</title>
@@ -64,6 +64,30 @@ R = Math.round(100.0 * R) / 100.0;
         is necessary to ensure that you get the correct type of result.
       </p>
     </principle>
+
+    <activity label="roundDemo">
+    <statement><p>Try the following demo of these math operations to round a decimal value. 
+      Try changing the value of r and try again.  </p></statement>
+      <program language="java" interactive="activecode">
+     <input>
+     public class RoundingDemo 
+     {
+      public static void main(String[] args) 
+      {
+            double r = 75.19999;
+            System.out.println("r: " + r);
+            
+            double rFloored = Math.floor(r * 100.0 + 0.5) / 100.0;
+            System.out.println("Math.floor " + rFloored);
+            
+            double rRounded = Math.round(100.0 * r) / 100.0;
+            System.out.println("Math.round: " + rRounded);
+      }
+  }
+    </input>
+    </program>
+    </activity>
+
   </subsection>
   <subsection>
     <title>Example: Converting Fahrenheit to Celsius</title>
@@ -161,7 +185,6 @@ R = Math.round(100.0 * R) / 100.0;
         <program language="java"><input>
           public class Temperature
           {
-              public Temperature() {}
               public static double fahrToCels(double temp)
               {
                   return (5.0 * (temp - 32.0) / 9.0);
@@ -197,6 +220,8 @@ R = Math.round(100.0 * R) / 100.0;
           you explicitly change all the literals in an expression to the same type.
         </p>
       </principle>
+
+   
     </subsubsection>
     <subsubsection>
       <title>Testing and Debugging</title>
@@ -245,6 +270,33 @@ R = Math.round(100.0 * R) / 100.0;
         One advantage of using these particular values is that we know what 
         results the methods should return.
       </p>
+
+      <activity label="TempDemo">
+        <statement><p>Try the following demo of the Temperature converter.  
+          Try each of the tests mentioned above.  </p></statement>
+          <program language="java" interactive="activecode">
+         <input>
+         public class Temperature {
+            
+             public static double fahrToCels(double temp)
+             {
+                 return (5.0 * (temp - 32.0) / 9.0);
+             }
+             public static double celsToFahr(double temp)
+             {
+                 return (9.0 * temp / 5.0 + 32.0);
+             }
+              public static void main(String[] args) {
+                  double fTemp = 32;
+                  double cTemp = Temperature.fahrToCels(fTemp);
+                  System.out.println(fTemp + "F is " + cTemp + "C");
+                  System.out.println("0 in C is " + Temperature.celsToFahr(0) + "F");
+             }
+         }
+        </input>
+        </program>
+        </activity>
+
       <principle>
         <title>EFFECTIVE DESIGN: Test Data</title>
         <p>
@@ -292,7 +344,7 @@ R = Math.round(100.0 * R) / 100.0;
         <ol>
           <li>
             <p>
-              Following the design in <xref ref="fig-tempcmdline">Figure</xref>,
+              Using a development environment that allows user input and following the design in <xref ref="fig-tempcmdline">Figure</xref>,
               implement the <c>TemperatureUI</c> class and use it to test the 
               methods in <c>Temperature</c> class.
               The <c>run()</c> method should use an
@@ -311,14 +363,14 @@ R = Math.round(100.0 * R) / 100.0;
           </li>
           <li>
             <p>
-              Following the design for the GUI developed in Chapter<nbsp/>4,
+              Using a development environment that allows GUI development, and following the design for the GUI developed in Chapter<nbsp/>4,
               implement a 
               GUI to use for testing the <c>Temperature</c> class.
               The GUI should have the layout shown in 
               <xref ref="fig-convapplgui">Figure</xref>.
             </p>
             <figure xml:id="fig-convapplgui">
-             <caption>NEED TO UPDATE THIS IMAGE.</caption>
+             <caption>GUI.</caption>
              <image width="40%" source="chptr05/5f5.png"/>
             </figure>
           </li>
@@ -540,20 +592,105 @@ R = Math.round(100.0 * R) / 100.0;
       </input></program>
     </listing>
     </introduction>
-<subsubsection xml:id="ss-5-7-2">
+
+<exercises xml:id="ss-5-7-2">
   <title>Self-Study Exercise</title>
-    <p>
-      <ol>
-        <li>
-          <p>
-            Implement a command-line interface class named <c>KBTestOneRowNim</c>, 
-            that uses our new version of <c>OneRowNim</c>. 
-            Make use of the <c>MAX_STICKS</c> and <c>MAX_PICKUP</c> in the user interface.
+    
+  <exercise label="OneRowNimWithConstants">
+         <statement><p>
+            Complete the main method below to implement a command-line interface  
+            that uses the new version of <c>OneRowNim</c> making  
+           use of the <c>MAX_STICKS</c> and <c>MAX_PICKUP</c> in the main method.
           </p>
-        </li>
-      </ol>
-    </p>
-  </subsubsection>
+          </statement>
+          <program language="java" interactive="activecode"><input>
+          public class OneRowNim
+          {   public static final int PLAYER_ONE = 1;
+              public static final int PLAYER_TWO = 2;
+              public static final int MAX_PICKUP = 3;
+              public static final int MAX_STICKS = 11;
+              public static final boolean GAME_OVER = false;
+              private int nSticks = MAX_STICKS;
+              private boolean onePlaysNext = true;
+              
+              /* Replace the numbers in this main method with the appropriate constants */
+              public static void main(String argv[])
+              { 
+                   OneRowNim game = new OneRowNim(11);
+                   while(game.gameOver() == false)
+                   {   
+                     System.out.println(game.report());  
+                     int sticks = (int) (Math.random() * 3) + 1;
+                     System.out.println("Sticks picked up: " + sticks);
+                     game.takeSticks(sticks);  
+                   } // while
+                   System.out.println(game.report());  // The game is now over
+                   System.out.print("Game won by player ");
+                   System.out.println(game.getWinner());
+             } // main()
+
+              public OneRowNim()
+              {
+              } //OneRowNim() constructor1
+              public OneRowNim(int sticks)
+              {   nSticks = sticks;
+              }  // OneRowNim() constructor2
+              public OneRowNim(int sticks, int starter)
+              {   nSticks = sticks;
+                  onePlaysNext = (starter == PLAYER_ONE);
+              }  // OneRowNim() constructor3
+              public boolean takeSticks(int num)
+              {   if (num &lt; 1 || num > MAX_PICKUP || num > nSticks)
+                      return false;                // Error
+                  else                             // Valid move
+                  {   nSticks = nSticks - num;
+                      onePlaysNext = !onePlaysNext;
+                      return true;
+                  } //else
+              }//takeSticks()
+              public int getSticks()
+              {   return nSticks;
+              } //getSticks()
+              public int getPlayer()
+              {   if (onePlaysNext)
+                      return PLAYER_ONE;
+                  else return PLAYER_TWO;
+              } //getPlayer()
+              public boolean gameOver()
+              {   return (nSticks &lt;= 0);
+              } // gameOver()
+              public int getWinner()
+              {   if (nSticks &lt; 1)
+                      return getPlayer();
+                  else return 0;         // Game is not over
+              } // getWinner()
+              public String report()
+              {   return ("Number of sticks left: " + getSticks()
+                    + "\nNext turn by player " + getPlayer() + "\n");
+              }   // report()
+            } // OneRowNim class
+        </input></program>
+      <solution>
+        <program language="java"><input>
+        public static void main(String argv[])
+        { 
+             OneRowNim game = new OneRowNim(MAX_STICKS);
+             while(game.gameOver() == false)
+             {   
+               System.out.println(game.report());  
+               int sticks = (int) (Math.random()*MAX_PICKUP) + 1;
+               System.out.println("Sticks picked up: " + sticks);
+               game.takeSticks(sticks);  
+             } // while
+             System.out.println(game.report());  // The game is now over
+             System.out.print("Game won by player ");
+             System.out.println(game.getWinner());
+       } // main()
+      </input></program>
+      </solution> 
+      </exercise>
+       </exercises>
+       
   </subsection>
   <subsection xml:id="OOD-information-hiding">
     <title>OBJECT-ORIENTED DESIGN:
@@ -605,7 +742,7 @@ R = Math.round(100.0 * R) / 100.0;
           <p>
             To confirm that our new version of <c>OneRowNim</c> 
             still works correctly with the user interfaces we developed in Chapter<nbsp/>4,
-            compile and run it with <c>OneRowNimApp</c>  (<xref ref="fig-ornapp">Figure</xref>).
+            compile and run it with <c>OneRowNimApp</c> in a development environment that allows user input.  (<xref ref="fig-ornapp">Figure</xref>).
           </p>
         </li>
       </ol>
@@ -824,18 +961,22 @@ R = Math.round(100.0 * R) / 100.0;
       <c>maxPickup</c> is either 1, 2, or 3, depending on the situation of the game at that point.
     </p>
     </introduction>
-<subsubsection xml:id="ss-5-7-4">
+    </subsection>
+
+<exercises xml:id="ss-5-7-4">
   <title>Self-Study Exercises</title>
   <figure xml:id="fig-nimplayer">
    <caption>The <c>NimPlayer</c> class.</caption>
    <image width="40%" source="chptr05/nimplayer.png"/>
   </figure>
-    <p>
-      <ol>
-        <li>
+    
+  <exercise label="nimPlayerEx">
+    <statement>
           <p>
+            This version of OneRowNim plays NimPlayer with the winning strategy
+                    against the RndPlayer which picks randomly.
             Implement a class named <c>NimPlayer</c> that incorporates 
-            the <c>move()</c> method designed in this section.
+            the <c>move()</c> method with the winning strategy designed in this section. Use the RndPlayer below as a guide.
             The class should implement the design shown in <xref ref="fig-nimplayer">Figure</xref>.
             That is, in addition to the <c>move()</c> method,
             it should have an instance variable, <c>nim</c>, which will 
@@ -843,17 +984,149 @@ R = Math.round(100.0 * R) / 100.0;
             Its constructor method should take a <c>OneRowNim</c> parameter,
             allowing the <c>NimPlayer</c> to be given a reference when it is instantiated.
           </p>
-        </li>
-        <li>
+          </statement>
+          <program language="java" interactive="activecode"><input>
+          /** Complete the class NimPlayer below */
+          class NimPlayer
+          {   
+            // instance variable for OneRowNim game
+
+            // Constructor w/1 argument
+
+            // move() method that uses winning strategy
+
+          } // NimPlayer
+            
+          /** RndPlayer plays a random move */
+          class RndPlayer
+          {
+            private OneRowNim nim;
+              
+            public RndPlayer(OneRowNim game)
+            {   
+                nim = game;
+            }
+            public int move() 
+            {   // Random move
+                int sticks = (int) (Math.random() * nim.MAX_PICKUP) + 1;
+                return sticks;
+             }
+            } // RndPlayer
+            
+            public class OneRowNim
+            {   public static final int PLAYER_ONE = 1;
+                public static final int PLAYER_TWO = 2;
+                public static final int MAX_PICKUP = 3;
+                public static final int MAX_STICKS = 11;
+                public static final boolean GAME_OVER = false;
+                private int nSticks = MAX_STICKS;
+                private boolean onePlaysNext = true;
+                
+                /** This version of OneRowNim plays NimPlayer with the winning strategy
+                    against the RndPlayer which picks randomly **/
+                public static void main(String argv[])
+                { 
+                  OneRowNim game = new OneRowNim(MAX_STICKS);
+                  RndPlayer randomPlayer = new RndPlayer(game);
+                  NimPlayer goodPlayer = new NimPlayer(game);
+                  
+                  while(game.gameOver() == false)
+                  {
+                      if (game.getPlayer() == game.PLAYER_ONE) {
+                         System.out.println("Sticks left = " + game.getSticks() + " Random player move. ");  
+                          int sticks = randomPlayer.move(); // Get move
+                          game.takeSticks(sticks);   // Do move
+                           System.out.println("RndPlayer takes " + sticks);
+                      } else {
+                          System.out.println("Sticks left = " + game.getSticks() + " NimPlayer move. "); 
+                          int sticks = goodPlayer.move();
+                          game.takeSticks(sticks);
+                          System.out.println("NimPlayer takes " + sticks);
+                      } // else
+                  } // while
+                  System.out.println("Sticks left = " + game.getSticks());  // The game is now over
+                  if (game.getWinner() == game.PLAYER_ONE)
+                   System.out.println("RndPLayer win. Nice game!");
+                  else
+                   System.out.println("NimPlayer win. Nice game!");
+               } // main()
+  
+                public OneRowNim()
+                {
+                } //OneRowNim() constructor1
+                public OneRowNim(int sticks)
+                {   nSticks = sticks;
+                }  // OneRowNim() constructor2
+                public OneRowNim(int sticks, int starter)
+                {   nSticks = sticks;
+                    onePlaysNext = (starter == PLAYER_ONE);
+                }  // OneRowNim() constructor3
+                public boolean takeSticks(int num)
+                {   if (num &lt; 1 || num > MAX_PICKUP || num > nSticks)
+                        return false;                // Error
+                    else                             // Valid move
+                    {   nSticks = nSticks - num;
+                        onePlaysNext = !onePlaysNext;
+                        return true;
+                    } //else
+                }//takeSticks()
+                public int getSticks()
+                {   return nSticks;
+                } //getSticks()
+                public int getPlayer()
+                {   if (onePlaysNext)
+                        return PLAYER_ONE;
+                    else return PLAYER_TWO;
+                } //getPlayer()
+                public boolean gameOver()
+                {   return (nSticks &lt;= 0);
+                } // gameOver()
+                public int getWinner()
+                {   if (nSticks &lt; 1)
+                        return getPlayer();
+                    else return 0;         // Game is not over
+                } // getWinner()
+                public String report()
+                {   return ("Number of sticks left: " + getSticks()
+                      + "\nNext turn by player " + getPlayer() + "\n");
+                }   // report()
+              } // OneRowNim class
+          </input></program>
+        <solution>
+          <program language="java"><input>
+          class NimPlayer
+          {   private OneRowNim nim;
+             
+              public NimPlayer (OneRowNim game)
+              {   nim = game;
+              }
+              public int move() 
+              {   int sticksLeft = nim.getSticks();
+                  if (sticksLeft % (nim.MAX_PICKUP + 1) != 1)
+                      return (sticksLeft - 1) % (nim.MAX_PICKUP +1);
+                  else {
+                      int maxPickup = Math.min(nim.MAX_PICKUP, sticksLeft);
+                      return 1 + (int)(Math.random() * maxPickup);
+                  }
+              }
+          } // NimPlayer
+        </input></program>
+        </solution> 
+        </exercise>
+
+
+          
+        
+        
+          
           <p>
-            Modify <c>OneRowNim</c>'s command-line interface to play One Row Nim 
+          2.  Using a development environment which allows user input, 
+          modify <c>OneRowNim</c>'s command-line interface to play One Row Nim 
             between the user and the computer,
             where the <c>NimPlayer</c> implemented in the previous exercise 
             represents the computer.
           </p>
-        </li>
-      </ol>
-    </p>
-  </subsubsection>
-  </subsection>
+       
+</exercises>
+
 </section>
