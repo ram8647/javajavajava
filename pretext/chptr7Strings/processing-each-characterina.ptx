@@ -6,34 +6,34 @@
       For example, to encrypt the string
       <q>hello</q>
       into
-      <q>jgnnq</q>, we have to go through each letter of the string and change 
+      <q>jgnnq</q>, we have to go through each letter of the string and change
       each character to its substitute.
     </p>
     <p>
-      These types of algorithms usually involve a counting loop bounded by  
+      These types of algorithms usually involve a counting loop bounded by
       the length of the string.
-      Recall that the <c>length()</c> method determines the number of 
+      Recall that the <c>length()</c> method determines the number of
       characters in a <c>String</c> and that strings are zero indexed.
-      This means that the first character is at index 0, and the last 
+      This means that the first character is at index 0, and the last
       character is at index <c>length()-1</c>. For example,
       to print each character in a string on a separate line,
-      we would step through the string from its first to its 
+      we would step through the string from its first to its
       last character and print each character::
     </p>
     <p>
-      
+
     </p>
  <program language="java"><input>
 // Precondition:  str is not null
 // Postcondition: the letters in str will have been printed
-public void printLetters(String str) 
+public void printLetters(String str)
 {
   for (int k = 0; k &lt; str.length(); k++)// For each char
     System.out.println(str.charAt(k));  //  Print it
 }
  </input></program>
     <p>
-      Note that our loop bound is <c>k &lt; str.length()</c>, since  
+      Note that our loop bound is <c>k &lt; str.length()</c>, since
       the index of the last character of any <c>String</c> is
       <c>length()-1</c>. Note also the use of <c>str.charAt(k)</c> to retrieve the
       <em>k</em>th character in <c>str</c> on each iteration of the loop.
@@ -79,7 +79,7 @@ public void printLetters(String str)
       perform this type of function.
     </p>
     <p>
-      The <c>countChar()</c> method will count the number of occurrences of  
+      The <c>countChar()</c> method will count the number of occurrences of
       any particular character in a <c>String</c> (<xref ref="lst-countchar">Listing</xref>).
       This method takes two parameters:
       a <c>String</c> parameter that stores the string being searched and a
@@ -91,7 +91,7 @@ public void printLetters(String str)
  <program language="java"><input>
 // Precondition: Neither str nor ch are null
 // Postcondition: countchar() == the number of ch in str
-public int countChar(String str, char ch) 
+public int countChar(String str, char ch)
 {
   int counter = 0;              // Initialize a counter
   for (int k = 0; k &lt; str.length(); k++)// For each char
@@ -104,8 +104,8 @@ public int countChar(String str, char ch)
     <p>
       Begin by initializing the local variable, <c>counter</c>, to  0.
       As in the previous example,
-      the <c>for</c> loop here will iterate through each character of 
-      the <c>String</c><mdash/>from 0 to <c>length()-1</c>. On each 
+      the <c>for</c> loop here will iterate through each character of
+      the <c>String</c><mdash/>from 0 to <c>length()-1</c>. On each
       iteration a check is made to see if the character in the
       <em>k</em>th position (<c>str.charAt(k)</c>) is the character being counted.
       If so, <c>counter</c> is incremented.
@@ -118,14 +118,14 @@ public int countChar(String str, char ch)
   <subsection>
     <title>Example: Reversing a String</title>
     <p>
-      Another interesting method that processes each character in a 
+      Another interesting method that processes each character in a
       string is the <c>reverse()</c> method.
       This is a method that reverses the letters in a string.
       For example,
       the reverse of <c>"java"</c> is <c>"avaj"</c>.
     </p>
     <p>
-      The algorithm for the <c>reverse()</c> method should use a simple  
+      The algorithm for the <c>reverse()</c> method should use a simple
       counting loop to reverse the letters in its <c>String</c> parameter.
       In this case,
       however, we can process the string from right to left,
@@ -138,7 +138,7 @@ public int countChar(String str, char ch)
   * Pre:  s is any non null string
   * Post: s is returned in reverse order
   */
-public String reverse(String s) 
+public String reverse(String s)
 {
     StringBuffer result = new StringBuffer();
     for (int k = s.length()-1; k >= 0; k--) {
@@ -148,10 +148,10 @@ public String reverse(String s)
 } // reverse()
  </input></program>
     <p>
-      Note that as in the other string-manipulation algorithms <mdash/> for example, 
-      <c>keywordSearch()</c> <mdash/> we should us a <c>StringBuffer</c> to store 
+      Note that as in the other string-manipulation algorithms <mdash/> for example,
+      <c>keywordSearch()</c> <mdash/> we should us a <c>StringBuffer</c> to store
       the method's result.
-      Thus we declare the <c>result</c><c>StringBuffer</c> at the beginning 
+      Thus we declare the <c>result</c><c>StringBuffer</c> at the beginning
       of the method and convert it back into a <c>String</c> at the end of the method.
     </p>
     <principle>
@@ -166,23 +166,23 @@ public String reverse(String s)
     <title>Example: Capitalizing the First Letter</title>
     <p>
       Another string manipulation method is the <c>capitalize()</c> method,
-      which returns a <c>String</c> whose  initial letter is capitalized but 
+      which returns a <c>String</c> whose  initial letter is capitalized but
       whose other letters are lowercase <mdash/> for example,
-      <q>Hello</q>. We use the <c>static</c><c>toUpperCase()</c> 
-      and <c>toLowerCase()</c> methods from the <c>Character</c> class 
+      <q>Hello</q>. We use the <c>static</c><c>toUpperCase()</c>
+      and <c>toLowerCase()</c> methods from the <c>Character</c> class
       to convert individual letters.
-      The algorithm converts the first letter to upper case and then 
+      The algorithm converts the first letter to upper case and then
       loops through the remaining letters converting each to lowercase:
     </p>
     <p>
-      
+
     </p>
  <program language="java"><input>
 /*
  * Pre:  s is any non null string
  * Post: s is returned with only its first letter capitalized
  */
-public String capitalize(String s) 
+public String capitalize(String s)
 {
   if (s.length() == 0)    // Special case: empty string
     return s;
@@ -202,89 +202,58 @@ public String capitalize(String s)
       <statement>
         <p>Run this program to see how it works and then modify it to perform the following tasks.</p>
           <ol>
-          <li><p>Add <c>countChar()</c> as a static method and write code to test it in the main while loop.</p></li>
           <li><p>Add <c>reverse()</c> as a static method and write code to test it in the main while loop.</p></li>
-          <li><p>Define and test a new method, <c>removeBlanks()</c>, that accepts a string parameter and returns
-          a string with all blank characters removed.</p></li>
+          <li><p>Define and test a new method, <c>removeBlanks()</c>, that accepts a string parameter
+          and returns a string with all blank characters removed.</p></li>
           </ol>
+          <p>
+            <xref ref="li-removeblanks">Solution</xref>
+          </p>
       </statement>
+
     <program language="java" interactive="activecode"><input>
-    import java.io.*;
-    
+
     public class StringProcessor {
 
-        public static void printLetters(String str) {
-            for (int k = 0; k &lt; str.length(); k++) // For each char
-              System.out.println(str.charAt(k));      //  Print it
-        }
+      public static int countChar(String str, char ch) {
+        int counter = 0;                  // Initialize a counter
+        for (int k = 0; k &lt; str.length(); k++)   // For each char
+          if (str.charAt(k) == ch)               //  If it's a ch
+            counter++;                           //   count it
+        return counter;                   // Return the result
+      }
 
-        // Add static countChar() abd reverse() methods 
+        // Add static reverse() method
 
 
 
         // Add static removeBlanks() method
 
         public static void main(String args[]) {
-            KeyboardReader kb = new KeyboardReader();
-            kb.prompt("Input a String or - stop - to quit: ");
-            String str = kb.getKeyboardInput();
-            while (!str.equals("stop")){
-              kb.display("Testing printLetters()\n");
-              StringProcessor.printLetters(str);
- 
-              // Add code to test your methods here 
+          String s = "This is a test";
+          System.out.println("Testing countChar()");
+          System.out.println( s + " has " +
+            StringProcessor.countChar(s, 't') + " t's");
 
+          // Add code to test your methods here
 
-
-
-
-              kb.prompt("Input a String or - stop - to quit: ");
-              str = kb.getKeyboardInput();
-            } // while
         } // main()
     } // StringProcessor
-
-    class KeyboardReader {   
-      private BufferedReader reader;
-
-      public KeyboardReader() {
-          reader = new BufferedReader
-            (new InputStreamReader(System.in));
-      }
-      public String getKeyboardInput() {   
-        return readKeyboard();
-      }
-      public void prompt(String s) {   
-        System.out.print(s);
-      }
-      public void display(String s) {   
-        System.out.print(s);
-      }
-      private String readKeyboard() {   
-        String line = "";
-          try {  
-            line = reader.readLine();
-          } catch (IOException e) {  
-            e.printStackTrace();
-          }
-          return line;
-      }
-  }
     </input></program>
     </activity>
   </subsection>
   <subsection>
     <title>Miscellaneous <c>String</c> Methods</title>
     <p>
-      In addition to the several <c>String</c> class methods we have 
+      In addition to the several <c>String</c> class methods we have
       discussed <mdash/> <c>valueOf()</c>, <c>equals()</c>, <c>indexOf()</c>,
-      <c>lastIndexOf()</c>, <c>charAt()</c>, <c>substring()</c> <mdash/> 
-      <xref ref="tab-strmethods">Table</xref> shows some of the other 
+      <c>lastIndexOf()</c>, <c>charAt()</c>, <c>substring()</c> <mdash/>
+      <xref ref="tab-strmethods">Table</xref> shows some of the other
       useful methods in the <c>String</c> class.
     </p>
 
     <table xml:id="tab-strmethods">
-      <title>Some useful <c>String</c> methods applied to the literal 
+      <title>Some useful <c>String</c> methods applied to the literal
       string <q>Perfection</q>.</title>
       <tabular>
         <row bottom="minor" left="minor">
@@ -318,8 +287,8 @@ public String capitalize(String s)
       </tabular>
     </table>
     <p>
-      Note that because of what we said about the read-only nature of <c>String</c>, 
-      methods such as <c>toUpperCase()</c>, <c>toLowerCase()</c>, and <c>trim()</c> 
+      Note that because of what we said about the read-only nature of <c>String</c>,
+      methods such as <c>toUpperCase()</c>, <c>toLowerCase()</c>, and <c>trim()</c>
       do not change their string. Instead they produce a new string.
       If you want to use one of these methods to convert a string,
       you must reassign its result back to the original string:

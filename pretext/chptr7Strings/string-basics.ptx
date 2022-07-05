@@ -78,7 +78,7 @@
       That information is hidden.
     </p>
       <figure xml:id="fig-emptystr">
-        <caption></caption>
+        <caption>An empty <c>String</c> object referenced by <q>name</q>.</caption>
         <image width="35%" source="chptr07/p349f2.png"/> 
       </figure>
     <p>
@@ -104,7 +104,7 @@
     </p>
     <figure xml:id="fig-socrates"> 
       <image width="35%" source="chptr07/p349f3.png"/> 
-      <caption>The literal <c>String</c> <q>Socrates.</q></caption>
+      <caption>A <c>String</c> object referenced by the literal <q>Socrates.</q></caption>
     </figure>
     <p>
       When Java encounters a
@@ -194,7 +194,7 @@ String name6 = name4;
     <principle>
       <title>Strings</title>
       <p>
-        Java <c>String</c> s are full-fledged objects,
+        Java <c>String</c>s are full-fledged objects,
         but they have some properties in common with primitive types.
         They can have literal values and they can be used in assignment statements.
       </p>
@@ -208,67 +208,9 @@ String name6 = name4;
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="sec-concatenation">
-    <title>Concatenating Strings</title>
-    <p>
-      Another way to build a <c>String</c> object is to concatenate two other strings.
-      Recall from <xref ref="chapter-objects">Chapter</xref>
-      that there are two ways to perform string concatenation in Java: We can use the <c>concat()</c> method or the concatenation operator,
-      <m>+</m>.
-    </p>
- <program language="java"><input>
-String lastName = "Onassis";
-String jackie =
-   new String("Jacqueline " + "Kennedy " + lastName);
-System.out.println("Jacqueline".concat(lastName));
- </input></program>
-    <p>
-      The second of these statements uses the
-      <em>concatenation  operator</em>,
-      <m>+</m>,
-      to create the <c>String</c>
-      <q>Jacqueline Kennedy Onassis.</q>
-      The third statement uses the <c>String</c> method, <c>concat()</c>, to print
-      <q>JacquelineOnassis.</q>
-    </p>
-    <p>
-      Using the + symbol as the string concatenation operator is  another example of
-      <em>operator overloading</em><mdash/>using the same operator for two or more different operations<mdash/>which we encountered in Chapter<nbsp/>5.
-    </p>
-    <principle>
-      <title>String Concatenation</title>
-      <p>
-        When surrounded on either side by a <c>String</c>, the + symbol is used as a binary
-        <term>concatenation</term> operator.
-        It has the effect of joining two strings together to form a single string.
-      </p>
-    </principle>
-    <p>
-      Note that primitive types are automatically promoted to <c>String</c> s when they are mixed with concatenation operators.
-      Thus, the statement
-    </p>
- <program language="java"><input>
-System.out.println("The sum of 5 and 5 = "+ (5 + 5));
- </input></program>
-    <p>
-      will print the string
-      <q>The sum of 5 and 5 = 10.</q>
-      Note that the integer addition<mdash/>(5 + 5)<mdash/>is performed first,
-      before the integer result is converted into a String.
-      If we had left off the parentheses around the addition operation,
-      the second plus sign would also be interpreted as a concatenation operator.
-      Thus,
-    </p>
- <program language="java"><input>
-System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
- </input></program>
-    <p>
-      would print
-      <q>The concatenation of 5 and 5 = 55.</q>
-    </p>
-    </subsection>
-    <subsection>
+<subsection>
     <title>Self-Study Exercises</title>
+
       <exercise label="str-basics-1">
       <title>What is printed?</title>
         <statement>
@@ -322,37 +264,9 @@ System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
             </condition>
           </var>
         </setup>
-      </exercise>       
+    </exercise>
 
-      <exercise label="str-basics-3">
-      <title>What is printed?</title>
-        <statement>
-          <p>
-            The following code segment will print: <var/>
-            <program language="java"><input>
-              String s1 = "silly"; 
-              String s2 = new String (s1 + " stuff");
-              System.out.println(s2);
-            </input></program>
-          </p>
-        </statement>
-        <setup>
-          <var>
-            <condition string="silly stuff">
-              <feedback>
-                <p>Correct.</p>
-              </feedback>
-            </condition>
-              <condition string=".*">
-              <feedback>
-                <p>Incorrect. The answer must exactly match what is printed.</p>
-              </feedback>
-            </condition>
-          </var>
-        </setup>
-      </exercise>
-
-      <exercise label="str-basics-4">
+    <exercise label="str-basics-3">
       <title>Creating an empty string</title>
         <statement>
           <p>Which the following declarations would create an empty string?</p>
@@ -391,72 +305,9 @@ System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
             </feedback>
           </choice>
         </choices>
-      </exercise>
+    </exercise>
 
-      <exercise label="str-basics-5">
-      <title>Evaluate expressions</title>
-        <statement>
-          <p>
-            Evaluate the following expressions given the declarations here. Make sure 
-            you use quote marks to distinguish strings ("100") from numbers (100).
-            <program language="java"><input>
-              int M = 5, N = 10;
-              String s1 = "51", s2 = "75";
-            </input></program>
-          </p>
-          <ul>
-           <li>
-              <c>M + N</c>  <var/>
-            </li>
-            <li>
-              <c>M + s1</c>  <var/>
-            </li>
-            <li>
-              <c>s1 + s2</c>  <var/>
-            </li>
-          </ul>
-        </statement>
-        <setup>
-          <var>
-            <condition number="15">
-              <feedback>
-                <p>Correct. Just adding two numbers.</p>
-              </feedback>
-            </condition>
-            <condition string=".*">
-              <feedback>
-                <p>Incorrect.</p>
-              </feedback>
-            </condition>
-          </var>
-          <var>
-            <condition string="&quot;1551&quot;">
-              <feedback>
-                <p>Correct. The number is promoted to a string.</p>
-              </feedback>
-            </condition>
-            <condition string=".*">
-              <feedback>
-                <p>Incorrect. Think about Java's promotion rules.</p>
-              </feedback>
-            </condition>
-          </var>     
-         <var>
-            <condition string="&quot;5175&quot;">
-              <feedback>
-                <p>Correct. Concatenating two strings.</p>
-              </feedback>
-            </condition>
-            <condition string=".*">
-              <feedback>
-                <p>Incorrect.</p>
-              </feedback>
-            </condition>
-          </var>                
-        </setup>
-      </exercise>
-
-      <exercise label="str-basics-6">
+    <exercise label="str-basics-4">
       <title>String objects</title>
         <statement>
           <p>
@@ -520,11 +371,166 @@ System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
         <hint>
           <p>Review the discussion around <xref ref="fig-strobjects">Figure</xref>.</p>
         </hint>
+    </exercise>
+ 
+  </subsection>
+  <subsection xml:id="sec-concatenation">
+    <title>Concatenating Strings</title>
+    <p>
+      Another way to build a <c>String</c> object is to concatenate two other strings.
+      Recall from <xref ref="chapter-objects">Chapter</xref>
+      that there are two ways to perform string concatenation in Java: We can use the <c>concat()</c> method or the concatenation operator,
+      <m>+</m>.
+    </p>
+ <program language="java"><input>
+String lastName = "Onassis";
+String jackie =
+   new String("Jacqueline " + "Kennedy " + lastName);
+System.out.println("Jacqueline".concat(lastName));
+ </input></program>
+    <p>
+      The second of these statements uses the
+      <em>concatenation  operator</em>,
+      <m>+</m>,
+      to create the <c>String</c>
+      <q>Jacqueline Kennedy Onassis.</q>
+      The third statement uses the <c>String</c> method, <c>concat()</c>, to print
+      <q>JacquelineOnassis.</q>
+    </p>
+    <p>
+      Using the + symbol as the string concatenation operator is  another example of
+      <em>operator overloading</em><mdash/>using the same operator for two or more different operations<mdash/>which we encountered in Chapter<nbsp/>5.
+    </p>
+    <principle>
+      <title>String Concatenation</title>
+      <p>
+        When surrounded on either side by a <c>String</c>, the + symbol is used as a binary
+        <term>concatenation</term> operator.
+        It has the effect of joining two strings together to form a single string.
+      </p>
+    </principle>
+    <p>
+      Note that primitive types are automatically promoted to <c>String</c>s when they are 
+      mixed with concatenation operators.
+      Thus, the statement
+    </p>
+ <program language="java"><input>
+System.out.println("The sum of 5 and 5 = "+ (5 + 5));
+ </input></program>
+    <p>
+      will print the string
+      <q>The sum of 5 and 5 = 10.</q>
+      Note that the integer addition<mdash/>(5 + 5)<mdash/>is performed first,
+      before the integer result is converted into a String.
+      If we had left off the parentheses around the addition operation,
+      the second plus sign would also be interpreted as a concatenation operator.
+      Thus,
+    </p>
+ <program language="java"><input>
+System.out.println("The concatenation of 5 and 5 = " + 5 + 5);
+ </input></program>
+    <p>
+      would print
+      <q>The concatenation of 5 and 5 = 55.</q>
+    </p>
+    </subsection>
+    <subsection>
+    <title>Self-Study Exercises</title>
+      <exercise label="str-basics-5">
+      <title>What is printed?</title>
+        <statement>
+          <p>
+            The following code segment will print: <var/>
+            <program language="java"><input>
+              String s1 = "silly"; 
+              String s2 = new String (s1 + " stuff");
+              System.out.println(s2);
+            </input></program>
+          </p>
+        </statement>
+        <setup>
+          <var>
+            <condition string="silly stuff">
+              <feedback>
+                <p>Correct.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect. The answer must exactly match what is printed.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
       </exercise>
+
+      <exercise label="str-basics-6">
+      <title>Evaluate expressions</title>
+        <statement>
+          <p>
+            Evaluate the following expressions given the declarations here. Make sure 
+            you use quote marks to distinguish strings ("100") from numbers (100).
+            <program language="java"><input>
+              int M = 5, N = 10;
+              String s1 = "51", s2 = "75";
+            </input></program>
+          </p>
+          <ul>
+           <li>
+              <c>M + N</c>  <var/>
+            </li>
+            <li>
+              <c>M + s1</c>  <var/>
+            </li>
+            <li>
+              <c>s1 + s2</c>  <var/>
+            </li>
+          </ul>
+        </statement>
+        <setup>
+          <var>
+            <condition number="15">
+              <feedback>
+                <p>Correct. Just adding two numbers.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+          <var>
+            <condition string="&quot;551&quot;">
+              <feedback>
+                <p>Correct. The number is promoted to a string.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect. Think about Java's promotion rules.</p>
+              </feedback>
+            </condition>
+          </var>     
+         <var>
+            <condition string="&quot;5175&quot;">
+              <feedback>
+                <p>Correct. Concatenating two strings.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>                
+        </setup>
+      </exercise>
+
 
   </subsection>
   <subsection xml:id="fig-zeroindex">
-    <title>Indexing <c>String</c> s</title>
+    <title>Indexing <c>String</c>s</title>
     <p>
       Programmers often need to take strings apart or put them together or rearrange them.
       Just think of the many word-processing tasks,
@@ -557,7 +563,7 @@ String string4 = string2 + " "
       <caption>Strings are 0-indexed in Java.</caption>
     </figure>
     <p>
-      All <c>String</c> s in Java are <term>zero indexed</term>
+      All <c>String</c>s in Java are <term>zero indexed</term>
           <idx><h>zero indexed</h></idx>
       <mdash/> that is, the index of the first character is zero.
       (Remember, zero indexing is contrasted with <term>unit indexing</term>,
@@ -613,7 +619,7 @@ static public String valueOf(Type);
     </p>
     <p>
       The <c>valueOf()</c> method is most useful for initializing
-<c>String</c> s.
+<c>String</c>s.
       Because <c>valueOf()</c> is a class method,
       it can be used as follows to instantiate new <c>String</c> objects:
     </p>
@@ -711,6 +717,8 @@ String pi = new String(""+Math.PI);// Creates "3.14"
         </hint>
       </exercise>
 
+<!-- XXXXXXXXXXX Can't get this one to work XXXXXXXXXXXXXXXX
+
       <exercise label="str-basics-8">
       <title>String.valueOf()</title>
         <statement>
@@ -756,5 +764,7 @@ String pi = new String(""+Math.PI);// Creates "3.14"
           <p>The <c>String.valueOf()</c> method converts its argument into a string.</p>
         </hint>
       </exercise>      
+XXXXXXXXXXXXXXXXXXXX -->
+
   </subsection>
 </section>
