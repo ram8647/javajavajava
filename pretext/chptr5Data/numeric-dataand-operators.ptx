@@ -16,6 +16,9 @@
       as series of 0s and 1s.) Java has two different kinds of real numbers, <c>float</c> and <c>double</c>, which are also distinguished by the number of bits used to represent them.
       See <xref ref="tab-numerics">Table</xref>.
     </p>
+</introduction>
+<subsection xml:id="numeric-types">
+  <title>Primitive Numeric Types</title>
     <table xml:id="tab-numerics">
       <title>Java's numeric types</title>
       <tabular>
@@ -141,7 +144,6 @@
         the values your program needs.
       </p>
     </principle>
-  </introduction>
 
   <exercises><title>Self-Study Exercises</title>
     <exercise label="fillin-binary">
@@ -223,9 +225,9 @@
                                   </exercise>    
   
   </exercises>
+  </subsection>
   <subsection>
-    <title>Numeric Operations</title>
-    <subsubsection><title>Arithmetic Operators</title>
+    <title>Arithmetic Operators</title>
       <p>
         The operations that can be done on numeric data include the standard algebraic operations:
         <em>addition</em> (+), <em>subtraction</em> (<m>-</m>),
@@ -388,9 +390,87 @@ if (N % 2 == 0)
         }
       </input></program>
       </activity>
-    </subsubsection>
 
-    <subsubsection xml:id="promotion-rules">
+<exercises>
+  <title>Self-Study Exercises</title>
+  
+
+<exercise label="eval-div-mod">
+  <title>Evaluate div and mod</title>
+  <statement>
+      <p>Match the integer expressions with their values.</p>
+  </statement>
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise>10 / 2</premise>
+          <response>5</response>
+      </match>
+      <match>
+          <premise>9 / 2</premise>
+          <response>4</response>
+      </match>
+      <match>
+          <premise>6 / 8</premise>
+          <response>0</response>
+      </match>
+      <match>
+          <premise>9 % 2</premise>
+          <response>1</response>
+      </match>
+      <match>
+        <premise>8 % 6</premise>
+        <response>2</response>
+      </match>
+      <match>
+        <premise>6 % 8</premise>
+        <response>6</response>
+      </match>
+     
+  </matches>
+ <solution><p>5, 4, 0, 1, 2, 6</p></solution>
+</exercise>
+
+ 
+<exercise label="eval-dec-div">
+  <title>Evaluate Decimal Expressions</title>
+  <statement>
+      <p>Match the expressions with their values, paying special attention to the data type of the results.</p>
+  </statement>
+  <feedback>
+      <p></p>
+  </feedback>
+  <matches>
+      <match>
+          <premise>8 / 2.0</premise>
+          <response>4.0</response>
+      </match>
+      <match>
+          <premise>9 / 2.0</premise>
+          <response>4.5</response>
+      </match>
+      <match>
+          <premise>6 / 8</premise>
+          <response>0</response>
+      </match>
+      <match>
+          <premise>0.0 / 2</premise>
+          <response>0.0</response>
+      </match>
+      <match>
+        <premise>8.0 / 6.0</premise>
+        <response>1.33</response>
+      </match>
+  </matches>
+  <solution><p>4.0, 4.5, 0, 0.0, 1.33</p></solution>
+</exercise>
+</exercises>
+
+</subsection>
+
+    <subsection xml:id="promotion-rules">
       <title>Numeric Promotion Rules</title>
       <p>
         Java is considered a <em>strongly typed</em>
@@ -501,86 +581,10 @@ n * m;
           </row>
         </tabular>
       </table>
-    </subsubsection>
-  </subsection>
+
 
 <exercises>
   <title>Self-Study Exercises</title>
-  
-
-<exercise label="eval-div-mod">
-  <title>Evaluate div and mod</title>
-  <statement>
-      <p>Match the integer expressions with their values.</p>
-  </statement>
-  <feedback>
-      <p></p>
-  </feedback>
-  <matches>
-      <match>
-          <premise>10 / 2</premise>
-          <response>5</response>
-      </match>
-      <match>
-          <premise>9 / 2</premise>
-          <response>4</response>
-      </match>
-      <match>
-          <premise>6 / 8</premise>
-          <response>0</response>
-      </match>
-      <match>
-          <premise>9 % 2</premise>
-          <response>1</response>
-      </match>
-      <match>
-        <premise>8 % 6</premise>
-        <response>2</response>
-      </match>
-      <match>
-        <premise>6 % 8</premise>
-        <response>6</response>
-      </match>
-     
-  </matches>
- <solution><p>5, 4, 0, 1, 2, 6</p></solution>
-</exercise>
-
- 
-<exercise label="eval-dec-div">
-  <title>Evaluate Decimal Expressions</title>
-  <statement>
-      <p>Match the expressions with their values, paying special attention to the data type of the results.</p>
-  </statement>
-  <feedback>
-      <p></p>
-  </feedback>
-  <matches>
-      <match>
-          <premise>8 / 2.0</premise>
-          <response>4.0</response>
-      </match>
-      <match>
-          <premise>9 / 2.0</premise>
-          <response>4.5</response>
-      </match>
-      <match>
-          <premise>6 / 8</premise>
-          <response>0</response>
-      </match>
-      <match>
-          <premise>0.0 / 2</premise>
-          <response>0.0</response>
-      </match>
-      <match>
-        <premise>8.0 / 6.0</premise>
-        <response>1.33</response>
-      </match>
-  </matches>
-  <solution><p>4.0, 4.5, 0, 0.0, 1.33</p></solution>
-</exercise>
- 
-
 <exercise label="eval-type-promotion">
   <title>Evaluate Type Promotion</title>
   <statement>
@@ -623,6 +627,7 @@ n * m;
   <solution><p>7 (int), 30 (long), 14.0 (double), 90 (long), 4.0 (double)</p></solution>
 </exercise>
 </exercises>
+  </subsection>
 
   <subsection xml:id="op-precedence">
     <title>Operator Precedence</title>
