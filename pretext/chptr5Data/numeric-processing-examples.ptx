@@ -174,7 +174,7 @@ R = Math.round(100.0 * R) / 100.0;
        <image width="50%" source="chptr05/temp-uml.png"/>
       </figure>
     </subsubsection>
-    <subsubsection xml:id="fig-p242f2">
+    <subsubsection>
       <title>Implementation: <c>Temperature</c></title>
       <p>
         The implementation of the <c>Temperature</c> class is shown in 
@@ -340,9 +340,9 @@ R = Math.round(100.0 * R) / 100.0;
 </subsubsection>
 <subsubsection xml:id="ss-5-7-1">
   <title>Self-Study Exercises</title>
-      <p>
-        <ol>
-          <li>
+     
+  <exercise>
+    <title>TemperatureUI</title><statement>
             <p>
               Using a development environment that allows user input and following the design in <xref ref="fig-tempcmdline">Figure</xref>,
               implement the <c>TemperatureUI</c> class and use it to test the 
@@ -360,8 +360,36 @@ R = Math.round(100.0 * R) / 100.0;
             <program language="java"><input>
               double fahr = Temperature.celsToFahr(98.6);
             </input></program>
-          </li>
-          <li>
+          </statement>
+          <solution>
+            <program language="java"><input>
+              public class TemperatureUI
+               { private KeyboardReader reader; // Handles command line I/O
+                 public TemperatureUI() 
+                 { reader = new KeyboardReader(); // Create reader object
+                 }
+                 // Input-process-output algorithm to convert temperatures.
+                 public void run() 
+                 { reader.prompt("Converts Fahrenheit and Celsius.\n");
+                   reader.prompt("Input a temperature in Fahrenheit > ");  
+                   double tempIn = reader.getKeyboardDouble();
+                   double tempResult = Temperature.fahrToCels(tempIn);
+                   reader.display(tempIn + " F = " + tempResult + " C\n"); 
+                   reader.prompt("Input a temperature in Celsius > ");  
+                   tempIn = reader.getKeyboardDouble();
+                   tempResult = Temperature.celsToFahr(tempIn);
+                   reader.display(tempIn + " C = " + tempResult + " F\n "); 
+                } // run()
+                public static void main(String args[])
+                { TemperatureUI ui = new TemperatureUI();  // Create and
+                  ui.run();                  //  run the user interface.
+                } // main()
+               } // TemperatureUI
+            </input></program>
+          </solution>
+        </exercise>
+        <exercise>
+          <title>Temperature GUI</title><statement>
             <p>
               Using a development environment that allows GUI development, and following the design for the GUI developed in Chapter<nbsp/>4,
               implement a 
@@ -373,9 +401,59 @@ R = Math.round(100.0 * R) / 100.0;
              <caption>GUI.</caption>
              <image width="40%" source="chptr05/5f5.png"/>
             </figure>
-          </li>
-        </ol>
-      </p>
+            </statement>
+            <solution><p>
+             <program language="java"><input>
+              import javax.swing.*;
+               import java.awt.*;
+               import java.awt.event.*;
+                // Use this panel with a JApplet top-level window (as per Chapter 4)
+               public class TemperatureJPanel extends JPanel implements ActionListener
+               { private JTextField inField = new JTextField(15);   // GUI components
+                 private JTextField resultField = new JTextField(15);
+                 private JLabel prompt1 = new JLabel("Input Temperature >>");
+                 private JLabel prompt2 = new JLabel("Conversion Result:");
+                 private JButton celsToFahr = new JButton("C to F");
+                 private JButton fahrToCels = new JButton("F to C");
+                 private JPanel panelN = new JPanel(); // Panels 
+                 private JPanel panelC = new JPanel();  
+                 private JPanel panelS = new JPanel();
+                 private Temperature temperature = new Temperature(); // Temperature object
+                 public TemperatureJPanel()       // Set up  user interface
+                 { setLayout(new BorderLayout());  // Use BorderLayout
+                   panelN.setLayout(new BorderLayout());
+                   panelC.setLayout(new BorderLayout());
+                   panelS.setLayout(new BorderLayout());
+                   panelN.add("North", prompt1);     // Input elements
+                   panelN.add("South", inField);
+                   panelC.add("West", celsToFahr);   // Control buttons
+                   panelC.add("East", fahrToCels);
+                   panelS.add("North", prompt2);     // Output elements
+                   panelS.add("South", resultField);
+                   add("North", panelN);   // Input at the top
+                   add("Center", panelC);  // Buttons in the center
+                   add("South", panelS);   // Result at the bottom
+                   celsToFahr.addActionListener(this); // Register with listeners
+                   fahrToCels.addActionListener(this);
+                   setSize(175,200);
+                 } // TemperatureJPanel()
+                 public void actionPerformed(ActionEvent e)
+                 { String inputStr = inField.getText();             // User's input
+                   double userInput = Double.parseDouble(inputStr); // Convert to double
+                   double result = 0;
+                   if (e.getSource() == celsToFahr) {          // Process and report 
+                     result = temperature.celsToFahr(userInput);       
+                     resultField.setText(inputStr + " C = " + result  + " F");
+                   } else {
+                     result = temperature.fahrToCels(userInput);
+                     resultField.setText(inputStr + " F = " +  result  + " C");
+                   }
+                 } // actionPerformed
+               } // TemperatureJPanel
+          
+            </input></program>
+            </p></solution>
+        </exercise>
     </subsubsection>
   </subsection>
   <subsection xml:id="class-constants">
@@ -593,11 +671,12 @@ R = Math.round(100.0 * R) / 100.0;
     </listing>
     </introduction>
 
-<exercises xml:id="ss-5-7-2">
-  <title>Self-Study Exercise</title>
+<subsubsection xml:id="ss-5-7-2">
+  <title>Self-Study Exercises</title>
     
   <exercise label="OneRowNimWithConstants">
-         <statement><p>
+    <title>OneRowNim with Constants</title>
+    <statement><p>
             Complete the main method below to implement a command-line interface  
             that uses the new version of <c>OneRowNim</c> making  
            use of the <c>MAX_STICKS</c> and <c>MAX_PICKUP</c> in the main method.
@@ -689,9 +768,10 @@ R = Math.round(100.0 * R) / 100.0;
       </input></program>
       </solution> 
       </exercise>
-       </exercises>
+      </subsubsection>
+      </subsection>
        
-  </subsection>
+
   <subsection xml:id="OOD-information-hiding">
     <title>OBJECT-ORIENTED DESIGN:
     Information Hiding</title>
@@ -736,17 +816,13 @@ R = Math.round(100.0 * R) / 100.0;
     </introduction>
 <subsubsection xml:id="ss-5-7-3">
   <title>Self-Study Exercise</title>
-    <p>
-      <ol>
-        <li>
+   
           <p>
             To confirm that our new version of <c>OneRowNim</c> 
             still works correctly with the user interfaces we developed in Chapter<nbsp/>4,
             compile and run it with <c>OneRowNimApp</c> in a development environment that allows user input.  (<xref ref="fig-ornapp">Figure</xref>).
           </p>
-        </li>
-      </ol>
-    </p>
+        
   </subsubsection>
   </subsection>
   <subsection xml:id="winningORN">
@@ -963,7 +1039,7 @@ R = Math.round(100.0 * R) / 100.0;
     </introduction>
     </subsection>
 
-<exercises xml:id="ss-5-7-4">
+<subsection xml:id="ss-5-7-4">
   <title>Self-Study Exercises</title>
   <figure xml:id="fig-nimplayer">
    <caption>The <c>NimPlayer</c> class.</caption>
@@ -971,6 +1047,7 @@ R = Math.round(100.0 * R) / 100.0;
   </figure>
     
   <exercise label="nimPlayerEx">
+    <title>NimPlayer</title>
     <statement>
           <p>
             This version of OneRowNim plays NimPlayer with the winning strategy
@@ -1114,19 +1191,54 @@ R = Math.round(100.0 * R) / 100.0;
         </solution> 
         </exercise>
 
-
-          
-        
-        
-          
+        <exercise label="nimPlayerEx">
+          <title>NimPlayer UI</title>
+          <statement>   
           <p>
-          2.  Using a development environment which allows user input, 
+           Using a development environment which allows user input, 
           modify <c>OneRowNim</c>'s command-line interface to play One Row Nim 
             between the user and the computer,
             where the <c>NimPlayer</c> implemented in the previous exercise 
             represents the computer.
           </p>
+        </statement>
+          <solution>
+            <program language="java"><input>
+ public class KBComputerNim
+ { public static void main(String argv[])
+   {   
+     KeyboardReader kb = new KeyboardReader();
+     OneRowNim game = new OneRowNim(OneRowNim.MAX_STICKS);
+     NimPlayer computer = new NimPlayer(game);
+     System.out.println("Let's play One Row Nim");
+     while(game.gameOver() == false)  {   
+       if (game.getPlayer() == game.PLAYER_ONE) 
+       { kb.prompt("Sticks left = " + game.getSticks() + 
+                                  " Your move. "); //Prompt
+         kb.prompt("You can pick up between 1 and " + 
+           Math.min(game.MAX_PICKUP,game.getSticks()) +" :");
+         int sticks = kb.getKeyboardInteger(); // Get move
+         game.takeSticks(sticks);              // Do move
+       } else 
+       { kb.prompt("Sticks left = " + game.getSticks() + 
+                                  " My move. "); 
+         int sticks = computer.move();
+         game.takeSticks(sticks);
+         System.out.println("I take " + sticks);
+       } // else
+     } // while
+                                  // The game is now over
+     kb.display("Sticks left = " + game.getSticks());  
+     if (game.getWinner() == game.PLAYER_ONE)
+       System.out.println(" You win. Nice game!");
+     else
+       System.out.println(" I win. Nice game!");
+   } // main()
+ } // KBComputerNim
+</input></program>
+          </solution>
        
-</exercises>
+       </exercise>
+</subsection>
 
 </section>

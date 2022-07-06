@@ -103,6 +103,7 @@
         </figure>
       
         <exercise label="bankCDex" xml:id="ex-bankcd">
+          <title>BankCD</title>
           <statement>
         <p> 
           Implement a <c>BankCD</c> class that calculates the maturity value of a CD. 
@@ -132,10 +133,32 @@
           }
          }
         </input>   </program>
+        <solution>
+          <program language="java"><input>
+            public class BankCD 
+            { private double principal;   // The CD's initial principal
+              private double rate;        // CD's interest rate
+              private double years;       // Number of years to maturity
+              public BankCD(double p, double r, double y) 
+              {   principal = p;
+                rate = r;
+                years = y;
+              } // BandCD()
+              public double calcYearly() 
+              {   return principal * Math.pow(1 + rate, years);
+              } // calcYearly()
+              public double calcDaily() 
+              {   return principal * Math.pow(1 + rate/365, years*365);
+              } // calcDaily()
+            } // BankCD
+          </input></program>
+        </solution>
         </exercise>
       
-        <p>
-         2. Using a development environment that allows user input, design a command-line user interface to the <c>BankCD</c> 
+        <exercise>
+          <title>BankCD UI</title>
+          <statement><p> Using a development environment that allows user input, 
+            design a command-line user interface to the <c>BankCD</c> 
           class that lets the user input principal,
           interest rate, and years,
           and reports the CD's maturity value with both yearly and daily compounding.
@@ -143,8 +166,6 @@
           and dollar figures in an appropriate format.
           The program's output should look something like the following (user's inputs follow
           the '>' prompt):
-        </p>
-
         <pre>
         ************************ OUTPUT ********************
         Compare daily and annual compounding for a Bank CD.
@@ -156,5 +177,42 @@
         The maturity value compounded daily is: $3,692.30
         ************************ OUTPUT ********************
       </pre>
+  </p></statement>
+  <solution><p>
+    <program language="java"><input>
+       public class TestBankCD 
+       { 
+         private KeyboardReader reader = new KeyboardReader();   
+         private NumberFormat dollars = NumberFormat.getCurrencyInstance(); 
+         private NumberFormat percent = NumberFormat.getPercentInstance();
+         private BankCD cd;
+         public void run()
+         { reader.display("Compares daily and annual compounding for a CD.\n");
+           reader.prompt("  Input the CD's initial principal, e.g.  1000.55 > ");
+           double principal = reader.getKeyboardDouble();
+           reader.prompt("  Input the CD's interest rate, e.g.  6.5 > ");
+           double rate = reader.getKeyboardDouble() / 100.0;
+           reader.prompt("  Input the number of years to maturity, e.g., 10.5 > ");
+           double years = reader.getKeyboardDouble();
+           cd = new BankCD(principal, rate, years);
+           percent.setMaximumFractionDigits(2);
+           System.out.println("For Principal = " + dollars.format(principal) +
+                              " Rate= " + percent.format(rate) +
+                              " Years= " + years);
+           double cdAnnual = cd.calcYearly();  // Compounded yearly
+           double cdDaily =  cd.calcDaily();   // Compounded annually
+           System.out.println(" The maturity value compounded yearly is " +
+                          dollars.format(cdAnnual));
+           System.out.println(" The maturity value compounded daily is: " +
+                          dollars.format(cdDaily));
+         } // run()
+         public static void main( String args[] ) 
+         { TestBankCD cd = new TestBankCD();
+           cd.run();
+         } // main()
+       }// TestBankCD
+    </input></program>
+  </p></solution>
+</exercise>
 </exercises>
 </section>
