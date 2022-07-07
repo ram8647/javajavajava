@@ -701,7 +701,7 @@ class OneRowNim
       This output indicates that player 1 removed the final stick and so player 2 is the winner of this game.
     </p>
 
-      </subsection>
+  <!--    </subsection> -->
       <exercises><title>Self-Study Exercises</title>
      
  
@@ -709,15 +709,16 @@ class OneRowNim
             <exercise label="addHintToRiddle">
               <title>Add Hint to Riddle Class</title>
               <statement><p>
-                1) Add a new declaration to the <c>Riddle</c> class for a <c>private String</c> instance variable named <c>hint</c>. Assign the variable an initial value of <c>"This riddle is too easy for a hint"</c>.
-                2) Write a header for a new method definition for <c>Riddle</c> named <c>getHint()</c>. 
+              <ol>
+                <li>Add a new declaration to the <c>Riddle</c> class for a <c>private String</c> instance variable named <c>hint</c>. Assign the variable an initial value of <c>"This riddle is too easy for a hint"</c>.
+              </li><li>Write a header for a new method definition for <c>Riddle</c> named <c>getHint()</c>. 
                 Assume that this method requires no parameters and that it simply returns the <c>String</c> value stored in the <c>hint</c> instance variable.
                           Should this method be declared <c>public</c> or <c>private</c>?
-                3) Write a header for the definition of a new <c>public</c> method for
+                </li><li> Write a header for the definition of a new <c>public</c> method for
               <c>Riddle</c> named <c>setHint()</c> which sets the value of the <c>hint</c>
                instance variable to whatever <c>String</c> value it receives as a parameter.
                           What should the result type be for this method?
-                           </p></statement>
+                         </li></ol>  </p></statement>
               <program language="java" interactive="activecode"><input>
               class Riddle 
               {                                  
@@ -774,22 +775,53 @@ class OneRowNim
                     System.out.println(riddle1.getHint());
                     riddle2.setHint("Hint: This is not a zebra!")
                     System.out.println(riddle2.getHint());
-
                   } // main()
                 } // RiddleUser
-              </input>  </program></exercise>
+              </input>  </program>
+            <solution>
+                <p>
+                  <ol><li>Definition of new instance variable in the <c>Riddle</c> class:
+         <program language="java"><input>
+        private String hint;
+         </input></program>
+                 </li>
+        
+                 <li>The <c>getHint()</c> method of the <c>Riddle</c> class,
+                    which should be a <c>public</c> method,
+                    is:
+         <program language="java"><input>
+        public String getHint()
+        {
+          return hint;
+        }
+         </input></program>
+              </li>
+              <li>
+                
+                   The  <c>setHint()</c> method of the <c>Riddle</c> class, with the  result type <c>void</c>.  is:
+         <program language="java"><input>
+        public void setHint(String aHint)
+        {
+          hint = aHint;
+        }
+         </input></program>   
+              </li>
+              </ol>
+              </p>
+            </solution>
+            </exercise>
               
 
               <exercise label="studentClassEx">
                 <title>Student Class</title>
-                <statement><p>Create a partial definition of a <c>Student</c> class.
-                  1) Create instance variables for the first name,
+                <statement><p>Create a definition of a <c>Student</c> class.
+                  <ol><li>Create instance variables for the first name,
                   last name, and an integer student identification number.
-                  2) Write the headers for three methods.
+                  </li><li> Write the headers for three methods.
                   One method uses three parameters to set values for the three instance variables.
-                  3) One method returns the student identification number.
-                  4) The last method returns a <c>String</c> containing the student's first name and last name.
-                                   
+                  </li><li> One method returns the student identification number.
+                  </li><li> The last method returns a <c>String</c> containing the student's first name and last name.
+                           </li></ol>        
                              </p></statement>
                 <program language="java" interactive="activecode"><input>
                 public class Student 
@@ -815,11 +847,33 @@ class OneRowNim
                     System.out.println("Name: " + s.getStudentID() );
                   }
                 }
-              </input>                </program></exercise>           
+              </input>                </program>
+            <solution>
+              <p>
+                A possible definition of the <c>Student</c> class is given below.
+     <program language="java"><input>
+    public class Student
+    {  private String firstName;
+       private String lastName;
+       private int studentID;
+       public void setStudent(String fName, String lName,int anID)
+       {
+         firstName = fName;
+         lastName = lName;
+         studentID = anID;
+       }
+       public int getStudentID() { return studentID; }
+       public String getStudentName() ( 
+        return firstName + " " + lastName; 
+      } 
+    }
+     </input></program>
+            </p></solution>
+          </exercise>           
          
         
-
 </exercises>
+</subsection>
 
   <subsection xml:id="sec-methodcall">
     <title>Flow of Control: Method Call and Return</title>
