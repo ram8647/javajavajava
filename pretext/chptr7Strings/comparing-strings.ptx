@@ -131,11 +131,10 @@ public boolean precedes(String s1, String s2)
       is shorter than
       <q>alphabet.</q>
     </p>
-    </subsection>
-    <subsection>
+    <exercises>
     <title>Self-Study Exercises</title>
           <exercise label="swap-str-algorithm" adaptive="yes">
-            <title>Swapping values in variables</title>
+            <title>Lexicographic Order</title>
             <statement>
                 <p> Arrange the following strings in lexicographic order:
                 alpha zero bath Alpha Zero a A</p>
@@ -163,9 +162,13 @@ public boolean precedes(String s1, String s2)
                    <p>zero</p>
                 </block>                   
             </blocks>
+          <solution>
+           <p>The correct order is: A Alpha Zero a alpha beta zero</p>
+          </solution>  
          </exercise>
 
-      <activity label="string-follows">
+      <exercise label="string-follows">
+      <title>StringFollows</title>
       <statement>
         <p>Using the <xref ref="lst-precedes">precedes() method</xref> as a guide,
         define and test a follows method. It should return true if and
@@ -188,7 +191,35 @@ public boolean precedes(String s1, String s2)
         } // main()
     } // StringFollows
     </input></program>
-    </activity>         
+    <solution>
+      <program language="java"><input>
+    public class StringFollows {
+
+       public static boolean follows(String s1, String s2) {
+            int minlen = Math.min(s1.length(), s2.length()); // Pick shorter length
+                            
+            for (int k=0; k &lt; minlen; k++) {     // For each ch in shorter string
+               if (s1.charAt(k) != s2.charAt(k))        // If chars unequal
+                   return s1.charAt(k) > s2.charAt(k); //  return true if s1's ch > s2's
+            }
+                                                // If all characters so far are equal
+                                             //  then s1 > s2 if it is longer than s2
+        return s1.length() > s2.length();  
+       }
+
+
+       public static void main(String args[]) {
+
+         // Add code to test your methods here
+             System.out.println (follows("a", "ab") );
+             System.out.println (follows("ab", "a") );
+             System.out.println (follows("ab", "ab") );
+       } // main()
+    } // StringFollows
+      </input></program>
+    </solution>
+    </exercise>
+  </exercises>         
   </subsection>
   <subsection xml:id="sub-venus">
     <title>Object Identity Versus Object Equality</title>
@@ -454,22 +485,20 @@ public class TestStringEquals
            hello is identical to hello
 </pre>
     </listing>
-</subsection>
-<subsection>
+<exercises>
   <title>Self-Study Exercises</title>
       <exercise label="str-equal1">
       <title>String equality vs identity</title>
         <statement>
       <p>
-        Evaluate the following expressions as true or false (use <term>T</term> or <term>F</term>)
-        based on these  <c>String</c> declarations,
+        Evaluate the following expressions as true or false based on these  <c>String</c> declarations,
         </p>
         <program language="java"><input>
         String s1 = "java", s2 = "java", s3 = "Java";
         String s4 = new String(s2);
         String s5 = new String("java");
         </input></program>
-          <ul>
+          <ol label="a">
            <li>
               <c>s1 == s2</c> <var/>
             </li>
@@ -485,11 +514,11 @@ public class TestStringEquals
             <li>
                <c>s2 == s3</c>  <var/>
             </li>
-          </ul>
+          </ol>
         </statement>
         <setup>
           <var>
-            <condition string="T">
+            <condition string="true">
               <feedback>
                 <p>Correct. s1 and s2 both refer to the same object, "java" </p>
               </feedback>
@@ -501,7 +530,7 @@ public class TestStringEquals
             </condition>
           </var>
           <var>
-            <condition string="T">
+            <condition string="true">
               <feedback>
                 <p>Correct. s1 and s2 both equal "java"</p>
               </feedback>
@@ -513,7 +542,7 @@ public class TestStringEquals
             </condition>
           </var>     
          <var>
-            <condition string="F">
+            <condition string="false">
               <feedback>
                 <p>Correct. s1 and s3 refer to different objects </p>
               </feedback>
@@ -525,7 +554,7 @@ public class TestStringEquals
             </condition>
           </var>
          <var>
-            <condition string="F">
+            <condition string="false">
               <feedback>
                 <p>Correct. "java" is not equal to "Java"</p>
               </feedback>
@@ -537,7 +566,7 @@ public class TestStringEquals
             </condition>
           </var> 
          <var>
-            <condition string="F">
+            <condition string="false">
               <feedback>
                 <p>Correct, s1 and s3 are different objects.</p>
               </feedback>
@@ -552,13 +581,16 @@ public class TestStringEquals
         <hint>
           <p>Review this program <xref ref="lst-equals2">Listing</xref>) and its discussion.</p>
         </hint>
+     <solution>
+      <p>(a)  true, (b) true, (c) false, (d) false, (e) false</p>
+     </solution>   
     </exercise>
 
     <exercise label="str-equal-2">
-      <title>String equality vs identity</title>
+      <title>String equality vs identity Part 2</title>
         <statement>
       <p>
-        Evaluate the following expressions as true or false (use <term>T</term> or <term>F</term>)
+        Evaluate the following expressions as true or false 
         based on these  <c>String</c> declarations,
         </p>
         <program language="java"><input>
@@ -566,7 +598,7 @@ public class TestStringEquals
         String s4 = new String(s2);
         String s5 = new String("java");
         </input></program>
-          <ul>
+          <ol label="a">
            <li>
               <c>s2.equals(s4)</c>  <var/>
           </li>
@@ -579,11 +611,11 @@ public class TestStringEquals
           <li>
               <c>s4 == s5</c>  <var/>
           </li>
-          </ul>
+          </ol>
         </statement>
         <setup>
           <var>
-            <condition string="T">
+            <condition string="true">
               <feedback>
                 <p>Correct. s2 and s4 both equal "java" </p>
               </feedback>
@@ -595,7 +627,7 @@ public class TestStringEquals
             </condition>
           </var>
           <var>
-            <condition string="F">
+            <condition string="false">
               <feedback>
                 <p>Correct. s2 and s4 are different objects.</p>
               </feedback>
@@ -607,7 +639,7 @@ public class TestStringEquals
             </condition>
           </var>     
          <var>
-            <condition string="F">
+            <condition string="false">
               <feedback>
                 <p>Correct. s1 and s5 refer to different objects. </p>
               </feedback>
@@ -619,7 +651,7 @@ public class TestStringEquals
             </condition>
           </var>
          <var>
-            <condition string="F">
+            <condition string="false">
               <feedback>
                 <p>Correct. s4 and s5 refer to different objects.</p>
               </feedback>
@@ -634,9 +666,13 @@ public class TestStringEquals
         <hint>
           <p>Review this program <xref ref="lst-equals2">Listing</xref>) and its discussion.</p>
         </hint>
+     <solution>
+      <p>(a)  true, (b) false, (c) false, (d) false</p>
+     </solution>    
     </exercise>
 
-    <activity label="string-play">
+    <exercise label="string-play">
+    <title>String Play</title>
       <statement>
         <p>Use <c>indexOf()</c> and <c>substring()</c> methods to manipulate 
         the strings s1 and s2 as described. Use 
@@ -663,6 +699,24 @@ public class TestStringEquals
         } // main()
     } // StringPlay
     </input></program>
-    </activity> 
+    <solution>
+    <program language="java"><input>
+    public static void main(String args[]) {
+      String s1 = "abcdefghijklmnopqrstuvwxyz";
+      String s2 = "hello world";
+
+      // Combine parts of s1 and s2 to create a new string "hello abc".
+      System.out.println(s2.substring(0,6)+s1.substring(0,3));
+      //  Swap "world" and "hello" in s2 to give "world hello".
+      System.out.println(s2.substring(6) + " " + s2.substring(0,5));
+      // Swap the front and back halves of s1 to give:
+      // nopqrstuvwxyzabcdefghijklm
+      System.out.println(s1.substring(s1.indexOf('n')) + 
+                         s1.substring(0,s1.indexOf('n')));
+    } // main()
+    </input></program>
+    </solution>
+    </exercise>
+  </exercises> 
   </subsection>
 </section>
