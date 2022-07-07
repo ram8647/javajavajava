@@ -254,10 +254,10 @@ sorter.insertionSort(intArr); // Pass intArr to the method
         Brackets are not used.
       </p>
     </principle>
-  </subsection>
-  <subsection xml:id="ss-insertion-sort">
+  <exercises xml:id="ss-insertion-sort">
     <title>Self Study Exercise</title>
- <exercise label="insertion-codeLens">
+ <exercise label="insertion-sort">
+ <title>Run Insertion Sort</title>
   <statement>
     <p>
       Run the insertion sort program. Click on Show CodeLens to step through 
@@ -265,7 +265,7 @@ sorter.insertionSort(intArr); // Pass intArr to the method
     </p>
   </statement>
   <program language="java" interactive="activecode"><input>
-ublic class Sort {
+public class Sort {
 
   public void insertionSort(int arr[]) {
     int temp;                         // Temporary variable 
@@ -295,7 +295,133 @@ ublic class Sort {
   } // main()
 } // Sort
  </input></program>
+ <solution>
+  <p>Use Codelens to step through the insertion sort algorithm.</p>
+ </solution>
  </exercise>
+
+  <exercise label="sort-1">
+    <title>Insertion sort trace 1</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high by 
+        <term>insertion sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after one pass</term> 
+          through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>24 18 90 1 0 85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>1 24 18 90 0  85 34 18 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>85 24 90 1  0  18 34 18 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>18 24 90 1  0  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Correct. 18 would be inserted before 24.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through one complete iteration of the outer loop.</p>
+    </hint>
+    <solution>
+      <p>Answer: 18 24 90 1  0  85 34 18</p>
+      <p>The first pass would insert 18 before 24:</p>
+      <pre> 
+        24 18 90 1  0  85 34 18 // Initial
+        18 24 90 1  0  85 34 18 // Pass 1
+       </pre>
+    </solution>    
+  </exercise>
+  <exercise label="sort-2">
+    <title>Insertion sort trace 2</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high by <term>insertion sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after four passes</term>
+           through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>18 24 90 1  0  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 2 passes.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 24 85 90 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 5 passes.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>0  1  18 24 90 85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Correct. The left side would be sorted up to the 5th element.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18 24 34 85 90</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The array would not be completely sorted after 4 passes.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through four complete iterations of the outer loop. After four passes
+      the numbers up to and including location 4 in the original array should be in the correrct order.</p>
+    </hint>
+    <solution>
+      <p>Answer: 0  1  18 24 90 85 34 18</p>
+      <p>The entire sort would go like this:</p>
+      <pre> 
+        24 18 90 1  0  85 34 18 // Initial
+        18 24 90 1  0  85 34 18 // Pass 1
+        18 24 90 1  0  85 34 18 // Pass 2
+        1  18 24 90 0  85 34 18 // Pass 3
+        0  1  18 24 90 85 34 18 // Pass 4 
+        0  1  18 24 85 90 34 18 // Pass 5
+        0  1  18 24 34 85 90 18 // Pass 6
+        0  1  18 18 24 34 85 90 // Pass 7        
+       </pre>
+    </solution>
+  </exercise>
+   
+</exercises>
 
   </subsection>
   <subsection xml:id="sec-selectionsort">
@@ -359,7 +485,134 @@ Selection sort of an N element array <c>arr</c> from small to large
       Finally, when the inner loop terminates, the algorithm swaps the smallest 
       element with <em>k</em>th element.
     </p>
+
+<exercises>
+  <title>Self-Study Exercises</title>
+    <exercise label="sort-3">
+    <title>Selection sort trace 1</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high 
+        by <term>selection sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after one pass</term>
+           through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>18 24 90 1  0  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. Are you thinking of insertion sort?</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18  24  85 34 90 </p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 5 passes.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>0  18 90 1   24  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Correct. The smallest number would be swapped into the 1st location.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18 24 34 85 90</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The array would not be completely sorted after 1 pass.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through one complete iteration of the outer loop.</p>
+    </hint>
+    <solution>
+      <p> Answer: >0  18 90 1   24  85 34 18 </p>
+      <p>The first pass would select the smallest number and place it in the first array location:</p>
+      <pre>
+      24 18 90 1   0   85 34 18 // Initial
+      0  18 90 1   24  85 34 18 // Pass 1
+      </pre>
+    </solution>
+  </exercise>
+
+  <exercise label="sort-4">
+    <title>Selection sort trace 2</title>
+    <statement>
+        <p>Suppose the following array of numbers is sorted from low to high 
+        by <term>selection sort</term>:</p>
+        <pre>
+        24 18 90 1 0 85 34 18
+        </pre>
+          <p>Which of the following shows the order of the numbers <term>after four passes</term>
+           through the array?</p>
+    </statement>
+    <choices>
+        <choice>
+            <statement>
+                <p>0  1  90 18  24  85 34 18</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 2 passes.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 90  24  85 34 18  </p>
+            </statement>
+            <feedback>
+                <p>Incorrect. That's how it would look after 3 passes.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+              <p>0  1  18 18  24  85 34 90 </p>
+            </statement>
+            <feedback>
+                <p>Correct. The four smallest numbers would be swapped into their locations.</p>
+            </feedback>
+        </choice>
+        <choice>
+            <statement>
+                <p>0  1  18 18 24 34 85 90</p>
+            </statement>
+            <feedback>
+                <p>Incorrect. The array would not be completely sorted after 1 pass.</p>
+            </feedback>
+        </choice>
+    </choices>
+    <hint>
+      <p>Trace through four complete iterations of the outer loop. After
+      each iteration the next smallest number should be swapped into place.</p>
+    </hint>
+    <solution>
+      <p> Answer: 0  1  18 18  24  85 34 90 </p>
+      <p>The four smallest numbers would be sorted at the left of the array.</p>
+      <pre>
+        24 18 90 1   0   85 34 18 // Initial
+        0  18 90 1   24  85 34 18 // Pass 1
+        0  1  90 18  24  85 34 18 // Pass 2
+        0  1  18 90  24  85 34 18 // Pass 3
+        0  1  18 18  24  85 34 90 // Pass 4
+        0  1  18 18  24  85 34 90 // Pass 5
+        0  1  18 18  24  34 85 90 // Pass 6
+        0  1  18 18  24  34 85 90 // Pass 7
+      </pre>
+    </solution>  
+  </exercise>
+  </exercises>
   </subsection>
+
   <subsection xml:id="sec-swap-vars">
     <title>Algorithm: Swapping Memory Elements</title>
     <p>
@@ -413,209 +666,9 @@ void swap(int arr[], int el1, int el2) {
     arr[el2] = temp;     // Overwrite second with first
 } // swap()
  </input></program>
-</subsection>
-<subsection>
-  <title>Self-Study Exercises</title>
-  <exercise label="sort-1">
-    <title>Insertion sort</title>
-    <statement>
-        <p>Suppose the following array of numbers is sorted from low to high by 
-        <term>insertion sort</term>:</p>
-        <pre>
-        24 18 90 1 0 85 34 18
-        </pre>
-          <p>Which of the following shows the order of the numbers <term>after one pass</term> 
-          through the array?</p>
-    </statement>
-    <choices>
-        <choice>
-            <statement>
-                <p>24 18 90 1 0 85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Incorrect</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>1 24 18 90 0  85 34 18 </p>
-            </statement>
-            <feedback>
-                <p>Incorrect</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>85 24 90 1  0  18 34 18 </p>
-            </statement>
-            <feedback>
-                <p>Incorrect</p>
-            </feedback>
-        </choice>
-        <choice correct="yes">
-            <statement>
-              <p>18 24 90 1  0  85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Correct. 18 would be inserted before 24.</p>
-            </feedback>
-        </choice>
-    </choices>
-    <hint>
-      <p>Trace through one complete iteration of the outer loop.</p>
-    </hint>
-  </exercise>
-  <exercise label="sort-2">
-    <title>Insertion sort</title>
-    <statement>
-        <p>Suppose the following array of numbers is sorted from low to high by <term>insertion sort</term>:</p>
-        <pre>
-        24 18 90 1 0 85 34 18
-        </pre>
-          <p>Which of the following shows the order of the numbers <term>after four passes</term>
-           through the array?</p>
-    </statement>
-    <choices>
-        <choice>
-            <statement>
-                <p>18 24 90 1  0  85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. That's how it would look after 2 passes.</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>0  1  18 24 85 90 34 18</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. That's how it would look after 5 passes.</p>
-            </feedback>
-        </choice>
-        <choice correct="yes">
-            <statement>
-              <p>0  1  18 24 90 85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Correct. The left side would be sorted up to the 5th element.</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>0  1  18 18 24 34 85 90</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. The array would not be completely sorted after 4 passes.</p>
-            </feedback>
-        </choice>
-    </choices>
-    <hint>
-      <p>Trace through four complete iterations of the outer loop. After four passes
-      the numbers up to and including location 4 in the original array should be in the correrct order.</p>
-    </hint>
-  </exercise>
 
-    <exercise label="sort-3">
-    <title>Selection sort</title>
-    <statement>
-        <p>Suppose the following array of numbers is sorted from low to high 
-        by <term>selection sort</term>:</p>
-        <pre>
-        24 18 90 1 0 85 34 18
-        </pre>
-          <p>Which of the following shows the order of the numbers <term>after one pass</term>
-           through the array?</p>
-    </statement>
-    <choices>
-        <choice>
-            <statement>
-                <p>18 24 90 1  0  85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. Are you thinking of insertion sort?</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>0  1  18 18  24  85 34 90 </p>
-            </statement>
-            <feedback>
-                <p>Incorrect. That's how it would look after 5 passes.</p>
-            </feedback>
-        </choice>
-        <choice correct="yes">
-            <statement>
-              <p>0  18 90 1   24  85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Correct. The smallest number would be swapped into the 1st location.</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>0  1  18 18 24 34 85 90</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. The array would not be completely sorted after 1 pass.</p>
-            </feedback>
-        </choice>
-    </choices>
-    <hint>
-      <p>Trace through one complete iteration of the outer loop.</p>
-    </hint>
-  </exercise>
-
-  <exercise label="sort-4">
-    <title>Selection sort</title>
-    <statement>
-        <p>Suppose the following array of numbers is sorted from low to high 
-        by <term>selection sort</term>:</p>
-        <pre>
-        24 18 90 1 0 85 34 18
-        </pre>
-          <p>Which of the following shows the order of the numbers <term>after four passes</term>
-           through the array?</p>
-    </statement>
-    <choices>
-        <choice>
-            <statement>
-                <p>0  1  90 18  24  85 34 18</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. That's how it would look after 2 passes.</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>0  1  18 90  24  85 34 18  </p>
-            </statement>
-            <feedback>
-                <p>Incorrect. That's how it would look after 3 passes.</p>
-            </feedback>
-        </choice>
-        <choice correct="yes">
-            <statement>
-              <p>0  1  18 18  24  85 34 90 </p>
-            </statement>
-            <feedback>
-                <p>Correct. The four smallest numbers would be swapped into their locations.</p>
-            </feedback>
-        </choice>
-        <choice>
-            <statement>
-                <p>0  1  18 18 24 34 85 90</p>
-            </statement>
-            <feedback>
-                <p>Incorrect. The array would not be completely sorted after 1 pass.</p>
-            </feedback>
-        </choice>
-    </choices>
-    <hint>
-      <p>Trace through four complete iterations of the outer loop. After
-      each iteration the next smallest number should be swapped into place.</p>
-    </hint>
-  </exercise>
-
+<exercises>
+<title>Self-Study Exercises</title>
   <exercise label="swap-algorithm" adaptive="yes">
    <title>Swapping values in variables</title>
    <statement>
@@ -637,9 +690,18 @@ void swap(int arr[], int el1, int el2) {
        </block>       
    </blocks>
    <hint>First, you need to save one of the values in <c>temp</c>.</hint>
+   <solution>
+   <pre>
+   double temp = 0;
+   temp = var1;
+   var1 = var2;
+   var2 = temp;
+   </pre>
+   </solution>
 </exercise>
-
+</exercises>
  </subsection>
+
   <subsection xml:id="paasing-params">
     <title>Passing a Value and Passing a Reference</title>
     <p>
@@ -737,8 +799,8 @@ Sort sorter = new Sorter();
       expense of copying large amounts of data.
       Indeed, Java provides no way to pass a copy of an object to a method.
     </p>
-    </subsection>
-    <subsection xml:id="ss-params">
+
+    <exercises xml:id="ss-params">
     <title>Self-Study Exercise</title>
       <exercise label="params-1">
     <title>Array Parameter</title>
@@ -795,6 +857,10 @@ Sort sorter = new Sorter();
       <hint>
         <p>This question has to do with how array arguments are passed to a method.</p>
       </hint>
+      <solution>
+      <p>Answer: 1,2,3,5,5. The change in the <c>myArr[3]</c> will persist after the method finishes.
+      </p>
+      </solution>
     </exercise>
 
  <exercise label="parameters-2"> 
@@ -833,6 +899,11 @@ Sort sorter = new Sorter();
     <hint>
       <p>Hint: Recall the difference between value and reference parameters.</p>                
     </hint>
+    <solution>
+      <p>Answer: 3 Even though the parameter <c>m</c> is changed within the method,
+                    that change will not affect <c>k</c>, which is a value argument.
+      </p>
+    </solution>
 </exercise>   
 
  <exercise label="selection-sort" adaptive="yes">
@@ -872,7 +943,18 @@ Sort sorter = new Sorter();
        </block>       
     </blocks>
    <hint></hint>
+   <solution>
+   <pre>
+   smallest = k; 
+   for (int i k+1; i&lt;arr.length; i++) {
+      if (arr[i] &lt; arr[smallest])
+        smallest = j;
+   }
+   swap(arr, k, smallest);  
+   </pre>
+   </solution>
 </exercise>
+</exercises>
 
   </subsection>
 </section>

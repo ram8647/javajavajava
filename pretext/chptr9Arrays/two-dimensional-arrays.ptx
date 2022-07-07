@@ -9,6 +9,9 @@
       you would use this type of array if you are doing a scientific study in 
       which you have to track the amount of precipitation for every day of the year.
     </p>
+  </introduction>
+  <subsection xml:id="sub-weather-data">
+  <title>Example: Rainfall Array</title>
     <p>
       One way to organize these data would be to create a one-dimensional array,
       consisting of 365 elements:
@@ -251,11 +254,11 @@ for (int month = 1; month &lt; rainfall.length; month++)
         </row>
       </tabular>
     </table>
-    </introduction>
-    <subsection>
+    <exercises>
     <title>Self-Study Exercises</title>
 
      <exercise label="twoD-array">
+     <title>Two-D array</title>
       <statement>
         <p>This programming problem has three parts:</p>
       <ol>
@@ -299,7 +302,28 @@ for (int month = 1; month &lt; rainfall.length; month++)
             }
           }
      </input></program>
+    <solution>
+        <program language="java" interactive="activecode"><input>
+          public class TwoDArray {                   
+            public static void main(String[] args) {
+                // Declare int2D, a 5 x 10 array of int
+                int int2d[][] = new int[5][10];
+
+                // Assign 100 to the last element in the <c>int2d</c> array
+                int2d[4][9] = 100;
+
+                // A loop to print int2D, one row per line
+                for (int k = 0; k &lt; int2d.length; k++) {
+                    for (int j = 0; j &lt; int2d[k].length; j++)
+                        System.out.print( int2d[k][j] + " ");
+                    System.out.println();    // new line
+                }          
+            }
+          }
+     </input></program>    
+    </solution>
   </exercise>
+  </exercises>
   </subsection>
   
   <subsection>
@@ -598,10 +622,10 @@ public class Rainfall {
         The data can be scaled to fit within the range that the actual data are expected to have.
       </p>
     </principle>
-</subsection>
-<subsection>
+<exercises>
 <title>Self-Study Exercises</title>
    <exercise label="newspaper">
+    <title>Newspaper sales</title>
     <statement>
       <p>This programming problem has three parts:</p>
       <ol>
@@ -626,10 +650,8 @@ public class Rainfall {
       </ol>
     </statement>
     <program language="java" interactive="activecode"><input>
-      public class Newspapers
-      {                   
-        public static void main(String[] args)
-        {
+      public class Newspapers {                   
+        public static void main(String[] args) {
           // Declare a 52 x 7 int array
           
           
@@ -651,6 +673,31 @@ public class Rainfall {
       <program language="java"><input>50 + (int)(Math.random()*150)</input></program>
       </p>
     </hint>
+    <solution>
+        <program language="java" interactive="activecode"><input>
+      public class Newspapers {                   
+        public static void main(String[] args) {
+          // Declare a 52 x 7 int array
+          int sales[][] = new int[52][7];
+                 
+          // Initialize the array with random integers between 50 and 200.
+
+          for (int k = 0; k &lt; sales.length; k++)
+              for (int j= 0; j &lt; sales[k].length; j++)
+                  sales[k][j] = 50 + (int)(Math.random() * 150); 
+          
+          // Calculate and print the average Sunday sales.
+                    
+          int sum = 0;
+          for (int i=0;i &lt; 52; i++) {
+            sum += sales[i][6];
+          }              
+          System.out.println("Sunday avg = " + sum/52);                              
+        }
+      }
+    </input></program>
+    </solution>
   </exercise>
+  </exercises>
   </subsection>
 </section>

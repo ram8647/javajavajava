@@ -1,4 +1,4 @@
-<section xml:id="objectorienteddesign2pt-polymorphic-sorting-optional">
+<section xml:id="polymorphic-sorting-optional">
   <title>OBJECT-ORIENTED DESIGN:
   Polymorphic Sorting (Optional)</title>
   <introduction>
@@ -17,6 +17,9 @@
       the <c>java.lang.Comparable</c> interface,
       which is specially designed for this purpose.
     </p>
+  </introduction>
+  <subsection xml:id="sub-comparable">
+  <title>The <c>Comparable</c> Interface</title>
     <p>
       The <c>java.lang.Comparable</c> interface consists of the compareTo() method:
     </p>
@@ -52,7 +55,7 @@ public abstract interface Comparable {
       rules for its return value:
     </p>
  <program language="java"><input>
-if (o1 &lt; o2)       then o1.compareTo(o2) &lt; 0
+if (o1 &lt; o2)    then o1.compareTo(o2) &lt; 0
 if (o1.equals(o2)) then o1.compareTo(o2) == 0
 if (o1 > o2)       then o1.compareTo(o2) > 0
  </input></program>
@@ -64,6 +67,9 @@ if (o1 > o2)       then o1.compareTo(o2) > 0
       <c>o2</c> are equal,
       then <c>o1.compareTo(o2)</c> will return<nbsp/>0.
     </p>
+  </subsection>
+  <subsection xml:id="sub-comparable-sort">
+  <title>Sorting Comparables</title>
     <p>
       For a class that implements <c>Comparable</c>, we can use the compareTo() 
       method to help sort its elements.
@@ -186,7 +192,7 @@ public class TestSort {
       we defined a <c>sort()</c> method that can sort an array containing any 
       kind of object as long as the object implements the <c>Comparable</c> interface.
     </p>
-  </introduction>
+  </subsection>
   <subsection xml:id="fig-p446f1">
     <title>The <c>java.util.Arrays.sort()</c> Method</title>
     <p>
@@ -211,8 +217,14 @@ java.util.Arrays.sort(fArr);
       Obviously, learning how to use Java's class and method library,
       saves real-word programmers lots of effort.
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
+
+<exercises>
+    <title>Self-Study Exercises</title>
+    <exercise>
+    <title>Polymorphic Sort</title>
+    <statement>
+      <p>This exercise has three parts:</p>
+      <ol label="a">
         <li>
           <p>
             Add a definition of a <c>compareTo()</c> method to the
@@ -234,5 +246,42 @@ java.util.Arrays.sort(fArr);
           </p>
         </li>
       </ol>
+    </statement>
+    <solution>
+     <ol label="a">
+        <li><p> A <c>compareTo()</c> for <c>LetterFreq</c>:</p>
+          <program language="java"><input>
+          public int compareTo(Object lf) {
+              LetterFreq  letFreq = (LetterFreq)lf;
+              if (freq &lt; letFreq.getFreq())
+                  return -1;
+              else if (freq > letFreq.getFreq())
+                  return +1;
+              else return 0; //The frequencies must be equal.
+          } //compareTo()
+          </input></program>
+        </li>
+        <li> <p>A <c>sort()</c> for <c>AnalyzeFreq</c>:</p>
+          <program language="java"><input>
+          public void sort() {
+              java.util.Arrays.sort(freqArr);
+          } //sort()
+          </input></program>
+        </li>
+        <li><p>A new <c>AnalyzeFreq.main()</c> that uses <c>sort()</c>:</p>
+          <program language="java"><input>
+          public static void main(String[] argv) {
+            AnalyzeFreq af = new AnalyzeFreq();
+            af.countLetters("Now is the time for all good students" +
+              " to study computer-related topics.");
+            af.sort();
+            af.printArray();
+          } //main()
+          </input></program>
+        </li>
+      </ol>
+    </solution>
+  </exercise>
+  </exercises>
   </subsection>
 </section>
