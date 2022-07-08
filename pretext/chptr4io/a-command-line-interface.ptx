@@ -23,18 +23,17 @@
     </p>
     <figure xml:id="fig-console">
       <caption>The Java console window.</caption>
-      <image width="73%" source="chptr04/console.png"/>
+      <image width="63%" source="chptr04/console.png"/>
     </figure>
     <p>
-      In Chapter<nbsp/>3 we described how to use the <c>System.out.print()</c> and
+      In Chapter 3 we described how to use the <c>System.out.print()</c> and
 <c>System.out.println()</c> methods to output strings to the console.
       That takes care of the output side of command-line interface.
       The more challenging task is managing the input-side of the interface.
     </p>
     <p>
       In Java, input and output is handled by objects that are called <term>streams</term>.
-      You can think of a stream as a kind of pipe through which data flow (Fig.
-      <xref ref="fig-streams"></xref>).
+      You can think of a stream as a kind of pipe through which data flow (<xref ref="fig-streams"></xref>).
       An <term>input stream</term>  carries data from some kind of input device,
       such as a keyboard or network connection or a file,
       to the program's main memory.
@@ -43,7 +42,7 @@
     </p>
     <figure xml:id="fig-streams">
       <caption>Input and output streams.</caption>
-      <image width="73%" source="chptr04/streams.png"/>
+      <image width="80%" source="chptr04/streams.png"/>
     </figure>
     <p>
       Each Java program has three standard streams available to it at startup: <c>System.in</c>, <c>System.out</c>, and <c>System.err</c>.
@@ -71,7 +70,7 @@
     </p>
     <figure xml:id="fig-buffrdr">
       <caption>The <c>BufferedReader</c> class.</caption>
-      <image width="73%" source="chptr04/buffrdr.png"/>
+      <image width="50%" source="chptr04/buffrdr.png"/>
     </figure>
     <p>
       <xref ref="fig-buffrdr">Figure</xref>
@@ -87,8 +86,7 @@
 
 <program language="java">
     <input>
-    BufferedReader input = new BufferedReader
-    (new InputStreamReader (System.in));
+    BufferedReader input = new BufferedReader(new InputStreamReader (System.in));
     </input>
 </program>
 
@@ -273,7 +271,7 @@
       </p>
     </principle>
     <p>
-      <xref ref="fig-keybrdrdrclass">Figure</xref> gives the full implementation
+      <xref ref="fig-keybrdrdrclass">Listing</xref> gives the full implementation
       (for now)
       of the <c>KeyboardReader</c> class.
      
@@ -426,10 +424,11 @@ Hi, please input your name here > Kim
     </p>
     <figure xml:id="fig-greeter">
       <caption>Using <c>KeyboardReader</c> as the user interface.</caption>
-      <image width="73%" source="chptr04/greeter.png"/>
+      <image width="80%" source="chptr04/greeter.png"/>
     </figure>
     <p>
-      The full implementation of the <c>GreeterApp</c> class is shown in <xref ref="fig-greeterapp">Figure</xref>.
+      The full implementation of the <c>GreeterApp</c> class is shown in 
+      <xref ref="fig-greeterapp">Listing</xref>.
       It begins by declaring an instance
     </p>
     <listing xml:id="fig-greeterapp">
@@ -500,32 +499,69 @@ public class GreeterApp
         </li>
       </ul>
     </p>
-      </subsection>
-      <subsection>
+     
+      <exercises>
       <title>Self-Study Exercises</title>
-      <ol>
-        <li>
+      
+      <exercise label="guessGameEx">
+        <title>HiLow Guessing Game</title>
+        <statement>
           <p>
-            Java's <c>Math</c> class has a static method that will generate a random number between 0 and 0.99999999<mdash/>that is,
+            Java's <c>Math</c> class has a static method that will generate a random number
+             between 0 and 0.99999999<mdash/>that is,
             between 0 and 1, not including 1.
             By using simple arithmetic,
             we can generate random numbers between any two values.
             For example,
-            the following statement assigns a random integer between 1 and 100 to the variable:
+            the following statement assigns a random integer between 1 and 100 to the 
+            variable:
+
 
 <program language="java">
     <input>
     secretNumber = 1 + (int)(Math.random() * 100);
     </input>
 </program>
-            Given this statement,
-            design and implement an application that will play the following guessing game with the user.
-            The computer generates a random number between 1 and 100 and then lets the user guess the number,
-            telling the user when the guess is too high or too low.
-            Note that for this problem,
-            the user will have to input integers at the keyboard.
+ Given this statement, design and implement an application that will play the following guessing game with the user.
+ The computer generates a random number between 1 and 100 and then lets the user guess the number,
+ telling the user when the guess is too high or too low.
+ Note that for this problem, the user will have to input integers at the keyboard, 
+ so you will have to use a development environment with user input possible, like replit. 
+ Paste your code or the link to your code here to turn in.
           </p>
-        </li>
-      </ol>
+          </statement>
+          <solution>
+            <program language="java">
+              <input>
+          public class HighLowApp
+          { private KeyboardReader reader;
+            private int secretNumber;
+            public HighLowApp()
+            { reader = new KeyboardReader();
+              secretNumber = 1 + (int)(Math.random() * 100);
+            } // HighLowApp() constructor
+            public void run()
+            { int userGuess = -1;
+              reader.display("Guess my secret number between 1 and 100.");
+              while (userGuess != secretNumber)
+              {   reader.prompt("Please input your guess here > ");
+                userGuess = reader.getKeyboardInteger();
+                if (userGuess > secretNumber)
+                  reader.display("Your guess was too high.");
+                if (userGuess &lt; secretNumber)
+                  reader.display("Your guess was too low.");
+              } // while
+              reader.display("Congratulations. Your guess was correct.");
+            } // run()
+            public static void main(String args[])
+            { HighLowApp app = new HighLowApp();
+              app.run();
+            } // main()
+          }// HighLowApp
+              </input>
+          </program>
+          </solution>
+          </exercise>
+        </exercises>
   </subsection>
 </section>

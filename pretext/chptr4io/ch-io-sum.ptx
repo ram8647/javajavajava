@@ -155,131 +155,23 @@
         </li>
     </ul>
 </subsection>
-<subsection>
-<title>Solutions to Self-Study Exercises</title>
-  <p>
-    <ol>
-      <li>
-        <p>
-            The following modification of the <c>GreeterApp</c> class is an implementation of the High Low Game:
 
-<program language="java">
-    <input>
-public class HighLowApp
-{ private KeyboardReader reader;
-  private int secretNumber;
-  public HighLowApp()
-  { reader = new KeyboardReader();
-    secretNumber = 1 + (int)(Math.random() * 100);
-  } // HighLowApp() constructor
-  public void run()
-  { int userGuess = -1;
-    reader.display("Guess my secret number between 1 and 100.");
-    while (userGuess != secretNumber)
-    {   reader.prompt("Please input your guess here > ");
-      userGuess = reader.getKeyboardInteger();
-      if (userGuess > secretNumber)
-        reader.display("Your guess was too high.");
-      if (userGuess &lt; secretNumber)
-        reader.display("Your guess was too low.");
-    } // while
-    reader.display("Congratulations. Your guess was correct.");
-  } // run()
-  public static void main(String args[])
-  { HighLowApp app = new HighLowApp();
-    app.run();
-  } // main()
-}// HighLowApp
-    </input>
-</program>
 
-        </p>
-      </li>
-      <li>
-        <p>
-            The following modification of <c>GreeterGUI</c> eliminates the <c>JButton</c>.
+<solutions scope="chapter-io" divisional="solution" project="solution" inline="solution"> 
+  <title>Solutions to Self-Study Exercises</title>
+  <!-- self-generated from any <exercise> that has a <solution> 
+       divisional means inside <exercises>
+       inline means an <exercise> that's not inside <exercises>
+       project means inside <activity>
+       For each type, you can list "statement hint solution answer", 
+       but statement includes the whole problem and even ones that don't have solutions.
+       <title> included automatically.
+  -->
+</solutions>
+ 
+      
 
-<program language="java">
-    <input>
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-public class GreeterGUI2 extends JFrame
-                         implements ActionListener
-{ private JTextArea display;
-  private JTextField inField;
-  private Greeter greeter;
-  public GreeterGUI2(String title)
-  {   greeter = new Greeter();
-      buildGUI();
-      setTitle(title);
-      pack();
-      setVisible(true);
-  } // GreeterGUI2()
-  private void buildGUI()
-  {   Container contentPane = getContentPane();
-      contentPane.setLayout(new BorderLayout());
-      display = new JTextArea(10,30);
-      inField = new JTextField(10);
-      inField.addActionListener(this);
-      JPanel inputPanel = new JPanel();
-      inputPanel.add(new
-              JLabel("Input your name and type enter: "));
-      inputPanel.add(inField);
-      contentPane.add("Center", display);
-      contentPane.add("South", inputPanel);
-  } // buildGUI()
-  public void actionPerformed(ActionEvent e)
-  {   if (e.getSource() == inField)
-      {   String name = inField.getText();
-          display.append(greeter.greet(name) + "\n");
-      }
-  } // actionPerformed()
-} // GreeterGUI2
-    </input>
-</program>
+     
+  
 
-        </p>
-      </li>
-      <li>
-        <p>
-            Java code that prints out the sum of the squares of a set of integers read from a file named "numbers.txt":
-
-<program language="java">
-    <input>
-import java.io.*;
-import java.util.Scanner;
-public class NumberFileReader
-{   private Scanner fileScan; // For file input
-    public NumberFileReader(String fName)
-    {   try
-        {   File theFile = new File(fName);
-            fileScan = new Scanner(theFile);
-        } catch (IOException e)
-        {    e.printStackTrace();
-        } //catch()
-    } //NumberFileReader()
-    public void readNumbers()
-    {   int num = 0;      // To store integers read
-        int sum = 0:      // To store sum of squares
-        while (fileScan.hasNextInt())
-        {   num = fileScan.nextInt();
-            sum = sum + num * num;
-        } // while
-        System.out.println("The sum of squares = " + sum);
-    } // readNumbers()
-    public static void main(String[] args)
-    {   NumberFileReader nfr =
-            new NumberFileReader("numbers.txt");
-        nfr.readNumbers()
-    } //main()
-}  //NumberFileReader
-    </input>
-</program>
-
-        </p>
-      </li>
-     </ol>
-  </p>
-</subsection>
 </section>

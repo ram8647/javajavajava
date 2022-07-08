@@ -201,5 +201,126 @@ Plain alphabet:    abcdefghijklmnopqrstuvwxyz
         This class should implement the <c>IPlayer</c> interface.
       </p>
     </li>
+  
+  <li>
+    <p>
+      Given the classes with the following headers
+
+<program language="java">
+<input>
+public class Animal ...
+public class DomesticAnimal extends Animal ...
+public class FarmAnimal extends DomesticAnimal...
+public class HousePet extends DomesticAnimal...
+public class Cow extends FarmAnimal ...
+public class Goat extends FarmAnimal ...
+public class DairyCow extends Cow ...
+</input>
+</program>
+
+draw a UML class diagram representing the hierarchy created by these declarations.
+    </p>
+  </li>
+  <li>
+    <p>
+      Given the preceding hierarchy of classes,
+      which of the following are legal assignment statements?
+
+<program language="java">
+<input>
+DairyCow dc = new FarmAnimal();
+FarmAnimal fa = new Goat();
+Cow c1 = new DomesticAnimal();
+Cow c2 = new DairyCow();
+DomesticAnimal dom = new HousePet();
+</input>
+</program>
+</p>
+</li>
+<li>The JFrame that follows contains a semantic error in its <c>SomeFrame()</c> constructor.
+  The error will cause the
+<c>actionPerformed()</c> method never to display
+  <q>Clicked</q>
+  even though the user clicks the button in the JFrame.
+  Why? (<em>Hint</em>: Think scope!)
+
+<program language="java">
+<input>
+public class SomeFrame extends JFrame
+                implements ActionListener
+{
+  // Declare instance variables
+  private JButton button;
+  public JFrame()
+  {
+    // Instantiate the instance variable
+    JButton button = new JButton("Click me");
+    add(button);
+    button.addActionListener(this);
+  } // init()
+  public void actionPerformed(ActionEvent e)
+  {
+    if (e.getSource() == button)
+      System.out.println("Clicked");
+  } // actionPerformed()
+} // SomeFrame
+</input>
+</program>
+
+</p>
+
+</li>
+<li>
+<p>
+  What would be output by the following program?
+
+<program language="java">
+<input>
+public class SomeFrame2 extends JFrame
+{
+  // Declare instance variables
+  private JButton button;
+  private JTextField field;
+  public SomeFrame()
+  {
+    // Instantiate instance variables
+    button = new JButton("Click me");
+    add(button);
+    field = new JTextField("Field me");
+    add(field);
+    System.out.println(field.getText() + button.getText());
+  } // init()
+  public static void main(String[] args) {
+    SomeFrame2 frame = new SomeFrame2();
+    frame.setSize(400,400);
+    frame.setVisible(true);
+  }
+} // SomeFrame2
+</input>
+</program>
+
+</p>
+</li>
+<li>
+
+ <p>
+  Design and implement a GUI that has a <c>JButton</c>, a <c>JTextField</c>, and 
+  a <c>JLabel</c>
+  and then uses the <c>toString()</c> method to display each object's string representation.
+</p>
+
+</li>
+<li>
+<p>
+  The <c>JButton</c> class inherits a <c>setText(String s)</c> from its <c>AbstractButton()</c> superclass.
+  Using that method,
+  design and implement a GUI that has a single button labeled initially,
+  <q>The Doctor is out.</q>
+  Each time the button is clicked,
+  it should toggle its label to,
+  <q>The Doctor is in</q>
+  and vice versa.
+</p></li>
+    </p>
   </ol>
 </section>

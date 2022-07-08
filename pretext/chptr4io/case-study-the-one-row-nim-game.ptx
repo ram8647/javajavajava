@@ -19,7 +19,8 @@
 <c>OneRowNim</c>, and a user interface object,
       for which we will use either a <c>KeyboardReader</c> or a <c>OneRowNimGUI</c>. One goal of our design was to develop the <c>OneRowNim</c> class so that it can be used,
       without changes,
-      with either a command-line interface or a GUI. <image width="73%" source="chptr04/ornuml.png"/>
+      with either a command-line interface or a GUI. 
+      
     </p>
     <p>
       Recall that we designed the <c>OneRowNim</c> class to maintain the state of the game and to provide methods that enforce the rules of the game.
@@ -29,8 +30,12 @@
       Also, an instance of <c>OneRowNim</c> keeps track of whose turn it is and can determine if the game is over and who the winner is when the game is over.
       Finally, the game ensures that players cannot cheat,
       either by taking too few or too many sticks on one turn.
-      Figure<nbsp/>4.23 shows the UML diagram of the <c>OneRowNim</c> class as described at the end of the previous chapter.
+       <xref ref="fig-onerownim-uml-diagram">Figure</xref> shows the UML diagram of the <c>OneRowNim</c> class as described at the end of the previous chapter.
     </p>
+    <figure xml:id="fig-onerownim-uml-diagram"><caption>OneRowNim Class UML Diagram</caption>
+      <image width="50%" source="chptr04/ornuml.png"/>
+    </figure>
+
   </introduction>
   <subsection>
     <title>A Command-line Interface to <c>OneRowNim</c></title>
@@ -97,9 +102,8 @@ Create a game object with 21 sticks
       Following the move we ask the game how many sticks are left and we use the reader object to report this.
     </p>
     <p>
-      Note that the loop structure has the three necessary elements.
-      The \marginpar{Loop structure: Initializer, entry condition,
-      updater} initializer in this case is the creation of a <c>OneRowNim</c> object.
+      Note that the loop structure has the three necessary element: initializer, entry condition, updater. 
+      The initializer in this case is the creation of a <c>OneRowNim</c> object.
       We know that this will cause the game to have 21 sticks and it will be the user's move.
       The loop-entry condition is that the game is not over,
       which is based on the fact that there are still sticks remaining to be picked up.
@@ -115,7 +119,7 @@ Create a game object with 21 sticks
       where we can worry about checking whether the user made a legal move and other such details.
     </p>
     <p>
-      <xref ref="fig-ornapp">Figure</xref>
+      <xref ref="fig-ornapp">Listing</xref>
       provides the implementation of the <c>OneRowNimApp</c> application.
       It uses a <c>KeyboardReader</c> as a command-line interface and a <c>OneRowNim</c> instance as it computational object.
       Thus, it has private instance variables for each of these objects,
@@ -183,10 +187,10 @@ public class OneRowNimApp
   public static void main(String args[])
   { OneRowNimApp app = new OneRowNimApp();
     app.run();
-  } //main()} // OneRowNimApp
+  } //main()
+} // OneRowNimApp
     </input>
 </program>
-
     </listing>
     <p>
       The <c>run()</c> method calls <c>userMove()</c> and <c>computerMove()</c> to perform the specific set of actions associated with each type of move.
@@ -242,7 +246,7 @@ public class OneRowNimApp
 
 <program language="java">
     <input>
-private OneRowNim game;
+    private OneRowNim game;
     ...
     game = new OneRowNim();
     </input>
@@ -270,8 +274,7 @@ private OneRowNim game;
       Thus, the basic algorithm is as follows:
     </p>
 
-<program language="java">
-    <input>
+<pre>
 Let the user move.
     If game:game is not over and computer turn
        let the computer move.
@@ -280,8 +283,7 @@ Let the user move.
     If game:game is over
         Stop accepting moves.
         Report the winner.
-    </input>
-</program>
+</pre>
 
     <p>
       After the user's move,
@@ -290,9 +292,11 @@ Let the user move.
       In that case, the computer would not get a move.
       Or, the user could have made an error.
       In that case it would still be the user's move.
-      These possibilities have to be considered in the algorithm before the computer gets to move.
+      These possibilities have to be considered in the algorithm before the computer gets
+       to move.
       As the pseudocode shows,
-      it is the <c>OneRowNim</c> object's responsibility to keep track of whether the game is over and whose turn it is.
+      it is the <c>OneRowNim</c> object's responsibility to keep track of whether the game
+       is over and whose turn it is.
     </p>
     <listing xml:id="fig-orngui">
       <caption>The <c>OneRowNimGUI</c> class.</caption>
@@ -358,19 +362,19 @@ public class OneRowNimGUI extends JFrame implements ActionListener
       display.append("There are " + sticksLeft + " sticks left.\n");
       if (game.gameOver()) endGame();
     } // if
-  } // actionPerformed()} // OneRowNimGUI
+  } // actionPerformed()
+} // OneRowNimGUI
     </input>
 </program>
 
     </listing>
     <p>
-      <xref ref="fig-orngui">Figure</xref>
+      <xref ref="fig-orngui">Listing</xref>
       shows the complete implementation of the
 <c>OneRowNimGUI</c> class.
       In terms of its instance variables, constructor,
       and its <c>buildGUI()</c> method,
-      there are only a few minor differences between this GUI and the <c>GreeterGUI</c>(Fig.
-      <xref ref="fig-simplegui"></xref>).
+      there are only a few minor differences between this GUI and the <c>GreeterGUI</c>(<xref ref="fig-greetergui"></xref>).
       This GUI has instance variables for its <c>JTextField</c>, <c>JTextArea</c>, and <c>JButton</c>, as well as one for <c>OneRowNim</c> instance,
       its computational object.
       It needs to be able to refer to these objects throughout the class.
@@ -431,7 +435,8 @@ gameOver()</c> and <c>getWinner()</c> to control the interaction with the user.
 if (game.gameOver())
 {  goButton.setEnabled(false);  // End the game
    inField.setEnabled(false);
-   ...}
+   ...
+}
     </input>
 </program>
 

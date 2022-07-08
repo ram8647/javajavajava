@@ -1,4 +1,4 @@
-<section xml:id="fromthe-java-libraryand-file-input-optional">
+<section xml:id="java-io-file">
   <title>From the Java Library: <c>java.io.File</c>
   and File Input (Optional)</title>
   <introduction>
@@ -18,30 +18,25 @@
       A <term>text file</term> stores a sequence of characters and is the type of file created by standard text editors like
       <em>NotePad</em> and <em>WordPad</em>
       on a Windows computer or <em>SimpleText</em> on a Macintosh.
-      A <term>binary file</term> has a more general format that can store numbers and other data the way they are <image width="73%" source="chptr11/fileuml.png"/> stored in the computer.
-      In this section we will consider only text files.
+      A <term>binary file</term> has a more general format that can store numbers and other data the way they are
+       stored in the computer.      In this section we will consider only text files.
       Binary files are considered in Chapter<nbsp/>11.
     </p>
   </introduction>
-  <subsection xml:id="fig-scanner2uml">
+  <subsection>
     <title>File Input with the <c>File</c> and <c>Scanner</c>Classes</title>
     <p>
       An instance of the <c>java.io.File</c> class stores information that a <c>Scanner</c> object needs to create an input stream that is connected to the sequence of characters in a text file.
-      A partial list of the public methods of the <c>File</c> class is given in the UML class diagram in Figure<nbsp/>4.26.
+      A partial list of the public methods of the <c>File</c> class is given in the 
+      UML class diagram in <xref ref="fig-fileuml">Figure</xref>.
       We will need to use only the <c>File()</c> constructor in this section.
-      The <c>File</c> instance created with the statement
-    </p>
+</p>
+      <figure xml:id="fig-fileuml">
+        <caption>File UML</caption>
+             <image width="40%" source="chptr11/fileuml.png"/> 
+       </figure>
 
-<program language="java">
-    <input>
-File theFile = new File("riddles.txt");
-    </input>
-</program>
-
-    <p>
-      <image width="73%" source="chptr04/scanner2uml.png"/>
-    </p>
-    <p>
+       <p>      The <c>File</c> instance created with the statement below
       will obtain and store information about the "riddles.txt" file in the same directory as the java code being executed,
       if such a file exists.
       If no such file exists,
@@ -53,23 +48,44 @@ File theFile = new File("riddles.txt");
       In any case, while we will not use it at this time,
       the <c>exists()</c> method of a <c>File</c> instance can be used to determine whether or not a file has been found with the specified name.
     </p>
+
+<program language="java">
+    <input>
+File theFile = new File("riddles.txt");
+    </input>
+</program>
+
+   
+    
+   
     <p>
       In order to read data from a file with a <c>Scanner</c> object we will need to use methods that were not discussed in Chapter<nbsp/>2.
-      An expanded list of methods of the <c>Scanner</c> class is given in Figure<nbsp/>4.27.
+      An expanded list of methods of the <c>Scanner</c> class is given in 
+      <xref ref="fig-scanner2uml">Figure</xref>.
       Note the there is a <c>Scanner()</c> constructor with a
 <c>File</c> object as an argument.
       Unlike the other <c>create()</c> method that was used in Chapter<nbsp/>2,
       this <c>create()</c> throws an exception that must be handled.
       The following code will create a <c>Scanner</c> object that will be connected to an input stream that can read from a file:
     </p>
+    <figure xml:id="fig-scanner2uml">
+      <caption>File UML</caption>
+      <image width="50%" source="chptr04/scanner2uml.png"/>
+    </figure>
 
 <program language="java">
     <input>
 try
-{   File theFile = new File("riddles.txt");
-    fileScan = new Scanner(theFile);
-    fileScan = fileScan.useDelimiter("\r\n");} catch (IOException e)
-{    e.printStackTrace();} //catch()
+{   
+  File theFile = new File("riddles.txt");
+  fileScan = new Scanner(theFile);
+  fileScan = fileScan.useDelimiter("\r\n");
+}
+catch (IOException e)
+{    
+  e.printStackTrace();
+
+} //catch()
     </input>
 </program>
 
@@ -94,7 +110,10 @@ try
     <p>
       The program in <xref ref="fig-fileprog">Figure</xref>
       is the complete listing of a class that reads riddles from a file
-    </p>
+        and displays them.
+        
+      </p>
+    
     <listing xml:id="fig-fileprog">
       <caption>A program which reads riddles from a file and displays them.</caption>
 
@@ -142,16 +161,16 @@ public class RiddleFileReader
        {   rfr.displayRiddle(riddle);
            riddle = rfr.readRiddle();
        } // while
-   } //main()}  //RiddleFileReader class
+   } //main()
+}  //RiddleFileReader class
     </input>
 </program>
-
     </listing>
-    <p>
-      and displays them.
-      Note that, in the body of the method <c>readRiddles()</c>, the statements:
-    </p>
-
+   
+<p>Note that, in the body of the method <c>readRiddles()</c>, the statements below    
+  make explicit the fact that variables that refer to objects are assigned <c>null</c> as 
+  a value when they are declared. 
+</p>
 <program language="java">
     <input>
 String ques = null;
@@ -161,8 +180,9 @@ Riddle theRiddle = null;
 </program>
 
     <p>
-      make explicit the fact that variables that refer to objects are assigned <c>null</c> as a value when they are declared.
-      The statements:
+      The statements below  will read <c>String</c> s into the variables <c>ques</c> and <c>ans</c> only if the file contains lines of data for them.
+      Otherwise the
+<c>readRiddle()</c> method will return a <c>null</c> value.  The <c>main()</c> method uses this fact to terminate a <c>while</c> loop when it runs out of string data to assign to <c>Riddle</c> questions and answers.
     </p>
 
 <program language="java">
@@ -171,63 +191,52 @@ if (fileScan.hasNext())
     ques = fileScan.next();
 if (fileScan.hasNext())
 {   ans =  fileScan.next();
-    theRiddle = new Riddle(ques, ans);}
+    theRiddle = new Riddle(ques, ans);
+}
     </input>
 </program>
 
     <p>
-      will read <c>String</c> s into the variables <c>ques</c> and <c>ans</c> only if the file contains lines of data for them.
-      Otherwise the
-<c>readRiddle()</c> method will return a <c>null</c> value.
-      The <c>main()</c> method uses this fact to terminate a <c>while</c> loop when it runs out of string data to assign to <c>Riddle</c> questions and answers.
-      There is a separate method, <c>displayRiddle()</c> using a separate instance of
+     There is a separate method, <c>displayRiddle()</c> using a separate instance of
 <c>Scanner</c> attached to the keyboard to display the question of a riddle before the answer.
     </p>
     <p>
       The contents of the "riddles.txt" file should be a list of riddles with each question and answer on a separate line.
-      For example The following three riddles saved in a text file would form a good example to test the <c>RiddleFileReader</c> class.
+      For example, the following three riddles saved in a text file would form a good example to test the <c>RiddleFileReader</c> class.
     </p>
-    <p>
-
-    </p>
-
-<program language="java">
-    <input>
+<pre>
 What is black and white and red all over?
   An embarrassed zebra
-  What is black and white and read all over?
+What is black and white and read all over?
   A newspaper
-  What other word can be made with the letters of ALGORITHM?
+What other word can be made with the letters of ALGORITHM?
   LOGARITHM
-    </input>
-</program>
+</pre>
 
     <p>
       When the <c>main()</c> method is executed,
       the user will see output in the console window that looks like:
     </p>
 
-<program language="java">
-    <input>
+<pre>
 What is black and white and red all over?
-  Input any letter to see answer: X
-  An embarrassed zebra
-  What is black and white and read all over?
-  Input any letter to see answer:
-    </input>
-</program>
+Input any letter to see answer: X
+An embarrassed zebra
+What is black and white and read all over?
+Input any letter to see answer:
+</pre>
 
     <p>
       Files are covered in depth in Chapter<nbsp/>11.
       Information on writing data to a file and reading data from a file without using the <c>Scanner</c> class can be found in that chapter.
     </p>
-</subsection>
-<subsection>
+<exercises>
 <title>Self-Study Exercises</title>
-      <ol>
-        <li>
+      <exercise label="numberFileEx">
+        <title>NumberFileReader</title>
+      <statement>
           <p>
-            Modify the <c>RiddleFileReader</c> class to create a program
+            Using a development environment that allows user input, modify the <c>RiddleFileReader</c> class to create a program
 <c>NumberFileReader</c> that opens a file named "numbers.txt" and reports the sum of the squares of the integers in the file.
             Assume that the file "numbers.txt" contains a list of integers in which each integer is on a separate line.
             The program should print the sum of the squares in the <c>System.out</c> console window.
@@ -235,8 +244,45 @@ What is black and white and red all over?
             there is no need to have a method to display the data being read or a <c>Scanner</c> object connected to the keyboard.
             You will want a constructor method and a method that reads the numbers and computes the sum of squares.
           </p>
-        </li>
-      </ol>
+          </statement>
+          <solution>
+            <p>
+              Java code that prints out the sum of the squares of a set of integers read from a file named "numbers.txt":
+  
+  <program language="java">
+      <input>
+  import java.io.*;
+  import java.util.Scanner;
+  public class NumberFileReader
+  {   private Scanner fileScan; // For file input
+      public NumberFileReader(String fName)
+      {   try
+          {   File theFile = new File(fName);
+              fileScan = new Scanner(theFile);
+          } catch (IOException e)
+          {    e.printStackTrace();
+          } //catch()
+      } //NumberFileReader()
+      public void readNumbers()
+      {   int num = 0;      // To store integers read
+          int sum = 0:      // To store sum of squares
+          while (fileScan.hasNextInt())
+          {   num = fileScan.nextInt();
+              sum = sum + num * num;
+          } // while
+          System.out.println("The sum of squares = " + sum);
+      } // readNumbers()
+      public static void main(String[] args)
+      {   NumberFileReader nfr =
+              new NumberFileReader("numbers.txt");
+          nfr.readNumbers()
+      } //main()
+  }  //NumberFileReader
+      </input>
+  </program></p>
+          </solution>
+        </exercise>
+        </exercises>
 
   </subsection>
 </section>
