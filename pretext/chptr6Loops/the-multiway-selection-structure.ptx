@@ -1,4 +1,4 @@
-<section xml:id="the-multiway-selection-structure">
+<section xml:id="switch">
   <title>The <c>switch</c> Multiway Selection Structure</title>
 <subsection><title>Switch</title>
   <p>
@@ -163,13 +163,13 @@ switch (m)
       This may cause more than one case to be executed.
     </p>
   </principle>
-  </subsection>
+  
   
   <exercises><title>Self-Study Exercises</title>
    
         <exercise label="switchbug1">
-         <statement><p>Identify and fix the errors in the following switch structure (if there is no error,
-          specify the output).</p></statement> 
+  <title>Switch Bug 1</title>
+          <statement><p>Identify and fix the errors in the following switch structure.</p></statement> 
  <program language="java" interactive="activecode"><input>
 public class Bugs 
 {
@@ -189,11 +189,27 @@ public class Bugs
   }
 }
  </input></program>
+<solution>
+  <program language="java"><input>
+       int k = 0;
+       switch (k)  // Syntax error: missing braces
+        case 0:
+            System.out.println("zero");
+            break;
+        case 1:
+            System.out.println("one");
+            break;
+        default:
+            System.out.println("default");
+            break;
+       }
+     </input></program>
+</solution>
 </exercise>
 
  <exercise label="switchbug2">
-  <statement><p>Identify and fix the errors in the following switch structure (if there is no error,
-   specify the output).</p></statement> 
+  <title>Switch Bug 2</title>
+  <statement><p>Identify and fix the errors in the following switch structure.</p></statement> 
 <program language="java" interactive="activecode"><input>
 public class Bugs 
 {
@@ -203,22 +219,36 @@ public class Bugs
     switch (k + 1)
     {   case 0:
             System.out.println("zero");
-            break;
         case 1:
             System.out.println("one");
-            break;
         default:
             System.out.println("default");
-            break;
     }
   }
 }
  </input></program>
-</exercise>
+<solution>
+  <program language="java"><input>
+    int k = 0;
+    switch (k + 1)
+    {
+        case 0:
+            System.out.println("zero");
+            break;               // Missing break;
+        case 1:
+            System.out.println("one"); 
+            break;           // Missing break;
+        default:
+            System.out.println("default");
+            break;         // Missing break;
+    }
+  </input></program>
+</solution></exercise>
 
 <exercise label="switchbug3">
-         <statement><p>Identify and fix the errors in the following switch structure (if there is no error,
-          specify the output).</p></statement> 
+  <title>Switch Bug 3</title>
+         <statement><p>Identify and fix the errors in the following switch structure.
+        </p></statement> 
  <program language="java" interactive="activecode"><input>
 public class Bugs 
 {
@@ -239,12 +269,30 @@ public class Bugs
   }
 }
  </input></program>
+ <solution>
+  <program language="java"><input>
+       int k = 6;
+       switch (k / 3.0) // Syntax error: not an integral value
+       {
+           case 2:
+               System.out.println("zero");
+               break;
+           case 3:
+               System.out.println("one");
+               break;
+           default:
+               System.out.println("default");
+               break;
+       }
+     </input></program>
+ </solution>
         </exercise>
 
     
   
 
     <exercise label="flavorsEx">
+      <title>Ice Cream Flavors</title>
       <statement><p>
         Write a <c>switch</c> statement that checks an integer variable <c>flavor</c> and 
         prints out the name of the ice cream flavor (where 0 is vanilla, 1 is chocolate,
@@ -269,6 +317,26 @@ public class Bugs
 
           }
         }
-        </input></program></exercise>
+        </input></program>
+      <solution>
+        <program language="java"><input>
+          switch (flavor)
+          {
+              case 1:
+                  System.out.println("Vanilla");
+                  break;
+              case 2:
+                  System.out.println("Chocolate");
+                  break;
+              case 3:
+                  System.out.println("Strawberry");
+                  break;
+              default:
+                  System.out.println("Error");
+          }
+           </input></program>
+      </solution>
+      </exercise>
 </exercises>
+</subsection>
 </section>

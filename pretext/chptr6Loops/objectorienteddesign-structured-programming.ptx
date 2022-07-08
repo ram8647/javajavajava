@@ -1,4 +1,4 @@
-<section xml:id="objectorienteddesign-structured-programming">
+<section xml:id="ood-structured-programming">
   <title>OBJECT-ORIENTED DESIGN:
   Structured Programming</title>
   <introduction>
@@ -313,7 +313,7 @@ else
       should be developed during the design stage and should play a role in all aspects of program development.
     </p>
   </subsection>
-  <subsection xml:id="self-study-exercisesE18">
+  <subsection>
     <title>Effective Program Design</title>
     <p>
       What we're really saying here is that using pre- and postconditions forces you to analyze your program's logic.
@@ -387,11 +387,12 @@ else
         Library code has been subjected to extensive testing.
       </p>
     </principle>
-    </subsection>
+  
     
-    <subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+    <exercises><title>Self-Study Exercises</title>
+      <exercise label="prepostcond1">
+        <title>Pre/Post Conditions 1</title>
+      <statement>
           <p>
             Identify the pre- and postconditions on
             <em>j</em> and <em>k</em>
@@ -404,12 +405,36 @@ do {
         j += k;
         k--;
     }
-    else k *= k;} while (j &lt;= k);
+    else k *= k;
+  } while (j &lt;= k);
                       // Postcondition
  </input></program>
           </p>
-        </li>
-        <li>
+        </statement>
+      <solution>
+        <p>
+          Identify the pre- and postconditions on
+          <em>j</em> and <em>k</em>
+          where indicated in the following code segment:
+ <program language="java"><input>
+int j = 0; k = 5;
+do {
+    if (k % 5 == 0) {
+                      // Precondition: j &lt;= k
+        j += k;
+        k--;
+    }
+    else k *= k;
+  } while (j &lt;= k);
+                      // Postcondition: j > k
+ </input></program>
+        </p>
+      </solution>  
+      </exercise>
+
+          <exercise label="prepostcond2">
+            <title>Pre/Post Conditions 2</title>
+          <statement>
           <p>
             Identify the pre- and postconditions for the following method,
             which computes <m>x^n</m> for
@@ -423,8 +448,26 @@ public double power(double x, int n) {
 } // power()
  </input></program>
           </p>
-        </li>
-      </ol>
+        </statement>
+        <solution>
+          <p>
+            Identify the pre- and postconditions for the following method,
+            which computes <m>x^n</m> for <m>n >= 0</m>.
+   <program language="java"><input>
+   // Precondition: N >= 0
+   // Postcondition: power(x,n) == x to the n
+   public double power(double x, int n ) {
+       double pow = 1;
+       for (int k = 1; k &lt;= n; k++)
+           pow = pow * x;
+       return pow;
+   } // power()
+   </input></program>
+          </p> 
+        </solution>  
+        </exercise>
+        
+        </exercises>
     
   </subsection>
 </section>

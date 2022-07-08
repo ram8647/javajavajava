@@ -421,7 +421,8 @@ for (int k = 1; k &lt;= 10; k++) {// Print 1 2 ... 10
         When braces are not used only the first statement after the loop heading will be iterated.
       </p>
     </principle>
-    </subsection>
+  </subsection>
+
     <exercises xml:id="self-study-exercisesA18"><title>Self-Study Exercises</title>
     
         <p>
@@ -429,6 +430,7 @@ for (int k = 1; k &lt;= 10; k++) {// Print 1 2 ... 10
         </p>
 
 <exercise label="bugforloop1">
+  <title>For Loop Bugs 1</title>
   <statement>
           <p>Fix the bugs in the following for loop. 
     </p>
@@ -443,9 +445,20 @@ for (int k = 1; k &lt;= 10; k++) {// Print 1 2 ... 10
      }
     }
  </input></program>
+ <solution>
+  <p>
+    Bug: Commas are used instead of semicolons in the header. Loop fixed below.
+<program language="java"><input>
+for (int k = 5; k &lt; 100; k++)
+   System.out.println(k);
+</input></program>
+  </p>
+ </solution>
 </exercise>
 
- <exercise label="bugforloop2"><statement>
+ <exercise label="bugforloop2">
+  <title>For Loop Bugs 2</title>
+  <statement>
   <p>Fix the bugs in the following for loop. </p>
 </statement>
                <program language="java" interactive="activecode"><input>
@@ -458,48 +471,80 @@ for (int k = 1; k &lt;= 10; k++) {// Print 1 2 ... 10
                    }
                 }
  </input></program>
+ <solution>
+  <p>
+    Bug: There shouldn't be 3 semicolons in the header. Loop fixed below.
+<program language="java"><input>
+for (int k = 0; k &lt; 12 ; k--)
+    System.out.println(k);
+</input></program>
+  </p>
+ </solution>
 </exercise>
 
 
-<exercise><statement>
+<exercise label="infinite-loops-ex"><title>Infinite Loops</title><statement>
         <p>
           Identify those statements that result in infinite loops.
-         </p>
-             </statement>
-                </exercise>
+         <ol>
+          <li>          
                  <program language="java"><input>
 for (int k = 0; k &lt; 100; k = k )
      System.out.println(k);
  </input></program>
-              
+              </li><li>
                  <program language="java"><input>
 for (int k = 1; k == 100; k = k + 2 )
      System.out.println(k);
  </input></program>
-             
+             </li><li>
                  <program language="java"><input>
 for (int k = 1; k >= 100; k = k - 2 )
      System.out.println(k);
  </input></program>
-              
+ </li></ol></p></statement>
+ <solution>
+  <p>
+    <ol>
+              <li>
+               
+                <p>
+                  Infinite loop because k is never incremented.
+                </p>
+              </li>
+              <li>
+               
+                <p>
+                  Infinite loop because k is always odd and thus never equal to 100.
+                </p>
+              </li>
+            </ol>
+          </p>
+ </solution>
+  </exercise>            
       
-     <exercise><statement>
+     <exercise label="local-j"><title>Variable j in Loop</title><statement>
         <p>
           What is the value of the variable <em>j</em> when the following loop terminates?
- </p></statement>
+          <program language="java"><input>
+            for (int i = 0; i &lt; 10; i++) {
+                int j;
+                j = j + 1;
+             }
+             </input></program>
+        </p></statement>
+ <solution>
+  <p>
+    <em>j</em> will be undefined when the loop terminates.
+    It is a local variable whose scope is limited to the loop body.
+  </p>
+ </solution>
  </exercise>
-
- <program language="java"><input>
-for (int i = 0; i &lt; 10; i++) {
-    int j;
-    j = j + 1;
- }
- </input></program>
-        
-     
      
     
-    <exercise label="count4"><statement>
+    <exercise label="count4">
+      <title>Count by 4's</title>
+      <statement>
       <p> Suppose you're helping your little sister learn to count by fours.
         Write a <c>for</c> loop in the active code window below that 
         prints the following sequence of numbers: 1, 5, 9, 13, 17, 21, 25.</p></statement>
@@ -518,6 +563,16 @@ for (int i = 0; i &lt; 10; i++) {
                        }
                     }
      </input></program>
+     <solution>
+      <p>
+        Your sister is learning to count by fours.
+        Write a <c>for</c> loop that prints the following sequence of numbers: 1, 5, 9, 13, 17, 21, 25.
+<program language="java"><input>
+for (int k = 1; k &lt;= 25; k = k+4)
+  System.out.print(k + " ");
+</input></program>
+      </p>
+     </solution>
     </exercise>
 </exercises>
 
@@ -676,7 +731,7 @@ public class Pattern
       Note that the bound of the inner loop varies according to the value of <em>row</em>,
       the loop counter for the outer loop.
     </p>
-    </subsection>
+   
  
     <exercises  xml:id="self-study-exerciseN18"><title>Self-Study Exercise</title>
       
@@ -691,7 +746,7 @@ public class Pattern
 # # # #
 # # # # #
  </input></program>
- <exercise label="nested-pattern-exercise"><statement>
+ <exercise label="nested-pattern-exercise"><title>Nested Loop Pattern</title><statement>
   <p>Write nested for loops to print a right triangle with a base of 5 # symbols.</p>
 </statement>
 <program language="java" interactive="activecode"><input>
@@ -706,7 +761,25 @@ public class Pattern
   }
 }
 </input></program>
+<solution>
+  <p>
+    Write a nested <c>for</c> loop to print the following geometric pattern:
+<program language="java"><input>
+#
+# #
+# # #
+# # # #
+# # # # #
+for (int row = 1; row &lt;= 5; row++)  {    // For each row
+  for (int col = 1; col &lt;= row; col++) // Columns per row
+      System.out.print('#');
+  System.out.println();                // New line
+} // row
+</input></program>
+  </p>
+</solution>
 </exercise>
 
   </exercises>
+  </subsection>
 </section>
