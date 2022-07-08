@@ -1,4 +1,4 @@
-<section xml:id="sec-constructors">
+<section xml:id="constructors">
   <title>Constructors</title>
   <introduction>
     <p>
@@ -128,33 +128,40 @@ OneRowNim game2 = new OneRowNim(13);
     </p>
     </introduction>
     
-    <subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
+    <exercises><title>Self-Study Exercises</title>
+     <exercise label="constructBug">
+      <title>Constructor Definition Bug</title>
+      <statement><p>
             What's wrong with the following constructor definition? 
  <program language="java"><input>
 public void OneRowNim(int sticks)
 {   nSticks = sticks;
 }
  </input></program>
-          </p>
-        </li>
-        <li>
+</p></statement>
+<hint><p>What is void in the header?</p></hint>
+<solution>
+  <p>
+    A constructor cannot have a return type, such as void.
+  </p>
+</solution>
+         </exercise>
+        
+      
           <p>
-            In the active code below or in your own development environment, change the <c>OneRowNim(int sticks)</c> constructor so that it sets the number of sticks and also have it also set player two as the player who takes the first turn.
+            In the active code below or in your own development environment, 
+            change the <c>OneRowNim(int sticks)</c> constructor so that it sets 
+            the number of sticks and also have it also set player two as the player 
+            who takes the first turn. Also, write a constructor that takes 2 parameters 
+            to set the number of sticks and to set the player.
           </p>
-        </li>
-        <li>
-          <p>
-            In the active code below or in your own development environment, write a constructor that takes 2 parameters to set the number of sticks and to set the player.
-          </p>
-        </li>
-      </ol>
-
+      
       <exercise label="constructorEx">
+        <title>OneRowNim Constructors</title>
         <statement>
-          <p>Change the <c>OneRowNim(int sticks)</c> constructor to also set the player to 2. Write a constructor that takes 2 parameters to set the number of sticks and to set the player.</p>
+          <p>Change the <c>OneRowNim(int sticks)</c> constructor to also set the player 
+            to 2. 
+            Write another constructor that takes 2 parameters to set the number of sticks and to set the player.</p>
         </statement>
       <program language="java" interactive='activecode'><input>
         /*
@@ -208,9 +215,23 @@ public void OneRowNim(int sticks)
             } // end of main
         } // OneRowNim class
         </input></program>
+        <solution>
+          <program language="java"><input>
+            public OneRowNim(int sticks)
+            {    
+                 nSticks = sticks;
+                 player = 2;
+            }
+            public OneRowNim(int sticks, int initPlayer)
+            {    
+                 nSticks = sticks;
+                 player = initPlayer;
+            }
+             </input></program>
+        </solution>
       </exercise>
-   
- </subsection>
+    </exercises>
+    
   <subsection xml:id="sec-defaultconstructors">
     <title>Default Constructors</title>
     <p>

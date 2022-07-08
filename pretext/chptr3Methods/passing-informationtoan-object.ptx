@@ -1,4 +1,4 @@
-<section xml:id="passing-informationtoan-object">
+<section xml:id="passing-info-to-object">
   <title>Passing Information to an Object</title>
 
    <subsection xml:id="accessors-mutators"><title>Accessor and Mutator Methods</title>
@@ -580,13 +580,13 @@ Next turn by player 2
 You can try this version of Nim in action here: <url href="https://replit.com/@BerylHoffman/OneRowNim1" visual="" target="_blank">OneRowNim.java on repl</url>. Run the following code multiple times and enter 1, 2, or 3. 
  Look at files to see the OneRowNim class code.</p>
  
+
  <!-- <interactive iframe="https://replit.com/@BerylHoffman/OneRowNim1">
  </interactive>
 -->
       </subsection>
 
-      <subsection><title>Self-Study Exercises</title>
-      
+      <exercises><title>Self-Study Exercises</title>
         <exercise label="fillin-scope">
           <title>Fill-In Scope</title>
       
@@ -607,48 +607,72 @@ You can try this version of Nim in action here: <url href="https://replit.com/@B
                     </condition>
                   </var>
                   </setup>
+                  <solution>
+                    <p>A parameter variable has <term>local</term> scope.</p>
+                  </solution>
                   </exercise>
 
-        <ol>
-        <li>
-          <p>
-            Explain the difference between a
-            <em>method declaration</em>
-            and a <em>method invocation</em>.
-              <idx><h>method invocation</h></idx>
-          </p>
-        </li>
-        <li>
-          <p>
-            Explain the difference between a
-            <em>formal parameter</em>
-            and an <em>argument</em>.
-          </p>
-        </li>
-        <li>
-          <p>
-            In the active code below or in your own development environment, modify the <c>OneRowNim</c> class of <xref ref="fig-testorn2">Figure</xref>
-            by adding two instance variables of type <c>String</c> to store names of the two players.
-            Choose names for the instance variables that would be appropriate for storing names for player one and player two.
-            Write a method named <c>setNames()</c> with two string parameters which assigns the first parameter to the instance variable that you created for the name of player one.
-            The second parameter should be assigned to the other new instance variable.
-          </p>
-        </li>
-        <li>
-          <p>
-            In the active code below or in your own development environment, write a statement in the main method that calls the <c>setNames()</c> method of the previous exercise 
-            and sets the name of player one of <c>game</c> to
-            <q>Xena</q>
-            and sets the name of player two to
-            <q>Yogi</q>.
-          </p>
-        </li>
-      </ol>
-      <activity label="setNamesEx">
+      <exercise label="mathMethodVocab">
+      <title>Matching Method Vocabulary</title>
+     
+      <statement>
+          <p>Match the vocabulary with their definitions.</p>
+      </statement>
+      <feedback>
+          <p>Review the vocabulary in this section.</p>
+      </feedback>
+      <matches>
+          <match>
+              <premise>method declaration</premise>
+              <response>defining a method by specifying its name, its parameters and result, 
+                and associating it with a segment of code.
+              </response>
+          </match>
+          <match>
+              <premise>method invocation</premise>
+              <response>calling or using a defined method.</response>
+          </match>   
+          <match>
+              <premise>formal parameter</premise>
+              <response>a variable in the method declaration,
+                whose purpose is to store a value while the method is running.          
+              </response>
+          </match>
+          <match>
+            <premise>argument</premise>
+            <response>a value that is passed to a method during a method call</response>
+        </match>
+      </matches>
+      <solution><p>
+        <ul>
+          <li>method declaration: defining a method by specifying its name, its parameters and result, 
+              and associating it with a segment of code.</li>
+          <li>method invocation: calling or using a defined method.</li>
+          <li>formal parameter: a variable in the method declaration,
+              whose purpose is to store a value while the method is running.</li>
+          <li> argument:  a value that is passed to a method during a method call.</li>
+        </ul>
+      </p></solution>
+    </exercise>
+         
+
+      <exercise label="setNamesEx">
+        <title>setNames()</title>
         <statement>
-          <p>Add private instance variables for the player names, a setNames method with 2 parameters to set these 
-            instance variables, and call the method from main with the arguments Xena and Yogi.</p>
-        </statement>
+          <p>Modify the <c>OneRowNim</c> class of <xref ref="fig-testorn2">Figure</xref>
+            : <ol><li>
+             Add two instance variables of type <c>String</c> to store names of the two players.
+              Choose names for the instance variables that would be appropriate for storing names for player one and player two.
+      </li><li>Write a method named <c>setNames()</c> with two string parameters which assigns the first parameter to the instance variable that you created for the name of player one.
+        The second parameter should be assigned to the other new instance variable.
+      </li>
+      <li>Write a statement in the main method that calls the <c>setNames()</c> method of the previous exercise 
+        and sets the name of player one of <c>game</c> to
+        <q>Xena</q>
+        and sets the name of player two to
+        <q>Yogi</q>.</li>
+          </ol>
+      </p>   </statement>
       <program language="java" interactive='activecode'><input>
         /*
          * File: OneRowNim.java
@@ -692,7 +716,7 @@ You can try this version of Nim in action here: <url href="https://replit.com/@B
               OneRowNim game = new OneRowNim(); // Declare a OneRowNim instance called game
               // Add code here to call game's setNames method 
 
-              game.report();               // Report state of game
+              game.report();           // Report state of game
               game.takeSticks(1);     // remove 1 stick
               game.report();
               game.takeSticks(2);     // remove 2 sticks
@@ -702,6 +726,27 @@ You can try this version of Nim in action here: <url href="https://replit.com/@B
             } // end of main
         } // OneRowNim class
         </input></program>
-        </activity>
-  </subsection>
+        <solution>
+          <p>
+            The following code declares two instance variables for names of players and 
+            defines a <c>setName()</c> method. Of course,
+            there are many other appropriate names for the variables and parameters and 
+            other initial assignments.</p>
+   <program language="java"><input>
+  private String nameOne = "Player One";
+  private String nameTwo = "Player Two";
+  public void setNames(String name1, String name2)
+  {    nameOne = name1;
+       nameTwo = name2;
+  }
+   </input></program>
+   <p>
+    A method call that sets the names of the players of <c>game1</c> is:
+<program language="java"><input>
+game1.setNames("Xena","Yogi");
+</input></program>
+  </p>
+        </solution>
+      </exercise>
+        </exercises>
 </section>

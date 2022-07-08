@@ -1,4 +1,4 @@
-<section xml:id="flowof-control-control-structures">
+<section xml:id="flow-of-control-structures">
   <title>Flow of Control: Control Structures</title>
   <introduction>
     <p>
@@ -444,11 +444,12 @@ public String takeSticks(int num)
       a programmer could choose to write the code either way.
     </p>
    
-      </subsection><subsection><title>Self-Study Exercises</title>
-        <p>
-      <ol>
-        <li>
-          <p>
+   <exercises><title>Self-Study Exercises</title>
+       
+    <exercise label="ifFlowChartEx">
+      <title>Flow Chart</title>
+      <statement>
+    <p>
             Consider the following method with
 <c>boolean</c> parameter.
  <program language="java"><input>
@@ -459,7 +460,8 @@ public String getStatus(boolean isDone)
    else
         return "Not Done";
  }
- </input></program>Draw a flowchart for the if-else version of the <c>getStatus()</c> method,
+ </input></program>
+ Draw a flowchart for the if-else version of the <c>getStatus()</c> method,
             using the figures in this section as a guide.
             The if-else structure should be drawn exactly as shown in <xref ref="fig-ifelsechart">Figure</xref>.
             It should have a single entry point that leads directly to the top of a diamond-shaped box that contains a boolean condition.
@@ -471,11 +473,20 @@ public String getStatus(boolean isDone)
             The left and right branches should be connected by a circular symbol that is aligned directly under the diamond box whose conditions it connects.
             There should be a single exit arrow pointing directly down.
           </p>
-        </li>
-        </ol>
-        </p>
+        </statement>
+          <solution>
+            <p>
+      
+              Flowchart of the if-else version of the <c>getStatus()</c> method:
+              <image width="50%" source="chptr03/isdone.png"/>
+        
+                      </p>
+          </solution>
+          </exercise>
+        
       
         <exercise label="ifDebugEx">
+          <title>If Debug</title>
           <statement><p> Identify the errors in the following statements and fix them in the activecode below.
           </p></statement>
           <program language="java" interactive="activecode"><input>
@@ -497,10 +508,23 @@ public String getStatus(boolean isDone)
                }
               }
  </input></program>
+ <solution>
+  <program language="java"><input>
+    if (isHeavy == true)
+         System.out.println("Heavy") ;
+    else ;  // Error (remove this semicolon)
+         System.out.println("Light");
+    if (isLong == true)
+         System.out.println("Long")
+    else   // Error (end line above with semicolon)
+         System.out.println("Short");
+     </input></program>
+ </solution>
   </exercise>        
   
         
           <exercise label="getPlayerNameEx">
+            <title>getPlayerName()</title>
             <statement><p>Write a method named
   <c>getPlayerName()</c> that returns a <c>String</c>. It should return
               <q>Ann</q>,              <q>Bill</q>,
@@ -539,8 +563,20 @@ public String getStatus(boolean isDone)
                  }
                 }
    </input></program>
+   <solution> <program language="java"><input>
+    public String getPlayerName()
+    {    if (player == 1)
+             return "Ann";
+         else if (player == 2)
+             return "Bill";
+         else if (player == 3)
+             return "Cal";
+         else
+             return "Error";
+    }
+     </input></program></solution>
         </exercise>
-  
+  </exercises>
   </subsection>
 
   <subsection xml:id="while-loops">
@@ -698,11 +734,11 @@ while (loop entry condition) { // Bound test
       and the loop body contains updater statements.
       The semantics of the while structure are shown in <xref ref="fig-whileflow">Figure</xref>.
     </p>
-  </subsection>
   
-    <subsection><title>While Loop Self-Study Exercises</title>
+  
+<exercises><title>While Loop Self-Study Exercises</title>
      
-          <p> Modify the definition of the
+ <p> Modify the definition of the
 <c>sumSquares()</c> method to define a method named <c>sumCubes()</c> that sums the cubes of integers 
 from a minimum value up to a maximum value and returns that sum. 
  <c>sumCubes()</c> should have two parameters that will store the minimum and maximum values.
@@ -711,6 +747,7 @@ Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2
     </p>
 
     <exercise label="sumCubes">
+      <title>sumCubes()</title>
       <statement><p>Using the <c>sumSquares</c> method below as a guide, define a method named
         <c>sumCubes(min, max)</c> that sums the cubes of integers 
         from a minimum value up to a maximum value and returns that sum. 
@@ -744,6 +781,23 @@ Thus the method call <c>sumCubes(2,3)</c> should return <m>35</m> since <m>2*2*2
     }
   }
  </input></program>
+ <solution>
+  <program language="java"><input>
+    public int sumCubes(int min, int max)
+    {
+        int num = min;
+        int sum = 0;
+        while (num &lt;=  max) 
+        { // While num &lt;= max
+            sum = sum + num*num*num; // Add cube of num to sum
+            num = num + 1;       // Add 1 to num
+        } //while
+        return sum;           // Return the sum
+    }
+     </input></program>
+          
+ </solution>
 </exercise>
+</exercises>
   </subsection>
 </section>
