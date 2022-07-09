@@ -2,10 +2,8 @@
   <title>Case Study: A Two Player Game Hierarchy</title>
   <introduction>
     <p>
-      In this section we will redesign our <c>OneRowNim</c> game to fit within a hierarchy of classes of two-player games,
-      which are games that involve two players.
-      Many games that this characteristic:
-      checkers, chess, tic-tac-toe,
+      In this section we will redesign our <c>OneRowNim</c> game to fit within a 
+      hierarchy of classes of two-player games, which might include checkers, chess, tic-tac-toe,
       guessing games, and so forth.
 
       <!--
@@ -13,16 +11,22 @@
       blackjack, solitaire, and others.
       There are also games that involve two or more players,
       such as many card games.
-      Thus, our redesign of <c>OneRowNim</c> as part of a two-player game hierarchy will not be our last effort to design a hierarchy of game-playing classes.
-      We will certainly re-design things as we learn new Java language constructs and as we try to extend our game library to other kinds of games.
+      Thus, our redesign of <c>OneRowNim</c> as part of a two-player game hierarchy 
+      will not be our last effort to design a hierarchy of game-playing classes.
+      We will certainly re-design things as we learn new Java language constructs and 
+      as we try to extend our game library to other kinds of games.
       -->
     </p>
     <p>
       This case study will illustrate how we can apply inheritance and polymorphism,
       as well as other object-oriented design principles.
-      The justification for revising <c>OneRowNim</c> at this point is to make it easier to design and develop other two-player games.
+      The justification for revising <c>OneRowNim</c> is to make 
+      it easier to design and develop other two-player games.
+    </p>
+    <p>
       As we have seen,
-      one characteristic of class hierarchies is that more general attributes and methods are defined in top-level classes.
+      one characteristic of class hierarchies is that more general attributes and methods 
+      are defined in top-level classes.
       As one proceeds down the hierarchy,
       the methods and attributes become more specialized.
       Creating a subclass is a matter of specializing a given class.
@@ -31,12 +35,16 @@
   <subsection>
     <title>Design Goals</title>
     <p>
-      One of our design goals is to revise the <c>OneRowNim</c> game so that it fits into a hierarchy of two-player games.
-      One way to do this is to generalize the <c>OneRowNim</c> game by creating a superclass that contains those attributes and methods that are common to all two-player games.
+      One of our design goals is to revise the <c>OneRowNim</c> game so that it 
+      fits into a hierarchy of two-player games.
+      One way to do this is to generalize the <c>OneRowNim</c> game by creating a 
+      superclass that contains those attributes and methods that are common to all two-player games.
+    </p>
+    <p>
       The superclass will define the most general and  generic elements of two-player games.
       All two-player games,
-      including
-<c>OneRowNim</c>, will be defined as subclasses of this top-level superclass and will inherit and possibly override its public and protected variables and methods.
+      including <c>OneRowNim</c>, will be defined as subclasses of this top-level 
+      superclass and will inherit and possibly override its public and protected variables and methods.
       Also, our top-level class will contain certain abstract methods,
       whose implementations will be given in <c>OneRowNim</c> and other subclasses.
     </p>
@@ -52,10 +60,12 @@
       this is a situation in which Java interfaces will come in handy.
     </p>
     <p>
-      Another important goal is to design a two-player game hierarchy that can easily be used with a variety of different user interfaces,
+      Another important goal is to design a two-player game hierarchy that can easily be used 
+      with a variety of different user interfaces,
       including command-line interfaces and GUIs.
       To handle this feature,
-      we will develop Java interfaces to serve as interfaces between our two-player games and various user interfaces.
+      we will develop Java interfaces to serve as interfaces between our two-player games and 
+      various user interfaces.
     </p>
   </subsection>
   <subsection xml:id="two-player-game-class">
@@ -65,8 +75,13 @@
       we first need to design a top-level class,
       which we will call the <c>TwoPlayerGame</c> class.
       What variables and methods belong in this class?
-      One way to answer this question is to generalize our current version of <c>OneRowNim</c> by moving any variables and methods that apply to all two-player games up to the <c>TwoPlayerGame</c> class.
-      All subclasses of <c>TwoPlayerGame</c><mdash/>which includes the <c>OneRowNim</c> class<mdash/>would inherit these elements.
+    </p>
+    <p>
+      One way to answer this question is to generalize our current version of <c>OneRowNim</c>
+      by moving any variables and methods that apply to all two-player games 
+      up to the <c>TwoPlayerGame</c> class.
+      All subclasses of <c>TwoPlayerGame</c><mdash/>which includes the <c>OneRowNim</c> 
+      class <mdash/>would inherit these elements.
       <xref ref="fig-onerownim">Figure</xref>
       shows the current design of <c>OneRowNim</c>. 
 
@@ -77,7 +92,8 @@
     </p>
     <p>
       What variables and methods should we move up to the <c>TwoPlayerGame</c> class?
-      Clearly, the class constants, <c>PLAYER_ONE</c> and <c>PLAYER_TWO</c>, apply to all two-player games.
+      Clearly, the class constants, <c>PLAYER_ONE</c> and <c>PLAYER_TWO</c>, 
+      apply to all two-player games.
       These should be moved up.
       On the other hand,
       the <c>MAX_PICKUP</c> and <c>MAX_STICKS</c> constants apply just to the <c>OneRowNim</c> game.
@@ -94,28 +110,31 @@
     <p>
       Because constructors are not inherited,
       all of the constructor methods  will remain in the <c>OneRowNim</c> class.
-      The instance methods, <c>takeSticks()</c> and <c>getSticks()</c>, are particular to <c>OneRowNim</c>, so they should remain there.
-      However, the other methods,
-<c>getPlayer()</c>, <c>gameOver()</c>, <c>getWinner()</c>, and <c>reportGameState()</c>, are methods that would be useful to all two-player games.
+      The instance methods, <c>takeSticks()</c> and <c>getSticks()</c>, are 
+      particular to <c>OneRowNim</c>, so they should remain there.
+      However, the other methods, <c>getPlayer()</c>, <c>gameOver()</c>, <c>getWinner()</c>, 
+      and <c>reportGameState()</c>, are methods that would be useful to all two-player games.
       Therefore these methods should be moved up to the superclass.
+    </p>
+    <p>
       Of course, while these methods can be defined in the superclass,
       some of the methods can only be implemented in subclasses.
       For example,
       the <c>reportGameState()</c> method reports the current state of the game,
       so it has to be implemented in <c>OneRowNim</c>. Similarly,
-      the
-<c>getWinner()</c> method defines how the winner of the game is determined,
+      the <c>getWinner()</c> method defines how the winner of the game is determined,
       a definition that can only occur in the subclass.
       Every two-player game needs methods such as these.
-      Therefore, we will define these methods as abstract methods in the superclass.
-      The intention is that <c>TwoPlayerGame</c> subclasses will provide game-specific implementations for these methods.
+      Therefore, we will define these as abstract methods in the superclass.
+      The intention is that <c>TwoPlayerGame</c> subclasses will provide 
+      game-specific implementations for these methods.
     </p>
     <p>
       Given these considerations,
       we come up with the design shown in <xref ref="fig-twoplayergame">Figure</xref>.
       The design shown in this figure is much more complex than designs we have used in earlier chapters.
-      However, the complexity comes from combining ideas already discussed in previous sections of this chapter,
-      so don't be put off by it.
+      However, the complexity comes from combining ideas already discussed in previous 
+      sections of this chapter, so don't be put off by it.
     </p>
     <figure xml:id="fig-twoplayergame">
       <caption><c>TwoPlayerGame</c> is the
@@ -124,28 +143,37 @@
     </figure>
     <p>
       To begin with,
-      notice that we have introduced two Java interfaces into our design in addition to the <c>TwoPlayerGame</c> superclass.
+      notice that we have introduced two Java interfaces into our design in 
+      addition to the <c>TwoPlayerGame</c> superclass.
       As we will show,
-      these interfaces lead to a more flexible design and one that can easily be extended to incorporate new two-player games.
+      these interfaces lead to a more flexible design and one that can easily 
+      be extended to incorporate new two-player games.
       Let's take each element of this design separately.
     </p>
   </subsection>
   <subsection>
     <title>The <c>TwoPlayerGame</c> Superclass</title>
     <p>
-      As we have stated,
-      the purpose of the <c>TwoPlayerGame</c> class is to serve as the superclass for all two-player games.
+      The purpose of the <c>TwoPlayerGame</c> class is to serve as the superclass for all two-player games.
       Therefore, it should define those variables and methods that are shared by two-player games.
     </p>
     <p>
-      The <c>PLAYER_ONE</c>, <c>PLAYER_TWO</c>, and <c>onePlaysNext</c> variables and the <c>getPlayer()</c>, <c>setPlayer()</c>, and <c>changePlayer()</c> methods have been moved up from the <c>OneRowNim</c> class.
+      The <c>PLAYER_ONE</c>, <c>PLAYER_TWO</c>, and <c>onePlaysNext</c> variables and 
+      the <c>getPlayer()</c>, <c>setPlayer()</c>, and <c>changePlayer()</c> methods have 
+      been moved up from the <c>OneRowNim</c> class.
       Clearly, these variables and methods apply to all two-player games.
-      Note that we have also added three new variables: <c>nComputers</c>, <c>computer1</c>, <c>computer2</c> and their corresponding methods, <c>getNComputers()</c> and <c>addComputerPlayer()</c>. We will use these elements to give our games the ability to be played by computer programs.
-      Because we want all of our two-player games to have this capability,
-      we define these variables and methods in the superclass rather than in <c>OneRowNim</c> and subclasses of <c>TwoPlayerGame</c>.
     </p>
     <p>
-      Note that the <c>computer1</c> and <c>computer2</c> variables are declared to be of type <c>IPlayer</c>. <c>IPlayer</c> is an interface,
+      Note that we have also added three new variables: <c>nComputers</c>, <c>computer1</c>, 
+      <c>computer2</c> and their corresponding methods, <c>getNComputers()</c> and <c>addComputerPlayer()</c>. 
+      We will use these elements to give our games the ability to be played by computer programs.
+      Because we want all of our two-player games to have this capability,
+      we define these variables and methods in the superclass rather than in <c>OneRowNim</c> and 
+      subclasses of <c>TwoPlayerGame</c>.
+    </p>
+    <p>
+      Note that the <c>computer1</c> and <c>computer2</c> variables are declared to be of 
+      type <c>IPlayer</c>. <c>IPlayer</c> is an interface,
       which contains a single method declaration,
       the <c>makeAMove()</c> method:
     </p>
@@ -155,28 +183,40 @@ public interface IPlayer {
  }
  </input></program>
     <p>
-      Why do we use an interface here rather than some type of game-playing object?
+      <term>Why an interface?</term> Why do we use an interface here rather than 
+      some type of game-playing object?
       This is a good design question.
-      Using an interface here makes our design more flexible and extensible because it frees us from having to know the names of the classes that implement the <c>makeAMove()</c> method.
-      The variables <c>computer1</c> and <c>computer2</c> will be assigned objects that implement <c>IPlayer</c> via the <c>addComputerPlayer()</c> method.
+      Using an interface here makes our design more flexible and extensible because it 
+      frees us from having to know the names of the classes that implement the <c>makeAMove()</c> method.
+      The variables <c>computer1</c> and <c>computer2</c> will be assigned objects that 
+      implement <c>IPlayer</c> via the <c>addComputerPlayer()</c> method.
     </p>
     <p>
-      The algorithms used in the various implementations of <c>
-makeAMove()</c> are
+      The algorithms used in the various implementations of <c> makeAMove()</c> are
       <em>game-dependent</em><mdash/>they depend on the particular game being played.
       It would be impossible to define a game-playing object that would suffice for all two-player games.
-      Instead, if we want an object that plays <c>OneRowNim</c>, we would define a <c>OneRowNimPlayer</c> and have it implement the <c>IPlayer</c> interface.
+      Instead, if we want an object that plays <c>OneRowNim</c>, we would define 
+      a <c>OneRowNimPlayer</c> and have it implement the <c>IPlayer</c> interface.
       Similarly, if we want an object that plays checkers,
       we would define a <c>CheckersPlayer</c> and have it implement the <c>IPlayer</c> interface.
+    </p>
+    <p>  
       By using an interface here,
-      our <c>TwoPlayerGame</c> hierarchy can deal with a wide range of  differently named objects that play games,
+      our <c>TwoPlayerGame</c> hierarchy can deal with a wide range of  differently 
+      named objects that play games,
       as long as they implement the <c>IPlayer</c> interface.
-      So, using the <c>IPlayer</c> interface adds flexibility to our game hierarchy and makes it easier to extend it to new,
+      So, using the <c>IPlayer</c> interface adds flexibility to our game hierarchy 
+      and makes it easier to extend it to new,
       yet undefined, classes.
       We will discuss the details of how to design a game player in one of the following sections.
     </p>
+  </subsection>
+  <subsection>
+    <title>Superclass Method Implementations</title>    
     <p>
-      Turning now to the methods defined in <c>TwoPlayerGame</c>, we have already seen implementations of <c>getPlayer()</c>, <c>setPlayer()</c>, and <c>changePlayer()</c> in the <c>OneRowNim</c> class.
+      Turning now to the methods defined in <c>TwoPlayerGame</c>, we have already seen 
+      implementations of <c>getPlayer()</c>, <c>setPlayer()</c>, and <c>changePlayer()</c> 
+      in the <c>OneRowNim</c> class.
       We will just move those implementations up to the superclass.
       The <c>getNComputers()</c> method is the accessor method for the <c>nComputers</c> variable,
       and its implementation is routine.
@@ -192,29 +232,34 @@ public void addComputerPlayer(IPlayer player) {
    else
       return; // No more than 2 players
    ++nComputers;
-  }
+}
  </input></program>
     <p>
       As we noted earlier,
-      the classes that play the various
-<c>TwoPlayerGame</c> s must implement the <c>IPlayer</c> interface.
-      The parameter for this method is of type <c>IPlayer</c>. The algorithm we use checks the current value of <c>nComputers</c>. If it is 0, which means that this is the first <c>IPlayer</c> added to the game,
-      the <c>player</c> is assigned to <c>computer2</c>. This allows the human user to be associated with <c>PLAYERONE</c>, if this is a game between a computer and a human user.
+      the classes that play the various <c>TwoPlayerGame</c>s must implement the <c>IPlayer</c> interface.
+      The parameter for this method is of type <c>IPlayer</c>. The algorithm we use checks 
+      the current value of <c>nComputers</c>. If it is 0, which means that this is the 
+      first <c>IPlayer</c> added to the game,
+      the <c>player</c> is assigned to <c>computer2</c>. This allows the human 
+      user to be associated with <c>PLAYERONE</c>, if this is a game between a computer and a human user.
     </p>
     <p>
       If <c>nComputers</c> equals 1, which means that we are adding a second
-<c>IPlayer</c> to the game,
+      <c>IPlayer</c> to the game,
       we assign that <c>player</c> to <c>computer1</c>. In either of these cases,
       we increment <c>nComputers</c>. Note what happens if <c>nComputers</c> is neither 1 nor 2.
       In that case,
-      we simply return without adding the <c>IPlayer</c> to the game and without incrementing <c>nComputers</c>. This,
+      we simply return without adding the <c>IPlayer</c> to the game and without 
+      incrementing <c>nComputers</c>. This,
       in effect,
-      limits the number of <c>IPlayer</c> s to two. (A more sophisticated design would throw an exception to report an error. but we will leave that for a subsequent chapter.)
+      limits the number of <c>IPlayer</c>s to two. (A more sophisticated design 
+      would throw an exception to report an error. but we will leave that for a subsequent chapter.)
     </p>
     <p>
       The <c>addComputerPlayer()</c> method is used to initialize a game after it is first created.
       If this method is not called,
-      the default assumption is that <c>nComputers</c> equals zero and that <c>computer1</c> and <c>computer2</c> are both <c>null</c>. Here's an example of how it could be used:
+      the default assumption is that <c>nComputers</c> equals zero and that <c>computer1</c> 
+      and <c>computer2</c> are both <c>null</c>. Here's an example of how it could be used:
     </p>
  <program language="java"><input>
  OneRowNim nim = new OneRowNim(11); // 11 sticks
@@ -223,13 +268,16 @@ public void addComputerPlayer(IPlayer player) {
  </input></program>
     <p>
       Note that the <c>NimPlayer()</c> constructor takes a reference to the game as its argument.
-      Clearly, our design should not assume that the names of the <c>IPlayer</c> objects would be known to the <c>TwoPlayerGame</c> superclass.
+      Clearly, our design should not assume that the names of the <c>IPlayer</c> objects 
+      would be known to the <c>TwoPlayerGame</c> superclass.
       This method allows the objects to be passed in at run time.
       We will discuss the details of <c>NimPlayerBad</c> in a subsequent section.
     </p>
     <p>
-      The <c>getRules()</c> method is a new method whose purpose is to return  a string that describes the rules of the particular game.
-      This method is implemented in the <c>TwoPlayerGame</c> class with the intention that it will be overridden in the various subclasses.
+      The <c>getRules()</c> method is a new method whose purpose is to return  
+      a string that describes the rules of the particular game.
+      This method is implemented in the <c>TwoPlayerGame</c> class with the intention 
+      that it will be overridden in the various subclasses.
       For example,
       its implementation in <c>TwoPlayerGame</c> is:
     </p>
@@ -255,10 +303,12 @@ public String getRules() {
 }
  </input></program>
     <p>
-      The idea is that each <c>TwoPlayerGame</c> subclass will take responsibility for specifying its own set of rules in a form that can be displayed to the user.
+      The idea is that each <c>TwoPlayerGame</c> subclass will take responsibility 
+      for specifying its own set of rules in a form that can be displayed to the user.
     </p>
     <p>
-      You might recognize that defining <c>getRules()</c> in the superclass and allowing it to be overridden in the subclasses is a form of  polymorphism.
+      You might recognize that defining <c>getRules()</c> in the superclass and 
+      allowing it to be overridden in the subclasses is a form of  polymorphism.
       It follows the design of the <c>toString()</c> method,
       which we discussed earlier.
       This design will allow us to use code that takes the following form:
@@ -269,13 +319,18 @@ TwoPlayerGame game = new OneRowNim();
  </input></program>
     <p>
       In this example the call to <c>getRules()</c> is polymorphic.
-      The dynamic binding mechanism is used to invoke the <c>getRules()</c> method that is defined in the <c>OneRowNim</c> class.
+      The dynamic binding mechanism is used to invoke the <c>getRules()</c> method 
+      that is defined in the <c>OneRowNim</c> class.
     </p>
+  </subsection>
+  <subsection>
+    <title>Superclass Abstract Method</title>      
     <p>
       The remaining methods in <c>TwoPlayerGame</c> are defined abstractly.
       The <c>gameOver()</c> and <c>getWinner()</c> methods are both methods that are
       <em>game dependent</em>.
-      That is, the details of their implementations depend on the particular <c>TwoPlayerGame</c> subclass in which they are implemented.
+      That is, the details of their implementations depend on the particular 
+      <c>TwoPlayerGame</c> subclass in which they are implemented.
     </p>
     <p>
       This is good example of how abstract methods should be used in designing a class hierarchy.
@@ -288,9 +343,13 @@ TwoPlayerGame game = new OneRowNim();
     <principle>
       <title>EFFECTIVE DESIGN: Abstract Methods</title>
       <p>
-        Abstract methods allow you to give general definitions in the superclass and to leave the implementation details to the different subclasses.
+        Abstract methods allow you to give general definitions in the superclass 
+        and to leave the implementation details to the different subclasses.
       </p>
     </principle>
+  </subsection>
+  <subsection>
+    <title>The  <c>TwoPlayerGame</c> Implementation</title> 
     <p>
       <xref ref="fig-twoplayercode">Listing</xref>
       shows the complete implementation of the abstract <c>TwoPlayerGame</c> class.
@@ -804,11 +863,12 @@ ui.report("\nPlayer 1 is a " + computer1.toString());
     </p>
     <p>Try NimPlayerBad in the exercise below.</p>        
 
-    </subsection>
-  <exercises><title>Self-Study Exercises</title>
+  <exercises>
+  <title>Self-Study Exercises</title>
       
            
             <exercise label="badnim-ex">
+              <title>Improved One Row Nim</title>
               <statement><p>Run to see NimPlayerBad playing. 
                 Then, add a class <c>NimPlayer</c> (using NimPlayerBad as a guide) that plays the optimal strategy for 
                 <c>OneRowNim</c>. This strategy was described in Chapter<nbsp/>5.</p></statement>
@@ -1168,8 +1228,27 @@ ui.report("\nPlayer 1 is a " + computer1.toString());
                 }  
               </input>
                 </program>
+            <solution>
+          <p>
+          A <c>NimPlayer</c> class that plays the optimal <c>OneRowNim</c> game 
+          would be identical to the <c>NimPlayerBad</c> class except the <c>move():int</c> 
+          method would be replaced with the following implementation:
+          </p>
+ <program language="java"><input>
+public int move() {
+    int sticksLeft = game.getSticks();
+    if (sticksLeft % (game.MAX_PICKUP + 1) != 1)
+        return (sticksLeft - 1) % (game.MAX_PICKUP +1);
+    else {
+        int maxPickup = Math.min(game.MAX_PICKUP, sticksLeft);
+         return 1 + (int)(Math.random() * maxPickup);
+    }
+ }
+ </input></program>
+            </solution>
             </exercise>       
               </exercises>
+</subsection>
 
 
   <subsection>
