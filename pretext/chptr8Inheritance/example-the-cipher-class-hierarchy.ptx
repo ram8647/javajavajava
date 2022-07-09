@@ -4,31 +4,57 @@
     <p>
       Suppose we wish to design a collection of cipher classes,
       including a Caesar cipher and a transposition cipher.
-      Because the basic operations used in all forms of encryption are the same,
-      both the <c>Caesar</c> class and the <c>Transpose</c> class will have methods to <c>encrypt()</c> and <c>decrypt()</c> messages,
-      where each message is assumed to be a string of words separated by spaces.
-      These methods will take a <c>String</c> of words and translate each word using the encoding method that is appropriate for that cipher.
-      Therefore, in addition to
-<c>encrypt()</c> and <c>decrypt()</c>, each cipher class will need polymorphic <c>encode()</c> and <c>decode()</c> methods,
-      which take a single word and encode or decode it according to the rules of that particular cipher.
     </p>
     <p>
-      From a design perspective the <c>encrypt()</c> and <c>decrypt()</c> methods will be the same for every class: They simply break the message into words and encode or decode each word.
+      Because the basic operations used in all forms of encryption are the same,
+      both the <c>Caesar</c> class and the <c>Transpose</c> class will have methods to 
+      <term>encrypt</term> and <term>decrypt</term> messages,
+      where each message is assumed to be a string of words separated by spaces.
+      These methods will take a <c>String</c> of words and translate each word using 
+      the encoding method that is appropriate for that cipher.
+    </p>
+    <pre>
+      encrypt: Take a sentence and encode each word.
+      decrypt: take a sentence and decode each word.
+    </pre>
+    <p>
+      In addition to <c>encrypt()</c> and <c>decrypt()</c>, each cipher class will 
+      need polymorphic <term>encode</term> and <term>decode</term> methods,
+      which take a single word and encode or decode it according to the rules of 
+      that particular cipher.
+    </p>
+    <pre>
+      encode: Take a word and encode it.
+      decode: take a word and decode it.
+    </pre>
+</introduction>
+  <subsection>
+    <title>Class Hierarchy</title>
+
+    <p>
+      From a design perspective the <c>encrypt()</c> and <c>decrypt()</c> methods will 
+      be the same for every class: They simply break the message into words and 
+      encode or decode each word.
+    </p>
+    <p>
       However, the
-<c>encode()</c> and <c>decode()</c> methods will be different for each different cipher.
+      <c>encode()</c> and <c>decode()</c> methods will be different for each different cipher.
       The <c>Caesar.encode()</c> method should replace each letter of a word with its substitute,
-      whereas the
-<c>Transpose.encode()</c> method should rearrange the letters of the word.
+      whereas the <c>Transpose.encode()</c> method should rearrange the letters of the word.
       Given these considerations, how should we design this set of classes?
     </p>
     <p>
       Because all of the various ciphers will have the same methods,
       it will 
-      be helpful to define a common <c>Cipher</c> superclass (<xref ref="fig-cipherhier"></xref>). <c>Cipher</c> will encapsulate those features that the individual cipher classes have in common<mdash/>the
-<c>encrypt()</c>, <c>decrypt()</c>, <c>encode()</c>, and <c>decode()</c> methods.
+      be helpful to define a common <c>Cipher</c> superclass 
+      (<xref ref="fig-cipherhier"></xref>), which will encapsulate those 
+      features that the individual cipher classes have in common<mdash/>the
+      <c>encrypt()</c>, <c>decrypt()</c>, <c>encode()</c>, and <c>decode()</c> methods.
     </p>
-    <figure xml:id="fig-cipherhier"><caption>Cipher class</caption></figure>
+    <figure xml:id="fig-cipherhier">
+    <caption>Cipher class</caption>
       <image width="50%" source="chptr07/p380f1.png"/> 
+    </figure>
       
     <p>
       Some of these methods can be implemented in the <c>Cipher</c> class itself.
@@ -37,9 +63,6 @@
       encode each word in the message,
       and return a <c>String</c> result.
       The following method definition will work for any cipher:
-    </p>
-    <p>
-      
     </p>
  <program language="java"><input>
 public String encrypt(String s) {
@@ -53,15 +76,18 @@ public String encrypt(String s) {
  </input></program>
     <p>
       This method creates a local <c>StringBuffer</c> variable,
-<c>result</c>, and uses <c>StringTokenizer</c> to break the original
-<c>String</c> into its component words.
+      <c>result</c>, and uses <c>StringTokenizer</c> to break the original
+      <c>String</c> into its component words.
       It uses the <c>encode()</c> method to encode the word,
-      appending the result into <c>result</c>. The result is converted back into a <c>String</c> and returned as the encrypted translation of
+      appending the result into <c>result</c>. The result is converted back 
+      into a <c>String</c> and returned as the encrypted translation of
       <em>s</em>, the original message.
     </p>
     <p>
       If we define <c>encrypt()</c> in the superclass,
       it will be inherited  by all of <c>Cipher</c>'s subclasses.
+    </p>
+<!--
       Thus, if we define <c>Caesar</c> and <c>Transpose</c> as  
       instances of these classes will be able to use the <c>encrypt()</c> method.
     </p>
@@ -69,16 +95,18 @@ public String encrypt(String s) {
 public class Caesar extends Cipher { ... }
 public class Transpose extends Cipher { ... }
  </input></program>
-    
+-->
     <p>
       On the other hand,
-      the polymorphic <c>encode()</c> method cannot be implemented within <c>Cipher</c>. 
-      This is because unlike the <c>encrypt()</c> method,
+      the polymorphic <c>encode()</c> method cannot be implemented within <c>Cipher</c>, 
+      because unlike the <c>encrypt()</c> method,
       which is the same for every <c>Cipher</c> subclass,
       the <c>encode()</c> method will be different for every subclass.
-      However, by declaring the <c>encode()</c> method as <c>abstract</c>, we can leave its implementation up to the <c>Cipher</c> subclasses.
-      Thus, within the
-<c>Cipher</c> class,
+    </p>
+    <p>
+      So, by declaring the <c>encode()</c> method as <c>abstract</c>, we will 
+      leave its implementation up to the <c>Cipher</c> subclasses.
+      Thus, within the <c>Cipher</c> class,
       we would define <c>encode()</c> and <c>decode()</c> as follows:
     </p>
  <program language="java"><input>
@@ -86,31 +114,31 @@ public class Transpose extends Cipher { ... }
 public abstract String encode(String word);
 public abstract String decode(String word);
  </input></program>
+ <!--
     <p>
-      These declarations within the <c>Cipher</c> class tell the compiler that these methods will be implemented in <c>Cipher</c>'s subclasses.
+      These declarations within the <c>Cipher</c> class tell the compiler that these 
+      methods will be implemented in <c>Cipher</c>'s subclasses.
       By defining it as <c>abstract</c>, <c>encode()</c> can be used in the <c>Cipher</c> class,
       as it is within the <c>encrypt()</c> method.
     </p>
-  </introduction>
+-->
+  </subsection>
   <subsection>
-    <title>Class Design: <c>Caesar</c></title>
+    <title>Class Design: <c>Cipher</c></title>
     <p>
-      <xref ref="fig-cipher">Listing</xref>
-      provides the full definition of the
-<c>Cipher</c> class.
-      The encode() and <c>decode()</c> methods are declared abstract.
-      They are intended to be implemented by
-<c>Cipher</c>'s subclasses.
+      <xref ref="fig-cipher">Listing</xref> provides the full definition of the <c>Cipher</c> class.
+      The abstract encode() and <c>decode()</c> methods will be implemented by <c>Cipher</c>'s 
+      subclasses.
     </p>
-    <listing xml:id="fig-cipher">
-      <caption>The <c>abstract Cipher</c> class.</caption>
+<listing xml:id="fig-cipher">
+  <caption>The <c>abstract Cipher</c> class.</caption>
       
  <program language="java"><input>
 import java.util.*;
 public abstract class Cipher {
   public String encrypt(String s) {
     StringBuffer result = new StringBuffer("");         // Use a StringBuffer
-    StringTokenizer words = new StringTokenizer(s);     // Break s into its words
+    StringTokenizer words = new StringTokenizer(s);     // Break s into words
     while (words.hasMoreTokens()) {                     // For each word in s
       result.append(encode(words.nextToken()) + " ");   //  Encode it
     }
@@ -130,10 +158,12 @@ public abstract class Cipher {
  </input></program>
 </listing>
     <p>
-      Note again that <c>encrypt()</c> and <c>decrypt()</c>, which are implemented in Cipher , invoke <c>encode()</c> and <c>decode()</c>,  respectively,
-      which are declared in <c>Cipher</c> but implemented in <c>Cipher</c>'s subclasses.
-      Java's dynamic binding mechanism will take care of invoking the appropriate implementation of
-<c>encode()</c> or <c>decode()</c>, depending on what type of object is involved.
+      Note again that <c>encrypt()</c> and <c>decrypt()</c> call <c>encode()</c> and <c>decode()</c>,  
+      respectively.  Java's dynamic binding mechanism will take care of invoking the 
+      appropriate implementation of <c>encode()</c> or <c>decode()</c>, depending on what 
+      type of cipher is involved.
+    </p>
+    <!--
       For example,
       if <c>caesar</c> and <c>transpose</c> are <c>Caesar</c> and <c>Transpose</c> objects,
       respectively,
@@ -148,36 +178,25 @@ transpose.encrypt("hello world");
     <p>
       When <c>caesar.encrypt()</c> is called,
       it will in turn invoke <c>caesar.encode()</c><mdash/>that is,
-      it will call the
-<c>encode()</c> method implemented in the <c>Caesar</c> class.
-      When
-<c>transpose.encrypt()</c> is invoked,
-      it will in turn invoke
-<c>transpose.encode()</c>. In this way,
+      it will call the <c>encode()</c> method implemented in the <c>Caesar</c> class.
+      When <c>transpose.encrypt()</c> is invoked,
+      it will in turn invoke <c>transpose.encode()</c>. In this way,
       each object can perform the encoding algorithm appropriate for its type of  cipher.
     </p>
+-->
   </subsection>
   <subsection>
     <title>Algorithm Design: Shifting Characters</title>
     <p>
-      The <c>Caesar</c> class is defined as an extension of <c>Cipher</c>(<xref ref="fig-caesar"></xref>).
-      The only methods implemented in <c>Caesar</c> are <c>encode()</c> and <c>decode()</c>. The <c>encode()</c> method takes a <c>String</c> parameter and returns a <c>String</c> result.
-      It takes each character of its parameter (<c>word.charAt(k)</c>) and performs a Caesar shift on the character.
-      Note how the shift is done:
+      The <c>Caesar</c> class (<xref ref="fig-caesar">Listing</xref>) extends 
+      <c>Cipher</c> and implements its own version of <c>encode()</c> and <c>decode()</c>. 
     </p>
- <program language="java"><input>
-ch = (char)('a' + (ch -'a'+ 3) % 26);// Caesar shift
- </input></program>
-    <p>
-      Recall from Chapter<nbsp/>5 that <c>char</c> data in Java are represented as 16-bit integers.
-      This enables us to manipulate characters as numbers.
-      Thus, to shift a character by 3, we simply add 3 to its integer representation.
-    </p>
-    <listing xml:id="fig-caesar">
-      <caption>The <c>Caesar</c> class.</caption>
-      
- <program language="java"><input>
+
+<listing xml:id="fig-caesar">
+  <caption>The <c>Caesar</c> class.</caption>
+  <program language="java"><input>
 public class Caesar extends Cipher {
+
   public String encode(String word) {
     StringBuffer result = new StringBuffer(); // Initialize a string buffer
     for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -187,6 +206,7 @@ public class Caesar extends Cipher {
     }
     return result.toString();              // Return the result as a string
   } // encode()
+  
   public String decode(String word) {
     StringBuffer result = new StringBuffer(); // Initialize a string buffer
     for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -200,23 +220,135 @@ public class Caesar extends Cipher {
  </input></program>
 </listing>
 
+    <p>
+      The <c>encode()</c> method takes a word and returns the result of
+      shifting each of the word's letters. How do we do that?
+      Fortunately, because <c>char</c> data in Java are represented as 16-bit integers. 
+      we can use some arithmetic to perform the shift.
+    </p>
+    <p>
+      For example, the character 'h' has an ASCII code of 104. Adding
+      3 gives 107, the ASCII code for 'k', which is shifted 3 characters to the right of 'h'.
+    </p>
+    <p>
+      The problem is this doesn't always work so simply. For example, the ASCII 
+      code for 'y' is 121. Adding 3 gives 124, the ASCII code for '|', which is not 
+      our desired result. To fix this, what we need to do 
+      is <q>wrap around</q> to the beginning of the alphabet,
+      so that 'y' gets shifted into 'b'.
+    </p>
+    <p>
+      In order to accomplish this wrap around we need to do some <term>modular arithmetic</term>.  
+      The alphabet has 26 letters and
+      for any positive integer <em>N</em>, <em>N % 26</em> will always give a number 
+      between 0 and 25. If we number the letters 'a' to 'z' as 0 to 25, then 'y' would be 24. 
+      Adding 3 gives 27 and 27 % 26 would give 1, which is the letter 'b'. Thus, 
+      if we can convert the letters to numbers between 0 and 25, we can use simple arithmetic 
+      to perform the shift. This leads to the following algorithm.
+    </p>
+    <algorithm>
+    <title>Ceasar shift the letter ch</title>
+    <program language="java"><input>
+    1. Convert ch to a number between 0 and 25.
+    2. Add the shift to that number.
+    3. Divide that number % 26.
+    4. Convert the resulting number back to a character.
+    </input></program>
+    </algorithm>
+    <p>
+      For step one of this algorithm we can convert any letter
+      'a' to 'z' into a number 0 to 25 simply by subtracting
+      the letter 'a' from it:      
+    </p>
+ <program language="java"><input>
+'a' - 'a' = 0
+'b' - 'a' = 1
+'c' - 'a' = 2
+...
+'z' - 'a' = 25
+ </input></program>
+<p>
+  Adding the shift and dividing % 26 gives us a number between 0 and 25. To convert that
+  back into a letter, we can just add the letter 'a' to it and use the <c>(char)</c>
+  cast operator to convert it to a character.
+</p>
+
+    <p>
+      If we combine these steps, we get the following expression for shifting
+      <c>ch</c> by  3:
+    </p>
+    <program language="java"><input>
+        (char)('a' + (ch -'a'+ 3) % 26)
+    </input></program>
+    <p>which breaks down as follows:
+        <program language="java"><input>
+        ch -'a'                          // Convert to 0 to 25
+        (ch -'a'+ 3)                     // Add shift
+        (ch -'a'+ 3) % 26                // Divide % 26
+        ('a' + (ch -'a'+ 3) % 26)        // Add 'a'
+        (char)('a' + (ch -'a'+ 3) % 26)  // Cast back into a letter
+    </input></program>
+    </p>
+    <p>
+      To summarize,
+      we can shift any character by 3 if we map it into the range 0 to 25, then add 3 to it mod 26,
+      then map that result back into  the<nbsp/>range
+      'a' to 'z'.
+    </p>
+<!--
+      Thus, shifting <em>y</em> would go as follows:
+    </p>
+
+ <program language="java"><input>
+(char)('a' + (ch -'a'+ 3) % 26)   //  Perform Caesar shift
+(char)('a' + ('y' - 'a' +3) % 26) //   on 'y'
+(char)(97 + (121 - 97 + 3) % 26)      //  Map 'y' to 0..25
+(char)(97 + (27 % 26))     //  Shift by 3, wrapping around
+(char)(97 + 1)            //  Map result back to 'a' to 'z'
+(char)(98)                //  Convert from int to char 'b'
+ </input></program>
+ -->
+    <p>
+      The algorithm for the reverse shift in the <c>decode()</c>  method is similar.
+      Accept in this case the reverse Caesar shift is done by shifting by 23, 
+      which is <m>26-3</m>. If the original shift is 3, we can reverse that by shifting 
+      an additional 23.  Together this gives a shift of 26,
+      which will give us back our original letter.
+    </p>
+
 <p>See this code in action below.</p>
 
 <activity label="caesar">
-  <statement><p>Run the code below. Change the text in main to another lowercase string and try again.
-    This code will only work with lowercase letters.</p>
+  <statement>
+  <p>Run the code below. Change the text in main to another 
+    lowercase string and try again.
+    This code will only work with lowercase letters.
+  </p>
   </statement>
   <program language="java" interactive="activecode"><input>
     import java.util.*;
+
+    public class TestCipher {
+    
+      public static void main(String[] args) {
+        Caesar caesar = new Caesar(); 
+        String text = "hello world";
+        String encryptTxt = caesar.encrypt(text);
+        System.out.println(text + " encrypted is " + encryptTxt);
+      }    
+    }
+
     public abstract class Cipher {
+  
       public String encrypt(String s) {
         StringBuffer result = new StringBuffer("");         // Use a StringBuffer
-        StringTokenizer words = new StringTokenizer(s);     // Break s into its words
+        StringTokenizer words = new StringTokenizer(s);     // Break s into words
         while (words.hasMoreTokens()) {                     // For each word in s
           result.append(encode(words.nextToken()) + " ");   //  Encode it
         }
         return result.toString();                            // Return the result
       } // encrypt()
+  
       public String decrypt(String s) {
         StringBuffer result = new StringBuffer("");        // Use a StringBuffer
         StringTokenizer words = new StringTokenizer(s);    // Break s into words
@@ -225,20 +357,20 @@ public class Caesar extends Cipher {
         }
         return result.toString();                       // Return the decryption
       } // decrypt()
+  
       public abstract String encode(String word);            // Abstract methods
       public abstract String decode(String word);
       
-      public static void main(String[] args)
-      {
+      public static void main(String[] args) {
          Caesar caesar = new Caesar(); 
          String text = "hello world";
          String encryptTxt = caesar.encrypt(text);
          System.out.println(text + " encrypted is " + encryptTxt);
       }
-    
     } // Cipher
 
     class Caesar extends Cipher {
+      
       public String encode(String word) {
         StringBuffer result = new StringBuffer(); // Initialize a string buffer
         for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -248,6 +380,7 @@ public class Caesar extends Cipher {
         }
         return result.toString();              // Return the result as a string
       } // encode()
+      
       public String decode(String word) {
         StringBuffer result = new StringBuffer(); // Initialize a string buffer
         for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -258,123 +391,41 @@ public class Caesar extends Cipher {
         return result.toString();            // Return the result as a string
       } // decode()
     } // Caesar
-     </input></program>
+  </input></program>
 </activity>
-    <p>
-      For example,
-      suppose that the character (<c>ch</c>) is <em>h</em>,
-      which has  an ASCII code of 104.
-      We want to shift it by 3, giving
-      <em>k</em>, which has a code of 107.
-      In this case,
-      we could simply add 3 to 104 to get the desired result.
-      However, suppose that <c>ch</c> was the character <em>y</em>,
-      which has an ASCII code of 121.
-      If we simply add 3 in this case,
-      we get 124, a code that corresponds to the symbol
-      <q>|,</q>
-      which is not our desired result.
-      Instead, we want the shift in this case to
-      <q>wrap around</q>
-      to the beginning of the alphabet,
-      so that <em>y</em> gets shifted into <em>b</em>.
-      In order to accomplish this we need to do some modular arithmetic.
-    </p>
-    <p>
-      Let's suppose the 26 characters
-      <em>a</em> to <em>z</em>
-      were numbered 0 through 25,
-      so that <em>a</em> corresponds to 0, <em>b</em>
-      to 1, and so on up to <em>z</em> as 25.
-      If we take any number <em>N</em>
-      and divide it (modulo 26),
-      we would get a number between 0 and 25.
-      Suppose, for example, <em>y</em> were numbered 24.
-      Shifting it by 3 would give us 27,
-      and <c>27 % 26</c> would give us 1, which corresponds to <em>b</em>.
-      So, if the <em>a</em> to <em>z</em>
-      were numbered 0 through 25,
-      then we can shift any character within that range by using the following formula:
-    </p>
- <program language="java"><input>
-(ch + 3) % 26         // Shift by 3 with wraparound
- </input></program>
-    <p>
-      To map a character in the range
-      <em>a</em> to <em>z</em>
-      onto the integers 0 to 25,
-      we can simply subtract <em>a</em> from it:
-    </p>
- <program language="java"><input>
-'a' - 'a' = 0
-'b' - 'a' = 1
-'c' - 'a' = 2
-...
-'z' - 'a' = 25
- </input></program>
-    <p>
-      Finally, we simply map the numbers 0 through 25 back to the characters
-      <em>a</em> to <em>z</em>
-      to complete the shift operation:
-    </p>
- <program language="java"><input>
-(char)('a' + 0) = 'a'
-(char)('a' + 1) = 'b'
-(char)('a' + 2) = 'c'
-...
-(char)('a' + 25) = 'z'
- </input></program>
-    <p>
-      Note the use here of the cast operator <c>(char)</c> to covert an integer into a 
-      <c>char</c>.
-    </p>
-    <p>
-      To summarize,
-      we can shift any character by 3 if we map it into the range 0 to 25, then add 3 to it mod 26,
-      then map that result back into  the<nbsp/>range
-      <em>a</em> to <em>z</em>.
-      Thus, shifting <em>y</em> would go as follows:
-    </p>
- <program language="java"><input>
-(char)('a' + (ch -'a'+ 3) % 26)   //  Perform Caesar shift
-(char)('a' + ('y' - 'a' +3) % 26) //   on 'y'
-(char)(97 + (121 - 97 + 3) % 26)      //  Map 'y' to 0..25
-(char)(97 + (27 % 26))     //  Shift by 3, wrapping around
-(char)(97 + 1)            //  Map result back to 'a' to 'z'
-(char)(98)                //  Convert from int to char 'b'
- </input></program>
-    <p>
-      Note that in <c>decode()</c> a reverse Caesar shift is done by shifting by 23, which is <m>26-3</m>.
-      If the original shift is 3, we can reverse that by shifting an additional 23.
-      Together this gives a shift of 26,
-      which will give us back our original string.
-    </p>
+
   </subsection>
   <subsection>
     <title>Class Design: <c>Transpose</c></title>
     <p>
-      The <c>Transpose</c> class (<xref ref="fig-transpose"></xref>) is structured the same as the <c>Caesar</c> class.
+      The <c>Transpose</c> class (<xref ref="fig-transpose"></xref>) is structured 
+      the same as the <c>Caesar</c> class.
       It implements both the
-<c>encode()</c> and <c>decode()</c> methods.
+      <c>encode()</c> and <c>decode()</c> methods.
       The key element here is the transpose operation,
       which in this case is a simple reversal of the letters in the word.
       Thus,
       <q>hello</q>
       becomes
       <q>olleh</q>. This is very easy to do when using the <c>StringBuffer.reverse()</c> method.
-      The
-<c>decode()</c> method is even simpler,
-      because all you need to do in this case is call <c>encode()</c>. Reversing the reverse of a string gives you back the original string.
     </p>
-    <listing xml:id="fig-transpose">
-      <caption>The <c>Transpose</c> class<idx><h>Transpose class</h></idx>.</caption>
+    <p>
+      The <c>decode()</c> method is even simpler,
+      because all you need to do in this case is call <c>encode()</c>. Reversing the 
+      reverse of a string gives you back the original string.
+    </p>
+
+<listing xml:id="fig-transpose">
+  <caption>The <c>Transpose</c> class</caption>
  <program language="java"><input>
 public class Transpose extends Cipher {
+
   // encode() reverses and returns a word
   public String encode(String word) {
     StringBuffer result = new StringBuffer(word);
     return result.reverse().toString();
   } // encode()
+
   public String decode(String word) {
     return encode(word);         // Just call encode
   } // decode
@@ -413,7 +464,8 @@ public class TestEncrypt {
  </input></program>
 </listing>
     <p>
-      It creates a <c>Caesar</c> cipher and      a <c>Transpose</c> cipher and then encrypts and decrypts the same sentence using each cipher.
+      It creates a <c>Caesar</c> cipher and   a <c>Transpose</c> cipher and 
+      then encrypts and decrypts the same sentence using each cipher.
       If you run this program, it will produce the following output:
     </p>
  <program language="java"><input>
@@ -430,7 +482,8 @@ public class TestEncrypt {
  <p>See this code in action below.</p>
 
 <activity label="test-encrypt">
-  <statement><p>Run the code below. Change the plain variable in main to another lowercase string and try again.
+  <statement><p>Run the code below. Change the plain variable in main to another 
+  lowercase string and try again.
     This code will only work with lowercase letters.</p>
   </statement>
   <program language="java" interactive="activecode"><input>
@@ -508,22 +561,33 @@ public class TestEncrypt {
     } // Transpose
      </input></program>
 </activity>
-
-    </subsection>
     
-    <exercises xml:id="self-study-exercises-crypto"><title>Self-Study Exercises</title>
-      
-           
+    <exercises xml:id="self-study-exercises-crypto">
+    <title>Self-Study Exercises</title>
 
           <exercise label="caesar-shift-exercise">
-            <statement><p>Modify the <c>Caesar</c> class so that it will allow various 
+          <title>Caesar Shift</title>
+            <statement>
+            <p>Modify the <c>Caesar</c> class so that it will allow various 
               sized shifts to be used, instead of just a shift of size 3.
               (<em>Hint</em>: Use an instance variable in the Caesar class to represent 
-              the shift, add a constructor to set it, and change the encode method to use it.)</p>
+              the shift, add a constructor to set it, and change the encode method to use it.)
+            </p>
             </statement>
             <program language="java" interactive="activecode"><input>
               import java.util.*;
-              public abstract class Cipher {
+
+              public class TestCipher {
+                public static void main(String[] args)  {
+                  int shift = 7; 
+                  Caesar caesar = new Caesar(); 
+                  String text = "hello world";
+                  String encryptTxt = caesar.encrypt(text);
+                  System.out.println(text + " encrypted with shift " + shift + " is " + encryptTxt);
+                }
+              }
+
+              abstract class Cipher {
                 public String encrypt(String s) {
                   StringBuffer result = new StringBuffer("");         // Use a StringBuffer
                   StringTokenizer words = new StringTokenizer(s);     // Break s into its words
@@ -550,8 +614,7 @@ public class TestEncrypt {
                    String text = "hello world";
                    String encryptTxt = caesar.encrypt(text);
                    System.out.println(text + " encrypted with shift " + shift + " is " + encryptTxt);
-                }
-              
+                }  
               } // Cipher
           
               class Caesar extends Cipher {
@@ -575,23 +638,106 @@ public class TestEncrypt {
                 } // decode()
               } // Caesar
                </input></program>
-          </exercise>
+               <solution>
+    <program language="java"><input>
+    import java.util.*;
+    public class TestCipher {
+       public static void main(String[] args)  {
+         int shift = 7; 
+         Caesar caesar = new Caesar(shift); 
+         String text = "hello world";
+         String encryptTxt = caesar.encrypt(text);
+         String decryptTxt =  caesar.decrypt(encryptTxt);
+         System.out.println(text + " encrypted with shift " + shift + " is " + encryptTxt);
+         System.out.println(encryptTxt + " decrypted with shift " + shift + " is " + decryptTxt);
+       }
+    }
+    
+    abstract class Cipher {
+      public String encrypt(String s) {
+        StringBuffer result = new StringBuffer("");         // Use a StringBuffer
+        StringTokenizer words = new StringTokenizer(s);     // Break s into its words
+        while (words.hasMoreTokens()) {                     // For each word in s
+          result.append(encode(words.nextToken()) + " ");   //  Encode it
+        }
+        return result.toString();                            // Return the result
+      } // encrypt()
+
+      public String decrypt(String s) {
+        StringBuffer result = new StringBuffer("");        // Use a StringBuffer
+        StringTokenizer words = new StringTokenizer(s);    // Break s into words
+        while (words.hasMoreTokens()) {                    // For each word in s
+          result.append(decode(words.nextToken()) + " ");  //  Decode it
+        }
+        return result.toString();                       // Return the decryption
+      } // decrypt()
+
+      public abstract String encode(String word);            // Abstract methods
+      public abstract String decode(String word);    
+    } // Cipher
+
+    class Caesar extends Cipher {
+      private int shift = 3;
+      public Caesar(int shft) {
+         shift = shft;
+      }
+      public String encode(String word) {
+        StringBuffer result = new StringBuffer(); // Initialize a string buffer
+        for (int k = 0; k &lt; word.length(); k++) { // For each character in word
+          char ch = word.charAt(k);               //  Get the character
+          ch = (char)('a' + (ch -'a'+ shift) % 26);   //  Perform caesar shift
+          result.append(ch);                   //  Append it to new string
+        }
+        return result.toString();              // Return the result as a string
+      } // encode()
+
+      public String decode(String word) {
+        StringBuffer result = new StringBuffer(); // Initialize a string buffer
+        for (int k = 0; k &lt; word.length(); k++) { // For each character in word
+        char ch = word.charAt(k);                 //  Get the character
+           ch = (char)('a' + (ch - 'a' + (26 - shift)) % 26); //  Perform reverse shift
+           result.append(ch);                     
+           //  Append it to new string
+        }
+        return result.toString();            // Return the result as a string
+      } // decode()
+    } // Caesar
+    </input></program>
+    </solution>
+   </exercise>
         
 
   
 
           <exercise label="transpose-shift-exercise">
+            <title>Transpose Rotate</title>
             <statement><p> Modify <c>Transpose.encode()</c> so that it uses a 
               rotation instead of a reversal.
               That is, a word like
               <q>hello</q>
               should be encoded as
               <q>ohell</q>
-              with a rotation of one character. (Hint: use a loop to append the letters into a new string)
-            </p>   </statement>
+              with a rotation of one character. 
+              (Hint: use a loop to append the letters into a new string)
+            </p>   
+            </statement>
             <program language="java" interactive="activecode"><input>
               import java.util.*;
-              public abstract class Cipher {
+              
+              public class TestTranspose {
+                public static void main(String[] args) {
+                  String plain = "this is the secret message";   // Here's the message
+        
+                  Transpose transpose = new Transpose();
+                  String secret = transpose.encrypt(plain);
+                  System.out.println("\n ********* Transpose Cipher Encryption *********");
+                  System.out.println("PlainText: " + plain);    // Display the results
+                  System.out.println("Encrypted: " + secret);
+                  System.out.println("Decrypted: " + transpose.decrypt(secret));// Decrypt
+                }
+              }
+              
+              abstract class Cipher {
                 public String encrypt(String s) {
                   StringBuffer result = new StringBuffer("");         // Use a StringBuffer
                   StringTokenizer words = new StringTokenizer(s);     // Break s into its words
@@ -600,6 +746,7 @@ public class TestEncrypt {
                   }
                   return result.toString();                            // Return the result
                 } // encrypt()
+              
                 public String decrypt(String s) {
                   StringBuffer result = new StringBuffer("");        // Use a StringBuffer
                   StringTokenizer words = new StringTokenizer(s);    // Break s into words
@@ -608,22 +755,9 @@ public class TestEncrypt {
                   }
                   return result.toString();                       // Return the decryption
                 } // decrypt()
-                public abstract String encode(String word);            // Abstract methods
-                public abstract String decode(String word);
-                
-                public static void main(String[] args)
-                {
-                  String plain = "this is the secret message";   // Here's the message
-        
-                  Transpose transpose = new Transpose();
-                  secret = transpose.encrypt(plain);
-                  System.out.println("\n ********* Transpose Cipher Encryption *********");
-                  System.out.println("PlainText: " + plain);    // Display the results
-                  System.out.println("Encrypted: " + secret);
-                  System.out.println("Decrypted: " + transpose.decrypt(secret));// Decrypt
-                
-                }
               
+                public abstract String encode(String word);            // Abstract methods
+                public abstract String decode(String word);              
               } // Cipher
           
               class Transpose extends Cipher {
@@ -639,8 +773,20 @@ public class TestEncrypt {
                 } // decode
               } // Transpose
                </input></program>
+  <solution>
+  <program language="java" interactive="activecode"><input>
+// Modification to encode():
+public String encode(String word) {
+    StringBuffer result = new StringBuffer();
+    for (int k=0; k &lt; word.length(); k++)
+        result.append(word.charAt((k+2) % word.length()));
+    return result.toString();
+}
+
+ </input></program>
+  </solution>
           </exercise>
-        
-        
     </exercises>
+  </subsection>
+
 </section>
