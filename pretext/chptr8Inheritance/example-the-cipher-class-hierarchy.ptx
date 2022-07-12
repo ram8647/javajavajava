@@ -295,19 +295,6 @@ public class Caesar extends Cipher {
       then map that result back into  the<nbsp/>range
       'a' to 'z'.
     </p>
-<!--
-      Thus, shifting <em>y</em> would go as follows:
-    </p>
-
- <program language="java"><input>
-(char)('a' + (ch -'a'+ 3) % 26)   //  Perform Caesar shift
-(char)('a' + ('y' - 'a' +3) % 26) //   on 'y'
-(char)(97 + (121 - 97 + 3) % 26)      //  Map 'y' to 0..25
-(char)(97 + (27 % 26))     //  Shift by 3, wrapping around
-(char)(97 + 1)            //  Map result back to 'a' to 'z'
-(char)(98)                //  Convert from int to char 'b'
- </input></program>
- -->
     <p>
       The algorithm for the reverse shift in the <c>decode()</c>  method is similar.
       Accept in this case the reverse Caesar shift is done by shifting by 23, 
@@ -338,7 +325,7 @@ public class Caesar extends Cipher {
       }    
     }
 
-    public abstract class Cipher {
+    abstract class Cipher {
   
       public String encrypt(String s) {
         StringBuffer result = new StringBuffer("");         // Use a StringBuffer
@@ -360,13 +347,6 @@ public class Caesar extends Cipher {
   
       public abstract String encode(String word);            // Abstract methods
       public abstract String decode(String word);
-      
-      public static void main(String[] args) {
-         Caesar caesar = new Caesar(); 
-         String text = "hello world";
-         String encryptTxt = caesar.encrypt(text);
-         System.out.println(text + " encrypted is " + encryptTxt);
-      }
     } // Cipher
 
     class Caesar extends Cipher {
@@ -596,6 +576,7 @@ public class TestEncrypt {
                   }
                   return result.toString();                            // Return the result
                 } // encrypt()
+
                 public String decrypt(String s) {
                   StringBuffer result = new StringBuffer("");        // Use a StringBuffer
                   StringTokenizer words = new StringTokenizer(s);    // Break s into words
@@ -605,19 +586,11 @@ public class TestEncrypt {
                   return result.toString();                       // Return the decryption
                 } // decrypt()
                 public abstract String encode(String word);            // Abstract methods
-                public abstract String decode(String word);
-                
-                public static void main(String[] args)
-                {
-                   int shift = 5; 
-                   Caesar caesar = new Caesar(shift); 
-                   String text = "hello world";
-                   String encryptTxt = caesar.encrypt(text);
-                   System.out.println(text + " encrypted with shift " + shift + " is " + encryptTxt);
-                }  
+                public abstract String decode(String word); 
               } // Cipher
           
               class Caesar extends Cipher {
+
                 public String encode(String word) {
                   StringBuffer result = new StringBuffer(); // Initialize a string buffer
                   for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -627,6 +600,7 @@ public class TestEncrypt {
                   }
                   return result.toString();              // Return the result as a string
                 } // encode()
+
                 public String decode(String word) {
                   StringBuffer result = new StringBuffer(); // Initialize a string buffer
                   for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -681,6 +655,7 @@ public class TestEncrypt {
       public Caesar(int shft) {
          shift = shft;
       }
+
       public String encode(String word) {
         StringBuffer result = new StringBuffer(); // Initialize a string buffer
         for (int k = 0; k &lt; word.length(); k++) { // For each character in word
@@ -705,10 +680,6 @@ public class TestEncrypt {
     </input></program>
     </solution>
    </exercise>
-        
-
-  
-
           <exercise label="transpose-shift-exercise">
             <title>Transpose Rotate</title>
             <statement><p> Modify <c>Transpose.encode()</c> so that it uses a 
@@ -768,6 +739,7 @@ public class TestEncrypt {
                 
                   return result.reverse().toString();
                 } // encode()
+
                 public String decode(String word) {
                   return encode(word);         // Just call encode
                 } // decode
@@ -775,17 +747,28 @@ public class TestEncrypt {
                </input></program>
   <solution>
   <program language="java" interactive="activecode"><input>
-// Modification to encode():
-public String encode(String word) {
-    StringBuffer result = new StringBuffer();
-    for (int k=0; k &lt; word.length(); k++)
-        result.append(word.charAt((k+2) % word.length()));
-    return result.toString();
-}
+// Modification to Transpose class for a 2-letter rotation.
+// Note the expression in decode to reverse the rotation: (k + word.length() - 2) 
+      class Transpose extends Cipher {
+        // encode() reverses and returns a word
+        // Modify this to use rotation instead of reverse
+        public String encode(String word) {
+            StringBuffer result = new StringBuffer();
+            for (int k=0; k &lt; word.length(); k++)
+                result.append(word.charAt((k+2) % word.length()));
+            return result.toString();
+        } // encode
+        public String decode(String word) {
+            StringBuffer result = new StringBuffer();
+            for (int k=0; k &lt; word.length(); k++)
+                result.append(word.charAt((k+word.length() -2) % word.length()));
+            return result.toString();
+        } // decode
+      } // Transpose
 
  </input></program>
   </solution>
-          </exercise>
+  </exercise>
     </exercises>
   </subsection>
 
