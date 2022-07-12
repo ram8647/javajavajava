@@ -196,21 +196,25 @@ public class OneRowNim
     A pseudocode description of how a game is played might look like:
   </p>
  <algorithm>
-Choose the initial number of sticks for the game
-  while the game is not over
-  {   Report the state of the game
+ <program language="java"><input>
+  Choose the initial number of sticks for the game
+  while the game is not over {   
+      Report the state of the game
       Process the next move
   }
   Report the state of the game
   Report who the winner is
+</input></program>
 </algorithm>
   <p>
   Here is a version with a main method that chooses a random number of sticks each time through the loop.
   </p>
   
   <activity label="nimRandom">
-    <statement><p>Run the code below a couple times. Use the Show CodeLens button to step through it to understand how the loop in main works.
-      What would happen if you changed the random number to be * 4 instead of * 3? Try it and see.
+    <statement><p>Run the code below a couple times. Use the Show CodeLens 
+      button to step through it to understand how the loop in main works.
+      What would happen if you changed the random number to be * 4 instead 
+      of * 3? Try it and see.
     </p></statement>
   <program language="java" interactive="activecode"><input>
   public class OneRowNim
@@ -288,28 +292,22 @@ Choose the initial number of sticks for the game
 </program>
 </activity>
 
-  <p>  Another version of main is shown in <xref ref="fig-tornclass">Listing</xref>.
-   This version uses the <c>Scanner</c> class  introduced in the previous chapter to get moves from the keyboard for both players.
-    Before each move <c>game.report()</c> describes the state of the game before the user is prompted to input a move for one of the players.
- You can try this code here: <url href="https://replit.com/@BerylHoffman/OneRowNim3" visual="" target="_blank">OneRowNim.java on repl</url>. Run the following code multiple times and enter 1, 2, or 3. 
-</p>
-cd ..
-
- <interactive iframe="iframe/repl-iframe.html" width="95%" aspect="1:1"/>
-  
-
+<activity label="nimScanner">
+  <statement>
+    <p>  
+      This version (<xref ref="fig-tornclass">Listing</xref>)
+       uses the <c>Scanner</c> class  introduced in the previous chapter 
+      to allow the game to be played with keyboard input for each player.
+    </p>
   <listing xml:id="fig-tornclass">
-    <caption>The <c>TestOneRowNim</c> class with a while loop.</caption>
+    <caption>The <c>TestOneRowNim</c> class with keyboard input.</caption>
  <program language="java"><input>
 import java.util.Scanner;
-public class TestOneRowNim
-{
-  public static void main(String argv[])
-  { 
+public class TestOneRowNim {
+  public static void main(String argv[]) { 
     Scanner sc = new Scanner(System.in);
     OneRowNim game = new OneRowNim(11);
-    while(game.gameOver() == false)
-    {   
+    while(game.gameOver() == false)  {   
       game.report();  // Prompt the user
       System.out.print("Input 1, 2, or 3: ");
       int sticks = sc.nextInt(); // Get move
@@ -323,17 +321,31 @@ public class TestOneRowNim
 } // TestOneRowNim
  </input></program>
 </listing>
+    <p>
+      Run the code multiple times and enter 1, 2, or 3. Can you figure 
+      out a winning strategy?   
+    </p>
+     <interactive iframe="iframe/repl-iframe.html" width="95%" aspect="1:1"/>
+    <!--  You can try this code here: <url href="https://replit.com/@BerylHoffman/OneRowNim3" 
+        visual="" target="_blank">OneRowNim.java on repl</url>. 
+      -->
+  </statement>
+
+</activity>
   
   <p>
     Note that the return value of the <c>takeSticks()</c> method is ignored in this test program.
-    We will make use of the return value in test programs in the next chapter when better user interfaces are developed for <c>OneRowNim</c>. Note,
+    We will make use of the return value in test programs in the next chapter when 
+    better user interfaces are developed for <c>OneRowNim</c>. Note,
     however, that taken together,
-    the public methods for <c>OneRowNim</c> provide other objects with an interface that they can use to communicate with individual <c>OneRowNim</c> objects.
+    the public methods for <c>OneRowNim</c> provide other objects with an 
+    interface that they can use to communicate with individual <c>OneRowNim</c> objects.
   </p>
   <principle>
     <title>EFFECTIVE DESIGN: Interfaces</title>
     <p>
-      Well-designed objects provide a useful public interface and protect the object's private elements from other objects.
+      Well-designed objects provide a useful public interface and protect 
+      the object's private elements from other objects.
     </p>
   </principle>
   <p>
