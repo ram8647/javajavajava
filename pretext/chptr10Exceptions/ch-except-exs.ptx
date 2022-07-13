@@ -1,0 +1,219 @@
+<section xml:id="ch-except-exs">
+    <title>Chapter Exercises</title>
+
+  <ol>
+    <li>
+      <p>
+        Explain the difference between the following pairs of terms:
+      </p>
+      <ol>
+        Throwing an exception and <em>catching an exception</em>. Try block and <em>catch block</em>. Catch block and <em>finally block</em>. Try block and <em>finally block</em>. Dynamic scope and <em>static scope</em>. Dialog box and <em>top-level window</em>. Checked and <em>unchecked</em> exception. Method stack and <em>method call</em>.
+      </ol>
+    </li>
+    <li>
+      <p>
+        Fill in the blanks.
+        <ol>
+          <li>
+            <p>
+              <c>__________</c> an exception is Java's way of signaling that some kind of abnormal situation has occurred.
+            </p>
+          </li>
+          <li>
+            <p>
+              The only place that an exception can be thrown in a Java program is within a <c>__________</c> .
+            </p>
+          </li>
+          <li>
+            <p>
+              The block of statements placed within a catch block is generally known as an <c>__________</c> .
+            </p>
+          </li>
+          <li>
+            <p>
+              To determine a statement's <c>__________</c> scope,
+              you have to trace the program's execution.
+            </p>
+          </li>
+          <li>
+            <p>
+              To determine a statement's <c>__________</c> scope,
+              you can just read its definition.
+            </p>
+          </li>
+          <li>
+            <p>
+              When a method is called,
+              a representation of the method call is placed on the <c>__________</c> .
+            </p>
+          </li>
+          <li>
+            <p>
+              The root of Java's exception hierarchy is the <c>__________</c> class.
+            </p>
+          </li>
+          <li>
+            <p>
+              A <c>__________</c> exception must be either caught or declared within the method in which it might be thrown. [4]
+            </p>
+          </li>
+          <li>
+            <p>
+              An <c>__________</c> exception can be left up to Java to handle.
+            </p>
+          </li>
+        </ol>
+      </p>
+    </li>
+    <li>
+      <p>
+        Compare and contrast the four different ways of handling exceptions within a program.
+      </p>
+    </li>
+    <li>
+      <p>
+        Suppose you have a program that asks the user to input a string of no more than five letters.
+        Describe the steps you'd need to take in order to design a <c>StringTooLongException</c> to handle cases where the user types in too many characters.
+      </p>
+    </li>
+    <li>
+      <p>
+        Exceptions require more computational overhead than normal processing.
+        Explain.
+      </p>
+    </li>
+    <li>
+      <p>
+        Suppose the following <c>ExerciseExample</c> program is currently executing the if statement in <c>method2()</c>:
+ <program language="java"><input>
+public class ExerciseExample {
+  public void method1(int M) {
+    try {
+      System.out.println("Entering try block");
+      method2( M );
+      System.out.println("Exiting try block");
+    } catch (Exception e) {
+      System.out.println("ERROR: " + e.getMessage());
+    }
+  } // method1()
+  public void method2(int M) {
+    if (M > 100)
+      throw new ArithmeticException(M + " is too large");
+  }
+  public static void main(String argv[]) {
+    ExerciseExample ex = new ExerciseExample();
+    ex.method1(500);
+  }} // ExerciseExample
+ </input></program>Draw a picture of the method call stack that represents this situation.
+      </p>
+    </li>
+    <li>
+      <p>
+        Repeat the previous exercise for the situation where the program is currently executing the second <c>println()</c> statement in <c>method1()</c>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Draw a hierarchy chart that represents the static scoping relationships among the elements of the <c>ExerciseExample</c> program.
+      </p>
+    </li>
+    <li>
+      <p>
+        What would be printed by the <c>ExerciseExample</c> program when it is run?
+      </p>
+    </li>
+    <li>
+      <p>
+        What would be printed by the <c>ExerciseExample</c> program,
+        if the statement in its main method were changed to
+<c>ex.method1(5)</c>?
+      </p>
+    </li>
+    <li>
+      <p>
+        Consider again the <c>ExerciseExample</c> program.
+        If the exception thrown were <c>Exception</c> rather than
+<c>ArithmeticException</c>, explain why we would get the following error message: <c>java.lang.Exception must be caught, or it must be
+declared<ellipsis /> </c>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Write a <c>try/catch</c> block that throws an
+<c>Exception</c> if the value of variable <c>X</c> is less than zero.
+        The exception should be an instance of <c>Exception</c> and,
+        when it is caught,
+        the message returned by <c>getMessage()</c> should be
+        <q>ERROR: Negative value in X coordinate.</q>
+      </p>
+    </li>
+    <li>
+      <p>
+        Look at the <c>IntFieldTester</c> program (Fig.
+        <xref ref="fig-intbound"></xref>) and the <c>IntField</c> class definition (Fig.
+        <xref ref="fig-intfield2"></xref>).
+        Suppose the user inputs a value that's greater than 100.
+        Show what the method call stack would look like when the <c>IntField.getInt()</c> method is executing the
+<c>num > bound</c> expression.
+      </p>
+    </li>
+    <li>
+      <p>
+        As a continuation of the previous exercise,
+        show what the program's output would be if the user input a value greater than 100.
+      </p>
+    </li>
+    <li>
+      <p>
+        As a continuation of the previous exercise,
+        modify the
+<c>IntOutOfRangeException</c> handler so that it prints the message call stack.
+        Then show what it would print.
+      </p>
+    </li>
+    <li>
+      <p>
+        Define a subclass of <c>RuntimeException</c> named
+<c>InvalidPasswordException</c>, which contains two constructors.
+        The first constructor takes no parameters and an exception thrown with this constructor should return
+        <q>ERROR: invalid password</q>
+        when its
+<c>getMessage()</c> is invoked.
+        The second constructor takes a single
+<c>String</c> parameter.
+        Exceptions thrown with this constructor should return the constructor's argument when <c>getMessage()</c> is invoked.
+      </p>
+    </li>
+    <li>
+      <p>
+        Extend the <c>IntField</c> class so that it will constrain the integer <c>JTextField</c> to an <c>int</c> between both a lower and upper bound.
+        In other words,
+        it should throw an exception if the user types in a value lower than the lower bound or greater than the upper bound.
+      </p>
+    </li>
+    <li>
+      <p>
+        Design Issue: One of the preconditions for the <c>InsertionSort()</c> method (Fig.<nbsp/>9.13) is that its array parameter not be null.
+        Of course, this precondition would fail if the array were passed a null array reference.
+        In that case, Java would throw a <c>NullPointerException</c> and terminate the program.
+        Is this an appropriate way to handle that exception?
+      </p>
+    </li>
+    <li>
+      <p>
+        With respect to the previous exercise,
+        suppose you decide that it is more appropriate to handle the
+<c>NullPointerException</c> by presenting an error dialog.
+        Modify the method to accommodate this behavior.
+      </p>
+    </li>
+    <li>
+      <p>
+        Design Issue: Another possible way to design the
+<c>sequentialSearch()</c> method (Fig.<nbsp/>9.16) would be to have it throw an exception when its key is not found in the array.
+        Is this a good design?
+        Explain.
+      </p>
+    </li>
+  </ol>
+</section>

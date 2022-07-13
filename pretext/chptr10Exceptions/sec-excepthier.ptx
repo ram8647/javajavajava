@@ -1,12 +1,7 @@
-<section xml:id="sec-excepthier">
+<section xml:id="exception-hierarchy">
   <title>Java's Exception Hierarchy</title>
-  <introduction>
-    <figure xml:id="fig-excepthier">
-      <caption>Part of Java's exception hierarchy.  All
-      subclasses of <c>RuntimeException</c> are known as <em>unchecked</em> exceptions.
-      Java programs are not required to catch these exceptions.</caption>
-      <image width="73%" source="chptr10/exchier.png"/>
-    </figure>
+  <subsection><title>Java Predefined Exceptions</title>
+    
     <p>
       The Java class library contains a number of predefined exceptions,
       some of which are shown in <xref ref="fig-excepthier">Figure</xref>.
@@ -16,6 +11,12 @@
       while others are contained in the <c>java.net</c> package.
       In general, exception classes are placed in the package that contains the methods that throw those exceptions.
     </p>
+    <figure xml:id="fig-excepthier">
+      <caption>Part of Java's exception hierarchy.  All
+      subclasses of <c>RuntimeException</c> are known as <em>unchecked</em> exceptions.
+      Java programs are not required to catch these exceptions.</caption>
+      <image width="100%" source="chptr10/exchier.png"/>
+    </figure>
     <p>
       Each of the classes in <xref ref="fig-excepthier">Figure</xref>
       identifies a particular type of exception,
@@ -23,116 +24,154 @@
       Obviously a subclass defines a more specific exception than its superclass.
       Thus, both <c>ArrayIndexOutOfBoundsException</c> and <c>StringIndexOutOfBoundsException</c> are more specific than <c>IndexOutOfBoundsException</c>.
     </p>
-    <table>
-      \TBT{0pc}{Some of Java's important exceptions.}
+    <table xml:id="tab-excepts">
+      <title>
+      Some of Java's important exceptions.</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+        <row bottom="minor">
           <cell><term>Class</term></cell>
           <cell><term>Description</term></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+       
         <row>
           <cell><c>ArithmeticException</c></cell>
-          <cell>Division by zero or some other kind of arithmetic problem\cr
+          <cell>Division by zero or some other kind of arithmetic problem</cell></row>
+          <row><cell>
 <c>ArrayIndexOutOfBoundsException</c></cell>
-          <cell>An array index is less than zero or greater\cr</cell>
-          <cell><nbsp/><nbsp/> than or equal to the array's length\cr
-<c>FileNotFoundException</c></cell>
-          <cell>Reference to a file that cannot be found\cr
-<c>IllegalArgumentException</c></cell>
-          <cell>Calling a method with an improper argument\cr
-<c>IndexOutOfBoundsException</c></cell>
-          <cell>An array or string index is out of bounds\cr
-<c>NullPointerException</c></cell>
-          <cell>Reference to an object that has not been instantiated\cr
-<c>NumberFormatException</c></cell>
-          <cell>Use of an illegal number format, such as when calling a method\cr
-<c>StringIndexOutOfBoundsException</c></cell>
-          <cell>A <c>String</c> index is less than zero or greater than\cr</cell>
-          <cell><nbsp/><nbsp/> or equal to the <c>String</c>'s length</cell>
+          <cell>An array index is less than zero or greater than or equal to the array's length</cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
+        <row><cell>
+<c>FileNotFoundException</c></cell>
+          <cell>Reference to a file that cannot be found</cell></row>
+          <row><cell>
+<c>IllegalArgumentException</c></cell>
+          <cell>Calling a method with an improper argument</cell></row>
+          <row><cell>
+<c>IndexOutOfBoundsException</c></cell>
+          <cell>An array or string index is out of bounds</cell></row>
+          <row><cell>
+<c>NullPointerException</c></cell>
+          <cell>Reference to an object that has not been instantiated</cell></row>
+          <row><cell>
+<c>NumberFormatException</c></cell>
+          <cell>Use of an illegal number format, such as when calling a method</cell></row>
+          <row><cell>
+<c>StringIndexOutOfBoundsException</c></cell>
+          <cell>A <c>String</c> index is less than zero or greater than
+          or equal to the <c>String</c>'s length</cell>
         </row>
       </tabular>
-      \endTB
     </table>
     <p>
-      Table<nbsp/>10.1 gives a brief summary of some of the most important exceptions.
+      <xref ref="tab-excepts">Table</xref> gives a brief summary of some of the most important exceptions.
       You've undoubtedly encountered some of these exceptions,
       because they are thrown by methods we have used repeatedly in programming examples.
-      Table<nbsp/>10.2 summarizes the exceptions raised by some of the methods we've used most frequently.
+      <xref ref="tab-except-methods">Table</xref> summarizes the exceptions raised by some of the methods we've used most frequently.
     </p>
-    <table>
-      \TBT{-9pc}{Some of Java's important exceptions by method.}
+    <table xml:id="tab-except-methods">
+      <title>Some of Java's important exceptions by method.</title>
       
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+       
+        <row bottom="minor">
           <cell><term>Class</term></cell>
           <cell><term>Method</term></cell>
           <cell><term>Exception Raised</term></cell>
           <cell><term>Description</term></cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+       
         <row>
           <cell><c>Double</c></cell>
           <cell><c>valueOf(String)</c></cell>
           <cell><c>NumberFormatException</c></cell>
-          <cell>The <c>String</c> is not a <c>double</c>\cr
+          <cell>The <c>String</c> is not a <c>double</c></cell></row>
+          <row><cell>
 <c>Integer</c></cell>
           <cell><c>parseInt(String)</c></cell>
           <cell><c>NumberFormatException</c></cell>
-          <cell>The <c>String</c> is not a <c>int</c>\cr
+          <cell>The <c>String</c> is not a <c>int</c></cell></row>
+          <row><cell>
 <c>String</c></cell>
           <cell><c>String(String)</c></cell>
           <cell><c>NullPointerException</c></cell>
-          <cell>The <c>String</c> is <c>null</c>\cr</cell>
+          <cell>The <c>String</c> is <c>null</c></cell></row>
+          <row><cell></cell>
           <cell><c>indexOf(String)</c></cell>
           <cell><c>NullPointerException</c></cell>
-          <cell>The <c>String</c> is <c>null</c>\cr</cell>
+          <cell>The <c>String</c> is <c>null</c></cell></row>
+          <row><cell></cell>
           <cell><c>lastIndexOf(String)</c></cell>
           <cell><c>NullPointerException</c></cell>
-          <cell>The <c>String</c> is <c>null</c>\cr</cell>
+          <cell>The <c>String</c> is <c>null</c></cell></row>
+          <row>
+            <cell></cell>
           <cell><c>charAt(int)</c></cell>
           <cell><c>StringIndexOutOfBoundsException</c></cell>
-          <cell>The <c>int</c> is not a valid index\cr</cell>
+          <cell>The <c>int</c> is not a valid index</cell></row>
+          <row><cell></cell>
           <cell><c>substring(int)</c></cell>
           <cell><c>StringIndexOutOfBoundsException</c></cell>
-          <cell>The <c>int</c> is not a valid index\cr</cell>
+          <cell>The <c>int</c> is not a valid index</cell></row>
+          <row><cell></cell>
           <cell><c>substring(int,int)</c></cell>
           <cell><c>StringIndexOutOfBoundsException</c></cell>
           <cell>An <c>int</c> is not a valid index</cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+       
       </tabular>
-      \endTB
     </table>
-    <subsection><title>Self-Study Exercise</title>
-    </p>
-    <ol>
+ 
+
+    <exercises><title>Self-Study Exercise</title>
+    
+   
+
+    <exercise label="exceptions-match">
+      <title>Exceptions Matching</title>
+      <statement>
+          <p>  What type of exception would be thrown for the following statements?
+          </p>
+      </statement>
+      <feedback>
+          <p></p>
+      </feedback>
+      <matches>
+          <match>
+              <premise> Integer.parseInt("26.2");  
+              </premise>
+              <response>NumberFormatException</response>
+          </match>
+          <match>
+              <premise>String s; s.indexOf('a');</premise>
+              <response>NullPointerException</response>
+          </match>
+          <match>
+              <premise>String s = "hello"; s.charAt(5);</premise>
+              <response>StringIndexOutOfBoundsException</response>
+          </match>         
+      </matches>
+     <solution><p> <ol>
       <li>
         <p>
-          What type of exception would be thrown for the following statements?
+<c>Integer.parseInt("26.2");        ==> NumberFormatException</c>
         </p>
-        <ol>
-          Integer.parseInt("26.2"); String s; s.indexOf('a'); String s = "hello"; s.charAt(5);
-        </ol>
       </li>
-    </ol>
-  </introduction>
-  <subsection>
+      <li>
+           <p>
+<c>String s; s.indexOf('a');        ==> NullPointerException</c>
+        </p>
+      </li>
+      <li>
+        <p>
+<c>String s = "hello"; s.charAt(5); ==> StringIndexOutOfBoundsException</c>
+        </p>
+      </li>
+    </ol></p></solution>
+    </exercise>
+</exercises>
+    </subsection>
+  
+    <subsection>
     <title>Checked and Unchecked Exceptions</title>
     <introduction>
       <p>
@@ -155,8 +194,10 @@
         </p>
       </principle>
     </introduction>
-    <subsubsection>
-      <title>The <c>throws</c>Clause</title>
+    </subsection>
+
+    <subsection>
+      <title>The <c>throws</c> Clause</title>
       <p>
         The <c>IOException</c>, which we encountered in Chapter<nbsp/>4 , is a checked exception.
         The Java compiler knows that
@@ -174,7 +215,7 @@
         then both methods must have a <c>throws</c> clause.
         For example, consider the following program:
       </p>
- <program language="java"><input>
+ <program language="java" interactive="activecode" stdin="yes"><input>
 import java.io.*;
 public class Example {
     BufferedReader input = new BufferedReader
@@ -187,7 +228,8 @@ public class Example {
                         throws IOException {
         Example ex = new Example();
         ex.doRead();
-    }}
+    }
+  }
  </input></program>
       <p>
         In this case,
@@ -211,14 +253,14 @@ IOException</c>. However,
         the <c>IOException</c> within the body of the method.
         We will discuss this approach in the next section.
       </p>
-    </subsubsection>
-    <subsubsection>
+    </subsection>
+    <subsection>
       <title>Unchecked Exceptions</title>
       <p>
         An <term>unchecked exception</term>
             <idx><h>unchecked exception</h></idx>
-        is any exception belonging to a subclass of <c>RuntimeException</c>(Fig.
-        <xref ref="fig-excepthier"></xref>).
+        is any exception belonging to a subclass of <c>RuntimeException</c>(
+        <xref ref="fig-excepthier">Figure</xref>).
         Unchecked exceptions are not checked by the compiler.
         The possibility that some statement or expression will lead to an <c>ArithmeticException</c> or
 <c>NullPointerException</c> is extremely difficult to detect at compile time.
@@ -240,54 +282,90 @@ IOException</c>. However,
 <c>RunTimeException</c><mdash/>does not have to be caught within your program.
         </p>
       </principle>
-    </subsubsection>
-  </subsection>
-  <subsection xml:id="self-study-exerciseO26">
+</subsection>
+  
+  <subsection>
     <title>The <c>Exception</c>Class</title>
     <p>
       The <c>java.lang.Exception</c> class itself is very simple,
-      consisting of just two constructor methods (Fig.<nbsp/>10.5).
+      consisting of just two constructor methods (<xref ref="fig-exc-class">Figure</xref>).
       The <c>Throwable</c> class,
       from which <c>Exception</c> is derived,
       is the root class of Java's exception and error hierarchy.
       It contains definitions for the <c>getMessage()</c> and <c>printStackTrace()</c> methods,
       which are two methods that we will use frequently in our error-handling routines.
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title><image width="73%" source="chptr10/excuml.png"/>
-    </p>
-    <ol>
-      <li>
-        <p>
-          Which of the following are examples of unchecked exceptions?
-        </p>
-        <ol>
-          <li>
-            <p>
-              IOException
-            </p>
-          </li>
-          <li>
-            <p>
-              IndexOutOfBoundsException
-            </p>
-          </li>
-          <li>
-            <p>
-              NullPointerException
-            </p>
-          </li>
-          <li>
-            <p>
-              ClassNotFoundException
-            </p>
-          </li>
-          <li>
-            <p>
-              NumberFormatException
-            </p>
-          </li>
-        </ol>
-      </li>
-    </ol>
+    <figure xml:id="fig-exc-class"><caption>Exception Class</caption>
+    <image width="50%" source="chptr10/excuml.png"/>
+    </figure>
+
+    </subsection>
+    
+    <subsection><title>Self-Study Exercises</title>
+      
+          
+    <exercise label="unchecked-exceptions">
+      <title>Unchecked Exceptions</title>
+      <statement>
+          <p>Which of the following are examples of unchecked exceptions?</p>
+      </statement>
+      <choices>
+          <choice correct="no">
+              <statement>
+                <p>
+                  IOException
+                </p>
+              </statement>
+              <feedback>
+                  <p><c>IOException</c> is unchecked.</p>
+              </feedback>
+          </choice>
+          <choice correct="yes">
+              <statement>
+                <p>
+                  IndexOutOfBoundsException
+                </p>
+              </statement>
+              <feedback>
+                <p>  <c>IndexOutOfBoundsException</c> is unchecked because it is a subclass of <c>RuntimeException</c>.</p>
+
+              </feedback>
+          </choice>
+          <choice correct="yes">
+              <statement>
+                <p>
+                  NullPointerException
+                </p>
+              </statement>
+              <feedback>
+              <p>  <c>NullPointerException</c> is unchecked because it is a subclass of <c>RuntimeException</c>.</p>
+              </feedback>
+          </choice>
+          <choice correct="no">
+              <statement>
+                <p>
+                  ClassNotFoundException
+                </p>
+              </statement>
+              <feedback>
+                  <p>This is a checked exception</p>
+              </feedback>
+          </choice>
+            <choice correct="yes">
+              <statement>
+                <p>
+                       NumberFormatException
+          </p>
+          </statement>
+          <feedback><p>
+            <c>NumberFormatException</c> is unchecked because it is a subclass of <c>RuntimeException</c>.
+              </p></feedback>
+          </choice>
+      </choices>
+     <solution><p>
+        The unchecked exceptions are <c>IndexOutOfBoundsException</c>,
+<c>NumberFormatException</c>, and <c>NullPointerException</c>, because these are subclasses of <c>RuntimeException</c>. The others are checked exceptions.
+     </p></solution>
+  </exercise>
   </subsection>
 </section>

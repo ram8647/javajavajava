@@ -1,0 +1,362 @@
+<section xml:id="ch-except-sum">
+  <title>Chapter Summary</title>
+ 
+    <subsection><title>Technical Terms</title>
+  
+  <p>
+    catch an exception
+  </p>
+  <p>
+    checked exception
+  </p>
+  <p>
+    dialog box
+  </p>
+  <p>
+    dynamic scope
+  </p>
+  <p>
+    error dialog
+  </p>
+  <p>
+    exception
+  </p>
+  <p>
+    exception handling
+  </p>
+  <p>
+    finally block
+  </p>
+  <p>
+    method call stack
+  </p>
+  <p>
+    method stack trace
+  </p>
+  <p>
+    modal dialog
+  </p>
+  <p>
+    static scope
+  </p>
+  <p>
+    throw an exception
+  </p>
+  <p>
+    try block
+  </p>
+  <p>
+    unchecked exception
+  </p>
+  </subsection>
+ 
+  <subsection><title>
+   The Try/Catch Statement</title>
+   <p> The <c>try/catch/finally</c> statement has the following syntax:
+  </p>
+ <program language="java"><input>
+try {
+    // Block of statements
+    // At least one of which may throw an exception
+    if ( * Some condition obtains */ )
+        throw new ExceptionName();} catch (ExceptionName ParameterName) {
+    // Block of statements to be executed
+    // If the ExceptionName exception is thrown in try}
+..} catch (ExceptionName2 ParameterName) {
+    // Block of statements to be executed
+    // If the ExceptionName2 exception is thrown in try} finally {
+    // Optional block of statements that is executed
+    // Whether an exception is thrown or not}
+ </input></program>
+  <p>
+    The try block is meant to include a statement or statements that might throw an exception.
+    The catch blocks<mdash/>there can be one or more<mdash/>are meant to handle exceptions that are thrown in the try block.
+    A catch block will handle any exception that matches its parameter class,
+    including subclasses of that class.
+    The finally block is optional.
+    It will be executed whether an exception is thrown or not.
+    If an exception is thrown in the try block,
+    the try block is exited permanently.
+  </p>
+  <p>
+    The <c>throw</c> statement inside the try block is there to illustrate how <c>throw</c> can be used.
+    You will usually not see a <c>throw</c> statement in a try block,
+    because most throws are done from within Java library methods,
+    which are called from a <c>try</c> block.
+  </p>
+  </subsection>
+
+  <subsection><title>Summary of Important Points</title>
+    <ul>
+      <li>
+        <p>
+          In Java, when an error or exceptional condition occurs,
+          you <c>throw</c> an <c>Exception</c>, which is caught by special code known as an
+          <em>exception handler</em>.
+          A <c>throw</c> statement<mdash/><c>throw new Exception()</c><mdash/>is used to throw an exception.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>try block</em> is a block of statements containing one or more statements that may throw an exception.
+          Embedding a statement in a try block indicates your awareness that it might throw an exception and your intention to handle the exception.
+        </p>
+      </li>
+      <li>
+        <p>
+          Java distinguishes between <em>checked</em>
+          and <em>unchecked</em> exceptions.
+          Checked exceptions must either be caught by the method in which they occur or you must declare that the method containing that statement <c>throws</c> the exception.
+        </p>
+      </li>
+      <li>
+        <p>
+          Unchecked exceptions are those that belong to subclasses of <c>RuntimeException</c>. If they are left uncaught,
+          they will be handled by Java's default exception handlers.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>catch block</em> is a block of statements that handles the exceptions that match its parameter.
+          A catch block can only follow a try block,
+          and there may be more than one catch block for each try block.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>try/catch</c> syntax allows you to separate the normal parts of an algorithm from special code meant to handle errors and exceptional conditions.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>method stack trace</em> is a trace of the method calls that have led to the execution of a particular statement in the program.
+          The <c>Exception.printStackTrace()</c> method can be called by exception handlers to print a trace of exactly how the program reached the statement that threw the exception.
+          Static scoping refers to how the text of the program is arranged.
+          If a variable is declared within a method or a block,
+          its static scope is confined to that method or block.
+          Dynamic scoping refers to how the program is executed.
+          A statement is within the dynamic scope of a method or block if it is called from that method or block,
+          or if it is called by some other method that was called from that method or block.
+        </p>
+      </li>
+      <li>
+        <p>
+          When searching for a catch block to handle an exception thrown by a statement, Java searches upward through the statement's static scope and backward through its dynamic scope until it finds a matching catch block.
+          If none is found,
+          the Java Virtual Machine will handle the exception itself by printing an error message and a method stack trace.
+        </p>
+      </li>
+      <li>
+        <p>
+          Many Java library methods throw exceptions when an error occurs.
+          These <c>throw</c> statements do not appear in the program.
+          For example, Java's integer division operator will throw an
+<c>ArithmeticException</c> if an attempt is made to divide by zero.
+        </p>
+      </li>
+      <li>
+        <p>
+          Generally, there are four ways to handle an exception: (1) Let Java handle it; (2) fix the problem that led to the exception and resume the program; (3) report the problem and resume the program;
+          and (4) print an error message and terminate the program.
+          Most erroneous conditions reported by exceptions are difficult or impossible to fix.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <c>finally</c> statement is an optional part of a
+<c>try/catch</c> block.
+          Statements contained in a finally block will be executed whether an exception is raised or not.
+        </p>
+      </li>
+      <li>
+        <p>
+          A well-designed program should use exception handling to deal with truly exceptional conditions,
+          not as a means of normal program control.
+        </p>
+      </li>
+      <li>
+        <p>
+          User-defined exceptions can be defined by extending the
+<c>Exception</c> class or one of its subclasses.
+        </p>
+      </li>
+    </ul>
+  
+  </subsection>
+
+  <solutions scope="chapter-exceptions" divisional="solution" project="solution" inline="solution">
+    <title>Solutions to Self-Study Exercises</title>
+  </solutions>
+   
+       
+ 
+  <ul>
+      <li>
+        <p>
+          An <c>ArrayIndexOutOfBoundsException</c> could be handled by the handlers in a, c, or d, because their classes are all superclasses of <c>ArrayIndexOutOfBoundsException</c>.
+        </p>
+      </li>
+      <li>
+        <p>
+          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.98 and then 0.44,
+          the program will generate the following output:
+ <program language="java"><input>
+0.98 is out of range
+ </input></program>Note that because the out-of-range error occurs in <c>method1()</c>,
+<c>method2()</c> is not called at all.
+        </p>
+      </li>
+      <li>
+        <p>
+          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.98 and then 0.44,
+          the following stack trace would be printed:
+ <program language="java"><input>
+java.lang.ArithmeticException: 0.98 is out of range
+    at MyClass2.method1(MyClass2.java:3)
+    at MyClass2.main(MyClass2.java:15)
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.44 and then 0.98,
+          the program will generate the following output:
+ <program language="java"><input>
+Hello 0.44
+0.98 is out of range
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.44 and then 0.98,
+          the following stack trace would be printed:
+ <program language="java"><input>
+java.lang.ArithmeticException: 0.98 is out of range
+    at MyClass2.method2(MyClass2.java:8)
+    at MyClass2.main(MyClass2.java:16)
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The divide-by-zero error in <c>BadDivide</c> occurs in the expression <c>n/d</c> in <c>Method2()</c>. It would generate the following stack trace:
+ <program language="java"><input>
+java.lang.ArithmeticException: divide by zero
+    at BadDivide.method2(BadDivide.java:7)
+    at BadDivide.method1(BadDivide.java:3)
+    at BadDivide.main(BadDivide.java:13)
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The following version of <c>BadDivide.method2()</c> will handle the divide-by-zero error itself:
+ <program language="java"><input>
+public void method2 (int n, int d) {
+    try {
+        System.out.println(n / d);
+    } catch (ArithmeticException e) {
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+        System.exit(0);
+    }}
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          If <c>someValue</c> equals 1000,
+          the code segment will print
+ <program language="java"><input>
+Entering try block
+ERROR: 1000 is too large
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          If <c>someValue</c> equals 50,
+          the code segment will print
+ <program language="java"><input>
+Entering try block
+Exiting try block
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+           <program language="java"><input>
+try {
+ if (X &lt; 0)
+    throw new Exception(
+           "ERROR: Negative value in X coordinate");} catch (Exception e) {
+ System.out.println( e.getMessage() );}
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <title>a</title>
+            <p>
+              It depends.
+              This is a computer game,
+              so one way to handle this problem would be to generate a message into a log file and resume the game.
+              If the GUI element is crucial to the game,
+              it's hard to see how it could be successfully handled.
+            </p>
+          </li>
+          <li>
+            <title>b</title>
+            <p>
+              It depends.
+              You would have to decide whether it would be more harmful or dangerous to continue production than not.
+            </p>
+          </li>
+          <li>
+            <title>c</title>
+            <p>
+              The program could report the security violation to the user and to the system manager and then keep accepting user input.
+            </p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>
+           <program language="java"><input>
+public class FieldIsEmptyException extends Exception {
+    public FieldIsEmptyException () {
+        super("The input field is empty ");
+    }}
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+           <program language="java"><input>
+public int getInt() {
+    int num = 0;
+    try {
+        String data = getText();
+        if (data.equals(""))
+            throw new FieldIsEmptyException();
+        num = Integer.parseInt( getText() );
+        if (num > bound)
+            throw new IntOutOfRangeException(bound);
+    } catch (FieldIsEmptyException e) {
+        System.out.println("Error: " + e.getMessage() );
+    } catch (NumberFormatException e) {
+      System.out.println("Error: You must input an integer.
+                                       Please try again.");
+    } catch (IntOutOfRangeException e) {
+        System.out.println(e.getMessage());
+        return 0;
+    }
+    return num;}
+ </input></program>
+        </p>
+      </li>
+    </ul>
+  
+ </section>
