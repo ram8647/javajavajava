@@ -1,0 +1,237 @@
+<section xml:id="ch-files-sum">
+<title>Chapter Summary</title>
+
+<subsection xml:id="ch-files-terms">
+<title>Technical Terms</title>
+  <p>
+    absolute path name
+  </p>
+  <p>
+    binary file
+  </p>
+  <p>
+    buffering
+  </p>
+  <p>
+    database
+  </p>
+  <p>
+    data hierarchy
+  </p>
+  <p>
+    directory
+  </p>
+  <p>
+    end-of-file {character}
+  </p>
+  <p>
+    field
+  </p>
+  <p>
+    file
+  </p>
+  <p>
+    filtering
+  </p>
+  <p>
+    input
+  </p>
+  <p>
+    object serialization
+  </p>
+  <p>
+    output
+  </p>
+  <p>
+    path
+  </p>
+  <p>
+    record
+  </p>
+  <p>
+    relative path name
+  </p>
+  <p>
+    Unicode Text Format (UTF)
+  </p>
+</subsection>
+<subsection xml:id="ch-files-points">
+<title>Summary of Important Points</title>
+    <ul>
+      <li>
+        <p>
+          A <em>file</em> is a collection of data stored on a disk.
+          A <em>stream</em> is an object that delivers data to and from other objects.
+        </p>
+      </li>
+      <li>
+        <p>
+          An <c>InputStream</c> is a stream that delivers data to a program from an external source<mdash/>such as the keyboard or a file.
+<c>System.in</c> is an example of an <c>InputStream</c>. An
+<c>OutputStream</c> is a stream that delivers data from a program to an external destination<mdash/>such as the screen or a file.   <c>System.out</c> is an example of an <c>OutputStream</c>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Data can be viewed as a hierarchy.
+          From highest to lowest, a <em>database</em>
+          is a collection of files.
+          A <em>file</em> is a collection of records.
+          A <em>record</em> is a collection of fields.
+          A <em>field</em> is a collection of bytes.
+          A <em>byte</em> is a collection of 8 bits.
+          A <em>bit</em> is one binary digit, either 0 or 1.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>binary file</em> is a sequence of 0s and 1s that is interpreted as a sequence of bytes.
+          A <em>text file</em> is a sequence of 0s and 1s that is interpreted as a sequence of characters.
+          A text file can be read by any text editor,
+          but a binary file cannot.
+<c>InputStream</c> and <c>OutputStream</c> are abstract classes that serve as the root classes for reading and writing binary data.   <c>Reader</c> and <c>Writer</c> serve as root classes for text I/O. Buffering is a technique in which a <em>buffer</em>,
+          a temporary region of memory,
+          is used to store data while they are being input or output.
+        </p>
+      </li>
+      <li>
+        <p>
+          A text file contains a sequence of characters divided into lines by the <c>\n</c> character and ending with a special
+          <em>end-of-file</em> character.
+        </p>
+      </li>
+      <li>
+        <p>
+          The standard algorithm for performing I/O on a file consists of three steps: (1) Open a stream to the file, (2) perform the I/O, and (3) close the stream.
+        </p>
+      </li>
+      <li>
+        <p>
+          Designing effective I/O routines answers two questions: (1) What streams should I use to perform the I/O? (2) What methods should I use to do the reading or writing?
+        </p>
+      </li>
+      <li>
+        <p>
+          To prevent damage to files when a program terminates abnormally,
+          streams should be closed when they are no longer needed.
+        </p>
+      </li>
+      <li>
+        <p>
+          Most I/O operations generate an <c>IOException</c> that should be caught in the I/O methods.
+        </p>
+      </li>
+      <li>
+        <p>
+          Text input uses a different technique to determine when the end of a file has been reached.
+          Text input methods return
+<c>null</c> or <c>-1</c> when they attempt to read the special end-of-file character.
+          Binary files don't contain an end-of-file character,
+          so binary read methods throw an <c>EOFException</c> when they attempt to read past the end of the file.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>java.io.File</c> class provides methods that enable a program to interact with a file system.
+          Its methods can be used to check a file's attributes,
+          including its name, directory, and path.
+        </p>
+      </li>
+      <li>
+        <p>
+          Streams can be joined together to perform I/O.<nbsp/>For example,
+          a <c>DataOutputStream</c> and a <c>FileOutputStream</c> can be joined to perform output to a binary file.
+        </p>
+      </li>
+      <li>
+        <p>
+          A binary file is
+          <q>raw</q>
+          in the sense that it contains no markers within it that allow you to tell where one data element ends and another begins.
+          The interpretation of binary data is up to the program that reads or writes the file.
+        </p>
+      </li>
+      <li>
+        <p>
+          Object serialization is the process of writing an object to an output stream.
+          Object deserialization is the reverse process of reading a serialized object from an input stream.
+          These processes use the <c>java.io.\-ObjectOutputStream</c> and
+<c>java.io.ObjectInputStream</c> classes.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>JFileChooser</c> class provides a dialog box that enables the user to select a file and directory when opening or saving a file.
+        </p>
+      </li>
+    </ul>
+</subsection>
+<subsection xml:id="ch-files-answers">
+<title>Self-study Answers</title>    
+    <ul>
+      <li>
+        <p>
+          Because <c>FileWriter</c> contains a constructor that takes a file name argument, <c>FileWriter(String)</c>, it can be used with
+<c>PrintWriter</c> to perform output to a text file:
+ <program language="java"><input>
+PrintWriter outStream =     //  Create output stream
+    new PrintWriter(new FileWriter(fileName)); // Open file
+outStream.print (display.getText());// Display text
+outStream.close();                  // Close output stream
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          An empty file doesn't affect this loop.
+          If the file is empty,
+          it will print a <c>null</c> line.
+          The test <c>line != null</c>, should come right after the <c>readLine()</c>, as it does in the <c>while</c> loop.
+        </p>
+      </li>
+      <li>
+        <p>
+          This loop won't work on an empty text file.
+          In that case, <c>ch</c> would be set to <m>-1</m>,
+          and the attempt to cast it into a <c>char</c> would cause an error.
+        </p>
+      </li>
+      <li>
+        <p>
+           <program language="java"><input>
+public void getFileAttributes(String fileName) {
+    File file = new File (fileName);
+    System.out.println(filename);
+    System.out.println("absolute path:"
+           + file.getAbsolutePath());
+    System.out.println("length:" + file.length());
+    if (file.isDirectory())
+        System.out.println("Directory");
+    else
+        System.out.println("Not a Directory");} // getFileAttributes()
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>inStream.close()</c> statement is misplaced in <c>readIntegers()</c>. By placing it inside the same <c>try/catch</c> block as the read loop,
+          it will get skipped and the stream will not be closed.
+          The <c>EOFException</c> should be caught in a separate <c>try/catch</c> block from other exceptions,
+          and it should just cause the read loop to exit.
+        </p>
+      </li>
+      <li>
+        <p>
+          Yes, a binary file containing several <c>SomeObjects</c> would be
+          <q>readable</q>
+          by the <c>BinaryIO</c> program because the program will read a <c>String</c> followed by 64 bytes.
+          However, <c>BinaryIO</c> would misinterpret the data,
+          because it will assume that <c>n1</c> and
+<c>n2</c> together comprise a single <c>int</c>, and <c>n3</c>(64 bits) will be interpreted as a <c>double</c>. A file of <c>SomeObject</c> s could not be read by the <c>ObjectIO</c> program,
+          because
+<c>SomeObject</c> does not implement the <c>Serializable</c> interface.
+        </p>
+      </li>
+    </ul>
+  </subsection>
+</section>
