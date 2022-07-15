@@ -1,7 +1,7 @@
 <section xml:id="sec-throws">
   <title>Creating and Throwing Your Own
   Exceptions</title>
-<introduction>
+<subsection><title>A New IntOutOfRange Exception</title>
   <p>
     Like other Java classes,
     the <c>Exception</c> class can be extended to handle cases that are not already covered by Java's built-in exceptions.
@@ -9,7 +9,11 @@
     but you will have to <c>throw</c> them yourself.
   </p>
   <p>
-    For example, Figure<nbsp/>10.20 shows the design of an exception that can be used for validating that an integer is less than or equal to a certain maximum value.
+    For example, <xref ref="fig-intoutofrange">Figure</xref> shows the design of an exception that can be used for validating that an integer is less than or equal to a certain maximum value.
+    <figure xml:id="fig-intoutofrange">
+      <caption>The <c>IntOutOfRange</c> exception. </caption>
+    <image width="50%" source="chptr10/intoutuml.png"/> 
+  </figure>
     It would be coded as follows:
   </p>
  <program language="java"><input>
@@ -20,19 +24,52 @@
 public class IntOutOfRangeException extends Exception {
     public IntOutOfRangeException (int Bound) {
       super("The input value exceeds the bound " + Bound);
-    }}
+    }
+  }
  </input></program>
   <p>
     The class extends <c>Exception</c> and consists entirely of a constructor method that calls the superclass constructor.
     The argument passed to the superclass constructor is the message that will be returned by <c>getMessage()</c> when an instance of this exception is created.
   </p>
+
+  <activity>
+    <statement>Try the <c>num</c> values 10 and 11 below to see this exception in action.</statement>
+    <program language="java" interactive="activecode"><input>
+    public class IntOutOfRangeException extends Exception 
+    {
+      public IntOutOfRangeException (int Bound) 
+      {
+        super("The input value exceeds the bound " + Bound);
+      }
+      
+      public static void main(String[] args) throws IntOutOfRangeException
+      {
+          int bound = 10;
+          int num = 11;
+          if (num > bound)
+              throw new IntOutOfRangeException(bound);
+          else
+              System.out.println(num + " is in range!");
+          
+      }
+  }
+</input>  </program>
+  </activity>
+ 
+</subsection>
+  <subsection><title>IntFieldClass</title>
   <p>
     Now let's consider an example where this new exception will be thrown.
-    Suppose we wish to constrain the <c>IntField</c> class that we developed previously (Fig.<nbsp/>10.14) so that it will only accept numbers that are less than a certain bound.
+    Suppose we wish to constrain the <c>IntField</c> class that we developed previously 
+    (<xref ref="fig-intfield">Figure</xref>) so that it will only accept numbers that are less than a certain bound.
     First, let's modify <c>IntField</c> so that its bound can be set when an instance is created.
     We want its bound to be an instance variable with some initial value,
-    and we want to provide a constructor that can be used to override the default (Fig.<nbsp/>10.21).
-    <image width="73%" source="chptr10/intfielduml.png"/>
+    and we want to provide a constructor that can be used to override the default 
+    (<xref ref="fig-intfield1">Figure</xref>).
+    <figure xml:id="fig-intfield1">
+      <caption></caption>
+    <image width="50%" source="chptr10/intfielduml.png"/>
+    </figure>
   </p>
   <p>
     This leads to the following revision of <c>IntField</c>:
@@ -44,7 +81,8 @@ public class IntField extends JTextField {
         super(size);
         bound = max;
     }
-   // The rest of the class is unchanged for now} // IntField
+   // The rest of the class is unchanged for now
+  } // IntField
  </input></program>
   <p>
     Our new constructor has the signature <c>IntField(int,int)</c>, which doesn't duplicate any of <c>JTextField</c>'s constructors.
@@ -55,7 +93,7 @@ public class IntField extends JTextField {
     it might not function as expected by users of the subclass.
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Extending a Class</title>
+    <title>EFFECTIVE DESIGN: Extending a Class</title>
     <p>
       When extending a class,
       care must taken to ensure that the superclass's methods are not inadvertently overridden.
@@ -68,8 +106,7 @@ public class IntField extends JTextField {
     It's an appropriate value to use,
     because any valid <c>int</c> that the user types should be less than or equal to <c>MAX_VALUE</c>. Given these changes to
 <c>IntField</c>, let's now incorporate our new exception into its
-<c>getInt()</c> method (Fig.
-    <xref ref="fig-intfield2"></xref>).
+<c>getInt()</c> method (<xref ref="fig-intfield2">Listing</xref>).
   </p>
   <p>
     This new version of <c>getInt()</c> throws an exception if the integer entered by the user is greater than the <c>IntField</c>'s
@@ -79,7 +116,7 @@ public class IntField extends JTextField {
     Neither is an acceptable alternative.
     It is far better to throw the exception to the calling method.
   </p>
-  <figure xml:id="fig-intfield2">
+  <listing xml:id="fig-intfield2">
     <caption>The revised <c>IntField</c> class containing the
     revised <c>getInt()</c> method.</caption>
  <program language="java"><input>
@@ -102,9 +139,9 @@ public class IntField extends JTextField {
     } // getInt()
 } // IntField
  </input></program>
-  </figure>
+</listing>
   <p>
-    The <c>IntFieldTester</c> class (<xref ref="fig-intbound">Figure</xref>) 
+    The <c>IntFieldTester</c> class (<xref ref="fig-intbound">Listing</xref>) 
     <!-- has the 
     design and functionality shown in <xref ref="fig-numformat">Figure</xref>.
     It--> provides a simple GUI interface to test the <c>IntField</c> class.
@@ -116,7 +153,7 @@ public class IntField extends JTextField {
     and the erroneous input is not used.
     Instead, the user is given another chance to enter a valid integer.
   </p>
-  <figure xml:id="fig-intbound">
+  <listing xml:id="fig-intbound">
     <caption>An application that uses an <c>IntField</c> object to process integers.</caption>
  <program language="java"><input>
 import java.awt.*;
@@ -165,23 +202,100 @@ public class IntFieldTester extends JPanel
         System.exit(0);   // Quit the application
       }
     });
-  } // main()} // IntFieldTester
+  } // main()
+} // IntFieldTester
  </input></program>
-  </figure>
-  </introduction>
+  </listing>>
   
-  <subsection><title>Self-Study Exercises</title>
-    <ol>
-      <li>
+ 
+  
+  <activity>
+    <statement> <p>Try the IntField class below by entering the invalid values of 101 and 3.5.</p>
+  <interactive iframe="iframe/repl-intField.html" width="95%" aspect="1:1"/>
+</statement>
+</activity>
+
+  <exercises><title>Self-Study Exercises</title>
+   
+    <exercise label="fieldEmpty"><title>FieldIsEmptyException</title>
+      <statement>
         <p>
-          Define a new <c>Exception</c> named <c>FieldIsEmptyException</c>, which is meant to be thrown if the user forgets to enter a value into a <c>IntField</c>.
+          Define a new <c>Exception</c> named <c>FieldIsEmptyException</c>, which is meant 
+          to be thrown if the user forgets to enter a value into a <c>IntField</c>.
         </p>
-      </li>
-      <li>
+      </statement>
+      <program language="java" interactive="activecode"><input>
+        /**
+        *  FieldIsEmptyException reports an exception when
+        *    the input field is empty
+        */
+      public class FieldIsEmptyException extends Exception
+      {  
+          // write the constructor here that calls super with the new message
+          // stating that the input field is empty.
+
+
+          public static void main(String[] args) throws FieldIsEmptyException
+          {
+              String input = "";
+              if (input.equals(""))
+                  throw new FieldIsEmptyException();
+              else
+                  System.out.println(input + " is not empty!");
+              
+          }
+      }
+      </input></program>
+        <solution>
         <p>
-          Modify the <c>IntField.getInt()</c> method so that it throws and catches the <c>FieldIsEmptyException</c>.
+          <program language="java"><input>
+public class FieldIsEmptyException extends Exception {
+   public FieldIsEmptyException () {
+       super("The input field is empty ");
+   }
+ }
+</input></program>
+       </p></solution>    
+       </exercise>
+    
+        <exercise label="getIntEx"><title>IntField.getInt()</title>
+          <statement>
+        <p>
+          Fork the repl project below. Modify the <c>IntField.getInt()</c> method so that it throws and catches the 
+          <c>FieldIsEmptyException</c> (copied from your solution above).
         </p>
-      </li>
-    </ol>
+   
+         <interactive iframe="iframe/repl-intField.html" width="95%" aspect="1:1"/>
+ 
+  </statement>
+    <solution>
+      <p>
+        <program language="java"><input>
+public int getInt() {
+ int num = 0;
+ try {
+     String data = getText();
+     if (data.equals(""))
+         throw new FieldIsEmptyException();
+     num = Integer.parseInt( getText() );
+     if (num > bound)
+         throw new IntOutOfRangeException(bound);
+ } catch (FieldIsEmptyException e) {
+     System.out.println("Error: " + e.getMessage() );
+ } catch (NumberFormatException e) {
+   System.out.println("Error: You must input an integer.
+                                    Please try again.");
+ } catch (IntOutOfRangeException e) {
+     System.out.println(e.getMessage());
+     return 0;
+ }
+ return num;
+}
+</input></program>
+     </p>
+    </solution>  
+    </exercise>
+    </exercises>
+
   </subsection>
 </section>

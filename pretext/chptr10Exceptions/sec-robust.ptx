@@ -18,56 +18,42 @@
       A well-designed commercial program should contain exception handlers for those truly exceptional conditions that may arise.
     </p>
     <p>
-      In general there are three ways to handle an exceptional condition that isn't already handled by Java (Table<nbsp/>10.3).
-      If the
+      In general there are three ways to handle an exceptional condition that isn't already
+       handled by Java (<xref ref="tab-except-strategies">Table</xref>).
     </p>
-    <table>
-      \TBT{0pc}{Exception-handling strategies.}
-      
+    <table xml:id="tab-except-strategies">
+      <title>Exception-handling strategies.</title>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+        <row bottom="minor">
           <cell><term>Kind of Exception</term></cell>
           <cell><term>Kind of Program</term></cell>
           <cell><term>Action to Be Taken</term></cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
           <cell>Caught by Java</cell>
           <cell></cell>
-          <cell>Let Java handle it\cr
+          <cell>Let Java handle it</cell>
+          </row>
+          <row><cell>
             Fixable condition</cell>
           <cell></cell>
-          <cell>Fix the error and resume execution\cr
+          <cell>Fix the error and resume execution</cell>
+          </row>
+          <row><cell>
             Unfixable condition</cell>
           <cell>Stoppable</cell>
-          <cell>Report the error and terminate</cell>
+          <cell>Report the error and terminate the program</cell>
         </row>
         <row>
-          <cell></cell>
-          <cell></cell>
-          <cell><nbsp/><nbsp/> the program\cr
+          <cell> 
             Unfixable condition</cell>
           <cell>Not stoppable</cell>
-          <cell>Report the error and resume</cell>
-        </row>
-        <row>
-          <cell></cell>
-          <cell></cell>
-          <cell><nbsp/><nbsp/> processing</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
+          <cell>Report the error and resume processing</cell>
         </row>
       </tabular>
-      \endTB
     </table>
     <p>
-      exceptional condition cannot be fixed,
+      If the exceptional condition cannot be fixed,
       the program should be terminated,
       with an appropriate error message.
       Second, if the  exceptional condition can be fixed without invalidating the program,
@@ -78,7 +64,7 @@
       and the program should be resumed.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Handling Exceptions</title>
+      <title>EFFECTIVE DESIGN: Handling Exceptions</title>
       <p>
         There are three general ways to handle exceptions: (1) Report the exception and terminate the program; (2) fix the exceptional condition and resume normal execution;
         and (3) report the exception to a log and resume execution.
@@ -98,7 +84,7 @@
       The throwing of the exception helps identify the design flaw.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Exceptions and Program Development</title>
+      <title>EFFECTIVE DESIGN: Exceptions and Program Development</title>
       <p>
         Java's built-in exception handling helps identify design flaws during program development.
         Your own use of exceptions should follow this approach.
@@ -121,7 +107,7 @@
       it is best to terminate the program.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Report and Terminate</title>
+      <title>EFFECTIVE DESIGN: Report and Terminate</title>
       <p>
         If an unfixable exception arises in a program that can be terminated,
         it is better to report the error and terminate the program.
@@ -167,14 +153,14 @@
       This type of exception handling should be built right into the program's design.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Report and Resume</title>
+      <title>EFFECTIVE DESIGN: Report and Resume</title>
       <p>
         If an unfixable exception arises in a program that cannot be terminated reasonably,
         the exception should be reported and the program should continue executing.
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="fig-intfield">
+  <subsection>
     <title>Fix the Error and Resume</title>
     <p>
       As an example of a problem that can be addressed as the  program runs,
@@ -192,16 +178,19 @@
     <p>
       Let's design a special <c>IntField</c> that functions like a normal text field but accepts only integers.
       If the user enters a value that generates a <c>NumberFormatException</c>, an error message should be printed and the user should be invited to try again.
-      As <image width="73%" source="chptr10/intfield.png"/>
+      As 
+      <figure xml:id="fig-intfield"><caption>Int Field</caption>
+      <image width="30%" source="chptr10/intfield.png"/>
+      </figure>
     </p>
     <p>
-      Figure<nbsp/>10.13 shows,
+      As <xref ref="fig-intfield">Figure</xref> shows,
       we want this special field to be a subclass of
 <c>JTextField</c> and to inherit the basic <c>JTextField</c> functionality.
       It should have the same kind of constructors that a normal <c>JTextField</c> has.
-      This leads to the definition shown in <xref ref="fig-intfieldprog">Figure</xref>.
+      This leads to the definition shown in <xref ref="fig-intfieldprog">Listing</xref>.
     </p>
-    <figure xml:id="fig-intfieldprog">
+    <listing xml:id="fig-intfieldprog">
       <caption>A <c>NumberFormatException</c> might be thrown by
       the <c>Integer.parseInt()</c> method in  <c>IntField.getInt()</c>.</caption>
  <program language="java"><input>
@@ -215,9 +204,10 @@ public class IntField extends JTextField {
     }
     public int getInt() throws NumberFormatException {
         return Integer.parseInt(getText());
-    } // getInt()} // IntField
+    } // getInt()
+  } // IntField
  </input></program>
-    </figure>
+</listing>
     <p>
       Note that the constructor methods use <c>super</c> to call the
 <c>JTextField</c> constructor.
@@ -259,7 +249,8 @@ public void actionPerformed(ActionEvent e) {
      "The input must be an integer.  Please re-enter.");
   } finally {
       repaint();
-  }} // actionPerformed()
+  }
+} // actionPerformed()
  </input></program>
     <p>
       The call to <c>getInt()</c> is embedded in a <c>try/catch</c> block.
@@ -276,8 +267,8 @@ public void actionPerformed(ActionEvent e) {
       If the user inputs a valid integer,
       the program will just report a message that displays the value.
       A more real-world example would make a more significant use of the value.
-      On the other hand, if the user types an erroneous value,
-      the program will pop up the dialog box shown in <xref ref="fig-errmsg">Figure</xref>.
+      On the other hand, if the user types an erroneouss value,
+      the program will pop up the dialog box shown in <xref ref="fig-errmsg1">Figure</xref>.
       (See the
       <q>From the Library</q>
       section of this chapter for more on dialog boxes.)
@@ -289,7 +280,7 @@ public void actionPerformed(ActionEvent e) {
       Note that the finally clause repaints the GUI. In this case,
       repainting would display the appropriate message on the applet or the application.
     </p>
-    <figure xml:id="fig-errmsg">
+    <figure xml:id="fig-errmsg1">
       <caption>This exception handler opens a dialog
       box to display an error message.</caption>
       <image width="73%" source="chptr10/errmsg1.png"/>
@@ -300,7 +291,7 @@ public void actionPerformed(ActionEvent e) {
       Defensive design is when we anticipate a possible  input error and take steps to ensure that a bad value is not propagated throughout the program.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Defensive Design</title>
+      <title>EFFECTIVE DESIGN: Defensive Design</title>
       <p>
         Well-designed code should anticipate potential problems,
         especially potential input problems.
@@ -324,7 +315,7 @@ public void actionPerformed(ActionEvent e) {
       it is important that the program be able to handle erroneous user input without crashing.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Fixing an Exception</title>
+      <title>EFFECTIVE DESIGN: Fixing an Exception</title>
       <p>
         If a method can handle an exception effectively,
         it should handle it locally.
@@ -332,14 +323,14 @@ public void actionPerformed(ActionEvent e) {
       </p>
     </principle>
     <principle>
-      <title>EFFECTIVE DESIGN:Library Exception Handling</title>
+      <title>EFFECTIVE DESIGN: Library Exception Handling</title>
       <p>
         Many of Java's library classes do not handle their own exceptions.
         The thinking behind this design is that the user of the class is in a better position to handle the exception in a way that's appropriate for the application.
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="fig-fixuml">
+  <subsection>
     <title>To Fix or Not to Fix</title>
     <p>
       Let's now consider a problem where it is less clear whether an exception can be successfully fixed
@@ -348,10 +339,10 @@ public void actionPerformed(ActionEvent e) {
     </p>
  <program language="java"><input>
 String list[] = new String[2];
- </input></program>
+ </input></program> 
     <p>
       If an attempt is made to add more than two elements to the array,
-      an ArrayIndexOutOfBoundsException will be raised.
+      an <c>ArrayIndexOutOfBoundsException</c> will be raised.
       This exception can be handled by extending the size of the array and inserting the element.
       Then the program's normal execution can be resumed.
     </p>
@@ -369,7 +360,8 @@ String list[] = new String[2];
 private void insertString(String str) {
      // Might throw ArrayIndexOutOfBoundsException
     list[count] = str;
-    ++count;}
+    ++count;
+  }
  </input></program>
     <p>
       The comment notes where an exception might be thrown.
@@ -398,12 +390,16 @@ private void insertString(String str) {
         list = newList;         // Make old point to new
     } finally {         // Since the exception is now fixed
         count++;        // Increase the count
-    }} // insertString()
+    }
+  } // insertString()
  </input></program>
     <p>
       The effect of the <c>catch</c> clause is to create a new array,
       still referred to as <c>list</c>, but that contains one more element than the original array.
-      <image width="73%" source="chptr10/fixuml.png"/>
+      <figure xml:id="fig-fixuml">
+        <caption>FixArrayBound UML</caption>
+      <image width="40%" source="chptr10/fixuml.png"/>
+    </figure>
     </p>
     <p>
       Note the use of the <c>finally</c> clause here.
@@ -411,7 +407,7 @@ private void insertString(String str) {
       This is the only way to guarantee that <c>count</c> is incremented exactly once whenever an element is assigned to the array.
     </p>
     <p>
-      The design of the <c>FixArrayBound</c> class is shown in Figure<nbsp/>10.17.
+      The design of the <c>FixArrayBound</c> class is shown in <xref ref="fig-fixuml">Figure</xref>.
       It provides a simple GUI interface that enables you to test the <c>insertString()</c> method.
       This program has a standard Swing interface,
       using a <c>JFrame</c> as the top-level window.
@@ -422,7 +418,33 @@ private void insertString(String str) {
       array that is extended each time a new string is entered.</caption>
       <image width="73%" source="chptr10/fixpic.png"/>
     </figure>
-    <figure xml:id="fig-arraybound">
+    
+    <p>
+      Each time the user types a string into the text field,
+      the
+<c>actionPerformed()</c> method calls the <c>insertString()</c> method to add the string to the array.
+      On each user action,
+      the <c>JPanel</c> is repainted.
+      The <c>paintComponent()</c> method simply clears the panel and then displays the array's elements
+      (<xref ref="fig-arrayfixscreen">Figure</xref>).
+    </p>
+    <principle>
+      <title>DEBUGGING TIP: Clearing the JPanel</title>
+      <p>
+        Swing components,
+        such as
+<c>JPanel</c>, do not automatically clear their backgrounds.
+        This must be done explicitly in the <c>paintComponent()</c> method.
+      </p>
+    </principle>
+    <p>
+      The complete implementation of <c>FixArrayBound</c> is given in <xref ref="fig-arraybound">Listing</xref>.
+      This example illustrates how an exception <em>can</em>
+      be handled successfully and the program's normal flow of control resumed.
+      However, the question is whether such an exception
+      <em>should</em> be handled this way.
+    </p>
+    <listing xml:id="fig-arraybound">
       <caption><c>FixArrayBound</c> increases the size of the array when
       a <c>ArrayIndexOutOfBoundsException</c> is raised.</caption>
       
@@ -472,12 +494,6 @@ public class FixArrayBound extends JPanel
     inField.setText("");
     repaint();
   } // actionPerformed()
- </input></program>
-    </figure>
-    <figure xml:id="fig-arraybound2">
-      <caption>{(continued)}<c>FixArrayBound</c> increases the size of the array when
- <c>ArrayIndexOutOfBoundsException</c> is raised.</caption>
- <program language="java"><input>
 public static void main( String args[] ) {
         JFrame f = new JFrame("Array Fixer");
         FixArrayBound panel = new FixArrayBound();
@@ -489,33 +505,10 @@ public static void main( String args[] ) {
                 System.exit(0);  // Quit the application
             }
         });
-    } // main()} // FixArrayBound
+    } // main()
+  } // FixArrayBound
  </input></program>
-    </figure>
-    <p>
-      Each time the user types a string into the text field,
-      the
-<c>actionPerformed()</c> method calls the <c>insertString()</c> method to add the string to the array.
-      On each user action,
-      the <c>JPanel</c> is repainted.
-      The <c>paintComponent()</c> method simply clears the panel and then displays the array's elements (Fig.<nbsp/>10.18).
-    </p>
-    <principle>
-      <title>DEBUGGING TIP:Clearing the JPanel</title>
-      <p>
-        Swing components,
-        such as
-<c>JPanel</c>, do not automatically clear their backgrounds.
-        This must be done explicitly in the <c>paintComponent()</c> method.
-      </p>
-    </principle>
-    <p>
-      The complete implementation of <c>FixArrayBound</c> is given in Figure<nbsp/>10-- 19.
-      This example illustrates how an exception <em>can</em>
-      be handled successfully and the program's normal flow of control resumed.
-      However, the question is whether such an exception
-      <em>should</em> be handled this way.
-    </p>
+</listing>
     <p>
       Unfortunately, this is not a well-designed program.
       The array's  initial size is much too small for the program's intended use.
@@ -524,7 +517,7 @@ public static void main( String args[] ) {
       be used as a remedy for poor design.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Truly Exceptional Conditions</title>
+      <title>EFFECTIVE DESIGN: Truly Exceptional Conditions</title>
       <p>
         A well-designed program should use exception handling to deal with truly exceptional conditions,
         not to process conditions that arise under normal or expected circumstances.
@@ -555,7 +548,7 @@ public static void main( String args[] ) {
       it takes considerably longer to handle an exception than it would to use a <c>Vector</c> for this type of application.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Appropriate Data Structure</title>
+      <title>EFFECTIVE DESIGN: Appropriate Data Structure</title>
       <p>
         A major component of problem solving is choosing the best way to represent the data.
         A vector should be used as an array structure whenever the size of the array will grow and shrink dynamically during the program's execution.
@@ -564,34 +557,79 @@ public static void main( String args[] ) {
     </subsection>
     <subsection><title>Self-Study Exercise</title>
     
-    <ol>
-      <li>
-        <p>
-          For each of the following exceptions,
-          determine whether it can be handled in such a way that the program can be resumed or whether the program should be terminated:
-        </p>
-        <ol>
-          <li>
-            <p>
-              A computer game program detects a problem with one of its GUI elements and throws a <c>NullPointerException</c>.
-            </p>
-          </li>
-          <li>
-            <p>
-              A factory assembly-line control program determines that an important control value has become negative and generates an
-<c>ArithmeticException</c>.
-            </p>
-          </li>
-          <li>
-            <p>
-              A company's Web-based order form detects that its user has entered an invalid <c>String</c> and throws a <c>SecurityException</c>.
-            </p>
-          </li>
-        </ol>
-      </li>
-    </ol>
-    <p>
-      <image width="73%" source="chptr10/intoutuml.png"/> \caption{The <c>IntOutOfRange</c> exception. }
-    </p>
+      <exercise label="resume-terminate">
+        <title>Resume or Terminate</title>
+        <statement>
+            <p>  For each of the following exceptions,
+              determine whether it can be handled in such a way that the program can be resumed (rather than terminated):
+         </p>
+        </statement>
+        <choices>
+            <choice correct="yes">
+                <statement>
+                    <p>
+                      A computer game program detects a problem with one of its many small GUI elements and throws a <c>NullPointerException</c>.
+                    </p>
+                </statement>
+                <feedback>
+                    <p>This is a computer game,
+                      so one way to handle this problem would be to generate a message into a 
+                      log file and resume the game.</p>
+                </feedback>
+            </choice>
+            <choice correct="no">
+                <statement>
+                  <p>
+                    A factory assembly-line control program determines that an important control value has become negative and generates an
+                    <c>ArithmeticException</c>.          
+                  </p>
+                </statement>
+                <feedback>
+                  You should probably terminate.
+                    You would have to decide whether it would be more harmful or dangerous 
+                    to continue production than not.
+                </feedback>
+            </choice>
+            <choice correct="yes">
+                <statement>
+                  <p>
+                    A company's Web-based order form detects that its user has entered an invalid <c>String</c> and throws a <c>SecurityException</c>.       
+                  </p>
+                </statement>
+                <feedback>
+                <p> The program could report the security violation to the user and to the 
+                  system manager and then keep accepting user input.  </p>
+                </feedback>
+            </choice>
+            </choices>
+            <solution>
+              <p>
+              <ol>
+                <li>
+                  <p>
+                    
+                    This is a computer game,
+                    so one way to handle this problem would be to generate a message into a 
+                    log file and resume the game.
+                  </p>
+                </li>
+                <li>
+                  <p>
+                 You should probably terminate.
+                    You would have to decide whether it would be more harmful or dangerous 
+                    to continue production than not.
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    The program could report the security violation to the user and to the 
+                    system manager and then keep accepting user input.
+                  </p>
+                </li>
+              </ol>
+              </p>
+            </solution>
+          </exercise>  
+
   </subsection>
 </section>

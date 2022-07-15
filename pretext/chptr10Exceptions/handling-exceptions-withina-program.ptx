@@ -5,7 +5,7 @@
       This section will describe how to handle exceptions within the program rather than leaving them to be handled by the JVM.
     </p>
   </introduction>
-  <subsection xml:id="fig-exchand">
+  <subsection>
     <title>Trying, Throwing, and Catching an Exception</title>
     <p>
       In Java, errors and other abnormal conditions are handled by throwing  and catching exceptions.
@@ -15,13 +15,15 @@
       as a way of signaling the abnormal condition.
       This is like pulling the fire alarm.
       When an exception is thrown,
-      an exception handler will catch the exception and deal with it (Fig.<nbsp/>10.6).
+      an exception handler will catch the exception and deal with it (<xref ref="fig-exchand">Figure</xref>).
       We will discuss try blocks,
-      which typically <image width="73%" source="chptr10/exchand.png"/>
+      which typically  are associated with catching exceptions, later in the section.
+
+<figure  xml:id="fig-exchand"><caption>Exception Handler</caption>
+      <image width="50%" source="chptr10/exchand.png"/>
+      </figure>
     </p>
-    <p>
-      are associated with catching exceptions, later in the section.
-    </p>
+   
     <p>
       If we go back to our <c>avgFirstN()</c> example,
       the typical way of handling this error in Java would be to throw an exception in the avgFirstN() method and catch it in the calling method.
@@ -37,19 +39,30 @@
       To illustrate Java's <c>try/throw/catch</c> mechanism,
       let's revisit the
 <c>CalcAvgTest</c> program.
-      The version shown in <xref ref="fig-calcavg2">Figure</xref>
+      The version shown in <xref ref="fig-calcavg2">Listing</xref>
       mimics the way Java's default exception handler works.
       If the <c>avgFirstN()</c> method is called with an argument that is zero or negative,
       an <c>IllegalArgumentException</c> is thrown.
       The exception is caught by the <c>catch</c> clause in the <c>CalcAvgTest.main()</c> method.
     </p>
-    <figure xml:id="fig-calcavg2">
+    <program language="java"><input>
+    try {
+      CalcAverage ca = new CalcAverage();
+      System.out.println( "AVG + " + ca.avgFirstN(0));
+    }
+    catch (IllegalArgumentException e) { // Exception Handler
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+      System.exit(0);
+    }
+  </input></program>
+    <listing xml:id="fig-calcavg2">
       <caption>In this version of the <c>calcAvgTest</c> program, an
 <c>IllegalArgumentException</c> thrown in <c>CalcAverage.avgFirstN()</c>, would be handled by the catch clause in
 <c>CalcAvgTest.main()</c>.</caption>
       
- <program language="java"><input>
-public class CalcAverage {
+ <program language="java" interactive="activecode"><input>
+ class CalcAverage {
   /**
    * Precondition:  N > 0
    * Postcondition: avgFirstN() equals the average of (1+2+...+N)
@@ -61,7 +74,8 @@ public class CalcAverage {
     for (int k = 1; k &lt;= N; k++)
       sum += k;
     return sum/N;         // What if N is 0?
-  } // avgFirstN()} // CalcAverage
+   } // avgFirstN()
+ } // CalcAverage
 public class CalcAvgTest {
   public static void main(String args[]) {
     try {
@@ -73,9 +87,10 @@ public class CalcAvgTest {
       e.printStackTrace();
       System.exit(0);
     }
-  }//main}// CalcAvgTest
+  }//main
+}// CalcAvgTest
  </input></program>
-    </figure>
+</listing>
     <p>
       Let's go through this example step by step.
       The first thing to notice is that if the <c>CalcAverage.avgFirstN()</c> method has a zero or negative argument,
@@ -86,15 +101,14 @@ public class CalcAvgTest {
     </p>
  <program language="java"><input>
 if (N &lt;= 0)
-  throw new IllegalArgumentException("ERROR: Illegal argument");
+   throw new IllegalArgumentException("ERROR: Illegal argument");
  </input></program>
     <p>
       Note the syntax of the <c>throw</c> statement.
       It creates a new <c>IllegalArgumentException</c> object and passes it a message that describes the error.
       This message becomes part of the exception object.
       It can be retrieved using the <c>getMessage()</c> method,
-      which is inherited from the <c>Throwable</c> class (Fig.
-      <xref ref="fig-excepthier"></xref>).
+      which is inherited from the <c>Throwable</c> class (<xref ref="fig-excepthier"></xref>).
     </p>
     <p>
       When a <c>throw</c> statement is executed,
@@ -105,10 +119,11 @@ if (N &lt;= 0)
 <c>CalcAvgTest.main()</c> method:
     </p>
  <program language="java"><input>
-catch (IllegalArgumentException e) {// Exception Handler
+catch (IllegalArgumentException e) {  // Exception Handler
    System.out.println(e.getMessage());
    e.printStackTrace();
-   System.exit(0);}
+   System.exit(0);
+}
  </input></program>
     <p>
       When an <c>IllegalArgumentException</c> is thrown,
@@ -122,9 +137,7 @@ catch (IllegalArgumentException e) {// Exception Handler
       When we run this program,
       the following output will be generated as a result of the illegal argument error:
     </p>
-    <p>
-      
-    </p>
+    
  <program language="java"><input>
 ERROR: Can't average 0 elements
 java.lang.IllegalArgumentException: ERROR: Illegal argument
@@ -147,7 +160,7 @@ java.lang.IllegalArgumentException: ERROR: Illegal argument
       It would make little sense to write our own exception handler if it does nothing more than mimic Java's default handler.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Using an Exception</title>
+      <title>EFFECTIVE DESIGN: Using an Exception</title>
       <p>
         Unless your program's handling of an exception is significantly different from Java's default handling of it,
         the program should just rely on the default.
@@ -164,7 +177,8 @@ java.lang.IllegalArgumentException: ERROR: Illegal argument
  <program language="java"><input>
 try {
     CalcAverage ca = new CalcAverage();
-    System.out.println( "AVG + " + ca.avgFirstN(0));        }
+    System.out.println( "AVG + " + ca.avgFirstN(0));        
+  }
  </input></program>
     <p>
       Second, we provide one or more <c>catch</c> clauses to handle particular types of exceptions.
@@ -188,7 +202,7 @@ try {
       the <c>IllegalArgumentException</c> is thrown
       by the <c>CalcAverage.avgFirstN()</c> method and caught by the catch
       clause within <c>CalcAvgTest.main()</c> method.</caption>
-      <image width="73%" source="chptr10/exccatch.png"/>
+      <image width="100%" source="chptr10/exccatch.png"/>
     </figure>
   </subsection>
   <subsection>
@@ -217,7 +231,7 @@ try {
       encapsulating all of a program's executable statements within a single <c>try</c> block in the <c>main()</c> method will effectively handle all the exceptions that occur within a program.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Normal Versus Exceptional Code</title>
+      <title>EFFECTIVE DESIGN: Normal Versus Exceptional Code</title>
       <p>
         A key element of Java's exception-handling mechanism is that the exception handler<mdash/>the catch block<mdash/>is distinct from the code that throws the exception<mdash/>the try block.
         The try block contains the normal algorithm.
@@ -250,10 +264,10 @@ try {
       </p>
     </principle>
     <p>
-      The complete syntax of the <c>try/catch</c> statement is summarized in <xref ref="fig-trystmt">Figure</xref>.
-      The try block is meant to
+      The complete syntax of the <c>try/catch</c> statement is summarized in <xref ref="fig-trystmt">Listing</xref>.
+ 
     </p>
-    <figure xml:id="fig-trystmt">
+    <listing xml:id="fig-trystmt">
       <caption>Java's try/catch statement.</caption>
  <program language="java"><input>
 try {
@@ -273,9 +287,9 @@ try {
      // Whether an exception is thrown or not
  }
  </input></program>
-    </figure>
+</listing>
     <p>
-      include a statement or statements that might throw an exception.
+      The try block is meant to     include a statement or statements that might throw an exception.
       The catch blocks<mdash/>there can be one or more<mdash/>are meant to handle exceptions that are thrown in the try block.
       A catch block will handle any exception that matches its parameter class,
       including subclasses of that class.
@@ -309,7 +323,8 @@ throw new ExceptionClassName(OptionalMessageString);
     </p>
  <program language="java"><input>
 catch (ExceptionClassName ParameterName) {
-    // Exception handling statements}
+    // Exception handling statements
+  }
  </input></program>
     <p>
       A <c>catch</c> block is very much like a method definition.
@@ -323,7 +338,7 @@ catch (ExceptionClassName ParameterName) {
     <p>
       The <em>ExceptionClassName</em>
       must be one of the classes in Java's  exception hierarchy
-      (see Fig.
+      (see 
       <xref ref="fig-excepthier"></xref>).
       A thrown exception will match any parameter of its own class or any of its superclasses.
       Thus, if an <c>ArithmeticException</c> is thrown,
@@ -351,7 +366,8 @@ try {
      System.out.println("ERROR: " + e.getMessage() );
      e.printStackTrace();
      System.exit(1);} catch (Exception e) {
-     System.out.println("ERROR: " + e.getMessage() );}
+     System.out.println("ERROR: " + e.getMessage() );
+    }
  </input></program>
     <p>
       In this case,
@@ -363,7 +379,7 @@ try {
 <c>catch</c> clauses.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Arranging Catch Clauses</title>
+      <title>PROGRAMMING TIP: Arranging Catch Clauses</title>
       <p>
         Catch clauses should be arranged from most specific to most general.
         The <c>Exception</c> clause should always be the last in the sequence.
@@ -413,8 +429,7 @@ try {
     <p>
       How does Java know that it should execute the <c>catch</c> clause in
 <c>CalcAvgTest.main()</c> when an exception is thrown in <c>avgFirstN()</c>? Also,
-      doesn't the latest version of <c>avgFirstN()</c>(Fig.
-      <xref ref="fig-calcavg2"></xref>) violate the restriction that a <c>throw</c> statement must occur within a try block?
+      doesn't the latest version of <c>avgFirstN()</c>(<xref ref="fig-calcavg2">Listing</xref>) violate the restriction that a <c>throw</c> statement must occur within a try block?
     </p>
     <p>
       An exception can only be thrown within a
@@ -428,8 +443,7 @@ try {
     <p>
       Dynamic scoping refers to the way a program is executed.
       For example,
-      in <c>CalcAverage</c>(Fig.
-      <xref ref="fig-calcavg2"></xref>),
+      in <c>CalcAverage</c>(<xref ref="fig-calcavg2">Listing</xref>),
       the <c>avgFirstN()</c> method is called from within the try block located in <c>CalcAvgTest.main()</c>. Thus,
       it falls within the dynamic scope of that try block.
     </p>
@@ -437,22 +451,48 @@ try {
       Contrast dynamic with what you have learned about
       <term>static scope</term>,
           <idx><h>static scope</h></idx>
-      which  we've used previously to define the scope of parameters and local variables (Fig.
-      <xref ref="fig-dynamic"></xref>).
+      which  we've used previously to define the scope of parameters and local variables 
+      (<xref ref="fig-dynamic"></xref>).
       Static scoping refers to the way a program is written.
-      A statement or variable occurs within the scope of a block if its text is actually written within that block.
+      A statement or variable occurs within the scope of a block if its 
+      text is actually written within that block.
+      
+      <figure xml:id="fig-dynamic">
+        <caption>Dynamic versus static scoping.  Static
+        scoping refers to how the program is written.  Look at its definitions.
+        Dynamic scoping refers to how the program executes.  Look at
+        what it actually does.</caption>
+        <image width="73%" source="chptr10/dynamic.png"/>
+      </figure>
+
       For example,
-      consider the definition of <c>MyClass</c>(Fig.
-      <xref ref="fig-myclass"></xref>).
+      consider the definition of <c>MyClass</c>(<xref ref="fig-myclass">Listing</xref>).
+
       The variable <c>X</c> occurs within the (static) scope of <c>method1()</c>, and the variable <c>Y</c> occurs within the (static) scope of <c>method2()</c>.
     </p>
-    <figure xml:id="fig-dynamic">
-      <caption>Dynamic versus static scoping.  Static
-      scoping refers to how the program is written.  Look at its definitions.
-      Dynamic scoping refers to how the program executes.  Look at
-      what it actually does.</caption>
-      <image width="73%" source="chptr10/dynamic.png"/>
-    </figure>
+    <listing xml:id="fig-myclass">
+      <caption>An example of dynamic versus static scoping.</caption>
+ <program language="java" interactive="activecode"><input>
+public class MyClass {
+    public void method1() {
+        int X = 1;
+        System.out.println("Hello" + X);
+    }
+    public void method2() {
+        int Y = 2;
+        System.out.println("Hello" + Y);
+    }
+    public static void main( String argv[] ) {
+        MyClass myclass = new MyClass();
+        if (Math.random() > 0.5)
+            myclass.method2();
+        else
+            myclass.method1();
+    }
+  } // MyClass
+ </input></program>
+</listing>
+ 
     <p>
       A method's parameters and local variables occur within its static scope.
       Also, in the <c>MyClass</c> definition,
@@ -476,27 +516,7 @@ main()
     method2()
         System.out.println("Hello" + Y);
  </input></program>
-    <figure xml:id="fig-myclass">
-      <caption>An example of dynamic versus static scoping.</caption>
- <program language="java"><input>
-public class MyClass {
-    public void method1() {
-        int X = 1;
-        System.out.println("Hello" + X);
-    }
-    public void method2() {
-        int Y = 2;
-        System.out.println("Hello" + Y);
-    }
-    public static void main( String argv[] ) {
-        MyClass myclass = new MyClass();
-        if (Math.random() > 0.5)
-            myclass.method2();
-        else
-            myclass.method1();
-    }} // MyClass
- </input></program>
-    </figure>
+ 
     <p>
       It occurs within the (dynamic) scope of <c>method2()</c>, which is within the (dynamic) scope of <c>main()</c>. On the other hand,
       if the result of <c>random()</c> had been 0.10,
@@ -508,7 +528,7 @@ public class MyClass {
       It prints a trace of a statement's dynamic scope.
     </p>
   </subsection>
-  <subsection xml:id="self-study-exercisesA26">
+  <subsection>
     <title>Exception Propagation: Searching for a Catch Block</title>
     <p>
       When an exception is thrown, Java uses both static and dynamic scoping to find a catch clause to handle it.
@@ -558,54 +578,96 @@ public class MyClass {
       <xref ref="fig-methodstack"></xref>) to search backward through the method calls that were made leading up to the exception.
       This is dynamic scoping.
       In the case of our <c>CalcAvgTest()</c> example (Fig.
-      <xref ref="fig-calcavg2"></xref>), Java would search backward to the <c>CalcAvgTest.main()</c> method,
+      <xref ref="fig-calcavg2">Listing</xref>), Java would search backward to the <c>CalcAvgTest.main()</c> method,
       which is where <c>avgFirstN()</c> was called,
       and it would find the <c>catch</c> clause there for handling
 <c>IllegalArgumentException</c> s.
       It would, therefore, execute that catch clause.
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-    <ol>
-      <li>
+    </subsection>
+    <subsection xml:id="self-study-exercisesA26"><title>Self-Study Exercises</title>
+    
+      <exercise label="catches">
+        <title>Catches</title>
+        <statement>
+            <p>  Suppose a program throws an <c>ArrayIndexOutOfBoundsException</c>. 
+              Using the exception hierarchy in <xref ref="fig-excepthier">Figure</xref>,
+              determine which of the following catch clauses could handle that exception.
+         </p>
+        </statement>
+        <choices>
+            <choice correct="yes">
+                <statement>
+                  <p>
+                    <c>catch (RunTimeException e) </c>
+                  </p>
+                </statement>
+                <feedback>
+                    <p><c>RunTimeException</c> is a superclass of 
+                      <c>ArrayIndexOutOfBoundsException</c>.</p>
+                </feedback>
+            </choice>
+            <choice correct="no">
+                <statement>
+                  <p>
+                      <c>catch (StringIndexOutOfBoundsException e) </c>
+                  </p>
+                </statement>
+                <feedback>
+                  <p>This does not involve a String.</p>
+                </feedback>
+            </choice>
+            <choice correct="yes">
+                <statement>
+                  <p>
+                    <c>catch (IndexOutOfBoundsException e) </c>
+                  </p>
+                </statement>
+                <feedback>
+                <p>  <c>IndexOutOfBoundsException</c> is a superclass of 
+                  <c>ArrayIndexOutOfBoundsException</c>.</p>
+                </feedback>
+            </choice>
+            <choice correct="yes">
+                <statement>
+                  <p>
+                    <c>catch (Exception e) </c>
+                  </p>
+                </statement>
+                <feedback>
+                    <p>The superclass Exception can catch anything!</p>
+                </feedback>
+            </choice>
+              <choice correct="no">
+                <statement>
+                  <p>
+                    <c>catch (ArrayStoreException e) </c>            
+            </p>
+            </statement>
+            <feedback><p>Not related.
+              </p></feedback>
+            </choice>
+        </choices>
+       <solution>
         <p>
-          Suppose a program throws an <c>ArrayIndexOutOfBoundsException</c>. Using the exception hierarchy in <xref ref="fig-excepthier">Figure</xref>,
-          determine which of the following catch clauses could handle that exception.
-        </p>
-        <ol>
-          <li>
-            <p>
-              <c>catch (RunTimeException e) </c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>catch (StringIndexOutOfBoundsException e) </c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>catch (IndexOutOfBoundsException e) </c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>catch (Exception e) </c>
-            </p>
-          </li>
-          <li>
-            <p>
-              <c>catch (ArrayStoreException e) </c>
-            </p>
-          </li>
-        </ol>
-      </li>
-      <li>
+          An <c>ArrayIndexOutOfBoundsException</c> could be handled by the handlers in
+          <c>RunTimeException</c>, <c>IndexOutOfBoundsException</c>, or Exception, because their classes are all superclasses of 
+          <c>ArrayIndexOutOfBoundsException</c>.
+           </p></solution>
+    </exercise>
+
+  <exercise label="except-output">
+<title>Exception Output</title>
+<statement>
         <p>
-          In the program that follows suppose that the first time <c>random()</c> is called it returns 0.98,
+          In the program that follows suppose that the first time <c>random()</c> is called
+           it returns 0.98,
           and the second time it is called it returns 0.44.
-          What output would be printed by the program?
+          What output would be printed by the program? What would be output if
+          <c>printStackTrace()</c> were called in addition to 
+          printing an error message?
  <program language="java"><input>
-class MyClass2 {
+public class MyClass2 {
     public void method1(double X) {
         if (X > 0.95)
             throw new ArithmeticException(X
@@ -626,32 +688,60 @@ class MyClass2 {
         } catch (ArithmeticException e) {
             System.out.println(e.getMessage());
         }
-    } // main()} // MyClass2
+    } // main()
+  } // MyClass2
  </input></program>
-        </p>
-      </li>
-      <li>
+        </p></statement>
+        <solution>
+          <p>
+            If <c>Math.random()</c> in <c>MyClass2</c> returns 0.98 and then 0.44,
+            the program will generate the following output:
+   <program language="java"><input>
+  0.98 is out of range
+   </input></program>Note that because the out-of-range error occurs in <c>method1()</c>,
+  <c>method2()</c> is not called at all.         The following stack trace would be printed:
+  <program language="java"><input>
+ java.lang.ArithmeticException: 0.98 is out of range
+     at MyClass2.method1(MyClass2.java:3)
+     at MyClass2.main(MyClass2.java:15)
+  </input></program>
+          </p>
+        </solution>
+        </exercise>
+      
+        <exercise label="except-output2">
+          <title>Exception Output 2</title>
+          <statement>
         <p>
-          For the values returned by <c>random()</c> in the previous exercise,
-          show what would be output if <c>printStackTrace()</c> were called in addition to printing an error message.
-        </p>
-      </li>
-      <li>
-        <p>
-          In the <c>MyClass2</c> program,
+          In the <c>MyClass2</c> program above,
           suppose that the first time
 <c>random()</c> is called it returns 0.44,
           and the second time it is called it returns 0.98.
           What output would be printed by the program?
-        </p>
-      </li>
-      <li>
-        <p>
-          For the values returned by <c>random()</c> in the previous exercise,
-          show what would be output if <c>printStackTrace()</c> were called instead of printing an error message.
-        </p>
-      </li>
-      <li>
+        
+          What would be output if <c>printStackTrace()</c> were called instead of 
+          printing an error message.
+        </p></statement>
+        <solution>     <p>
+          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.44 and then 0.98,
+          the program will generate the following output:
+ <program language="java"><input>
+Hello 0.44
+0.98 is out of range
+ </input></program>
+        
+          The following stack trace would be printed:
+ <program language="java"><input>
+java.lang.ArithmeticException: 0.98 is out of range
+    at MyClass2.method2(MyClass2.java:8)
+    at MyClass2.main(MyClass2.java:16)
+ </input></program>
+        </p></solution>
+        </exercise>
+      
+        <exercise label="except-divide-by-0">
+          <title>Divide by Zero Exception</title>
+          <statement>
         <p>
           Find the divide-by-zero error in the following program,
           and then show what stack trace would be printed by the program:
@@ -667,18 +757,69 @@ public class BadDivide {
         BadDivide bd = new BadDivide();
         for (int k = 0; k &lt; 5; k++)
             bd.method1(k);
-    }}
+    }
+  }
  </input></program>
-        </p>
-      </li>
-      <li>
+ </p></statement>
+ <solution>
+  <p>
+    The divide-by-zero error in <c>BadDivide</c> occurs in the expression 
+    <c>n/d</c> in <c>Method2()</c>. It would generate the following stack trace:
+<program language="java"><input>
+java.lang.ArithmeticException: divide by zero
+at BadDivide.method2(BadDivide.java:7)
+at BadDivide.method1(BadDivide.java:3)
+at BadDivide.main(BadDivide.java:13)
+</input></program>
+  </p>
+ </solution>
+ </exercise>
+        
+      
+<exercise label="modify-divide-by-zero">
+  <title>Modify Divide by Zero</title>
+<statement>
         <p>
           Modify <c>method2()</c> so that it handles the divide-by-zero exception itself,
           instead of letting Java handle it.
           Have it print an error message and a stack trace.
-        </p>
-      </li>
-      <li>
+        </p></statement>
+        <program language="java" interactive="activecode"><input>
+          public class BadDivide {
+              public void method1 (int n) {
+                  method2(100, n);
+              }
+              public void method2 (int n, int d) {
+                   System.out.println(n / d);
+              }
+              public static void main(String args[]) {
+                  BadDivide bd = new BadDivide();
+                  for (int k = 0; k &lt; 5; k++)
+                      bd.method1(k);
+              }
+            }
+           </input></program>
+           <solution>
+            <p>
+              The following version of <c>BadDivide.method2()</c> will handle the divide-by-zero error itself:
+     <program language="java"><input>
+    public void method2 (int n, int d) {
+        try {
+            System.out.println(n / d);
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.exit(0);
+        }
+      }
+     </input></program>
+            </p>
+            </solution>
+            </exercise>
+
+            <exercise label="except-output3">
+              <title>Exception Output 3</title>
+              <statement>
         <p>
           What would be printed by the following code segment if <c>someValue</c> equals 1000?
  <program language="java"><input>
@@ -687,26 +828,73 @@ try {
     System.out.println("Entering try block");
     if (M > 100)
         throw new Exception(M + " is too large");
-    System.out.println("Exiting try block");} catch (Exception e) {
-    System.out.println("ERROR: " + e.getMessage());}
+    System.out.println("Exiting try block");
+  } catch (Exception e) {
+    System.out.println("ERROR: " + e.getMessage());
+  }
  </input></program>
         </p>
-      </li>
-      <li>
+</statement>
+<solution>
+  <p>
+    If <c>someValue</c> equals 1000,
+    the code segment will print
+<program language="java"><input>
+Entering try block
+ERROR: 1000 is too large
+</input></program>
+  </p>
+</solution>
+</exercise> 
+
+        <exercise label="except-output-4"><title>Exception Output 4</title>
+          <statement>
         <p>
           What would be printed by the code segment in the preceding question if <c>someValue</c> equals 50?
         </p>
-      </li>
-      <li>
+        </statement>
+        <solution>
+          <p>
+            If <c>someValue</c> equals 50,
+            the code segment will print
+   <program language="java"><input>
+  Entering try block
+  Exiting try block
+   </input></program>
+          </p>
+        </solution>
+        </exercise>
+      
+        <exercise label="try-block-ex"><title>Try/Catch Block</title>
+          <statement>   
         <p>
           Write a <c>try/catch</c> block that throws an
 <c>Exception</c> if the value of variable <c>X</c> is less than zero.
           The exception should be an instance of <c>Exception</c> and,
           when it is caught,
           the message returned by <c>getMessage()</c> should be
-          <q>ERROR: Negative value in X coordinate.</q>
-        </p>
-      </li>
-    </ol>
+          <q>ERROR: Negative value in X coordinate.</q></p>
+</statement>
+<program language="java" interactive="activecode"><input>
+  public class MyClass {
+    public static void main(String argv[]) {
+        
+        double X = Math.random() * -10;
+           
+    } // main()
+  } // MyClass2
+   </input></program>
+<solution>
+  <p>
+    <program language="java"><input>
+try {
+  if (X &lt; 0)
+     throw new Exception("ERROR: Negative value in X coordinate");
+} catch (Exception e) {
+     System.out.println( e.getMessage() );
+}
+</input></program>
+</p> </solution>
+</exercise>    
   </subsection>
 </section>

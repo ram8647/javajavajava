@@ -11,7 +11,8 @@
     For example, a <em>file dialog</em>
     is opened whenever you want to open or save a file.
     It provides an interface that lets you name the file 
-    <em>java.sun.com/j2se/1.5.0/docs/api/</em>} and helps you search through the computer's directory structure to find a file.
+    (<url href="https://docs.oracle.com/javase/7/docs/api/java/awt/FileDialog.html" visual="">https://docs.oracle.com/javase/7/docs/api/java/awt/FileDialog.html</url>)
+     and helps you search through the computer's directory structure to find a file.
   </p>
   <p>
     A <em>warning dialog</em> or <term>error dialog</term>
@@ -29,7 +30,8 @@
  <program language="java"><input>
 catch (NumberFormatException e) {
   JOptionPane.showMessageDialog(this,
-    "The input must be an integer.  Please reenter.");}
+    "The input must be an integer.  Please reenter.");
+  }
  </input></program>
   <p>
     This method call displays the window shown in <xref ref="fig-errmsg">Figure</xref>.
@@ -37,8 +39,13 @@ catch (NumberFormatException e) {
     The
 <c>showMessageDialog()</c> method is a <c>static</c> method of the
 <c>javax.swing.JOptionPane</c> class.
-    This class provides a collection of similar methods for creating and displaying basic dialog boxes.
-    <image width="73%" source="chptr10/p634f1.png"/> A dialog differs from other kinds of top-level windows<mdash/>such as
+    This class provides a collection of similar methods for creating and displaying 
+    basic dialog boxes.
+    <figure xml:id="fig-errmsg">
+      <caption>Dialog Window</caption>
+    <image width="50%" source="chptr10/p634f1.png"/> 
+    </figure>
+    A dialog differs from other kinds of top-level windows<mdash/>such as
 <c>JApplet</c> and <c>JFrame</c><mdash/>in that it is associated with another window (Fig.<nbsp/>10-- 24).
     The first parameter in this version of the <c>showMessageDialog()</c> method is a reference to the dialog's parent window.
     The second parameter is a <c>String</c> representing the message.
@@ -54,17 +61,16 @@ catch (NumberFormatException e) {
   </p>
   <p>
     Note that the dialog box also contains an <em>icon</em>
-    that symbolizes the purpose of the message (Fig.
-    <xref ref="fig-errmsg2"></xref>).
-    The icon
+    that symbolizes the purpose of the message (<xref ref="fig-errmsg2"></xref>).
+    The icon is representative of the dialog's message type.
   </p>
   <figure xml:id="fig-errmsg2">
     <caption>An error dialog.</caption>
     <image width="73%" source="chptr10/errmsg2.png"/>
   </figure>
   <p>
-    is representative of the dialog's message type.
-    Among the basic types available in <c>JOptionPane</c> are the following:
+    
+    Among the basic message types available for the icon in <c>JOptionPane</c> are the following:
   </p>
  <program language="java"><input>
 JOptionPane.PLAIN_MESSAGE
@@ -79,8 +85,7 @@ JOptionPane.ERROR_MESSAGE
 <c>showMessageDialog()</c>:
   </p>
  <program language="java"><input>
-showMessageDialog(Component comp, Object message,
-                  String title, int msgType);
+showMessageDialog(Component comp, Object message, String title, int msgType);
  </input></program>
   <p>
     The first parameter is a reference to the parent window.
@@ -95,46 +100,42 @@ catch (IntOutOfRangeException e) {
     JOptionPane.showMessageDialog(this,
             e.getMessage(),
             "Error dialog",
-            JOptionPane.ERROR_MESSAGE);}
+            JOptionPane.ERROR_MESSAGE);
+          }
  </input></program>
   <p>
     This would produce the dialog shown in <xref ref="fig-errmsg2">Figure</xref>.
   </p>
   <p>
-    The other kinds of basic dialogs provided by the <c>JOptionPane</c> class are listed in Table<nbsp/>10.4.
+    The other kinds of basic dialogs provided by the <c>JOptionPane</c> class are listed 
+    in <xref ref="tab-dialog">Table</xref>.
     All of the dialogs listed there can be created with a line or two of code.
     In addition to  these,
     it's also possible to create sophisticated dialogs that can be as customized as any other GUI interface you can build in Java.
   </p>
-  <table>
-    \vspace{-6pt}\TBT{2pc}{Basic dialogs provided by <c>JOptionPane</c>.}
-    
+  <table  xml:id="tab-dialog">
+    <title>Basic dialogs provided by <c>JOptionPane</c>.</title>
     <tabular>
-      <row>
-        <cell><c>__________</c></cell>
-      </row>
-      <row>
+      <row bottom="minor">
         <cell><term>Dialog</term></cell>
         <cell><term>Description</term></cell>
       </row>
       <row>
-        <cell><c>__________</c></cell>
-      </row>
-      <row>
         <cell>Message Dialog</cell>
-        <cell>Presents a simple error or informational message \cr
-          Confirm Dialog</cell>
-        <cell>Prompts the user to confirm a particular action \cr
-          Option Dialog</cell>
-        <cell>Lets the user choose from some options\cr
+        <cell>Presents a simple error or informational message </cell>
+        </row>
+        <row>
+        <cell>Confirm Dialog</cell>
+        <cell>Prompts the user to confirm a particular action </cell>
+      </row>
+      <row><cell>          Option Dialog</cell>
+        <cell>Lets the user choose from some options</cell>
+        </row>
+        <row><cell>
           Input Dialog</cell>
         <cell>Prompts and inputs a string</cell>
       </row>
-      <row>
-        <cell><c>__________</c></cell>
-      </row>
     </tabular>
-    \endTB
   </table>
   <p>
     In this chapter,
@@ -144,603 +145,6 @@ catch (IntOutOfRangeException e) {
     This chapter continues the emphasis on good program design for creating useful,
     stable programs.
   </p>
-  <p>
-    \secSMHleft{Chapter Summary} \secKTH{Technical Terms} \begin{KT} catch block
-  </p>
-  <p>
-    catch an exception
-  </p>
-  <p>
-    checked exception
-  </p>
-  <p>
-    dialog box
-  </p>
-  <p>
-    dynamic scope
-  </p>
-  <p>
-    error dialog
-  </p>
-  <p>
-    exception
-  </p>
-  <p>
-    exception handling
-  </p>
-  <p>
-    finally block
-  </p>
-  <p>
-    method call stack
-  </p>
-  <p>
-    method stack trace
-  </p>
-  <p>
-    modal dialog
-  </p>
-  <p>
-    static scope
-  </p>
-  <p>
-    throw an exception
-  </p>
-  <p>
-    try block
-  </p>
-  <p>
-    unchecked exception
-  </p>
-  <p>
-    \end{KT}
-  </p>
-  <p>
-    \secSMHtwo{The Try/Catch Statement} The <c>try/catch/finally</c> statement has the following syntax:
-  </p>
- <program language="java"><input>
-try {
-    // Block of statements
-    // At least one of which may throw an exception
-    if ( * Some condition obtains */ )
-        throw new ExceptionName();} catch (ExceptionName ParameterName) {
-    // Block of statements to be executed
-    // If the ExceptionName exception is thrown in try}
-..} catch (ExceptionName2 ParameterName) {
-    // Block of statements to be executed
-    // If the ExceptionName2 exception is thrown in try} finally {
-    // Optional block of statements that is executed
-    // Whether an exception is thrown or not}
- </input></program>
-  <p>
-    The try block is meant to include a statement or statements that might throw an exception.
-    The catch blocks<mdash/>there can be one or more<mdash/>are meant to handle exceptions that are thrown in the try block.
-    A catch block will handle any exception that matches its parameter class,
-    including subclasses of that class.
-    The finally block is optional.
-    It will be executed whether an exception is thrown or not.
-    If an exception is thrown in the try block,
-    the try block is exited permanently.
-  </p>
-  <p>
-    The <c>throw</c> statement inside the try block is there to illustrate how <c>throw</c> can be used.
-    You will usually not see a <c>throw</c> statement in a try block,
-    because most throws are done from within Java library methods,
-    which are called from a <c>try</c> block.
-  </p>
-  <p>
-    \secSMHtwo{Summary of Important Points}
-    <ul>
-      <li>
-        <p>
-          In Java, when an error or exceptional condition occurs,
-          you <c>throw</c> an <c>Exception</c>, which is caught by special code known as an
-          <em>exception handler</em>.
-          A <c>throw</c> statement<mdash/><c>throw new Exception()</c><mdash/>is used to throw an exception.
-        </p>
-      </li>
-      <li>
-        <p>
-          A <em>try block</em> is a block of statements containing one or more statements that may throw an exception.
-          Embedding a statement in a try block indicates your awareness that it might throw an exception and your intention to handle the exception.
-        </p>
-      </li>
-      <li>
-        <p>
-          Java distinguishes between <em>checked</em>
-          and <em>unchecked</em> exceptions.
-          Checked exceptions must either be caught by the method in which they occur or you must declare that the method containing that statement <c>throws</c> the exception.
-        </p>
-      </li>
-      <li>
-        <p>
-          Unchecked exceptions are those that belong to subclasses of <c>RuntimeException</c>. If they are left uncaught,
-          they will be handled by Java's default exception handlers.
-        </p>
-      </li>
-      <li>
-        <p>
-          A <em>catch block</em> is a block of statements that handles the exceptions that match its parameter.
-          A catch block can only follow a try block,
-          and there may be more than one catch block for each try block.
-        </p>
-      </li>
-      <li>
-        <p>
-          The <c>try/catch</c> syntax allows you to separate the normal parts of an algorithm from special code meant to handle errors and exceptional conditions.
-        </p>
-      </li>
-      <li>
-        <p>
-          A <em>method stack trace</em> is a trace of the method calls that have led to the execution of a particular statement in the program.
-          The <c>Exception.printStackTrace()</c> method can be called by exception handlers to print a trace of exactly how the program reached the statement that threw the exception.
-          Static scoping refers to how the text of the program is arranged.
-          If a variable is declared within a method or a block,
-          its static scope is confined to that method or block.
-          Dynamic scoping refers to how the program is executed.
-          A statement is within the dynamic scope of a method or block if it is called from that method or block,
-          or if it is called by some other method that was called from that method or block.
-        </p>
-      </li>
-      <li>
-        <p>
-          When searching for a catch block to handle an exception thrown by a statement, Java searches upward through the statement's static scope and backward through its dynamic scope until it finds a matching catch block.
-          If none is found,
-          the Java Virtual Machine will handle the exception itself by printing an error message and a method stack trace.
-        </p>
-      </li>
-      <li>
-        <p>
-          Many Java library methods throw exceptions when an error occurs.
-          These <c>throw</c> statements do not appear in the program.
-          For example, Java's integer division operator will throw an
-<c>ArithmeticException</c> if an attempt is made to divide by zero.
-        </p>
-      </li>
-      <li>
-        <p>
-          Generally, there are four ways to handle an exception: (1) Let Java handle it; (2) fix the problem that led to the exception and resume the program; (3) report the problem and resume the program;
-          and (4) print an error message and terminate the program.
-          Most erroneous conditions reported by exceptions are difficult or impossible to fix.
-        </p>
-      </li>
-      <li>
-        <p>
-          A <c>finally</c> statement is an optional part of a
-<c>try/catch</c> block.
-          Statements contained in a finally block will be executed whether an exception is raised or not.
-        </p>
-      </li>
-      <li>
-        <p>
-          A well-designed program should use exception handling to deal with truly exceptional conditions,
-          not as a means of normal program control.
-        </p>
-      </li>
-      <li>
-        <p>
-          User-defined exceptions can be defined by extending the
-<c>Exception</c> class or one of its subclasses.
-        </p>
-      </li>
-    </ul>
-  </p>
-  <p>
-    \secANSHleft
-    <ul>
-      <li>
-        <ol>
-          <li>
-            <title>a</title>
-            <p>
-<c>Integer.parseInt("26.2");        ==> NumberFormatException</c>
-            </p>
-          </li>
-          <li>
-            <title>b</title>
-            <p>
-<c>String s; s.indexOf('a');        ==> NullPointerException</c>
-            </p>
-          </li>
-          <li>
-            <title>c</title>
-            <p>
-<c>String s = "hello"; s.charAt(5); ==> StringIndexOutOfBoundsException</c>
-            </p>
-          </li>
-        </ol>
-      </li>
-      <li>
-        <p>
-          The unchecked exceptions are <c>IndexOutOfBoundsException</c>,
-<c>NumberFormatException</c>, and <c>NullPointerException</c>, because these are subclasses of <c>RuntimeException</c>. The others are checked exceptions.
-        </p>
-      </li>
-      <li>
-        <p>
-          An <c>ArrayIndexOutOfBoundsException</c> could be handled by the handlers in a, c, or d, because their classes are all superclasses of <c>ArrayIndexOutOfBoundsException</c>.
-        </p>
-      </li>
-      <li>
-        <p>
-          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.98 and then 0.44,
-          the program will generate the following output:
- <program language="java"><input>
-0.98 is out of range
- </input></program>Note that because the out-of-range error occurs in <c>method1()</c>,
-<c>method2()</c> is not called at all.
-        </p>
-      </li>
-      <li>
-        <p>
-          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.98 and then 0.44,
-          the following stack trace would be printed:
- <program language="java"><input>
-java.lang.ArithmeticException: 0.98 is out of range
-    at MyClass2.method1(MyClass2.java:3)
-    at MyClass2.main(MyClass2.java:15)
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.44 and then 0.98,
-          the program will generate the following output:
- <program language="java"><input>
-Hello 0.44
-0.98 is out of range
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          If <c>Math.random()</c> in <c>MyClass2</c> returns 0.44 and then 0.98,
-          the following stack trace would be printed:
- <program language="java"><input>
-java.lang.ArithmeticException: 0.98 is out of range
-    at MyClass2.method2(MyClass2.java:8)
-    at MyClass2.main(MyClass2.java:16)
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The divide-by-zero error in <c>BadDivide</c> occurs in the expression <c>n/d</c> in <c>Method2()</c>. It would generate the following stack trace:
- <program language="java"><input>
-java.lang.ArithmeticException: divide by zero
-    at BadDivide.method2(BadDivide.java:7)
-    at BadDivide.method1(BadDivide.java:3)
-    at BadDivide.main(BadDivide.java:13)
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The following version of <c>BadDivide.method2()</c> will handle the divide-by-zero error itself:
- <program language="java"><input>
-public void method2 (int n, int d) {
-    try {
-        System.out.println(n / d);
-    } catch (ArithmeticException e) {
-        System.out.println(e.getMessage());
-        e.printStackTrace();
-        System.exit(0);
-    }}
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          If <c>someValue</c> equals 1000,
-          the code segment will print
- <program language="java"><input>
-Entering try block
-ERROR: 1000 is too large
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          If <c>someValue</c> equals 50,
-          the code segment will print
- <program language="java"><input>
-Entering try block
-Exiting try block
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-           <program language="java"><input>
-try {
- if (X &lt; 0)
-    throw new Exception(
-           "ERROR: Negative value in X coordinate");} catch (Exception e) {
- System.out.println( e.getMessage() );}
- </input></program>
-        </p>
-      </li>
-      <li>
-        <ol>
-          <li>
-            <title>a</title>
-            <p>
-              It depends.
-              This is a computer game,
-              so one way to handle this problem would be to generate a message into a log file and resume the game.
-              If the GUI element is crucial to the game,
-              it's hard to see how it could be successfully handled.
-            </p>
-          </li>
-          <li>
-            <title>b</title>
-            <p>
-              It depends.
-              You would have to decide whether it would be more harmful or dangerous to continue production than not.
-            </p>
-          </li>
-          <li>
-            <title>c</title>
-            <p>
-              The program could report the security violation to the user and to the system manager and then keep accepting user input.
-            </p>
-          </li>
-        </ol>
-      </li>
-      <li>
-        <p>
-           <program language="java"><input>
-public class FieldIsEmptyException extends Exception {
-    public FieldIsEmptyException () {
-        super("The input field is empty ");
-    }}
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-           <program language="java"><input>
-public int getInt() {
-    int num = 0;
-    try {
-        String data = getText();
-        if (data.equals(""))
-            throw new FieldIsEmptyException();
-        num = Integer.parseInt( getText() );
-        if (num > bound)
-            throw new IntOutOfRangeException(bound);
-    } catch (FieldIsEmptyException e) {
-        System.out.println("Error: " + e.getMessage() );
-    } catch (NumberFormatException e) {
-      System.out.println("Error: You must input an integer.
-                                       Please try again.");
-    } catch (IntOutOfRangeException e) {
-        System.out.println(e.getMessage());
-        return 0;
-    }
-    return num;}
- </input></program>
-        </p>
-      </li>
-    </ul>
-  </p>
-  <p>
-    \marginpar{<term>Note:</term> For programming exercises,
-    <term>first</term> draw a UML class diagram describing all classes and their inheritance relationships and/or associations.}
-  </p>
-  <ol>
-    <li>
-      <p>
-        Explain the difference between the following pairs of terms:
-      </p>
-      <ol>
-        Throwing an exception and <em>catching an exception</em>. Try block and <em>catch block</em>. Catch block and <em>finally block</em>. Try block and <em>finally block</em>. Dynamic scope and <em>static scope</em>. Dialog box and <em>top-level window</em>. Checked and <em>unchecked</em> exception. Method stack and <em>method call</em>.
-      </ol>
-    </li>
-    <li>
-      <p>
-        Fill in the blanks.
-        <ol>
-          <li>
-            <p>
-              <c>__________</c> an exception is Java's way of signaling that some kind of abnormal situation has occurred.
-            </p>
-          </li>
-          <li>
-            <p>
-              The only place that an exception can be thrown in a Java program is within a <c>__________</c> .
-            </p>
-          </li>
-          <li>
-            <p>
-              The block of statements placed within a catch block is generally known as an <c>__________</c> .
-            </p>
-          </li>
-          <li>
-            <p>
-              To determine a statement's <c>__________</c> scope,
-              you have to trace the program's execution.
-            </p>
-          </li>
-          <li>
-            <p>
-              To determine a statement's <c>__________</c> scope,
-              you can just read its definition.
-            </p>
-          </li>
-          <li>
-            <p>
-              When a method is called,
-              a representation of the method call is placed on the <c>__________</c> .
-            </p>
-          </li>
-          <li>
-            <p>
-              The root of Java's exception hierarchy is the <c>__________</c> class.
-            </p>
-          </li>
-          <li>
-            <p>
-              A <c>__________</c> exception must be either caught or declared within the method in which it might be thrown. [4]
-            </p>
-          </li>
-          <li>
-            <p>
-              An <c>__________</c> exception can be left up to Java to handle.
-            </p>
-          </li>
-        </ol>
-      </p>
-    </li>
-    <li>
-      <p>
-        Compare and contrast the four different ways of handling exceptions within a program.
-      </p>
-    </li>
-    <li>
-      <p>
-        Suppose you have a program that asks the user to input a string of no more than five letters.
-        Describe the steps you'd need to take in order to design a <c>StringTooLongException</c> to handle cases where the user types in too many characters.
-      </p>
-    </li>
-    <li>
-      <p>
-        Exceptions require more computational overhead than normal processing.
-        Explain.
-      </p>
-    </li>
-    <li>
-      <p>
-        Suppose the following <c>ExerciseExample</c> program is currently executing the if statement in <c>method2()</c>:
- <program language="java"><input>
-public class ExerciseExample {
-  public void method1(int M) {
-    try {
-      System.out.println("Entering try block");
-      method2( M );
-      System.out.println("Exiting try block");
-    } catch (Exception e) {
-      System.out.println("ERROR: " + e.getMessage());
-    }
-  } // method1()
-  public void method2(int M) {
-    if (M > 100)
-      throw new ArithmeticException(M + " is too large");
-  }
-  public static void main(String argv[]) {
-    ExerciseExample ex = new ExerciseExample();
-    ex.method1(500);
-  }} // ExerciseExample
- </input></program>Draw a picture of the method call stack that represents this situation.
-      </p>
-    </li>
-    <li>
-      <p>
-        Repeat the previous exercise for the situation where the program is currently executing the second <c>println()</c> statement in <c>method1()</c>.
-      </p>
-    </li>
-    <li>
-      <p>
-        Draw a hierarchy chart that represents the static scoping relationships among the elements of the <c>ExerciseExample</c> program.
-      </p>
-    </li>
-    <li>
-      <p>
-        What would be printed by the <c>ExerciseExample</c> program when it is run?
-      </p>
-    </li>
-    <li>
-      <p>
-        What would be printed by the <c>ExerciseExample</c> program,
-        if the statement in its main method were changed to
-<c>ex.method1(5)</c>?
-      </p>
-    </li>
-    <li>
-      <p>
-        Consider again the <c>ExerciseExample</c> program.
-        If the exception thrown were <c>Exception</c> rather than
-<c>ArithmeticException</c>, explain why we would get the following error message: <c>java.lang.Exception must be caught, or it must be
-declared<ellipsis /> </c>.
-      </p>
-    </li>
-    <li>
-      <p>
-        Write a <c>try/catch</c> block that throws an
-<c>Exception</c> if the value of variable <c>X</c> is less than zero.
-        The exception should be an instance of <c>Exception</c> and,
-        when it is caught,
-        the message returned by <c>getMessage()</c> should be
-        <q>ERROR: Negative value in X coordinate.</q>
-      </p>
-    </li>
-    <li>
-      <p>
-        Look at the <c>IntFieldTester</c> program (Fig.
-        <xref ref="fig-intbound"></xref>) and the <c>IntField</c> class definition (Fig.
-        <xref ref="fig-intfield2"></xref>).
-        Suppose the user inputs a value that's greater than 100.
-        Show what the method call stack would look like when the <c>IntField.getInt()</c> method is executing the
-<c>num > bound</c> expression.
-      </p>
-    </li>
-    <li>
-      <p>
-        As a continuation of the previous exercise,
-        show what the program's output would be if the user input a value greater than 100.
-      </p>
-    </li>
-    <li>
-      <p>
-        As a continuation of the previous exercise,
-        modify the
-<c>IntOutOfRangeException</c> handler so that it prints the message call stack.
-        Then show what it would print.
-      </p>
-    </li>
-    <li>
-      <p>
-        Define a subclass of <c>RuntimeException</c> named
-<c>InvalidPasswordException</c>, which contains two constructors.
-        The first constructor takes no parameters and an exception thrown with this constructor should return
-        <q>ERROR: invalid password</q>
-        when its
-<c>getMessage()</c> is invoked.
-        The second constructor takes a single
-<c>String</c> parameter.
-        Exceptions thrown with this constructor should return the constructor's argument when <c>getMessage()</c> is invoked.
-      </p>
-    </li>
-    <li>
-      <p>
-        Extend the <c>IntField</c> class so that it will constrain the integer <c>JTextField</c> to an <c>int</c> between both a lower and upper bound.
-        In other words,
-        it should throw an exception if the user types in a value lower than the lower bound or greater than the upper bound.
-      </p>
-    </li>
-    <li>
-      <p>
-        Design Issue: One of the preconditions for the <c>InsertionSort()</c> method (Fig.<nbsp/>9.13) is that its array parameter not be null.
-        Of course, this precondition would fail if the array were passed a null array reference.
-        In that case, Java would throw a <c>NullPointerException</c> and terminate the program.
-        Is this an appropriate way to handle that exception?
-      </p>
-    </li>
-    <li>
-      <p>
-        With respect to the previous exercise,
-        suppose you decide that it is more appropriate to handle the
-<c>NullPointerException</c> by presenting an error dialog.
-        Modify the method to accommodate this behavior.
-      </p>
-    </li>
-    <li>
-      <p>
-        Design Issue: Another possible way to design the
-<c>sequentialSearch()</c> method (Fig.<nbsp/>9.16) would be to have it throw an exception when its key is not found in the array.
-        Is this a good design?
-        Explain.
-      </p>
-    </li>
-  </ol>
+ 
+ 
 </section>
