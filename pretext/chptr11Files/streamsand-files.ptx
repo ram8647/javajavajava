@@ -4,18 +4,25 @@
     <p>
       As was noted in Chapter<nbsp/>4,
       all input and output (I/O) in Java is accomplished through the use of input streams and output streams.
-      You are already familiar with input and output streams because we  have routinely used the <c>System.out</c> output stream and and the <c>System.in</c> input stream (Fig.
+      You are already familiar with input and output streams because we  have routinely used the <c>System.out</c> 
+      output stream and and the <c>System.in</c> input stream (Fig.
       <xref ref="fig-systemout"></xref>) in this text's examples.
-      Recall that <c>System.out</c> usually connects your program (source) to the screen (destination) and <c>System.in</c> usually connects the keyboard (source) to the running program
+      Recall that <c>System.out</c> usually connects your program (source) to the screen 
+      (destination) and <c>System.in</c> usually connects the keyboard (source) to the running program
       (destination).
       What you have learned about streams will also be a key for connecting files to a program.
     </p>
+  <figure xml:id="fig-systemout">
+    <caption>The <c>System.out</c> output stream connects your program
+    to the screen and the <c>System.in</c> input stream connects it to the keyboard.</caption>
+    <image width="73%" source="chptr11/sysinout.png"/>
+  </figure>
   </introduction>
   <subsection xml:id="fig-datahier">
     <title>The Data Hierarchy</title>
     <p>
       Data, or information,
-      are the contents that flow through Java streams or stored in files.
+      are the contents that flow through Java streams and are stored in files.
       All data are comprised of binary digits or <em>bits</em>.
       A bit is simply a 0 or a 1, the electronic states that correspond to these values.
       As we learned in Chapter<nbsp/>5,
@@ -23,8 +30,9 @@
     </p>
     <p>
       However, it would be tedious if a program had to work with data in units as small as bits.
-      Therefore, most operations involve various-sized aggregates of data such as an 8-bit <c>byte</c>, a 16-bit <c>short</c>, a 16-bit <c>char</c>, a 32-bit <c>int</c>, a 64-bit <c>long</c>, a 32-bit
-<c>float</c>, or a 64-bit <c>double</c>. As we know,
+      Therefore, most operations involve various-sized aggregates of data such as an 
+      8-bit <c>byte</c>, a 16-bit <c>short</c>, a 16-bit <c>char</c>, a 32-bit <c>int</c>, a 64-bit <c>long</c>, a 32-bit
+      <c>float</c>, or a 64-bit <c>double</c>. As we know,
       these are Java's primitive numeric types.
       In addition to these aggregates,
       we can group together a sequence of <c>char</c> to form a <c>String</c>.
@@ -38,21 +46,27 @@
           <idx><h>fields</h></idx>
       that contain different types of data.
       For example,
-      a student record might contain fields for the student's name and address represented by (<c>String</c> s),
+      a student record might contain fields for the student's name and address represented by (<c>String</c>s),
       expected year of graduation (<c>int</c>), and current grade point average represented by (<c>double</c>).
       Collections of these records are typically grouped into <em>files</em>.
+    </p>
+    <p>
       For example,
       your registrar's office may have a separate file for each of its graduating classes.
       These are typically organized into a collection of related files,
       which is called a <term>database</term>.
           <idx><h>database</h></idx>
-      <image width="73%" source="chptr11/datahier.png"/> Taken together,
+     Taken together,
       the different kinds of data that are processed by a computer or stored in a file can be organized into a
       <term>data hierarchy</term>
           <idx><h>data hierarchy</h></idx>
-      (Fig.<nbsp/>11. 2).
+      (<xref ref="fig-data-hier">Figure</xref>).
     </p>
-    <p>
+    <figure xml:id="fig-data-hier">
+    <caption>A data hierarchy.</caption>
+     <image width="50%" source="chptr11/datahier.png"/>
+    </figure> 
+     <p>
       It's important to recognize that while we,
       the programmers,
       may group data into various types of abstract entities,
@@ -76,13 +90,15 @@
       whereas a <em>text file</em> is processed as a sequence of characters.
     </p>
     <p>
-      Text editors and other programs that process text files interpret the file's sequence of bits as a sequence of characters<mdash/>that is,
+      Text editors and other programs that process text files interpret the file's sequence of 
+      bits as a sequence of characters<mdash/>that is,
       as a string.
       Your Java source programs (<c>*.java</c>) are text files,
       and so are the HTML files that populate the World Wide Web.
       The big advantage of text files is their portability.
-      Because their data  are represented in the ASCII code (Table~5.13), they can be read and written by just about any text-processing program.
-      Thus, a text file created by a program on a Windows/Intel computer can be read by a Macintosh program.
+      Because their data  are represented in the ASCII code (<xref ref="fig-ASCII">Table</xref>), they can be read 
+      and written by just about any text-processing program.
+      Thus, a text file created by a program on a Windows computer can be read by a Macintosh program.
     </p>
     <p>
       In non-Java environments, data in binary files are stored as bytes,
@@ -90,14 +106,15 @@
       The manner in which a computer's memory stores binary data determines how it is represented in a file.
       Thus, binary data are not very portable.
       For example,
-      a binary file of integers created on a Macintosh cannot be read by a Windows/Intel program.
+      a binary file of integers created on a Macintosh cannot typically be read by a Windows program.
     </p>
     <p>
-      One reason for the lack of portability is that each type of computer uses its own definition for how an integer is defined.
+      One reason for the lack of portability is that each type of computer uses its own 
+      definition for how an integer is defined.
       On some systems  an integer might be 16 bits,
       and on others it might be 32 bits,
       so even if you know that a Macintosh binary file contains integers,
-      that still won't make it readable by Windows/Intel programs.
+      that still won't make it readable by Windows programs.
       Another problem is that even if two computers use the same number of bits to represent an integer,
       they might use different representation schemes.
       For example,
@@ -106,8 +123,9 @@
     </p>
     <p>
       The good news for us is that Java's designers have made its binary files
-      <em>platform independent</em>
-      by carefully defining the exact size and representation that must be used for integers and all other primitive types.
+      <term>platform independent</term>
+      by carefully defining the exact size and representation that must be used for 
+      integers and all other primitive types.
       Thus, binary files created by Java programs can be interpreted by Java programs on any platform.
     </p>
     <principle>
@@ -118,14 +136,16 @@
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="fig-writer">
+  <subsection xml:id="sec-streams">
     <title>Input and Output Streams</title>
     <p>
-      Java has a wide variety of streams for performing I/O.<nbsp/>They are defined in the <c>java.io</c> package,
-      which must be imported by any program that does I/O. They are generally organized into the hierarchy illustrated in <xref ref="fig-streamhier">Figure</xref>.
+      Java has a wide variety of streams for performing I/O. They are defined in the <c>java.io</c> package,
+      which must be imported by any program that does I/O. They are generally organized into the 
+      hierarchy illustrated in <xref ref="fig-streamhier">Figure</xref>.
       We will cover only a small portion of the hierarchy in this text.
       Generally speaking,
-      binary files are processed by subclasses of <c>InputStream</c> and <c>OutputStream</c>.  Text files are processed by subclasses of <c>Reader</c> and <c>Writer</c>, both of which are streams,
+      binary files are processed by subclasses of <c>InputStream</c> and <c>OutputStream</c>.  
+      Text files are processed by subclasses of <c>Reader</c> and <c>Writer</c>, both of which are streams,
       despite their names.
     </p>
     <figure xml:id="fig-streamhier">
@@ -133,25 +153,27 @@
       <image width="73%" source="chptr11/streamhier.png"/>
     </figure>
     <p>
-<c>InputStream</c> and <c>OutputStream</c> are abstract classes that serve as the root classes for reading and writing binary data.
-      Their most commonly used subclasses are <c>DataInputStream</c> and
-<c>DataOutputStream</c>, which are used for processing <c>String</c> data and data of any of Java's primitive types<mdash/><c>char</c>,
-<c>boolean</c>, <c>int</c>, <c>double</c>, and so on.
-      The analogues of these classes for processing text data are the <c>Reader</c> and <c>Writer</c> classes,
-      which serve as the root classes for all text I/O.
+    <c>InputStream</c> and <c>OutputStream</c> are abstract classes that serve as the root classes for 
+    reading and writing binary data.
+    Their most commonly used subclasses are <c>DataInputStream</c> and
+    <c>DataOutputStream</c>, which are used for processing <c>String</c> data and data of any of Java's 
+    primitive types<mdash/><c>char</c>,
+    <c>boolean</c>, <c>int</c>, <c>double</c>, and so on.
+    The analogues of these classes for processing text data are the <c>Reader</c> and <c>Writer</c> classes,
+    which serve as the root classes for all text I/O.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Choosing a Stream</title>
+      <title>PROGRAMMING TIP: Choosing a Stream</title>
       <p>
-        In choosing an appropriate stream for an I/O operation, <c>DataInputStream</c> s and
-<c>DataOutputStream</c> s normally are used for binary I/O.<nbsp/><c>Reader</c> and
-<c>Writer</c> streams normally are used for text I/O.
+        In choosing an appropriate stream for an I/O operation, <c>DataInputStream</c>s and
+        <c>DataOutputStream</c>s normally are used for binary I/O. <c>Reader</c> and
+        <c>Writer</c> streams normally are used for text I/O.
       </p>
     </principle>
     <p>
       The various subclasses of these root classes perform various specialized I/O operations.
       For example, <c>FileInputStream</c> and
-<c>FileOutputStream</c> are used for performing binary input and output on files.
+      <c>FileOutputStream</c> are used for performing binary input and output on files.
       The <c>PrintStream</c> class contains methods for outputting various primitive data<mdash/>integers,
       floats, and so forth<mdash/>as text.
       The <c>System.out</c> stream,
@@ -159,128 +181,210 @@
       is an object of this type.
       The <c>PrintWriter</c> class,
       which was introduced in JDK 1.1 contains the same methods as
-<c>PrintStream</c> but the methods are designed to support platform independence and internationalized I/O<mdash/>that is, I/O that works in different languages and alphabets.
+      <c>PrintStream</c> but the methods are designed to support platform independence 
+      and internationalized I/O<mdash/>that is, I/O that works in different languages and alphabets.
     </p>
     <p>
-      The various methods defined in <c>PrintWriter</c> are designed <image width="73%" source="chptr11/writer.png"/> to output a particular type of primitive data (Fig.<nbsp/>11.4).
+      The various methods defined in <c>PrintWriter</c> are designed 
+      to output a particular type of primitive data (Fig.<nbsp/>11.4).
       As you would expect,
       there is both a <c>print()</c> and
-<c>println()</c> method for each kind of data that the programmer wants to output.
+      <c>println()</c> method for each kind of data that the programmer wants to output.
     </p>
+    <figure xml:id="fig-writer">
+      <caption>The <c>PrintWriter</c> class.</caption>
+      <image width="50%" source="chptr11/writer.png"/>
+    </figure> 
     <p>
-      Table<nbsp/>11.1 briefly describes Java's most commonly used input and output streams.
+      <xref ref="tab-streams">Table</xref> briefly describes Java's most commonly used input and output streams.
       In addition to the ones we've already mentioned,
       you are already familiar with methods from the <c>BufferedReader</c> and
-<c>File</c> classes,
+      <c>File</c> classes,
       which were used in Chapter<nbsp/>4.
     </p>
-    <p>
-      <term>Filtering</term>
-          <idx><h>Filtering</h></idx>
-      refers to performing operations on data while the data are being input or output.
-      Methods in the <c>FilterInputStream</c> and <c>FilterReader</c> classes can be used to filter binary and text data during input.
-      Methods in the <c>FilterOutputStream</c> and <c>FilterWriter</c> can be used to filter output data.
-      These classes serve as the root classes for various filtering subclasses.
-      They can also be subclassed to perform customized data filtering.
-    </p>
-    <table>
-      \TBT{-5pc}{Description of some of Java's important stream classes.}
-      
+     <table xml:id="tab-streams">
+      <caption>Description of some of Java's important stream classes.</caption>
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
+        <row bottom="minor" left="minor">
           <cell><term>Class</term></cell>
           <cell><term>Description</term></cell>
         </row>
         <row>
-          <cell><c>__________</c></cell>
+          <cell><c>InputStream</c></cell>
+          <cell>Abstract root class of all binary input streams</cell>
         </row>
         <row>
-          <cell><c>InputStream</c></cell>
-          <cell>Abstract root class of all binary input streams \cr
+          <cell>
 <c>FileInputStream</c></cell>
-          <cell>Provides methods for reading bytes from a binary file \cr
+          <cell>Provides methods for reading bytes from a binary file </cell>
+        </row>
+        <row>
+          <cell>
 <c>FilterInputStream</c></cell>
-          <cell>Provides methods required to filter data \cr
+          <cell>Provides methods required to filter data </cell>
+        </row>
+        <row>
+          <cell>
 <c>BufferedInputStream</c></cell>
-          <cell>Provides input data buffering for reading large files \cr
+          <cell>Provides input data buffering for reading large files </cell>
+        </row>
+        <row>
+          <cell>
 <c>ByteArrayInputStream</c></cell>
-          <cell>Provides methods for reading an array as if it were a stream \cr
+          <cell>Provides methods for reading an array as if it were a stream </cell>
+        </row>
+        <row>
+          <cell>
 <c>DataInputStream</c></cell>
-          <cell>Provides methods for reading Java's primitive data types \cr
+          <cell>Provides methods for reading Java's primitive data types </cell>
+        </row>
+        <row>
+          <cell>
 <c>PipedInputStream</c></cell>
-          <cell>Provides methods for reading piped data from another thread \cr
+          <cell>Provides methods for reading piped data from another thread </cell>
+        </row>
+        <row>
+          <cell>
 <c>OutputStream</c></cell>
-          <cell>Abstract root class of all binary output streams \cr
+          <cell>Abstract root class of all binary output streams </cell>
+        </row>
+        <row>
+          <cell>
 <c>FileOutputStream</c></cell>
-          <cell>Provides methods for writing bytes to a binary file \cr
+          <cell>Provides methods for writing bytes to a binary file </cell>
+        </row>
+        <row>
+          <cell>
 <c>FilterOutputStream</c></cell>
-          <cell>Provides methods required to filter data \cr
+          <cell>Provides methods required to filter data </cell>
+        </row>
+        <row>
+          <cell>
 <c>BufferedOutputStream</c></cell>
-          <cell>Provides output data buffering for writing large files \cr
+          <cell>Provides output data buffering for writing large files </cell>
+        </row>
+        <row>
+          <cell>
 <c>ByteArrayOutputStream</c></cell>
-          <cell>Provides methods for writing an array as if it were a stream \cr
+          <cell>Provides methods for writing an array as if it were a stream </cell>
+        </row>
+        <row>
+          <cell>
 <c>DataOutputStream</c></cell>
-          <cell>Provides methods for writing Java's primitive data types \cr
+          <cell>Provides methods for writing Java's primitive data types </cell>
+        </row>
+        <row>
+          <cell>
 <c>PipedOutputStream</c></cell>
-          <cell>Provides methods for writing piped data to another thread \cr
+          <cell>Provides methods for writing piped data to another thread </cell>
+        </row>
+        <row>
+          <cell>
 <c>PrintStream</c></cell>
-          <cell>Provides methods for writing primitive data as text \cr
+          <cell>Provides methods for writing primitive data as text </cell>
+        </row>
+        <row>
+          <cell>
 <c>Reader</c></cell>
-          <cell>Abstract root class for all text input streams \cr
+          <cell>Abstract root class for all text input streams </cell>
+        </row>
+        <row>
+          <cell>
 <c>BufferedReader</c></cell>
-          <cell>Provides buffering for character input streams  \cr
+          <cell>Provides buffering for character input streams  </cell>
+        </row>
+        <row>
+          <cell>
 <c>CharArrayReader</c></cell>
-          <cell>Provides input operations on <c>char</c> arrays  \cr
+          <cell>Provides input operations on <c>char</c> arrays  </cell>
+        </row>
+        <row>
+          <cell>
 <c>FileReader</c></cell>
-          <cell>Provides methods for character input on files \cr
+          <cell>Provides methods for character input on files </cell>
+        </row>
+        <row>
+          <cell>
 <c>FilterReader</c></cell>
-          <cell>Provides methods to filter character input \cr
+          <cell>Provides methods to filter character input </cell>
+        </row>
+        <row>
+          <cell>
 <c>StringReader</c></cell>
-          <cell>Provides input operations on <c>String</c> s  \cr
+          <cell>Provides input operations on <c>String</c> s  </cell>
+        </row>
+        <row>
+          <cell>
 <c>Writer</c></cell>
-          <cell>Abstract root class for all text output streams \cr
+          <cell>Abstract root class for all text output streams </cell>
+        </row>
+        <row>
+          <cell>
 <c>BufferedWriter</c></cell>
-          <cell>Provides buffering for character output streams \cr
+          <cell>Provides buffering for character output streams </cell>
+        </row>
+        <row>
+          <cell>
 <c>CharArrayWriter</c></cell>
-          <cell>Provides output operations to <c>char</c> arrays \cr
+          <cell>Provides output operations to <c>char</c> arrays </cell>
+        </row>
+        <row>
+          <cell>
 <c>FileWriter</c></cell>
-          <cell>Provides methods for output to text files \cr
+          <cell>Provides methods for output to text files </cell>
+        </row>
+        <row>
+          <cell>
 <c>FilterWriter</c></cell>
-          <cell>Provides methods to filter character output \cr
+          <cell>Provides methods to filter character output </cell>
+        </row>
+        <row>
+          <cell>
 <c>PrintWriter</c></cell>
-          <cell>Provides methods for printing binary data as characters \cr
+          <cell>Provides methods for printing binary data as characters </cell>
+        </row>
+        <row bottom="minor">
+          <cell>
 <c>StringWriter</c></cell>
           <cell>Provides output operations to <c>String</c> s</cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
       </tabular>
-      \endTB
     </table>
     <p>
+      <term>Filtering</term>
+          <idx><h>Filtering</h></idx>
+      refers to performing operations on data while the data are being input or output.
+      Methods in the <c>FilterInputStream</c> and <c>FilterReader</c> classes can be used to 
+      filter binary and text data during input.
+      Methods in the <c>FilterOutputStream</c> and <c>FilterWriter</c> can be used to filter output data.
+      These classes serve as the root classes for various filtering subclasses.
+      They can also be subclassed to perform customized data filtering.
+    </p>
+   <p>
       One type of filtering is <term>buffering</term>,
           <idx><h>buffering</h></idx>
       which is provided by several buffered streams,
       including <c>BufferedInputStream</c> and <c>BufferedReader</c>, for performing binary and text input,
       and <c>BufferedOutputStream</c> and <c>BufferedWriter</c>, for buffered output operations.
+    </p>
+    <p>  
       As was discussed in chapter<nbsp/>4,
       a <em>buffer</em> is a relatively large region of memory used to temporarily store data while they are being input or output.
       When buffering is used,
-      a program will transfer a large number of bytes into the buffer from the relatively slow input device and then transfer these to the program as each read operation is performed.
+      a program will transfer a large number of bytes into the buffer from the relatively slow input 
+      device and then transfer these to the program as each read operation is performed.
       The transfer from the buffer to the program's memory is very fast.
     </p>
     <p>
       Similarly, when buffering is used during output,
-      data are transferred directly to the buffer and then written to the disk when the buffer fills up or when the <c>flush()</c> method is called.
+      data are transferred directly to the buffer and then written to the disk when the buffer 
+      fills up or when the <c>flush()</c> method is called.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Buffering</title>
+      <title>PROGRAMMING TIP: Buffering</title>
       <p>
-        Buffered streams can improve a program's overall efficiency by reducing the amount of time it spends accessing relatively slow input or output devices.
+        Buffered streams can improve a program's overall efficiency by reducing the 
+        amount of time it spends accessing relatively slow input or output devices.
       </p>
     </principle>
     <p>
@@ -288,29 +392,36 @@
       For example,
       suppose you want to add line numbers to a text editor's printed output.
       To perform this task,
-      you could define a <c>FilterWriter</c> subclass and override its <c>write()</c> methods to perform the desired filtering operation.
+      you could define a <c>FilterWriter</c> subclass and override its <c>write()</c> methods to 
+      perform the desired filtering operation.
       Similarly, to remove the line numbers from such a file during input,
       you could define a <c>FilterReader</c> subclass.
       In that case,
       you would override its <c>read()</c> methods to suit your goals for the program.
     </p>
     <p>
-      There are several classes that provide I/O-like operations on various internal memory structures. <c>ByteArrayInputStream</c>, <c>ByteArrayOutputStream</c>, <c>CharArrayReader</c>, and <c>CharArrayWriter</c> are four classes that take input from or send output to arrays in the program's memory.
+      There are several classes that provide I/O-like operations on various internal memory structures. 
+      <c>ByteArrayInputStream</c>, <c>ByteArrayOutputStream</c>, <c>CharArrayReader</c>, and 
+      <c>CharArrayWriter</c> are four classes that take input from or send output to arrays in the program's memory.
       Methods in these classes can be useful for performing various operations on data during input or output.
       For example,
-      suppose a program reads an entire line of integer data from a binary file into a <c>ByteArray</c>. It might then transform the data by, say,
+      suppose a program reads an entire line of integer data from a binary file into 
+      a <c>ByteArray</c>. It might then transform the data by, say,
       computing the remainder modulo <c>N</c> of each value.
       The program now can read these transformed data by treating the byte array as an input stream.
       A similar example would apply for some kind of output transformation.
     </p>
     <p>
-      The <c>StringReader</c> and <c>StringWriter</c> classes provide methods for treating <c>String</c> s and <c>StringBuffer</c> s as I/O streams.
+      The <c>StringReader</c> and <c>StringWriter</c> classes provide methods for 
+      treating <c>String</c>s and <c>StringBuffer</c>s as I/O streams.
       These methods can be useful for performing certain data conversions.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Integer/String Conversion</title>
+      <title>PROGRAMMING TIP: Integer/String Conversion</title>
       <p>
-        An integer can be converted to a <c>String</c> by writing it to a <c>StringBuffer</c>, which can then be output as an entire line of text. <c>StringReader</c> methods can be used to read integer data from an ordinary <c>String</c> object.
+        An integer can be converted to a <c>String</c> by writing it to a <c>StringBuffer</c>, 
+        which can then be output as an entire line of text. <c>StringReader</c> methods 
+        can be used to read integer data from an ordinary <c>String</c> object.
       </p>
     </principle>
   </subsection>
