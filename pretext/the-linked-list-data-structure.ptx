@@ -16,7 +16,7 @@
       they can be used for a range of specialized purposes.
     </p>
   </introduction>
-  <subsection xml:id="self-study-exercisesA38">
+  <subsection>
     <title>Using References to Link Objects</title>
     <p>
       As you know from earlier chapters,
@@ -33,34 +33,45 @@ JButton b = new JButton();
     </p>
  <program language="java"><input>
 public class Student {
-     private String name;}
+     private String name;
+}
  </input></program>
     <p>
       In this example, <c>name</c> is a reference to a <c>String</c> object.
     </p>
-    <figure xml:id="fig-linkedlist">
-      <caption>A linked list of <c>Node</c> s terminated
-      by a <c>null</c> link.</caption>
-      <image width="73%" source="chptr16/linkedlist.png"/>
-    </figure>
+ 
     <p>
       A <term>linked list</term>
           <idx><h>linked list</h></idx>
       is a list in which a collection of nodes are linked together by references from one node to the next.
+      </p>
+      <figure xml:id="fig-linkedlist">
+        <caption>A linked list of Nodes terminated
+        by a <c>null</c> link.</caption>
+        <image width="73%" source="chptr16/linkedlist.png"/>
+      </figure>
+      <p>
       To make a linked list,
       we will define a class of self-referential  objects.
       A <term>self-referential object</term>
           <idx><h>self-referential object</h></idx>
       is an object that contains a reference to an object of the same class.
-      The convention is to name these objects <c>Node</c> s:
+      The convention is to name this object <c>Node</c>:
     </p>
  <program language="java"><input>
 public class Node {
      private String name;
-     private Node next;}
+     private Node next;
+}
  </input></program>
-    <p>
-      \marginfigvspace{10pt}{chptr16/nodeuml.eps}{The <c>Node</c> class.}{fig-nodeuml} In addition to the reference to a <c>String</c> object,
+
+ <figure xml:id="fig-nodeuml">
+  <caption>The <c>Node</c> class.</caption>
+  <image width="73%" source="chptr16/nodeuml.png"/>
+</figure>
+    
+      <p>
+      In addition to the reference to a <c>String</c> object,
       each
 <c>Node</c> object contains a reference to another <c>Node</c> object.
       The <c>next</c> variable is often called a <term>link</term>
@@ -100,10 +111,13 @@ public class Node {
      public void setData(Object obj);  // Data access
      public Object getData();
      public void setNext(Node link);   // Link access
-     public Node getNext();} // Node
+     public Node getNext();
+    } // Node
  </input></program>
     <p>
-      Note that we have defined the <c>Node</c>'s data in the most general possible way: As a reference to an <c>Object</c>. Because the <c>Object</c> class is the root of Java's entire class hierarchy,
+      Note that we have defined the <c>Node</c>'s data in the most general possible way: 
+      as a reference to an <c>Object</c>. 
+      Because the <c>Object</c> class is the root of Java's entire class hierarchy,
       an <c>Object</c> can encompass any kind of data.
       By using Java's wrapper classes,
       such as <c>Integer</c> and <c>Double</c>, a
@@ -118,17 +132,17 @@ public class Node {
       but the link access methods will generally be the same.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Link Versus Data</title>
+      <title>EFFECTIVE DESIGN: Link Versus Data</title>
       <p>
         Making a clear distinction between an object's data and those elements used to manipulate the object is an example of the divide-and-conquer principle.
       </p>
     </principle>
-    </subsection><subsection><title>Self-Study Exercises</title>
+ <exercises><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
-            Write a statement to create a new <c>Node</c> whose data consist of the <c>String</c>
-            <q>Hello.</q>
+            Write a statement to create a new <c>Node</c> whose data consist of the 
+            <c>String</c><q>Hello.</q>
           </p>
         </li>
         <li>
@@ -139,24 +153,25 @@ public class Node {
           </p>
         </li>
       </ol>
+      </exercises>
  </subsection>
-  <subsection xml:id="fig-phonelist">
+  <subsection>
     <title>Example: The Dynamic Phone List</title>
     <p>
-      Let's define a <c>PhoneListNode</c> class that can be used to implement a phone list (Fig.
-      <xref ref="fig-phoneuml"></xref>).
+      Let's define a <c>PhoneListNode</c> class that can be used to implement a phone list 
+      (<xref ref="fig-phoneuml"></xref>).
       This definition will be a straightforward specialization of the generic <c>Node</c> list defined in the previous section.
       Each element of the phone list will consist of a person's name and phone number.
       These will be the node's data and can be stored in two <c>String</c> variables.
       To access these data,
       we will provide a  constructor and a basic set of access methods.
-      Thus, we have the definition shown in <xref ref="fig-phonelistnode">Figure</xref>.
+      Thus, we have the definition shown in <xref ref="list-phonelistnode">Figure</xref>.
     </p>
     <figure xml:id="fig-phoneuml">
       <caption>Design of the <c>PhoneListNode</c> class.</caption>
       <image width="73%" source="chptr16/phoneuml.png"/>
     </figure>
-    <figure xml:id="fig-phonelistnode">
+    <listing xml:id="list-phonelistnode">
       <caption>The <c>PhoneListNode</c> class.</caption>
  <program language="java"><input>
 public class PhoneListNode {
@@ -186,16 +201,17 @@ public class PhoneListNode {
      } // setNext()
      public PhoneListNode getNext() {
          return next;
-     } // getNext()} // PhoneListNode
+     } // getNext()
+    } // PhoneListNode
  </input></program>
-    </figure>
+</listing>
     <p>
       The constructor and data access methods should be familiar to you.
       Note that the constructor sets the initial value of <c>next</c> to
 <c>null</c>, which means that it refers to no object.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Null Reference</title>
+      <title>DEBUGGING TIP: Null Reference</title>
       <p>
         A common programming error is the attempt to use a <c>null</c> reference to refer to an object.
         This usually means the reference has not been successfully initialized.
@@ -213,27 +229,28 @@ public class PhoneListNode {
       The following statements create three nodes:
     </p>
  <program language="java"><input>
-PhoneListNode node1 =
-       new PhoneListNode("Roger M","090-997-2918");
-PhoneListNode node2 =
-       new PhoneListNode("Jane M","090-997-1987");
-PhoneListNode node3 =
-       new PhoneListNode("Stacy K","090-997-9188");
+PhoneListNode node1 = new PhoneListNode("Roger M","090-997-2918");
+PhoneListNode node2 = new PhoneListNode("Jane M","090-997-1987");
+PhoneListNode node3 = new PhoneListNode("Stacy K","090-997-9188");
  </input></program>
     <p>
-      The next two statements chain the nodes together into the list shown in Figure<nbsp/>16.5:
+      The next two statements chain the nodes together into the list shown in 
+      <xref ref="list-phonelistpic">Figure</xref>:
     </p>
  <program language="java"><input>
 node1.setNext(node2);
 node2.setNext(node3);
  </input></program>
+ <figure xml:id="fig-phonelistpic"><caption>Phone List</caption>
+ <image width="73%" source="chptr16/phonelistpic.png"/>
+</figure>
     <p>
-      If we wanted to add a fourth node to the end of this <image width="73%" source="chptr16/phonelistpic.png"/> list,
+      If we wanted to add a fourth node to the end of this 
+       list,
       we could use the following statements:
     </p>
  <program language="java"><input>
-PhoneListNode node4 =
-     new PhoneListNode("gary g","201-119-8765");
+PhoneListNode node4 = new PhoneListNode("gary g","201-119-8765");
 node3.setNext(node4);
  </input></program>
     <p>
@@ -244,13 +261,13 @@ node3.setNext(node4);
       a better design would be able to find the end of the list without knowing anything about the list's data.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Generality</title>
+      <title>EFFECTIVE DESIGN: Generality</title>
       <p>
         In a well-designed list data structure,
         you should be able to manipulate its elements without knowing anything about its data.
       </p>
     </principle>
-    <subsection><title>Self-Study Exercise</title>
+    <exercises><title>Self-Study Exercise</title>
       <ol>
         <li>
           <p>
@@ -263,6 +280,7 @@ node3.setNext(node4);
           </p>
         </li>
       </ol>
+      </exercises>
  </subsection>
   <subsection>
     <title>Manipulating the Phone List</title>
@@ -278,7 +296,8 @@ node3.setNext(node4);
       which is the purpose of the <c>head</c> variable.
     </p>
     <p>
-      A preliminary coding of the <c>PhoneList</c> class is shown in <xref ref="fig-phonelistprelim">Figure</xref>.
+      A preliminary coding of the <c>PhoneList</c> class is shown in 
+      <xref ref="list-phonelistprelim">Listing</xref>.
       As you can see there,
       when a new
 <c>PhoneList</c> instance is constructed, <c>head</c> is initialized to
@@ -288,13 +307,13 @@ node3.setNext(node4);
       its definition says that a list is empty when the reference to the <c>head</c> of this list is <c>null</c>.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:The <c>null</c>Reference</title>
+      <title>PROGRAMMING TIP: The <c>null</c>Reference</title>
       <p>
         A <c>null</c> reference is useful for defining limit cases,
         such as an empty list or an uninstantiated object.
       </p>
     </principle>
-    <figure xml:id="fig-phonelistprelim">
+    <listing xml:id="list-phonelistprelim">
       <caption>A preliminary version of the <c>PhoneList</c> class.</caption>
  <program language="java"><input>
 public class PhoneList {
@@ -308,9 +327,10 @@ public class PhoneList {
     public void insert(PhoneListNode node) { }
     public String getPhone(String name) { }
     public String remove(String name) { }
-    public void print() { }} // PhoneList
+    public void print() { }
+  } // PhoneList
  </input></program>
-    </figure>
+</listing>
   </subsection>
   <subsection>
     <title>Inserting Nodes into a List</title>
@@ -351,7 +371,8 @@ public void insert(PhoneListNode newNode) {
     while (current.getNext() != null)// While not last node
       current = current.getNext(); //   go to next node
       current.setNext( newNode );  // Do the insertion
-    }} // insert()
+    }
+  } // insert()
  </input></program>
     <p>
       Recall that when nodes are linked,
@@ -377,8 +398,7 @@ while (current.getNext() != null)   // Entry condition
       The loop variable, <c>current</c>, is initialized by setting it to point to the head of the list.
       The entry condition tests whether the <c>next</c> link,
       leading out of <c>current</c>, is
-<c>null</c>(Fig.
-      <xref ref="fig-inserting"></xref>).
+<c>null</c>(<xref ref="fig-inserting"></xref>).
       That is, when the link coming out of a node is <c>null</c>, then that node is the last node in the list [<xref ref="fig-inserting">Figure</xref>(c)]. Inside the while loop,
       the update expression simply assigns the next node to <c>current</c>. In that way, <c>current</c> will point to each successive node until the last node is found.
       It's very important that the loop exits when <c>current.getNext()</c> is <c>null</c><mdash/>that is,
@@ -394,7 +414,7 @@ while (current.getNext() != null)   // Entry condition
       <image width="73%" source="chptr16/inserting.png"/>
     </figure>
     <principle>
-      <title>DEBUGGING TIP:List Traversal</title>
+      <title>DEBUGGING TIP: List Traversal</title>
       <p>
         A common error in designing list-traversal algorithms is an erroneous loop-entry or loop-exit condition.
         One way to avoid this error is to hand trace your algorithm to make sure your code is correct.
@@ -421,7 +441,8 @@ public void print() {
   while (current != null) {      // While not end of list
     System.out.println( current.toString() ); // print data
     current = current.getNext();       //  go to next node
-  }} // print()
+  }
+} // print()
  </input></program>
     <p>
       Note the differences between this while loop and the one used in the <c>insert()</c> method.
@@ -432,7 +453,7 @@ public void print() {
       the entry condition, <c>(current != null)</c>, signifies that the task has been completed.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Terminating a Traversal</title>
+      <title>PROGRAMMING TIP: Terminating a Traversal</title>
       <p>
         In designing list-traversal algorithms where the reference,
         <term>p</term>,
@@ -444,7 +465,7 @@ public void print() {
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="self-study-exerciseO38">
+  <subsection>
     <title>Looking up a Node in a List</title>
     <p>
       Because the record associated with a person can be located anywhere in the list,
@@ -467,7 +488,8 @@ public String getPhone(String name) {
         return current.getData(); // Case 2: Found name
       else                        // Case 3: No such person
         return ("Sorry.  No entry for " + name);
-   }} // getPhone()
+   }
+  } // getPhone()
  </input></program>
     <p>
       Note the while loop in this case.
@@ -479,18 +501,19 @@ public String getPhone(String name) {
       it is necessary to test whether the name was found or not after the loop is exited.
       Then appropriate action can be taken.
     </p>
-    <subsection><title>Self-Study Exercise</title>
+    <exercises><title>Self-Study Exercise</title>
       <ol>
         <li>
           <p>
             What if the exit condition for the while loop in <c>getPhone()</c> were stated as
  <program language="java"><input>
-((current.getNext() != null) ||
-     (!current.getName().equals(name)))
+((current.getNext() != null) || (!current.getName().equals(name)))
  </input></program>
           </p>
         </li>
       </ol>
+      </exercises>
+      
  </subsection>
   <subsection>
     <title>Removing a Node from a List</title>
@@ -505,12 +528,12 @@ public String getPhone(String name) {
       with the same basic while loop for cases 3 and 4.
     </p>
     <p>
-      As <xref ref="fig-remove">Figure</xref> shows,
+      As <xref ref="list-remove">Listing</xref> shows,
       the first two cases are easily handled.
       If the list is empty, we just return an error message.
-      We
+
     </p>
-    <figure xml:id="fig-remove">
+    <listing xml:id="list-remove">
       <caption>The <c>remove()</c> method.</caption>
  <program language="java"><input>
 public String remove(String name) { // Remove an entry by name
@@ -531,11 +554,12 @@ public String remove(String name) { // Remove an entry by name
     previous.setNext(current.getNext());
     return "Removed " + current.toString();
   } else
-    return ("Sorry.  No entry for " + name); // Case 4: node not found} // remove()
+    return ("Sorry.  No entry for " + name); // Case 4: node not found
+  } // remove()
  </input></program>
-    </figure>
+</listing>
     <p>
-      use <c>current</c> as the traversal variable.
+We      use <c>current</c> as the traversal variable.
       If the named node is the first node,
       we simply need to set <c>head</c> to
 <c>current.getNext()</c>, which has the effect of making <c>head</c> point to the second node in the list [<xref ref="fig-removal">Figure</xref>(a)]. Once the node is cut out from the chain of links,
@@ -569,7 +593,7 @@ public String remove(String name) { // Remove an entry by name
 previous.setNext(current.getNext());
  </input></program>
   </subsection>
-  <subsection xml:id="self-study-exercisesB38">
+  <subsection>
     <title>Testing the List</title>
     <p>
       In developing list-processing programs,
@@ -577,12 +601,12 @@ previous.setNext(current.getNext());
       As we have seen,
       both the insertion and removal operations involve several distinct cases.
       Proper testing of  these methods ideally would test every possible case.
-      The <c>main()</c> program in <xref ref="fig-testlist">Figure</xref>
+      The <c>main()</c> program in <xref ref="list-testlist">Listing</xref>
       illustrates the kinds of tests that should be performed.
       This method could be incorporated directly into the <c>PhoneList</c> class,
       or it could be made part of a separate class.
     </p>
-    <figure xml:id="fig-testlist">
+    <listing xml:id="list-testlist">
       <caption>A <c>main()</c> method containing a set of tests for the
 <c>PhoneList</c> class.</caption>
  <program language="java"><input>
@@ -624,9 +648,10 @@ public static void main(String argv[]) {
   list.print();
   System.out.println(list.remove("Roger W"));
   System.out.println("Phone Directory");
-  list.print();} // main()
+  list.print();
+} // main()
  </input></program>
-    </figure>
+</listing>
     <p>
       Of course, there are often so many combinations of list operations that exhaustive testing might not be feasible.
       At the very least you should design test data that test each of the different conditions identified in your algorithms.
@@ -636,14 +661,14 @@ public static void main(String argv[]) {
       you should test all three cases that we identified.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Test Data</title>
+      <title>EFFECTIVE DESIGN: Test Data</title>
       <p>
         Test data for validating list-processing algorithms should
         (at least)
         test each of the cases identified in each of the removal and insertion methods.
       </p>
     </principle>
-    </subsection><subsection><title>Self-Study Exercises</title>
+   <exercises><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -656,5 +681,6 @@ public static void main(String argv[]) {
           </p>
         </li>
       </ol>
+      </exercises>
   </subsection>
 </section>
