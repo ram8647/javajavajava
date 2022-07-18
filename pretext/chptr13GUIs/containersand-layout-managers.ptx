@@ -15,11 +15,14 @@
       Most GUIs will have a similar kind of containment hierarchy.
     </p>
     <p>
-      <image width="73%" source="p495f1.eps"/>
+    <figure xml:id="fig-concomp">
+        <caption>A <em>Container</em> contains components.</caption>
+        <image width="73%" source="chptr13/p495f1.png"/>
+      </figure>  
     </p>
     <p>
       A <c>Container</c> is a relatively simple object whose main task is primarily to hold its components in a particular order.
-      It has methods to add and remove components (Fig.<nbsp/>13.20).
+      It has methods to add and remove components (Fig.<xref ref="fig-concomp"></xref>).
       As you can see from these methods,
       a container keeps track of the order of its elements,
       and it is possible to refer to a component by its index order.
@@ -56,48 +59,52 @@
     <p>
       Although it is possible to manage your own layouts, it is not easy to do.
       For most applications you are much better off by learning to use one of the AWT's built-in layouts.
-      Table<nbsp/>13.3 gives a brief summary of the available layouts.
-      We will show examples of <c>FlowLayout</c>, <c>GridLayout</c>, and <c>BorderLayout</c>. Some of the widely used Swing containers have a default layout manager assigned to them (Table<nbsp/>13.4).
+       <xref ref="tab-layout-managers">Table</xref> gives a brief summary of the available layouts.
+      We will show examples of <c>FlowLayout</c>, <c>GridLayout</c>, and <c>BorderLayout</c>. Some of 
+      the widely used Swing containers have a default layout manager assigned to 
+      them <xref ref="tab-default-managers">Table</xref>.
     </p>
-    <table>
-      \TBT{-8pc}{Some of Java's AWT and Swing layout managers.}
-      
-      <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{Manager}</cell>
-          <cell>{Description}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell><c>java.awt.BorderLayout</c></cell>
-          <cell>Arranges elements along the north, south, east, west,\cr</cell>
-          <cell>and in the center of the container.\cr
-<c>java.swing.BoxLayout</c></cell>
-          <cell>Arranges elements in a single row or single column.\cr
-<c>java.awt.CardLayout</c></cell>
-          <cell>Arranges elements like a stack of cards, with one visible at a time.\cr
-<c>java.awt.FlowLayout</c></cell>
-          <cell>Arranges elements left to right across the container.\cr
-<c>java.awt.GridBagLayout</c></cell>
-          <cell>Arranges elements in a grid of variably sized cells (complicated).\cr
-<c>java.awt.GridLayout</c></cell>
-          <cell>Arranges elements into a two-dimensional grid of equally sized cells.\cr
-<c>java.swing.OverlayLayout</c></cell>
-          <cell>Arranges elements on top of each other.</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-      </tabular>
-      \endTB
-    </table>
+    <table xml:id="tab-layout-managers">
+  <title>Some of Java's AWT and Swing layout managers.</title>
+  <tabular halign="left">
+    <row header="yes" bottom="minor" >
+      <cell>Manager</cell>
+      <cell>Description</cell>
+    </row>
+    <row>
+      <cell>java.awt.BorderLayout</cell>
+      <cell>Arranges elements along the north, south, east, west,
+      and in the center of the container.</cell>
+    </row>
+    <row>
+      <cell>java.swing.BoxLayout</cell>
+      <cell>Arranges elements in a single row or single column.</cell>
+    </row>
+    <row>
+      <cell>java.awt.CardLayout</cell>
+      <cell>Arranges elements like a stack of cards, with one visible at a time.</cell>
+    </row>
+    <row>
+      <cell>java.awt.FlowLayout</cell>
+      <cell>Arranges elements left to right across the container.</cell>
+    </row>
+    <row>
+      <cell>java.awt.GridBagLayout</cell>
+      <cell>Arranges elements in a grid of variably sized cells (complicated).</cell>
+    </row>
+    <row>
+      <cell>java.awt.GridLayout</cell>
+      <cell>Arranges elements into a two-dimensional grid of equally sized cells.</cell>
+    </row>
+    <row>
+      <cell>java.swing.OverlayLayout</cell>
+      <cell>Arranges elements on top of each other.</cell>
+    </row>
+  </tabular>
+</table>
+
     <p>
-      To override the default layout for any of the <c>JApplet</c>,
+      To override the default layout for any of the
 <c>JDialog</c>, <c>JFrame</c>, and <c>JWindow</c> containers,
       you must remember to use the getContentPane() . The correct statement is
     </p>
@@ -107,46 +114,40 @@ getContentPane().setLayout(new FlowLayout());
     <principle>
       <title>DEBUGGING TIP:Content Pane</title>
       <p>
-        Attempting to add a component directly to a <c>JApplet</c> or a <c>JFrame</c> will cause an exception.
-        For these top-level containers,
+        Attempting to add a component directly to a <c>JFrame</c> will cause an exception.
+        For a top-level container,
         components must be added to their content panes.
       </p>
     </principle>
-    <table>
-      \TBT{4pc}{Default layouts for some of the common
-      Swing containers.}
-      
-      <tabular>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell>{Container}</cell>
-          <cell>{Layout Manager}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-        <row>
-          <cell><c>JApplet</c></cell>
-          <cell><c>BorderLayout</c>(on its content pane) \cr
-<c>JBox</c></cell>
-          <cell><c>BoxLayout</c>\cr
-<c>JDialog</c></cell>
-          <cell><c>BorderLayout</c>(on its content pane) \cr
-<c>JFrame</c></cell>
-          <cell><c>BorderLayout</c>(on its content pane) \cr
-<c>JPanel</c></cell>
-          <cell><c>FlowLayout</c>\cr
-<c>JWindow</c></cell>
-          <cell><c>BorderLayout</c>(on its content pane)</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
-      </tabular>
-      \endTB
-    </table>
+    <table xml:id="tab-default-managers">
+  <title>Default layouts for some of the common Swing containers.</title>
+  <tabular halign="left">
+    <row header="yes" bottom="minor" >
+      <cell>Container</cell>
+      <cell>Description</cell>
+    </row>
+    <row>
+      <cell>JBox</cell>
+      <cell><c>BoxLayout</c></cell>
+    </row>
+    <row>
+      <cell>JDialog</cell>
+      <cell><c>BorderLayout</c>(on its content pane) </cell>
+    </row>
+    <row>
+      <cell>JFrame</cell>
+      <cell><c>BorderLayout</c>(on its content pane)</cell>
+    </row>
+    <row>
+      <cell>JPanel</cell>
+      <cell><c>FlowLayout</c></cell>
+    </row>
+    <row>
+      <cell>JWindow</cell>
+      <cell><c>BorderLayout</c>(on its content pane)</cell>
+    </row>
+  </tabular>
+</table>
   </subsection>
   <subsection xml:id="fig-convertscreen3">
     <title>The <c>GridLayout</c>Manager</title>
@@ -162,15 +163,15 @@ getContentPane().setLayout(new FlowLayout());
  <program language="java"><input>
 setLayout(new GridLayout(4,3,1,1));
  </input></program>
-    <p>
+   <p>
       This statement creates a <c>GridLayout</c> object and assigns it as the layout manager for the keypad.
       It will ensure that the keypad will have four rows and three columns of buttons (Fig.
-      <xref ref="fig-convertscreen3"></xref>).
+      <xref ref="fig-grid-convertscreen"></xref>).
       The last two arguments in the constructor affect the relative spacing between the rows and the columns.
       The higher the number, the larger the spacing.
       As components are added to the keypad,
       they will automatically be arranged by the manager into a <m>4 \times 3</m> grid.
-      <image width="73%" source="9f13.eps"/> Note that for a <c>JPanel</c>, the <c>setLayout()</c> method applies to the panel itself.
+       Note that for a <c>JPanel</c>, the <c>setLayout()</c> method applies to the panel itself.
       Unlike the top-level containers,
       such as
 <c>JFrame</c>, other containers don't have content panes.
@@ -178,7 +179,14 @@ setLayout(new GridLayout(4,3,1,1));
       not to a content pane.
       Confusion over this point could be the source of bugs in your programs.
     </p>
-    <principle>
+        <p>
+            <figure xml:id="fig-grid-convertscreen">
+        <caption>This version of the <em>metric converter GUI</em> uses a keypad
+        for mouse-based input.  It has an attractive overall layout </caption>
+        <image width="73%" source="chptr13/9f13.png"/>
+      </figure>  
+    </p>
+     <principle>
       <title>DEBUGGING TIP:Content Pane</title>
       <p>
         Top-level containers,
@@ -229,9 +237,9 @@ setLayout(new GridLayout(4,3,1,1));
     <p>
       One way to fix these problems is to use a <c>BorderLayout</c> to divide the frame into five areas:
       north, south, east, west, and center,
-      as shown in <xref ref="fig-borderlayout-guis">Figure</xref>.
+      as shown in <xref ref="fig-borderlayoutgui">Figure</xref>.
       The <c>BorderLayout</c> class contains two constructors:
-      <image width="73%" source="9f14.eps"/>
+      
     </p>
  <program language="java"><input>
 public BorderLayout();
@@ -239,6 +247,14 @@ public BorderLayout(int hgap, int vgap);
  </input></program>
     <p>
       The two parameters in the second version of the constructor allow you to insert spacing between the areas.
+    </p>
+       <p>
+    <figure xml:id="fig-borderlayoutgui">
+        <caption>Arrangement of the components in a border layout. The relative
+        sizes of the areas will vary
+        </caption>
+        <image width="73%" source="chptr13/9f14.png"/>
+      </figure>  
     </p>
     <p>
       Components are added to a <c>BorderLayout</c> by using the <c>add(Component, String)</c> method found in the <c>Container</c> class.
@@ -265,7 +281,7 @@ getContentPane().add(keypad,"East");
       One limitation of the <c>BorderLayout</c> is that only one component  can be added to each area.
       That means that if you want to add several components to an area,
       you must first enclose them within a
-<c>JPanel</c> and then add the entire panel to the area.
+      <c>JPanel</c> and then add the entire panel to the area.
       For example,
       let's create a panel to contain the prompt and the text field and place it at the north edge of the frame:
     </p>
@@ -298,7 +314,7 @@ getContentPane.add(controlPanel,"East");
     <figure xml:id="fig-metricgui3">
       <caption>A border layout design for the metric
       converter program. The dotted lines show the panels.</caption>
-      <image width="73%" source="9f15.eps"/>
+      <image width="73%" source="chptr13/9f15.png"/>
     </figure>
     <p>
       In a <c>BorderLayout</c>, when one
@@ -317,9 +333,15 @@ getContentPane.add(controlPanel,"East");
       it is left blank.
     </p>
     <p>
+    <figure xml:id="fig-convertscreen5">
+        <caption>The metric converter,  showing its appearance when a border 
+        design is used.</caption>
+        <image width="73%" source="chptr13/9f16.png"/>
+      </figure>  
+    </p>
+    <p>
       <xref ref="fig-convertscreen5">Figure</xref>
-      shows the results we get when we incorporate these <image width="73%" source="9f16.eps"/> \caption{The metric converter,
-      showing its appearance when a border design is used. } changes into the program.
+      shows the results we get when we incorporate these changes into the program.
       The only changes to the program itself occur in the constructor method,
       which in its revised form is defined as follows:
     </p>

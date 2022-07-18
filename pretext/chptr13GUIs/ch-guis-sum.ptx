@@ -1,0 +1,278 @@
+<section xml:id="ch-guis-sum">
+    <title>Chapter Summary</title>
+    <subsection>
+      <title>Technical Terms</title> 
+      <p>
+       <tabular>
+       <row>
+      <cell>adapter class</cell>
+      <cell>lightweight component</cell>
+       </row>
+       <row>
+      <cell>callback design</cell>
+      <cell>listener</cell>
+       </row>
+       <row>
+      <cell>content pane</cell>
+      <cell>model</cell>
+       </row>
+       <row>
+      <cell>containment hierarchy</cell>
+      <cell>model-view-controller (MVC)</cell>
+       </row>
+       <row>
+      <cell>controller</cell>
+      <cell>peer model</cell>
+       </row>
+       <row>
+      <cell>event model</cell>
+      <cell>pluggable look and feel</cell>
+       </row>
+       <row>
+      <cell>inner class</cell>
+      <cell>view</cell>
+       </row>
+       <row>
+      <cell>layout manager</cell>
+      <cell>widget hierarchy</cell>
+       </row>
+      </tabular>
+    </p>
+</subsection>
+
+<subsection>
+ <title>Important Points</title>
+    <ul>
+      <li>
+        <p>
+          Java provides two sets of Graphical User Interface (GUI) components,
+          the Abstract Windowing Toolkit (AWT), which was part of Java 1.0 and the Swing component set,
+          the GUI part of the Java Foundation Classes (JFC), introduced in JDK 1.1.
+        </p>
+      </li>
+      <li>
+        <p>
+          Unlike their AWT counterparts, Swing components are written entirely in Java.
+          This allows programs written in Swing to have a platform-independent look and feel.
+          There are three built-in look-and-feel packages in Swing:
+          a Windows style, a Unix-like Motif style,
+          and a purely Java Metal style.
+        </p>
+      </li>
+      <li>
+        <p>
+          Swing components are based on the
+          <em>model-view-controller (MVC)</em> architecture,
+          in which the component is divided into three separate objects:
+          how it looks (<em>view</em>),
+          what state it's in (<em>model</em>), and what it does
+          (<em>controller</em>).
+          The view and controller parts are sometimes combined into a single
+          <em>user interface</em> class,
+          which can be changed to create a customized look and feel.
+        </p>
+      </li>
+      <li>
+        <p>
+          AWT components are based on the <em>peer model</em>,
+          in which every AWT component has a peer in the native windowing system.
+          This model is less efficient and more platform dependent than the MVC model.
+        </p>
+      </li>
+      <li>
+        <p>
+          Java's <em>event model</em> is based on
+          <em>event listeners</em>.
+          When a GUI component is created,
+          it is registered with an appropriate event listener,
+          which takes responsibility for handling the component's events.
+        </p>
+      </li>
+      <li>
+        <p>
+          A user interface combines four functions:
+          guidance/information for the user,
+          input, output, and control.
+        </p>
+      </li>
+      <li>
+        <p>
+          Components in a GUI are organized into a
+          <em>containment hierarchy</em>
+          that is rooted at the top-level window. <c>JPanel</c> s and other
+<c>Container</c> s can be used to organize the components into a hierarchy according to function or some other criterion.
+        </p>
+      </li>
+      <li>
+        <p>
+          The top-level Swing classes<mdash/><c>JApplet</c>, <c>JDialog</c>,
+<c>JFrame</c>, and <c>JWindow</c><mdash/>use a <em>content pane</em>
+          as their component container.
+        </p>
+      </li>
+      <li>
+        <p>
+          A GUI should minimize the number of input devices the user needs to manipulate,
+          as well as the complexity the user needs to deal with.
+          Certain forms of redundancy<mdash/>such as two independent but complete sets of controls<mdash/>are desirable because they make the interface more flexible and more widely applicable.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>layout manager</em> is an object that manages the size and arrangement of the components in a container.
+          The AWT and Swing provide a number of built-in layouts,
+          including flow, border, grid, and box layouts.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>radio button</em> is a toggle button that belongs to a group in which only one button from the group may be selected at the same time.
+          A <em>checkbox</em> is a toggle button that always displays its state.
+        </p>
+      </li>
+      <li>
+        <p>
+          A well-designed interface should reduce the chance of user error and should make it as easy as possible to recover from errors when they do occur.
+        </p>
+      </li>
+    </ul>
+  </subsection>  
+
+<subsection>
+<title>Solutions to Self-Study Exercises</title>
+    <p>
+    <ol>
+      <li>
+        <p>
+    <figure xml:id="fig-p528f1">
+        <caption>A <c>JButton</c> has internal model-view-controller components that interact with each other to produce the button's overall behavior.</caption>
+        <image width="73%" source="chptr13/p528f1.png"/>
+      </figure>
+	 </p>
+	  <p>
+          How can a button still be considered a component under the MVC model?
+          This is a good question.
+          The <c>JButton</c> class acts as a wrapper class and hides the model-view-controller details (Fig.
+          <xref ref="fig-p528f1"></xref>).
+          When you instantiate a <c>JButton</c>, you still get a single instance.
+          Think of it this way: Your body consists of several systems that interact (internally) among themselves,
+          but it's still one body that other bodies interact with as a single object.
+        </p>
+      </li>
+      <li>
+        <p>
+          A component can indeed be registered with more than one listener.
+          For example,
+          the <c>ToggleButton</c> that we defined in <xref ref="chapter-io">Chapter</xref> has two listeners.
+          The first is the button itself,
+          which takes care of toggling the button's label.
+          The second is the frame in which the button is used,
+          which takes care of handling whatever action the button is associated with.
+        </p>
+      </li>
+      <li>
+        <p>
+          Some components can have two different kinds of listeners.
+          For example, imagine a
+          <q>sticky button</q>
+          that works like this.
+          When you click and release the button,
+          it causes some action to take place,
+          just like a normal button.
+          When you click and hold the mouse button down, the button
+          <q>sticks</q>
+          to the cursor and you can then move it to a new location.
+          This button would need listeners for
+<c>ActionEvent</c> s, <c>MouseEvent</c> s, and <c>MouseMotionEvent</c> s.
+        </p>
+      </li>
+      <li>
+        <p>
+          To round a double you could use the <c>Math.round()</c> method.
+          For example,
+          suppose the number you want to round is <c>d</c>. Then the expression <c>Math.round(100 * d)/100.0</c> will round to two decimal places.
+          Alternatively,
+          you could use the
+<c>java.text.NumberFormat</c> class.
+          Both of these approaches were covered in Chapter<nbsp/>5.
+        </p>
+      </li>
+      <li>
+        <p>
+          Many cars today have cruise control as a alternative way to control the accelerator.
+          Push buttons, usually located on the steering wheel,
+          are used to speed up and slow down,
+          so you can drive with your foot or your hand.
+        </p>
+      </li>
+      <li>
+        <p>
+          As an alternative,
+          a north-west-center border layout for the top-level window in the <c>Converter</c> might work.
+          So might center-south-east and center-south-west.
+          What makes these possible is the fact that the layout manager will use up space in any edge area that is not assigned a component.
+        </p>
+      </li>
+      <li>
+        <p>
+          A flow layout would not be appropriate for the control panel because you would have little control of where the <c>convert</c> button would be placed relative to the keypad.
+        </p>
+      </li>
+      <li>
+        <p>
+          Interface design disaster: My car uses the same kind of on/off switch for the headlights and the windshield wipers.
+          One is a stem on the left side of the steering wheel,
+          and the other is on a stem on the right side of the steering wheel.
+          On more than one occasion, I've managed to turn off the headlights when I intended to turn on the wipers.
+        </p>
+      </li>
+      <li>
+        <p>
+          Modify the <c>addRecentCut()</c> method so it limits the cuts stored in the vector to the last ten cuts.
+          Solution: Check the size of the vector after inserting the cut.
+          If it exceeds ten,
+          remove the last element in the vector.
+ <program language="java"><input>
+private void addRecentCut(String cut) {
+  recentCuts.insertElementAt(cut, 0);
+  if (recentCuts.size() > 10) { // If more than 10 cuts
+    recentCuts.removeElementAt(10);  // remove oldest cut
+  }
+  cutsMenu.removeAll();
+  for (int k = 0; k &lt; recentCuts.size(); k++) {
+    JMenuItem item =
+      new JMenuItem((String) recentCuts.elementAt(k));
+    cutsMenu.add(item);
+    item.addActionListener(this);
+  }} // addRecentCut()
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          Modify the <c>addRecentCut()</c> method so that it doesn't duplicate cuts stored in the vector.
+          Solution: Use the <c>indexOf()</c> method to search for the cut in the vector.
+          If it's already there,
+          don't insert the cut.
+ <program language="java"><input>
+private void addRecentCut(String cut) {
+  if (recentCuts.indexOf(cut) == -1) {// If not already cut
+    recentCuts.insertElementAt(cut,0);
+    if (recentCuts.size() > 10) { // If more than 10 cuts
+        recentCuts.removeElementAt(10); // remove oldest
+    }
+    cutsMenu.removeAll();
+    for (int k = 0; k &lt; recentCuts.size(); k++) {
+        JMenuItem item =
+          new JMenuItem((String) recentCuts.elementAt(k));
+        cutsMenu.add(item);
+        item.addActionListener(this);
+    }
+  } // if not already cut} // addRecentCut()
+ </input></program>
+        </p>
+      </li>
+    </ol>
+  </p>
+</subsection>
+</section>
