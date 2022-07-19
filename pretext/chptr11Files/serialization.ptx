@@ -8,25 +8,34 @@
           <idx><h>object serialization</h></idx>
       Objects can be converted into a sequence of bytes, or <em>serialized</em>,
       by using the
-<c>ObjectOutputStream</c> class,
+      <c>ObjectOutputStream</c> class,
       and they can be <em>deserialized</em>,
       or converted from bytes into a structured object,
-      by using the <c>ObjectInputStream</c> class (Fig.<nbsp/>11.26).
+      by using the <c>ObjectInputStream</c> class (<xref ref="fig-objiouml"></xref>).
       Despite the complexity of the serialization/deserialization processes,
       the methods in these classes make the task just as easy as reading and writing primitive data.
-      <image width="73%" source="chptr11/objiouml.png"/> To illustrate object serialization,
+    </p>
+    <figure xml:id="fig-objiouml">
+    <caption>The ObjectIO classes.</caption>
+     <image width="50%" source="chptr11/objiouml.png"/>
+    </figure> 
+  </introduction>
+  <subsection xml:id="sec-serializable">
+  <title>The <c>Serializable</c> Interface</title>
+    <p>
+      To illustrate object serialization,
       let's begin by defining a
-<c>Student</c> class (Fig.
-      <xref ref="fig-student"></xref>).
+      <c>Student</c> class (<xref ref="fig-student">Listing</xref>).
       In order to serialize an object,
       it must be a member of a class that implements the
-<c>Serializable</c> interface.
+      <c>Serializable</c> interface.
       The <c>Serializable</c> interface is a
-      <em>marker interface</em>,
-      an interface that doesn't define any methods or constants but just serves to designate whether an object can be serialized or not.
+      <term>marker interface</term>,
+      an interface that doesn't define any methods or constants but just serves to designate 
+      whether an object can be serialized or not.
     </p>
-    <figure xml:id="fig-student">
-      <caption>The <em>serializable</em><c>Student</c> class.</caption>
+    <listing xml:id="fig-student">
+      <caption>The <em>serializable</em> <c>Student</c> class.</caption>
       
  <program language="java"><input>
 import java.io.*;
@@ -40,12 +49,14 @@ public class Student implements Serializable {
     year = yr;
     gpa = gpaIn;
   }
+
   public void writeToFile(FileOutputStream outStream)
                                      throws IOException{
     ObjectOutputStream ooStream = new ObjectOutputStream(outStream);
     ooStream.writeObject(this);
     ooStream.flush();
   } // writeToFile()
+  
   public void readFromFile(FileInputStream inStream)
            throws IOException, ClassNotFoundException {
     ObjectInputStream oiStream = new ObjectInputStream(inStream);
@@ -54,18 +65,20 @@ public class Student implements Serializable {
     this.year = s.year;
     this.gpa = s.gpa;
   } // readFromFile()
+  
   public String toString() {
     return name + "\t" + year + "\t" + gpa;
-  }} // Student
+  }
+} // Student
  </input></program>
-    </figure>
+    </listing>
     <p>
       The <c>Student</c> class contains its own I/O methods,
-<c>readFromFile()</c> and <c>writeToFile()</c>. This is an appropriate object-oriented design.
+      <c>readFromFile()</c> and <c>writeToFile()</c>. This is an appropriate object-oriented design.
       The <c>Student</c> class encapsulates all the relevant information needed to read and write its data.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:I/O Design</title>
+      <title>EFFECTIVE DESIGN: I/O Design</title>
       <p>
         If an object is going to be input and output to and from files,
         it should define its own I/O methods.
@@ -75,24 +88,24 @@ public class Student implements Serializable {
     <p>
       Note the definition of the <c>writeToFile()</c> method,
       which performs the output task.
-      This method's <c>FileOutputStream</c> parameter is used to create an <c>ObjectOutputStream</c>, whose <c>writeObject()</c> method writes the object into the file.
-      To output a
-<c>Student</c> object,
+      This method's <c>FileOutputStream</c> parameter is used to 
+      create an <c>ObjectOutputStream</c>, whose <c>writeObject()</c> method writes the object into the file.
+      To output a <c>Student</c> object,
       we merely invoke the <c>writeObject()</c> method.
       This method writes out the current values of all the object's public and private fields.
       In this case,
-      the method would write a <c>String</c> for the object's <c>name</c>, an <c>int</c> for the object's <c>year</c>, and a <c>double</c> for the object's <c>gpa</c>.
+      the method would write a <c>String</c> for the object's <c>name</c>, an <c>int</c> 
+      for the object's <c>year</c>, and a <c>double</c> for the object's <c>gpa</c>.
     </p>
     <p>
       Although our example doesn't require it,
       the <c>writeObject()</c> method can also handle fields that refer to other objects.
       For example,
       suppose our <c>Student</c> object provided a field for
-<c>courses</c> that contained a reference to an array of objects,
+      <c>courses</c> that contained a reference to an array of objects,
       each of which described a course the student has taken.
       In that case,
-      the
-<c>writeObject()</c> method would serialize the array and all its objects
+      the <c>writeObject()</c> method would serialize the array and all its objects
       (assuming they are serializable).
       Thus, when a complex object is serialized,
       the result would be a complex structure that contains all the data linked to that root object.
@@ -100,29 +113,31 @@ public class Student implements Serializable {
     <p>
       Object deserialization,
       as shown in the <c>readFromFile()</c> method,  is simply the reverse of the serialization process.
-      The
-<c>readObject()</c> method reads one serialized object from the
-<c>ObjectInputStream</c>. Its result type is <c>Object</c>, so it is necessary to cast the result into the proper type.
+      The <c>readObject()</c> method reads one serialized object from the
+      <c>ObjectInputStream</c>. Its result type is <c>Object</c>, so it is necessary to cast the result into the proper type.
       In our example we use a local <c>Student</c> variable to store the object as it is input.
       We then copy each field of the local object to <c>this</c> object.
     </p>
     <p>
       Note that the <c>readFromFile()</c> method throws both the
-<c>IOException</c> and <c>ClassNotFoundException</c>. An <c>IOException</c> will be generated if the file you are attempting to read does not contain serialized objects of the correct type.
+      <c>IOException</c> and <c>ClassNotFoundException</c>. An <c>IOException</c> will be generated 
+      if the file you are attempting to read does not contain serialized objects of the correct type.
       Objects that can be input by <c>readObject()</c> are those that were output by
-<c>writeObject()</c>. Thus,
-      just as in the case of binary I/O, it is best to design an object's input and output routines together so that they are compatible.
+      <c>writeObject()</c>. Thus,
+      just as in the case of binary I/O, it is best to design an object's input and output 
+      routines together so that they are compatible.
       The <c>ClassNotFoundException</c> will be thrown if the
-<c>Student</c> class cannot be found.
+      <c>Student</c> class cannot be found.
       This is needed to determine how to deserialize the object.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Object Serialization</title>
+      <title>PROGRAMMING TIP: Object Serialization</title>
       <p>
-        Java's serialization classes, <c>ObjectOutputStream</c> and <c>ObjectInputStream</c>, should be used whenever an object needs to be input or output from a stream.
+        Java's serialization classes, <c>ObjectOutputStream</c> and <c>ObjectInputStream</c>, 
+        should be used whenever an object needs to be input or output from a stream.
       </p>
     </principle>
-  </introduction>
+  </subsection>
   <subsection xml:id="object-io">
     <title>The <c>ObjectIO</c>Class</title>
     <p>
@@ -133,25 +148,27 @@ public class Student implements Serializable {
       Everything else about this program will be exactly the same as in <c>BinaryIO</c>.
     </p>
     <p>
-      <xref ref="fig-objectioclass">Figure</xref>
-      provides the full implementation of the
-<c>ObjectIO</c> class.
+      <xref ref="fig-objectioclass">Listing</xref>
+      provides the full implementation of the <c>ObjectIO</c> class.
       Note that the <c>writeRecords()</c> method will still write five random records to the data file.
-      The difference in this case is that we will call the <c>Student.writeToFile()</c> method to take care of the actual output operations.
+      The difference in this case is that we will call the <c>Student.writeToFile()</c> 
+      method to take care of the actual output operations.
       The revised algorithm will create a new <c>Student</c> object,
       using randomly generated data for its name, year,
       and GPA and then invoke its <c>writeToFile()</c> to output its data.
       Note how a <c>FileOutputStream</c> is created and passed to the <c>Student.\-writeToFile()</c> method.
     </p>
-    <figure xml:id="fig-objectioclass">
-      <caption>Part I of the <c>ObjectIO</c> class, which provides
-      an interface to reading and writing files of <c>Student</c> s.</caption>
+    <listing xml:id="fig-objectioclass">
+      <caption>The <c>ObjectIO</c> class  provides
+      an interface to reading and writing files of <c>Student</c>s.
+      </caption>
       
  <program language="java"><input>
 import javax.swing.*;         // Swing components
 import java.awt.*;
 import java.io.*;
 import java.awt.event.*;
+
 public class ObjectIO extends JFrame implements ActionListener{
   private JTextArea display = new JTextArea();
   private JButton read = new JButton("Read From File"),
@@ -159,6 +176,7 @@ public class ObjectIO extends JFrame implements ActionListener{
   private JTextField nameField = new JTextField(10);
   private JLabel prompt = new JLabel("Filename:",JLabel.RIGHT);
   private JPanel commands = new JPanel();
+
   public ObjectIO () {
     super("ObjectIO Demo");                // Set window title
     read.addActionListener(this);
@@ -174,6 +192,7 @@ public class ObjectIO extends JFrame implements ActionListener{
     this.getContentPane().add( new JScrollPane(display));
     this.getContentPane().add("Center", display);
   } // ObjectIO
+
   public void actionPerformed(ActionEvent evt) {
     String fileName = nameField.getText();
     if (evt.getSource() == read)
@@ -181,12 +200,8 @@ public class ObjectIO extends JFrame implements ActionListener{
     else
         writeRecords(fileName);
   } // actionPerformed()
- </input></program>
-    </figure>
-    <figure xml:id="fig_objectIOpart2cont">
-      <caption>(<em>continued</em>) The <c>ObjectIO</c> class, Part II.</caption>
- <program language="java"><input>
-private void readRecords(String fileName) {
+
+  private void readRecords(String fileName) {
      try {
        FileInputStream inStream = new FileInputStream(fileName);  // Open a stream
        display.setText("Name\tYear\tGPA\n");
@@ -207,6 +222,7 @@ private void readRecords(String fileName) {
          display.append("ERROR: Class NOT found " + e.getMessage() + "\n");
      }
   } // readRecords()
+
   private void writeRecords(String fileName) {
     try {
       FileOutputStream outStream = new FileOutputStream( fileName );// Open stream
@@ -223,6 +239,7 @@ private void readRecords(String fileName) {
        display.append("IOERROR: " + e.getMessage() + "\n");
     }
   } // writeRecords()
+
   public static void main(String args[]) {
     ObjectIO io = new ObjectIO();
     io.setSize( 400,200);
@@ -232,9 +249,11 @@ private void readRecords(String fileName) {
             System.exit(0);  // Quit the application
             }
     });
-  } // main()} // ObjectIO
+  } // main()
+} // ObjectIO
  </input></program>
-    </figure>
+    </listing>
+
     <p>
       The <c>readRecords()</c> method (Fig.
       <xref ref="fig-objectioclass"></xref>, Part II) will read data from a file containing serialized <c>Student</c> objects.
@@ -242,24 +261,41 @@ private void readRecords(String fileName) {
       passing it a <c>FileInputStream</c>. Note how the <c>FileInputStream</c> is created and,
       unlike in <c>BinaryIO</c>, the inner try block is exited by an IOException rather than an <c>EOFException</c>.
     </p>
-    </subsection>
-    <subsection>
+
+  <exercises>
     <title>Self-Study Exercise</title>
-      <ol>
-        <li>
+     <exercise>
+      <title>Serializable?</title>
+      <statement>
           <p>
             Given the following definition,
-            would a binary file consisting of several <c>SomeObject</c> s be readable by either the <c>BinaryIO</c> or the <c>ObjectIO</c> programs?
+            would a binary file consisting of several <c>SomeObject</c>s be readable 
+            by either the <c>BinaryIO</c> or the <c>ObjectIO</c> programs?
             Explain.
+          </p>
+      </statement>
  <program language="java"><input>
 public class SomeObject {
     private String str;
     private short n1;
     private short n2;
-    private long  n3;}
+    private long  n3;
+}
  </input></program>
-          </p>
-        </li>
-      </ol>
+ <solution>
+         <p>
+          Yes, a binary file containing several <c>SomeObjects</c> would be
+          <q>readable</q>
+          by the <c>BinaryIO</c> program because the program will read a <c>String</c> followed by 64 bytes.
+          However, <c>BinaryIO</c> would misinterpret the data,
+          because it will assume that <c>n1</c> and
+          <c>n2</c> together comprise a single <c>int</c>, and <c>n3</c>(64 bits) will be 
+          interpreted as a <c>double</c>. A file of <c>SomeObject</c>s could not be read by 
+          the <c>ObjectIO</c> program,
+          because <c>SomeObject</c> does not implement the <c>Serializable</c> interface.
+        </p>
+ </solution>
+  </exercise>
+  </exercises>
   </subsection>
 </section>

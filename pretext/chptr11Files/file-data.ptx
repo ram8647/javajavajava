@@ -9,7 +9,7 @@
   </p>
   <p>
     To illustrate how we can apply what we've learned about file I/O, let's modify the <c>WordGuess</c> class
-    (which is listed in Fig.<nbsp/>8.27)
+    (<xref ref="fig-wordguess">Listing</xref>)
     so that it reads a list of possible words for players to guess from a file.
     The Chapter<nbsp/>8  version of the class contains a method, <c>getSecretWord()</c>, which uses a <c>switch</c> statement to randomly choose and return a word from a fixed list of ten words.
     Reading the words from a text file would allow a user to modify the list of possible words by adding or changing words without needing to recompile the program.
@@ -40,12 +40,14 @@
   </p>
  <program language="java"><input>
 private String[] wordArray;
-    private int arraySize;
+private int arraySize;
  </input></program>
   <p>
-    Note that it will be useful to store the number of words in the file in its first line so that this information can be used to allocate memory for the array.
+    Note that it will be useful to store the number of words in the file in its first line so that 
+    this information can be used to allocate memory for the array.
     For example,
-    let us assume the text file will be named <c>secretwords.txt</c>, it will be located in the same directory as the <c>WordGuess</c> class,
+    let us assume the text file will be named <c>secretwords.txt</c>, it will be located in the same 
+    directory as the <c>WordGuess</c> class,
     it will have the number of words in the file as its first line,
     and it will have  a single word per line after that.
     Thus, a small file might look like:
@@ -57,11 +59,14 @@ private String[] wordArray;
     DIALOGS
  </input></program>
   <p>
-    We can use the body of the <c>readTextFile()</c> method of the <c>TextIO</c> class as a model for the Java code that needs to be added to the <c>WordGuess</c> constructor.
+    We can use the body of the <c>readTextFile()</c> method of the <c>TextIO</c> class as a model for 
+    the Java code that needs to be added to the <c>WordGuess</c> constructor.
     Pseudocode for this code will look like:
   </p>
+  <algorithm>
+  <title>Read textfile algorithm</title>
  <program language="java"><input>
-Use file name to open a  BufferedReader stream
+    Use file name to open a  BufferedReader stream
     Read first line and convert to an integer
     Store the integer as the size of the array
     Allocate memory for the array
@@ -71,14 +76,15 @@ Use file name to open a  BufferedReader stream
        Read next line of file
     Close the BufferedReader stream
  </input></program>
+</algorithm>
   <p>
     When this pseudocode is translated into Java and inserted into a
-<c>try-catch</c> statement we get the code fragment in <xref ref="fig-wordguessfile">Figure</xref>.
+    <c>try-catch</c> statement we get the code fragment in <xref ref="fig-wordguessfile">Listing</xref>.
   </p>
-  <figure xml:id="fig-wordguessfile">
+  <listing xml:id="fig-wordguessfile">
     <caption>Code added at beginning of the <c>WordGuess</c> constructor.</caption>
  <program language="java"><input>
-try{
+    try {
         FileReader fr = new FileReader("secretwords.txt");
         BufferedReader inStream
             = new BufferedReader(fr);
@@ -91,7 +97,7 @@ try{
             wordArray[k] = line;
             line = inStream.readLine();
             k++;
-        }//while
+        } //while
         inStream.close();
     } catch(FileNotFoundException e){
         e.printStackTrace();
@@ -99,22 +105,26 @@ try{
         e.printStackTrace();
     } //catch
  </input></program>
-  </figure>
+  </listing>
   <p>
-    The new <c>getSecretWord()</c> method merely needs to generate a  random array index and return the corresponding array element:
+    The new <c>getSecretWord()</c> method merely needs to generate a  random array 
+    index and return the corresponding array element:
   </p>
  <program language="java"><input>
-private String getSecretWord(){
+    private String getSecretWord() {
         int num = (int)(Math.random()*arraySize);
         return wordArray[num];
     } //getSecretWord()
  </input></program>
   <p>
     The only other modification that is needed for to complete new
-<c>WordGuess</c> class is to add an initial <c>import java.io.*;</c> statement so that the file IO classes can be accessed.
+    <c>WordGuess</c> class is to add an initial <c>import java.io.*;</c> statement so that the file 
+    IO classes can be accessed.
   </p>
   <p>
-    The earlier examples in this chapter can be used as models to enhance numerous practical applications.
-    GUI applications that involve a user's choice to load data from a file or save data in a file should make use of the <c>JFileChooser</c> dialogs to initiate the file operations.
+    The earlier examples in this chapter can be used as models to enhance numerous 
+    practical applications.
+    GUI applications that involve a user's choice to load data from a file or save data 
+    in a file should make use of the <c>JFileChooser</c> dialogs to initiate the file operations.
   </p>
 </section>

@@ -3,12 +3,16 @@
   <introduction>
     <p>
       As we've seen,
-      an attempt to create a <c>FileReader</c> stream may throw a <c>FileNotFoundException</c>. The way this happens is if the user provides a name for a file that either doesn't exist or isn't located where its name says it should be located.
-      The question that needs to be considered: Is there any way we can detect these kinds of errors before attempting to read the file?
+      an attempt to create a <c>FileReader</c> stream may throw a <c>FileNotFoundException</c>. 
+      The way this happens is if the user provides a name for a file that either doesn't exist or 
+      isn't located where its name says it should be located.
+      The question that needs to be considered: Is there any way we can detect these kinds of errors 
+      before attempting to read the file?
     </p>
     <p>
-      The <c>java.io.File</c> class provides methods that we can use for this <image width="73%" source="chptr11/hier.png"/> task.
-      The <c>File</c> class provides a representation of the computer's file and directory information in a platform-independent manner.
+      The <c>java.io.File</c> class provides methods that we can use for this task.
+      The <c>File</c> class provides a representation of the computer's file and directory 
+      information in a platform-independent manner.
       As you know, a file is a collection of data,
       whereas a <term>directory</term>
           <idx><h>directory</h></idx>
@@ -22,6 +26,10 @@
   </introduction>
   <subsection>
     <title>Names and Paths</title>
+    <figure xml:id="fig-hier">
+    <caption>A file hierarchy.</caption>
+    <image width="60%" source="chptr11/hier.png"/>
+    </figure>
     <p>
       In order to correctly specify a file's location,
       it is necessary to know a little about how files are stored on your computer's disk drive.
@@ -30,14 +38,18 @@
           <idx><h>path</h></idx>
       is a description of a file's location in the hierarchy.
       For example,
-      consider the hierarchy of files in Figure<nbsp/>11.15.
+      consider the hierarchy of files in <xref ref="fig-hier">Figure</xref>.
+    </p>
+    <p>
       Assume that your Java program is named <c>MyClass.class</c>. When a program is running,
       the program's directory is considered the
       <em>current directory</em>.
-      Any files located in the current directory can be referred to by name alone<mdash/>for example, <c>MyClass.java</c>. To refer to a file located in a subdirectory of the  current directory,
+      Any files located in the current directory can be referred to by name 
+      alone<mdash/>for example, <c>MyClass.java</c>. To refer to a file located in a subdirectory of the  current directory,
       you need to provide the name of the subdirectory and the file: <c>datafiles/data.txt</c>. In this case,
-      we are assuming a Unix file system,
-      so we are using the <c>/</c> as the separator between the name of the directory (<c>datafiles</c>) and the name of the file (<c>data.txt</c>).
+      we are assuming a Linux file system,
+      so we are using the <c>/</c> as the separator between the name of the directory (<c>datafiles</c>) 
+      and the name of the file (<c>data.txt</c>).
       This is an example of a <term>relative path name</term>,
       because we are specifying a file in relation to the current directory.
     </p>
@@ -52,7 +64,7 @@
 /root/java/examples/datafiles/data.txt
  </input></program>
     <p>
-      would be the absolute path name for the file named <c>data.txt</c> on a Unix system.
+      would be the absolute path name for the file named <c>data.txt</c> on a Linux system.
       When you supply the name of a file to one of the stream constructors,
       you are actually providing a <em>path</em> name.
       If the path consists of just a name,
@@ -63,16 +75,24 @@
     <title>Validating File Names</title>
     <p>
       Before reading a file it is often necessary to determine that the file's name is a valid one and that the file can be read.
-      The <c>File</c> class (Fig.<nbsp/>11.16) provides platform-independent methods for dealing with files and directories.
+      The <c>File</c> class (<xref ref="fig-fileuml">Figure</xref>) provides platform-independent methods for 
+      dealing with files and directories.
       It contains methods that list the contents of directories,
       determine a file's attributes,
       and rename and delete files.
-      <image width="73%" source="chptr11/fileuml.png"/> Note the several <c>static</c> constants provided.
+      Note the several <c>static</c> constants provided.
       These allow path names to be specified in a platform-independent way.
-      For example, on a Unix system,
-      the <c>File.separator</c> character will be the
-<c>/</c> and on a Windows system it will be the <c>\,backslash</c>. <c>File.separator</c> will be initialized to the appropriate separator for the particular system being used.
     </p>
+    <p>
+      For example, on a Linux system,
+      the <c>File.separator</c> character will be the
+      <c>/</c> and on a Windows system it will be the <c>\,backslash</c>. <c>File.separator</c> will 
+      be initialized to the appropriate separator for the particular system being used.
+    </p>
+    <figure xml:id="fig-fileuml">
+    <caption>The <c>File</c> class.</caption>
+    <image width="50%" source="chptr11/fileuml.png"/> 
+    </figure>
     <principle>
       <title>PROGRAMMING TIP:File Separators</title>
       <p>
@@ -89,7 +109,8 @@
       A file might be unreadable for a number of reasons.
       It might be owned by  another user and readable only by that user.
       Or it might be designated as not readable by its owner.
-      We'll pass the method the name of the file (a <c>String</c>), and the method will return <c>true</c> if a readable file with that name exists.
+      We'll pass the method the name of the file (a <c>String</c>), and the method will 
+      return <c>true</c> if a readable file with that name exists.
       Otherwise, the method will throw an exception and return <c>false</c>:
     </p>
  <program language="java"><input>
@@ -110,10 +131,12 @@ private boolean isReadableFile(String fileName) {
   } catch (IOException e) {
     System.out.println("IOERROR: " + e.getMessage() + "\n");
     return false;
-  }} // isReadableFile
+  }
+} // isReadableFile
  </input></program>
     <p>
-      The method simply creates a <c>File</c> instance and uses its <c>exists()</c> and <c>canRead()</c> methods to check whether its name is valid.
+      The method simply creates a <c>File</c> instance and uses its <c>exists()</c> 
+      and <c>canRead()</c> methods to check whether its name is valid.
       If either condition fails, an exception is thrown.
       The method handles its own exceptions,
       printing an error message and returning false in each case.
@@ -140,28 +163,44 @@ private boolean isWriteableFile(String fileName) {
   } catch (IOException e) {
     display.setText("IOERROR: " + e.getMessage() + "\n");
     return false;
-  }} // isWriteableFile()
+  }
+} // isWriteableFile()
  </input></program>
     <p>
       The first check in this code tests that the user has not forgotten to provide a name for the output file.
       It is unlikely that the user wants to name the file with the empty string.
       We use the <c>exists()</c> method to test whether the user is attempting to write to an existing file.
       If so, we use the <c>canWrite()</c> method to test whether the file is writeable.
-      Both kinds of errors result in
-<c>IOException</c> s.
+      Both kinds of errors result in <c>IOException</c>s.
     </p>
-    </subsection>
-    <subsection>
+    <exercises>
     <title>Self-Study Exercise</title>
-      <ol>
-        <li>
+      <exercise>
+        <title>File Info</title>
+        <statement>
           <p>
             The other methods of the <c>File</c> class are just as easy to use as the ones we have illustrated in this section.
-            Write a method that takes the name of a file as its single parameter and prints the following information about the file:
-            its absolute path, its length,
-            and whether it is a directory or a file.
+            Write a method, <c>getFileAttributes</c> that takes the name of a file as its single parameter and 
+            prints the following information about the file:
+            its absolute path, its length, and whether it is a directory or a file.
           </p>
-        </li>
-      </ol>
+        </statement>
+        <solution>
+                   <program language="java"><input>
+public void getFileAttributes(String fileName) {
+    File file = new File (fileName);
+    System.out.println(filename);
+    System.out.println("absolute path:"
+           + file.getAbsolutePath());
+    System.out.println("length:" + file.length());
+    if (file.isDirectory())
+        System.out.println("Directory");
+    else
+        System.out.println("Not a Directory");
+} // getFileAttributes()
+ </input></program>
+        </solution>
+      </exercise>
+    </exercises>
   </subsection>
 </section>

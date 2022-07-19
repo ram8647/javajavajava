@@ -6,8 +6,8 @@
       they can't and shouldn't be used for every data-processing application.
       For example,
       your college's administrative data system undoubtedly uses files to store student records.
-      Because your student record contains a variety of different types of data<mdash/><c>String</c> s,
-<c>int</c> s, <c>double</c> s<mdash/>it cannot be processed as text.
+      Because your student record contains a variety of different types of data <mdash/><c>String</c>,
+      <c>int</c>s, <c>double</c> <mdash/>it cannot be processed as text.
       Similarly, a company's inventory files,
       which also include data of a wide variety of types,
       cannot be processed as text.
@@ -26,35 +26,42 @@
       A binary file doesn't have an end-of-file character because any such character would be indistinguishable from a binary datum.
     </p>
     <principle>
-      <title>DEBUGGING TIP:End of Binary File</title>
+      <title>DEBUGGING TIP: End of Binary File</title>
       <p>
         Because a binary file does not have an end-of-file character,
-        it would be an error to use the same loop-entry conditions we used in the loops we designed for reading text files.
+        it would be an error to use the same loop-entry conditions we used in the loops 
+        we designed for reading text files.
       </p>
     </principle>
     <p>
       Generally speaking,
       the steps involved in reading and writing binary files are the same as for text files:
     </p>
-    <p>
-      \begin{NL} \item Connect a stream to the file. \item Read or write the data,
-      possibly using a loop. \item Close the stream. \end{NL}
-    </p>
+    <algorithm>
+    <title>Processing binary files</title>
+    <program language="java"><input>
+      Connect a stream to the file.
+      Read or write the data, possibly using a loop. 
+      Close the stream.
+    </input></program>
+    </algorithm>
     <p>
       The difference between text and binary file I/O resides in the Java streams that we use.
     </p>
   </introduction>
-  <subsection xml:id="fig-dostream">
+  <subsection xml:id="sec-binary-data">
     <title>Writing Binary Data</title>
     <introduction>
       <p>
         Let's begin by designing a method that will output employee data to a binary file.
         As the developer of this program,
         one thing you'll have  to do is build some sample data files.
-        These can't easily be built by hand<mdash/>remember you can't use a text editor to create them<mdash/>so you'll want to develop a method that can generate some random data of the sort your application will have to process.
+        These can't easily be built by hand<mdash/>remember you can't use a text editor to 
+        create them<mdash/>so you'll want to develop a method that can generate some random data 
+        of the sort your application will have to process.
       </p>
       <principle>
-        <title>EFFECTIVE DESIGN:I/O Design</title>
+        <title>EFFECTIVE DESIGN: I/O Design</title>
         <p>
           When designing file I/O applications,
           it is good to design the input and the output methods together.
@@ -78,14 +85,15 @@ Name3 52 9.25
       <p>
         As you can see,
         these data look as if they were randomly generated,
-        but they resemble the real data in the important respects: They are of the right type<mdash/><c>String</c>, <c>int</c>, <c>double</c><mdash/>and have the right kind of values.
+        but they resemble the real data in the important respects: 
+        They are of the right type<mdash/><c>String</c>, <c>int</c>, <c>double</c><mdash/>and have the right kind of values.
         Of course, when these data are stored in the file,
         or in the program's memory,
         they just look like one long string of 0's and 1's.
       </p>
       <p>
-        Our approach to designing this output method will be the same as the approach we used in designing methods for text I/O.<nbsp/>That is,
-        we start with two questions:
+        Our approach to designing this output method will be the same as the approach we used in designing 
+        methods for text I/O. That is, we start with two questions:
         <ul>
           <li>
             <p>
@@ -100,8 +108,8 @@ Name3 52 9.25
         </ul>
       </p>
       <p>
-        And we find the answers to these by searching through the <c>java.io</c> package (Fig.
-        <xref ref="fig-streamhier"></xref> and Table<nbsp/>11.1).
+        And we find the answers to these by searching through the <c>java.io</c> package 
+        <xref ref="fig-streamhier">Figure</xref> and <xref ref="tab-streams">Table</xref>).
       </p>
       <figure xml:id="fig-fostream">
         <caption>The <c>FileOutputStream</c> class.</caption>
@@ -113,35 +121,42 @@ Name3 52 9.25
         one likely candidate is <c>FileOutputStream</c>(Fig.
         <xref ref="fig-fostream"></xref>).
         This class has the right kind of constructors,
-        but it only contains <c>write()</c> methods for writing <c>int</c> s and <c>byte</c> s, and we need to be able to write <c>String</c> s and <c>double</c> s as well as <c>int</c> s.
+        but it only contains <c>write()</c> methods for writing <c>int</c> and <c>byte</c> data, and 
+        we need to be able to write <c>String</c>  and <c>double</c> data as well.
       </p>
       <p>
-        These kinds of methods are found in <c>DataOutputStream</c><image width="73%" source="chptr11/dostream.png"/> (Fig.<nbsp/>11.18),
+        These kinds of methods are found in <c>DataOutputStream</c>
+         (<xref ref="fig-dostream">Figure</xref>),
         which contains a <c>write()</c> method for each different type of data.
         As you can see, there's one method for each primitive type.
         However, note that the <c>writeChar()</c> takes an
-<c>int</c> parameter,
+        <c>int</c> parameter,
         which indicates that the character is written in binary format rather than as a ASCII or Unicode character.
         Although you can't tell by just reading its method signature,
         the <c>writeChars(String)</c> method also writes its data in binary format rather than as a sequence of characters.
-        This is the main difference between these <c>write()</c> methods and the ones defined in the <c>Writer</c> branch of Java's I/O hierarchy.
+        This is the main difference between these <c>write()</c> methods and the ones defined in the 
+        <c>Writer</c> branch of Java's I/O hierarchy.
       </p>
+      <figure xml:id="fig-dostream">
+      <caption>The <c>DataOutputStream</c> class.</caption>
+      <image width="60%" source="chptr11/dostream.png"/>
+      </figure>
+
       <p>
         Now that we've found the appropriate classes and methods,
         we need to create a pipeline to write data to the file and develop an output algorithm.
         To construct a stream to use in writing employee records,
-        we want to join together a
-<c>DataOutputStream</c> and a <c>FileOutputStream</c>. The
-<c>DataOutputStream</c> gives us the output methods we need,
-        and the
-<c>FileOutputStream</c> lets us use the file's name to create the stream:
+        we want to join together a <c>DataOutputStream</c> and a <c>FileOutputStream</c>. The
+        <c>DataOutputStream</c> gives us the output methods we need,
+        and the <c>FileOutputStream</c> lets us use the file's name to create the stream:
       </p>
  <program language="java"><input>
 DataOutputStream outStream
   = new DataOutputStream(new FileOutputStream (fileName));
  </input></program>
       <p>
-        This enables the program to write data to the <c>DataOutputStream</c>, which will pass them through the <c>FileOutputStream</c> to the file itself.
+        This enables the program to write data to the <c>DataOutputStream</c>, which will pass them 
+        through the <c>FileOutputStream</c> to the file itself.
         That settles the first question.
       </p>
       <p>
@@ -150,7 +165,8 @@ DataOutputStream outStream
         In this case, because we are generating random data,
         we can use a simple for loop to generate,
         say, five records of employee data.
-        We need one <c>write()</c> statement for each of the elements in the employee record: The name (<c>String</c>), age (<c>int</c>), and pay rate (<c>double</c>):
+        We need one <c>write()</c> statement for each of the elements in the employee record: 
+        The name (<c>String</c>), age (<c>int</c>), and pay rate (<c>double</c>):
       </p>
  <program language="java"><input>
 for (int k = 0; k &lt; 5; k++) {  // Output 5 data records
@@ -161,7 +177,8 @@ for (int k = 0; k &lt; 5; k++) {  // Output 5 data records
       <p>
         Within the loop body we have one output statement for each data element in the record.
         The names of the methods reflect the type of data they write.
-        Thus, we use <c>writeInt()</c> to write an <c>int</c> and <c>writeDouble()</c> to write a <c>double</c>. But why do we use <c>writeUTF</c> to write the employee's name,
+        Thus, we use <c>writeInt()</c> to write an <c>int</c> and <c>writeDouble()</c> to write 
+        a <c>double</c>. But why do we use <c>writeUTF</c> to write the employee's name,
         a <c>String</c>?
       </p>
     </introduction>
@@ -169,15 +186,16 @@ for (int k = 0; k &lt; 5; k++) {  // Output 5 data records
       <title>The Unicode Text Format (UTF)</title>
       <p>
         There is no <c>DataOutputStream.writeString()</c> method.
-        Instead,
-<c>String</c> s are written using the <c>writeUTF()</c> method.
+        Instead, <c>String</c>s are written using the <c>writeUTF()</c> method.
         <term>UTF</term>
             <idx><h>UTF</h></idx>
         stands for <term>Unicode Text Format</term>,
         a coding scheme for Java's Unicode character set.
         Recall that Java uses the Unicode character set instead of the ASCII set.
-        As a 16-bit code, Unicode can represent \marginpar{ASCII vs.
-        Unicode} 8-bit ASCII characters plus a wide variety of Asian and other international characters.
+        As a 16-bit code, Unicode can represent 8-bit ASCII characters plus a wide 
+        variety of Asian and other international characters.
+      </p>
+      <p>
         However, Unicode is not a very efficient coding scheme if you aren't writing an international program.
         If your program just uses the standard ASCII characters,
         which can be stored in 1 byte,
@@ -187,15 +205,15 @@ for (int k = 0; k &lt; 5; k++) {  // Output 5 data records
         but it provides a more efficient way of representing the ASCII subset.
       </p>
       <p>
-        It's now time to combine these separate elements into a single method (Fig.
-        <xref ref="fig-writerecordsmethod"></xref>).
+        It's now time to combine these separate elements into a single method 
+        (<xref ref="fig-writerecordsmethod">Figure</xref>).
         The <c>writeRecords()</c> method takes a single <c>String</c> parameter that specifies the name of the file.
         This is a <c>void</c> method.
         It will output data to a file,
         but it will not return anything to the calling method.
         The method follows the standard output algorithm: Create an output stream,
         write the data, close the stream.
-        Note also that the method includes a <c>try/catch</c> block to handle any <c>IOException</c> s that might be thrown.
+        Note also that the method includes a <c>try/catch</c> block to handle any <c>IOException</c>s that might be thrown.
       </p>
       <figure xml:id="fig-writerecordsmethod">
         <caption>A method to write a binary file consisting of five
@@ -214,42 +232,54 @@ private void writeRecords( String fileName )  {
    outStream.close();          // Close the stream
  } catch (IOException e) {
    display.setText("IOERROR: " + e.getMessage() + "\n");
- }} // writeRecords()
+ }
+} // writeRecords()
  </input></program>
       </figure>
     </subsubsection>
   </subsection>
-  <subsection xml:id="fig-fistream">
+  <subsection xml:id="sec-fistream">
     <title>Reading Binary Data</title>
     <p>
-      The steps involved in reading data from a binary file are the same as for reading data from a text file: Create an input stream and open the file,
+      The steps involved in reading data from a binary file are the same as for 
+      reading data from a text file: Create an input stream and open the file,
       read the data, close the file.
       The main difference lies in the way you check for the end-of-file marker in a binary file.
     </p>
     <p>
-      Let's design a method to read the binary data that were output by the
-<c>writeRecords()</c> method.
-      We'll call this method
-<c>readRecords()</c>. It, too,
-      will consist of a single <c>String</c><image width="73%" source="chptr11/fistream.png"/> parameter that provides the name of the file to be read,
+      Let's design a method to read the binary data that were output by the <c>writeRecords()</c> method.
+      We'll call this method <c>readRecords()</c>. It, too,
+      will consist of a single <c>String</c> parameter that provides the name of the file to be read,
       and it will be a void method.
-      It will just display the data on
-<c>System.out</c>.
+      It will just display the data on <c>System.out</c>.
     </p>
+    <figure xml:id="fig-fistream">
+    <caption>The <c>FileInputStream</c> class.</caption>
+    <image width="60%" source="chptr11/fistream.png"/>
+    </figure>
     <p>
       The next questions we need to address are: What stream classes should we use,
       and what methods should we use?
       For binary input,
-      we need an
-<c>InputStream</c> subclass (Fig.
-      <xref ref="fig-streamhier"></xref> and Table<nbsp/>11.1).
+      we need an <c>InputStream</c> subclass 
+      (<xref ref="fig-streamhier">Figure</xref> and <xref ref="tab-streams">Table</xref>).
       As you've probably come to expect,
-      the <c>FileInputStream</c> class contains constructors that let us create a stream from a file name (Fig.<nbsp/>11. 20).
+      the <c>FileInputStream</c> class contains constructors that let us create a stream from a file name 
+      (<xref ref="tab-streams">Table</xref>).
       However, it does not contain useful <c>read()</c> methods.
-      Fortunately,
-      the <c>DataInputStream</c> class contains the input counterparts of the methods we found in <c>DataOutputStream</c>(Fig.<nbsp/>11.21).
-      Therefore, our input stream for this method will be a combination of <c>DataInputStream</c> and <c>FileInputStream</c>:
     </p>
+    <figure xml:id="fig-datainputstream">
+    <caption>The <c>DataInputStream</c> class contains methods for reading all types of data.</caption>
+    <image width="50%" source="chptr11/datainputstream.png"/>
+    </figure>
+    <p>
+      Fortunately,
+      the <c>DataInputStream</c> class contains the input counterparts of the 
+      methods we found in <c>DataOutputStream</c> (<xref ref="fig-datainputstream">Figure</xref>).
+      Therefore, our input stream for this method will be a combination of 
+      <c>DataInputStream</c> and <c>FileInputStream</c>:
+    </p>
+
  <program language="java"><input>
 DataInputStream inStream
    = new DataInputStream(new FileInputStream(file));
@@ -260,66 +290,70 @@ DataInputStream inStream
       Unlike text files,
       binary files do not contain a special end-of-file marker.
       Therefore, the read methods can't see anything in the file that tells them they're at the end of the file.
-      Instead, when a binary read method attempts to read past the end of the file,
+    </p>
+    <p>
+      Consequently, when a binary read method attempts to read past the end of the file,
       an end-of-file exception <c>EOFException</c> is thrown.
-      Thus, the binary loop is coded as an infinite loop that's exited when the <c>EOFException</c> is raised: \marginfigvspace{-120pt}{chptr11/distream.eps}{The <c>java.io.DataInputStream</c> class contains methods for reading all types of data.}{fig-distream}
+      Thus, the binary loop is coded as an infinite loop that's exited when the <c>EOFException</c> is 
+      raised: 
     </p>
  <program language="java"><input>
 try {
-  while (true) {  // Infinite loop
-    String name = inStream.readUTF();  // Read a record
+  while (true) {                        // Infinite loop
+    String name = inStream.readUTF();   // Read a record
     int age = inStream.readInt();
     double pay = inStream.readDouble();
     display.append(name + " " + age + " " + pay + "\n");
-  } // while} catch (EOFException e) {} // Until EOF exception
+  } // while
+} catch (EOFException e) {} // Until EOF exception
  </input></program>
     <p>
       The read loop is embedded within a <c>try/catch</c> statement.
-      Note that the <c>catch</c> clause for the
-<c>EOFException</c> does nothing.
+      Note that the <c>catch</c> clause for the <c>EOFException</c> does nothing.
       Recall that when an exception is thrown in a <c>try</c> block,
       the block is exited for good,
       which is precisely the action we want to take.
-      That's why we needn't do anything when we catch the <c>EOFException</c>. We have to catch the exception or else Java will catch it and terminate the program.
+      That's why we needn't do anything when we catch the <c>EOFException</c>. 
+      We have to catch the exception or else Java will catch it and terminate the program.
       This is an  example of an expected exception.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:<c>EOFException</c></title>
+      <title>EFFECTIVE DESIGN: <c>EOFException</c></title>
       <p>
         An attempt to read past the end of a binary file will cause an <c>EOFException</c> to be thrown.
         Catching this exception is the standard way of terminating a binary input loop.
       </p>
     </principle>
     <p>
-      Note also the <c>read()</c> statements within the loop are mirror opposites of the <c>write()</c> statements in the method that created the data.
-      This will generally be true for binary I/O routines: The statements that read data from a file should
-      <q>match</q>
-      those that wrote the data in the first place.
+      Note also the <c>read()</c> statements within the loop are mirror opposites 
+      of the <c>write()</c> statements in the method that created the data.
+      This will generally be true for binary I/O routines: 
+      The statements that read data from a file should
+      <q>match</q> those that wrote the data in the first place.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Matching Input to Output</title>
+      <title>EFFECTIVE DESIGN: Matching Input to Output</title>
       <p>
         The statements used to read binary data should match those that wrote the data.
-        If a
-<c>writeX()</c> method were used to write the data,
+        If a <c>writeX()</c> method were used to write the data,
         a <c>readX()</c> should be used to read<nbsp/>it.
       </p>
     </principle>
     <p>
       To complete the method,
       the only remaining task is to <c>close()</c> the stream after the data are read.
-      The complete definition is shown in <xref ref="fig-readrecordsmethod">Figure</xref>.
+      The complete definition is shown in <xref ref="fig-readrecordsmethod">Listing</xref>.
     </p>
-    <figure xml:id="fig-readrecordsmethod">
+    <listing xml:id="fig-readrecordsmethod">
       <caption>A method for reading binary data.</caption>
  <program language="java"><input>
 private void readRecords( String fileName ) {
  try {
-   DataInputStream inStream     // Open stream
+   DataInputStream inStream                 // Open stream
      = new DataInputStream(new FileInputStream(fileName));
    display.setText("Name   Age Pay\n");
    try {
-     while (true) {               // Infinite loop
+     while (true) {                        // Infinite loop
         String name = inStream.readUTF();  // Read a record
         int age = inStream.readInt();
         double pay = inStream.readDouble();
@@ -333,23 +367,24 @@ private void readRecords( String fileName ) {
       display.setText("IOERROR: "+ fileName + " NOT Found: \n");
    } catch (IOException e) {
       display.setText("IOERROR: " + e.getMessage() + "\n");
-   }} // readRecords()
+   }
+} // readRecords()
  </input></program>
-    </figure>
+    </listing>
     <p>
       It's important that a <c>close()</c> statement be placed after the
-<c>catch EOFException</c> clause.
+      <c>catch EOFException</c> clause.
       If it were placed in the <c>try</c> block,
       it would never get executed.
       Note also that the entire method is embedded in an outer <c>try</c> block that catches the
-<c>IOException</c>, thrown by the various <c>read()</c> methods,
+      <c>IOException</c>, thrown by the various <c>read()</c> methods,
       and the
-<c>FileNotFoundException</c>, thrown by the <c>FileInputStream()</c> constructor.
+      <c>FileNotFoundException</c>, thrown by the <c>FileInputStream()</c> constructor.
       These make the method a bit longer,
       but conceptually they belong in this method.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:The <c>finally</c>Block</title>
+      <title>PROGRAMMING TIP: The <c>finally</c>Block</title>
       <p>
         In coding a binary read loop,
         the try block is exited as soon as the <c>EOFException</c> is raised.
@@ -358,21 +393,23 @@ private void readRecords( String fileName ) {
       </p>
     </principle>
     <principle>
-      <title>EFFECTIVE DESIGN:Nested Try/Catch</title>
+      <title>EFFECTIVE DESIGN: Nested Try/Catch</title>
       <p>
         Nested try blocks must be used to perform binary I/O correctly.
         The outer block encapsulates statements that throw <c>IOException</c> s.
-        The inner block encapsulates the read loop and catches the <c>EOFException</c>. No particular action need be taken when the <c>EOFException</c> is caught.
+        The inner block encapsulates the read loop and catches the <c>EOFException</c>. 
+        No particular action need be taken when the <c>EOFException</c> is caught.
       </p>
     </principle>
-  </subsection>
-  <subsection>
+  <exercises>
     <title>Self-Study Exercise</title>
-      <ol>
-        <li>
+    <exercise>
+    <title>Find the errors</title>
+    <statement>
           <p>
             Identify the error in the following method,
             which is supposed to read a binary file of <c>int</c> s from a <c>DataInputStream</c>:
+        </p>
  <program language="java"><input>
 public void readIntegers(DataInputStream inStream) {
     try {
@@ -383,28 +420,49 @@ public void readIntegers(DataInputStream inStream) {
         inStream.close();
     } catch (EOFException e) {
     } catch (IOException e) {
-    }} // readIntegers
+    }
+} // readIntegers
  </input></program>
-          </p>
-        </li>
-      </ol>
+  </statement>
+  <solution>
+          <p>
+          The <c>inStream.close()</c> statement is misplaced in <c>readIntegers()</c>. 
+          By placing it inside the same <c>try/catch</c> block as the read loop,
+          it will get skipped and the stream will not be closed.
+          The <c>EOFException</c> should be caught in a separate <c>try/catch</c> block from other exceptions,
+          and it should just cause the read loop to exit.
+        </p>
+  </solution>
+  </exercise>
+</exercises>
+ 
  </subsection>
   <subsection xml:id="fig-biniouml">
-    <title>The <c>BinaryIO</c>Application</title>
+    <title>The <c>BinaryIO</c> Application</title>
+    <figure xml:id="fig-binaryIO">
+    <caption>A program to read and write binary files.</caption>
+    <image width="50%" source="chptr11/biniouml.png"/>
+    </figure> 
     <p>
       Given the methods we wrote in the previous section,
-      we can now specify the overall design of the <c>BinaryIO</c> class (Fig.<nbsp/>11.23).
-      The program sets up the same interface we used in the text file example (Fig.<nbsp/>11.24).
+      we can now specify the overall design of the <c>BinaryIO</c> class 
+      (<xref ref="fig-binaryIO">Figure</xref>).
+      The program sets up the same interface we used in the text file example (<xref ref="fig-binaryUI">Figure</xref>).
       It allows<nbsp/>the user to specify the name of a data file to read or write.
       One button allows the user to write random employee records to a binary file,
-      and the other allows the user to display the contents of a file in a <c>JTextArea</c>. The <c>BinaryIO</c> program in Figure<nbsp/>11.25 <image width="73%" source="chptr11/biniouml.png"/> incorporates both <c>readRecords()</c> and <c>writeRecords()</c> into a complete Java program.
+      and the other allows the user to display the contents of a file in a <c>JTextArea</c>. 
+      The <c>BinaryIO</c> program in <xref ref="fig-binaryioclass">Figure</xref> 
+      incorporates both <c>readRecords()</c> and <c>writeRecords()</c> into a complete Java program.
     </p>
-    <p>
-      \marginfigvspace{30pt}{chptr11/binioapp.eps}{A program to read and write binary files.}{fig-binaryioscreen}
-    </p>
-    <figure xml:id="fig-binaryioclass">
-      <caption>Part I of the <c>BinaryIO</c> class, which illustrates
-      simple input and output from a binary file.</caption>
+    <figure xml:id="fig-binaryUI">
+    <caption>User interface for BinaryIO program.</caption>
+    <image width="50%" source="chptr11/binaryUI.png"/>
+    </figure> 
+
+    <listing xml:id="fig-binaryioclass">
+      <caption>The <c>BinaryIO</c> class illustrates
+      simple input and output from a binary file.
+    </caption>
  <program language="java"><input>
 import javax.swing.*;         // Swing components
 import java.awt.*;
@@ -432,6 +490,7 @@ public class BinaryIO extends JFrame implements ActionListener{
         this.getContentPane().add( new JScrollPane(display));
         this.getContentPane().add("Center", display);
     } // BinaryIO()
+
     private void readRecords( String fileName ) {
         try {
             DataInputStream inStream     // Open stream
@@ -454,12 +513,7 @@ public class BinaryIO extends JFrame implements ActionListener{
             display.setText("IOERROR: " + e.getMessage() + "\n");
         }
     } // readRecords()
- </input></program>
-    </figure>
-    <figure xml:id="fig_binaryIOpart2">
-      <caption>(<em>continued</em>) The <c>BinaryIO</c> class, Part II.</caption>
-      
- <program language="java"><input>
+
 private void writeRecords( String fileName )  {
    try {
      DataOutputStream outStream   // Open stream
@@ -475,6 +529,7 @@ private void writeRecords( String fileName )  {
       display.setText("IOERROR: " + e.getMessage() + "\n");
    }
  } // writeRecords()
+
  public void actionPerformed(ActionEvent evt) {
      String fileName = nameField.getText();
      if (evt.getSource()  == read)
@@ -482,6 +537,7 @@ private void writeRecords( String fileName )  {
       else
          writeRecords(fileName);
  } // actionPerformed()
+ 
  public static void main(String args[]) {
     BinaryIO bio = new BinaryIO();
     bio.setSize(400, 200);
@@ -491,9 +547,11 @@ private void writeRecords( String fileName )  {
             System.exit(0);
        }
     });
- } // main()} // BinaryIO
+ } // main()
+} // BinaryIO
+
  </input></program>
-    </figure>
+    </listing>
   </subsection>
   <subsection>
     <title>Abstracting Data from Files</title>
@@ -522,33 +580,35 @@ readDouble();
       This point should make it evident why (non-Java) binary files are not portable  whereas text files are.
       With text files, each character consists of 8 bits,
       and each 8-bit chunk can be interpreted as an ASCII character.
-      So even though a text file consists of a long sequence of 0's and 1's, we know how to find the boundaries between each character.
+      So even though a text file consists of a long sequence of 0's and 1's, we know how to find 
+      the boundaries between each character.
       That's why any text editor can read a text file,
       no matter what program created it.
     </p>
     <p>
       On the other hand,
-      binary files are also just a long sequence of 0's and 1's, but we can't tell where one data element begins and another one ends.
+      binary files are also just a long sequence of 0's and 1's, but we can't tell 
+      where one data element begins and another one ends.
       For example, the 64-bit sequence
     </p>
  <program language="java"><input>
 010100110011001001010100110011000
-    010100110011001011010100110011000
+010100110011001011010100110011000
  </input></program>
     <p>
-      could represent two 32-bit <c>int</c> s or two 32-bit <c>float</c> s or one 64-bit double or four 16-bit <c>char</c> s or a single
-<c>String</c> of 8 ASCII characters.
+      could represent two 32-bit <c>int</c>s or two 32-bit <c>float</c>s or one 64-bit double or four 16-bit <c>char</c>s 
+      or a single <c>String</c> of 8 ASCII characters.
       We can't tell what data we have unless we know exactly how the data were written.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Interpreting Binary Data</title>
+      <title>DEBUGGING TIP: Interpreting Binary Data</title>
       <p>
         The fact that you can read the data in a binary file is no guarantee that you are interpreting it correctly.
         To interpret it correctly, you must read it the same way it was written.
       </p>
     </principle>
     <principle>
-      <title>EFFECTIVE DESIGN:Data Abstraction</title>
+      <title>EFFECTIVE DESIGN: Data Abstraction</title>
       <p>
         Binary data are
         <q>raw.</q>
