@@ -146,6 +146,100 @@ whoseTurn = (whoseTurn + 1) % nPlayers
       For the game <c>WordGuess</c>, we would be adding 
       <c>Player</c>s of type <c>WordGuesser</c> to the game.
     </p>
+    <activity>
+      <statement><p>Try the test for the ComputerGame class below.</p></statement>
+      <program language="java" interactive="activecode"><input>
+        public class TestComputerGame {
+        public static void main(String[] args)
+        {
+           TestGame g = new TestGame(2); // 2 player game
+           Player computer = new Player(0,0);
+           Player human = new Player(1,1);
+           g.addPlayer(computer);
+           g.addPlayer(human);
+          // Try this code to see the ArrayIndexOutOfBounds Exception
+           //g.addPlayer(computer);
+           System.out.println( g.listPlayers() ); 
+        }
+      }
+      class TestGame extends ComputerGame
+      { 
+        public TestGame() { super(); }
+        public TestGame(int n) { super(n); }
+        // empty overrides of abstract methods for testing purposes
+        public  boolean gameOver() { return true; }
+        public  String getWinner() { return "winner"; }
+      }
+      abstract class ComputerGame {
+        protected int nPlayers;
+        protected int addedPlayers = 0;
+        protected int whoseTurn;
+        protected Player player[];  // An array of players
+      
+        public ComputerGame() {
+          nPlayers = 1;       // Default: 1 player game
+          player = new Player[1];
+        }
+        public ComputerGame(int n) {
+          nPlayers = n;
+          player = new Player[n]; // N-Player game
+        }
+        public void setPlayer(int starter) {
+          whoseTurn = starter;
+        }
+        public int getPlayer() {
+          return whoseTurn;
+        }
+        public void addPlayer(Player p) {
+          player[addedPlayers] = p;
+          ++addedPlayers;
+        }
+        public void changePlayer() {
+          whoseTurn = (whoseTurn + 1) % nPlayers;
+        }
+        public String getRules() {
+          return "The rules of this game are: ";
+        }
+        public String listPlayers() {
+          StringBuffer result = new StringBuffer("\nThe players are:\n");
+          for (int k = 0; k &lt; nPlayers; k++)
+            result.append("Player" + k + " " + player[k].toString() + "\n");
+            result.append("\n");
+            return result.toString();
+        }
+        public abstract boolean gameOver(); // Abstract
+        public abstract String getWinner(); //  methods
+      } //ComputerGame
+      
+      class Player  {   
+          public static final int COMPUTER=0;
+          public static final int HUMAN=1;
+          protected int id = -1;            // An int between 0 and nPlayers-1
+          protected int kind = HUMAN;
+          public Player() { }
+          public Player(int id, int kind) {
+              this.id = id;
+              this.kind = kind;
+          }
+          public void setID(int k) {
+              id = k;
+          }
+          public int getID() {
+              return id;
+          }
+          public void setKind(int k) {
+              kind = k;
+          }
+          public int getKind() {
+              return kind;
+          }
+          public boolean isComputer() {
+              return kind == COMPUTER;
+          }
+      } // Player
+    </input>
+      </program>
+    </activity>
     <p>
       The complete source code for <c>ComputerGame</c> is shown in 
       <xref ref="lst-gamesource">Listing</xref>.
@@ -210,7 +304,7 @@ public abstract class ComputerGame {
       <c>addedPlayers</c> variable as the index into the <c>player</c> array,
       which always has length <c>nPlayers</c>. An attempt to call 
       this method when the array is already full will lead to the 
-      following exception being thrown by Java:
+      following exception being thrown by Java. Try this in the activecode activity above.
     </p>
  <program language="java"><input>
 Exception in thread ``main''
@@ -228,7 +322,7 @@ Exception in thread ``main''
       (<xref ref="lst-gamesource">Listing</xref>).
       Here is a good example of polymorphism at work.
       The elements of the <c>player</c> array have a declared type of <c>Player</c>. 
-      Their dynamic type is <c>WordGuesser</c>. So when the expression 
+      If their dynamic type is <c>WordGuesser</c>, when the expression 
       <c>player[k].toString()</c> is invoked,
       dynamic binding is used to bind this method call to the implementation 
       of <c>toString()</c> defined in the <c>WordGuesser</c> class.
@@ -251,7 +345,7 @@ Exception in thread ``main''
     </principle>
   </subsection>
   <subsection xml:id="sec-wordguesser">
-    <title>The <c>WordGuess</c> and <c>WordGuesser</c>Classes</title>
+    <title>The <c>WordGuess</c> and <c>WordGuesser</c> Classes</title>
     <p>
       We will assume here that you are familiar with the <c>WordGuess</c> 
       example from Chapter<nbsp/>8.
@@ -416,7 +510,8 @@ public abstract class Player  {
   public void setKind(int k) { kind = k; }
   public int getKind() { return kind; }
   public boolean isComputer() { return kind == COMPUTER; }
-  public abstract String makeAMove(String prompt); } // Player
+  public abstract String makeAMove(String prompt); 
+} // Player
  </input></program>
     </listing>
     <p>
@@ -467,5 +562,8 @@ public static void main(String args[]) {
       You know enough now about object-oriented design principles to recognize 
       that the use of <c>play()</c> in this context is an example of polymorphism.
     </p>
+    <activity><statement>Try the WordGuess Game below. Click on Files to see the code.
+      <interactive iframe="iframe/repl-iframe-wordguess-ch9.html" width="95%" aspect="1:1"/>
+    </statement></activity>
   </subsection>
 </section>

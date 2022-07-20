@@ -2,14 +2,16 @@
   <title>One-Dimensional Arrays</title>
   <introduction>
     <p>
-      An array is considered a <em>data structure</em>.
-      A <term>data structure</term> is an organized collection of data.
+      An array is considered a <term>data structure</term>, 
+      which is an organized collection of data.
       In an array,
       data are arranged  in a linear or sequential structure,
       with one element following another.
       When referencing elements in an array,
       we refer to the position of the particular element within the array.
     </p>
+    </introduction>
+    <subsection><title>Array Subscripts/Indexing</title>
     <p>
       For example,
       if the array is named <c>arr</c>, then the elements are named
@@ -21,7 +23,7 @@
     </p>
     <figure xml:id="fig-intarray">
       <caption>An array of 15 integers named <c>arr</c>.</caption>
-      <image width="73%" source="chptr09/8f1.png"/>
+      <image width="100%" source="chptr09/8f1.png"/>
     </figure>
     <p>
       <xref ref="fig-intarray">Figure</xref>
@@ -29,45 +31,50 @@
       The syntax for referring to elements of an array is
     </p>
     <p>
-      <c> arrayname  [  subscript  ] </c>
+      <c> arrayname[ subscript ] </c>
     </p>
     <p>
       where <em>arrayname</em> is the name of the array <mdash/> any valid identifier 
-      will do <mdash/> and <em>subscript</em>
+      will do <mdash/> and <term>subscript</term>, also called <term>index</term>,
       is the position of the element within the array.
       As <xref ref="fig-intarray">Figure</xref> shows,
       the first element in the array has subscript 0, the second has subscript 1, and so on.
     </p>
     <p>
-      A <term>subscript</term> is an integer quantity contained in square brackets that 
+      A <term>subscript</term> or <term>index</term> is an integer quantity contained in square brackets that 
       is used to identify an array element.
-      A subscript must be either an integer value or an integer  expression.
-      Using <xref ref="fig-intarray">Figure</xref> to illustrate an example,
+      A subscript must be either an integer value or an integer  expression, for example <c>arr[j+k]</c>
+      where <c>j+k</c> is evaluated to an integer before being used to pull out the array element.   
+      Try the code below which uses <xref ref="fig-intarray">Figure</xref> as an example.
       suppose that <em>j</em> and <em>k</em>
       are integer variables equaling 5 and 7, respectively.
-      Each of the following then would be valid references to elements of the array <em>arr</em>:
+      Each of the following then would be valid references to elements of the array 
+      <em>arr</em>.
     </p>
+<activity><statement><p>Run the following code. 
+  Can you print out the 0th element of the array? Can you print out the (k-j)th element? Which element is that?</p></statement>
+ <program language="java" interactive="activecode"><input>
+  public class ArrayEx
+  {                   
+    public static void main(String[] args)
+    {
+        int arr[] = {-2, 8, -1, -3, 16, 20, 25, 16, 16, 8, 18, 19, 45, 21, -2 };
+        int j = 5;
+        int k = 7;  
+        System.out.println("4th element: " + arr[4]);     //Refers to 16
+        System.out.println("jth element: " + arr[j]);     //Is arr[5] which refers to 20
+        System.out.println("(j+k)th element: " + arr[j + k]); //Is arr[5+7] which is arr[12] which refers to 45
+        System.out.println("(k%j)th element: " + arr[k % j]); //Is arr[7%5] which is arr[2] which refers to -1
+        // Can you print out the 0th element?
+        // Can you print out the (k-j)th element?
+      }
+  }
+      </input></program>
+ </activity>
+   
     <p>
-      
-    </p>
- <program language="java"><input>
-arr[4]     //Refers to 16
-arr[j]     //Is arr[5] which refers to 20
-arr[j + k] //Is arr[5+7] which is arr[12] which refers to 45
-arr[k % j] //Is arr[7%5] which is arr[2] which refers to -1
- </input></program>
-    <p>
-      These examples show that when an expression,
-      such as <c>j
-+ k</c>, is used as a subscript,
-      it is evaluated (to 12 in this case) before the reference is made.
-    </p>
-    <p>
-      It is a syntax error to use a noninteger type as an array subscript.
-      Each of the following expressions would be invalid:
-    </p>
-    <p>
-      
+      It is a syntax error to use a non-integer type as an array subscript.
+      Each of the following expressions would be invalid (try them above to see what happens):
     </p>
  <program language="java"><input>
 arr[5.0]  // 5.0 is a float and can't be an array subscript
@@ -89,25 +96,26 @@ arr[15]  // The last element of arr has subscript 14
 arr[j*k] // Since j*k equals 35
  </input></program>
     <p>
-      Each of these references would lead to an <c>IndexOutOfBoundsException</c>. 
+      Each of these references would lead to an <c>IndexOutOfBoundsException</c>.  Try them above to see this exception.
       (Exceptions are covered in detail in Chapter<nbsp/>10.)
     </p>
     <principle>
-      <title>Array Subscripts</title>
+      <title>Array Subscript/Index</title>
       <p>
-        Array subscripts must be integer values in the range <c>0...(N-1)</c>, where <term>N</term>
+        An array subscript (index) must be an integer value in the range <c>0...(N-1)</c>, 
+        where <term>N</term>
         is the number of elements in the array.
       </p>
     </principle>
     <principle>
-      <title>DEBUGGING TIP: Array Subscripts</title>
+      <title>DEBUGGING TIP: Array Subscripts/Indices</title>
       <p>
         In developing array algorithms,
         it's important to design test data that show that array 
         subscripts do not cause run-time errors.
       </p>
     </principle>
-  </introduction>
+  </subsection>
   <subsection>
     <title>Declaring and Creating Arrays</title>
     <p>
@@ -200,7 +208,7 @@ int arr[];     // The brackets may follow the array's name
 int[] arr;     // The brackets may follow the array's type
  </input></program>
     <p>
-      The following example creates an array of five <c>String</c> s 
+      The following example creates an array of five <c>String</c>s 
       and then uses a for loop to assign the strings <c>"hello1"</c>, <c>"hello2"</c>, 
       <c>"hello3"</c>, <c>"hello4"</c>, and <c>"hello5"</c> to the five array locations:
     </p>
@@ -240,10 +248,10 @@ for (int k = 0; k &lt; strarr.length; k++)     // For each element
       we first use the <c>new</c> operator to create <c>strarr</c>, an 
       array of type <c>String</c> of length five.
       We then use a
-      <c>String</c> constructor to create the five <c>String</c> s that are stored in the array.
+      <c>String</c> constructor to create the five <c>String</c>s that are stored in the array.
       It is important to realize that creating an array to store five <c>Object</c> s
       (as opposed to five primitive data elements)
-      does not also create the <c>Object</c> s themselves that will be stored in the array.
+      does not also create the <c>Object</c>s themselves that will be stored in the array.
     </p>
     <p>
       When an <c>array</c> of objects is created,
@@ -253,10 +261,10 @@ for (int k = 0; k &lt; strarr.length; k++)     // For each element
       are <c>null</c>. So to create and initialize the array <c>strarr</c>, we need to 
       create <em>six</em> objects <mdash/> the array itself,
       which will contain five <c>String</c> s, and then the 
-      five <c>String</c> s that are stored in <c>strarr</c>.
+      five <c>String</c>s that are stored in <c>strarr</c>.
     </p>
     <figure xml:id="fig-arrayobjs">
-      <caption>Creating an array of five <c>String</c> s involves
+      <caption>Creating an array of five <c>String</c>s involves
       six objects, because the array itself is a separate object.
       In (a), the array variable is declared.  In (b), the array
       is instantiated, creating an array of five <c>null</c>
@@ -266,8 +274,8 @@ for (int k = 0; k &lt; strarr.length; k++)     // For each element
     </figure>
     <p>
       One more example will help underscore this point.
-      The following statements create four <em>new</em><c>Object</c> s, an array 
-      to store three <c>Student</c> s plus the three <c>Student</c> s themselves 
+      The following statements create four <em>new</em><c>Object</c>s, an array 
+      to store three <c>Student</c>s plus the three <c>Student</c>s themselves 
       (<xref ref="fig-school">Figure</xref>):
     </p>
  <program language="java"><input>
@@ -278,12 +286,12 @@ school[2] = new Student("Aristotle");// The third Student
  </input></program>
     <p>
       The first statement creates an array named <c>school</c> 
-      to store three Student s, and the next three statements create 
-      the individual <c>Student</c> s and assign them to the array (Fig.<nbsp/>9.3).
+      to store three Students, and the next three statements create 
+      the individual <c>Student</c>s and assign them to the array (<xref ref="fig-school">Figure</xref>).
       Thus, creating the array and initializing its elements require four <c>new</c> statements.
     </p>
     <figure xml:id="fig-school">
-      <caption>An array of <c>Stodent</c> objects.</caption>
+      <caption>An array of <c>Student</c> objects.</caption>
       <image width="50%" source="chptr09/p407f1.png"/>
     </figure> 
     <p>
@@ -307,7 +315,7 @@ System.out.println(students[0].getName());
       </p>
     </principle>
     <p>
-      Now that we've assigned the three <c>Student</c> s to the array,
+      Now that we've assigned the three <c>Student</c>s to the array,
       we can refer to them by means of subscripted references.
       A reference to the Student named
       <q>Socrates</q>
@@ -326,7 +334,7 @@ for (int k = 0; k &lt; school.length; k++)
     System.out.println(school[k].getState());
  </input></program>
     <p>
-      What if the three <c>Student</c> s already existed before the array was created?
+      What if the three <c>Student</c>s already existed before the array was created?
       In that case,
       we could just assign their references to the array elements,
       as in the following example (<xref ref="fig-students">Figure</xref>):
@@ -349,8 +357,8 @@ school[2] = student3;
       (such as <c>school[0]</c>).
     </p>
     <figure xml:id="fig-students">
-    <image width="50%" source="chptr09/p408f1.png"/> 
-    <caption>IMAGE IS CUT OFF. Arrays of objects store references to the objects,
+    <image width="50%" source="chptr09/school.png"/> 
+    <caption>Arrays of objects store references to the objects,
       not the objects themselves.</caption>
     </figure>
     <p>
@@ -367,7 +375,7 @@ school[2] = student3;
       the compiler <em>allocates</em> storage for <em>N</em>
       variables of the element's type.
       In the case of <c>arr</c> that we discussed earlier (<xref ref="fig-intarray">Figure</xref>),
-      the compiler would allocate storage for 15 <c>int</c> s <mdash/>i.e.,  60 contiguous bytes 
+      the compiler would allocate storage for 15 <c>int</c>s <mdash/>i.e.,  60 contiguous bytes 
       of storage,
       because each <c>int</c> requires 4 bytes (32 bits) of storage.
       If we declare an array of 20 <c>double</c> s,
@@ -560,13 +568,13 @@ double arr[] = new double[20];
 int arr[] = {-2,8,-1,-3,16,20,25,16,16,8,18,19,45,21,-2};
  </input></program>
     <p>
-      Similarly, to create and initialize an array of <c>String</c> s, we can use the following statement:
+      Similarly, to create and initialize an array of <c>String</c>s, we can use the following statement:
     </p>
  <program language="java"><input>
 String strings[] = {"hello", "world", "goodbye", "love"};
  </input></program>
     <p>
-      This example creates and stores four <c>String</c> s in the array.
+      This example creates and stores four <c>String</c>s in the array.
       Note in these examples that when an array declaration contains an initializer,
       it is not necessary to use
       <c>new</c> and it is not necessary to specify the number of elements in the array.

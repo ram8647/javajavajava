@@ -76,11 +76,11 @@ if (o1 > o2)       then o1.compareTo(o2) > 0
       For example,
       the following revised version of <c>insertionSort()</c> method can be used 
       to sort any array of <c>Comparable</c> objects<mdash/>that is,
-      any array of objects whose class implements <c>Comparable</c>:
+      any array of objects whose class implements <c>Comparable</c> for any type <c>T</c>.
     </p>
  <program language="java"><input>
-public void sort(Comparable[] arr) {
-  Comparable temp;   // Temporary variable for insertion
+  public  &lt;T extends Comparable&lt;T>> void sort(T[] arr) {
+    T temp;      // Temporary variable for insertion
 
   for (int k = 1; k &lt; arr.length; k++)  {
     temp = arr[k];    // Remove it from array
@@ -93,9 +93,8 @@ public void sort(Comparable[] arr) {
  </input></program>
     <p>
       In this version,
-      the parameter is an array of <c>Comparable</c>. Thus,
-      we can pass it any array whose elements implement <c>Comparable</c>, 
-      including an array of <c>Integer</c> or <c>Float</c>, and so on.
+      the parameter is an array of any Object type <c>T</c>. Thus,
+      we can pass it  an array of <c>Integer</c> or <c>Float</c>, and so on.
       Then, to compare elements of a <c>Comparable</c> array,
       we use the <c>compareTo()</c> method:
     </p>
@@ -133,12 +132,12 @@ for (i = k-1; i >= 0 &amp;&amp; arr[i].compareTo(temp) > 0; i--)
     <listing xml:id="lst-testsort">
       <caption><c>TestSort</c> uses the polymorphic <c>sort()</c> method
       to sort either <c>Integer</c>s or <c>Float</c>s.</caption>
- <program language="java"><input>
+ <program language="java" interactive="activecode"><input>
 public class TestSort {
   public static int MAXSIZE = 25;
 
-  public void sort(Comparable[] arr) {
-    Comparable temp;      // Temporary variable for insertion
+  public  &lt;T extends Comparable&lt;T>> void sort(T[] arr) {
+    T temp;      // Temporary variable for insertion
 
     for (int k = 1; k &lt; arr.length; k++) { // For each element
       temp = arr[k];                     // Remove it
@@ -149,10 +148,12 @@ public class TestSort {
     }
   } // sort()
   
-  public void print(Comparable arr[]) {
+  public  &lt;T extends Comparable&lt;T>> void print(T[] arr) 
+  {
     for (int k = 0; k &lt; arr.length; k++) {
-      if (k % 5 == 0)  System.out.println();  // New row
-        System.out.print(arr[k].toString() + "\t");
+      if (k % 5 == 0)  
+         System.out.println();  // New row
+      System.out.print(arr[k].toString() + "\t");
     }
     System.out.println();
   }
@@ -162,8 +163,8 @@ public class TestSort {
     Integer iArr[] = new Integer[TestSort.MAXSIZE];
     Float fArr[] = new Float[TestSort.MAXSIZE];
     for (int k = 0; k &lt; TestSort.MAXSIZE; k++) { // Create data
-      iArr[k] = new Integer((int) (Math.random() * 10000));
-      fArr[k] = new Float(Math.random() * 10000);
+      iArr[k] = ((int) (Math.random() * 10000));
+      fArr[k] = ((float) Math.random() * 10000);
     }
     TestSort test = new TestSort();
     test.sort(iArr);     // Sort and print Integers
@@ -193,7 +194,7 @@ public class TestSort {
       kind of object as long as the object implements the <c>Comparable</c> interface.
     </p>
   </subsection>
-  <subsection xml:id="fig-p446f1">
+  <subsection>
     <title>The <c>java.util.Arrays.sort()</c> Method</title>
     <p>
       While sorting algorithms provide a good way to introduce the concepts of array processing,
@@ -210,13 +211,31 @@ public class TestSort {
     </p>
  <program language="java"><input>
 java.util.Arrays.sort(iArr);
-java.util.Arrays.sort(fArr);
+// or if you: import java.util.*;
+Arrays.sort(fArr);
  </input></program>
     <p>
       That's all there is to it!
       Obviously, learning how to use Java's class and method library,
-      saves real-word programmers lots of effort.
+      saves real-word programmers lots of effort. Try it below!
     </p>
+    <activity><statement>Run the code below a couple times to populate the array with random numbers and see the result of the <c>Arrays.sort()</c> method.</statement>
+  <program language="java" interactive="activecode"><input>
+import java.util.*;
+public class TestSort {  
+   public static void main(String args[]) {
+    Integer iArr[] = new Integer[20];
+    for (int i = 0; i &lt; iArr.length; i++) { // Create data
+      iArr[i] = ((int) (Math.random() * 10000));
+    }
+   Arrays.sort(iArr); // sort the array using Java library
+   for (int i = 0; i &lt; iArr.length; i++) { // print
+      System.out.println(iArr[i]);
+    }
+  } // main()
+}
+</input></program>
+</activity>
 
 <exercises>
     <title>Self-Study Exercises</title>
@@ -242,11 +261,48 @@ java.util.Arrays.sort(fArr);
         </li>
         <li>
           <p>
-            Rewrite the <c>main()</c> of the <c>AnalyzeFreq</c> class to make use of the <c>sort()</c> method of the previous exercise.
+            Rewrite the <c>main()</c> of the <c>AnalyzeFreq</c> class to make use of 
+            the <c>sort()</c> method of the previous exercise.
           </p>
         </li>
       </ol>
     </statement>
+    <program language="java" interactive="activecode"><input>
+      public class AnalyzeFreq {
+      
+        private LetterFreq[] freqArr; //An array of frequencies
+        
+        public AnalyzeFreq() {
+          freqArr = new LetterFreq[26];
+          for (int k = 0; k &lt; 26; k++) {
+            freqArr[k] = new LetterFreq((char)('A' + k), 0);
+          } //for
+        }
+        public void countLetters(String str) {
+          char let; //For use in the loop.
+          str = str.toUpperCase();
+          for (int k = 0; k &lt; str.length(); k++) {
+            let = str.charAt(k);
+            if ((let >= 'A') &amp;&amp; (let &lt;= 'Z')) {
+              freqArr[let - 'A'].incrFreq();
+            } //if
+          } //for
+        }
+        public void printArray() {
+          for (int k = 0; k &lt; 26; k++) {
+            System.out.print("letter: " + freqArr[k].getLetter());
+            System.out.println(" freq: " + freqArr[k].getFreq());
+          } //for
+        } 
+    
+    public static void main(String[] argv) {
+      AnalyzeFreq af = new AnalyzeFreq();
+      af.countLetters("Now is the time for all good students" +
+        " to study computer related topics.");
+      af.printArray();
+    } //main()
+  } //AnalyzeFreq
+  </input></program>
     <solution>
      <ol marker="a">
         <li><p> A <c>compareTo()</c> for <c>LetterFreq</c>:</p>
