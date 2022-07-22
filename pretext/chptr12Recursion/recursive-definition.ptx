@@ -67,7 +67,7 @@ n! = n * (n-1)! if n > 0    // Recursive case
       the recursion would have continued to <m>(-1)</m>! and <m>(-2)</m>! and so on.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Bounding the Repetition</title>
+      <title>DEBUGGING TIP: Bounding the Repetition</title>
       <p>
         An infinite repetition will result if a recursive definition is not properly bounded.
       </p>
@@ -82,7 +82,7 @@ n! = n * (n-1)! if n > 0    // Recursive case
       case is used to stop or limit the recursion.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Recursive Definition</title>
+      <title>EFFECTIVE DESIGN: Recursive Definition</title>
       <p>
         For recursive algorithms and definitions,
         the base case serves as the bound for the algorithm.
@@ -92,16 +92,22 @@ n! = n * (n-1)! if n > 0    // Recursive case
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="fig-boxes">
+  <subsection xml:id="sec-boxes">
     <title>Drawing a Nested Pattern</title>
     <p>
       As another example,
-      consider the problem of drawing the nested boxes pattern in Figure<nbsp/>12.2.
+      consider the problem of drawing the nested boxes pattern in <xref ref="fig-boxes">Figure</xref>.
+    </p>
+    <figure xml:id="fig-boxes">
+    <caption>Nested boxes.</caption>
+    <image width="40%" source="chptr12/boxes.png"/>
+    </figure>
+    <p>
       The self-similarity occurs in the fact that for this pattern,
       its parts resemble the whole.
       The basic shape involved is a square,
       which is repeated over and over at an ever-smaller scale.
-      A recursive definition for this <image width="73%" source="chptr12/boxes.png"/> pattern would be
+      A recursive definition for this pattern would be
     </p>
  <program language="java"><input>
 Base case:      if side &lt; 5 do nothing
@@ -109,7 +115,7 @@ Recursive case: if side >= 5
                   draw a square
                   decrease the side and draw a smaller
                              pattern inside the square
- </input></program>
+ </input></program> 
     <p>
       This definition uses the length of the square's side to help define the pattern.
       If the length of the side is greater than or equal to 5, draw a square with dimensions <m>side \times side</m>.
@@ -120,14 +126,15 @@ Recursive case: if side >= 5
       Thus, the length of the side serves as the limit or bound for this algorithm.
     </p>
     <p>
-      You should note that the length of the side functions here like a parameter in a method definition: It provides essential information for the definition,
+      You should note that the length of the side functions here like a parameter in a method 
+      definition: It provides essential information for the definition,
       just as a method parameter provides essential data to the method.
       Indeed, this is exactly the role that parameters play in recursive methods.
       They provide essential information that determines the method's behavior.
     </p>
     <p>
-      Figure<nbsp/>12.3 illustrates how we would apply the definition.
-      <image width="73%" source="chptr12/nestedbox.png"/> \caption{A trace of the nested boxes definition starting with a side of 20 and decreasing the side by 5 each time. } Suppose the side starts out at 20 and decreases by 5 at each level of recursion.
+      <xref ref="fig-nestedbox">Figure</xref> illustrates how we would apply the definition.
+      Suppose the side starts out at 20 and decreases by 5 at each level of recursion.
       Note that as you move from top to bottom across the four patterns,
       each pattern contains the one below it.
       A <c>nestedBoxes(20)</c> can be drawn by first drawing a
@@ -136,7 +143,12 @@ Recursive case: if side >= 5
       <m>15 \times 15</m> square and then drawing a <c>nestedBoxes(10)</c> pattern inside it.
       And so on.
     </p>
-    <p>
+    <figure xml:id="fig-nestedbox">
+     <image width="30%" source="chptr12/nestedbox.png"/>
+     <caption>A trace of the nested boxes definition starting with a side 
+     of 20 and decreasing the side by 5 each time.</caption>
+     </figure>
+     <p>
       These examples illustrate the power of recursion
           <idx><h>recursion</h></idx>
       as a problem-solving technique for situations that involve repetition.
@@ -148,48 +160,203 @@ Recursive case: if side >= 5
       In either case, repetition stops when the bound is reached.
     </p>
      <principle>
-              <title>DEBUGGING TIP:Infinite Recursion</title>
+              <title>DEBUGGING TIP: Infinite Recursion</title>
               <p>
                 An unbounded or incorrectly bounded recursive algorithm will lead to infinite repetition.
                 Care must be taken to get the bound right.
               </p>
     </principle>
-    </subsection>
-    <subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+    <exercises>
+    <title>Self-Study Exercises</title>
+        <exercise>
+        <title>Recursive definition: 2^n</title>
+          <statement>
           <p>
             You can calculate <m>2^n</m> by multiplying 2 by itself <em>n</em> times.
             For example, <m>2^3</m> is <m>2 \times 2 \times 2</m>.
             Note also that <m>2^0=1</m>.
-            Given these facts,
-            write a recursive definition for <m>2^n</m>, for <m>n \geq 0</m>.
+            Which of the following would be an appropriate recursive definition of <m>2^n</m> 
+            for <m>n \geq 0</m>?
           </p>
-        </li>
-        <li>
+          </statement>
+      <choices>
+        <choice correct="no">
+        <statement>
+      <pre>
+      <m>2^n =</m>
+            0, if n = 0             // Base case
+            <m>2 * 2^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+            </statement>
+            <feedback>
+                <p>The base case looks wrong.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+      <pre>
+      <m>2^n =</m>
+            1, if n = 0             // Base case
+            <m>n * 2^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+            </statement>
+            <feedback>
+                <p>It looks like this would result in <m>n * n * ... * n</m>.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+      <statement>
+      <pre>
+      <m>2^n =</m>
+            1, if n = 0             // Base case
+            <m>2 * 2^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+      </statement>
+            <feedback>
+                <p>Right, this is a correct definition.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>None of the above</p>
+            </statement>
+            <feedback>
+                <p>Try again.</p>
+            </feedback>
+        </choice>
+      </choices>
+      <solution>
+      <pre>
+      <m>2^n =</m>
+            1, if n = 0             // Base case
+            <m>2 * 2^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+      </solution>
+      </exercise>
+      <exercise>
+        <title>Recursive definition: x^n</title>
+          <statement>
           <p>
-            Generalize your solution to the previous exercise by giving a recursive definition for <m>x^n</m>,
+            Generalize your solution to the previous exercise by giving a 
+            recursive definition for <m>x^n</m>,
             where <m>x</m> and <m>n</m> are both integers <m>\geq 0</m>.
           </p>
-        </li>
-        <li>
+          </statement>
+      <choices>
+      <choice correct="yes">
+      <statement>
+      <pre>
+      <m>x^n =</m>
+            1, if n = 0             // Base case
+            <m>x * x^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+      </statement>
+            <feedback>
+                <p>Right, this is a correct definition.</p>
+            </feedback>
+        </choice>      
+        <choice correct="no">
+        <statement>
+      <pre>
+      <m>x^n =</m>
+            1, if x = 0             // Base case
+            <m>x * x^(n-1)</m>, if x > 0   // Recursive case
+      </pre>
+            </statement>
+            <feedback>
+                <p>The recursion should depend on <m>n</m> not on  <m>x</m>.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+      <pre>
+      <m>x^n =</m>
+            x, if n = 0             // Base case
+            <m>x * x^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+            </statement>
+            <feedback>
+                <p><m>x^0 = 1</m>. In your definition <m>x^0 = x</m>.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>None of the above</p>
+            </statement>
+            <feedback>
+                <p>Try again.</p>
+            </feedback>
+        </choice>
+      </choices>
+      <solution>
+      <pre>
+      <m>x^n =</m>
+            1, if n = 0             // Base case
+            <m>x * x^(n-1)</m>, if n > 0   // Recursive case
+      </pre>
+      </solution>
+        </exercise>
+        <exercise>
+        <title>Equivalent definitions?</title>
+        <statement>
           <p>
-            Is the recursive definition given earlier for the nested boxes equivalent to the following recursive definition?
-            Explain.
- <program language="java"><input>
-Draw a square.         // in every case
+            True or false, for <m>side > 5</m>, the following recursive definitions for drawing
+            nested boxes are equivalent.
+          </p>
+<p><term>Definition 1:</term></p>
+<pre>
+if side >= 5
+    draw a square
+    draw a smaller nested boxes inside the square
+</pre>    
+
+<p><term>Definition 2:</term></p>
+<pre>
+Draw a square.         
 If side > 5
     draw a smaller nested boxes inside the square
- </input></program>In this case,
-            the base case <m>(side \lt = 5)</m> is implicit.
-          </p>
-        </li>
-        <li>
+</pre>
+<p>
+</p>
+        </statement>
+        <choices>
+        <choice correct="yes">
+            <statement>
+                <p>True</p>
+            </statement>
+            <feedback>
+                <p>Both would produce the same result for <m>side > 5</m>.</p>
+            </feedback>
+        </choice>        
+        <choice correct="no">
+            <statement>
+                <p>False</p>
+            </statement>
+            <feedback>
+                <p>Both would produce the same result for <m>side > 5</m>.</p>
+            </feedback>
+        </choice>
+      </choices>
+      <solution>
+        <p>
+            Yes, the two definitions for nested boxes are equivalent.
+            Suppose the square starts out with a side of 20.
+            Both will draw squares with sides of 20, 15, 10, 5. If
+            side starts out at 5, both draw a square of size 5. For
+            values less than 5, nothing would be drawn.
+        </p>
+      </solution>
+        </exercise>
+<!--
+        <exercise>
+        <statement>
           <p>
-          <image width="73%" source="chptr12/circlebox.png"/>
-            Write a recursive definition for the recursive pattern shown in Figure<nbsp/>12.4.
+          Write a recursive definition for the recursive pattern shown in this figure.
+          <image width="30%" source="chptr12/circlebox.png"/>
           </p>
-        </li>
-      </ol>
+        </statement>
+        </exercise>
+-->
+      </exercises>
   </subsection>
 </section>
