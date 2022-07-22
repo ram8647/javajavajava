@@ -64,7 +64,7 @@ Accepted a connection from java.cs.trincoll.edu/157.252.16.21
 Closed the connection
  </input></program>
     <principle>
-      <title>EFFECTIVE DESIGN:Infinite Loop</title>
+      <title>EFFECTIVE DESIGN: Infinite Loop</title>
       <p>
         A server is an application that's designed to run in an infinite loop.
         The loop should be exited only when some kind of exception occurs.
@@ -83,13 +83,16 @@ Closed the connection
       as a typical example, and then generalize it.
     </p>
   </subsection>
-  <subsection xml:id="fig-p851f1">
+  <subsection>
     <title>The Threaded Root Subclass: <c>ClientServer</c></title>
     <p>
-      One lesson we can draw at the outset is that both clients and servers <image width="73%" source="chptr15/p851f1.png"/> use basically the same socket I/O methods.
+      One lesson we can draw at the outset is that both clients and servers 
+      use basically the same socket I/O methods.
+
       Thus, as we've seen,
       the
-<c>readFromSocket()</c> and <c>writeToSocket()</c> methods could be used by both clients and servers.
+<c>readFromSocket()</c> and <c>writeToSocket()</c> methods could be used by both clients 
+and servers.
       Because we want all clients and servers to inherit these methods,
       they must be placed in a common superclass.
       Let's name this the <c>ClientServer</c> class.
@@ -102,15 +105,18 @@ Closed the connection
     </p>
     <p>
       Therefore, let's define the <c>ClientServer</c> class as a subclass of
-<c>Thread</c>(Fig.<nbsp/>15.25).
+<c>Thread</c>(<xref ref="fig-subclassThread"></xref>).
       Recall from Chapter<nbsp/>14 that the typical way to derive functionality from a <c>Thread</c> subclass is to override the <c>run()</c> method.
       The <c>run()</c> method will be a good place to implement the client and server protocols.
       Because they are different,
       we'll define <c>run()</c> in both the <c>Client</c> and <c>Server</c> subclasses.
     </p>
+    <figure xml:id="fig-subclassThread">
+      <caption>ClientServer as a subclass of Thread</caption>
+      <image width="50%" source="chptr15/p851f1.png"/> 
+    </figure>
     <p>
-      For now, the only methods contained in <c>ClientServer</c>(Fig.
-      <xref ref="fig-clientserver"></xref>) are the two I/O methods we designed.
+      For now, the only methods contained in <c>ClientServer</c>(<xref ref="list-clientserver">Listing</xref>) are the two I/O methods we designed.
       The only modification we have made to the methods occurs in the <c>writeToSocket()</c> method,
       where we have added code to make sure that any strings written to the socket are terminated with an end-of-line character.
     </p>
@@ -118,9 +124,12 @@ Closed the connection
       This is an important enhancement,
       because the read loop in the
 <c>readFromSocket()</c> method expects to receive an end-of-line character.
-      Rather than rely on specific clients to guarantee that their strings end with <c>\n</c>, our design takes care of
+      Rather than rely on specific clients to guarantee that their strings end with 
+      <c>\n</c>, our design takes care of   this problem for them.
+      This ensures that every communication that takes place between one of our clients and servers will be line oriented.
+
     </p>
-    <figure xml:id="fig-clientserver">
+    <listing xml:id="list-clientserver">
       <caption>The <c>ClientServer</c> class serves as the superclass for client/server applications.</caption>
  <program language="java"><input>
 import java.io.*;
@@ -144,15 +153,13 @@ public class ClientServer extends Thread {
       str = str + '\n';
     for (int k = 0; k &lt; str.length() ; k++)
       oStream.write(str.charAt(k));
-  } // writeToSocket()}// ClientServer
+  } // writeToSocket()
+}// ClientServer
  </input></program>
-    </figure>
-    <p>
-      this problem for them.
-      This ensures that every communication that takes place between one of our clients and servers will be line oriented.
-    </p>
+</listing>
+   
     <principle>
-      <title>EFFECTIVE DESIGN:Defensive Design</title>
+      <title>EFFECTIVE DESIGN: Defensive Design</title>
       <p>
         Code that performs I/O, whether across a network or otherwise,
         should be designed to anticipate and remedy common errors.
@@ -161,14 +168,15 @@ public class ClientServer extends Thread {
     </principle>
   </subsection>
   <subsection>
-    <title>The <c>EchoServer</c>Class</title>
-    <figure xml:id="fig-p852f1">
-      <caption>Design of the <c>EchoServer</c> class.</caption>
-      <image width="73%" source="chptr15/p852f1.png"/>
-    </figure>
+    <title>The <c>EchoServer</c> Class</title>
+   
     <p>
       Let's now develop a design for the echo server.
-      This class will be a subclass of <c>ClientServer</c>(Fig.<nbsp/>15.27).
+      This class will be a subclass of <c>ClientServer</c>(<xref ref="fig-p852f1"></xref>)).
+      <figure xml:id="fig-p852f1">
+        <caption>Design of the <c>EchoServer</c> class.</caption>
+        <image width="50%" source="chptr15/p852f1.png"/>
+      </figure>
       As we saw in discussing the server protocol,
       one task that echo server will do is create a <c>ServerSocket</c> and establish a port number for its service.
       Then it will wait for a <c>Socket</c> connection,
@@ -191,10 +199,12 @@ public class EchoServer extends ClientServer {
         e.printStackTrace();
       }
     }
-    public void run() { }  // Stub method}// EchoServer
+    public void run() { }  // Stub method
+  }// EchoServer
  </input></program>
     <p>
-      Note that the constructor method catches the <c>IOException</c>. Note also that we have included a stub version of <c>run()</c>, which we want to define in this class.
+      Note that the constructor method catches the <c>IOException</c>. 
+      Note also that we have included a stub version of <c>run()</c>, which we want to define in this class.
     </p>
     <p>
       Once <c>EchoServer</c> has set up a port,
@@ -225,7 +235,8 @@ public void run() {
     }
   } catch (IOException e) {
      e.printStackTrace();
-  }}// run()
+  }
+}// run()
  </input></program>
     <p>
       For simplicity,
@@ -237,7 +248,8 @@ public void run() {
       the <c>provideService()</c> method consists of writing a greeting to the client and then repeatedly reading a string from the input stream and echoing it back to the client via the output stream.
       This is easily done using the <c>writeToSocket()</c> and <c>readFromSocket()</c> methods we developed.
       The implementation of this method is shown,
-      along with the complete implementation of <c>EchoServer</c>, in <xref ref="fig-echoserver">Figure</xref>.
+      along with the complete implementation of <c>EchoServer</c>, in 
+      <xref ref="list-echoserver">Listing</xref>.
     </p>
     <p>
       The protocol used by <c>EchoServer.provideService()</c> starts by saying
@@ -259,7 +271,7 @@ public void run() {
       <q>Goodbye.</q>
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Defensive Design</title>
+      <title>EFFECTIVE DESIGN: Defensive Design</title>
       <p>
         Converting I/O to lowercase helps to minimize miscommunication between a client and server and leads to a more robust protocol.
       </p>
@@ -274,7 +286,7 @@ public void run() {
       leaving its implementation to  the <c>Server</c> subclasses.
       We'll discuss the details of this change later.
     </p>
-    <figure xml:id="fig-echoserver">
+    <listing xml:id="list-echoserver">
       <caption><c>EchoServer</c> simply echoes the client's message.</caption>
  <program language="java"><input>
 import java.net.*;
@@ -323,20 +335,25 @@ public class EchoServer extends ClientServer {
   public static void main(String args[]) {
       EchoServer server = new EchoServer(10001,3);
       server.start();
-  }// main()}// EchoServer
+  }// main()
+}// EchoServer
  </input></program>
-    </figure>
+</listing>
   </subsection>
-  <subsection xml:id="fig-p854f1">
-    <title>The <c>EchoClient</c>Class</title>
+  
+  <subsection>
+    <title>The <c>EchoClient</c> Class</title>
+
+ 
     <p>
-      <image width="73%" source="chptr15/p854f1.png"/>
-    </p>
-    <p>
-      The <c>EchoClient</c> class is just as easy to design (Fig.<nbsp/>15.29).
+      The <c>EchoClient</c> class is just as easy to design (<xref ref="fig-p854f1">Fig</xref>).
       It, too, will be a subclass of <c>ClientServer</c>. It needs an instance variable for the <c>Socket</c> that it will use,
       and its constructor should be responsible for opening a socket connection to a particular server and port.
       The main part of its protocol should be placed in the <c>run()</c> method.
+   
+      <figure    xml:id="fig-p854f1"><caption>EchoClient Class</caption>
+      <image width="50%" source="chptr15/p854f1.png"/>
+      </figure>
       The initial definition is as follows:
     </p>
  <program language="java"><input>
@@ -354,7 +371,8 @@ public class EchoClient extends ClientServer {
          System.exit(1);
        }
      }// EchoClient()
-    public void run() { }// Stub method}// EchoClient
+    public void run() { }// Stub method
+  }// EchoClient
  </input></program>
     <p>
       The constructor method takes two parameters that specify the URL and port number of the echo server.
@@ -384,7 +402,7 @@ until the user types "goodbye"
       this design is another example of the encapsulation principle:
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Encapsulation</title>
+      <title>EFFECTIVE DESIGN: Encapsulation</title>
       <p>
         Encapsulating a portion of the algorithm into a separate method makes it easy to change the algorithm by overriding the method.
       </p>
@@ -405,7 +423,8 @@ protected void requestService(Socket socket) throws IOException {
       servStr = readFromSocket(socket);         // Read the server's response
       System.out.println("SERVER: " + servStr);   // Report server's response
     } while (!userStr.toLowerCase().equals("goodbye"));    // Until 'goodbye'
-  }} // requestService()
+  }
+} // requestService()
  </input></program>
     <p>
       Although this method involves several lines,
@@ -430,7 +449,8 @@ protected String readFromKeyboard() throws IOException {
                    new InputStreamReader(System.in));
   System.out.print("INPUT: ");
   String line = input.readLine();
-  return line;}// readFromKeyboard()
+  return line;
+}// readFromKeyboard()
  </input></program>
     <p>
       The only method remaining to be defined is the <c>run()</c>, which is shown with the complete definition of <c>EchoClient</c> in <xref ref="fig-echoclient">Figure</xref>.
@@ -439,7 +459,7 @@ protected String readFromKeyboard() throws IOException {
 <c>requestService()</c> method, <c>run()</c> closes the socket connection.
       Because <c>requestService()</c> might throw an <c>IOException</c>, the entire method must be embedded within a <c>try/catch</c> block that catches that exception.
     </p>
-    <figure xml:id="fig-echoclient">
+    <listing xml:id="list-echoclient">
       <caption>The <c>EchoClient</c> class prompts the user for a string
       and sends it to the <c>EchoServer</c>, which simply
       echoes it back.</caption>
@@ -491,16 +511,17 @@ public class EchoClient extends ClientServer {
   public static void main(String args[]) {
     EchoClient client = new EchoClient("java.trincoll.edu",10001);
     client.start();
-  }// main()}// EchoClient
+  }// main()
+}// EchoClient
  </input></program>
-    </figure>
+</listing>
   </subsection>
   <subsection>
     <title>Testing the Echo Service</title>
     <p>
-      Both <c>EchoServer</c> and <c>EchoClient</c> contain <c>main()</c> methods (Figs.
-      <xref ref="fig-echoserver"></xref>
-      and <xref ref="fig-echoclient"></xref>).
+      Both <c>EchoServer</c> and <c>EchoClient</c> contain <c>main()</c> methods (
+        <xref ref="list-echoserver"></xref>
+      and <xref ref="list-echoclient"></xref>).
       In order to test the programs,
       you would run the server on one computer and the client on another computer.
       (Actually they can both be run on the same computer,
@@ -516,7 +537,8 @@ public class EchoClient extends ClientServer {
  <program language="java"><input>
 public static void main(String args[]) {
     EchoServer server = new EchoServer(10001,3);
-    server.start();}// main()
+    server.start();
+  }// main()
  </input></program>
     <p>
       When an <c>EchoClient</c> is created,
@@ -526,7 +548,8 @@ public static void main(String args[]) {
 public static void main(String args[]) {
     EchoClient client =
             new EchoClient("java.trincoll.edu",10001);
-    client.start();}// main()
+    client.start();
+  }// main()
  </input></program>
     <p>
       As they are presently coded,
