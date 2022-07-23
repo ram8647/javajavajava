@@ -8,17 +8,24 @@
       Similarly, just as a string can be divided into a head and a tail,
       an array can be divided into its <em>head</em>,
       the first element, and its <em>tail</em>,
-      <image width="73%" source="chptr12/headtail.png"/> the rest of its elements (Fig.<nbsp/>12.14).
+      the rest of its elements (<xref ref="fig-headtail">Figure</xref>).
       Because the tail of an array is itself an array,
       it satisfies the self-similarity principle.
-      Therefore, arrays have all the appropriate characteristics that make them excellent candidates for recursive processing.
+      Therefore, arrays have all the appropriate characteristics that make 
+      them excellent candidates for recursive processing.
     </p>
+    <figure xml:id="fig-headtail">
+      <image width="73%" source="chptr12/headtail.png"/>
+      <caption>An array is a recursive structure.</caption>
+    </figure> 
   </introduction>
   <subsection>
     <title>Recursive Sequential Search</title>
     <p>
-      Let's start by developing a recursive version of the sequential search algorithm that we discussed in Chapter<nbsp/>9.
-      Recall that the sequential search method takes two parameters:  the array being searched and the <em>key</em>,
+      Let's start by developing a recursive version of the sequential search algorithm 
+      that we discussed in Chapter<nbsp/>9.
+      Recall that the sequential search method takes two parameters:  
+      the array being searched and the <em>key</em>,
       or target value, being searched for.
       If the key is found in the array,
       the method returns its index.
@@ -37,36 +44,43 @@
   * Post: either -1 or the key's index is returned
   */
 public int sequentialSearch(int arr[], int key) {
-    return -1;           // failure if this is reached}
+    return -1;           // failure if this is reached
+}
  </input></program>
     <p>
       If we divide the array into its head and tail,
       then one way to describe a recursive search algorithm is as follows:
     </p>
+
+<algorithm>
+<title>Recursive search algorithm</title>
  <program language="java"><input>
 If the array is empty, return -1
 If the array's head matches the key, return its index
 If the array's head doesn't match the key,
  return the result of searching the tail of the array
  </input></program>
+</algorithm>
     <p>
-      This algorithm clearly resembles the approach we used in recursive string processing: Perform some operation on the head of the array and recurse on the tail of the array.
+      This algorithm clearly resembles the approach we used in recursive string 
+      processing: Perform some operation on the head of the array and recurse on the tail of the array.
     </p>
     <p>
-      The challenge in developing this algorithm is not so much knowing what  to do but knowing how to represent concepts like the head and the tail of the array.
+      The challenge in developing this algorithm is not so much knowing what  
+      to do but knowing how to represent concepts like the head and the tail of the array.
       For strings,
-      we had methods such as <c>s.charAt(0)</c> to represent the head of the string and <c>s.substring(1)</c> to represent the string's tail.
+      we had methods such as <c>s.charAt(0)</c> to represent the head of the string 
+      and <c>s.substring(1)</c> to represent the string's tail.
       For an array named <c>arr</c>, the expression
-<c>arr[0]</c> represents the head of the array.
-      Unfortunately,
-      we have no method comparable to the <c>substring()</c> method for strings that lets us represent the tail of the array.
+      <c>arr[0]</c> represents the head of the array.
+      Unfortunately, we have no method comparable to the <c>substring()</c> method 
+      for strings that lets us represent the tail of the array.
     </p>
     <p>
       To help us out of this dilemma,
       we can use an integer parameter to represent the head of the array.
       Let's have the <c>int</c> parameter,
-      <em>head</em>, represent the current head of the array (Fig.
-      <xref ref="fig-headtail2"></xref>).
+      <em>head</em>, represent the current head of the array (<xref ref="fig-headtail2">Figure</xref>).
       Then <m>head+1</m> represents the start of the tail,
       and <c>arr.length-1</c> represents the end of the tail.
       Our method will always be passed a reference to the whole array,
@@ -74,22 +88,21 @@ If the array's head doesn't match the key,
       If we let <em>head</em> vary from 0 to <c>arr.length</c> on each recursive call,
       the method will recurse through the array in head/tail fashion,
       searching for the key.
-      The method will stop when <c>head =
-arr.length</c>.
+      The method will stop when <c>head = arr.length</c>.
     </p>
     <figure xml:id="fig-headtail2">
-      <caption>A
-      parameter, <em>head</em>, can represent the head of some portion of the array.</caption>
+      <caption>A parameter, <em>head</em>, can represent the head of some portion of the array.</caption>
       <image width="73%" source="chptr12/headtail2.png"/>
     </figure>
     <principle>
-      <title>PROGRAMMING TIP:Subarray Parameter</title>
+      <title>PROGRAMMING TIP: Subarray Parameter</title>
       <p>
         For methods that take an array argument,
-        an <c>int</c> parameter can be used to designate the portion of the array that should be processed in the method.
+        an <c>int</c> parameter can be used to designate the 
+        portion of the array that should be processed in the method.
       </p>
     </principle>
-    <figure xml:id="fig-rsearch">
+    <listing xml:id="fig-rsearch">
       <caption>The recursive search method takes three parameters.  The
       <em>head</em> parameter points to the beginning of that portion of the
       array that is being searched.</caption>
@@ -109,18 +122,17 @@ private int search(int arr[], int head, int key)  {
  else               // Recursive: search the tail
    return search(arr, head + 1, key);}
  </input></program>
-    </figure>
+    </listing>
     <p>
-      This leads to the definition for recursive search shown in <xref ref="fig-rsearch">Figure</xref>.
+      This leads to the definition for recursive search shown in <xref ref="fig-rsearch">Listing</xref>.
       Note that the recursive search method takes three parameters:
       the array to be searched, <c>arr</c>, the <c>key</c> being sought,
       and an integer <c>head</c> that gives the starting location for the search.
-      The algorithm is bounded when <c>head =
-arr.length</c>. In effect,
+      The algorithm is bounded when <c>head = arr.length</c>. In effect,
       this is like saying the recursion should stop when we have reached a tail that contains 0 elements.
       This underscores the point we made earlier about the importance of parameters in designing recursive methods.
       Here the <em>head</em> parameter serves as the
-      <em>recursion parameter</em>.
+      <term>recursion parameter</term>.
           <idx><h>recursion parameter</h></idx>
        It controls the progress of the recursion.
     </p>
@@ -134,7 +146,7 @@ arr.length</c>. In effect,
       when we have exhausted all possible locations for the key.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Recursive Search</title>
+      <title>DEBUGGING TIP: Recursive Search</title>
       <p>
         For the recursive search method to work properly,
         it must be called with the correct value for the
@@ -142,7 +154,7 @@ arr.length</c>. In effect,
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="self-study-exerciseR30">
+  <subsection xml:id="info-hiding">
     <title>Information Hiding</title>
     <p>
       Note that in order to use the <c>search()</c> method,
@@ -152,7 +164,8 @@ arr.length</c>. In effect,
       After all, if we want to search an array,
       we just want to pass two arguments,
       the array and the key we're searching for.
-      It's  unreasonable to expect users of a method to know that they also have to pass 0 as the head in order to get the recursion started.
+      It's  unreasonable to expect users of a method to know that they 
+      also have to pass 0 as the head in order to get the recursion started.
       This design is also prone to error,
       because it's quite easy for a mistake to be made when the method is called.
     </p>
@@ -162,18 +175,19 @@ arr.length</c>. In effect,
       The interface hides the fact that a recursive algorithm is being used,
       but this is exactly the kind of implementation detail that should be hidden from the user.
       This is an example of the principle of information hiding that we introduced in Chapter<nbsp/>0.
-      A more  appropriate design would make the recursive method a <c>private</c> method that's called by the public method,
+      A more  appropriate design would make the recursive method a <c>private</c> method 
+      that's called by the public method,
       as shown <xref ref="fig-searcher">Figure</xref>
-      and implemented in the <c>Searcher</c> class (Fig.
-      <xref ref="fig-searcherclass"></xref>).
+      and implemented in the <c>Searcher</c> class (<xref ref="fig-searcherclass">Listing</xref>).
     </p>
     <figure xml:id="fig-searcher">
       <caption>The public <c>search()</c> method serves
       as an interface to the private recursive method, <c>search()</c>.
       Note that the methods have different signatures.</caption>
-      <image width="73%" source="chptr12/searcher.png"/>
+      <image width="60%" source="chptr12/searcher.png"/>
     </figure>
-    <figure xml:id="fig-searcherclass">
+
+    <listing xml:id="fig-searcherclass">
       <caption>Information hiding principle: The <c>public</c><c>search()</c>
       method calls the <c>private</c>, recursive <c>search()</c>, thereby hiding the
       fact that a recursive algorithm is used.</caption>
@@ -188,6 +202,7 @@ public class Searcher {
   public int search(int arr[], int key) {
     return search(arr, 0, key); // Call recursive search
   }
+
   /**
    * search(arr, head, key) -- Recursively search arr for key
    *  starting at head
@@ -203,6 +218,64 @@ public class Searcher {
     else                      // Recursive case: search the tail
         return search(arr, head + 1, key);
   } // search()
+
+} // Searcher
+ </input></program>
+    </listing>
+
+    <principle>
+      <title>EFFECTIVE DESIGN: Information Hiding</title>
+      <p>
+        Unnecessary implementation details,
+        such as whether a method uses a recursive or iterative algorithm,
+        should be hidden within the class.
+        Users of a class or method should be shown only those details that they need to know.
+      </p>
+    </principle>
+    <exercises>
+    <title>Self-Study Exercise</title>
+    <exercise>
+    <title>Recursive search</title>
+      <statement>
+          <p>
+            Write a <c>main()</c> method for the <c>Searcher</c> class to 
+            conduct the following test of <c>search()</c>. Create an <c>int</c> array of ten elements,
+            initialize its elements to the even numbers from 0 to 18,
+            and then use a for loop to search the array for each of the numbers from 0 to 20.
+          </p>
+<program language="java" interactive="activecode"><input>
+public class Searcher {
+  /**
+   * search(arr,key) -- searches arr for key.
+   * Pre:  arr != null and 0 &lt;= head &lt;= arr.length
+   * Post: if arr[k] == key for k,  0 &lt;= k &lt; arr.length,
+   *       return k,  else return -1
+   */
+  public int search(int arr[], int key) {
+    return search(arr, 0, key); // Call recursive search
+  }
+
+  /**
+   * search(arr, head, key) -- Recursively search arr for key
+   *  starting at head
+   * Pre:  arr != null and 0 &lt;= head &lt;= arr.length
+   * Post: if arr[k] == key for k,  0 &lt;= k &lt; arr.length, return k
+   *       else return -1
+   */
+  private int search(int arr[], int head, int key)  {
+    if (head == arr.length)   // Base case: empty list - failure
+      return -1;
+    else if (arr[head] == key)// Base case: key found -- success
+      return head;
+    else                      // Recursive case: search the tail
+        return search(arr, head + 1, key);
+  } // search()
+
+} // Searcher
+ </input></program>               
+      </statement> 
+      <solution>
+ <program language="java"><input>     
   public static void main(String args[]) {
     int numbers[] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
     Searcher searcher = new Searcher();
@@ -213,31 +286,14 @@ public class Searcher {
         else
           System.out.println(k + " is not in the array ");
     } // for
-  } // main()} // Searcher
- </input></program>
-    </figure>
-    <principle>
-      <title>EFFECTIVE DESIGN:Information Hiding</title>
-      <p>
-        Unnecessary implementation details,
-        such as whether a method uses a recursive or iterative algorithm,
-        should be hidden within the class.
-        Users of a class or method should be shown only those details that they need to know.
-      </p>
-    </principle>
-    </subsection>
-    <subsection><title>Self-Study Exercise</title>
-      <ol>
-        <li>
-          <p>
-            Write a <c>main()</c> method for the <c>Searcher</c> class to conduct the following test of <c>search()</c>. Create an <c>int</c> array of ten elements,
-            initialize its elements to the even numbers from 0 to 18,
-            and then use a for loop to search the array for each of the numbers from 0 to 20.
-          </p>
-        </li>
-      </ol>
+  } // main()      
+   </input></program>      
+  </solution>
+    </exercise>
+  </exercises>
  </subsection>
-  <subsection xml:id="self-study-exercisesD30">
+
+  <subsection xml:id="recursive-sort">
     <title>Recursive Selection Sort</title>
     <p>
       Next we want you to think back to Chapter<nbsp/>9,
@@ -256,7 +312,7 @@ public class Searcher {
       the deck will be completely sorted.
     </p>
     <principle>
-      <title>DEBUGGING TIP:Off-by-One Error</title>
+      <title>DEBUGGING TIP: Off-by-One Error</title>
       <p>
         Sorting algorithms are particularly susceptible to an off-by-one error.
         To sort an array with <term>N</term> elements,
@@ -291,20 +347,20 @@ public class Searcher {
       down one element to the left.
     </p>
     <p>
-      <xref ref="fig-selectionsort">Figure</xref>
+      <xref ref="fig-selectionsort">ListingA</xref>
       provides a partial implementation of selection sort for an array of <c>int</c>. In this definition,
       the array is one parameter.
       The second parameter, <c>int last</c>, defines that portion of the array,
       from right to left, that is yet to be sorted.
       On the first call to this method,
       <em>last</em> will be
-<c>arr.length  -  1</c>. On the second,
+      <c>arr.length  -  1</c>. On the second,
       it will be <c>arr.length  -  2</c>, and so on.
       When <em>last</em> gets to be 0, the array will be sorted.
       Thus, in terms of the card deck analogy,
       <em>last</em> represents the last card in the unsorted portion of the deck.
     </p>
-    <figure xml:id="fig-selectionsort">
+    <listing xml:id="fig-selectionsort">
       <caption>The <c>selection-</c><c>Sort()</c> method uses the <c>findMax()</c>
       and <c>swap()</c> methods to help it sort an array.</caption>
  <program language="java"><input>
@@ -316,16 +372,18 @@ public class Searcher {
   *   for any j &lt; k
   */
 private void selectionSort(int arr[], int last) {
- if (last > 0) {
-   int maxLoc = findMax (arr, last);// Find the largest
-   swap(arr, last, maxLoc);         // Swap it with last
-   selectionSort(arr, last - 1);    // Move down the array
- }} // selectionSort()
+  if (last > 0) {
+    int maxLoc = findMax (arr, last);// Find the largest
+    swap(arr, last, maxLoc);         // Swap it with last
+    selectionSort(arr, last - 1);    // Move down the array
+  }
+} // selectionSort()
  </input></program>
-    </figure>
+    </listing>
     <p>
       Note how simply the <c>selectionSort()</c> method can be coded.
-      Of course, this is because we have used separate methods to handle the  tasks of finding the largest element and swapping the last element and the largest.
+      Of course, this is because we have used separate methods to handle the  
+      tasks of finding the largest element and swapping the last element and the largest.
       This not only makes sense in terms of the divide-and-conquer principle,
       but we also already defined a <c>swap()</c> method in Chapter<nbsp/>9.
       So here is a good example of reusing code:
@@ -338,37 +396,129 @@ private void selectionSort(int arr[], int last) {
   * Post: the locations of el1 and el2 are swapped in arr
   */
 private void swap(int arr[], int el1, int el2)  {
- int temp = arr[el1]; // Assign the first element to temp
- arr[el1] = arr[el2]; // Overwrite first with second
- arr[el2] = temp;     // Overwrite second with first(temp)} // swap()
+  int temp = arr[el1]; // Assign the first element to temp
+  arr[el1] = arr[el2]; // Overwrite first with second
+  arr[el2] = temp;     // Overwrite second with first(temp)
+} // swap()
  </input></program>
     <p>
       The definition of the <c>findMax()</c> method is left as a self-study exercise.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Method Decomposition</title>
+      <title>PROGRAMMING TIP: Method Decomposition</title>
       <p>
         A task can be simplified by breaking it up into simpler subtasks,
         especially if you already have methods for solving one or more of the subtasks.
       </p>
     </principle>
-    </subsection>
-    <subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+
+    <exercises>
+    <title>Self-Study Exercises</title>
+    <exercise>
+    <title>Find Max</title>
+    <statement>
+          <p>
+            Define an iterative version of the <c>findMax(arr,N)</c> method that is used in
+            <c>selectionSort()</c>. Its goal is to return the location (index) of the 
+            largest integer between <c>arr[0]</c> and <c>arr[N]</c>.
+          </p>
+    <program language="java" interactive="activecode"><input>
+    public class Main {
+
+      // Define findMax() method. Make it static.
+
+
+      // Test defineMax method
+      public static void main(String args[]) {
+        int numbers[] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+
+
+      } // main()      
+
+    }
+    </input></program>
+    </statement>
+    <solution>
+ <program language="java"><input>
+  /** findMax (arr,N) returns the index of the largest
+    *  value between arr[0] and arr[N], N >= 0.
+    *  Pre: 0 &lt;= N &lt;= arr.length -1
+    *  Post: arr[findMax()]>=arr[k] for k between 0 and N.
+    */
+  private int findMax(int arr[], int N) {
+      int maxSoFar = 0;
+      for (int k = 0; k &lt;= N; k++)
+          if (arr[k] > arr[maxSoFar])
+              maxSoFar = k;
+      return maxSoFar;
+  } // findMax()
+ </input></program>    
+    </solution>
+    </exercise>
+
+    <exercise>
+    <title>Selection sort</title>
+    <statement>
           <p>
             As in the case of the <c>search()</c> method,
             we need to provide a public interface to the recursive <c>selectionSort()</c> method.
-            We want to enable the user to sort an array just by calling <c>sort(arr)</c>, where <c>arr</c> is the name of the array to be sorted.
+            We want to enable the user to sort an array just by calling <c>sort(arr)</c>, 
+            where <c>arr</c> is the name of the array to be sorted.
             Define the <c>sort()</c> method.
           </p>
-        </li>
-        <li>
-          <p>
-            Define an iterative version of the <c>findMax(arr,N)</c> method that is used in
-<c>selectionSort()</c>. Its goal is to return the location (index) of the largest integer between <c>arr[0]</c> and <c>arr[N]</c>.
-          </p>
-        </li>
-      </ol>
+    <program language="java" interactive="activecode"><input>
+    public class Sorter {
+
+      // Define findMax() method. Make it static.
+
+
+      private void swap(int arr[], int el1, int el2)  {
+        int temp = arr[el1]; // Assign the first element to temp
+        arr[el1] = arr[el2]; // Overwrite first with second
+        arr[el2] = temp;     // Overwrite second with first(temp)
+      } // swap()
+
+      /**
+        * selectionSort(arr,last)--Recursively sort arr starting
+        *   at last element
+        * Pre:  arr != null and 0 &lt;= last &lt; arr.length
+        * Post: arr will be arranged so that arr[j] &lt;= arr[k],
+        *   for any j &lt; k
+        */
+      private void selectionSort(int arr[], int last) {
+        if (last > 0) {
+          int maxLoc = findMax (arr, last);// Find the largest
+          swap(arr, last, maxLoc);         // Swap it with last
+          selectionSort(arr, last - 1);    // Move down the array
+        }
+      } // selectionSort()     
+
+      // Add the nonrecursive sort here and test it in main 
+
+
+
+      // Test the findMax() method
+      public static void main(String args[]) {
+        int numbers[] = {100, 5, 14, -7, 0, 152, -80, 34, 42};
+
+
+      } // main()      
+    }    
+    </input></program>
+    </statement>
+     <solution>
+      <program language="java"><input>
+      /** sort(arr) sorts the int array, arr
+      *  Pre: arr is not null
+      *  Post: arr will be arranged so that arr[j] &lt;= arr[k]
+      *     for any j &lt; k
+      */
+      public void sort(int arr[]) {
+          selectionSort(arr, arr.length - 1); // Call the recursive method
+      }
+      </input></program>
+    </solution>
+  As we can now </exercise>
+  </exercises>
   </subsection>
 </section>
