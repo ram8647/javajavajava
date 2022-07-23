@@ -1,0 +1,98 @@
+<section xml:id="arraylists">
+  <title>From the Java Library: java.util.ArrayList</title>
+  <p>
+    The <c>java.util.ArrayList</c> class (<url href="https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html" visual="">https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html</url>) 
+    implements an array of objects that can grow in 
+    size as needed.
+    One limitation of regular arrays is that their lengths remain fixed.
+    Once the array is full <mdash/> once every element is used <mdash/>
+    you can't allocate additional elements.
+  </p>
+  
+  <p>
+    The <c>ArrayList</c> class contains the methods listed in <xref ref="fig-arraylist">Figure</xref> for storing and retrieving objects,
+    and for accessing objects by their index position within the
+    <c>ArrayList</c>.
+  </p>
+    <figure xml:id="fig-arraylist">
+    <caption>Public methods in the <c>ArrayList</c> class.</caption>
+      <image width="100%" source="chptr09/ArrayList-methods.jpg"/>
+    </figure>
+  
+  <p>
+    One use for a <c>ArrayList</c> would be when a program needs to store input from the user or a file without knowing in advance how many items there are.
+    Using a <c>ArrayList</c> is less efficient than an array in terms of processing speed,
+    but it gives you the flexibility of growing the data structure to meet the storage requirements.
+  </p>
+  <p>
+    As an illustration of this idea,
+    the program in <xref ref="lst-arraylistdemo">Listing</xref>
+    creates a random number of integers and then stores them in a <c>ArrayList</c>. 
+    The <c>ArrayList</c>, which is declared and instantiated in <c>main()</c>, is 
+    initially empty.
+    Integers from 0 to the random <c>bound</c> are then inserted into the <c>ArrayList</c>. In this case,
+    insertions are done with the
+    <c>add()</c> method,
+    which causes the <c>ArrayList</c> object to insert the element at the next available location,
+    increasing its size, if necessary.    Once all the integers have been inserted,
+    the <c>printArrayList()</c> method is called.
+    Note that it uses the <c>size()</c> method to determine how many 
+    elements the <c>ArrayList</c> contains, and the <c>get()</c> method to get elements out of the ArrayList similar to [] in arrays.
+     Run the program below multiple times to see ArrayLists of different sizes.
+  </p>
+  <listing xml:id="lst-arraylistdemo">
+    <caption>Demonstration of the <c>ArrayList</c> class.</caption>
+    
+ <program language="java" interactive="activecode"><input>
+    import java.util.ArrayList;
+    public class ArrayListDemo {
+      
+      public static void printArrayList(ArrayList&lt;Integer> list) {
+        for (int i=0; i &lt; list.size(); i++) 
+          System.out.println(list.get(i));
+      } // printArrayList()
+      
+      public static void main(String args[]) {
+        ArrayList&lt;Integer> list = new ArrayList&lt;Integer>();  // An empty arraylist
+        int bound = (int)(Math.random() * 20);
+        for (int k = 0; k &lt; bound; k++ )   // add a random number of Integers 
+          list.add(k); 
+        System.out.println(list); // Print the elements in 1 line
+        printArrayList(list);            // Print the elements on multiple lines
+      } // main()
+    } // ArrayListDemo
+ </input></program>
+  </listing>
+<p>
+    <c>ArrayLists</c> 
+     can only hold Objects, for example String, the wrapper classes Integer and Double, or even a new programmer defined class like Student. 
+     They cannot hold primitive types like int, double, etc.
+    To declare an <c>ArrayList</c>, we use a generic Object type like Integer, Double, String, Object. 
+    If you don't specify the type, it will default to <c>Object</c>.   
+    In the program above, when a number is added to the <c>ArrayList</c>, it will automatically be
+    wrapped into an <c>Integer</c> object.
+    <program language="java"><input>
+    // ArrayList&lt;Type> 
+    ArrayList&lt;Integer> numList = new ArrayList&lt;Integer>(); 
+    ArrayList&lt;String> nameList = new ArrayList&lt;String>(); 
+    ArrayList&lt;Double> decList = new ArrayList&lt;Double>(); 
+    ArrayList objects = new ArrayList(); // a list of Objects
+    </input> </program>
+       </p>
+
+  <p>
+    By defining <c>ArrayList</c> to store objects, Java's designers have  
+    made it as general as possible and,
+    therefore, as widely useful as possible.
+  </p>
+  <principle>
+    <title>EFFECTIVE DESIGN: Generality</title>
+    <p>
+      Defining a data collection,
+      such as an array or a <c>ArrayList</c>, in terms of the <c>Object</c> class makes it capable of storing and processing any type of value,
+      including values of primitive data types.
+      This is because the
+<c>Object</c> class is the root of<nbsp/>the<nbsp/>Java class hierarchy.
+    </p>
+  </principle>
+</section>

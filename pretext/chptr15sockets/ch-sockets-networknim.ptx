@@ -52,13 +52,13 @@
     </p>
     <p>
       These design decisions lead to the definitions of <c>Server</c> and
-<c>Client</c> shown in <xref ref="fig-serverclass">Figures</xref>
-      and <xref ref="fig-clientclass"></xref>, respectively.
+<c>Client</c> shown in <xref ref="list-serverclass">Listing</xref>
+      and <xref ref="list-clientclass">Listing</xref>, respectively.
       Note that <c>provideService()</c> and <c>requestService()</c> are left unimplemented.
       Subclasses of <c>Server</c>, such as <c>NimServer</c>, and subclasses of <c>Client</c>, such as <c>NimClient</c>, can implement <c>provideService()</c> and <c>requestService()</c> in a way that is appropriate for the particular service they are providing.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Polymorphism</title>
+      <title>EFFECTIVE DESIGN: Polymorphism</title>
       <p>
         Defining a method as
 <c>abstract</c> within a superclass,
@@ -67,7 +67,7 @@
         Polymorphism is a powerful object-oriented design technique.
       </p>
     </principle>
-    <figure xml:id="fig-serverclass">
+    <listing xml:id="list-serverclass">
       <caption>The abstract <c>Server</c> class.</caption>
       
  <program language="java"><input>
@@ -101,10 +101,11 @@ public abstract class Server extends ClientServer {
     } // try/catch
   }// run()
  // Implemented in subclass
- protected abstract void provideService(Socket socket);  }// Server
+ protected abstract void provideService(Socket socket); 
+}// Server
  </input></program>
-    </figure>
-    <figure xml:id="fig-clientclass">
+    </listing>
+    <listing xml:id="list-clientclass">
       <caption>The abstract <c>Client</c> class.</caption>
  <program language="java"><input>
 import java.net.*;
@@ -140,18 +141,20 @@ public abstract class Client extends ClientServer {
     System.out.print("INPUT: ");
     String line = input.readLine();
     return line;
-  }// readFromKeyboard()}// Client
+  }// readFromKeyboard()
+}// Client
  </input></program>
-    </figure>
+    </listing>
   </introduction>
   <subsection>
     <title>The <c>NimServer</c>Class</title>
     <p>
       Given the abstract definition of the <c>Server</c> class,
-      defining a new service is simply a matter of extending <c>Server</c> and  implementing the <c>provideService()</c> method in the new subclass.
+      defining a new service is simply a matter of extending <c>Server</c> and  
+      implementing the <c>provideService()</c> method in the new subclass.
       We will name the subclass <c>NimServer</c>.
     </p>
-    <figure xml:id="fig-nimserverclass">
+    <listing xml:id="list-nimserverclass">
       <caption>The  <c>NimServer</c> class.</caption>
       
  <program language="java"><input>
@@ -213,11 +216,12 @@ public class NimServer extends Server {
   public static void main(String args[]) {
     NimServer server = new NimServer(10001,5);
     server.start();
-  } // main()} // NimServer
+  } // main()
+} // NimServer
  </input></program>
-    </figure>
+    </listing>
     <p>
-      <xref ref="fig-nimserverclass">Figure</xref>
+      <xref ref="list-nimserverclass">Listing</xref>
       provides a definition of the <c>NimServer</c> subclass.
       Note how its implementation of <c>provideService()</c> uses an instance of the <c>OneRowNim</c> class from Chapter<nbsp/>8.
       Also, the <c>play()</c> method,
@@ -256,15 +260,15 @@ public class NimServer extends Server {
     </p>
   </subsection>
   <subsection>
-    <title>The <c>NimClient</c>Class</title>
+    <title>The <c>NimClient</c> Class</title>
     <p>
       The <c>NimClient</c> class is even easier to implement.
       As its task is simply to manage the communication between the human user and the <c>NimServer</c>, it is very similar to the <c>requestService()</c> method we used in <c>EchoClient</c>. The relationship between the abstract <c>Client</c> class (Fig.
-      <xref ref="fig-clientclass"></xref>) and its extension in <c>NimClient</c>(Fig.
-      <xref ref="fig-nimclientclass"></xref>) is very similar to the relationship between <c>Server</c> and <c>NimServer</c>. The<nbsp/><c>requestService()</c> method is called by <c>Client.run()</c>. It is implemented in <c>NimClient</c>. In this way,
+      <xref ref="list-clientclass"></xref>) and its extension in <c>NimClient</c>(
+        <xref ref="list-nimclientclass"></xref>) is very similar to the relationship between <c>Server</c> and <c>NimServer</c>. The<nbsp/><c>requestService()</c> method is called by <c>Client.run()</c>. It is implemented in <c>NimClient</c>. In this way,
       the <c>Client</c> class can serve as a superclass for any number of clients.  New clients for new services can be derived from <c>Client</c> by simply implementing their own <c>requestService()</c> method.
     </p>
-    <figure xml:id="fig-nimclientclass">
+    <listing xml:id="list-nimclientclass">
       <caption>The derived <c>NimClient</c> class.</caption>
       
  <program language="java"><input>
@@ -291,11 +295,12 @@ public class NimClient extends Client {
   public static void main(String args[]) {
     NimClient client = new NimClient("localhost", 10001);
     client.start();
-  } // main()} // NimClient
+  } // main()
+} // NimClient
  </input></program>
-    </figure>
+    </listing>
     <principle>
-      <title>EFFECTIVE DESIGN:Inheritance</title>
+      <title>EFFECTIVE DESIGN: Inheritance</title>
       <p>
         By placing as much functionality as possible into a generic client/server superclass,
         you can simplify the creation of new services.
@@ -303,7 +308,7 @@ public class NimClient extends Client {
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="self-study-exerciseQ36">
+  <subsection>
     <title>Testing the Nim Service</title>
     <p>
       Testing the One Row Nim service will be no different than testing the Echo service.
@@ -313,10 +318,10 @@ public class NimClient extends Client {
       you will have to modify the <c>main()</c> methods of both <c>NimServer</c> and <c>NimClient</c> to provide the correct URL and port for your environment.
     </p>
     </subsection>
-    <subsection>
+    <exercises>
     <title>Self-Study Exercise</title>
-      <ol>
-        <li>
+     <exercise label="scramble">
+      <title>Scramble Service</title><statement>
           <p>
             The design of the client/server hierarchy makes it easy to create a new service by extending both the <c>Server</c> and
 <c>Client</c> classes.
@@ -329,11 +334,21 @@ public class NimClient extends Client {
             the scramble service will return
             <q>act atc cat cta tac tca.</q>
           </p>
-        </li>
-        <li>
+          </statement>
+          <solution>
+            <p>
+              The scramble service would be implemented by defining two new classes: The <c>ScrambleServer</c> class is a subclass of <c>Server</c>, and the <c>ScrambleClient</c> class is a subclass of <c>Client</c>. The <c>ScrambleClient</c> would implement the <c>requestService()</c> method and the <c>ScrambleServer</c> would implement the
+  <c>provideService()</c> method.
+            </p>
+          </solution>
+     </exercise>
+
+     <exercise label="connectionErrors">
+      <title>Connection Errors</title><statement>   
           <p>
-            Describe what happens when each of the following errors is introduced into the <c>EchoClient</c> or <c>EchoServer</c> programs:
-            <ul>
+            Describe what happens when each of the following errors is introduced 
+            into the <c>EchoClient</c> or <c>EchoServer</c> programs:
+            <ol>
               <li>
                 <p>
                   Specify the wrong host name when running <c>EchoClient</c>.
@@ -349,9 +364,38 @@ public class NimClient extends Client {
                   Remove the reference to <c>\n</c> in the <c>writeToSocket()</c> call in <c>requestService()</c>.
                 </p>
               </li>
-            </ul>
+            </ol>
           </p>
-        </li>
-      </ol>
-  </subsection>
+          </statement>
+          <solution>
+            <ol>
+              <li>
+                <p>
+                  If you specify the wrong host name,
+                  you will get the following exception:
+      <c>java.net.ConnectException: Connection refused</c>.
+                </p>
+              </li>
+              <li>
+                <p>
+                  If you specify the wrong port,
+                  you will get the following exception:
+      <c>java.net.ConnectException: Connection refused</c>.
+                </p>
+              </li>
+              <li>
+                <p>
+                  If you leave off the <c>\n</c> in the <c>writeToSocket()</c> call,
+                  nothing will go wrong because the <c>writeToSocket()</c> method will catch this error and add the end-of-line character to the string before sending it to the server.
+                  The server reads lines from the client,
+                  so every communication must end with <c>\n</c> or the protocol will break down. \end{ANSBL}
+                </p>
+              </li>
+            </ol>
+          </solution>
+          </exercise>
+      >
+      </exercises>
+      
+ 
 </section>

@@ -71,11 +71,11 @@
       such as <c>data.txt</c>, Java assumes that the file is located in the same directory as the program itself.
     </p>
   </subsection>
-  <subsection xml:id="fig-fileuml-files">
+  <subsection>
     <title>Validating File Names</title>
     <p>
       Before reading a file it is often necessary to determine that the file's name is a valid one and that the file can be read.
-      The <c>File</c> class (<xref ref="fig-fileuml">Figure</xref>) provides platform-independent methods for 
+      The <c>File</c> class (<xref ref="fig-fileuml2">Figure</xref>) provides platform-independent methods for 
       dealing with files and directories.
       It contains methods that list the contents of directories,
       determine a file's attributes,
@@ -89,7 +89,7 @@
       <c>/</c> and on a Windows system it will be the <c>\,backslash</c>. <c>File.separator</c> will 
       be initialized to the appropriate separator for the particular system being used.
     </p>
-    <figure xml:id="fig-fileuml">
+    <figure xml:id="fig-fileuml2">
     <caption>The <c>File</c> class.</caption>
     <image width="50%" source="chptr11/fileuml.png"/> 
     </figure>
@@ -179,14 +179,29 @@ private boolean isWriteableFile(String fileName) {
         <title>File Info</title>
         <statement>
           <p>
-            The other methods of the <c>File</c> class are just as easy to use as the ones we have illustrated in this section.
-            Write a method, <c>getFileAttributes</c> that takes the name of a file as its single parameter and 
+            The other methods of the <c>File</c> class (<xref ref="fig-fileuml">Figure</xref>) are just as easy to 
+            use as the ones we have illustrated in this section.
+            Complete the <c>getFileAttributes()</c> method that takes the name of a file as its single parameter and 
             prints the following information about the file:
-            its absolute path, its length, and whether it is a directory or a file.
+            its absolute path, its length, and whether it is a directory or a file. The <c>main()</c> program is completed for you.
           </p>
+        <program language="java" interactive="activecode"><input>
+        public class Main {
+            // Complete this method
+            public static void getFileAttributes(String filename) {
+                System.out.println("Getting file attributes for " + filename);
+
+            }
+
+            public static void main(String args[]) {
+                getFileAttributes("Main.java");
+            }
+
+        }
+        </input></program>
         </statement>
         <solution>
-                   <program language="java"><input>
+<program language="java"><input>
 public void getFileAttributes(String fileName) {
     File file = new File (fileName);
     System.out.println(filename);

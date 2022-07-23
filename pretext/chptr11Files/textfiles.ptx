@@ -107,7 +107,7 @@ one\ntwo\nthree\nfour\n\eof
         we would use a <c>Writer</c> subclass.
         But which subclass should we use?
         One way to decide this is to consult the Java API documentation on 
-        the <url href="https://docs.oracle.com/en/java/javase/18/docs/api/index.html">Oracle site</url>.
+        the <url href="https://docs.oracle.com/en/java/javase/18/docs/api/index.html" visual="">Oracle site</url>.
       </p>
       <p>
         For I/O operations you want to consult the classes in the <c>java.io</c> package.
@@ -308,23 +308,84 @@ outStream.close();                                   // Close the stream
     <exercise>
     <statement>
           <p>
-            Is it possible to perform output to a text file using a
-            <c>PrintWriter</c> and a <c>FileWriter</c> stream in combination?
-            If so, write the Java code.
+            Which of the following code segments make proper use of
+            <c>PrintWriter</c> (<xref ref="fig-printwriter">Figure</xref>) 
+            and a <c>FileWriter</c> (<xref ref="fig-filewriter">Figure</xref>) 
+            to perform output to a textfile.
           </p>
     </statement>
+    <choices>
+            <choice correct="no">
+            <statement>
+                <program language="java"><input>
+                PrintWriter outStream =                        
+                    new FileWriter(new FileWriter(fileName)); 
+                outStream.print (display.getText());           
+                outStream.close();                             
+                </input></program>
+            </statement>
+                <feedback>
+                    <p>
+                      There is no <c>FileWriter(OutputStream)</c> constructor.
+                    </p>
+                </feedback>
+            </choice>
+            <choice correct="no">
+            <statement>
+                <program language="java"><input>
+                FileWriter outStream =                        
+                    new FileWriter(new PrintWriter(fileName)); 
+                outStream.print (display.getText());           
+                outStream.close();                             
+                </input></program>
+            </statement>
+                <feedback>
+                  <p>There is no <c>PrintWriter(fileName:String)</c> constructor.
+                  </p>
+                </feedback>
+            </choice>
+            <choice correct="yes">
+            <statement>
+                <program language="java"><input>
+                PrintWriter outStream =                        
+                    new PrintWriter(new FileWriter(fileName)); 
+                outStream.print (display.getText());           
+                outStream.close();                             
+                </input></program>
+            </statement>
+                <feedback>
+                <p>
+                  Yes,  the <c>FileWriter(filename: String)</c> constructor will
+                  create an output stream for <c>PrintWriter</c>.
+                </p>
+                </feedback>
+            </choice>
+            <choice correct="no">
+            <statement>
+                 <program language="java"><input>
+                FileWriter outStream =                        
+                    new PrintWriter(new FileWriter(fileName)); 
+                outStream.print (display.getText());           
+                outStream.close();                             
+                </input></program>
+            </statement>
+                <feedback>
+                    <p><c>PrintWriter</c> is not a subclass of <c>FileWriter</c>.</p>
+                </feedback>
+            </choice>
+        </choices>
     <solution>
             <p>
           Because <c>FileWriter</c> contains a constructor that takes a file name 
           argument, <c>FileWriter(String)</c>, it can be used with <c>PrintWriter</c> to 
           perform output to a text file:
           </p>
- <program language="java"><input>
+<program language="java"><input>
 PrintWriter outStream =                        //  Create output stream
     new PrintWriter(new FileWriter(fileName)); // Open file
 outStream.print (display.getText());           // Print the text
 outStream.close();                             // Close output stream
- </input></program>
+</input></program>
     </solution>
     </exercise>
     </exercises>
@@ -543,7 +604,7 @@ while ( line is not null ) {                           // Loop entry condition
 
   <exercises>
   <title>Self-Study Exercises</title>
-          <exercise label="read-file algorithm" adaptive="yes">
+          <exercise label="read-file-algorithm" adaptive="yes">
             <title>Read Loop</title>
             <statement>
                 <p>Organize the following blocks into a correctly formed read loop.
@@ -668,7 +729,7 @@ while ( read was successful ) {       // Entry condition
     </p>
     <exercises>
     <title>Self-Study Exercise</title>
-         <exercise label="read-file algorithm" adaptive="yes">
+         <exercise label="read-file-by-char" adaptive="yes">
             <title>Read Loop Characters</title>
             <statement>
                 <p>Organize the following blocks into a correctly formed loop that
@@ -821,8 +882,10 @@ public void actionPerformed(ActionEvent evt) {
   <activity>
 <title>TextIO application</title>
 <statement>
-<p>Try running the <c>TextIO</c> program in the replit. As an input file you can use <c>Main.java</c>.
-<interactive iframe="iframe/repl-textio.html" width="95%" aspect="1:1"/>
+<p>Try running the <c>TextIO</c> program in <url href="https://replit.com/@RalphMorelli/TextIO#Main.java">replit</url>. 
+As an input file you can use <c>Testfile.txt</c>, which is provided. Try making some edits and the saving (i.e., writing) and 
+then reopening the file to see that your edits are saved.
+<!-- <interactive iframe="iframe/repl-textio.html" width="95%" aspect="1:1"/> -->
 </p>
 </statement>
   </activity>

@@ -404,13 +404,20 @@ private void readRecords( String fileName ) {
   <exercises>
     <title>Self-Study Exercise</title>
     <exercise>
-    <title>Find the errors</title>
+    <title>Find the error</title>
     <statement>
           <p>
-            Identify the error in the following method,
-            which is supposed to read a binary file of <c>int</c> s from a <c>DataInputStream</c>:
+            Which of the following method definitions would correctly read a binary file
+            of <c>int</c>?
         </p>
  <program language="java"><input>
+
+ </input></program>
+  </statement>
+      <choices>
+            <choice correct="no">
+            <statement>
+                <program language="java"><input>
 public void readIntegers(DataInputStream inStream) {
     try {
         while (true) {
@@ -421,17 +428,80 @@ public void readIntegers(DataInputStream inStream) {
     } catch (EOFException e) {
     } catch (IOException e) {
     }
-} // readIntegers
- </input></program>
-  </statement>
+} // readIntegers                           
+                </input></program>
+            </statement>
+                <feedback>
+                    <p>
+                      The <c>inStream.close()</c> statement is in the wrong place.
+                    </p>
+                </feedback>
+            </choice>
+            <choice correct="no">
+            <statement>
+                <program language="java"><input>
+public void readIntegers(DataInputStream inStream) {
+    try {
+        while (true) {
+            int num = inStream.readInt();
+            System.out.println(num);
+        }
+    } catch (EOFException e) {
+    } catch (IOException e) {
+        inStream.close();
+    }
+} // readIntegers                            
+                </input></program>
+            </statement>
+                <feedback>
+                  <p>
+                      The <c>inStream.close()</c> statement is in the wrong place.
+                  </p>
+                </feedback>
+            </choice>
+            <choice correct="yes">
+            <statement>
+                <program language="java"><input>
+public void readIntegers(DataInputStream inStream) {
+    try {
+        while (true) {
+            int num = inStream.readInt();
+            System.out.println(num);
+        }
+    } catch (EOFException e) {
+    } catch (IOException e) {
+    } finally {
+        inStream.close();
+    }
+} // readIntegers                             
+                </input></program>
+            </statement>
+                <feedback>
+                <p>
+                  Yes,  the <c>inStream.close()</c> statement goes in the <c>finally</c> block.
+                </p>
+                </feedback>
+            </choice>
+        </choices>
   <solution>
           <p>
-          The <c>inStream.close()</c> statement is misplaced in <c>readIntegers()</c>. 
-          By placing it inside the same <c>try/catch</c> block as the read loop,
-          it will get skipped and the stream will not be closed.
-          The <c>EOFException</c> should be caught in a separate <c>try/catch</c> block from other exceptions,
-          and it should just cause the read loop to exit.
-        </p>
+          The <c>inStream.close()</c> statement should go in the <c>finally</c> block:
+          </p>
+                          <program language="java"><input>
+public void readIntegers(DataInputStream inStream) {
+    try {
+        while (true) {
+            int num = inStream.readInt();
+            System.out.println(num);
+        }
+    } catch (EOFException e) {
+    } catch (IOException e) {
+    } finally {
+        inStream.close();
+    }
+} // readIntegers                             
+                </input></program>
+          
   </solution>
   </exercise>
 </exercises>

@@ -1,0 +1,1014 @@
+<section xml:id="recursive-string-methods">
+  <title>Recursive String Methods</title>
+  <introduction>
+    <p>
+      Remember that a <em>recursive method</em>
+      is a method that calls itself.
+      Like recursive definitions,
+      recursive methods are designed around the divide-and-conquer and self-similarity principles.
+      Defining a recursive method involves a similar analysis to the one we used in designing recursive definitions.
+      We identify a self-similar subproblem of the original problem plus one or more limiting cases.
+    </p>
+    <p>
+      The idea of a method calling itself seems a bit strange at first.
+      It's  perhaps best understood in terms of a clone or a copy.
+      When a method calls itself,
+      it really calls a copy of itself,
+      one that has a slightly different internal state.
+      Usually the difference in state is the result of a difference in the invoked method's parameters. 
+    </p>
+  </introduction>
+  <subsection xml:id="self-study-exerciseN30">
+    <title>Printing a String</title>
+    <p>
+      To illustrate the concept of a recursive method,
+      let's define a recursive method for printing a string.
+      This is not intended to be a practical method<mdash/>we already have the <c>println()</c> method 
+      for printing strings.
+      But pretend for a moment that you only have a version of <c>println()</c> that works for characters,
+      and your task is to write a version that can be used to print an entire string of characters.
+    </p>
+    <p>
+      A little terminology will help us describe the algorithm.
+      Let's call the first letter of a string the
+      <term>head</term> of the string,
+      and let's refer to all the remaining letters in the string as the
+      <term>tail</term> of the string.
+      Then the problem of printing a string can be solved using a
+      <term>head-and-tail algorithm</term>,
+          <idx><h>head-and-tail algorithm</h></idx>
+       which consists of two parts:
+      printing the head of the string and recursively printing its tail.
+      The limiting case here is when a string has no characters in it.
+      It's trivial to print the empty string<mdash/>there is nothing to print!
+      This leads to the method definition shown in <xref ref="fig-printstring">Listing</xref>.
+    </p>
+    <listing xml:id="fig-printstring">
+      <caption>The recursive <c>printString()</c> method.</caption>
+ <program language="java"><input>
+/**
+  * printString() prints each character of the string s
+  * Pre: s is initialized (non-null)
+  * Post: none
+  */
+public void printString(String s) {
+    if (s.length() == 0)
+        return;                  // Base case: do nothing
+    else {                       // Recursive case:
+        System.out.print(s.charAt(0)); // Print head
+        printString(s.substring(1));   // Print tail
+    }
+} // printString()
+ </input></program>
+    </listing>
+    <p>
+      The base case here provides a limit and bounds the recursion when the length of <em>s</em>
+      is 0<mdash/>that is, when the string is empty.
+      The recursive case solves the problem of printing
+      <em>s</em> by solving the smaller,
+      self-similar problem of printing a substring of <em>s</em>.
+      Note that the recursive case makes progress toward the limit.
+      On each recursion,
+      the tail will get smaller and smaller until it becomes the empty string.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Recursive Progress</title>
+      <p>
+        In a recursive algorithm,
+        each recursive call must make progress toward the bound,
+        or base case.
+      </p>
+    </principle>
+    <p>
+      Let's now revisit the notion of a method
+          <idx><h>method call, recursive</h></idx>
+       calling itself.
+      Obviously this is what happens in the recursive case,
+      but what does it mean<mdash/>what actions does this lead to in the program?
+    </p>
+    <p>
+      Each recursive call to a method is really a call to a
+      <em>copy</em> of that method,
+      and each copy has a slightly different internal state.
+      We can define <c>printString()</c>'s internal state completely in terms of its recursion parameter,
+      <em>s</em>, which is the string that's being printed.
+      A <term>recursion parameter</term>
+          <idx><h>recursion parameter</h></idx>
+      is a parameter whose value is used to control the progress of the recursion.
+      In this case, if <em>s</em> differs in each copy,
+      then so will <c>s.substring(1)</c> and
+<c>s.charAt(0)</c>.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Recursion and Parameters</title>
+      <p>
+        Recursive methods use a recursion parameter to distinguish between 
+        self-similar instances of the method call.
+        The parameter controls the progress of the recursion toward its bound.
+      </p>
+    </principle>
+    <p>
+      <xref ref="fig-traceprint">Figure</xref>
+      illustrates the sequence of recursive method calls and the output that results when
+      <c>printString("hello")</c> is invoked.
+    </p>
+    <figure xml:id="fig-traceprint">
+      <caption>A recursive method call invokes a copy
+      of the method, each with a slightly different internal state.  As
+      this is done repeatedly, a stack of method calls is created.</caption>
+      <image width="60%" source="chptr12/traceprint.png"/>
+    </figure>
+    <p>
+      Each box represents a separate instance of the <c>printString()</c> method,
+      with its own internal  state.
+      In this illustration,
+      its state is represented by its parameter, <c>s</c>. Because each instance has a different parameter,
+      behaviors differ slightly.
+      Each box shows the character that will be printed by that instance (<c>s.charAt(0)</c>), 
+      and the string that will be passed on to the next instance (<c>s.substring(1)</c>).
+    </p>
+    <principle>
+      <title>DEBUGGING TIP: Off-by-One Error</title>
+      <p>
+        The expressions <c>s.charAt(0)</c> and <c>s.substring(1)</c> will generate exceptions if
+        <term>s</term> is the empty string.
+      </p>
+    </principle>
+    <p>
+      The arrows represent the method calls and returns.
+      Note that the first <c>return</c> executed is the one in the base case.
+      Each instance of the method must wait for the instance it called to return before it can return.
+      That's why the instances
+      <q>pile up</q>
+      in a cascade-like structure.
+      The arrowless lines trace the order in which the output is produced.
+    </p>
+    <p>
+      Each instance of <c>printString()</c> is similar to the next in that each will print one character and then pass on a substring,
+      but each performs its duties on a different string.
+      Note how the string, the recursion parameter in this case,
+      gets smaller in each instance of
+      <c>printString()</c>.  This represents progress toward the method's base case <c>s.length() == 0</c>. 
+      When the empty string is passed as an argument,
+      the recursion will stop.
+      If the method does not make progress toward its bound in this way,
+      the result will be an infinite recursion.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Bounding the Recursion</title>
+      <p>
+        For recursive algorithms,
+        the recursion parameter is used to express the algorithm's bound or base case.
+        In order for the algorithm to terminate,
+        each recursive call should make progress toward the bound.
+      </p>
+    </principle>
+    <p>
+      Note also the order in which things are done in this method.
+      First <c>s.charAt(0)</c> is printed,
+      and then <c>s.substring(1)</c> is  passed to <c>printString()</c> in the recursion.
+      This is a typical structure for a head-and-tail algorithm.
+      What makes this work is that the tail is a smaller,
+      self-similar version of the original structure.
+    </p>
+    <principle>
+      <title>EFFECTIVE DESIGN: Head-and-Tail Algorithm</title>
+      <p>
+        Many recursive solutions involve breaking a sequential structure,
+        such as a string or an array, into its head and tail.
+        An operation is performed on the head,
+        and the algorithm recurses on the tail.
+      </p>
+    </principle>
+    <exercises>
+    <title>Self-Study Exercise</title>
+    <exercise>
+    <title>Tracing printString()</title>
+    <statement>      
+          <p>
+            Use Codelens to step through the printString() method, taking care to notice
+            the different state of the method on each recursive call. It should match
+            <xref ref="fig-traceprint">Figure</xref>.
+          </p>
+          <program language="java" interactive="activecode"><input>
+    public class Main {
+        /**
+          * printString() prints each character of the string s
+          * Pre: s is initialized (non-null)
+          * Post: none
+          */
+        public static void printString(String s) {
+            if (s.length() == 0)
+                return;                  // Base case: do nothing
+            else {                       // Recursive case:
+                System.out.print(s.charAt(0)); // Print head
+                printString(s.substring(1));   // Print tail
+            }
+        } // printString()
+
+        public static void main(String args[]) {
+            printString("hello");
+        }
+    }
+          </input></program>
+      </statement>
+    </exercise>
+    <exercise>
+    <title>What's the output?</title>
+    <statement>      
+          <p>
+            What would be printed by the following version of the <c>printString2()</c> method,
+            if it is called with <c>printString2("hello")</c>? <var/>
+          </p>
+          <program language="java"><input>
+          public void printString2(String s)  {
+              if (s.length() == 1)
+                System.out.print(s.charAt(0));         // Base case:
+              else {                                   // Recursive case
+                System.out.print(s.charAt(s.length() - 1));
+                printString2(s.substring(0, s.length() - 1));
+              }
+          } // printString2()
+          </input></program>
+      </statement>
+       <setup>
+          <var>
+            <condition string="olleh">
+              <feedback>
+                <p>Correct. This prints the string backwards.</p>
+              </feedback>
+            </condition>
+              <condition string=".*">
+              <feedback>
+                <p>Incorrect.</p>
+              </feedback>
+            </condition>
+          </var>
+        </setup>
+        <solution>
+          <p>olleh</p>
+        </solution>
+      </exercise>
+    
+    <exercise>
+    <title>Tracing printString2()</title>
+    <statement>      
+          <p>
+            Use Codelens to step through the printString2() method, taking care to notice
+            the different state of the method on each recursive call. 
+          </p>
+          <program language="java" interactive="activecode"><input>
+    public class Main {
+          public void printString2(String s)  {
+              if (s.length() == 1)
+                System.out.print(s.charAt(0));         // Base case:
+              else {                                   // Recursive case
+                System.out.print(s.charAt(s.length() - 1));
+                printString2(s.substring(0, s.length() - 1));
+              }
+          } // printString2()
+
+        public static void main(String args[]) {
+            printString2("hello");
+        }
+    }
+          </input></program>
+      </statement>
+    </exercise>      
+      </exercises>
+ </subsection>
+  <subsection xml:id="reverse-printing">
+    <title>Printing the String Backward</title>
+    <p>
+      What do you suppose would happen if we reversed the order of the statements 
+      in the <c>printString()</c> method?
+      That is, what if the recursive call came before <c>s.charAt(0)</c> is printed,
+      as in the following method:
+    </p>
+ <program language="java"><input>
+/**
+  * printReverse() prints each character s in reverse order
+  * Pre: s is initialized (non-null)
+  * Post: none
+  */
+public void printReverse(String s) {
+    if (s.length() > 0) {      // Recursive case:
+      printReverse(s.substring(1));  // Print tail
+      System.out.print(s.charAt(0)); // Print first char
+    }
+} // printReverse()
+ </input></program>
+    <p>
+      As its name suggests,
+      this method will print the string in reverse order.
+      The trace in <xref ref="fig-tracerevprint">Figure</xref> shows how
+      this works.
+    </p>
+    <figure xml:id="fig-tracerevprint">
+      <caption>A trace of <c>printReverse(s)</c>, which
+      prints its string argument in reverse order.</caption>
+      <image width="60%" source="chptr12/printreverse.png"/>
+    </figure>
+    <p>
+      Before <c>printReverse("hello")</c> can print <em>h</em>,
+      it calls <c>printReverse("ello")</c> and must wait for that call to complete its execution and return.
+      But <c>printReverse("ello")</c> calls
+      <c>printReverse("llo")</c> and so must wait for that call to complete its execution and return.
+    </p>
+    <p>
+      This process continues until <c>printReverse("")</c> is called.
+      While the base case is executing,
+      the other five instances of <c>printReverse()</c> must each wait for the 
+      instance that they called to complete its execution.
+      It is only after the base case returns,
+      that <c>printReverse("o")</c> can print its first character and return.
+    </p>
+    <p>
+      So the letter <em>o</em> will be printed first.
+      After <c>printReverse("o")</c> has returned,
+      then <c>printReverse("lo")</c> can print its first character.
+      So the letter <em>l</em> will be printed next, and so on,
+      until the original call to <c>printReverse("hello")</c> is completed and returns.
+      Thus, the string will be printed in reverse order.
+    </p>
+    <p>
+      Note that the method call and return structure in this example follows a
+      <term>last-in-first-out (LIFO) protocol</term>.
+          <idx><h>last-in<ndash/>first-out (LIFO) protocol</h></idx>
+       That is,
+      the last method called is always the first method to return.
+      This is the protocol used by all method calls, recursive or otherwise.
+    </p>
+    <principle>
+      <title>LIFO</title>
+      <p>
+        All programming languages, including Java,
+        use a last-in-first-out protocol for procedure call and return.
+      </p>
+    </principle>
+    <p>
+      For example,
+      compare the order in which things happen in <xref ref="fig-tracerevprint">Figure</xref>
+      with the method stack trace in  <xref ref="fig-traceprint">Figure</xref>.
+      The only real difference between the two figures is that here the method stack 
+      is represented as growing downward,
+      whereas in  <xref ref="fig-traceprint">Figure</xref> it grows upward.
+      As each method call is made,
+      a representation of the method call is placed on the
+      <em>method call stack</em>.  When a method returns,
+      its block is removed from the top of the stack.
+      The only difference between recursive and nonrecursive method calls is that 
+      recursive methods call instances of the same method definition.
+      Of course, as we've seen,
+      the instances are all slightly different from each other.
+    </p>
+    <exercises>
+    <title>Self-Study Exercises</title>
+
+    <activity>
+    <title>Tracing printReverse()</title>
+    <statement>      
+          <p>
+            Use Codelens to step through the printReverse() method, taking care to notice
+            the different state of the method on each recursive call. It should match
+            <xref ref="fig-tracerevprint">Figure</xref>.
+          </p>
+          <program language="java" interactive="activecode"><input>
+    public class Main {
+        /**
+          * printReverse() prints each character s in reverse order
+          * Pre: s is initialized (non-null)
+          * Post: none
+          */
+        public static void printReverse(String s) {
+          if (s.length() > 0) {      // Recursive case:
+            printReverse(s.substring(1));  // Print tail
+            System.out.print(s.charAt(0)); // Print first char
+          }
+        } // printReverse()
+ 
+        public static void main(String args[]) {
+            printReverse("hello");
+        }
+    }
+          </input></program>
+      </statement>
+    </activity>    
+
+    <exercise>
+    <title>Count down</title>
+    <statement>
+          <p>
+            Write a recursive method called <c>countDown()</c> that takes a single <c>int</c> parameter,
+            <m>N \geq 0</m>,
+            and prints a countdown, such as
+            <q>5, 4, 3, 2, 1, blastoff.</q>
+            The main program is completed for you.
+         </p>
+    </statement>
+    <program language="java" interactive="activecode"><input>
+    public class Main {
+
+        // Your static countDown() method definition goes here
+
+        public static void main(String args[]) {
+            countDown(5);
+        }
+    }
+    </input></program>
+    <solution>
+     <program language="java"><input>
+/** countDown(N) recursively prints a countdown
+  *  beginning at N and ending at 1
+  * @param N >= 1
+  * Base case: N == 0
+  */
+void countDown(int N) {
+    if (N == 0)                     // Base case
+        System.out.println("blastoff");
+    else {
+        System.out.print(N + ", "); // Recursive case
+        countDown(N - 1);
+    }
+} // countDown()
+ </input></program>
+    </solution>
+    </exercise>
+
+    <exercise>
+    <title>Count down by two</title>
+    <statement>
+          <p>
+            Revise the method in the previous exercise so that when it's called with 
+            <c>countDown(10)</c>, it will print
+            <q>10 8 6 4 2 blastoff</q>; if it's called with <c>countDown(9)</c>, it prints
+            <q>9 7 5 3 1 blastoff.</q>
+            The main program is completed for you.
+         </p>
+    </statement>
+    <program language="java" interactive="activecode"><input>
+    public class Main {
+
+        // Your static countDown() method definition goes here
+
+        public static void main(String args[]) {
+            countDown(10);
+            countDown(9);
+        }
+    }
+    </input></program>
+    <solution>
+     <program language="java"><input>
+/** countDown(N) recursively prints a countdown
+  *  beginning at N, counting every other number, 10 8 6 ...
+  *  and ending at "blastoff"
+  * @param N >= 1
+  * Base case: N &lt;= 0
+  */
+void countDown(int N) {
+    if (N &lt;= 0)                     // Base case
+        System.out.println("blastoff");
+    else {
+        System.out.print(N + ", "); // Recursive case
+        countDown(N - 2 );
+    }
+} // countDown()
+ </input></program>
+    </solution>
+    </exercise>    
+
+  </exercises>
+ </subsection>
+  <subsection xml:id="counting-characters">
+    <title>Counting Characters in a String</title>
+    <p>
+      Suppose you're writing an encryption program and you need to count the  frequencies 
+      of the letters of the alphabet.
+      Let's write a recursive method for this task.
+    </p>
+    <p>
+      This method will have two parameters:
+      a <c>String</c> to store the string that will be processed and a <c>char</c> to store the 
+      target character<mdash/>the one we want to count.
+      The method should return an <c>int</c>, representing the number of occurrences of the 
+      target character in the string:
+    </p>
+ <program language="java"><input>
+// Goal: count the occurrences of ch in s
+ public int countChar(String s, char ch) {
+     ...
+ }
+ </input></program>
+    <p>
+      Here again our analysis must identify a recursive step that breaks the problem into smaller,
+      self-similar versions of itself,
+      plus a base case or limiting case that defines the end of the recursive process.
+      Because the empty string will contain no target characters,
+      we can use  it as our base case.
+      So, if it is passed the empty string,
+<c>countChar()</c> should just return 0 as its result.
+    </p>
+    <p>
+      For the recursive case,
+      we can divide the string into its head and  tail.
+      If the head is the target character,
+      then the number of occurrences in the string is (1 + the number of occurrences in its tail).
+      If the head of the string is not the target character,
+      then the number of occurrences is (0 + the number of occurrences in its tail).
+      Of course, we'll use recursion to calculate the number of occurrences in the tail.
+    </p>
+    <p>
+      This analysis leads to the recursive method shown in <xref ref="fig-countch">Listing</xref>.
+      Note that for both recursive cases the
+      same recursive call is used.
+    </p>
+    <listing xml:id="fig-countch">
+      <caption>The recursive <c>countChar()</c> method.</caption>
+ <program language="java"><input>
+/**
+  * Pre:  s is a non-null String, ch is any character
+  * Post: countChar() == the number of occurrences of ch in str
+  */
+public int countChar(String s, char ch) {
+    if (s.length() == 0)    // Base case: empty string
+      return 0;
+    else if (s.charAt(0) == ch)  // Recursive case 1
+      return 1 + countChar(s.substring(1), ch); // Head = ch
+    else                         // Recursive case 2
+      return 0 + countChar(s.substring(1), ch); // Head != ch
+} // countChar()
+ </input></program>
+    </listing>
+    <p>
+      In both cases we pass the tail of the original string,
+      plus the target character.
+      Note also how the return statement is evaluated:
+    </p>
+ <program language="java"><input>
+return 1 + countChar(s.substring(1),ch); // Head = ch
+ </input></program>
+    <p>
+      Before the method can return a value,
+      it must receive the result of calling <c>countChar(s.substring(1),ch)</c> and add it to  1.
+      Only then can a result be returned to the calling method.
+      This leads to the following evaluation sequence for
+      <c>countChar("dad",'d')</c>:
+    </p>
+ <program language="java"><input>
+countChar("dad",'d');
+1 + countChar("ad",'d');
+1 + 0 + countChar("d",'d');
+1 + 0 + 1 + countChar("",'d');
+1 + 0 + 1 + 0 = 2              // Final result
+ </input></program>
+    <p>
+      In this way,
+      the final result of calling <c>countChar("dad",'d')</c> is built up 
+      recursively by adding together the partial results from each separate 
+      instance of <c>countChar()</c>. The evaluation process is shown graphically in 
+      <xref ref="fig-tracecount">Figure</xref>.
+    </p>
+    <figure xml:id="fig-tracecount">
+      <caption>A trace of
+      <c>countChar("dad",'d')</c>, which
+      returns the value 2.</caption>
+      <image width="60%" source="chptr12/tracecount.png"/>
+    </figure>
+    <principle>
+      <title>DEBUGGING TIP: Return Type</title>
+      <p>
+        A common error with nonvoid recursive algorithms is forgetting to 
+        make sure that those return statements that contain a recursive call 
+        yield the correct data type.
+      </p>
+    </principle>
+    
+  <exercises>
+    <title>Self-Study Exercises</title>
+    <activity>
+    <title>Tracing countChar()</title>
+    <statement>      
+          <p>
+            Use Codelens to step through the countChar() method, taking care to notice
+            the different state of the method on each recursive call. It should match
+            <xref ref="fig-tracecount">Figure</xref>.
+          </p>
+          <program language="java" interactive="activecode"><input>
+    public class Main {
+        /**
+          * Pre:  s is a non-null String, ch is any character
+          * Post: countChar() == the number of occurrences of ch in str
+          */
+        public static int countChar(String s, char ch) {
+              if (s.length() == 0)    // Base case: empty string
+                return 0;
+              else if (s.charAt(0) == ch)  // Recursive case 1
+                return 1 + countChar(s.substring(1), ch); // Head = ch
+              else                         // Recursive case 2
+                return 0 + countChar(s.substring(1), ch); // Head != ch
+        } // countChar()
+ 
+        public static void main(String args[]) {
+            System.out.println("The number of d's in dad = " 
+                + countChar("dad", 'd'));
+        }
+    }
+          </input></program>
+      </statement>
+    </activity>
+
+    <exercise>
+    <title>Sum of 1 to N</title>
+    <statement>
+          <p>
+            Here's a numerical problem.
+            Write a recursive method to compute the sum of 1 to <em>N</em>,
+            given <em>N</em> as a parameter. That is, 
+            <m>sum1toN(N) = 1+2+3+...+N</m>,  for <m>N >= 0</m>.
+          </p>
+    </statement>
+    <program language="java" interactive="activecode"><input>
+    public class Main {
+
+        // Your static sum1toN() method definition goes here
+
+        public static void main(String args[]) {
+            System.out.println("The sum of 1 to 10 = " 
+                  + andsum1toN(10));
+        }
+    }
+    </input></program>
+    <solution>
+     <program language="java"><input>
+    int sum1toN(int N) {
+        if (N == 0)
+            return 0;
+        else
+            return N + sum1toN(N-1);
+    }
+ </input></program>
+    </solution>
+    </exercise>
+    </exercises>
+ </subsection>
+  <subsection xml:id="string-translate">
+    <title>Translating a String</title>
+    <p>
+      A widely used string-processing task is to convert one string into another 
+      string by replacing one character with a substitute throughout the string.
+      For example, suppose we want to convert a Unix path name,
+      which uses the forward slash
+      <q>/</q>
+      to separate one part of the path from another, into a Windows path name,
+      which uses the backslash character 
+      <q><m>\backslash</m></q>
+      as a separator.
+      For example,
+      we want a method that can translate the following two strings into one another:
+    </p>
+ <program language="java"><input>
+/unix_system/myfolder/java
+\Windows_system\myfolder\java
+ </input></program>
+    <p>
+      Thus, we want a method that takes three parameters:
+      a <c>String</c>, on which the conversion will be performed,
+      and two <c>char</c> variables,
+      the first being the original character in the string and the second being its substitute.
+      The precondition for this method is simply that each of these three parameters has 
+      been properly initialized with a value.
+      The postcondition is that all occurrences of the first character have been replaced by the second character.
+    </p>
+    <p>
+      As in our previous  string-processing methods,
+      the limiting case in this problem is the empty string,
+      and the recursive case will divide the string into its head and its tail.
+      If the head is the character we want to replace,
+      we concatenate its substitute with the result we obtain by recursively converting its tail.
+    </p>
+    <p>
+      This analysis leads to the definition shown in <xref ref="fig-convert">Listing</xref>.
+      This method has more or less the same head and tail structure as the preceding example.
+      The difference is that here the operation we perform on the head of the 
+      string is concatenation rather than addition.
+    </p>
+    <listing xml:id="fig-convert">
+      <caption>The <c>convert()</c> method replaces one character with another
+      in a string.</caption>
+ <program language="java"><input>
+/**
+  * Pre:  str, ch1, ch2 have been initialized
+  * Post: the result contains a ch2 everywhere that ch1
+  *       had occurred in str
+  */
+public static String convert(String str, char ch1, char ch2) {
+    if (str.length() == 0)         // Base case: empty string
+      return str;
+    else if (str.charAt(0) == ch1) // Recursive 1: ch1 at head
+                                    // Replace ch1 with ch2
+      return ch2 + convert(str.substring(1), ch1, ch2);
+    else                       // Recursive 2: ch1 not at head
+      return str.charAt(0) + convert(str.substring(1), ch1, ch2);
+} // convert()
+ </input></program>
+    </listing>
+    <p>
+      The base case is still the case in which <c>str</c> is the empty string.
+      The first recursive case occurs when the character being replaced is the 
+      head of <c>str</c>. In that case,
+      its substitute (<c>ch2</c>) is concatenated with the result of converting 
+      the rest of the string and returned as the result.
+      The second recursive case occurs when the head of the string is <em>not</em>
+      the character being replaced.
+      In this case,
+      the head of the string is simply concatenated with the result of converting the rest of the string.
+      <xref ref="fig-traceconvert">Figure</xref>
+      shows an example of its execution.
+    </p>
+    <figure xml:id="fig-traceconvert">
+      <caption>A trace of <c>convert("bad",'d','m')</c>,
+      which returns
+      <q>bam.</q>
+      </caption>
+      <image width="60%" source="chptr12/traceconvert.png"/>
+    </figure>
+ 
+
+    <exercises>
+    <title>Self-Study Exercise</title>
+
+    <activity>
+    <title>Tracing convert()</title>
+    <statement>      
+          <p>
+            Use Codelens to step through the <c>convert()</c> method, taking care to notice
+            the different state of the method on each recursive call. It should match
+            <xref ref="fig-traceconvert">Figure</xref>.
+          </p>
+          <program language="java" interactive="activecode"><input>
+    public class Main {
+
+        public static String convert(String str, char ch1, char ch2) {
+            if (str.length() == 0)         // Base case: empty string
+              return str;
+            else if (str.charAt(0) == ch1) // Recursive 1: ch1 at head
+                                            // Replace ch1 with ch2
+              return ch2 + convert(str.substring(1), ch1, ch2);
+            else                       // Recursive 2: ch1 not at head
+              return str.charAt(0) + convert(str.substring(1), ch1, ch2);
+        } // convert()
+ 
+        public static void main(String args[]) {
+            System.out.println(convert("To be or not to be", 'b', 'm')); 
+        }
+    }
+          </input></program>
+      </statement>
+    </activity>    
+ 
+    <exercise>
+    <title>Add Blanks</title>
+      <statement>
+          <p>
+            Write a recursive method, <c> addBlanks()</c> that changes each 
+            blank in a string into two consecutive blanks,
+            leaving the rest of the string unchanged.
+          </p>
+      </statement>
+    <program language="java" interactive="activecode"><input>
+    public class Main {
+
+        // Your static addBlanks() method definition goes here
+
+        public static void main(String args[]) {
+            String str = "The rain in spain falls mainly on the   plain."
+            String result = addBlanks(str);
+            System.out.println(result);
+        }
+    }
+    </input></program>
+    <solution>
+     <program language="java"><input>
+String addBlanks(String s) {
+    if (s.length() == 0)
+      return "";
+    else if (s.charAt(0) == ' ')
+      return ' ' + s.charAt(0) + addBlanks(s.substring(1));
+    else
+      return s.charAt(0) + addBlanks(s.substring(1));
+}
+ </input></program>
+    </solution>      
+    </exercise>
+    </exercises>
+ </subsection>
+
+  <subsection xml:id="sec-cointoss">
+    <title>Printing all Possible Outcomes when Tossing N Coins</title>
+    <p>
+      Suppose that a student who is studying probability wishes to have a Java program that,
+      for any positive integer <m>N</m>,
+      will print out a list of all possible outcomes when <m>N</m> coins are tossed.
+      For purposes of analyzing the problem,
+      it is assumed that the coins are numbered <m>1</m> through <m>N</m> and that they are tossed one at a time.
+      An outcome will be represented by a string of <c>H</c>'s and <c>T</c>'s corresponding to heads and tails.
+    </p>
+    <p>
+      Thus, if <m>N = 2</m>,
+      the string <c>HT</c> represents a head on the first coin and a tail on the second coin.
+      What we need is a method  which,
+      when given the number of coins,
+      will print out all strings of this type.
+      In case of two coins the output should be:
+    </p>
+ <program language="java"><input>
+HH
+HT
+TH
+TT
+ </input></program>
+    <p>
+      Let's devise a strategy, given any positive integer <m>N</m>,
+      for printing the strings  that correspond to all possible outcomes when tossing <m>N</m> coins.
+      Clearly, for <m>N = 1</m>,
+      the method needs to print an <c>H</c> on one line and a <c>T</c> on the next line.
+    </p>
+    <p>
+      For an arbitrary number of coins <m>N</m>,
+      one way to generate all outcomes is to think of two kinds of strings<mdash/>those 
+      that start with an <c>H</c> and those that start with a <c>T</c>. The strings that start 
+      with <c>H</c> can be generated by inserting an <c>H</c> in front of each of the outcomes 
+      that occur when <m>N-1</m> coins are tossed.
+      The strings beginning with
+      <c>T</c> can be generated in a similar manner.
+      Thus, using the outcomes for two coins above,
+      we know that the outcomes for three coins for which the first coin is <c>H</c> are:
+    </p>
+ <program language="java"><input>
+HHH
+HHT
+HTH
+HTT
+ </input></program>
+    <p>
+      Using an argument similar to the one above,
+      we can generalize this to a description of the recursive case for an algorithm.
+      We want an algorithm that generates all those outcomes for <m>N</m> coins 
+      where we are given a string <c>STR</c> representing one particular outcome for 
+      all but the last <m>K</m> coins where <m>0 \lt K \lt = N</m>.
+    </p>
+    <p>
+      To print out all such outcomes,
+      just print all outcomes with a fixed outcome corresponding to <c>STR + "H"</c> for 
+      all but the last <m>K - 1</m> coins and then print all outcomes with the fixed outcome 
+      <c>STR + "T"</c> for all but the last <m>K - 1</m> coins.
+      The base case is the special case <m>K = 1</m> when you just need <c>STR
+      + "H"</c> on one line and <c>STR + "T"</c> on the next.
+      If you start the algorithm with <c>STR = ""</c> and <m>K = N</m>,
+      this algorithm will print out all the outcomes for tossing <m>N</m> coins.
+    </p>
+    <p>
+      To translate this into Java code we can create a method called 
+      <c>printOutcomes(String str,int N)</c>. The 
+      above recursive description easily translates into code for the method 
+      in <xref ref="fig-cointoss">Listing</xref>.
+    </p>
+    <listing xml:id="fig-cointoss">
+      <caption>The method <c>printOutcomes()</c> prints all outcomes given the
+      results on some initial coins.</caption>
+ <program language="java"><input>
+/**
+ * printOutcomes(str, N) prints out all possible outcomes
+ * beginning with str when N more coins are tossed.
+ * Pre: str is a string of Hs and Ts.
+ * Pre: N is a positive integer.
+ * Post: none
+ */
+ public static void printOutcomes(String str,int N){
+     if (N == 1) { // The base case
+         System.out.println(str + "H");
+         System.out.println(str + "T");
+     } else {  // The recursive case
+         printOutcomes(str + "H", N - 1);
+         printOutcomes(str + "T", N - 1);
+     } //else
+}// printOutcomes()
+ </input></program>
+    </listing>
+    <p>
+      To print out all outcomes when tossing, say, seven coins,
+      just make the method call <c>CoinToss.printOutcomes("",7)</c>. This particular 
+      call would generate the desired output:
+    </p>
+ <program language="java"><input>
+HHHHHHH
+HHHHHHT
+.......
+TTTTTTH
+TTTTTTT
+ </input></program>
+    <p>
+      To better understand how the recursive method definition generates its output,
+      it might be helpful to trace the order of recursive calls and output to 
+      <c>System.out</c> that occurs when executing <c>printOutcomes("",3)</c> 
+      as shown in <xref ref="fig-tracecointoss">Figure</xref>.
+    </p>
+    <figure xml:id="fig-tracecointoss">
+      <image width="40%" source="chptr12/cointoss.png"/>
+      <caption>Tracing the printOutcomes("",3) method.</caption>
+    </figure> 
+    <p>
+      Notice that the recursive case in the method implementation makes two 
+      calls to itself and as a result it is not so clear how this method 
+      would be written using a loop instead of recursion.
+      This example is more typical of the type of problem for which a 
+      recursive method is shorter and clearer than a method that solves the 
+      same problem without using recursion.
+    </p>
+    <exercises>
+    <title>Self-Study Exercise</title>
+    
+    <activity>
+    <title>Tracing printOutcomes()</title>
+    <statement>      
+          <p>
+            Use Codelens to step through the <c>printOutcomes</c>> method, taking care to notice
+            the different state of the method on each recursive call. Note that in this algorithm
+            there are two recursive calls in the recursive case.
+            It should match
+            <xref ref="fig-tracecointoss">Figure</xref>.
+          </p>
+          <program language="java" interactive="activecode"><input>
+    public class Main {
+ 
+        public static void printOutcomes(String str,int N){
+            if (N == 1) { // The base case
+                System.out.println(str + "H");
+                System.out.println(str + "T");
+            } else {  // The recursive case
+                printOutcomes(str + "H", N - 1);
+                printOutcomes(str + "T", N - 1);
+            } //else
+        }// printOutcomes()
+ 
+        public static void main(String args[]) {
+            printOutcomes("", 3);
+        }
+    }
+          </input></program>
+      </statement>
+    </activity>
+
+    <exercise>
+    <title>Chess Outcomes</title>
+      <statement>
+          <p>
+            Modify the above  <c>printOutcomes()</c> method so that it will print 
+            out all possible outcomes when a chess player plays a series of <m>N</m> games.
+            The outcome of each game is to be represented by a <c>W</c>, <c>L</c>, or <c>D</c> 
+            corresponding to the player winning,
+            losing, or drawing the game.
+          </p>
+      </statement>
+               <program language="java" interactive="activecode"><input>
+    public class Main {
+ 
+        public static void printOutcomes(String str,int N){
+            if (N == 1) { // The base case
+                System.out.println(str + "H");
+                System.out.println(str + "T");
+            } else {  // The recursive case
+                printOutcomes(str + "H", N - 1);
+                printOutcomes(str + "T", N - 1);
+            } //else
+        }// printOutcomes()
+ 
+        public static void main(String args[]) {
+            printOutcomes("", 3);
+        }
+    }
+          </input></program>
+      <solution>
+        <p>
+            A method to print out all possible outcomes for a chess player playing 
+            <c>N</c> games. <c>printOutcomes(str, N)</c> will print all outcomes for the 
+            next <c>N</c> games given that results for previous games are stored in the string named <c>str</c>.
+        </p>
+ <program language="java"><input>
+public static void printOutcomes(String str, int N){
+     if (N = 1) { // Base case: win, lose, or draw one game
+         System.out.println(str + "W");
+         System.out.println(str + "L");
+         System.out.println(str + "D");
+     } else {  // Recursive case
+         printOutcomes(str + "W", N - 1);
+         printOutcomes(str + "L", N - 1);
+         printOutcomes(str + "D", N - 1);
+     } //else
+ } // printOutcomes()
+ </input></program>
+      </solution>
+    </exercise>
+    </exercises>
+  </subsection>
+</section>

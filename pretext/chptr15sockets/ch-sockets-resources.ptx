@@ -1,5 +1,5 @@
-<section xml:id="adding-text-network-resourcesforan-application">
-  <title>Adding Text Network Resources for an
+<section xml:id="real-estate-app">
+  <title>The Real-Estate
   Application</title>
   <introduction>
     <p>
@@ -26,11 +26,11 @@
       one per line,
       giving it the following format:
     </p>
- <program language="java"><input>
-beautifulCape
-handsomeRanch
-lovelyColonial
- </input></program>
+ <pre>
+cape
+ranch
+colonial
+ </pre>
   </subsection>
   <subsection>
     <title>Downloading a Text File from the Web</title>
@@ -38,7 +38,12 @@ lovelyColonial
       This application requires us to solve two new problems:
     </p>
     <p>
-      \begin{NL} \item How do we download a text file of names that we want to use as menu items? \item How do we download a text file and display it in a <c>JTextArea</c>? \item How do we download and display an image file? \end{NL}
+      <ul><li><p>How do we download a text file of names that we want to use as menu items? 
+      </p></li>
+      <li><p> How do we download a text file and display it in a <c>JTextArea</c>? 
+        </p></li>
+        <li><p>  How do we download and display an image file? </p></li>
+        </ul>
     </p>
     <p>
       The <c>SlideShowFrame</c> solves the problem of downloading and displaying an image file.
@@ -69,15 +74,17 @@ lovelyColonial
       or whatever, you would use the following general algorithm:
     </p>
  <program language="java"><input>
-URL url;
 InputStream data;
 try {
-    url = new URL(fileURL);          // Create a URL
-    data = url.openStream(); // Open a stream to URL
-  // READ THE FILE INTO MEMORY} // Read dat
-    data.close();                     // Close the stream} catch (MalformedURLException e) { // Thrown by URL()
-    System.out.println(e.getMessage());} catch( IOException e ) {
-    System.out.println(e.getMessage());}
+    URL url = new URL(fileURL);          // Create a URL
+    data = url.openStream();   // Open a stream to URL
+                 // READ THE FILE INTO MEMORY
+    data.close();             // Close the stream
+  } catch (MalformedURLException e) { // Thrown by URL()
+    System.out.println(e.getMessage());
+  }   catch( IOException e ) {
+    System.out.println(e.getMessage()); // Thrown by openStream()
+  }
  </input></program>
     <p>
       The algorithm consists of four basic steps:
@@ -138,7 +145,8 @@ private void readTextIntoDisplay(URL url)
     display.append(line + "\n");// Add to display
     line = data.readLine();
   }
-  data.close();}// readTextIntoDisplay()
+  data.close();
+}// readTextIntoDisplay()
  </input></program>
     <p>
       The method is passed the file's URL and it uses the
@@ -156,20 +164,18 @@ private void readTextIntoDisplay(URL url)
 String line = data.readLine();
 while (line != null) {
     homeChoice.addItem(line);
-    line = data.readLine();}
+    line = data.readLine();
+  }
  </input></program>
   </subsection>
-  <subsection xml:id="fig-p838f1">
+  <subsection>  
     <title>Interface Design</title>
-    <figure xml:id="fig-realestategui">
-      <caption>User interface design for the real
-      estate application.</caption>
-      <image width="73%" source="chptr15/15f11.png"/>
-    </figure>
+    
     <p>
       The interface for this application is very important.
       It should provide some means to display a text file and an image.
-      The text file can be displayed in a <c>JTextArea</c>, and the image can be drawn on a <c>JPanel</c>.
+      The text file can be displayed in a <c>JTextArea</c>, and the image can be drawn on 
+      a <c>JPanel</c>.
     </p>
     <p>
       Next, let's consider the types of controls a user might need.
@@ -190,8 +196,12 @@ while (line != null) {
       borders, respectively.
       <xref ref="fig-realestategui">Figure</xref>
       illustrates these various design decisions.
-      <image width="73%" source="chptr15/p838f1.png"/>
-    </p>
+      </p>
+      <figure xml:id="fig-realestategui">
+        <caption>User interface design for the real
+        estate application.</caption>
+        <image width="90%" source="chptr15/15f11.png"/>
+      </figure>      
   </subsection>
   <subsection>
     <title>Problem Decomposition: <c>RealEstateViewer</c></title>
@@ -200,16 +210,34 @@ while (line != null) {
     </p>
     <p>
       The task of downloading the image and text files from the Web can be handled by the program's main class,
-      the <c>RealEstateViewer</c>, which will also handle the user interface (Fig.<nbsp/>15.16).
+      the <c>RealEstateViewer</c>, which will also handle the user interface (<xref ref="fig-real-estate-class">Figure</xref>).
       As the application's top-level window, <c>RealEstateViewer</c> will is subclass of <c>JFrame</c>. Because its controls will include a <c>JComboBox</c>, it must implement the <c>itemStateChanged()</c> method of the <c>ItemListener</c> interface.
     </p>
+    
+    <figure xml:id="fig-real-estate-class"><caption>RealEstateViewer Class</caption>
+    <image width="40%" source="chptr15/p838f1.png"/>
+    </figure>
+    
     <p>
       What components and other instance variables will we need for this class?
       According to our interface design,
       it will need a <c>JComboBox</c>, a <c>JTextArea</c>, and the <c>ImagePanel</c>. Because it will be downloading images,
       it will need an <c>Image</c> variable.
     </p>
-    <figure xml:id="fig-realviewer1">
+      <!-- <p>The constants used by this application include the URL string for the data file.
+      Also, because all the images and data files will start with the same prefix,
+    </p>
+ <program language="java"><input>
+http://java.trincoll.edu/&#126;jjjava/homes/
+ </input></program> 
+    <p>
+      we should make this a constant in the program. -->
+<p>
+      The initial version of <c>RealEstateViewer</c> is shown in <xref ref="list-realviewer1">Listing</xref>.
+      Note that the <c>main()</c> method merely creates an instance of the application and shows it.
+      Note also that the <c>currentImage</c> variable is declared <c>public</c>. This will let the <c>ImagePanel</c> have direct access to <c>currentImage</c> whenever it needs to display a new image.
+    </p>
+    <listing xml:id="list-realviewer1">
       <caption>The <c>RealEstateViewer</c>, Version 1.</caption>
  <program language="java"><input>
 import java.awt.*;
@@ -240,28 +268,23 @@ public class RealEstateViewer extends JFrame
         System.exit(0);  // Quit the application
       }
     });
-  }// main()}// RealEstateViewer
+  }// main()
+}// RealEstateViewer
  </input></program>
-    </figure>
-    <p>
-      The constants used by this application include the URL string for the data file.
-      Also, because all the images and data files will start with the same prefix,
-    </p>
- <program language="java"><input>
-http://java.trincoll.edu/&#126;jjjava/homes/
- </input></program>
-    <p>
-      we should make this a constant in the program.
-      These preliminary decisions lead to the initial version of <c>RealEstateViewer</c> shown in <xref ref="fig-realviewer1">Figure</xref>.
-      Note that the <c>main()</c> method merely creates an instance of the application and shows it.
-      Note also that the <c>currentImage</c> variable is declared <c>public</c>. This will let the <c>ImagePanel</c> have direct access to <c>currentImage</c> whenever it needs to display a new image.
-    </p>
+</listing>
+    
+    
   </subsection>
-  <subsection xml:id="fig-p839f1">
-    <title>The <c>ImagePanel</c>Class</title>
+  <subsection>
+    <title>The <c>ImagePanel</c> Class</title>
     <p>
       We'll use a second class,
-      the <c>ImagePanel</c>, to handle displaying the image (Figs.<nbsp/>15.18 <image width="73%" source="chptr15/p839f1.png"/> and <xref ref="fig-imagepanel"></xref>).
+      the <c>ImagePanel</c>, to handle displaying the image (<xref ref="fig-imagepanel">Figure</xref> 
+      and <xref ref="list-imagepanel">Listing</xref>).</p>
+      <figure xml:id="fig-imagepanel"><caption>ImagePanel Class</caption>
+        <image width="40%" source="chptr15/p839f1.png"/> 
+      </figure>
+     <p>
       The reason we use a separate class for this task is that we want the image to appear in its own panel
       (which appears on the West border of the main window).
       In addition to its constructor,
@@ -270,17 +293,7 @@ http://java.trincoll.edu/&#126;jjjava/homes/
       Its task is simply to get the current image from its parent frame and display it.
       Note that a reference to the parent frame is passed to the object in its constructor.
     </p>
-  </subsection>
-  <subsection>
-    <title>Method Decomposition</title>
-    <p>
-      The stub methods listed in the initial version of
-<c>RealEstateViewer</c>(Fig.
-      <xref ref="fig-realviewer1"></xref>) outline the main tasks required by the application.
-      Some of these methods are very simple and even trivial to implement.
-      Others should be broken up into subtasks.
-    </p>
-    <figure xml:id="fig-imagepanel">
+    <listing xml:id="list-imagepanel">
       <caption>The <c>ImagePanel</c> class.</caption>
  <program language="java"><input>
 import javax.swing.*;
@@ -293,9 +306,21 @@ public class ImagePanel extends JPanel {
     public void paintComponent(Graphics g) {
         if (frame.currentImage != null)
             g.drawImage(frame.currentImage, 0, 0, this);
-    }}// ImagePanel
+    }
+  }// ImagePanel
  </input></program>
-    </figure>
+</listing>
+  </subsection>
+  <subsection>
+    <title>Method Decomposition</title>
+    <p>
+      The stub methods listed in the initial version of
+<c>RealEstateViewer</c>(<xref ref="fig-realviewer1"></xref>) outline the main tasks 
+required by the application.
+      Some of these methods are very simple and even trivial to implement.
+      Others should be broken up into subtasks.
+    </p>
+
     <p>
       The constructor method should be responsible for creating the user interface,
       most of which will involve the routine tasks of registering a listener for the <c>homeChoice</c> menu and setting up an appropriate layout that implements the design we developed for the user interface:
@@ -309,7 +334,8 @@ public RealEstateViewer () {
     this.getContentPane().add("Center",imagePanel);
     display.setLineWrap(true);
     initHomeChoices();      // Set up choice box
-    showCurrentSelection(); // Display current home}
+    showCurrentSelection(); // Display current home
+  }
  </input></program>
     <p>
       Note the last two statements of the method.
@@ -327,7 +353,8 @@ public RealEstateViewer () {
     </p>
  <program language="java"><input>
 public void itemStateChanged(ItemEvent evt) {
-    showCurrentSelection();}
+    showCurrentSelection();
+  }
  </input></program>
   </subsection>
   <subsection>
@@ -354,7 +381,8 @@ private void initHomeChoices() {
     System.out.println( "ERROR: " + e.getMessage());
   } catch (IOException e) {
     System.out.println( "ERROR: " + e.getMessage());
-  }}// initHomeChoices()
+  }
+}// initHomeChoices()
  </input></program>
     <p>
       It uses the algorithm we developed earlier for downloading a text file.
@@ -425,7 +453,8 @@ private void showCurrentSelection() {
     System.out.println( "ERROR: " + e.getMessage()) ;
   } catch (IOException e) {
     System.out.println("ERROR: " + e.getMessage()) ;
-  } // Try/catch block} // showCurrentSelection()
+  } // Try/catch block
+} // showCurrentSelection()
  </input></program>
     <p>
       Note that we have also elected to handle both the
@@ -441,22 +470,23 @@ private void showCurrentSelection() {
 <c>private</c> utility method performs a standard file-reading algorithm using the <c>readLine()</c> method that we developed earlier.
       <xref ref="fig-realestatescreen">Figure</xref>
       provides a view of the program's appearance as it is displaying information to a user.
-      <xref ref="fig-realestateclass">Figure</xref>
+      <xref ref="list-realestateclass">Listing</xref>
       provides the complete implementation of this program.
     </p>
     <figure xml:id="fig-realestatescreen">
-      <caption>The <c>RealEstate- Viewer</c> program
-      downloads images and documents over the Web.</caption>
-      <image width="73%" source="chptr15/15f14.png"/>
+      <caption>The <c>RealEstate- Viewer</c> App.</caption>
+      <image width="73%" source="chptr15/homeviewerdisplay.png"/>
     </figure>
-    <figure xml:id="fig-realestateclass">
-      <caption>The <c>RealEstateViewer</c> class, Part I.</caption>
+    <listing xml:id="list-realestateclass">
+      <caption>The <c>RealEstateViewer</c> class</caption>
  <program language="java"><input>
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.io.*;
+import javax.imageio.*;
 import javax.swing.*;
+
 public class RealEstateViewer extends JFrame
                                 implements ItemListener {
   public static final int WIDTH=400,HEIGHT=200;
@@ -466,9 +496,10 @@ public class RealEstateViewer extends JFrame
     "http://java.trincoll.edu/&#126;jjjava/homes/";
   private JTextArea display = new JTextArea(20,20);
   private JComboBox homeChoice = new JComboBox();
-  private ImagePanel imagePanel = new ImagePanel(this);
+  private ImagePanel imagePanel = new ImagePanel(this); // use the ImagePanel class
   public Image currentImage = null;
-  public RealEstateViewer () {
+  
+  public RealEstateViewer () {   // Constructor
     super("Home Viewer Application"); // Set window title
     homeChoice.addItemListener( this);
     this.getContentPane().add("North",homeChoice);
@@ -478,6 +509,7 @@ public class RealEstateViewer extends JFrame
     initHomeChoices();        // Set up the choice box
     showCurrentSelection();   // Display the current home
   } // RealEstateViewer()
+
   private void initHomeChoices() {
     try {
       URL url = new URL(dataFileURL);
@@ -494,12 +526,7 @@ public class RealEstateViewer extends JFrame
         System.out.println("ERROR: " + e.getMessage()) ;
     }
   }// initHomeChoices()
- </input></program>
-    </figure>
-    <figure xml:id="fig_realestateviewercont">
-      <caption><em>(continued)</em><c>RealEstateViewer</c>, Part II.</caption>
-      
- <program language="java"><input>
+
 private void readTextIntoDisplay(URL url) throws IOException {
     BufferedReader data
       = new BufferedReader(
@@ -509,8 +536,10 @@ private void readTextIntoDisplay(URL url) throws IOException {
     while (line != null)  {         // Read each line
       display.append(line + "\n");  // And add it to the display
       line = data.readLine();
-    } data.close();
+    } 
+    data.close();
   }// readTextIntoDisplay()
+
   private void showCurrentSelection() {
     URL url = null;                          // Get user's choice
     String choice = homeChoice.getSelectedItem().toString();
@@ -528,9 +557,11 @@ private void readTextIntoDisplay(URL url) throws IOException {
         System.out.println("ERROR: " + e.getMessage()) ;
     }
   }// showCurrentSelection()
+  
   public void itemStateChanged(ItemEvent evt) {
     showCurrentSelection();
   } // itemStateChanged()
+  
   public static void main(String args[]) {
     RealEstateViewer viewer = new RealEstateViewer();
     viewer.setSize(viewer.WIDTH,viewer.HEIGHT);
@@ -540,9 +571,20 @@ private void readTextIntoDisplay(URL url) throws IOException {
         System.exit(0);    // Quit the application
       }
     });
-  }// main()}// RealEstateViewer
+  }// main()
+}// RealEstateViewer
  </input></program>
-    </figure>
+</listing>
+
+
+<activity><statement><p>Try the Real Estate App below. Pull down the menu to try different 
+  choices. 
+  <interactive iframe="iframe/repl-real-estate-app.html" width="100%" aspect="1:1"/>
+  </p></statement>
+  </activity>
+
+
+
   </subsection>
   <subsection>
     <title>Reusing Code</title>
@@ -552,7 +594,7 @@ private void readTextIntoDisplay(URL url) throws IOException {
 <c>javax.imageio.ImageIO.read()</c> method and other classes from the Java class library illustrate an important principle of object-oriented programming.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Code Reuse</title>
+      <title>EFFECTIVE DESIGN: Code Reuse</title>
       <p>
         Before writing code to perform a particular task,
         search the available libraries to see if there is already code that performs that task.
@@ -573,11 +615,39 @@ private void readTextIntoDisplay(URL url) throws IOException {
       <q>Is there a method that will do what I'm trying to do here?</q>
       That question should be the first question on your search through the libraries and reference books.
     </p>
- <program language="java"><input>
-http://java.sun.com/j2se/1.5.0/docs/api/
- </input></program>
-    <p>
-      \RHrightsec{15.6}{Client/Server Communication via <c>Socket</c> s}
-    </p>
+  </subsection>
+  <subsection><title>Self-Study Exercise</title>
+  
+       
+      <exercise label="createAppEx"><title>Create Your Own App</title><statement>
+        <p>Fork the repl below to create your own app for the Real Estate domain or another domain of your choice
+          where you want to display images and text.
+          Add your own images and text files by uploading them into your repl. 
+          You can change the code to use local files in the repl instead of a URL with the 
+          following code in the loop 
+          to read in the images in <c>initHomeChoices()</c>: 
+          <program language="java"><input>
+              // instead of the arg. new InputStreamReader(url.openStream()
+              BufferedReader data = new BufferedReader(new FileReader(filename));	 
+              // catch FileNotFoundFoundException 
+          </input></program>
+          You will also need to change the URL argument into a String argument in <c>readTextIntoDisplay(String filename)</c> and use 
+          the FileReader above, and use the File class to read in the image file in <c>readTextIntoDisplay()</c>:
+          <program language="java"><input>
+            // read in local file instead of url
+            File imageFile = new File(base + choice + ".jpg");  
+            currentImage = ImageIO.read(imageFile);
+        </input></program>
+        </p>
+        <interactive iframe="iframe/repl-real-estate-app.html" width="100%" aspect="1:1"/>
+      </statement>
+      <solution>
+         <p>See possible solution:
+          <url href="https://replit.com/@BerylHoffman/Real-Estate-App-with-files" visual="">
+            https://replit.com/@BerylHoffman/Real-Estate-App-with-files
+          </url>
+        </p>
+      </solution>
+        </exercise>
   </subsection>
 </section>

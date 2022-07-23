@@ -98,7 +98,8 @@ public class LetterFreq {
     }
     public void incrFreq() {
         freq++;
-    }} //LetterFreq
+    }
+  } //LetterFreq
  </input></program>
     </listing>
     <p>
@@ -191,13 +192,12 @@ public void printArray() {
     <p>
       The entire definition of <c>AnalyzeFreq</c> is
       given in <xref ref="lst-anafreq">Figure</xref>.
-      We will modify this class later in the chapter to be able to sort 
-      the array after counting.
+      
     </p>
     <listing xml:id="lst-anafreq">
       <caption>The <c>AnalyzeFreq</c> class definition.</caption>
       
- <program language="java" interactive="activecode"><input>
+ <program language="java"><input>
 public class AnalyzeFreq {
 
   private LetterFreq[] freqArr; //An array of frequencies
@@ -228,8 +228,9 @@ public class AnalyzeFreq {
  </input></program>
 </listing>
     <p>
-      We leave the coding of the <c>main()</c> method as an exercise.
-    </p>
+      We leave the coding of the <c>main()</c> method as an exercise below.
+      We will also modify this class later in the chapter to be able to sort 
+      the array after counting.</p>
 
 <exercises>
 <title>Self-Study Exercises</title>
@@ -244,6 +245,35 @@ public class AnalyzeFreq {
             computer related topics</q>.
           </p>
     </statement>
+    <program language="java" interactive="activecode"><input>
+      public class AnalyzeFreq {
+      
+        private LetterFreq[] freqArr; //An array of frequencies
+        
+        public AnalyzeFreq() {
+          freqArr = new LetterFreq[26];
+          for (int k = 0; k &lt; 26; k++) {
+            freqArr[k] = new LetterFreq((char)('A' + k), 0);
+          } //for
+        }
+        public void countLetters(String str) {
+          char let; //For use in the loop.
+          str = str.toUpperCase();
+          for (int k = 0; k &lt; str.length(); k++) {
+            let = str.charAt(k);
+            if ((let >= 'A') &amp;&amp; (let &lt;= 'Z')) {
+              freqArr[let - 'A'].incrFreq();
+            } //if
+          } //for
+        }
+        public void printArray() {
+          for (int k = 0; k &lt; 26; k++) {
+            System.out.print("letter: " + freqArr[k].getLetter());
+            System.out.println(" freq: " + freqArr[k].getFreq());
+          } //for
+        } 
+      } //AnalyzeFreq
+       </input></program>
     <solution>
  <program language="java"><input>
     public static void main(String[] argv) {

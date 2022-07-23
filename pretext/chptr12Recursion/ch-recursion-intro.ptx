@@ -2,22 +2,28 @@
   <title>Introduction</title>
   <introduction>
     <p>
-      The pattern in Figure<nbsp/>12.1 is known as the Sierpinski gasket.
+      The pattern in <xref ref="fig-sierpinski">Figure</xref> is known as the Sierpinski gasket.
       Its overall shape is that of an equilateral triangle.
       But notice how inside the outer triangle there are three smaller triangles that are similar to the overall pattern.
       And inside each of those are three even smaller triangles,
       and so on.
-      The Sierpinski gasket is known as a <em>fractal</em>
+      The Sierpinski gasket is known as a <term>fractal</term>
       because when you divide it up,
       you end up with a smaller version of the overall pattern.
       The overall gasket pattern is repeated over and over,
       at smaller and smaller scales, throughout the figure.
-      <image width="73%" source="chptr12/sierpinski1.png"/> How would you draw this pattern?
+    </p>
+    <figure xml:id="fig-sierpinski">
+    <caption>The Sierpinski gasket.</caption>
+    <image width="73%" source="chptr12/sierpinski1.png"/>
+    </figure>
+    <p>
+      How would you draw this pattern?
       If you try to use some kind of nested loop structure,
       you'll find that it is very challenging.
       It can be done using loops, but it isn't easy.
       On the other hand,
-      if you use an approach known as <em>recursion</em>,
+      if you use an approach known as <term>recursion</term>,
       this problem is much easier to solve.
       It's a little bit like the representation issue we discussed in Chapter<nbsp/>5.
       Your ability to solve a problem often depends on how you represent the problem.
@@ -25,13 +31,14 @@
       such as the problem of drawing the Sierpinski gasket.
     </p>
     <p>
-      The main goal of this chapter is to introduce recursion as both a problem-solving technique and as alternative to loops
+      The main goal of this chapter is to introduce recursion as both a problem-solving 
+      technique and as alternative to loops
       (which we discussed in Chapter<nbsp/>6)
       for implementing repetition.
-      We begin with the notion of a <em>recursive definition</em>,
+      We begin with the notion of a <term>recursive definition</term>,
       a concept used widely in mathematics and computer science.
       We then introduce the idea of a
-      <em>recursive method</em>,
+      <term>recursive method</term>,
       which is the way recursion is implemented in a program.
     </p>
     <p>
@@ -53,7 +60,7 @@
       A <term>recursive method</term>
           <idx><h>recursive method</h></idx>
       is a method that calls itself.
-      An <em>iterative method</em>
+      An <term>iterative method</term>
           <idx><h>iterative method</h></idx>
       is a method that uses a loop to repeat an action.
       In one sense, <em>recursion</em>
@@ -69,16 +76,19 @@
  <program language="java"><input>
 public void hello(int N)  {
     for (int k = 0; k &lt; N; k++)
-        System.out.println("Hello");} // hello()
+        System.out.println("Hello");
+} // hello()
  </input></program>
     <p>
       A recursive version of this method would be defined  as follows:
     </p>
  <program language="java"><input>
 public void hello(int N)  {
-    if (N > 0) \verb!{!
+    if (N > 0) {
         System.out.println("Hello");
-        hello(N - 1);                // Recursive call} // hello()
+        hello(N - 1);                // Recursive call
+    }
+} // hello()
  </input></program>
     <p>
       This method is recursive because it calls itself when
@@ -131,41 +141,186 @@ hello(5)
       recursion is often less efficient than iteration as a way to code a particular algorithm.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Efficiency</title>
+      <title>EFFECTIVE DESIGN: Efficiency</title>
       <p>
         Iterative algorithms and methods are generally more efficient than recursive algorithms that do the same thing.
       </p>
     </principle>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+    <exercises>
+      <title>Self-Study Exercises</title>
+      <exercise>
+      <title><c>mystery(5)</c>?</title>
+      <statement>
           <p>
             What would be printed if we call the following method with the expression <c>mystery(0)</c>?
- <program language="java"><input>
-public void mystery(int N) {
-    System.out.print(N + " ");
-    if (N &lt;= 5)
-        mystery(N + 1);} // mystery()
- </input></program>What about <c>mystery(100)</c>?
           </p>
-        </li>
-        <li>
+          <program language="java"><input>
+          public void mystery(int N) {
+              System.out.print(N + " ");
+              if (N &lt;= 5)
+                  mystery(N + 1);
+          } // mystery()
+          </input></program>
+      </statement>
+          <choices>
+        <choice correct="yes">
+            <statement>
+                <p>0 1 2 3 4 5 6</p>
+            </statement>
+            <feedback>
+                <p>Yes the recursion would end when <c>N > 5</c>.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p> 0 1 2 3 4 5</p>
+            </statement>
+            <feedback>
+                <p>What happens when N = 6?</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>1 2 3 4 5 6</p>
+            </statement>
+            <feedback>
+                <p>What happens when N = 0?</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>None of the above</p>
+            </statement>
+            <feedback>
+                <p>Try again.</p>
+            </feedback>
+        </choice>
+        </choices>
+        <hint>
+          <p>Try to trace the method calls, writing down the output as you go.</p>
+        </hint>
+      <solution>
+        <p> The output would be: 0 1 2 3 4 5 6. The 6 is printed before the recursion stops.</p>
+      </solution>
+      </exercise>   
+      <exercise>
+      <title><c>mystery(100)</c>?</title>
+      <statement>
           <p>
-            What would be printed if we call the following method with the expression <c>mystery(5)</c>?
- <program language="java"><input>
-public void mystery(int N) {
-    System.out.print(N + " ");
-    if (N &lt;= 5)
-        mystery(N - 1);} // mystery()
- </input></program>
+            What would be printed if we call the following method with the expression <c>mystery(100)</c>?
           </p>
-        </li>
-      </ol>
+          <program language="java"><input>
+          public void mystery(int N) {
+              System.out.print(N + " ");
+              if (N &lt;= 5)
+                  mystery(N + 1);
+          } // mystery()
+          </input></program>
+      </statement>
+          <choices>
+        <choice correct="no">
+            <statement>
+                <p>0 1 2 3 4 5 6 ... 100</p>
+            </statement>
+            <feedback>
+                <p>Look carefully at the <c>if</c> condition.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+                <p>100</p>
+            </statement>
+            <feedback>
+                <p>Right, no recursive calls would result in this case.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>100 99 98 ... 0</p>
+            </statement>
+            <feedback>
+                <p>Look carefully at the <c>if</c> condition.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>None of the above</p>
+            </statement>
+            <feedback>
+                <p>Try again.</p>
+            </feedback>
+        </choice>
+        </choices>
+        <hint>
+          <p>Try to trace the method calls, writing down the output as you go.</p>
+        </hint>
+      <solution>
+      <p>The output produced by <c>mystery(100)</c> would be 100.</p>
+      </solution>
+      </exercise>  
+     <exercise>
+      <title><c>mystery2(5)</c>?</title>
+      <statement>
+          <p>
+            What would be printed if we call the following method with the expression <c>mystery2(5)</c>?
+          </p>
+          <program language="java"><input>
+          public void mystery2(int N) {
+              System.out.print(N + " ");
+              if (N &lt;= 5)
+                  mystery2(N - 1);
+          } // mystery()
+          </input></program>
+      </statement>
+          <choices>
+        <choice correct="no">
+            <statement>
+                <p>5 4 3 2 1 0</p>
+            </statement>
+            <feedback>
+                <p>What makes it stop at 0??</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>5 4 3 2 1</p>
+            </statement>
+            <feedback>
+                <p>What makes it stop at 1?</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+                <p>5 4 3 2 1 0 -1 -2 -3 ... </p>
+            </statement>
+            <feedback>
+                <p>Right, the recursion never stops. It's infinite.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+                <p>None of the above</p>
+            </statement>
+            <feedback>
+                <p>Try again.</p>
+            </feedback>
+        </choice>
+        </choices>
+        <hint>
+          <p>Try to trace the method calls, writing down the output as you go.</p>
+        </hint>
+      <solution>
+        <p>The output produced by <c>mystery(5)</c> would be: 5 4 3 2 1 0 -1 -2 ...
+            In other words, this is an infinite recursion.</p>
+      </solution>
+      </exercise>       
+ </exercises>
  </subsection>
   <subsection>
     <title>Recursion as a Problem-Solving Approach</title>
     <p>
-      Given that recursion is not really necessary<mdash/>if a programming language has loops<mdash/>and is not more efficient than loops,
+      Given that recursion is not really necessary<mdash/>if a programming language 
+      has loops<mdash/>and is not more efficient than loops,
       why is it so important?
       The answer is that, in a broader sense,
       recursion is an effective approach to problem solving.
@@ -174,14 +329,17 @@ public void mystery(int N) {
     </p>
     <p>
       Recursion is based on two key problem-solving concepts:
-      <em>divide and conquer</em>
+      <term>divide and conquer</term>
           <idx><h>divide and conquer</h></idx>
-      and <em>self-similarity</em>.
+      and <term>self-similarity</term>.
           <idx><h>self-similarity</h></idx>
-      In recursive problem solving we use the divide-and-conquer strategy repeatedly to break a big problem into a sequence of smaller and smaller problems until we arrive at a problem that is practically trivial to solve.
+      In recursive problem solving we use the divide-and-conquer strategy repeatedly to break a 
+      big problem into a sequence of smaller and smaller problems until we arrive at a problem 
+      that is practically trivial to solve.
     </p>
     <p>
-      What allows us to create this series  of subproblems is that each subproblem is similar to the original problem<mdash/>that is,
+      What allows us to create this series  of subproblems is that each subproblem is 
+      similar to the original problem<mdash/>that is,
       each subproblem is just a smaller version of the original problem.
       Look again at the task of saying
       <q>Hello</q>
@@ -199,10 +357,9 @@ public void mystery(int N) {
       self-similar problems is at the heart of the recursive approach.
       And  although you might not have thought about this before,
       a surprising number of programming problems have this self-similarity characteristic.
-      Let's illustrate these ideas with some simple examples.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Divide and Conquer</title>
+      <title>PROGRAMMING TIP: Divide and Conquer</title>
       <p>
         Many programming problems can be solved by dividing them into smaller,
         simpler problems.

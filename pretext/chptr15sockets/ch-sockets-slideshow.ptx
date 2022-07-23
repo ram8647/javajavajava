@@ -1,30 +1,36 @@
-<section xml:id="the-slide-show-program">
-  <title>The Slide Show Program</title>
+<section xml:id="slideshow-app">
+  <title>The SlideShow Application</title>
   <subsection>
     <title>Problem Specification</title>
     <p>
       Let's suppose our slide show will repeatedly display a set of images named
-      <q>slide0.gif,</q>
-      <q>slide1.gif,</q>
-      and
-      <q>slide2.gif.</q>
-      Suppose these images are stored on a Web site on <c>www.cs.trincoll.edu</c> and are stored in a directory named <c>/<c>&#126;</c> ram/jjj/slideshow</c>.
-      This means our program will have to load the following three URLs:
+      <q>demo0.gif,</q>
+      <q>demo1.gif,</q>
+      <q>demo2.gif,</q>
+      <q>demo3.gif.</q>
+      Suppose these images are stored on a Web site on <c>www.cs.trincoll.edu</c>.
+      Our program will have to load the following four URLs:
     </p>
     <p>
       
     </p>
  <program language="java"><input>
-http://www.cs.trincoll.edu/&#126;ram/jjj/slideshow/slide0.gif
+  http://www.cs.trincoll.edu/&#126;ram/jjj/labs/ch09/slideshow/demo/demo0.gif
+  http://www.cs.trincoll.edu/&#126;ram/jjj/labs/ch09/slideshow/demo/demo1.gif
+  http://www.cs.trincoll.edu/&#126;ram/jjj/labs/ch09/slideshow/demo/demo2.gif
+  http://www.cs.trincoll.edu/&#126;ram/jjj/labs/ch09/slideshow/demo/demo3.gif
+
+</input></program>
+  <!-- http://www.cs.trincoll.edu/&#126;ram/jjj/slideshow/slide0.gif
 http://www.cs.trincoll.edu/&#126;ram/jjj/slideshow/slide1.gif
-http://www.cs.trincoll.edu/&#126;ramjjj/slideshow/slide2.gif
- </input></program>
+http://www.cs.trincoll.edu/&#126;ramjjj/slideshow/slide2.gif-->
+ 
     <p>
       We want our show to cycle endlessly through these images,
       leaving about 5 seconds between each slide.
     </p>
   </subsection>
-  <subsection xml:id="fig-p830f1">
+  <subsection>
     <title>User Interface Design</title>
     <p>
       The user interface for this program is graphical,
@@ -35,25 +41,31 @@ http://www.cs.trincoll.edu/&#126;ramjjj/slideshow/slide2.gif
  <program language="java"><input>
 public void paint(Graphics g) {
     if (currentImage != null)
-        g.drawImage(currentImage, 10, 10, this);}
+        g.drawImage(currentImage, 10, 10, this);
+}
  </input></program>
     <p>
       The assumption here is that the <c>currentImage</c> instance variable will be set initially to <c>null</c>. Each time an image is downloaded,
       it will be set to refer to that image.
       Because
 <c>paint()</c> is called before the program starts downloading the images,
-      it <image width="73%" source="chptr15/p830f1.png"/> is necessary to guard against attempting to draw a <c>null</c> image,
+      it  is necessary to guard against attempting to draw a <c>null</c> image,
       which would lead to an exception.
+
     </p>
+    
   </subsection>
   <subsection>
     <title>Problem Decomposition</title>
     <p>
-      One problem we face with this program is getting it to pause between \marginfigvspace{15pt}{chptr15/p830f2.eps}{The <c>Timer</c> class delays the frame thread between each slide.}{fig-p830f2} each slide.
-      One way to do this is to set up a loop that does nothing for about 5 seconds:
+      One problem we face with this program is getting it to pause
+       between each slide.
+      One way to do this is to set up a loop that does nothing for 
+      about 5 seconds:
     </p>
  <program language="java"><input>
-for (int k = 0; k &lt; 1000000; k++ ) ;// Busy waiting
+for (int k = 0; k &lt; 1000000; k++ ) 
+    ;// Busy waiting
  </input></program>
     <p>
       However, this isn't a very good solution.
@@ -66,23 +78,41 @@ for (int k = 0; k &lt; 1000000; k++ ) ;// Busy waiting
     <p>
       A much better design would be to use a separate timer thread,
       which can <c>sleep()</c> for 5 seconds between each slide.
+      <principle>
+        <title>EFFECTIVE DESIGN: Busy Waiting</title>
+        <p>
+          Instead of busy waiting,
+          a thread that sleeps for a brief period on each iteration is a better way to introduce a delay into an algorithm.
+        </p>
+      </principle>
       So our program will have two classes:
-      one to download and display the slides and one to serve as a timer (Figs.<nbsp/>15.10 and 15.11). ( Java Swing has a Timer class that works a little bit differently,
+      one to download and display the slides and one to serve as 
+      a timer (<xref ref="fig-p830f1">Figure</xref> and
+      <xref ref="fig-p830f2">Figure</xref>). 
+      (Java Swing has a Timer class that works a little bit differently,
       see the javadoc for a description.)
       <ul>
-        SlideShowFrame<mdash/>This <c>JFrame</c> subclass will take care of downloading and displaying the images and starting the timer thread.  Timer<mdash/>This class will implement the
+      <li><p>  SlideShowFrame<mdash/>This <c>JFrame</c> subclass 
+        will take care of downloading and displaying the images and 
+        starting the timer thread.  </p></li>
+        <li><p>Timer<mdash/>This class will implement the
 <c>Runnable</c> interface so that it can run as a separate thread.  It will repeatedly sleep for 5 seconds and then tell the frame to display the next side.
-      </ul>
+     </p></li> </ul>
     </p>
-    <principle>
-      <title>EFFECTIVE DESIGN:Busy Waiting</title>
-      <p>
-        Instead of busy waiting,
-        a thread that sleeps for a brief period on each iteration is a better way to introduce a delay into an algorithm.
-      </p>
-    </principle>
+   
+
+
+    <figure xml:id="fig-p830f1">
+      <caption>SlideShowFrame class</caption>
+      <image width="35%" source="chptr15/p830f1.png"/>
+    </figure>
+    <figure xml:id="fig-p830f2">
+      <caption>The <c>Timer</c> class delays the
+        frame thread between each slide.</caption>
+      <image width="45%" source="chptr15/p830f2.png"/>
+    </figure>
   </subsection>
-  <subsection xml:id="fig-p832f1">
+  <subsection>
     <title>The <c>SlideShowFrame</c> class</title>
     <p>
       What should we do with the images we download?
@@ -93,7 +123,7 @@ for (int k = 0; k &lt; 1000000; k++ ) ;// Busy waiting
       it would be wasteful to download it again.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Network Traffic</title>
+      <title>EFFECTIVE DESIGN: Network Traffic</title>
       <p>
         In general, a design that minimizes network traffic is preferable.
       </p>
@@ -109,11 +139,14 @@ for (int k = 0; k &lt; 1000000; k++ ) ;// Busy waiting
       Thus, our frame needs the following instance variables:
     </p>
  <program language="java"><input>
-private static final int NIMGS = 3;
+private static final int NIMGS = 4;
 private Image[] slide = new Image[NIMGS];
 private Image currentImage = null;
 private int nextImg = 0;
+private String baseURL = "http://www.cs.trincoll.edu/~ram/jjj/labs/ch09/slideshow/demo/";
  </input></program>
+
+
     <p>
       Given these variables,
       let's now write a method to take care of  choosing the next slide.
@@ -127,7 +160,8 @@ private int nextImg = 0;
 public void nextSlide() {
     currentImage = slide[nextImg];
     nextImg = (nextImg + 1) % NIMGS;
-    repaint();}// nextSlide()
+    repaint();
+ }// nextSlide()
  </input></program>
     <p>
       The method's algorithm is very simple.
@@ -138,7 +172,7 @@ public void nextSlide() {
       Finally, the method calls <c>repaint()</c> to display the image.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Modular Arithmetic</title>
+      <title>PROGRAMMING TIP: Modular Arithmetic</title>
       <p>
         Modular arithmetic (<c>x % N</c>) is useful for cycling repeatedly through the values <m>0, 1, \ldots, N-1</m>.
       </p>
@@ -164,24 +198,30 @@ public void nextSlide() {
       Here we just place these method calls in a loop:
     </p>
  <program language="java"><input>
-for (int k=0; k &lt; NIMGS; k++)
-    slide[k] = javax.imageio.ImageIO.read(getCodeBase(),
-                 "gifs/demo" + k + ".gif");
+for (int k=0; k &lt; NIMGS; k++) {
+  try {
+    slide[k] = ImageIO.read( new URL(baseURL +  "demo" + k + ".gif"));
+  }
+    catch (MalformedURLException e) {
+     System.out.println( "Malformed URL: " + e) ;
+  }
+   catch (IOException e) {
+     System.out.println("I/O Exception " + e);
+  }
+}
  </input></program>
     <p>
       Note here how we convert the loop variable <em>k</em>
       into a <c>String</c> and concatenate it right into the URL specification.
       This allows us to have URLs containing
-      <q>slide0.gif,</q>
-      <q>slide1.gif,</q>
-      and
-      <q>slide2.gif.</q>
+      <q>demo0.gif,</q> ... <q>demo3.gif</q>.
       This makes our program easily extensible should we later decide to add more slides to the show.
-      Note also the use of the class constant <c>NIMGS</c> as the loop bound.
+      Note also the use of the class constant <c>NIMGS</c> 
+      as the loop bound.
       This too adds to the program's extensibility.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Concatenation</title>
+      <title>PROGRAMMING TIP: Concatenation</title>
       <p>
         Concatenating an integer value (<c>k</c>) with a string lets you create file names of the form <c>file1.gif</c>, <c>file2.gif</c>, and so on.
       </p>
@@ -202,10 +242,14 @@ timer.start();
       and the <c>nextSlide()</c> method is an example of a
       <term>callback method</term>
           <idx><h>callback method</h></idx>
-      (Fig.<nbsp/>15.12).
+          (<xref ref="fig-callback">Figure</xref>).
+
+      <figure xml:id="fig-callback"><caption>Call Back</caption>
+      <image width="73%" source="chptr15/p832f1.png"/>
+      </figure>
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Callback</title>
+      <title>PROGRAMMING TIP: Callback</title>
       <p>
         Communication between two objects can often be handled using a callback technique.
         One object is passed a reference to the other object.
@@ -213,10 +257,11 @@ timer.start();
       </p>
     </principle>
     <p>
-      This completes our design and development of <c>SlideShowFrame</c>, which is shown in <xref ref="fig-slideframe">Figure</xref>.
-      <image width="73%" source="chptr15/p832f1.png"/>
+      This completes our design and development of <c>SlideShowFrame</c>, which is shown 
+      in <xref ref="list-slideframe">Listing</xref>.
+     
     </p>
-    <figure xml:id="fig-slideframe">
+    <listing xml:id="list-slideframe">
       <caption>The <c>SlideShowFrame</c> class.</caption>
  <program language="java"><input>
 import java.awt.*;
@@ -225,10 +270,12 @@ import javax.imageio.ImageIO;
 import java.net.*;
 public class SlideShowFrame extends JFrame  {
     public static final int WIDTH=300, HEIGHT=200;
-    private static final int NIMGS = 3;
+    private static final int NIMGS 4;
     private Image[] slide = new Image[NIMGS];
     private Image currentImage = null;
     private int nextImg = 0;
+    private String baseURL = "http://www.cs.trincoll.edu/~ram/jjj/labs/ch09/slideshow/demo/";
+
     public void paint(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -241,18 +288,29 @@ public class SlideShowFrame extends JFrame  {
         repaint();
     }// nextSlide()
     public SlideShowFrame() {
-        for (int k=0; k &lt; NIMGS; k++)
-            slide[k] = ImageIO.read(getCodeBase(),
-                             "gifs/demo" + k + ".gif");
+        for (int k=0; k &lt; NIMGS; k++) {
+          try {
+            slide[k] = ImageIO.read( new URL(baseURL +  "demo" + k + ".gif"));
+          }
+            catch (MalformedURLException e) {
+             System.out.println( "Malformed URL: " + e) ;
+          }
+           catch (IOException e) {
+             System.out.println("I/O Exception " + e);
+          }
+        }
+            
         Thread timer = new Thread(new Timer(this));
         timer.start();
         setSize( WIDTH, HEIGHT );
-    }// constructor}// SlideShowFrame
+        show();
+    }// constructor
+  }// SlideShowFrame
  </input></program>
-    </figure>
+</listing>
   </subsection>
-  <subsection xml:id="self-study-exerciseP36">
-    <title>The <c>Timer</c>Class</title>
+  <subsection>
+    <title>The <c>Timer</c> Class</title>
     <p>
       The <c>Timer</c> class is a subclass of <c>Thread</c>, which means it must implement the <c>run()</c> method.
       Recall that we never directly  call a thread's <c>run()</c> method.
@@ -265,7 +323,8 @@ public class SlideShowFrame extends JFrame  {
  <program language="java"><input>
 while (true) {
     frame.nextSlide();
-    sleep( 5000 );}
+    sleep( 5000 );
+}
  </input></program>
     <p>
       However, recall that <c>Thread.sleep()</c> throws the
@@ -280,11 +339,11 @@ while (true) {
     <p>
       Given these design decisions,
       the complete implementation of
-<c>Timer</c> is shown in <xref ref="fig-timerthread">Figure</xref>.
+<c>Timer</c> is shown in <xref ref="list-timerthread">Listing</xref>.
       To see how it works, download it from the
       <em>Java, Java, Java</em> Web site and run it.
     </p>
-    <figure xml:id="fig-timerthread">
+    <listing xml:id="list-timerthread">
       <caption>The <c>Timer</c> class.</caption>
  <program language="java"><input>
 public class Timer implements Runnable {
@@ -301,14 +360,46 @@ public class Timer implements Runnable {
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
-    }// run()}// Timer
+    }// run()
+  }// Timer
  </input></program>
-    </figure>
-  </subsection>  
-    <subsection>
+    </listing>
+  
+    <activity>
+      <statement>
+      <p>Try the SlideShow program below on replit.</p>
+      <interactive iframe="iframe/repl-slideshow1.html" width="100%" aspect="1:1"/>
+-</statement>
+    </activity>
+
+    <exercises>
     <title>Self-Study Exercise</title>
-      <ol>
-        <li>
+     
+    <exercise label="slideshowEx"><title>Create Your Own Slideshow</title><statement>
+      <p>Fork the repl below to create your own slideshow or animation. 
+        Add your own images by uploading them into your repl. Make sure you rename them to be 
+        numbered consecutively. You can change the code to use local files in the repl 
+        instead of a URL with the following code in the loop 
+        to read in the images in <c>SlideShowFrame()</c> constructor:
+        <program language="java"><input>
+          // Use File for local file in replit project instead of URL
+          File imageFile = new File("image" + k + ".jpg");  
+          slide[k] = ImageIO.read(imageFile);
+        </input></program>
+        You can change the Timer sleep amount to control the speed of the animation.
+      </p>
+      <interactive iframe="iframe/repl-slideshow1.html" width="100%" aspect="1:1"/>
+      <!-- <interactive iframe="iframe/repl-slideshow-local-files.html" width="100%" aspect="1:1"/> -->
+    </statement>
+    <solution>
+      <p>See possible solution:
+      <url href="https://replit.com/@BerylHoffman/SlideShowWithFiles" visual="">https://replit.com/@BerylHoffman/SlideShowWithFiles
+      </url>
+    </p>
+    </solution>
+      </exercise>
+
+    <exercise label="designSound"><title>Design Soundtrack</title><statement>
           <p>
             Describe the design changes you would make to
 <c>SlideShowFrame</c> if you wanted to play a soundtrack along with your slides.
@@ -316,7 +407,54 @@ public class Timer implements Runnable {
             <q>sound0.au,</q>
             sound1.au,'' and so forth, on your Web site.
           </p>
-        </li>
-      </ol>
+          </statement>
+          <solution>
+            <p>
+              To play sounds along with slides in the <c>SlideShowFrame</c>, you would make the following modifications to the code:
+   <program language="java"><input>
+  private Clip soundClip[] = new Clip[NIMGS];
+  private Clip currentClip = null;
+   </input></program>Declare an array of <c>URL</c> s to store the URLs of the audio files you want to play.
+              Assign Clips to the array at the same time you input the images:
+   <program language="java"><input>
+  for (int k=0; k &lt; NIMGS; k++) {
+    url =
+     new URL( "http://www.cs.trincoll.edu/&#126;ram/jjj/slide" +
+                                                k + ".gif");
+    slide[k] = imageIO.read( url );
+    URL soundURL =
+     new URL("http://www.cs.trincoll.edu/&#126;ram/jjj/sound" +
+                                                 k + ".au");
+    AudioInputStream audio =
+      AudioSystem.getAudioInputStream(url);
+    DataLine.Info info = new DataLine.Info(Clip.class,
+                 audio.getFormat());
+    soundClip[k] = (Clip) AudioSystem.getLine(info);
+  }
+   </input></program>
+   Change the nextSlide() code to the following
+   <program language="java"><input>
+  public void nextSlide() {
+      currentClip.stop(); // stop sound playback
+      currentClip = soundClip[nextImg]; // get next soundClip
+      currentClip.setFramePosition(0); // start clip at beginning
+      currentImage = slide[nextImg];
+      nextImg = ( nextImg + 1) % NIMGS;
+      repaint ();
+    }
+   </input></program>Each time an image is displayed in <c>paint()</c>, play the corresponding sound by using the URL from the array:
+   <program language="java"><input>
+  public void paint(Graphics g) {
+      if (currentImage != null) {
+          g.drawImage(currentImage,10,10,this);
+          currentClip.start();
+      }
+    }
+   </input></program>
+            </p>
+          </solution>
+          </exercise>
+        </exercises>
+        
   </subsection>
 </section>

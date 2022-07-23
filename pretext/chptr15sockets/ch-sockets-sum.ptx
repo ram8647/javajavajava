@@ -2,87 +2,104 @@
 <title>Chapter Summary</title>
 <subsection>
 <title>Technical Terms</title>
-    <p>
+<table>
+  <tabular>
+<row>
+<cell>
     busy waiting
-      </p>
-      <p>
+      </cell>
+      <cell>
         callback method
-      </p>
-      <p>
+      </cell>
+      <cell>
         client
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         client/server protocols
-      </p>
-      <p>
+      </cell>
+
+        <cell>
         domain name
-      </p>
-      <p>
+      </cell>
+      <cell>
         ethernet protocol
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         File Transfer Protocol (FTP)
-      </p>
-      <p>
+      </cell>
+      <cell>
         get
-      </p>
-      <p>
+      </cell>
+
+      <cell>
         HyperText Transfer Protocol (HTTP)
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         internet
-      </p>
-      <p>
+      </cell>
+      <cell>
         Internet
-      </p>
-      <p>
+      </cell>
+      <cell>
         Internetworking Protocol (IP)
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         Java Server Page (JSP)
-      </p>
-      <p>
+      </cell>
+      <cell>
         packet
-      </p>
-      <p>
+      </cell>
+      <cell>
         port
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         post
-      </p>
-      <p>
+      </cell>
+
+      <cell>
         protocol
-      </p>
-      <p>
+      </cell>
+      <cell>
         router
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         sandbox security model
-      </p>
-      <p>
+      </cell>
+      <cell>
         scriptlet
-      </p>
-      <p>
+      </cell>
+ 
+      <cell>
         server
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         servlet
-      </p>
-      <p>
+      </cell>
+      <cell>
         Simple Mail Transfer Protocol (SMTP)
-      </p>
-      <p>
+      </cell>
+      <cell>
         socket
-      </p>
-      <p>
+      </cell>
+    </row><row>
+      <cell>
         trusted code
-      </p>
-      <p>
+      </cell>
+      <cell>
         Uniform Resource Locator (URL)
-      </p>
-      <p>
+      </cell>
+      <cell>
         World Wide Web (WWW)
-      </p>
+      </cell>
+    </row>
+    </tabular></table>
 </subsection>
 <subsection>
 <title>Summary of Important Points</title>      
@@ -159,132 +176,11 @@
           </li>
         </ul>
 </subsection>
-<subsection>
-<title>Answers to Self-Study Exercises</title> 
-        <ul>
-          <li>
-            <p>
-              The fully connected mesh topology requires the most cables.
-            </p>
-          </li>
-          <li>
-            <p>
-              The fully connected mesh topology would have the most potential to use alternate routes if one of the host computers crashed.
-            </p>
-          </li>
-          <li>
-            <p>
-              The star topology would be rendered completely useless if its central hub crashed.
-            </p>
-          </li>
-          <li>
-            <p>
-              Prentice Hall's Web server is located at
-   <program language="java"><input>
-  http://www.prenhall.com
-   </input></program>The protocol is <c>http</c>. The host computer is named <c>www</c>. Prentice Hall's domain name is <c>prenhall</c>, and it is part of the
-  <c>com</c>(commercial) Internet domain.
-            </p>
-          </li>
-          <li>
-            <p>
-              \begin{ANSBL}
-            </p>
-          </li>
-          <li>
-            <p>
-              For buying a piece of software at a bookstore,
-              the server would be the sales clerk.
-              The protocol would be to select the software from off the shelf,
-              bring it to the checkout counter,
-              give the sales clerk money, and get a receipt.
-            </p>
-          </li>
-          <li>
-            <p>
-              For buying a piece of software over the phone,
-              the server would be the telephone sales clerk.
-              The protocol would be to select from a catalog,
-              provide the sales clerk with your credit card information,
-              and say goodbye.
-            </p>
-          </li>
-          <li>
-            <p>
-              For buying a piece of software over the Internet,
-              the server would be the computer that handles the transaction.
-              The protocol would be to select the item from a Web-based form,
-              provide the form with personal and payment information,
-              and click on the Buy button. \end{ANSBL}
-            </p>
-          </li>
-          <li>
-            <p>
-              To play sounds along with slides in the <c>SlideShowFrame</c>, you would make the following modifications to the code:
-   <program language="java"><input>
-  private Clip soundClip[] = new Clip[NIMGS];
-  private Clip currentClip = null;
-   </input></program>Declare an array of <c>URL</c> s to store the URLs of the audio files you want to play.
-              Assign Clips to the array at the same time you input the images:
-   <program language="java"><input>
-  for (int k=0; k &lt; NIMGS; k++) {
-    url =
-     new URL( "http://www.cs.trincoll.edu/&#126;ram/jjj/slide" +
-                                                k + ".gif");
-    slide[k] = imageIO.read( url );
-    URL soundURL =
-     new URL("http://www.cs.trincoll.edu/&#126;ram/jjj/sound" +
-                                                 k + ".au");
-    AudioInputStream audio =
-      AudioSystem.getAudioInputStream(url);
-    DataLine.Info info = new DataLine.Info(Clip.class,
-                 audio.getFormat());
-    soundClip[k] = (Clip) AudioSystem.getLine(info);}
-   </input></program>Change the nextSlide() code to the following
-   <program language="java"><input>
-  public void nextSlide() {
-      currentClip.stop(); // stop sound playback
-      currentClip = soundClip[nextImg]; // get next soundClip
-      currentClip.setFramePosition(0); // start clip at beginning
-      currentImage = slide[nextImg];
-      nextImg = ( nextImg + 1) % NIMGS;
-      repaint ();}
-   </input></program>Each time an image is displayed in <c>paint()</c>, play the corresponding sound by using the URL from the array:
-   <program language="java"><input>
-  public void paint(Graphics g) {
-      if (currentImage != null) {
-          g.drawImage(currentImage,10,10,this);
-          currentClip.start();
-      }}
-   </input></program>
-            </p>
-          </li>
-          <li>
-            <p>
-              The scramble service would be implemented by defining two new classes: The <c>ScrambleServer</c> class is a subclass of <c>Server</c>, and the <c>ScrambleClient</c> class is a subclass of <c>Client</c>. The <c>ScrambleClient</c> would implement the <c>requestService()</c> method and the <c>ScrambleServer</c> would implement the
-  <c>provideService()</c> method.
-            </p>
-          </li>
-          <li>
-            <p>
-              \begin{ANSBL}
-            </p>
-          </li>
-          <li>
-            <p>
-              If you specify the wrong host name or port,
-              you will get the following exception:
-  <c>java.net.ConnectException: Connection refused</c>.
-            </p>
-          </li>
-          <li>
-            <p>
-              If you leave off the <c>\n</c> in the <c>writeToSocket()</c> call,
-              nothing will go wrong because the <c>writeToSocket()</c> method will catch this error and add the end-of-line character to the string before sending it to the server.
-              The server reads lines from the client,
-              so every communication must end with <c>\n</c> or the protocol will break down. \end{ANSBL}
-            </p>
-          </li>
-        </ul>
-</subsection>      
+
+
+
+<solutions scope="chapter-sockets" divisional="solution" project="solution" inline="solution">
+  <title>Solutions to Self-Study Exercises</title>
+</solutions>
+     
 </section>          
