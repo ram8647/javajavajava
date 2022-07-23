@@ -1,0 +1,182 @@
+<section xml:id="ch-template-exs">
+    <title>Chapter Exercises</title>
+    <p><term>Note:</term> For programming exercises, <term>first</term> draw a UML class diagram 
+    describing all classes and their inheritance relationships and/or associations.}
+      </p>
+      <p>
+    <ol>
+      <li>
+        <p>
+          Explain the difference between the following pairs of terms:
+          <ol>
+            Blocked and <em>ready</em>. Priority and <em>round-robin</em> scheduling. Producer and <em>consumer</em>. Monitor and <em>lock</em>. Concurrent and <em>time slicing</em>. Mutual exclusion and <em>critical section</em>. Busy and <em>nonbusy</em> waiting.
+          </ol>
+        </p>
+       </li>
+      <li>
+        <p>
+          Fill in the blanks.
+          <ol>
+            <li>
+              <p>
+                <c>__________</c> happens when a CPU's time is divided among several different threads.
+              </p>
+            </li>
+            <li>
+              <p>
+                A method that should not be interrupted during its execution is known as a <c>__________</c> .
+              </p>
+            </li>
+            <li>
+              <p>
+                The scheduling algorithm in which each thread gets an equal portion of the CPU's time is known as <c>__________</c> .
+              </p>
+            </li>
+            <li>
+              <p>
+                The scheduling algorithm in which some threads can preempt other threads is known as <c>__________</c>.
+              </p>
+            </li>
+            <li>
+              <p>
+                A <c>__________</c> is a mechanism that enforces mutually exclusive access to a synchronized method.
+              </p>
+            </li>
+            <li>
+              <p>
+                A thread that performs an I/O operation may be forced into the <c>__________</c> state until the operation is completed.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </li>
+      <li>
+        <p>
+          Describe the concept of <em>time slicing</em>
+          as it applies to CPU scheduling.
+        </p>
+      </li>
+      <li>
+        <p>
+          What's the difference in the way concurrent threads would be implemented on a computer with several processors and on a computer with a single processor?
+        </p>
+      </li>
+      <li>
+        <p>
+          Why are threads put into the <em>blocked</em>
+          state when they perform an I/O operation?
+        </p>
+      </li>
+      <li>
+        <p>
+          What's the difference between a thread in the sleep state and a thread in the ready state?
+        </p>
+      </li>
+      <li>
+        <p>
+          <term>Deadlock</term> is a situation that occurs when one thread is holding a resource that another thread is waiting for,
+          while the other thread is holding a resource that the first thread is waiting for.
+          Describe how deadlock can occur at a four-way intersection with cars entering from each branch.
+          How can it be avoided?
+        </p>
+      </li>
+      <li>
+        <p>
+          <term>Starvation</term> can occur if one thread is repeatedly preempted by other threads.
+          Describe how starvation can occur at a four-way intersection and how it can be avoided.
+        </p>
+      </li>
+      <li>
+        <p>
+          Use the <c>Runnable</c> interface to define a thread that repeatedly generates random numbers in the interval 2 through 12.
+        </p>
+      </li>
+      <li>
+        <p>
+          Create a version of the <c>Bakery</c> program that uses two clerks to serve customers.
+        </p>
+      </li>
+      <li>
+        <p>
+          Modify the <c>Numbers</c> program so that the user can interactively create <c>NumberThread</c> s and assign them a priority.
+          Modify the <c>NumberThread</c> s so that they print their numbers indefinitely
+          (rather than for a fixed number of iterations).
+          Then experiment with the system by observing the effect of introducing threads with the same,
+          lower, or higher priority.
+          How do the threads behave when they all have the same priority?
+          What happens when you introduce a higher-priority thread into the mix?
+          What happens when you introduce a lower-priority thread into the mix?
+        </p>
+      </li>
+      <li>
+        <p>
+          Create a bouncing ball simulation in which a single ball (thread) bounces up and down in a vertical line.
+          The ball should bounce off the bottom and top of the enclosing frame.
+        </p>
+      </li>
+      <li>
+        <p>
+          Modify the simulation in the previous exercise so that more than one ball can be introduced.
+          Allow the user to introduce new balls into the simulation by pressing the space bar or clicking the mouse.
+        </p>
+      </li>
+      <li>
+        <p>
+          Modify your solution to the previous problem by having the balls bounce off the wall at a random angle.
+        </p>
+      </li>
+      <li>
+        <p>
+          <term>Challenge:</term> One type of producer/consumer problem is the
+          <em>reader/writer</em> problem.
+          Create a subclass of
+		<c>JTextField</c> that can be shared by threads,
+          one of which writes a random number to the text field,
+          and the other of which reads the value in the text field.
+          Coordinate the two threads so that the overall effect of the program will be to print the values from 0 to 100 in the proper order.
+          In other words,
+          the reader thread shouldn't read a value from the text field until there's a value to be read.
+          The writer thread shouldn't write a value to the text field until the reader has read the previous value.
+        </p>
+      </li>
+      <li>
+        <p>
+          <term>Challenge:</term> Create a streaming banner thread that moves a simple message across a panel.
+          The message should repeatedly enter at the left edge of the panel and exit from the right edge.
+          Design the banner as a subclass of <c>JPanel</c> and have it implement the <c>Runnable</c> interface.
+          That way it can be added to any user interface.
+          One of its constructors should take a <c>String</c> argument that lets the user set the banner's message.
+        </p>
+      </li>
+      <li>
+        <p>
+          <term>Challenge:</term> Create a slide show program,
+          which repeatedly cycles through an array of images.
+          The action of displaying the images should be a separate thread.
+          The frame thread should handle the user interface.
+          Give the user some controls that let it pause, stop, start,
+          speed up, and slow down the images.
+        </p>
+      </li>
+      <li>
+        <p>
+          <term>Challenge:</term> Create a horse race simulation,
+          using separate threads for each of the horses.
+          The horses should race horizontally across the screen,
+          with each horse having a different vertical coordinate.
+          If you don't have good horse images to use,
+          just make each horse a colored polygon or some other shape.
+          Have the horses implement the <c>Drawable</c> interface,
+          which we introduced in Chapter<nbsp/>{chapter-inheritance}. 
+        </p>
+      </li>
+      <li>
+        <p>
+		<term>Challenge:</term> Create a multithreaded digital clock application.
+          One thread should keep time in an endless while loop.
+          The other thread should be responsible for updating the screen each second.        
+          </p>
+      </li>
+    </ol>
+    </p>
+</section> 

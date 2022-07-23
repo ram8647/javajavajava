@@ -1,0 +1,405 @@
+<section xml:id="fromthe-java-library2">
+  <title>From the Java Library: <c>java.lang.Thread</c></title>
+  <introduction>
+  <p>
+  The <c>java.lang.Thread</c> class contains the public methods shown
+in <xref ref="fig-thread-intf">Figure</xref>
+ (the figure contains only a partial list).  Note that
+<c> Thread</c> implements the <c> Runnable</c> interface, which consists
+simply of the <c>run</c> method.  As we will now see, another way to
+create a thread is to instantiate a <c> Thread</c> object and pass it a
+<c>Runnable</c> object that will become its body. This approach allows
+you to turn an existing class into a separate thread.
+</p>
+    <p>
+    <figure xml:id="fig-thread-intf">
+        <caption>The <c>java.lang.Thread</c> Class.</caption>
+        <image width="73%" source="chptr14/p708f1.png"/>
+      </figure>
+	 </p>
+        <p>
+    <figure xml:id="fig-runnable-intf">
+        <caption>Any object that implements the <c> Runnable</c> 
+interface can be run as a separate thread.</caption>
+        <image width="73%" source="chptr14/p709f1.png"/>
+      </figure>
+	 </p>
+    <p>
+A <c>Runnable</c> object is any object that implements the <c>
+Runnable</c> interface---that is, any object that implements the 
+<c>run()</c> method (<xref ref="fig-runnable-intf">Figure</xref>). 
+ The following example provides an
+alternative way to implement the <c>NumberThread</c> program:
+</p>
+
+ <program language="java"><input>
+public class NumberPrinter implements Runnable {
+    int num;
+
+    public void NumberPrinter(int n) {
+        num = n;
+    }
+
+    public void run() {
+        for (int k=0; k &lt; 10; k++)
+            System.out.print(num);
+    } // run()
+} // NumberPrinter
+ </input></program>
+ 
+<p> Given this definition, we would then pass instances of this class to
+the individual threads as we create them:
+</p>
+ <program language="java"><input>
+public class Numbers {
+  public static void main(String args[]) {
+
+    Thread number1, number2, number3, number4, number5;
+     // Create and start each thread
+    number1 = new Thread(new NumberPrinter(1)); number1.start(); 
+    number2 = new Thread(new NumberPrinter(2)); number2.start();
+    number3 = new Thread(new NumberPrinter(3)); number3.start();
+    number4 = new Thread(new NumberPrinter(4)); number4.start();
+    number5 = new Thread(new NumberPrinter(5)); number5.start();
+  } // main()
+} // Numbers
+ </input></program>
+
+<p> The <c> NumberPrinter</c> class implements
+<c> Runnable</c> by defining exactly the same <c> run()</c> that was used
+previously in the <c> NumberThread</c> class.  We then pass instances of
+<c> NumberPrinter</c> when we create the individual threads.  Doing
+things this way gives exactly the same output as earlier.  This example
+serves to illustrate another way of creating a multithreaded program:
+<ul>
+<li>
+<p>
+Implement the <c> Runnable</c> interface for an existing class
+ by implementing the <c> void run()</c> method, which contains the
+ statements to be executed by that thread.
+</p>
+</li>
+<li>
+<p>
+Create several <c> Thread</c> instances by first creating
+ instances of the <c> Runnable</c> class and passing each instance as
+ an argument to the <c>Thread()</c> constructor. 
+ </p>
+</li>
+<li>
+<p>
+For each thread instance, start it by invoking the <c>start()</c> 
+ method on it.
+</p>
+</li>
+</ul>
+</p>
+<principle>
+<title>Thread Creation</title>
+<p>
+A thread can be created by
+passing a <c> Runnable</c> object to a new <c>Thread</c> instance.  The
+object's <c>run()</c> method will be invoked automatically as soon as
+the thread's <c>start()</c> method is called.
+</p>
+</principle>
+<principle>
+<title>Converting a Class to a Thread</title>
+<p>
+Using the <c>Runnable</c> interface to create threads enables you to turn an existing
+class into a thread.  For most applications, using the <c> Runnable</c>
+interface is preferable to redefining the class as a <c> Thread</c>
+subclass.
+</p>
+</principle>
+</introduction>
+<subsection><title>Self-Study Exercise</title>
+      <p>
+      <ol>
+        <li>
+          <p>
+Use the <c>Runnable</c> interface to convert the
+following class into a thread.  You want the
+thread to print all the odd numbers up to its bound:
+ <program language="java"><input>
+public class PrintOdds {
+    private int bound;
+    public void PrintOdds(int b) {
+        bound = b;
+    }
+
+    public void print() {
+        if (int k = 1; k &lt; bound; k+=2)
+            System.out.println(k);
+    }
+} // PrintOdds
+</input></program>
+          </p>
+        </li>
+      </ol>
+    </p>
+</subsection>
+
+<subsection>
+    <title>Thread Control</title>
+    <p>
+The various methods in the <c>Thread</c> class (Fig.~14.4)
+can be used to exert some control over a thread's execution.  The <c>start()</c> and
+<c>stop()</c> methods play the obvious roles of starting and stopping a
+thread.  These methods will sometimes be called automatically.
+For example, an applet is treated as a thread by the browser,
+or appletviewer, which is responsible for starting and stopping it.
+</p>
+<p>
+As we saw in the <c>NumberThread</c> example, the <c>run()</c> method
+encapsulates the thread's basic algorithm.   It is usually not called
+directly.  Instead, it is called by the thread's <c>start()</c> method,
+which handles any system-dependent initialization tasks before calling
+<c>run()</c>.
+</p>
+</subsection>
+<subsection>
+    <title>Thread Priority</title>
+<p>
+The <c>setPriority(int)</c> method lets you set a thread's priority to
+an integer value between <c>Thread.MIN\_PRIORITY</c> and
+<c>Thread.MAX\_PRIOR\-ITY</c>, the bounds defined as constants in the
+<c>Thread</c> class.  Using <c>set\-Prior\-ity()</c> gives you some control over a
+thread's execution.  In general, higher-priority threads get to run
+before, and longer than, lower-priority threads.
+</p>  
+<principle>
+<title>Preemption</title>
+<p> 
+A higher-priority thread that
+wants to run will {\it preempt} any threads of lower priority.
+</p>
+</principle>
+<p>
+To see how {\tt setPriority()} works, suppose we change
+<c>NumberThread</c>'s constructor to the following:
+</p>
+<program language="java"><input>
+public NumberThread(int n) {
+    num = n;
+    setPriority(n);
+}
+</input></program> 
+<p>
+In this case, each thread sets its priority to its ID number.
+So, thread five will have priority five, a higher priority than
+all the other threads.   Suppose we now run 2 million iterations of
+each of these threads.  Because 2 million iterations will take a long
+time if we print the thread's ID on each iteration, let's modify the
+<c>run()</c> method, so that the ID is printed every 1 million
+iterations:
+</p>
+<program language="java"><input>
+for (int k = 0; k &lt; 10; k++)
+    if (k % 1000000 == 0)
+        System.out.print(num);
+</input></program> 
+<p>
+Given this modification, we get the following output when we
+run  <c>Numbers()</c>}:
+</p>
+<program language="java"><input>
+5544332211
+</input></program> 
+<p>
+It appears from this output that the threads ran to completion
+in priority order.  Thus, thread five completed 2 million iterations before
+thread four started to run, and so on.  This shows that, on my system at
+least, the Java Virtual Machine (JVM) supports priority scheduling.
+</p>
+<principle>
+<title>Platform Dependence.</title>
+<p>
+Thread implementation in Java is platform dependent.  Adequate testing is 
+necessary to ensure that a program will perform correctly on a given platform.
+</p>
+</principle>
+<principle>
+<title>Thread Coordination.</title>
+<p>
+One way to coordinate the behavior of two threads is to give one thread 
+higher priority than another.
+</p>
+</principle>
+<principle>
+<title>Starvation.</title>
+<p>
+A high-priority thread that never gives up the CPU can starve lower-priority 
+threads by preventing them from accessing the CPU.
+</p>
+</principle>
+</subsection>
+<subsection>
+    <title>Forcing Threads to Sleep</title>
+    <p>The <c>Thread.sleep()</c> and <c>Thread.yield()</c> methods also
+provide some control over a thread's behavior.  When executed by
+a thread, the <c>yield()</c> method causes the thread to
+yield the CPU, allowing the thread scheduler to choose another
+thread.  The <c>sleep()</c> method causes the thread to yield
+and not to be scheduled until a certain amount of real time
+has passed.
+    </p>
+<principle>
+<title>Sleep Versus Yield.</title>
+<p>
+Both the <c>yield()</c> and <c>sleep()</c> methods yield the CPU, but the <c>sleep()</c> method
+keeps the thread from being rescheduled for a fixed amount of real
+time.
+</p>
+</principle>
+  <p>
+The <c>sleep()</c> method can halt a running thread for a given number
+of milliseconds, allowing other waiting threads to run.  The <c>sleep()</c>
+ method throws an <c>InterruptedException</c>, which is a
+checked exception.  This means that the <c>sleep()</c> call must be
+embedded within a <c>try/catch</c> block or the method it's in must
+throw an <c>InterruptedException</c>.  Try/catch blocks were covered in
+Chapter 10.
+</p>  
+<program language="java"><input>
+try {
+    sleep(100);
+} catch (InterruptedException e) {
+    System.out.println(e.getMessage());
+}
+</input></program> 
+<p>
+   For example, consider the following version of the
+<c>NumberPrinter.run()</c>:
+</p>
+  <program language="java"><input>
+public void run() {
+    for (int k=0; k &lt; 10; k++) {
+        try {
+            Thread.sleep((long)(Math.random() * 1000));
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.print(num);
+    } // for
+} // run()
+</input></program> 
+ <p>
+ In this example, each thread is forced to sleep for a random
+number of milliseconds between 0 and 1,000. When a thread sleeps, it
+gives up the CPU, which allows one of the other waiting threads to
+run.  As you would expect, the output we get from this example will
+reflect the randomness in the amount of time that each thread sleeps:
+ </p>
+ <program language="java"><input>
+14522314532143154232152423541243235415523113435451
+</input></program> 
+<p>
+As we will see, the <c>sleep()</c> method provides a
+rudimentary form of thread synchronization, in which one thread
+yields control to another.
+</p>
+</subsection>
+<subsection><title>Self-Study Exercises</title>
+      <p>
+      <ol>
+        <li>
+          <p>
+What happens if you run five <c>NumberThread</c>s of equal priority
+through 2 million iterations each? Run this experiment and note the
+output.  Don't print after every iteration! What sort of scheduling
+algorithm (round-robin, priority scheduling, or something else) was used
+to schedule threads of equal priority on your system?
+          </p>
+        </li>
+        <li>
+          <p>
+Try the following experiment and note the output.   Let each thread
+sleep for 50 milliseconds (rather than a random number of
+milliseconds). How does this affect the scheduling of the threads? To
+make things easier to see, print each thread's ID after every 100,000
+iterations.
+          </p>
+        </li>
+        <li>
+          <p>
+The purpose of the Java garbage collector is to recapture
+memory that was used by objects that are no longer being
+used by your program.  Should its thread have higher or
+lower priority than your program?
+          </p>
+        </li>
+      </ol>
+    </p>
+</subsection>
+<subsection>
+    <title>The Asynchronous Nature of Threaded Programs</title>
+    <p>
+Threads are <term>asynchronous</term>. This means that the order of execution
+and the timing of a set of threads are unpredictable, at
+least from the programmer's point of view.  Threads are executed under
+the control of the scheduling algorithm used by the operating system
+and the Java Virtual Machine.  In general, unless threads are
+explicitly synchronized, it is impossible for the programmer to
+predict when and for how long an individual thread will
+run.  In some systems, under some circumstances, a thread might run to
+completion before any other thread can run.  In other systems, or
+under different circumstances, a thread might run for a short time and
+then be suspended while another thread runs. Of course, when a thread
+is preempted by the system, its state is saved so that its execution
+can be resumed without losing any information.    
+</p> 
+<p>
+One implication of a thread's asynchronicity is that it is not
+generally possible to determine where in its source code an individual
+thread might be preempted.  You can't even assume that a thread will
+be able to complete a simple Java arithmetic operation once it has started
+it.   For example, suppose a thread had to execute the following
+operation:
+</p>
+ <program language="java"><input>
+int N = 5 + 3;
+</input></program> 
+<p>
+This operation computes the sum of 5 and 3 and assigns the result to
+<c>N</c>.  It would be tempting to think that once the thread started
+this operation, it would be able to complete it, but that is not
+necessarily so.  You have to remember that Java code is compiled into
+a rudimentary bytecode, which is translated still further into
+the computer's machine language.   In machine language, this operation
+would break down into something like the following three steps:
+</p>
+<program language="java"><input>
+Fetch 5 from memory and store it in register A.
+Add 3 to register A.
+Assign the value in register A to N.
+</input></program>
+<p>
+Although none of the individual machine instructions can
+be preempted, the thread could be interrupted between any two machine
+instructions.  The point here is that not even a single Java language
+instruction can be assumed to be indivisible or unpreemptible.
+Therefore, it is impossible to make any assumptions about when a
+particular thread will run and when it will give up the CPU. This
+suggests the following important principle of multithreaded programs:
+</p>
+<principle>
+      <title>Asynchronous Thread Principle</title>
+<p>
+Unless they are explicitly prioritized or synchronized, threads behave in a completely
+<em>asynchronous</em> fashion.
+</p>
+</principle>
+<principle>
+      <title>Thread Timing.</title>
+<p>
+Unless they are explicitly synchronized, you cannot make any assumptions about when, or
+in what order, individual threads will execute, or where a thread might be interrupted 
+or preempted during its execution.
+</p>
+</principle>
+<p>
+As we will see, this principle plays a large role in the design of multithreaded programs.
+</p>
+</subsection>
+</section>

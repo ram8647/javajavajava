@@ -1,0 +1,303 @@
+<section xml:id="ch-threads-sum">
+    <title>Chapter Summary</title>
+    <subsection>
+      <title>Technical Terms</title> 
+      <p>
+       <tabular>
+       <row>
+      <cell>asynchronous</cell>
+      <cell>monitor</cell>
+      <cell>ready queue</cell>
+       </row>
+       <row>
+      <cell>blocked</cell>
+      <cell>multitasking</cell>
+      <cell>round-robin scheduling</cell>
+       </row>
+       <row>
+      <cell>busy waiting</cell>
+      <cell>multithreaded</cell>
+      <cell>scheduling algorithm</cell>
+       </row>
+       <row>
+      <cell>concurrent</cell>
+      <cell>mutual exclusion</cell>
+      <cell>task</cell>
+       </row>
+       <row>
+      <cell>critical section</cell>
+      <cell>priority scheduling</cell>
+      <cell>thread</cell>
+       </row>
+       <row>
+      <cell>dispatched</cell>
+      <cell>producer/consumer model</cell>
+      <cell>thread life cycle</cell>
+       </row>
+       <row>
+      <cell>fetch-execute cycle</cell>
+      <cell>quantum</cell>
+      <cell>time slicing</cell>
+       </row>
+       <row>
+      <cell>lock</cell>
+      <cell>queue</cell>
+      <cell></cell>
+       </row>
+      </tabular>
+    </p>
+</subsection>
+<subsection>
+ <title>Important Points</title>
+    <p>
+      <ul>
+        Multitasking is the technique of executing several tasks at the same time within a single program.  In Java we give each task a separate <em>thread of execution</em>, thus resulting in a <em>multithreaded</em> program.
+        <li>
+          <p>
+            A <em>sequential</em> computer with a single
+            <em>central processing unit (CPU)</em>
+            can execute only one machine instruction at a time.
+            A <em>parallel</em> computer uses multiple CPUs operating simultaneously to execute more than one instruction at a time.
+          </p>
+        </li>
+        <li>
+          <p>
+            Each CPU uses a <em>fetch-execute cycle</em>
+            to retrieve the next machine instruction from memory and execute it.
+            The cycle is under the control of the CPU's internal clock,
+            which typically runs at several hundred
+            <em>megahertz</em><mdash/>where 1 megahertz (MHz) is 1 million cycles per second.
+            Time slicing is the technique whereby several threads can share a single CPU over a given time period.
+            Each thread is given a small slice of the CPU's time under the control of some kind of scheduling algorithm.
+          </p>
+        </li>
+        <li>
+          <p>
+            In <em>round-robin scheduling</em>,
+            each thread is given an equal slice of time,
+            in a first-come<ndash/>first-served order.
+            In <em>priority scheduling</em>,
+            higher-priority threads are allowed to run before lower-priority threads are run.
+          </p>
+        </li>
+        <li>
+          <p>
+            There are generally two ways of creating threads in a program.
+            One is to create a subclass of <c>Thread</c> and implement a
+<c>run()</c> method.
+            The other is to create a <c>Thread</c> instance and pass it a <c>Runnable</c> object<mdash/>that is,
+            an object that implements <c>run()</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>sleep()</c> method removes a thread from the CPU for a determinate length of time,
+            giving other threads a chance to run.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>setPriority()</c> method sets a thread's priority.
+            Higher-priority threads have more and longer access to the CPU.
+          </p>
+        </li>
+        <li>
+          <p>
+            Threads are <em>asynchronous</em>.
+            Their timing and duration on the CPU are highly sporadic and unpredictable.
+            In designing threaded programs,
+            you must be careful not to base your algorithm on any assumptions about the threads' timing.
+          </p>
+        </li>
+        <li>
+          <p>
+            To improve the responsiveness of interactive programs,
+            you could give compute-intensive tasks,
+            such as drawing lots of dots,
+            to a lower-priority thread or to a thread that sleeps periodically.
+          </p>
+        </li>
+        <li>
+          <p>
+            A thread's life cycle consists of ready, running,
+            waiting, sleeping, and blocked states.
+            Threads start in the ready state and are dispatched to the CPU by the scheduler,
+            an operating system program.
+            If a thread performs an I/O operation,
+            it blocks until the I/O is completed.
+            If it voluntarily sleeps, it gives up the CPU.
+          </p>
+        </li>
+        <li>
+          <p>
+            According to the <em>producer/consumer</em> model,
+            two threads share a resource,
+            one serving to produce the resource and the other to consume the resource.
+            Their cooperation must be carefully synchronized.
+          </p>
+        </li>
+        <li>
+          <p>
+            An object that contains <c>synchronized</c> methods is known as a <em>monitor</em>.
+            Such objects ensure that only one thread at a time can execute a synchronized method.
+            The object is <em>locked</em> until the thread completes the method or voluntarily sleeps.
+            This is one way to ensure mutually exclusive access to a resource by a collection of cooperating threads.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <c>synchronized</c> qualifier can also be used to designate a method as a
+            <em>critical section</em>,
+            whose execution should not be preempted by one of the other cooperating threads.
+          </p>
+        </li>
+        <li>
+          <p>
+            In designing multithreaded programs,
+            it is useful to assume that if a thread <em>can</em>
+            be interrupted at a certain point,
+            it <em>will</em> be interrupted there.
+            Thread coordination should never be left to chance.
+          </p>
+        </li>
+        <li>
+          <p>
+            One way of coordinating two or more cooperating threads is to use the <c>wait/notify</c> combination.
+            One thread waits for a resource to be available,
+            and the other thread notifies when a resource becomes available.
+          </p>
+        </li>
+      </ul>
+    </p>
+  </subsection>  
+
+<subsection>
+<title>Solutions to Self-Study Exercises</title>
+    <p>
+      <ol>
+        <li>
+          <p>
+             <program language="java"><input>
+public class PrintOdds implements Runnable {
+  private int bound;
+  public PrintOdds(int b) {
+   bound = b;
+  }
+  public void print() {
+    if (int k = 1; k &lt; bound; k+=2)
+      System.out.println(k);
+  }
+  public void run() {
+    print();
+  }}
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            On my system, the experiment yielded the following output,
+            if each thread printed its number after every 100,000 iterations:
+ <program language="java"><input>
+1111112222222211111111333333322222221111113333333
+222224444444433333344444445555555544444555555555555
+ </input></program>This suggests that round-robin scheduling is being used.
+          </p>
+        </li>
+        <li>
+          <p>
+            If each thread is given 50 milliseconds of sleep on each iteration,
+            they tend to run in the order in which they were created:
+ <program language="java"><input>
+123451234512345...
+ </input></program>
+          </p>
+        </li>
+        <li>
+          <p>
+            The garbage collector runs whenever the available memory drops below a certain threshold.
+            It must have higher priority than the application,
+            since the application won't be able to run if it runs out of memory.
+          </p>
+        </li>
+        <li>
+          <p>
+            To improve the responsiveness of an interactive program,
+            the system could give a high priority to the threads that interact with the user and a low priority to those that perform noninteractive computations,
+            such as number crunching.
+          </p>
+        </li>
+        <li>
+          <p>
+            If the JVM were single threaded,
+            it wouldn't be possible to break out of an infinite loop,
+            because the program's loop would completely consume the CPU's attention.
+          </p>
+        </li>
+        <li>
+          <p>
+            If round-robin scheduling is used,
+            each thread will be get a portion of the CPU's time,
+            so the GUI thread will eventually get its turn.
+            But you don't know how long it will be before the GUI gets its turn,
+            so there might still be an unacceptably long wait before the user's actions are handled.
+            Thus, to <em>guarantee</em> responsiveness,
+            it is better to have the drawing thread sleep on every iteration.
+          </p>
+        </li>
+        <li>
+          <p>
+            If <c>Dotty</c>'s priority is set to 1, a low value,
+            this does improve the responsiveness of the interface,
+            but it is significantly less responsive than using a <c>sleep()</c> on each iteration.
+          </p>
+        </li>
+        <li>
+          <p>
+            In a real bakery only one customer at a time can take a number.
+            The take-a-number gadget
+            <q>enforces</q>
+            mutual exclusion by virtue of its design: There's room for only one hand to grab the ticket and there's only one ticket per number.
+            If two customers got
+            <q>bakery rage</q>
+            and managed to grab the same ticket,
+            it would rip in half and neither would benefit.
+          </p>
+        </li>
+        <li>
+          <p>
+            One experiment to run would be to make the clerk's performance very slow by using large sleep intervals.
+            If the algorithm is correct,
+            this should not affect the order in which customers are served.
+            Another experiment would be to force the clerk to work fast but the customers to work slowly.
+            This should still not affect the order in which the customers are served.
+          </p>
+        </li>
+        <li>
+          <p>
+            You should observe that the waiting line builds up as customers enter the bakery,
+            but the clerk should still serve the customers in the correct order.
+          </p>
+        </li>
+        <li>
+          <p>
+            A two-ball version of Pong would require the following changes to the original version:
+            <ol>
+              <li>
+                <p>
+                  A new <c>Ball()</c> constructor that has parameters to set the initial location and direction of the ball.
+                </p>
+              </li>
+              <li>
+                <p>
+                  The <c>PongFrame</c> should create a new <c>Ball</c> instance,
+                  start it,
+                  and draw it.
+                </p>
+              </li>
+            </ol>
+          </p>
+        </li>
+      </ol>
+    </p>
+</subsection>
+</section>
