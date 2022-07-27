@@ -5,12 +5,16 @@
       A <term>fractal</term> is a geometric shape that exhibits a recursive structure.
       When it is divided into parts,
       each part is a  smaller version of the whole.
+    </p>
+    <p>
       Fractal patterns occur in many situations and places.
       For example,
       if you look at a graph of the Dow Jones Industrial Average (DJIA) over the past year,
       the graph for each day is similar to the graph of each month,
       which is similar to the graph of each year, and so on.
       Each part is a reduced-scale version of the whole.
+    </p>
+    <p>  
       Fractals also occur throughout nature.
       If you look at a coastline from an airplane,
       the shape of each part of the coastline,
@@ -23,26 +27,33 @@
       So, fractal patterns are all around us.
       Because of their self-similarity and divisibility,
       fractals are well-suited for recursive programming.
-      Drawing recursive patterns is also an excellent way to illustrate how to use parameters to create generality in method design.
+      Drawing recursive patterns is also an excellent way to illustrate how to use 
+      parameters to create generality in method design.
+    </p>
+    <p>
       In this section,
       we will develop two simple patterns and incorporate them into a GUI.
     </p>
   </introduction>
-  <subsection xml:id="fig-boxes2">
+  <subsection xml:id="sec-boxes2">
     <title>Nested Squares</title>
     <p>
       Earlier in this chapter,
-      we developed a recursive definition for drawing a nested squares pattern (Fig.<nbsp/>12.2).
+      we developed a recursive definition for drawing a nested squares pattern 
+      (<xref ref="fig-boxes">Figure</xref>).
       Now let's develop a recursive method that actually draws the pattern.
       For this pattern, the base case is the drawing of the square.
       The recursive case, if more divisions are desired,
       is the drawing of smaller patterns within the square:
     </p>
+<algorithm>
+<title>Nested squares</title>
  <program language="java"><input>
 Draw a square.
 If more divisions are desired
     draw a smaller version of pattern within square.
  </input></program>
+</algorithm>
     <p>
       An important consideration for this algorithm is to specify precisely what we mean by
       <q>if more divisions are desired.</q>
@@ -55,18 +66,27 @@ If more divisions are desired
     <p>
       Another more general way to do this is to describe the fractal structure in terms of its <em>levels</em>.
       For nested squares,
-      the  level-zero pattern would be just the basic square shape (Fig.<nbsp/>12.21).
-      A level-one pattern would be the basic <image width="73%" source="chptr12/boxes2.png"/> square shape plus an inner square,
+      the  level-zero pattern would be just the basic square shape 
+      (<xref ref="fig-boxes2">Figure</xref>).
+      A level-one pattern would be the basic  square shape plus an inner square,
       and so on.
       The higher the level, the more subdividing we do.
       Therefore, one way to control the recursion is to use a <em>level</em>
       parameter as the <em>recursion parameter</em><mdash/>as the parameter that controls the recursion:
     </p>
+    <figure xml:id="fig-boxes2">
+    <caption>Levels of squares.</caption>
+    <image width="40%" source="chptr12/boxes2.png"/>
+    </figure>
+
+<algorithm>
+<title>Level based nested squares</title>    
  <program language="java"><input>
 Draw a square.
 If the level is greater than 0,
     draw a smaller version of pattern within square.
  </input></program>
+</algorithm>
     <p>
       What other parameters will we need for this method?
       If we're going to draw a rectangle,
@@ -80,15 +100,15 @@ If the level is greater than 0,
       let's use another parameter for this value.
     </p>
     <p>
-      These design considerations suggest the method shown in <xref ref="fig-drawboxes">Figure</xref>.
+      These design considerations suggest the method shown in <xref ref="fig-drawboxes">Listing</xref>.
       Note that we must also provide a
-<c>Graphics</c> parameter so the method can use the <c>drawRect()</c> method to draw the square.
+      <c>Graphics</c> parameter so the method can use the <c>drawRect()</c> method to draw the square.
       As we decided,
       the <c>level</c> parameter controls the recursion.
       Note that its value is decreased by 1 in the recursive call.
       This will ensure that <c>level</c> will eventually reach 0, and recursion will stop.
     </p>
-    <figure xml:id="fig-drawboxes">
+    <listing xml:id="fig-drawboxes">
       <caption>The <c>drawBoxes()</c> method.</caption>
       
  <program language="java"><input>
@@ -103,12 +123,13 @@ private void drawBoxes(Graphics g, int level,
            int locX, int locY, int side, int delta) {
   g.drawRect(locX, locY, side, side );
   if (level > 0) {
-    int newLocX = locX + delta; int newLocY = locY + delta;
-    drawBoxes(g, level - 1, newLocX, newLocY,
-                                   side - 2 * delta, delta);
-  } // if} // drawBoxes()
+    int newLocX = locX + delta; 
+    int newLocY = locY + delta;
+    drawBoxes(g, level - 1, newLocX, newLocY, side - 2 * delta, delta);
+  } // if
+} // drawBoxes()
  </input></program>
-    </figure>
+    </listing>
     <p>
       Finally, note the use of the <c>delta</c> parameter,
       which is used to change the length of the sides by a fixed amount, <c>2 * delta</c>, at each level.
@@ -121,38 +142,94 @@ private void drawBoxes(Graphics g, int level,
       between nested squares is constant.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Levels of Recursion</title>
+      <title>EFFECTIVE DESIGN: Levels of Recursion</title>
       <p>
         Many recursive algorithms use a <term>level</term>
         parameter as the recursion parameter.
       </p>
     </principle>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+    <exercises>
+    <title>Self-Study Exercises</title>
+    <exercise>
+    <title>Nested Boxes</title>
+    <statement>
           <p>
-            Trace through the <c>drawBoxes()</c> method and draw the level-four and level-five versions of the nested boxes pattern.
-            Assume that the initial values for <c>side</c> and <c>delta</c> are 100 and 5, respectively,
-            and the initial coordinates for <c>(locX,locY)</c> are (20,20).
-          </p>
-        </li>
-        <li>
-          <p>
-            The pattern shown in Figure<nbsp/>12.23 can be drawn by using <c>delta</c> as a fixed ratio of the length of the side,
-            for example, 10 percent.
-            Modify the <c>drawBoxes()</c> method to use <c>delta</c> in this way.
-          </p>
-        </li>
-        <li>
-          <p>
-            Write an iterative version of the <c>drawBoxes()</c> method.
-            (<em>Hint</em>: On each iteration,
-            you must change the <em>x-</em>
-            and <em>y-</em>coordinates of the square's location and the length of its side.)
-            \marginfiglarge{chptr12/boxes3.eps}{This version of nested boxes can be drawn by using <c>delta</c> as a fixed percentage of the length of the side.}{fig-boxes3}
-          </p>
-        </li>
-      </ol>
+            The code here combines the <c>drawBoxes()</c> method with a simple GUI 
+            to draw a level-9 picture of the nested boxes.
+          </p> 
+            <ol>
+            <li><p>Modify the <c>level</c> variable and re-run the program to draw 
+            different levels of the boxes.</p>
+            </li>
+            <li><p>Replace the recursive method
+            with an equivalent iterative method. <term>Hint</term>: On each iteration,
+            you must change the <em>x-</em> and <em>y-</em>coordinates of the square's 
+            location and the length of its side.)</p>
+            </li>
+            </ol>
+     <program language="java" interactive="activecode"><input>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Boxes {
+
+    private int level = 9;
+
+    private void drawBoxes(Graphics g, int level, int locX, int locY, int side, int delta) {
+        g.drawRect(locX, locY, side, side);
+        if (level > 0) {
+            int newLocX = locX + delta;
+            int newLocY = locY + delta;
+            drawBoxes(g, level - 1, newLocX, newLocY, side - 2 * delta, delta);
+        } // if
+    } // drawBoxes()
+
+    /**
+     * draw() is the public method that handles drawing of the boxes 
+     * @param g is a reference to the current Graphics object
+     */
+    public void draw(Graphics g) {
+        drawBoxes(g, level, 20, 20, 300, 10);
+    } // draw()
+
+    public static void main(String args[]) {
+        new DrawingGUI("Boxes");
+    }
+} // Boxes
+
+class DrawingGUI extends JFrame {
+
+    public DrawingGUI(String title) {
+        setTitle(title);
+        setVisible(true);
+        setSize(340, 360);
+        getContentPane().add(new DrawingPanel());
+    }
+}
+
+class DrawingPanel extends JPanel {
+    public void paintComponent(Graphics g) {
+        new Boxes().draw(g); // Create a Boxes object and call draw()
+    }
+}
+ </input></program>      
+    </statement>
+    <solution>
+   <program language="java"><input>
+    private void drawBoxesIterative(Graphics g, int level, int locX, int locY, int side, int delta) {
+        for (int k = level; k >= 0; k--) {
+            g.drawRect(locX, locY, side, side); // Draw a square
+            locX += delta; // Calculate new location
+            locY += delta;
+            side -= 2 * delta; // Calculate new side length
+        }
+    } // drawBoxesIterative()
+     </input></program>      
+
+    </solution>
+    </exercise>      
+ </exercises>
  </subsection>
   <subsection>
     <title>The Sierpinski Gasket</title>
@@ -177,11 +254,14 @@ private void drawBoxes(Graphics g, int level,
       If we follow the same strategy we used in the nested squares example,
       we get the following algorithm:
     </p>
+<algorithm>
+    <title>Sierpinski Gasket</title>
  <program language="java"><input>
 Base case:       Draw a triangle.
 Recursive Case:  If more divisions are desired,
      draw three smaller gaskets within the triangle.
  </input></program>
+</algorithm>
     <p>
       For this pattern the base case is the drawing of the basic triangle.
       The recursive cases, if more divisions are desired,
@@ -207,17 +287,18 @@ Recursive Case:  If more divisions are desired,
  */
 private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
                    int p2X, int p2Y, int p3X, int p3Y) {
-  g.drawLine(p1X, p1Y, p2X, p2Y);  // Draw a triangle
-  g.drawLine(p2X, p2Y, p3X, p3Y);
-  g.drawLine(p3X, p3Y, p1X, p1Y);
-  if (lev > 0) { // If more levels, draw 3 smaller gaskets
-    int q1X = (p1X + p2X) / 2;    int q1Y = (p1Y + p2Y) / 2;
-    int q2X = (p1X + p3X) / 2;    int q2Y = (p1Y + p3Y) / 2;
-    int q3X = (p2X + p3X) / 2;    int q3Y = (p2Y + p3Y) / 2;
-    drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
-    drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
-    drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
-  } // if} // drawGasket()
+    g.drawLine(p1X, p1Y, p2X, p2Y);  // Draw a triangle
+    g.drawLine(p2X, p2Y, p3X, p3Y);
+    g.drawLine(p3X, p3Y, p1X, p1Y);
+    if (lev > 0) { // If more levels, draw 3 smaller gaskets
+      int q1X = (p1X + p2X) / 2;    int q1Y = (p1Y + p2Y) / 2;
+      int q2X = (p1X + p3X) / 2;    int q2Y = (p1Y + p3Y) / 2;
+      int q3X = (p2X + p3X) / 2;    int q3Y = (p2Y + p3Y) / 2;
+      drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+      drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+      drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+    } // if
+} // drawGasket()
  </input></program>
     </figure>
     <p>
@@ -225,28 +306,47 @@ private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
       we use the <c>level</c> parameter as the recursion parameter for this method,
       which controls the  recursion.
       Note that each of the three recursive calls decreases the
-<c>level</c> by 1.
+      <c>level</c> by 1.
       This will ensure that eventually <c>level</c> will equal 0, and recursion will stop.
     </p>
     <p>
       Note also how the three pairs of coordinates are used.
       Drawing a triangle is simple.
       Just draw three lines from <c>(p1X,p1Y)</c> to
-<c>(p2X,p2Y)</c>, from <c>(p2X,p2Y)</c> to <c>(p3X,p3Y)</c>, and from
-<c>(p3X,p3Y)</c> back to <c>(p1X, p1Y)</c>. The most complicated part of the method is calculating the vertices for the three inner gaskets.
+      <c>(p2X,p2Y)</c>, from <c>(p2X,p2Y)</c> to <c>(p3X,p3Y)</c>, and from
+      <c>(p3X,p3Y)</c> back to <c>(p1X, p1Y)</c>. 
+    </p>
+    <p>  
+      The most complicated part of the method is 
+      calculating the vertices for the three inner gaskets.
       If you look at <xref ref="fig-sierpinski">Figure</xref> again,
       you'll notice that each of the inner triangles uses one of the vertices of the main triangle,
       plus the <em>midpoints</em> of the two adjacent sides.
       Thus, the triangle on the
       <q>left</q>
-      uses the left vertex <c>(p1X,p1Y)</c>, and the midpoints of the other two lines from <c>(p1X,p1Y)</c> to <c>(p2X,p2Y)</c> and from <c>(p1X,p1Y)</c> to <c>(p3X,p3Y)</c>. As you might remember from high school math,
+      uses the left vertex <c>(p1X,p1Y)</c>, and the midpoints of the other two lines 
+      from <c>(p1X,p1Y)</c> to <c>(p2X,p2Y)</c> and from <c>(p1X,p1Y)</c> 
+      to <c>(p3X,p3Y)</c>. As you might remember from high school math,
       the formula for computing the midpoint of the line segment <m>(x1,y1)</m> to <m>(x2,y2)</m> is 
     </p>
- <program language="java"><input>
+
+ <algorithm>
+<title>Midpoint of a Line</title>
+<program language="java"><input>
 ( (x1 + x2) / 2, (y1 + y2) / 2 )
  </input></program>
-    <p>
+ </algorithm>
+   <p>
       This formula is used repeatedly to calculate the vertices of the three smaller gaskets.
     </p>
+<activity>
+<title>Sierpinski Gasket</title>
+<statement>
+  <p>
+    <url href="https://replit.com/@RalphMorelli/SierpinskiGasket?v=1">Click on this repl</url>
+     to explore the various levels of the Sierpinski Gasket. 
+  </p>
+</statement>
+</activity>
   </subsection>
 </section>
