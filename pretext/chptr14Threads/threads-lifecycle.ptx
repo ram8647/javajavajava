@@ -10,16 +10,24 @@
     Each thread has a <term>life cycle</term>
         <idx><h>life cycle</h></idx>
     that consists of several different states,
-    which are summarized in <xref ref="fig-lifecycle">Figure</xref> and Table<nbsp/>14.1.
+    which are summarized in <xref ref="fig-lifecycle">Figure</xref> and 
+    <xref ref="tab-threadstates">Table</xref>.
     Thread states are represented by labeled ovals,
     and the transitions between states are represented by labeled arrows.
-    Much \marginpar{Ready, running,
-    and sleeping} of a thread's life cycle is under the control of the operating system and the Java Virtual Machine. Those transitions represented by method names<mdash/>such as <c>start()</c>, <c>stop()</c>, <c>wait()</c>, <c>sleep()</c>, <c>notify()</c><mdash/>can be controlled by the program.
+  </p>
+  <p>
+    Much of a thread's life cycle is under the control of the operating system 
+    and the Java Virtual Machine. Those transitions represented by method 
+    names<mdash/>such as <c>start()</c>, <c>stop()</c>, <c>wait()</c>, <c>sleep()</c>, 
+    <c>notify()</c><mdash/>can be controlled by the program.
     Of these methods,
-    the <c>stop()</c> method has been deprecated in JDK 1.2 because it is inherently unsafe to stop a thread in the middle of its execution.
+    the <c>stop()</c> method has been deprecated because it is inherently unsafe 
+    to stop a thread in the middle of its execution.
     Other transitions<mdash/>such as
     <em>dispatch, I/O request, I/O done, time expired,
     done sleeping</em><mdash/>are under the control of the CPU scheduler.
+  </p>
+  <p>
     When first created a thread is in the ready state,
     which means that it is ready to run.
     In the ready state, a thread is waiting,
@@ -34,19 +42,13 @@
     <mdash/>that is,
     it will be given the CPU.<nbsp/>It will then be in the running state. 
   </p>
-  <table>
-    \TBT{2.5pc}{A summary of the different thread states.}
+  <table xml:id="tab-threadstates">
+    <title>A summary of the different thread states.</title>
     
     <tabular>
-      <row>
-        <cell><c>__________</c></cell>
-      </row>
-      <row>
+      <row bottom="minor" left="minor">
         <cell>{State}</cell>
         <cell>{Description}</cell>
-      </row>
-      <row>
-        <cell><c>__________</c></cell>
       </row>
       <row>
         <cell>Ready</cell>
@@ -68,16 +70,16 @@
         <cell>Blocked</cell>
         <cell>The thread is waiting for I/O to finish.</cell>
       </row>
-      <row>
+      <row bottom="minor">
         <cell>Dead</cell>
         <cell>The thread is terminated.</cell>
-      </row>
-      <row>
-        <cell><c>__________</c></cell>
       </row>
     </tabular>
     \endTB
   </table>
+  </introduction>
+  <subsection><title>Thread Control</title>
+
   <p>
     Transitions between the ready and running states happen under the control of the CPU scheduler,
     a fundamental part of the Java runtime  system.
@@ -96,7 +98,8 @@
   </p>
   <p>
     When a thread calls the <c>wait()</c> method,
-    it voluntarily gives up the CPU, but this time it won't be ready to run again until it is  notified by some other thread.
+    it voluntarily gives up the CPU, but this time it won't be ready to run 
+    again until it is  notified by some other thread.
   </p>
   <p>
     This would be like one child giving his or her turn to another child.
@@ -111,7 +114,10 @@
     A thread is put into a blocked state when it does some kind of I/O operation.
     I/O devices, such as disk drives,
     modems, and  keyboards,
-    are very slow compared to the CPU.<nbsp/>Therefore, I/O operations are handled by separate processors known as <em>controllers</em>.
+    are very slow compared to the CPU.<nbsp/>Therefore, I/O operations are handled by 
+    separate processors known as <em>controllers</em>.
+  </p>
+  <p>
     For example,
     when a thread wants to read data from a disk drive,
     the system will give this task to the disk controller,
@@ -123,28 +129,51 @@
   </p>
   <p>
     In terms of the bicycle analogy,
-    blocking a thread would be like giving the bicycle to another child when the rider has to stop to tie his or her shoe.
+    blocking a thread would be like giving the bicycle to another child when the 
+    rider has to stop to tie his or her shoe.
     Instead of letting the bicycle just sit there,
     we let another child ride it.
     When the shoe is tied,
     the child is ready to ride again and goes back into the ready line.
-    Letting other threads run while one thread is waiting for an I/O operation to complete improves the overall utilization of the CPU.
+    Letting other threads run while one thread is waiting for an I/O operation 
+    to complete improves the overall utilization of the CPU.
   </p>
-  </introduction>
-  <subsection><title>Self-Study Exercise</title>
-      <p>
-      <ol>
-        <li>
+  <exercises>
+  <title>Self-Study Exercise</title>
+  <exercise>
+  <title>Thread Scheduling</title>
+  <statement>
           <p>
-          Round-robin scheduling isn't always the best idea.
-          Sometimes <em>priority scheduling</em>
-          leads to a better system.
-          Can you think of ways that priority 
-          scheduling<mdash/>higher-priority threads go to the head of the line<mdash/>can be 
-          used to improve the responsiveness of an interactive program?
+          True or false, round-robin scheduling is always the best way
+          to allocate access to the CPU.
           </p>
-        </li>
-      </ol>
-    </p>
+  </statement>
+         <choices>
+        <choice correct="no">
+            <statement>
+                <p>True</p>
+            </statement>
+            <feedback>
+                <p>How would that work for performing I/O?</p>
+            </feedback>
+        </choice>        
+        <choice correct="yes">
+            <statement>
+                <p>False</p>
+            </statement>
+            <feedback>
+                <p>Right, priority scheduling is necessary for I/O.</p>
+            </feedback>
+        </choice>
+      </choices>
+      <solution>
+      <p>
+          <em>Priority scheduling</em>
+          is used for I/O threads, which are given higher 
+          priority in order to improve the responsiveness of an interactive program.
+      </p>
+      </solution>
+      </exercise>
+    </exercises>
 </subsection>
 </section>
