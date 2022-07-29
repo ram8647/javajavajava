@@ -3,48 +3,67 @@
   javax.swing.JComboBox</title>
   <introduction>
     <p>
-      \tBOXseven{A}<c>JComboBox</c> is a Swing component that combines a text field and a drop-down list (Fig.<nbsp/>12.28).
-      It lets the user either type in a selection or choose a selection from a list that appears when the user requests it<mdash/>a <c>JComboBox</c>'s drop-down behavior is somewhat similar to a <c>java.awt.Choice</c> box.
+      <c>JComboBox</c> is a Swing component that combines a text field and a drop-down list 
+      (<xref ref="fig-combobox">Figure</xref>).
+      It lets the user either type in a selection or choose a selection from a 
+      list that appears when the user requests it<mdash/>a <c>JComboBox</c>'s 
+      drop-down behavior is somewhat similar to a <c>java.awt.Choice</c> box.
     </p>
-    <p>
-      <image width="73%" source="chptr12/jcombobox.png"/>
-    </p>
+    <figure xml:id="fig-combobox">
+      <image width="40%" source="chptr12/jcombobox.png"/>
+      <caption>The <c>JComboBox</c> component.</caption>
+    </figure>
     <p>
       A <c>JComboBox</c> can be used to represent a
       <em>drop-down menu</em>.
       When the user clicks on a <c>JComboBox</c>, a list of options drops down,
-      and the user can select a particular option that is stored in the box's internal state (Fig.<nbsp/>12.29).
-      The list of options associated with a <c>JComboBox</c> can be built beforehand and inserted into the component in a constructor,
+      and the user can select a particular option that is stored in the box's internal state 
+      (<xref ref="fig-comboscreen">Figure</xref>).
+    </p>
+    <figure xml:id="fig-comboscreen">
+      <image width="40%" source="chptr12/comboscreen.png"/> 
+      <caption>Using a <c>JComboBox</c>.</caption>
+    </figure>
+
+    <p>
+      The list of options associated with a <c>JComboBox</c> can be built beforehand and inserted 
+      into the component in a constructor,
       or items can be inserted one at a time by repeatedly using its <c>addItem()</c> method.
     </p>
     <p>
-      As Figure<nbsp/>12.28 shows,
+      As <xref ref="fig-combobox">Figure</xref> shows,
       either an array or a vector of items can be passed to a constructor method to initialize the box's menu.
       The items stored in a <c>JComboBox</c> box are references to
-<c>Object</c> s, most commonly <c>String</c> s that represent the name of the menu item.
+      <c>Object</c>s, most commonly <c>String</c>s that represent the name of the menu item.
       They are stored in the
       (zero indexed)
       order in which they are added.
       The <c>addItem()</c> method is used to add an individual
-<c>Object</c> to a <c>JComboBox</c>. By default,
+      <c>Object</c> to a <c>JComboBox</c>. By default,
       the first item added to a <c>JComboBox</c> will be the <em>selected</em>
       item until the user selects another item.
     </p>
     <p>
-      When the user makes a selection in a <c>JComboBox</c>, the item selected can be gotten either by its reference (<c>getSelectedItem()</c>) or by its position within the menu (<c>getSelectedIndex()</c>).
-      There are also methods to <c>setSelectedItem()</c> and <c>setSelectedIndex()</c> that let you select an individual item either by its reference or its position.
-      The <c>addItemListener()</c> method is used to designate some object as the listener for the <c>ItemEvent</c> s that are generated whenever the user selects a menu option.
+      When the user makes a selection in a <c>JComboBox</c>, the item selected can be 
+      gotten either by its reference (<c>getSelectedItem()</c>) or by its position within 
+      the menu (<c>getSelectedIndex()</c>).
+      There are also methods to <c>setSelectedItem()</c> and <c>setSelectedIndex()</c> 
+      that let you select an individual item either by its reference or its position.
+      The <c>addItemListener()</c> method is used to designate some object as the 
+      listener for the <c>ItemEvent</c> s that are generated whenever the user selects a menu option.
       Alternatively,
-      the addActionListener() method lets you handle action events,
+      the <c>addActionListener()</c> method lets you handle action events,
       such as when the user types a value into the box.
     </p>
   </introduction>
-  <subsection xml:id="fig-comboscreen">
+  <subsection xml:id="sec-comboscreen">
     <title>A <c>JComboBox</c>Example</title>
     <p>
       As a simple example,
-      let's design an graphical interface that can be used to display the fractal patterns we developed earlier.
-      We want an interface that lets the user select from among the available patterns<mdash/>we'll use the Sierpinski gasket and nested boxes for starters.
+      let's design an graphical interface that can be used to display the fractal 
+      patterns we developed earlier.
+      We want an interface that lets the user select from among the available 
+      patterns<mdash/>we'll use the Sierpinski gasket and nested boxes for starters.
       In addition,
       the user should also be able to select different levels for the drawings,
       from 0 to 9.
@@ -52,7 +71,7 @@
       with one <c>JComboBox</c> for each menu.
     </p>
     <p>
-      The first step is to declare and instantiate the <c>JComboBox</c> es as instance variables:
+      The first step is to declare and instantiate the <c>JComboBox</c>es as instance variables:
     </p>
  <program language="java"><input>
 private String items[] =
@@ -61,9 +80,11 @@ private JComboBox patterns = new JComboBox(items);
 private JComboBox levels = new JComboBox();
  </input></program>
     <p>
-      Note that in this case we pass the constructor for the <image width="73%" source="chptr12/comboscreen.png"/> <c>patterns</c> menu an entire array of items.
+      Note that in this case we pass the constructor for the 
+      <c>patterns</c> menu an entire array of items.
       If we hadn't done it this way,
-      we would add individual items to the combo box in the JFrame's constructor <c>RecursivePatterns()</c>. In fact,
+      we would add individual items to the combo box in the JFrame's constructor
+       <c>RecursivePatterns()</c>. In fact,
       that's how we'll initialize the <c>levels</c> menu:
     </p>
  <program language="java"><input>
@@ -72,27 +93,28 @@ for (int k=0; k &lt; 10; k++)   // Add 10 levels
 levels.setSelectedItem("4"); // Select default level
  </input></program>
     <p>
-      This loop would be placed in the JFrame's constructor, <c> RecursivePatterns()</c>. It adds strings representing levels 0 to 9 to the menu and initializes the box so that level four is showing as the default option.
+      This loop would be placed in the JFrame's constructor, <c> RecursivePatterns()</c>. 
+      It adds strings representing levels 0 to 9 to the menu and initializes 
+      the box so that level four is showing as the default option.
     </p>
     <p>
       Our next step is to designate the JFrame as the <c>ItemListener</c> for both menus<mdash/>that is,
-      the JFrame is named as the object that will handle the events that occur in the <c>JComboBox</c> es.
-      Then we add the
-<c>JComboBox</c> component to the JFrame:
+      the JFrame is named as the object that will handle the events that occur in the <c>JComboBox</c>es.
+      Then we add the <c>JComboBox</c> component to the JFrame:
     </p>
  <program language="java"><input>
 controls.add(levels);    // Control panel for menus
 controls.add(patterns);
-                                // Add the controls
-getContentPane().add(controls, "North");
-                           // And the drawing panel
-getContentPane().add(canvas, "Center");
-              // Register the menus with a listener
-levels.addItemListener(this);
+                               
+getContentPane().add(controls, "North");  // Add the controls
+getContentPane().add(canvas, "Center");   // And drawing panel
+              
+levels.addItemListener(this);   // Register menus with a listener
 patterns.addItemListener(this);
  </input></program>
     <p>
-      Note that we use a separate <c>controls</c> panel (a <c>JPanel</c>) for the two menus and a <c>canvas</c> panel (another <c>JPanel</c>) for the drawings.
+      Note that we use a separate <c>controls</c> panel (a <c>JPanel</c>) 
+      for the two menus and a <c>canvas</c> panel (another <c>JPanel</c>) for the drawings.
     </p>
     <p>
       The next step is to implement the <c>itemStateChanged()</c> method to handle the user's selections.
@@ -101,47 +123,62 @@ patterns.addItemListener(this);
       In order to handle these events,
       the program must implement the <c>ItemListener</c> interface,
           <idx><h>ItemListener interface</h></idx>
-      which consists of the single method <c>itemStateChanged()</c>. This method is invoked automatically whenever the user selects an item from one of the <c>JComboBox</c> es:
+      which consists of the single method <c>itemStateChanged()</c>. This method is 
+      invoked automatically whenever the user selects an item from one of the <c>JComboBox</c> es:
     </p>
  <program language="java"><input>
 public void itemStateChanged(ItemEvent e) {
     canvas.setPattern(patterns.getSelectedIndex(),
                          levels.getSelectedIndex());
-    repaint();}
+    repaint();
+}
  </input></program>
     <p>
-      The <c>itemStateChanged()</c> method has the same general form as the <c>actionPerformed()</c> method,
+      The <c>itemStateChanged()</c> method has the same general form as 
+      the <c>actionPerformed()</c> method,
       except that its parameter is an ItemEvent . For this example,
       the program uses the
-<c>getSelectedIndex()</c> method to get the selected pattern and the selected level by their respective item numbers within the menus.
+      <c>getSelectedIndex()</c> method to get the selected pattern and the 
+      selected level by their respective item numbers within the menus.
       It then passes these values along to the <c>canvas</c> object,
       which takes care of the drawing.
       Finally, the method invokes the <c>repaint()</c> method.
       Because the JFrame is a container,
       this will cause all of its components to be repainted as well.
     </p>
+<!--    
     <p>
       <xref ref="fig-seqdiag">Figure</xref>
-      illustrates the sequence of events that occurs when an item is selected from a <c>JComboBox</c>. The complete implementation for the program is given in <xref ref="fig-recursivepatterns">Figure</xref>.
+      illustrates the sequence of events that occurs when an item is selected 
+      from a <c>JComboBox</c>. 
     </p>
+-->
+    <p>
+      The complete implementation for the program is given in 
+      <xref ref="fig-recursivepatterns">Listing</xref>.
+    </p>
+<!--
     <figure xml:id="fig-seqdiag">
       <caption>This UML sequence diagram shows the interaction between
       the various objects included in the action of selecting an item
       from a <c>JComboBox</c>.</caption>
-      <image width="73%" source="chptr12/seqdiag.png"/>
+      <image width="60%" source="chptr12/seqdiag.png"/>
     </figure>
-    <figure xml:id="fig-recursivepatterns">
+-->
+    <listing xml:id="fig-recursivepatterns">
       <caption>The <c>RecursivePatterns</c> program.</caption>
  <program language="java"><input>
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+
 public class RecursivePatterns extends JFrame implements ItemListener  {
   private String choices[] = {"Sierpinski Gasket", "Nested Boxes"};
   private JComboBox patterns = new JComboBox(choices); // Pattern choices
   private JComboBox levels = new JComboBox();          // Level choices
   private Canvas canvas = new Canvas();                // Drawing panel
   private JPanel controls = new JPanel();
+
   public RecursivePatterns() {
     for (int k=0; k &lt; 10; k++)            // Add 10 levels
       levels.addItem(k + "" );
@@ -156,38 +193,44 @@ public class RecursivePatterns extends JFrame implements ItemListener  {
     patterns.addItemListener(this);
     setSize(canvas.WIDTH,canvas.HEIGHT+controls.getSize().width);
   } // init()
+
   public void itemStateChanged(ItemEvent e) {
     canvas.setPattern(patterns.getSelectedIndex(),
                                      levels.getSelectedIndex());
     repaint();                             // Repaint the JFrame
   } // itemStateChanged()
-   public static void main(String args[])
-   {
+  
+  public static void main(String args[]) {
       JFrame f = new RecursivePatterns();
       f.setVisible(true);
-   }} // RecursivePatterns
+   }
+} // RecursivePatterns
  </input></program>
-    </figure>
+</listing>
+
     <figure xml:id="fig-canvas">
       <caption>Design of a drawing <c>Canvas</c> class.</caption>
-      <image width="73%" source="chptr12/canvasnew.png"/>
+      <image width="50%" source="chptr12/fig-canvas.png"/>
     </figure>
     <p>
+
       The actual drawing of the fractal patterns is handled by the <c>canvas JPanel</c> component,
       whose design is shown in <xref ref="fig-canvas">Figure</xref>
       and whose implementation is given in <xref ref="fig-canvaspanel">Figure</xref>.
       All of the drawing is done in the <c>paintComponent()</c> method.
       Because the <c>canvas</c> is contained within the JFrame,
       the <c>paintComponent()</c> method is called automatically whenever the JFrame repaints itself.
-      Notice how the
-<c>switch</c> statement uses the pattern that  the user chose to call the corresponding drawing method.
+      Notice how the <c>switch</c> statement uses the pattern that  the user 
+      chose to call the corresponding drawing method.
       You can see from this <c>switch</c> statement that a <c>JComboBox</c>'s items are <em>zero indexed</em>.
     </p>
-    <figure xml:id="fig-canvaspanel">
-      <caption>The <c>Canvas</c> class is a drawing panel, Part I.</caption>
+    
+    <listing xml:id="fig-canvaspanel">
+      <caption>The <c>Canvas</c> class is a drawing panel.</caption>
  <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
+
 public class Canvas extends JPanel {
   private static final int GASKET = 0, BOXES = 1;
   public static final int WIDTH=400, HEIGHT=400;
@@ -197,6 +240,7 @@ public class Canvas extends JPanel {
   private final int gP3X = 150; private final int gP3Y = 110; // points
   private int pattern = 0 ;                      // Current pattern
   private int level = 4;                         // Current level
+
   public Canvas() {
     setSize(WIDTH, HEIGHT);
   }
@@ -204,13 +248,8 @@ public class Canvas extends JPanel {
     pattern = pat;
     level = lev;
   }
- </input></program>
-    </figure>
-    <figure xml:id="fig_canvaspart2">
-      <caption>The <c>Canvas</c> class, Part II.</caption>
-      
- <program language="java"><input>
-public void paintComponent(Graphics g) {
+
+  public void paintComponent(Graphics g) {
         g.setColor(getBackground());   // Redraw the panel's background
         g.drawRect(0, 0, WIDTH, HEIGHT);
         g.setColor(getForeground());
@@ -223,6 +262,7 @@ public void paintComponent(Graphics g) {
             break;
         } // switch
     } // paintComponent()
+  
    /** drawGasket()---recursively draws the Sierpinski
     *  gasket pattern, with points (p1X, p1Y), (p2X, p2Y), (p3X, p3Y)
     *  representing the vertices of its enclosing triangle.
@@ -242,6 +282,7 @@ public void paintComponent(Graphics g) {
             drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
         }
     } // drawGasket()
+  
    /** drawBoxes()---recursively draws pattern of nested squares
     *  with (locX, locY) the top left corner of outer the square and
     *  side being the length square's side.
@@ -259,6 +300,157 @@ public void paintComponent(Graphics g) {
     } // drawBoxes()
 } // Canvas
  </input></program>
-    </figure>
+    </listing>
+<exercises>
+<title>Self-study Exercises</title>
+<exercise>
+<title>Recursive Patterns</title>
+<statement> 
+            <ol>
+            <li><p>Write a revised <c>drawBoxes()</c> method 
+            that reduces the length of the side at each level by a fixed ratio of the length of the side, 
+            for example, 10 percent.</p>
+            </li>
+            <li><p>Add your revised method to the <c>RecursivePatterns</c> program as a third pattern.</p>
+            </li>
+            </ol>
+ <program language="java" interactive="activecode"><input>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class RecursivePatterns extends JFrame implements ItemListener {
+    private String choices[] = { "Sierpinski Gasket", "Nested Boxes" };
+    private JComboBox patterns = new JComboBox(choices); // Pattern choices
+    private JComboBox levels = new JComboBox(); // Level choices
+    private Canvas canvas = new Canvas(); // Drawing panel
+    private JPanel controls = new JPanel();
+
+    public RecursivePatterns() {
+        for (int k = 0; k &lt; 10; k++) // Add 10 levels
+            levels.addItem(k + "");
+        patterns.setSelectedItem(choices[0]); // Initialize menus
+        levels.setSelectedItem("4");
+        canvas.setBorder(BorderFactory.createTitledBorder("Drawing Canvas"));
+        controls.add(levels); // Control panel for menus
+        controls.add(patterns);
+        getContentPane().add(controls, "North"); // Add controls
+        getContentPane().add(canvas, "Center"); // Add drawing panel
+        levels.addItemListener(this); // Register menus with listener
+        patterns.addItemListener(this);
+        setSize(canvas.WIDTH, canvas.HEIGHT + controls.getSize().width);
+    } // init()
+
+    public void itemStateChanged(ItemEvent e) {
+        canvas.setPattern(patterns.getSelectedIndex(),
+                levels.getSelectedIndex());
+        repaint(); // Repaint the JFrame
+    } // itemStateChanged()
+
+    public static void main(String args[]) {
+        JFrame f = new RecursivePatterns();
+        f.setVisible(true);
+    }
+} // RecursivePatterns
+
+class Canvas extends JPanel {
+    private static final int GASKET = 0, BOXES = 1;
+    public static final int WIDTH = 400, HEIGHT = 400;
+    private final int HBOX = 10, VBOX = 50, BOXSIDE = 200, BOXDELTA = 10;
+    private final int gP1X = 10;
+    private final int gP1Y = 280; // Initial
+    private final int gP2X = 290;
+    private final int gP2Y = 280; // gasket
+    private final int gP3X = 150;
+    private final int gP3Y = 110; // points
+    private int pattern = 0; // Current pattern
+    private int level = 4; // Current level
+
+    public Canvas() {
+        setSize(WIDTH, HEIGHT);
+    }
+
+    public void setPattern(int pat, int lev) {
+        pattern = pat;
+        level = lev;
+    }
+
+    public void paintComponent(Graphics g) {
+        g.setColor(getBackground()); // Redraw the panel's background
+        g.drawRect(0, 0, WIDTH, HEIGHT);
+        g.setColor(getForeground());
+        switch (pattern) {
+            case GASKET:
+                drawGasket(g, level, gP1X, gP1Y, gP2X, gP2Y, gP3X, gP3Y);
+                break;
+            case BOXES:
+                drawBoxes(g, level, HBOX, VBOX, BOXSIDE, BOXDELTA);
+                break;
+        } // switch
+    } // paintComponent()
+
+    /**
+     * drawGasket()---recursively draws the Sierpinski
+     * gasket pattern, with points (p1X, p1Y), (p2X, p2Y), (p3X, p3Y)
+     * representing the vertices of its enclosing triangle.
+     * level (>= 0) is the recursion parameter (base case: level 0)
+     */
+    private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
+            int p2X, int p2Y, int p3X, int p3Y) {
+        g.drawLine(p1X, p1Y, p2X, p2Y); // Draw a triangle
+        g.drawLine(p2X, p2Y, p3X, p3Y);
+        g.drawLine(p3X, p3Y, p1X, p1Y);
+        if (lev > 0) { // If more levels, draw 3 smaller gaskets
+            int q1X = (p1X + p2X) / 2;
+            int q1Y = (p1Y + p2Y) / 2;
+            int q2X = (p1X + p3X) / 2;
+            int q2Y = (p1Y + p3Y) / 2;
+            int q3X = (p2X + p3X) / 2;
+            int q3Y = (p2Y + p3Y) / 2;
+            drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+            drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+            drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+        }
+    } // drawGasket()
+
+    /**
+     * drawBoxes()---recursively draws pattern of nested squares
+     * with (locX, locY) the top left corner of outer the square and
+     * side being the length square's side.
+     * level (>= 0) is the recursion parameter (base case: level 0)
+     * delta is used to adjust the length of the side.
+     */
+    private void drawBoxes(Graphics g, int level,
+            int locX, int locY, int side, int delta) {
+        g.drawRect(locX, locY, side, side);
+        if (level > 0) {
+            int newLocX = locX + delta;
+            int newLocY = locY + delta;
+            drawBoxes(g, level - 1, newLocX, newLocY,
+                    side - 2 * delta, delta);
+        }
+    } // drawBoxes()
+} // Canvas
+ </input></program>
+</statement>
+<solution>
+ <program language="java"><input>
+private void  drawBoxesRev(Graphics g, int level, int locX,
+                   int locY, int side, int delta) {
+    g.drawRect(locX, locY, side, side );
+    if (level > 0) {
+      int dside = side * delta / 100; // Percent delta
+      int newLocX = locX + dside;
+      int newLocY = locY + dside;
+      drawBoxesRev(g, level - 1, newLocX, newLocY,
+                         side - 2 * dside, delta);
+    }
+} // drawBoxesRev()
+ </input></program>
+</solution>
+</exercise>
+</exercises>
+
+
  </subsection>
 </section>

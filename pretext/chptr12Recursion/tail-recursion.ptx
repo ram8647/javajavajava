@@ -1,15 +1,36 @@
 <section xml:id="objectorienteddesign-tail-recursion">
-  <title>OBJECT-ORIENTED DESIGN:
-  Tail Recursion</title>
+  <title>OBJECT-ORIENTED DESIGN: Tail Recursion</title>
   <p>
-    Although the <c>drawBoxes()</c> method is relatively simple to convert into an iterative version
-    (see Self-Study Exercise 12.18),
-    the same cannot be said for the
-<c>drawGasket()</c> method.
+    As we saw in the previous section, it is relatively simple to convert the <c>drawBoxes()</c> method
+    into an iterative version:
+  </p>
+   <program language="java"><input>
+    private void drawBoxesIterative(Graphics g, int level, int locX, int locY, int side, int delta) {
+        for (int k = level; k >= 0; k--) {
+            g.drawRect(locX, locY, side, side); // Draw a square
+            locX += delta; // Calculate new location
+            locY += delta;
+            side -= 2 * delta; // Calculate new side length
+        }
+    } // drawBoxesIterative()
+
+    private void drawBoxes(Graphics g, int level, int locX, int locY, int side, int delta) {
+        g.drawRect(locX, locY, side, side);
+        if (level > 0) {
+            int newLocX = locX + delta;
+            int newLocY = locY + delta;
+            drawBoxes(g, level - 1, newLocX, newLocY, side - 2 * delta, delta);
+        } // if
+    } // drawBoxes()
+     </input></program>      
+  <p>
+    However, the same cannot be said for the
+    <c>drawGasket()</c> method.
     It is clearly a case where the recursive approach makes the problem easier to solve.
   </p>
   <p>
-    One difference between <c>drawBoxes()</c> and <c>drawGasket()</c> is that <c>drawBoxes()</c> is an example of a tail-recursive method.
+    One difference between <c>drawBoxes()</c> and <c>drawGasket()</c> is that <c>drawBoxes()</c> 
+    is an example of a tail-recursive method.
     A method is <term>tail recursive</term>
         <idx><h>tail recursive</h></idx>
      if all of its recursive calls occur as the last action performed in the method.
@@ -26,11 +47,12 @@
   </p>
  <program language="java"><input>
 public void printHello(int N) {
- if (N > 1) {
-   System.out.println("Hello");
-   printHello(N - 1); // The last executed statement
- } else
-   System.out.println("Hello");} // printHello()
+    if (N > 1) {
+      System.out.println("Hello");
+      printHello(N - 1); // The last executed statement
+    } else
+      System.out.println("Hello");
+} // printHello()
  </input></program>
   <p>
     This method is tail recursive because the last statement that will be executed,
@@ -47,7 +69,8 @@ public void printHello(int N) {
  <program language="java"><input>
 public void printHelloIterative(int N) {
     for (int k = N; k > 0; k--)
-        System.out.println("Hello");}
+        System.out.println("Hello");
+}
  </input></program>
   <p>
     In this case, we use the parameter <em>N</em>
@@ -56,7 +79,7 @@ public void printHelloIterative(int N) {
     This is equivalent to what happens when we decrement the recursion parameter in the recursive call.
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Tail Recursion</title>
+    <title>EFFECTIVE DESIGN: Tail Recursion</title>
     <p>
       Tail-recursive algorithms are relatively simple to convert into iterative algorithms that do the same thing.
     </p>
@@ -65,12 +88,15 @@ public void printHelloIterative(int N) {
     As you can see,
     recursive methods that are not tail recursive are much more complex.
     Just compare the <c>drawGasket()</c> and
-<c>drawBoxes()</c> methods.
+    <c>drawBoxes()</c> methods.
     Yet it is precisely for these nontail-recursive algorithms that recursion turns out to be most useful.
+  </p>
+  <p>
     As you might expect,
     if you can't give a simple tail-recursive solution to a problem,
     the problem probably doesn't have a simple iterative solution either.
-    Thus, the problems where we most need recursion are those where we can't give a simple tail-recursive or a simple iterative solution.
+    Thus, the problems where we most need recursion are those where we can't 
+    give a simple tail-recursive or a simple iterative solution.
     And there are a lot of such problems,
     especially when you get into nonlinear data structures such as trees and graphs.
   </p>
@@ -81,44 +107,110 @@ public void printHelloIterative(int N) {
   </p>
  <program language="java"><input>
 for (int k = lev; k > 0; k--) {
- drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
- drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
- drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);}
+  drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+  drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+  drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+}
  </input></program>
   <p>
     But now each of the method calls within the body of this loop would have to be replaced by very complex loops.
     That would be a daunting task.
-    So the lesson to be drawn from this observation is that recursion is most useful as a problem-solving technique for problems that don't yield to a simple iterative solution.
+    So the lesson to be drawn from this observation is that recursion is most useful 
+    as a problem-solving technique for problems that don't yield to a simple iterative solution.
   </p>
   <principle>
-    <title>EFFECTIVE DESIGN:Recursion or Iteration</title>
+    <title>EFFECTIVE DESIGN: Recursion or Iteration</title>
     <p>
       If you have difficulty designing an iterative solution to a problem,
       try developing a recursive solution to it.
     </p>
   </principle>
-  <subsection><title>Self-Study Exercises</title>
-    <ol>
-      <li>
+  <exercises>
+  <title>Self-Study Exercises</title>
+        <exercise>
+        <title><c>printReverse()</c> tail recursive?</title>
+        <statement>
+          <p>
+            True or false, the <c>printReverse()</c> method is tail recursive.
+          </p>
+ <program language="java"><input>
+public void printReverse(String s) {
+    if (s.length() > 0) {      // Recursive case:
+      printReverse(s.substring(1));  // Print tail
+      System.out.print(s.charAt(0)); // Print first char
+    }
+} // printReverse()
+ </input></program>          
+        </statement>
+        <choices>
+        <choice correct="no">
+            <statement>
+                <p>True</p>
+            </statement>
+            <feedback>
+                <p>Is the recursive call the last statement to be executed?</p>
+            </feedback>
+        </choice>        
+        <choice correct="yes">
+            <statement>
+                <p>False</p>
+            </statement>
+            <feedback>
+                <p>Right, the recursive call is NOT the last statement to be executed.</p>
+            </feedback>
+        </choice>
+      </choices>
+      <solution>
         <p>
-          Trace the <c>drawGasket()</c> method for levels two and three.
-          Pick your own values for the three vertices.
+          The <c>printReverse()</c> method is not tail recursive because in that 
+          method the recursive call is not the last statement executed.
         </p>
-      </li>
-      <li>
+      </solution>
+    </exercise>
+
+        <exercise>
+        <title><c>countChar()</c> tail recursive?</title>
+        <statement>
+          <p>
+            True or false, the <c>countChar()</c> method is tail recursive.
+          </p>
+ <program language="java"><input>
+public int countChar(String s, char ch) {
+    if (s.length() == 0)    // Base case: empty string
+      return 0;
+    else if (s.charAt(0) == ch)  // Recursive case 1
+      return 1 + countChar(s.substring(1), ch); // Head = ch
+    else                         // Recursive case 2
+      return 0 + countChar(s.substring(1), ch); // Head != ch
+} // countChar()
+ </input></program>          
+        </statement>
+        <choices>
+        <choice correct="yes">
+            <statement>
+                <p>True</p>
+            </statement>
+            <feedback>
+                <p>Right, the recursive call IS the last statement to be executed.</p>
+            </feedback>
+        </choice>        
+        <choice correct="no">
+            <statement>
+                <p>False</p>
+            </statement>
+            <feedback>
+                <p>Is the recursive call the last statement to be executed?</p>
+            </feedback>
+        </choice>
+      </choices>
+      <solution>
         <p>
-          Is the <c>printReverse()</c> method,
-          discussed earlier, tail recursive?
-          Explain.
+            The <c>countChar()</c> method is tail recursive.
+            The recursive calls are not the last statements in the method definition.
+            However, each of the recursive calls would be the last statement executed by the method.
         </p>
-      </li>
-      <li>
-        <p>
-          Is the <c>countChar()</c> method,
-          discussed earlier, tail recursive?
-          Explain.
-        </p>
-      </li>
-    </ol>
-  </subsection>
+      </solution>
+  </exercise>
+</exercises>
+
 </section>

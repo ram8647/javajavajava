@@ -1,5 +1,5 @@
-<section xml:id="java-servletsand-java-server-pages">
-  <title>Java Servlets and Java Server Pages</title>
+<section xml:id="jsp-and-servlets">
+  <title>Java Server Pages (JSP) and Servlets</title>
   <introduction>
     <p>
       In this chapter we have been discussing the client/server model of computing.
@@ -21,27 +21,27 @@
       Fortunately,
       learning HTML code is not difficult and although it doesn't fit within the scope of this book,
       you can easily find books or Web sites that cover basic HTML coding.
-      Moreover, in order for servlets and JSPs to work,
-      they must be associated with a Web server that is specially configured to understand Java code.
-      At the end of this section we will provide links to a Web site where you can learn more about HTML and about how to set up your own JSPs and servlets.
+    </p>
+    <p>
+      In order for servlets and JSPs to work,
+      they must be run in a Web server that is specially configured to understand Java code.
+      <url href="https://tomcat.apache.org/tomcat-8.5-doc/setup.html">Apache Tomcat</url> 
+      is a simple web server that you can download and install for this purpose. 
+      Note that the current software industry does not use JSP and servlets as much these days.
+      <url href="https://spring.io/" visual="">Spring</url> is a popular Java web application framework that is used instead.
+      
     </p>
   </introduction>
   <subsection>
     <title>Java Server Pages</title>
     <p>
       A Java Server Page (JSP) is a Web page that contains small snippets of Java code.
-      The simple example discussed here was downloaded from on online tutorial at
-    </p>
- <program language="java"><input>
-http://developer.apple.com/internet/java/tomcat1.html
- </input></program>
-    <p>
-      The Java code on a JSP embedded within <c>&lt;% ... %&gt;</c> brackets and interspersed among a page's HTML tags.
+    The Java code on a JSP embedded within <c>&lt;% ... %&gt;</c> brackets and interspersed among a page's HTML tags.
       The Java code can extend over one or more lines.
-      <xref ref="fig-jspcode">Figure</xref>
+      <xref ref="list-jspcode">Listing</xref>
       shows the complete sourcecode for a simple JSP.
     </p>
-    <figure xml:id="fig-jspcode">
+    <listing xml:id="list-jspcode">
       <caption>A simple JavaServer Page (JSP).</caption>
  <program language="java"><input>
 &lt;html>&lt;head>&lt;title>Very Simple JSP Example&lt;/title>&lt;/head>
@@ -69,7 +69,7 @@ Reload this page to watch the greeting change.
 &lt;/body>
 &lt;/html>
  </input></program>
-    </figure>
+</listing>
     <p>
       In this example we see two uses of Java code.
       In the first case,
@@ -86,7 +86,7 @@ Current time: &lt;%= new java.util.Date() %&gt;
     </p>
     <figure xml:id="fig-jspscreen">
       <caption>A screen shot of a JSP.</caption>
-      <image width="73%" source="chptr15/jspscreen.png"/>
+      <image width="73%" source="chptr15/jspscreen.jpg"/>
     </figure>
     <p>
       In the second case, a <em>scriptlet</em>
@@ -101,7 +101,7 @@ Current time: &lt;%= new java.util.Date() %&gt;
     </p>
     <p>
       Obviously, this simple example only scratches the surface of what you can do with JSP. If you want to learn more about JSP, there are many helpful online tutorials available,
-      such as <c>http://www.jsptut.com/</c>. However,
+      such as <url href="https://www.tutorialspoint.com/jsp/index.htm" visual="">https://www.tutorialspoint.com/jsp/index.htm</url>. However,
       remember that in order to experiment with JSP, it will be necessary to have access to a JSP-aware Web server either on your own computer or on one provided by your service provider.
     </p>
   </subsection>
@@ -113,19 +113,20 @@ Current time: &lt;%= new java.util.Date() %&gt;
       In a Web application, the browser serves as the client.
     </p>
     <p>
-      Many URLs that we access on the web are pure HTML files that are simply transmitted back to the browser by the Web server.
-      For example,
+      Many URLs that we access on the web are pure HTML files that are simply transmitted 
+      back to the browser by the Web server. For example, the following web page:
+      <!-- For example,
       the URL for a simple HTML document on the author's Web site is:
     </p>
  <program language="java"><input>
 http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
  </input></program>
-    <p>
       If you type that URL into a Web browser,
       the Web server at
 <c>www.cs.trincoll.edu</c> would transmit the following text file to your browser,
       which would then render and display the document.
-    </p>
+-->
+</p>
  <program language="java"><input>
 &lt;HTML>
 &lt;HEAD>
@@ -174,7 +175,7 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
     <title>A Simple Servlet Example</title>
     <p>
       To illustrate the difference between a Java servlet and a simple HTML page,
-      <xref ref="fig-hiservlet">Figure</xref>
+      <xref ref="list-hiservlet">Figure</xref>
       shows a servlet that creates a Web page that says
       <q>Hello.</q>
       As you can see, a servlet is a Java program.
@@ -183,7 +184,7 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/hello.html
       the <c>HelloServlet</c> class,
       which is a subclass of <c>HttpServlet</c>, the standard superclass for all Java servlets.
     </p>
-    <figure xml:id="fig-hiservlet">
+    <listing xml:id="list-hiservlet">
       <caption>A simple Java servlet.</caption>
  <program language="java"><input>
 import java.io.*;
@@ -209,7 +210,7 @@ public class HelloServlet extends HttpServlet {
     }
   }
  </input></program>
-    </figure>
+</listing>
     <p>
       The servlet defines the <c>doGet()</c> method.
       This is a method that is defined in the <c>HttpServlet</c> superclass.
@@ -254,7 +255,7 @@ public class HelloServlet extends HttpServlet {
     </p>
     <figure xml:id="fig-nimscreen">
       <caption>The interface for the Nim servlet.</caption>
-      <image width="73%" source="chptr15/nimscreen.png"/>
+      <image width="73%" source="chptr15/nimscreen.jpg"/>
     </figure>
     <p>
       The browser interface for this version of the game is shown in <xref ref="fig-nimscreen">Figure</xref>.
@@ -271,8 +272,7 @@ public class HelloServlet extends HttpServlet {
     </p>
     <p>
       Let's now look at the servlet program itself,
-      whose code is shown in <xref ref="list-nimservlet">Listing</xref>
-      and <xref ref="fig-nimservlet2"></xref>.
+      whose code is shown in <xref ref="list-nimservlet">Listing</xref>.
       This servlet program is quite a bit longer than the simple hello server,
       but it is not really any more complex or difficult.
       The <c>NimServlet</c> extends the <c>HttpServlet</c> superclass and overrides the <c>doGet()</c> method.
@@ -282,7 +282,7 @@ public class HelloServlet extends HttpServlet {
       and <em>post</em> requests.
     </p>
     <listing xml:id="list-nimservlet">
-      <caption>Java code for the <c>NimServlet</c>, minus the <c>doGet()</c> method.</caption>
+      <caption>Java code for the <c>NimServlet</c></caption>
  <program language="java"><input>
 import java.io.*;
 import java.util.*;
@@ -297,80 +297,74 @@ public class NimServlet extends HttpServlet {
     {
         doGet(request, response);
     }
-    //  The doGet() method goes here.
-} // NimServlet
- </input></program>
-    </listing>
-    <listing xml:id="list-nimservlet2">
-      <caption>Java code for the <c>NimServlet</c>'s <c>doGet()</c> method.</caption>
- <program language="java"><input>
-public void doGet(HttpServletRequest request, HttpServletResponse response)
+   
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
-{
-  response.setContentType("text/html");
-  PrintWriter out = response.getWriter();
-  HttpSession session = request.getSession(true);
-  out.println("&lt;html>");
-  out.println("&lt;body>");
-  out.println("&lt;head>");
-  out.println("&lt;title>Simple Nim Game&lt;/title>");
-  out.println("&lt;/head>");
-  out.println("&lt;body>");
-  out.println("&lt;center>&lt;h1>One Row Nim&lt;/h1>&lt;/center>");
-  out.println("&lt;center>&lt;h3>The Rules&lt;/h3>");
-  out.println("A random number of pennies is thrown on the table.&lt;BR>");
-  out.println("Two players alternate making moves,&lt;BR>");
-  out.println("picking up between 1 and 3 pennies on each move.&lt;BR>");
-  out.println("The player who picks up the last penny loses.&lt;BR>&lt;BR>");
-  if (nim == null) {
-    nim = new OneRowNim(7 + (int)(Math.random() * 11));
-    nimPlayer = new NimPlayer(nim);
-    out.println("&lt;h4>You go first!&lt;/h4>&lt;/center>");
-  } else {
-    int userTakes = Integer.parseInt(request.getParameter("pickup"));
-    if (!nim.takeSticks(userTakes)) {
-       out.println("&lt;h4>&lt;font color='red'>Woops. That's an illegal move!. Try again. &lt;/font>&lt;h4>");
-    } else if (!nim.gameOver()) {
-       nim.changePlayer();
-       out.println("&lt;h4>So, you took &lt;font color='blue'>" + userTakes + "&lt;/font>&lt;BR>");
-       out.println("That leaves me with &lt;font color='blue'>" + nim.getSticks() + "&lt;/font>&lt;BR>");
-       int iTake = nimPlayer.move();
-       out.println("OK. I take &lt;font color='red'>" + iTake + " &lt;/font>pennies.&lt;BR>&lt;/h4>");
-       nim.takeSticks(iTake);
-       nim.changePlayer();
-    } // if not gameover
-  } // else nim != null
-  if (!nim.gameOver()) {
-    if (nim.getPlayer() == 1)
-      out.println("&lt;center>&lt;h3>Who's Turn: &lt;font color='magenta'> Your turn &lt;/font>&lt;h3>&lt;/center>");
-    else
-      out.println("&lt;center>&lt;h3>Who's Turn: &lt;font color='magenta'> My turn &lt;/font>&lt;h3>&lt;/center>");
-    out.println("&lt;center>&lt;h3>Pennies Left: &lt;font color='red'>" + nim.getSticks() + "&lt;/font>&lt;h3>&lt;/center>");
-    out.println("&lt;center>");
-    for (int k=0; k &lt; nim.getSticks(); k++)
-      out.println("&lt;img src='http://xroads.virginia.edu/&#126;CAP/LINCOLN/cent.jpg' width='25' height='25'>");
-    out.println("&lt;/center>&lt;br>");
-    out.println("&lt;center>");
-    out.println("&lt;form action='/jjj3e/NimServlet' method='POST'>");
-    out.println("&lt;table border='0'>");
-    out.println("&lt;tr>&lt;td>How many do you pickup?: &lt;/td>" +
-        "&lt;td>&lt;input type='text' name='pickup' value='0'>&lt;/td>&lt;/tr>");
-    out.println("&lt;/table>");
-    out.println("&lt;/center>");
-    out.println("&lt;/form>");
-  } else {
-    out.println("&lt;h3>&lt;font color='red'>Game over!&lt;/font>&lt;h3>");
-    if (nim.getPlayer() == 1)
-      out.println("&lt;center>&lt;h4>And the winner is : &lt;font color='magenta'> Me.&lt;/font>&lt;h4>&lt;/center>");
-    else
-      out.println("&lt;center>&lt;h4>And the winner is: &lt;font color='magenta'> You.&lt;/font>&lt;h4>&lt;/center>");
-    out.println("&lt;center>&lt;h4>&lt;font color='magenta'> Nice game!&lt;/font>&lt;h4>&lt;/center>");
-    out.println("&lt;center>&lt;h4>To play again, just reload the page.&lt;h4>&lt;/center>");
-    nim = null;
-  } // else game over
-  out.println("&lt;/body>");
-  out.println("&lt;/html>");
-}// doGet
+    {
+      response.setContentType("text/html");
+      PrintWriter out = response.getWriter();
+      HttpSession session = request.getSession(true);
+      out.println("&lt;html>");
+      out.println("&lt;body>");
+      out.println("&lt;head>");
+      out.println("&lt;title>Simple Nim Game&lt;/title>");
+      out.println("&lt;/head>");
+      out.println("&lt;body>");
+      out.println("&lt;center>&lt;h1>One Row Nim&lt;/h1>&lt;/center>");
+      out.println("&lt;center>&lt;h3>The Rules&lt;/h3>");
+      out.println("A random number of pennies is thrown on the table.&lt;BR>");
+      out.println("Two players alternate making moves,&lt;BR>");
+      out.println("picking up between 1 and 3 pennies on each move.&lt;BR>");
+      out.println("The player who picks up the last penny loses.&lt;BR>&lt;BR>");
+      if (nim == null) {
+        nim = new OneRowNim(7 + (int)(Math.random() * 11));
+        nimPlayer = new NimPlayer(nim);
+        out.println("&lt;h4>You go first!&lt;/h4>&lt;/center>");
+      } else {
+        int userTakes = Integer.parseInt(request.getParameter("pickup"));
+        if (!nim.takeSticks(userTakes)) {
+          out.println("&lt;h4>&lt;font color='red'>Woops. That's an illegal move!. Try again. &lt;/font>&lt;h4>");
+        } else if (!nim.gameOver()) {
+          nim.changePlayer();
+          out.println("&lt;h4>So, you took &lt;font color='blue'>" + userTakes + "&lt;/font>&lt;BR>");
+          out.println("That leaves me with &lt;font color='blue'>" + nim.getSticks() + "&lt;/font>&lt;BR>");
+          int iTake = nimPlayer.move();
+          out.println("OK. I take &lt;font color='red'>" + iTake + " &lt;/font>pennies.&lt;BR>&lt;/h4>");
+          nim.takeSticks(iTake);
+          nim.changePlayer();
+        } // if not gameover
+      } // else nim != null
+      if (!nim.gameOver()) {
+        if (nim.getPlayer() == 1)
+          out.println("&lt;center>&lt;h3>Who's Turn: &lt;font color='magenta'> Your turn &lt;/font>&lt;h3>&lt;/center>");
+        else
+          out.println("&lt;center>&lt;h3>Who's Turn: &lt;font color='magenta'> My turn &lt;/font>&lt;h3>&lt;/center>");
+        out.println("&lt;center>&lt;h3>Pennies Left: &lt;font color='red'>" + nim.getSticks() + "&lt;/font>&lt;h3>&lt;/center>");
+        out.println("&lt;center>");
+        for (int k=0; k &lt; nim.getSticks(); k++)
+          out.println("&lt;img src='http://xroads.virginia.edu/&#126;CAP/LINCOLN/cent.jpg' width='25' height='25'>");
+        out.println("&lt;/center>&lt;br>");
+        out.println("&lt;center>");
+        out.println("&lt;form action='/jjj3e/NimServlet' method='POST'>");
+        out.println("&lt;table border='0'>");
+        out.println("&lt;tr>&lt;td>How many do you pickup?: &lt;/td>" +
+            "&lt;td>&lt;input type='text' name='pickup' value='0'>&lt;/td>&lt;/tr>");
+        out.println("&lt;/table>");
+        out.println("&lt;/center>");
+        out.println("&lt;/form>");
+      } else {
+        out.println("&lt;h3>&lt;font color='red'>Game over!&lt;/font>&lt;h3>");
+        if (nim.getPlayer() == 1)
+          out.println("&lt;center>&lt;h4>And the winner is : &lt;font color='magenta'> Me.&lt;/font>&lt;h4>&lt;/center>");
+        else
+          out.println("&lt;center>&lt;h4>And the winner is: &lt;font color='magenta'> You.&lt;/font>&lt;h4>&lt;/center>");
+        out.println("&lt;center>&lt;h4>&lt;font color='magenta'> Nice game!&lt;/font>&lt;h4>&lt;/center>");
+        out.println("&lt;center>&lt;h4>To play again, just reload the page.&lt;h4>&lt;/center>");
+        nim = null;
+      } // else game over
+      out.println("&lt;/body>");
+      out.println("&lt;/html>");
+    }// doGet
  </input></program>
     </listing>
     <p>
@@ -472,7 +466,8 @@ out.println("&lt;tr>&lt;td>How many do you pick up?: &lt;/td>" +
       which are the elements in the angle brackets.
     </p>
   </subsection>
-  <subsection>
+ <!-- BH put download link in intro instead:
+   <subsection>
     <title>Setting Up and Using Java Servlets</title>
     <p>
       Java servlets can only run on a Web server that is specially configured to interpret them.
@@ -491,4 +486,5 @@ http://www.cs.trincoll.edu/&#126;ram/jjj/servlets
       Links to Java servlet sites are also provided on our servlets page.
     </p>
 </subsection>
+-->
 </section>

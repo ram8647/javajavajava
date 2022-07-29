@@ -6,10 +6,12 @@
           <idx><h>thread</h></idx>
       (or a <em>thread of execution</em>
       or a <em>thread of control</em>) is a single sequence of executable statements within a program.
+    </p>
+    <p>
       For Java applications,
-      the flow of control begins at the first statement in <c>main()</c> and continues sequentially through the program statements.
-      For Java applets,
-      the flow of control begins with the first statement in <c>init()</c>. Loops within a program cause a certain block of statements to be repeated.
+      the flow of control begins at the first statement in <c>main()</c> and 
+      continues sequentially through the program statements.
+      Loops within a program cause a certain block of statements to be repeated.
       If-else structures cause certain statements to be selected and others to be skipped.
       Method calls cause the flow of execution to jump to another part of the program,
       from which it returns after the method's statements are executed.
@@ -17,7 +19,8 @@
       you can trace the sequential flow of execution from one statement to the next.
     </p>
     <p>
-      One way to visualize a thread is to imagine that you could make a  list of the program's statements as they are executed by the computer's central processing unit (CPU).
+      One way to visualize a thread is to imagine that you could make a  list of the 
+      program's statements as they are executed by the computer's central processing unit (CPU).
       Thus, for a particular execution of a program with loops,
       method calls, and selection statements,
       you could list each instruction that was executed, beginning at the first,
@@ -31,9 +34,11 @@
       Within a single thread,
       the statements are executed one after the other, as usual.
       However, by alternately executing the statements from one thread and another,
-      the computer can run several threads <em>concurrently</em>.
+      the computer can run several threads <term>concurrently</term>.
       Even though the CPU executes one instruction at at time,
       it can run multiple threads concurrently by rapidly alternating among them.
+    </p>
+    <p>
       The main advantage of concurrency is that it allows the computer to do more than one task at a time.
       For example,
       the CPU could alternate between downloading an image from the Internet and running a spreadsheet calculation.
@@ -45,7 +50,7 @@
     <principle>
 <title>JVM Threads</title>
 <p>
-he Java Virtual Machine (JVM) is itself an example of a multithreaded program.
+The Java Virtual Machine (JVM) is itself an example of a multithreaded program.
       JVM threads perform tasks that are essential to the successful execution of Java programs.
 </p>
 </principle>
@@ -68,7 +73,7 @@ One of the JVM threads,
       A <term>task</term> in this sense is a computer operation of some sort,
       such as reading or saving a file,
       compiling a program, or displaying an image on the screen.
-      Multitasking requires the use of a separate thread for each of the tasks.
+      Multitasking requires the use of a separate thread for each task.
       The methods available in the Java <c>Thread</c> class make it possible
       (and quite simple)
       to implement <term>multithreaded</term>
@@ -77,15 +82,17 @@ One of the JVM threads,
     </p>
     <p>
       Most computers, including personal computers,
-      are <em>sequential</em> machines that consist of a single CPU, which is capable of executing one machine instruction at a time.
-      In contrast, <em>parallel computers</em>,
+      are <term>sequential</term> machines that consist of a single CPU, which 
+      is capable of executing one machine instruction at a time.
+      In contrast, <term>parallel computers</term>,
       used primarily for large scale scientific and engineering applications,
       are made up of multiple CPUs working in tandem.
     </p>
     <p>
       Today's personal computers,
       running at clock speeds over 1 gigahertz<mdash/>1 <em>gigahertz</em>
-      equals 1 billion cycles per second<mdash/>are capable of executing millions of machine instructions per second.
+      equals 1 billion cycles per second<mdash/>are capable of executing 
+      millions of machine instructions per second.
       Despite its great speed,
       however, a single CPU can process only one instruction at a time.
     </p>
@@ -97,13 +104,14 @@ One of the JVM threads,
       multithreaded programs are made possible by dividing the CPU's time and sharing it among the threads.
       The CPU's schedule is managed by a
       <term>scheduling algorithm</term>,
-      which is an algorithm that schedules threads for execution on the CPU. The choice of a scheduling algorithm depends on the platform on which the program is running.
-      Thus, thread scheduling might be handled differently on Unix, Windows,
+      which schedules threads for execution on the CPU. 
+      The choice of a scheduling algorithm depends on the platform on which the program is running.
+      Thus, thread scheduling might be handled differently on Linux, Windows,
       and Macintosh systems.
     </p>
     <figure xml:id="fig-timeslicing">
       <caption>Each thread gets a slice of the CPU's time.</caption>
-      <image width="73%" source="chptr14/13f1.png"/>
+      <image width="50%" source="chptr14/13f1.png"/>
     </figure>
     <p>
       One common scheduling technique is known as
@@ -113,12 +121,12 @@ One of the JVM threads,
       For example,
       suppose we have a program that consists of two threads.
       Using this technique,
-      the system would give each thread a small <em>quantum</em>
+      the system would give each thread a small <term>quantum</term>
           <idx><h>quantum</h></idx>
       of CPU time<mdash/>say, one thousandth of a second (one
-      <em>millisecond</em>)<mdash/>to execute its instructions.
+      <term>millisecond</term>)<mdash/>to execute its instructions.
       When its quantum expires,
-      the thread would be <em>preempted</em>
+      the thread would be <term>preempted</term>
       and the other thread would be given a chance to run.
       The algorithm would then alternate in this <term>round-robin</term>
           <idx><h>round-robin</h></idx>
@@ -127,19 +135,23 @@ One of the JVM threads,
       During each millisecond on a 300-megahertz CPU,  a thread can execute 300,000 machine instructions.
       One <term>megahertz</term> equals 1 million cycles per second.
       Thus, within each second of real time,
-      each thread will receive 500 time slices and will be able to execute something like 150 million machine instructions.
+      each thread will receive 500 time slices and will be able to 
+      execute something like 150 million machine instructions.
     </p>
     <p>
       Under <term>priority scheduling</term>,
           <idx><h>priority scheduling</h></idx>
-      threads of higher priority are  allowed to run to completion before lower-priority threads are given a chance.
-      An example of a high-priority thread would be one that is processing keyboard input or any other kind of interactive input from the user.
+      threads of higher priority are  allowed to run to completion before 
+      lower-priority threads are given a chance.
+      An example of a high-priority thread would be one that is processing 
+      keyboard input or any other kind of interactive input from the user.
       If such tasks were given low priority,
       users would experience noticeable delays in their interaction,
       which would be quite unacceptable.
     </p>
     <p>
-      The only way a high-priority thread can be preempted is if a thread of still higher priority becomes available to run.
+      The only way a high-priority thread can be preempted is if a thread 
+      of still higher priority becomes available to run.
       In many cases,
       higher-priority threads are those that can complete their task within a few milliseconds,
       so they can be allowed to run to completion without starving the lower-priority threads.
@@ -148,25 +160,29 @@ One of the JVM threads,
       Starvation occurs when one thread is repeatedly preempted by other threads.
     </p>
     <p>
-      \BOXtwoleft{Thread Support.}{Depending on the hardware platform, Java threads can be supported by assigning different threads to different processors,
+      Depending on the hardware platform, 
+      Java threads can be supported by assigning different threads to different processors,
       by time slicing a single processor,
-      or by time slicing many hardware processors.}
+      or by time slicing many hardware processors.
     </p>
   </subsection>
-  <subsection xml:id="fig-p706f1">
+  <subsection xml:id="multi-thread-numbers">
     <title>Multithreaded Numbers</title>
     <p>
       Let's consider a simple example of a threaded program.
       Suppose we give every individual thread a unique ID number,
       and each time it runs, it prints its ID ten times.
       <nbsp/>For example,
-      when the thread with ID 1 runs the output produced would just be a sequence of ten 1's: 1111111111.
+      when the thread with ID 1 runs the output produced would just 
+      be a sequence of ten 1's: 1111111111.
     </p>
+    <figure xml:id="fig-numberthread">
+     <image width="50%" source="chptr14/p706f1.png"/>
+     <caption>The <c>NumberThread</c> class.</caption>
+    </figure>
     <p>
-      As shown in Figure<nbsp/>14.2, the <c>NumberThread</c> class is defined <image width="73%" source="chptr14/p706f1.png"/>
-    </p>
-    <p>
-      as a subclass of <c>Thread</c> and overrides the <c>run()</c> method.
+      As shown in <xref ref="fig-numberthread">Figure</xref>, the <c>NumberThread</c> class is 
+      defined as a subclass of <c>Thread</c> and overrides the <c>run()</c> method.
       To set the thread's ID number,
       the constructor takes a single parameter that is used to set the thread's ID number.
       In the <c>run()</c> method,
@@ -182,19 +198,22 @@ public class NumberThread extends Thread {
         for (int k=0; k &lt; 10; k++) {
             System.out.print(num);
         } //for
-    } // run()} // NumberThread
+    } // run()
+} // NumberThread
  </input></program>
     <p>
       
     </p>
+    <p>
+      Now let's define another class whose task will be to create many <c>NumberThread</c>s and 
+      get them all running at the same time (<xref ref="fig-p707f1">Figure</xref>).
+    </p>
     <figure xml:id="fig-p707f1">
       <caption>The <c>Numbers</c> object creates several instances of
-<c>NumberThread</c> and tells each one to <c>start()</c>.</caption>
-      <image width="73%" source="chptr14/p707f1.png"/>
+      <c>NumberThread</c> and tells each one to <c>start()</c>.</caption>
+      <image width="50%" source="chptr14/p707f1.png"/>
     </figure>
     <p>
-      Now let's define another class whose task will be to create many NumberThread s and get them all running at the same time (Fig.
-      <xref ref="fig-p707f1"></xref>).
       For each <c>NumberThread</c>, we want to call its constructor and then <c>start()</c> it:
     </p>
     <p>
@@ -211,7 +230,8 @@ public class Numbers {
     number3 = new NumberThread(3); number3.start();
     number4 = new NumberThread(4); number4.start();
     number5 = new NumberThread(5); number5.start();
-  } // main()} // Numbers
+  } // main()
+} // Numbers
  </input></program>
     <p>
       When a thread is started by calling its <c>start()</c> method,
@@ -255,11 +275,9 @@ public class Numbers {
       Threads 2, 3, 4, and 5 did not.
       As this example illustrates,
       the order and timing of a thread's execution are highly unpredictable.
-      This example also serves to illustrate one way of creating a multithreaded program:
     </p>
     <p>
-      <image width="73%" source="chptr14/p708f1.png"/> \caption{The <c>java.lang.Thread</c> class.
-      NOTE: NEEDS REVISION TO ADD PRIORITY, YIELD() and SLEEP(). }
+      This example also serves to illustrate one way of creating a multithreaded program:
       <ul>
         <li>
           <p>
