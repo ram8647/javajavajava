@@ -2,7 +2,8 @@
   <title>The Linked List Data Structure</title>
   <introduction>
     <p>
-      As we said, a <em>static</em> data structure is one whose size is fixed  during a program's execution<mdash/>a static structure's memory is allocated at compile time.
+      As we said, a <em>static</em> data structure is one whose size is fixed  during a program's 
+      execution<mdash/>a static structure's memory is allocated at compile time.
       By contrast, a <em>dynamic</em>
       structure is one that can grow and shrink as needed.
       In this section, we will develop a dynamic <em>list</em>,
@@ -39,17 +40,11 @@ public class Student {
     <p>
       In this example, <c>name</c> is a reference to a <c>String</c> object.
     </p>
- 
     <p>
       A <term>linked list</term>
           <idx><h>linked list</h></idx>
       is a list in which a collection of nodes are linked together by references from one node to the next.
       </p>
-      <figure xml:id="fig-linkedlist">
-        <caption>A linked list of Nodes terminated
-        by a <c>null</c> link.</caption>
-        <image width="73%" source="chptr16/linkedlist.png"/>
-      </figure>
       <p>
       To make a linked list,
       we will define a class of self-referential  objects.
@@ -63,13 +58,7 @@ public class Node {
      private String name;
      private Node next;
 }
- </input></program>
-
- <figure xml:id="fig-nodeuml">
-  <caption>The <c>Node</c> class.</caption>
-  <image width="73%" source="chptr16/nodeuml.png"/>
-</figure>
-    
+ </input></program>   
       <p>
       In addition to the reference to a <c>String</c> object,
       each
@@ -80,13 +69,24 @@ public class Node {
       For example, <xref ref="fig-linkedlist">Figure</xref>
       provides an illustration of a linked list of <c>Node</c> s.
     </p>
-    <p>
-      By assigning references to the <c>next</c> variables in each <c>Node</c>, we can chain together arbitrarily long lists of objects.
-      Therefore, we will want to add methods to our <c>Node</c> class that enable us to manipulate a <c>Node</c>'s next variable (Fig.<nbsp/>16<ndash/>2).
+      <figure xml:id="fig-linkedlist">
+        <caption>A linked list of Nodes terminated
+        by a <c>null</c> link.</caption>
+        <image width="73%" source="chptr16/linkedlist.png"/>
+      </figure>
+   <p>
+      By assigning references to the <c>next</c> variables in each <c>Node</c>, we can 
+      chain together arbitrarily long lists of objects.
+      Therefore, we will want to add methods to our <c>Node</c> class that enable us to 
+      manipulate a <c>Node</c>'s next variable (<xref ref="fig-nodeuml">Figure</xref>).
       By assigning it a reference to another <c>Node</c>, we can link two <c>Node</c> s together.
       By retrieving the link's value,
       we can find the next <c>Node</c> in the list.
     </p>
+ <figure xml:id="fig-nodeuml">
+  <caption>The <c>Node</c> class.</caption>
+  <image width="73%" source="chptr16/nodeuml.png"/>
+</figure>
     <principle>
       <title>Self-Referential Object</title>
       <p>
@@ -98,7 +98,8 @@ public class Node {
       In addition to the link variable,
       each <c>Node</c> stores some data.
       In this example,
-      the data is a single <c>String</c>. But there's no real limit to the amount and type of data that can be  stored in a linked list.
+      the data is a single <c>String</c>. But there's no real limit to the amount and type of 
+      data that can be  stored in a linked list.
       Therefore, in addition to methods that manipulate a <c>Node</c>'s link,
       we will also want methods to manipulate its data.
       These points suggest the following basic design for a <c>Node</c>:
@@ -112,7 +113,7 @@ public class Node {
      public Object getData();
      public void setNext(Node link);   // Link access
      public Node getNext();
-    } // Node
+} // Node
  </input></program>
     <p>
       Note that we have defined the <c>Node</c>'s data in the most general possible way: 
@@ -165,7 +166,7 @@ public class Node {
       These will be the node's data and can be stored in two <c>String</c> variables.
       To access these data,
       we will provide a  constructor and a basic set of access methods.
-      Thus, we have the definition shown in <xref ref="list-phonelistnode">Figure</xref>.
+      Thus, we have the definition shown in <xref ref="list-phonelistnode">Listing</xref>.
     </p>
     <figure xml:id="fig-phoneuml">
       <caption>Design of the <c>PhoneListNode</c> class.</caption>
@@ -202,7 +203,7 @@ public class PhoneListNode {
      public PhoneListNode getNext() {
          return next;
      } // getNext()
-    } // PhoneListNode
+} // PhoneListNode
  </input></program>
 </listing>
     <p>
@@ -213,16 +214,18 @@ public class PhoneListNode {
     <principle>
       <title>DEBUGGING TIP: Null Reference</title>
       <p>
-        A common programming error is the attempt to use a <c>null</c> reference to refer to an object.
+        A common programming error is the attempt to use a <c>null</c> 
+        reference to refer to an object.
         This usually means the reference has not been successfully initialized.
       </p>
     </principle>
     <p>
       Let's discuss the details of the link access methods<mdash/>the
 <c>setNext()</c> and <c>getNext()</c> methods<mdash/>which are also simple to implement.
-      Because this is a <c>PhoneListNode</c>, these methods  take <c>PhoneListNode</c> as a parameter and return type,
-      respectively.
-      Given a reference to a <c>PhoneListNode</c>, the <c>setNext()</c> method assigns it to <c>next</c>. The <c>getNext()</c> method simply returns the value of its <c>next</c> link.
+      Because this is a <c>PhoneListNode</c>, these methods  take <c>PhoneListNode</c> as
+       a parameter and return type, respectively.
+      Given a reference to a <c>PhoneListNode</c>, the <c>setNext()</c> method assigns it 
+      to <c>next</c>. The <c>getNext()</c> method simply returns the value of its <c>next</c> link.
     </p>
     <p>
       Let's now see how we would use these methods to construct a list.
@@ -235,13 +238,15 @@ PhoneListNode node3 = new PhoneListNode("Stacy K","090-997-9188");
  </input></program>
     <p>
       The next two statements chain the nodes together into the list shown in 
-      <xref ref="list-phonelistpic">Figure</xref>:
+      <xref ref="fig-phonelistpic">Figure</xref>:
     </p>
  <program language="java"><input>
 node1.setNext(node2);
 node2.setNext(node3);
  </input></program>
- <figure xml:id="fig-phonelistpic"><caption>Phone List</caption>
+ <figure xml:id="fig-phonelistpic">
+  <caption>The phonelist: a linked list of nodes, each of which contains 
+  a person's name and phone number.</caption>
  <image width="73%" source="chptr16/phonelistpic.png"/>
 </figure>
     <p>
@@ -290,11 +295,16 @@ node3.setNext(node4);
       This class will include the insert,
       access, and remove methods.
       It must also contain a reference to the list itself.
-      This leads to the basic design shown in Figure<nbsp/>16.6.
-      Because this is a list of <c>PhoneListNode</c> s, we need a <c>PhoneListNode</c> reference to point to \marginfigvspace{-120pt}{chptr16/phonelistclass.eps}{The <c>PhoneList</c> class has a reference to the first node of the list (<c>head</c>) and methods to insert,
-      remove, and look up information.}{fig-phonelistclass} the list,
-      which is the purpose of the <c>head</c> variable.
-    </p>
+      This leads to the basic design shown in <xref ref="fig-phonl-class">Figure</xref>.
+      Because this is a list of <c>PhoneListNode</c> s, we need a <c>PhoneListNode</c> reference 
+      to point to the list, which is the purpose of the <c>head</c> variable.
+        </p>
+ <figure xml:id="fig-phonl-class">
+      <caption>The <c>PhoneList</c> class 
+      has a reference to the first node of the list (<c>head</c>) and methods to insert,
+      remove, and look up information.</caption>
+      <image width="73%" source="chptr16/phonelistclass.png"/>
+</figure>
     <p>
       A preliminary coding of the <c>PhoneList</c> class is shown in 
       <xref ref="list-phonelistprelim">Listing</xref>.
@@ -328,7 +338,7 @@ public class PhoneList {
     public String getPhone(String name) { }
     public String remove(String name) { }
     public void print() { }
-  } // PhoneList
+} // PhoneList
  </input></program>
 </listing>
   </subsection>
@@ -370,9 +380,9 @@ public void insert(PhoneListNode newNode) {
     PhoneListNode current = head; // Start traversal at head
     while (current.getNext() != null)// While not last node
       current = current.getNext(); //   go to next node
-      current.setNext( newNode );  // Do the insertion
-    }
-  } // insert()
+    current.setNext( newNode );  // Do the insertion
+  } // else
+} // insert()
  </input></program>
     <p>
       Recall that when nodes are linked,
@@ -480,25 +490,26 @@ public String getPhone(String name) {
   if (isEmpty())                    // Case 1: Empty list
     return "Phone list is empty";
   else {
-    PhoneListNode current = head;
-    while ((current.getNext() != null) &amp;&amp;
+     PhoneListNode current = head;
+     while ((current.getNext() != null) &amp;&amp;
                  (!current.getName().equals(name)))
-      current = current.getNext();
-      if (current.getName().equals(name))
+        current = current.getNext();
+     if (current.getName().equals(name))
         return current.getData(); // Case 2: Found name
-      else                        // Case 3: No such person
+     else                        // Case 3: No such person
         return ("Sorry.  No entry for " + name);
-   }
-  } // getPhone()
+  } // else
+} // getPhone()
  </input></program>
     <p>
       Note the while loop in this case.
-      As in the <c>insert()</c> method,
-      when the loop exits,
-      we need a reference to the <c>current</c> node so that we can print its phone number [<c>current.getData()</c>]. But here there are three ways to exit the loop: (1) We reach the end of the list without finding the named person; (2) we find the named person in the interior of the list;
-      or (3) we find the named person  in the last node of the list.
-      In any case,
-      it is necessary to test whether the name was found or not after the loop is exited.
+      As in the <c>insert()</c> method, when the loop exits,
+      we need a reference to the <c>current</c> node so that we can print its phone 
+      number [<c>current.getData()</c>]. But here there are three ways to exit the 
+      loop: (1) We reach the end of the list without finding the named person; (2) we find the named 
+      person in the interior of the list;
+      or (3) we find the named person  in the last node of the list.  In any case,   
+       it is necessary to test whether the name was found or not after the loop is exited.
       Then appropriate action can be taken.
     </p>
     <exercises><title>Self-Study Exercise</title>
@@ -531,7 +542,6 @@ public String getPhone(String name) {
       As <xref ref="list-remove">Listing</xref> shows,
       the first two cases are easily handled.
       If the list is empty, we just return an error message.
-
     </p>
     <listing xml:id="list-remove">
       <caption>The <c>remove()</c> method.</caption>
@@ -555,7 +565,7 @@ public String remove(String name) { // Remove an entry by name
     return "Removed " + current.toString();
   } else
     return ("Sorry.  No entry for " + name); // Case 4: node not found
-  } // remove()
+} // remove()
  </input></program>
 </listing>
     <p>

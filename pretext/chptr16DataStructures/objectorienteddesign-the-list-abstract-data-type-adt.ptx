@@ -47,7 +47,7 @@
     </p>
   </introduction>
   <subsection xml:id="fig-listnode">
-    <title>The <c>Node</c>Class</title>
+    <title>The <c>Node</c> Class</title>
     <principle>
       <title>EFFECTIVE DESIGN:Generalizing a Type</title>
       <p>
@@ -57,23 +57,35 @@
     </principle>
     <p>
       Our approach will be to generalize the classes we created in the <c>PhoneList</c> example.
-      Thus, the <c>PhoneListNode</c> will become a generic <c>Node</c> that can store any kind of data (Fig.<nbsp/>16<ndash/>13).
+      Thus, the <c>PhoneListNode</c> will become a generic <c>Node</c> that can store any kind 
+      of data (<xref ref="fig-adtlistnode">Figure</xref>).
       Some of the changes are merely name changes.
       Thus, wherever we had <c>PhoneListNode</c>, we now have just <c>Node</c>. The link access methods have not changed significantly.
-      What has <image width="73%" source="chptr16/listnode.png"/> changed is that instead of instance variables for the name,
+      What has changed is that instead of instance variables for the name,
       phone number,
       and so on,
       we now have just a single data reference to an <c>Object</c>. This is as general as you can get, because,
       as we pointed out earlier, <c>data</c> can refer to any object,
       even to primitive data.
     </p>
+   <figure xml:id="fig-adtlistnode">
+      <caption>The <c>Node</c> class is a generalization of 
+      the <c>PhoneListNode</c> class.</caption>
+      <image width="73%" source="chptr16/listnode.png"/>
+ </figure>
     <p>
-      The implementation of the <c>Node</c> class is shown in <xref ref="fig-nodeclass">Figure</xref>.
-      Note that the data access methods, <c></c>
+      The implementation of the <c>Node</c> class is shown in <xref ref="listing-nodeclass">Listing</xref>.
+      Note that the data access methods,getData()} and <c>setData()</c>, use references 
+      to <c>Object</c> for their parameter and return type.
+      Note also how we've defined the <c>toString()</c> method.
+      It just invokes <c>data.toString()</c>. Because
+      <c>toString()</c> is defined in <c>Object</c>, every type of data will have this method.
+      And because <c>toString()</c> is frequently overridden in defining new objects,
+      it is useful here.
     </p>
-    <figure xml:id="fig-nodeclass">
+    <listing xml:id="listing-nodeclass">
       <caption>The <c>Node</c> class is a more abstract version of
-      the <c>Phone- ListNode</c> class.</caption>
+      the <c>PhoneListNode</c> class.</caption>
  <program language="java"><input>
 public class Node {
    private Object data;        // Stores any kind of data
@@ -96,30 +108,27 @@ public class Node {
    }
    public Node getNext() {
       return next;
-   }} // Node
+   }
+} // Node
  </input></program>
-    </figure>
-    <p>
-      getData()} and <c>setData()</c>, use references to <c>Object</c> for their parameter and return type.
-      Note also how we've defined the <c>toString()</c> method.
-      It just invokes <c>data.toString()</c>. Because
-<c>toString()</c> is defined in <c>Object</c>, every type of data will have this method.
-      And because <c>toString()</c> is frequently overridden in defining new objects,
-      it is useful here.
-    </p>
+    </listing>
   </subsection>
   <subsection>
     <title>The <c>List</c>Class</title>
     <p>
-      Let's now generalize the <c>PhoneList</c> class (Fig.<nbsp/>16<ndash/>15).
-      The <c>List</c> class will still contain a reference to the <c>head</c> of the list,
-      which will now be a list of
-<c>Node</c> s.
-      It will still define its constructor,
-      its \marginfigvspace{-90pt}{chptr16/listuml.eps}{The <c>List</c> class contains a pointer to the head of the list and public methods to insert and remove objects from both the front and rear of the list.}{fig-listuml}<c>isEmpty()</c> method,
-      and its <c>print()</c> method in the same way as in the
-<c>PhoneList</c>.
+      Let's now generalize the <c>PhoneList</c> class.
+      The <c>List</c> class (<xref ref="fig-adtlistuml">Figure</xref>) will still contain a 
+      reference to the <c>head</c> of the list,
+      which will now be a list of <c>Node</c> s.  It will still define its constructor,
+      its <c>isEmpty()</c> method,
+      and its <c>print()</c> method in the same way as in the <c>PhoneList</c>.
     </p>
+    <figure xml:id="fig-adtlistuml">
+      <caption>The <c>List</c> class contains a 
+      pointer to the head of the list and public methods to insert and remove objects 
+      from both the front and rear of the list.</caption>
+      <image width="73%" source="chptr16/listuml.png"/>
+    </figure>
     <p>
       However, in designing a generic <c>List</c> class,
       we want to design some new methods,
@@ -133,9 +142,8 @@ public class Node {
       so we'll scrap this method in favor of two new methods that remove a node from the beginning or end of the list,
       respectively.
     </p>
-    <figure xml:id="fig-listadt">
-      <caption>The <c>List</c>ADT.</caption>
-      
+<listing xml:id="listing-listadt">
+      <caption>The <c>List</c> ADT.</caption>    
  <program language="java"><input>
 public class List {
   private Node head;
@@ -162,7 +170,7 @@ public class List {
       Node current = head;              // Start at head of list
       while (current.getNext() != null) // Find the end of the list
         current = current.getNext();
-        current.setNext(new Node(obj));  // Create and insert newNode
+      current.setNext(new Node(obj));  // Create and insert newNode
       }
   } // insertAtRear()
   public Object removeFirst() {
@@ -187,14 +195,15 @@ public class List {
     }
     previous.setNext(null);
     return current.getData();
-  } // removeLast()} // List
+  } // removeLast()
+} // List
  </input></program>
-    </figure>
+</listing>
     <p>
       We already know the basic strategies for implementing these new methods,
-      which are shown in the definition in <xref ref="fig-listadt">Figure</xref>.
+      which are shown in the definition in <xref ref="listing-listadt">Listing</xref>.
       We have renamed the <c>insertAtRear()</c> method,
-      which otherwise is very similar to the <c>PhoneList.\-insert()</c> method.
+      which otherwise is very similar to the <c>PhoneList.insert()</c> method.
       The key change is that now its parameter must be an
 <c>Object</c>, because we want to be able to insert any kind of object into our list.
       At the same time,
@@ -210,10 +219,10 @@ head = new Node(obj);
       traversing to the last node.
     </p>
     <p>
-      The new <c>insertAtFront()</c> method (Fig.
-      <xref ref="fig-listadt"></xref>) is simple to implement,
+      The new <c>insertAtFront()</c> method (<xref ref="listing-listadt">Listing</xref>) is simple to implement,
       since no traversal of the list is necessary.
-      You just need to create a new <c>Node</c> with the <c>Object</c> as its data element and then link the new node into the head of the list:
+      You just need to create a new <c>Node</c> with the <c>Object</c> as its data element and then 
+      link the new node into the head of the list:
     </p>
  <program language="java"><input>
 Node newnode = new Node(obj);
@@ -260,7 +269,7 @@ head = newnode;
 <c>Integer</c> s mixed with <c>Float</c> s, mixed with other types of objects.
       The <c>main()</c> method in <xref ref="fig-testlistadt">Figure</xref> illustrates this feature.
     </p>
-    <figure xml:id="fig-testlistadt">
+<listing xml:id="listing-testlistadt">
       <caption>A series of tests for the <c>List</c>ADT.</caption>
       
  <program language="java"><input>
@@ -288,9 +297,10 @@ public static void main( String argv[] ) {
   o = list.removeFirst();
   System.out.println(" Removed " +o.toString());
   System.out.println("Generic List:");
-  list.print();} // main()
+  list.print();
+} // main()
  </input></program>
-    </figure>
+    </listing>
     <principle>
       <title>EFFECTIVE DESIGN:The <c>List</c>ADT</title>
       <p>
@@ -299,9 +309,9 @@ public static void main( String argv[] ) {
     </principle>
     <p>
       The list we create here involves various types of data.
-      The <c>PhoneRecord</c> class is a scaled-down version of the <c>PhoneListNode</c> we used in the previous example (Fig.
+      The <c>PhoneRecord</c> class is a scaled-down version of the <c>PhoneListNode</c> we used in the previous example (
       <xref ref="fig-phonerecorduml"></xref>).
-      Its definition is shown in <xref ref="fig-phonerecord">Figure</xref>.
+      Its definition is shown in <xref ref="listing-phonerecord">Listing</xref>.
       Note how we use an <c>Object</c> reference to remove objects from the list in <c>main()</c>. We use the
 <c>Object.toString()</c> method to display the object that was removed.
     </p>
@@ -310,7 +320,7 @@ public static void main( String argv[] ) {
       stores data for a phone directory.</caption>
       <image width="73%" source="chptr16/phonerecorduml.png"/>
     </figure>
-    <figure xml:id="fig-phonerecord">
+    <listing xml:id="listing-phonerecord">
       <caption>A <c>PhoneRecord</c> class.</caption>
  <program language="java"><input>
 public class PhoneRecord {
@@ -328,10 +338,27 @@ public class PhoneRecord {
      }
      public String getPhone( ) {
          return phone;
-     }} // PhoneRecord
+     }
+} // PhoneRecord
  </input></program>
-    </figure>
-    </subsection><subsection><title>Self-Study Exercises</title>
+    </listing>
+    
+    <exercises><title>Self-Study Exercises</title>
+      <exercise>
+          <p>
+            Trace through the <c>main()</c> method line by line and predict its output.
+          </p>      
+      </exercise>
+       <exercise>
+            <p>
+            Design a test of the <c>List</c> program that shows that it is possible to insert new elements into a list after some or all of its previous nodes have been removed.
+          </p>
+      </exercise>
+</exercises>
+    
+    </subsection>
+<!--
+   <subsection><title>Self-Study Exercises</title>
       <ol>
         <li>
           <p>
@@ -345,4 +372,5 @@ public class PhoneRecord {
         </li>
       </ol>
   </subsection>
+  -->
 </section>

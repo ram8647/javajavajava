@@ -1,12 +1,11 @@
 <section xml:id="fromthe-java-library-the-java-collections-frameworkand-generic-types">
   <title>From the Java Library: The Java Collections Framework and Generic Types</title>
   <introduction>
+   <!-- ???
+         <em>java.sun.com/j2se/1.5.0/docs/api/</em>
+   -->
     <p>
-      
-      <em>java.sun.com/j2se/1.5.0/docs/api/</em>}
-    </p>
-    <p>
-      \tBOXseven{The Java class library} contains implementations of some abstract data types.
+      The Java class library contains implementations of some abstract data types.
       The Java utility package, <c>java.util.*</c>, contains a good number of classes and interfaces designed to facilitate storing and manipulating groups of objects.
       This family of related interfaces and classes is called the
       <term>Java collections framework</term>.
@@ -29,13 +28,17 @@
       you would use <c>&lt;E&gt;</c> or <c>&lt;K,V&gt;</c> to refer to unspecified type names.
       Thus, names of classes or interfaces implemented with generic types are written with the syntax <c>ClassName&lt;E&gt;</c>.
     </p>
+    <figure xml:id="fig-libvecuml">
+      <caption>The <c>Java.util.Vector</c> class is implemented with a generic type in <c>Java 5.0</c>.</caption>
+      <image width="73%" source="chptr16/libvectoruml.png"/>
+</figure>
     <p>
       Let's reconsider the <c>Vector</c> class,
       which was introduced in Chapter<nbsp/>9.
       The <c>Vector</c> class,
       which is part of the Java collections framework,
       has a generic type implementation in Java 5.0.
-      <image width="73%" source="chptr16/libvectoruml.png"/> Figure<nbsp/>16.28 describes the <c>Vector&lt;E&gt;</c> class.
+      <xref ref="fig-libvecuml">Figure</xref> describes the <c>Vector&lt;E&gt;</c> class.
       Notice that the
 <c>E</c> refers to an unspecified type name, that is,
       the name of a class or interface.
@@ -84,20 +87,22 @@ strVec.addElement(new Integer(57));
 <c>String</c>. This is a big convenience for the programmer,
       because forgetting to cast objects from one type to another is a common programming error.
     </p>
-    <p>
-      <image width="73%" source="chptr16/libstackuml.png"/> \caption{The <c>java.util.\-Stack&lt;E&gt;</c> class is a subclass of <c>Vector&lt;E&gt;</c>. }
-    </p>
-  </subsection>
+   </subsection>
   
   <subsection>
     <title>The <c>java.util.Stack&lt;E&gt;</c> class</title>
     <p>
       The Java collections framework includes the <c>Stack&lt;E&gt;</c> class,
       implemented as a subclass of the <c>Vector&lt;E&gt;</c> class.
-      It contains the methods shown in Figure<nbsp/>16.29.
+      It contains the methods shown in <xref ref="fig-libstackuml">Figure</xref>.
       For the most part,
       its methods provide the same functionality as the methods we developed earlier in this chapter.
     </p>
+    <figure xml:id="fig-libstackuml">
+      <caption>The <c>java.util.\-Stack&lt;E&gt;</c> class is a 
+      subclass of <c>Vector&lt;E&gt;</c>.</caption>
+      <image width="73%" source="chptr16/libstackuml.png"/>
+   </figure>
     <p>
       Note that the methods provide the functionality of a stack ADT but the details of its implementation are hidden from the user.
       An object of this class can be declared, instantiated,
@@ -125,13 +130,14 @@ Stack&lt;String&gt; stk = new Stack&lt;String&gt;();
     <title>The <c>List&lt;E&gt;</c> interface
     and the <c>LinkedList&lt;E&gt;</c> class</title>
     <p>
-      The <c>java.util.LinkedList&lt;E&gt;</c> is an implementation of a linked list (Fig.<nbsp/>16.30).
+      The <c>java.util.LinkedList&lt;E&gt;</c> is an implementation of a linked list (<xref ref="fig-liblinklist">Figure</xref>).
       Like our implementation earlier in this chapter,
       it contains methods that can be used to define the standard stack and queue methods.
     </p>
-    <p>
+    <figure xml:id="fig-liblinklist">
+      <caption></caption>
       <image width="73%" source="chptr16/liblinlist.png"/>
-    </p>
+    </figure>
     <p>
       Many of the standard list-processing methods are defined as part of the <c>java.util.List&lt;E&gt;</c> interface.
       The advantage of defining list operations as an interface is that they can be implemented by a number of data structures.
@@ -152,11 +158,11 @@ Stack&lt;String&gt; stk = new Stack&lt;String&gt;();
       </ul>
     </p>
     <p>
-      The programmer might write a short method like that in <xref ref="fig-listtest">Figure</xref>
+      The programmer might write a short method like that in <xref ref="listing-listtest">Listing</xref>
       to demonstrate how the <c>List&lt;E&gt;</c> and
 <c>LinkedList&lt;E&gt;</c> structures will be used.
     </p>
-    <figure xml:id="fig-listtest">
+    <listing xml:id="listing-listtest">
       <caption>A method that demonstrates the interface <c>List&lt;E&gt;</c>
       and the class <c>LinkedList&lt;E&gt;</c>.</caption>
  <program language="java"><input>
@@ -173,7 +179,7 @@ public static void testList() {
      System.out.println(pr);
     } // testList
  </input></program>
-    </figure>
+    </listing>
     <p>
       Note that the statement
     </p>

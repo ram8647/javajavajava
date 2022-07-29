@@ -5,13 +5,14 @@
       A <term>queue</term>
           <idx><h>queue</h></idx>
       is a special type of list that limits insertions to the end of the list and removals to the front of the list.
-      Therefore, it enforces <term>first-in<ndash/>first-out (FIFO)</term><idx><h>first-in<ndash/>first-out (FIFO)</h></idx> behavior on the list.
+      Therefore, it enforces <term>first-in<ndash/>first-out (FIFO)</term><idx><h>first-in<ndash/>first-out 
+      (FIFO)</h></idx> behavior on the list.
       Think of the waiting line at the salad bar.
-      You enter the line at the rear and you leave the line at the front (Fig.
-      <xref ref="fig-queue"></xref>).
+      You enter the line at the rear and you leave the line at the front (<xref ref="fig-queue"></xref>).
     </p>
     <sidebyside>
-      The queue operations are conventionally called <em>enqueue</em><idx><h>enqueue</h></idx>, for insert, and <term>dequeue</term><idx><h>dequeue</h></idx>,
+      The queue operations are conventionally called <em>enqueue</em><idx><h>enqueue</h></idx>, 
+      for insert, and <term>dequeue</term><idx><h>dequeue</h></idx>,
       for remove, respectively.  Thus, the queue ADT stores a list of data
       and supports the following operations:
       <ul>
@@ -47,21 +48,24 @@
     </figure>
   </introduction>
   <subsection xml:id="fig-queueuml">
-    <title>The <c>Queue</c>Class</title>
+    <title>The <c>Queue</c> Class</title>
     <p>
-      The <c>Queue</c> class is also trivial to derive from <c>List</c>(Fig.<nbsp/>16.25).
-      Here we just restrict operations to the <c>insertAtRear()</c> and <c>removeFirst()</c> methods (Fig.
-      <xref ref="fig-queueadt"></xref>).
+      The <c>Queue</c> class is also trivial to derive from <c>List</c>(<xref ref="fig-queueadtuml">Figure</xref>).
+      Here we just restrict operations to the <c>insertAtRear()</c> and <c>removeFirst()</c> 
+      methods (<xref ref="listing-queueadt">Listing</xref>).
       To test the methods of this class,
-      we replace the <c>push()</c> and <c>pop()</c> operations of the last example to <c>enqueue()</c> and <c>dequeue()</c>, respectively (Fig.
-      <xref ref="fig-queueadttest"></xref>).
+      we replace the <c>push()</c> and <c>pop()</c> operations of the last example to <c>enqueue()</c> 
+      and <c>dequeue()</c>, respectively (<xref ref="listing-queueadttest">Listing</xref>).
       In this case,
       the letters of the test string will come out of the queue in the same order they went in<mdash/>FIFO.
     </p>
-    <p>
+    <figure xml:id="fig-queueadtuml">
+      <caption>The <c>Queue</c>'s <c>enqueue()</c> and <c>dequeue()</c> methods are
+      can use the <c>List</c>'s <c>insertAtRear()</c> and <c>removeFirst()</c> methods, respectively.</caption>
       <image width="73%" source="chptr16/queueuml.png"/>
-    </p>
-    <figure xml:id="fig-queueadt">
+    </figure>
+
+    <listing xml:id="listing-queueadt">
       <caption>The <c>Queue</c>ADT.</caption>
  <program language="java"><input>
 public class Queue extends List {
@@ -74,10 +78,10 @@ public class Queue extends List {
      public Object dequeue() {
          return removeFirst();
      }
-    }// Queue
+}// Queue
  </input></program>
-    </figure>
-    <figure xml:id="fig-queueadttest">
+    </listing>
+    <listing xml:id="listing-queueadttest">
       <caption>A method to test the <c>Queue</c>ADT. Letters inserted
       in a queue come out in the same order they went in.</caption>
  <program language="java"><input>
@@ -95,9 +99,9 @@ public static void main(String argv[]) {
          o  = queue.dequeue();
          System.out.print( o.toString() );
      }
-    } // main()
+} // main()
  </input></program>
-    </figure>
+    </listing>
     <principle>
       <title>EFFECTIVE DESIGN: ADTs</title>
       <p>
@@ -117,6 +121,4 @@ public static void main(String argv[]) {
       </ol>
       </exercises>
   </subsection>
-  
-  
 </section>

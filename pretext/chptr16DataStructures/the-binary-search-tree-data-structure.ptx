@@ -1,0 +1,106 @@
+<section xml:id="the-binary-search-tree-data-structure">
+  <title>The Binary Search Tree Data Structure</title>
+  <p>
+    To gain some appreciation of what binary search trees are and why they are useful in implementing the <c>Set</c> and <c>Map</c> interfaces,
+    let's make a few comments about implementing very simple versions of these structures.
+  </p>
+  <p>
+    Like a linked list, a <em>binary tree</em>
+    is a data structure consisting of a collection of nodes that are linked together by references from one node to another.
+    However, unlike a linked list,
+    each node in a binary tree contains references to two other other nodes, (<c>left</c> and <c>right</c>), corresponding to the left- and right-subtrees growing out of a particular node.
+    A <em>subtree</em> is a tree that is part of larger tree.
+    This creates a tree-like structure,
+    as shown in <xref ref="fig-btree-ds">Figure</xref>.
+    Note that some of the references to other nodes might
+  </p>
+  <figure xml:id="fig-btree-ds">
+    <caption>A binary search tree of <c>PhoneTreeNode</c> s.</caption>
+    <image width="73%" source="chptr16/btree.png"/>
+  </figure>
+  <p>
+    be null.
+    The trunk of the tree corresponds to the node labeled <c>root</c>. In computer science,
+    trees are almost always drawn upside down.
+    Thus the trunk of the tree, <c>root</c>, is at the top of the figure.
+  </p>
+  <p>
+    If we assume that the objects contained in a tree are from a class that implements the <c>Comparable</c> interface,
+    then a <term>binary search tree</term>
+    is a binary tree in which the objects are ordered so that the object at a particular node is greater than the objects stored in its left subtree and less than the objects stored in its right subtree.
+  </p>
+  <p>
+    Figure<nbsp/>16.36 shows a binary search tree with the phone list data that we have used throughout the chapter.
+    Objects are compared by comparing the names alphabetically.
+    From the figure it is easy to see that searching for a object should start at the root of the tree.
+    At each node,
+    examining the name at the node will tell you whether you have found the object there.
+    Otherwise, by checking the name at the node,
+    you can decide which subtree the data could be in,
+    and you can traverse either left or right through each level of the tree.
+    One can deduce that if the tree is balanced<mdash/>that is,
+    if at most nodes the size of the left subtree is about the same size as the right subtree<mdash/>searching the tree much faster than searching a linked list.
+    This is one of the main advantages of using a binary search tree over a linked list.
+  </p>
+  <p>
+    The <c>TreeSet</c> and <c>TreeMap</c> classes implement sophisticated algorithms for inserting and removing data from a tree,
+    which guarantees that the tree remains relatively balanced.
+    The details of these algorithms are beyond the scope of this book,
+    but would be a subject of study in a standard
+    <em>Data Structures and Algorithms</em> course.
+  </p>
+  <p>
+    We will conclude this subsection by giving a brief outline of an implementation of a simple binary search tree that stores our phone list data.
+    Like our <c>LinkedList</c> example,
+    you need to define a node class and a tree class.
+    The node class with unimplemented methods, would look like:
+  </p>
+ <program language="java"><input>
+public class PhoneTreeNode {
+   private String name;
+   private String phone;
+   private PhoneTreeNode left;
+   private PhoneTreeNode right;
+   public PhoneTreeNode(String nam, String pho){ }
+   public void setData(String nam, String pho){ }
+   public String getName(){ }
+   public boolean contains(String nam, String pho){ }
+   public void insert(String nam, String pho){ }
+   //other methods} // PhoneTreeNode
+ </input></program>
+  <p>
+    The tree structure itself contains a reference to a node:
+  </p>
+ <program language="java"><input>
+public class PhoneTree {
+  private PhoneTreeNode root;
+  public PhoneTree(){ }
+  public boolean contains(String nam, String pho){ }
+  public void insert(String nam, String pho){ }
+  //other methods} // PhoneTreeNode
+ </input></program>
+  <p>
+    We will implement only the two <c>contains()</c> methods.
+    The <c>PhoneTree</c> version is very simple:
+  </p>
+ <program language="java"><input>
+public boolean contains(String nam, String pho){
+    if (root == null) return false;
+    else return root.contains(nam, pho);} // contains() in PhoneTree
+ </input></program>
+  <p>
+    The implementation of the <c>contains()</c> method of <c>PhoneTreeNode</c> is only slightly more involved.
+  </p>
+ <program language="java"><input>
+public boolean contains(String nam, String pho){
+    if (name.equals(nam))
+        return true;
+    else if(name.compareTo(nam) &lt; 0) { // name &lt; nam
+        if (right == null) return false;
+        else return right.contains(nam, pho);
+    } else { { // name > nam}
+        if (left == null) return false;
+        else return left.contains(nam, pho);
+    }} // contains() in PhoneTreeNode
+ </input></program>
+</section>

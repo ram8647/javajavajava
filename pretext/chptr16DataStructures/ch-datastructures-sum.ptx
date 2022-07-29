@@ -1,0 +1,387 @@
+<section xml:id="ch-datastructures-sum">
+	<title>Chapter Summary</title>
+<introduction>
+   <p>
+    In this chapter,
+    we have given you a brief introduction to the concept of a dynamic data 
+    structure and tried to illustrate how they work and why they are useful 
+    for organizing and managing large amounts of data.
+    We also introduced you to an important new language feature introduced 
+    in Java 5.0, the concept of generic types.
+    Obviously, we have only scratched the surface of the important topic of 
+    data structures and the algorithms used to manage them.
+    For a broader and deeper treatment of this subject,
+    you will have to take a <em>Data Structures and Algorithms</em> course,
+    which is a fundamental course in most computer science curricula.
+  </p>   
+</introduction>
+<subsection>
+      <title>Technical Terms</title> 
+      <p>
+       <tabular>
+       <row>
+      <cell> Abstract Data Type (ADT)</cell>
+      <cell>linked list</cell>
+       </row>
+       <row>
+      <cell>binary search tree</cell>
+      <cell>list</cell>
+       </row>
+       <row>
+      <cell>data structure</cell>
+      <cell>pop</cell>
+       </row>
+       <row>
+      <cell>dequeue</cell>
+      <cell>push</cell>
+       </row>
+       <row>
+      <cell>dynamic structure</cell>
+      <cell>queue</cell>
+       </row>
+       <row>
+      <cell>enqueue</cell>
+      <cell>reference</cell>
+       </row>
+       <row>
+      <cell>first-in<ndash/>first-out (FIFO)</cell>
+      <cell>self-referential object</cell>
+       </row>
+       <row>
+      <cell>generic type</cell>
+      <cell>stack</cell>
+       </row>
+       <row>
+      <cell>Java collections framework</cell>
+      <cell>static structure</cell>
+       </row>
+       <row>
+      <cell>key</cell>
+      <cell>traverse</cell>
+       </row>
+       <row>
+      <cell>last-in<ndash/>first-out (LIFO)</cell>
+      <cell>value</cell>
+       </row>
+       <row>
+      <cell>link</cell>
+      <cell>vector</cell>
+       </row>
+      </tabular>
+    </p>
+</subsection>
+<subsection>
+ <title>Important Points</title>
+    <ul>
+      <li>
+        <p>
+          A <em>data structure</em> is used to organize data and make them more efficient to process.
+          An array is an example of a <em>static structure</em>,
+          since its size does not change during a program's execution.
+          A vector is an example of a <em>dynamic structure</em>,
+          one whose size can grow and shrink during a program's execution.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>linked list</em> is a linear structure in which the individual nodes of the list are joined together by references.
+          A <em>reference</em> is a variable that refers to an object.
+          Each node in the list has a <em>link</em>
+          variable that refers to another node.
+          An object that can refer to the same kind of object is said to be
+          <em>self-referential</em>.
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>Node</c> class is an example of a self-referential class.
+          It contains a link variable that refers to a <c>Node</c>. By assigning references to the link variable, <c>Node</c> s can be chained together into a linked list.
+          In addition to their link variables, <c>Node</c> s contain data variables,
+          which should be accessible through public methods.
+        </p>
+      </li>
+      <li>
+        <p>
+          Depending on the use of a linked list,
+          nodes can be inserted at various locations in the list:
+          at the head, the end, or in the middle of the list.
+        </p>
+      </li>
+      <li>
+        <p>
+          Traversal algorithms must be used to access the elements of a singly linked list.
+          To traverse a list you start at the first node and follow the links of the chain until you reach the desired node.
+        </p>
+      </li>
+      <li>
+        <p>
+          Depending on the application,
+          nodes can be removed from the front,
+          rear, or middle of a linked list.
+          Except for the front node,
+          traversal algorithms are used to locate the desired node.
+        </p>
+      </li>
+      <li>
+        <p>
+          In developing list algorithms,
+          it is important to test them thoroughly.
+          Ideally, you should test every possible combination of insertions and removals that the list can support.
+          Practically,
+          you should test every independent case of insertions and removals that the list supports.
+        </p>
+      </li>
+      <li>
+        <p>
+          An <em>Abstract Data Type (ADT)</em>
+          is a concept that combines two elements: A collection of data,
+          and the operations that can be performed on the data.
+          For the list ADT, the data are the values (<c>Object</c> s or <c>int</c> s) contained in the nodes that make up the list,
+          and the operations are insertion, removal,
+          and tests of whether the list is empty.
+        </p>
+      </li>
+      <li>
+        <p>
+          In designing an ADT, it's important to provide a public interface that can be used to access the ADT's data.
+          The ADT's implementation details should not matter to the user and should,
+          therefore,
+          be hidden.
+          A Java class definition,
+          with its <c>public</c> and <c>private</c> aspects,
+          is perfectly suited to implement an ADT.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>stack</em> is a list that allows insertions and removals only at the front of the list.
+          A stack insertion is called a <em>push</em>
+          and a removal is called a <em>pop</em>.
+          The first element in a stack is usually called the top of the stack.
+          The <c>Stack</c>ADT can easily be defined as a subclass of <c>List</c>. Stacks are used for managing the method call and return in most programming languages.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>queue</em> is a list that only allows insertions at the rear and removals from the front of a list.
+          A queue insertion is called <em>enqueue</em>,
+          and a removal is called <em>dequeue</em>.
+          The
+<c>Queue</c>ADT can easily be defined as a subclass of <c>List</c>. Queues are used for managing the various lists used by the CPU scheduler<mdash/>such as the ready,
+          waiting, and blocked queues.
+        </p>
+      </li>
+      <li>
+        <p>
+          A <em>binary search tree</em> is a binary tree in which the ordered data stored at any node is greater than all data stored in the left subtree and is less than all data stored in the right subtree.
+        </p>
+      </li>
+    </ul>
+</subsection>  
+<subsection>
+<title>Solutions to Self-Study Exercises</title>
+  <p>
+   <ol>
+      <li>
+        <p>
+           <program language="java"><input>
+Node node = new Node(new String("Hello"));
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+           <program language="java"><input>
+Node node = new Node(new Student("William"));
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+           <program language="java"><input>
+PhoneListNode newNode =
+         new PhoneListNode("Bill C", "111-202-3331");
+nodeptr.setNext(newNode);
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The following condition is too general.
+          It will cause the loop to exit as soon as a nonnull node is encountered,
+          whether or not the node matches the one being sought.
+ <program language="java"><input>
+((current.getNext() != null) ||
+                  (!current. getName().equals(name)))
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>PhoneList</c> program will generate the following output,
+          which has been edited slightly to improve its readability:
+ <program language="java"><input>
+Phone Directory
+---------------
+Roger M 997-0020    Roger W 997-0086    Rich P  997-0010
+Jane M  997-2101    Stacy K 997-2517
+Looking up numbers by name
+   Roger M 997-0020
+   Rich P 997-0010
+   Stacy K 997-2517
+   Sorry. No entry for Mary P
+Removed Rich P  997-0010
+Phone Directory
+---------------
+Roger M 997-0020    Roger W 997-0086   Jane M  997-2101
+Stacy K 997-2517
+Removed Roger M 997-0020
+Phone Directory
+---------------
+Roger W 997-0086    Jane M  997-2101    Stacy K 997-2517
+Removed Stacy K 997-2517
+Phone Directory
+---------------
+Roger W 997-0086    Jane M  997-2101
+Removed Jane M  997-2101
+Phone Directory
+---------------
+Roger W 997-0086
+Sorry. No entry for Jane M
+Phone Directory
+---------------
+Roger W 997-0086
+Removed Roger W 997-0086
+Phone Directory
+---------------
+Phone list is empty
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          Executing the following method calls will test whether it is possible to insert items into a list after items have been removed:
+ <program language="java"><input>
+// Create and insert some nodes
+PhoneList list = new PhoneList();
+list.insert(new PhoneListNode("Roger M", "997-0020"));
+list.insert(new PhoneListNode("Roger W", "997-0086"));
+System.out.println(list.remove("Roger M") );
+list.insert(new PhoneListNode("Rich P", "997-0010"));
+System.out.println(list.remove("Roger W"));
+list.insert(new PhoneListNode("Jane M", "997-2101"));
+list.insert(new PhoneListNode("Stacy K", "997-2517"));
+System.out.println(list.remove("Jane M"));
+System.out.println(list.remove("Stacy K"));
+list.print();
+       // List should be empty
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The List ADT program will produce the following output:
+ <program language="java"><input>
+Generic List
+---------------
+Hello, World!
+8647
+Roger M 997-0020
+Jane M 997-2101
+Stacy K 997-2517
+  Removed Stacy K 997-2517
+Generic List:
+Hello, World!
+8647
+Roger M 997-0020
+Jane M 997-2101
+  Removed Jane M 997-2101
+Generic List:
+Hello, World!
+8647
+Roger M 997-0020
+  Removed Hello, World!
+Generic List:
+8647
+Roger M 997-0020
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          Executing the following method calls will test whether it is possible to insert items into a
+  <c>List</c> after items have been removed:
+ <program language="java"><input>
+// Create and insert some nodes
+List list = new List();
+list.insertAtFront(new PhoneRecord("Roger M", "997-0020"));
+list.insertAtFront(new PhoneRecord("Roger W", "997-0086"));
+System.out.println("Current List Elements");
+list.print();
+Object o = list.removeLast();   // Remove last element
+list.insertAtFront(o); // Insert at the front of the list
+System.out.println("Current List Elements");
+list.print();
+o = list.removeFirst();
+System.out.println("Removed " + o.toString());
+o = list.removeFirst();
+System.out.println("Removed " + o.toString());
+list.insertAtRear(o);
+System.out.println("Current List Elements");
+list.print();       // List should have one element
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>peek()</c> method should just return the first node without deleting it:
+ <program language="java"><input>
+public Object peek() {
+     return head;}
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The <c>peekLast()</c> method can be modeled after the
+<c>List.removeLast()</c> method:
+ <program language="java"><input>
+public Object peekLast() {
+  if (isEmpty())
+    return null;
+  else {
+    Node current = head;         // Start at head of list
+    while (current.getNext() != null)// Find end of  list
+      current = current.getNext();
+      return  current;                 // Return last node
+    }} // peekLast()
+ </input></program>
+        </p>
+      </li>
+      <li>
+        <p>
+          The following class tests the <c>java.util.Stack&lt;E&gt;</c> class:
+ <program language="java"><input>
+import java.util.*;
+public class StackTest{
+public static void main( String argv[] ) {
+   Stack&lt;Character> stack = new Stack&lt;Character>();
+   String string = "Hello this is a test string";
+   System.out.println("String: " + string);
+   for (int k = 0; k &lt; string.length(); k++)
+     stack.push(new Character(string.charAt(k)));
+   Character ch = null;
+   String reversed = "";
+   while (!stack.empty()) {
+     ch  = stack.pop();
+     reversed = reversed + ch.charValue();
+   }
+   System.out.println("Reversed String: " + reversed);} // main()} // StackTest class
+ </input></program>
+        </p>
+      </li>
+    </ol>
+  </p>
+
+</subsection>
+</section>

@@ -10,10 +10,9 @@
       When you put a dish on the stack,
       it goes onto the top of the stack.
       When you remove a dish from the stack,
-      it comes from the top of the stack (Fig.
-      <xref ref="fig-stack"></xref>).
+      it comes from the top of the stack (<xref ref="fig-adtstack"></xref>).
     </p>
-    <figure xml:id="fig-stack">
+    <figure xml:id="fig-adtstack">
       <caption>A stack is a list that permits
       insertions and removals only at its top.</caption>
       <image width="73%" source="chptr16/stack.png"/>
@@ -61,23 +60,35 @@
       The activation block is pushed onto the stack.
       When that method call returns,
       the return address is retrieved from the activation block and the whole block is popped off the stack.
-      The
-<c>Exception.printStackTrace()</c> method uses the run-time stack to print a trace of the method calls that led to an exception.
+      The <c>Exception.printStackTrace()</c> method uses the run-time stack to print a trace of the method 
+      calls that led to an exception.
     </p>
   </introduction>
   <subsection xml:id="fig-stackuml">
     <title>The <c>Stack</c>Class</title>
     <p>
-      Given our general definition of <c>List</c> and <c>Node</c>, it is practically trivial to define the stack ADT as a subclass of <c>List</c>(Fig.<nbsp/>16<ndash/>21).
+      Given our general definition of <c>List</c> and <c>Node</c>, it is practically trivial to 
+      define the stack ADT as a subclass of <c>List</c>(<xref ref="fig-adtstackuml">Figure</xref>).
       As a subclass of <c>List</c>, a <c>Stack</c> will inherit all of the public and protected methods defined in
-<c>List</c>. Therefore,
-      we can simply use the <c>insertAtFront()</c> and
-<c>removeFirst()</c> methods for the push and pop operations,
-      <image width="73%" source="chptr16/stackuml.png"/> respectively (Fig.
-      <xref ref="fig-stackadt"></xref>).
+      <c>List</c>. Therefore, we can simply use the <c>insertAtFront()</c> and
+       <c>removeFirst()</c> methods for the push and pop operations,
+       respectively (<xref ref="listing-stackadt"></xref>).
+       </p>
+      <figure xml:id="fig-adtstackuml">
+      <caption>As a subclass of <c>List</c>, a <c>Stack</c> inherits all of its public (+) 
+      and protected (#) elements. Therefore <c>push()</c> can be defined in terms of
+      <c>insertAtFront()</c> and <c>pop()</c> can be defined in terms of <c>removeFirst()</c>.
+      </caption>
+      <image width="73%" source="chptr16/stackuml.png"/>
+      </figure>          
+       <p>
       Because the <c>isEmpty()</c> method is defined in <c>List</c>, there's no need to override it in
+      <c>Stack</c>. In effect, the <c>push()</c> and <c>pop()</c> methods merely rename 
+      the <c>insertAtFront()</c> and <c>removeFirst()</c> methods.
+      Note that the <c>Stack()</c> constructor calls the superclass constructor.
+      This is necessary so that the list can be initialized.
     </p>
-    <figure xml:id="fig-stackadt">
+   <listing xml:id="listing-stackadt">
       <caption>The <c>Stack</c>ADT.</caption>
  <program language="java"><input>
 public class Stack extends List {
@@ -92,13 +103,7 @@ public class Stack extends List {
      }
     } // Stack
  </input></program>
-    </figure>
-    <p>
-<c>Stack</c>. In effect,
-      the <c>push()</c> and <c>pop()</c> methods merely rename the <c>insertAtFront()</c> and <c>removeFirst()</c> methods.
-      Note that the <c>Stack()</c> constructor calls the superclass constructor.
-      This is necessary so that the list can be initialized.
-    </p>
+    </listing>
     <p>
       Do we have to make any changes to the <c>List</c> class in order to use it this way?
       Yes.
@@ -126,6 +131,9 @@ public class Stack extends List {
         Use <c>public</c> to define the ADT's interface.
       </p>
     </principle>
+    
+    
+    
     <exercises><title>Self-Study Exercise</title>
       <ol>
         <li>
@@ -146,13 +154,13 @@ public class Stack extends List {
 <c>String</c>. Then pop letters off the stack and concatenate them,
       left to right,
       into another <c>String</c>, until the stack is empty (Fig.
-      <xref ref="fig-stackadttest"></xref>).
+      <xref ref="listing-stackadttest"></xref>).
     </p>
     <p>
       Note that because our <c>Node</c> s store <c>Object</c> s, we must convert each <c>char</c> into a <c>Character</c>, using the wrapper class.
       Note also that we can use the <c>toString()</c> method to convert from <c>Object</c> to <c>String</c> as we are popping the stack.
     </p>
-    <figure xml:id="fig-stackadttest">
+    <listing xml:id="listing-stackadttest">
       <caption>A method to test the <c>Stack</c>ADT, which is used
       here to reverse a String of letters.</caption>
  <program language="java"><input>
@@ -169,9 +177,9 @@ public static void main( String argv[] ) {
          reversed = reversed + o.toString();
      }
      System.out.println("Reversed String: " + reversed);
-    } // main()
+} // main()
  </input></program>
-    </figure>
+    </listing>
     
   </subsection>
 </section>
