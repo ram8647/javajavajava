@@ -1,4 +1,4 @@
-<section xml:id="the-java-event-model">
+<section xml:id="java-event-model">
   <title>The Java Event Model</title>
   <introduction>
     <p>
@@ -6,7 +6,8 @@
       Every keystroke and mouse click,
       every time a disk is inserted into a disk drive, an event is generated.
       The handling of events are an important element of GUI programming.
-      Therefore, before we begin discussing how to design GUIs, it will be useful to review the main concepts of Java's <term>event model</term>.
+      Therefore, before we begin discussing how to design GUIs, it will be useful to 
+      review the main concepts of Java's <term>event model</term>.
           <idx><h>event model</h></idx>
     </p>
     <p>
@@ -15,7 +16,7 @@
       (and through the browser, for applets)
       to the program.
       Those events that belong to the program must be handled by the program
-      (refer to Fig.<nbsp/>4.18 in Chapter<nbsp/>4).
+      (refer to <xref ref="fig-eventmodel">Figure</xref> in Chapter<nbsp/>4).
       For example, if you click your browser's menu bar,
       that event will be handled by the browser itself.
       If you click a button contained in the Java program,
@@ -45,25 +46,33 @@ private JButton clickme = new JButton("ClickMe");
 public MyGUI() {
   // Add clickme to the GUI and assign it a listener
   add(clickme);
-  clickme.addActionListener(this); }
+  clickme.addActionListener(this); 
+}
  </input></program>
     <p>
       In this case,
-      we have designated the GUI itself (<c>this</c>) as an <c>ActionListener</c> for <c>clickme</c>(Fig.<nbsp/>13.5).
-      <image width="73%" source="chptr13/p478f1.png"/> A <term>listener</term>
+      we have designated the GUI itself (<c>this</c>) as an <c>ActionListener</c> for 
+      <c>clickme</c> <xref ref="fig-listener">Figure</xref>.
+      <figure xml:id="fig-listener"><caption>ActionListener</caption>
+      <image width="50%" source="chptr13/p478f1.png"/> 
+    </figure>
+      
+      A <term>listener</term>
           <idx><h>listener</h></idx>
       is any object that implements a
       <em>listener interface</em>,
-      which is one of the interfaces derived from <c>java.util.EventListener</c>. An <c>ActionListener</c> is an object that listens for and receives <c>ActionEvent</c> s.
+      which is one of the interfaces derived from <c>java.util.EventListener</c>. 
+      An <c>ActionListener</c> is an object that listens for and receives
+  an     <c>ActionEvent</c>.
     </p>
     <p>
       In order to complete the event-handling code,
       the GUI must implement the <c>ActionListener</c> interface.
-      As <xref ref="fig-clickme">Figure</xref> shows,
+      As <xref ref="listing-clickme">Listing</xref> shows,
       implementing an interface is a matter of declaring the interface in the class heading and implementing the methods contained in the interface,
       in this case the <c>actionPerformed()</c> method.
     </p>
-    <figure xml:id="fig-clickme">
+    <listing xml:id="listing-clickme">
       <caption>A simple GUI application that handles action events
       on a <c>JButton</c>.</caption>
  <program language="java"><input>
@@ -81,23 +90,20 @@ public class MyGUI extends JFrame
     } // init()
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == clickme) {
-      clickme.setText(clickme.getText()+"*");
+           clickme.setText(clickme.getText()+"*");
         }
     } // actionPerformed()
     public static void main(String args[]) {
         MyGUI gui = new MyGUI();
-    }} // MyGUI
+    }
+  } // MyGUI
  </input></program>
-    </figure>
-    <figure xml:id="fig-p479f1">
-      <caption>A UML depiction of the sequence of actions
-      and events that take place when a button is clicked. The vertical
-      lines represent time lines, with time running from top to bottom. The
-      arrows between lines represent messages passing between objects.</caption>
-      <image width="73%" source="chptr13/p479f1.png"/>
-    </figure>
+    </listing>
+
+   
+    
     <p>
-      Now that we have implemented the code in <xref ref="fig-clickme">Figure</xref>,
+      Now that we have implemented the code in <xref ref="listing-clickme">Listing</xref>,
       whenever the user clicks <c>clickme</c>, that action is encapsulated within an <c>ActionEvent</c> object and passed to the <c>actionPerformed()</c> method.
       This method contains Java code that will handle the user's action in an appropriate way.
       For this example,
@@ -105,11 +111,24 @@ public class MyGUI extends JFrame
       <xref ref="fig-p479f1">Figure</xref>
       depicts the sequence of actions and events that occur when the the user clicks a button.
     </p>
+    <figure xml:id="fig-p479f1">
+      <caption>A UML depiction of the sequence of actions
+      and events that take place when a button is clicked. The vertical
+      lines represent time lines, with time running from top to bottom. The
+      arrows between lines represent messages passing between objects.</caption>
+      <image width="100%" source="chptr13/p479f1.png"/>
+    </figure>
     <p>
-      The methods used to handle the <c>ActionEvent</c> are derived from the <image width="73%" source="chptr13/p479f2.png"/> \caption{An <c>EventObject</c>. The <c>getSource()</c> method is used to get the object that caused the event. }<c>java.util.EventObject</c> class,
-      the root class for all events (Fig.<nbsp/>13.8).
-      Our example (Fig.
-      <xref ref="fig-clickme"></xref>) uses the <c>getSource()</c> method to get a reference to the object that generated the event.
+      The methods used to handle the <c>ActionEvent</c> are derived from the 
+      <c>java.util.EventObject</c> class,   the root class for all events (<xref ref="fig-event-obj">Figure</xref>). 
+      The <c>getSource()</c> method is used to get the object that caused the event. </p>
+
+        <figure xml:id="fig-event-obj"><caption>An <c>EventObject</c></caption>
+          <image width="50%" source="chptr13/p479f2.png"/> 
+          </figure>
+          
+      <p>      Our example 
+      (<xref ref="listing-clickme"></xref>) uses the <c>getSource()</c> method to get a reference to the object that generated the event.
       To see what information is contained in an event object,
       we can use the <c>toString()</c> method to print a string representation of the event that was generated.
       Here's what it displays:
@@ -126,95 +145,92 @@ java.awt.event.ActionEvent[ACTION_PERFORMED,cmd=ClickMe]
       The source of the event was the <c>JButton</c>.
     </p>
   </introduction>
-  <subsection xml:id="self-study-exercisesA32">
+  <subsection>
     <title>Event Classes</title>
     <p>
       Although the event model is the same for both AWT and Swing classes,
       the Swing package introduces many additional events.
       Table<nbsp/>13.1 lists the events that are generated by both AWT and Swing components.
       You already have worked with some of these.
-      We have written GUIs that handled <c>ActionEvent</c> s for <c>JButton</c> s and
-<c>JTextField</c> s in preceding chapters.
+      We have written GUIs that handled <c>ActionEvents</c>  for <c>JButtons</c> and
+<c>JTextFields</c> in preceding chapters.
     </p>
-    <table>
-      \TBTvar{0pc}{Java's <c>AWTEvent</c> s<idx><h>AWTEvent</h></idx> for each <c>Component</c> type
+    <table xml:id="tableAWTEvent">
+      <title>Java's <c>AWTEvent</c> for each <c>Component</c> type
       (Original source: David Flanagan,
-      <em>Java in a Nutshell</em>, 2d ed., O'Reilly Associates, 1997. Modified for Swing components.)}
+      <em>Java in a Nutshell</em>, 2d ed., O'Reilly Associates, 1997. 
+      Modified for Swing components.)</title>
       
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
+        <row bottom="minor">
+          <cell>Components</cell>
+          <cell>Events</cell>
+          <cell>Description</cell>
         </row>
-        <row>
-          <cell>{Components}</cell>
-          <cell>{Events}</cell>
-          <cell>{Description}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+     
         <row>
           <cell><c>Button, JButton</c></cell>
           <cell><c>ActionEvent</c></cell>
-          <cell>User clicked button\cr
+          <cell>User clicked button</cell></row>
+          <row><cell>
 <c>CheckBox, JCheckBox</c></cell>
           <cell><c>ItemEvent</c></cell>
-          <cell>User toggled a checkbox\cr
+          <cell>User toggled a checkbox</cell></row><row><cell>
 <c>CheckboxMenuItem, JCheckboxMenuItem</c></cell>
           <cell><c>ItemEvent</c></cell>
-          <cell>User toggled a checkbox\cr
+          <cell>User toggled a checkbox</cell></row><row><cell>
 <c>Choice, JPopupMenu</c></cell>
           <cell><c>ItemEvent</c></cell>
-          <cell>User selected a choice\cr
+          <cell>User selected a choice</cell></row><row><cell>
 <c>Component, JComponent</c></cell>
           <cell><c>ComponentEvent</c></cell>
-          <cell>Component was moved or resized\cr</cell>
+          <cell>Component was moved or resized</cell></row><row><cell></cell>
           <cell><c>FocusEvent</c></cell>
-          <cell>Component acquired or lost focus\cr</cell>
+          <cell>Component acquired or lost focus</cell></row><row><cell></cell>
           <cell><c>KeyEvent</c></cell>
-          <cell>User typed a key\cr</cell>
+          <cell>User typed a key</cell></row><row><cell></cell>
           <cell><c>MouseEvent</c></cell>
-          <cell>User manipulated the mouse\cr
+          <cell>User manipulated the mouse</cell></row><row><cell>
 <c>Container, JContainer</c></cell>
           <cell><c>ContainerEvent</c></cell>
-          <cell>Component added/removed from container\cr
+          <cell>Component added/removed from container</cell></row><row><cell>
 <c>List, JList</c></cell>
           <cell><c>ActionEvent</c></cell>
-          <cell>User double-clicked a list item\cr</cell>
+          <cell>User double-clicked a list item</cell></row><row><cell></cell>
           <cell><c>ItemEvent</c></cell>
-          <cell>User clicked a list item\cr
+          <cell>User clicked a list item</cell></row><row><cell>
 <c>Menu, JMenu</c></cell>
           <cell><c>ActionEvent</c></cell>
-          <cell>User selected menu item\cr
+          <cell>User selected menu item</cell></row><row><cell>
 <c>Scrollbar, JScrollbar</c></cell>
           <cell><c>AdjustmentEvent</c></cell>
-          <cell>User moved scrollbar\cr
+          <cell>User moved scrollbar</cell></row><row><cell>
 <c>TextComponent, JTextComponent</c></cell>
           <cell><c>TextEvent</c></cell>
-          <cell>User edited text\cr
+          <cell>User edited text</cell></row><row><cell>
 <c>TextField, JTextField</c></cell>
           <cell><c>ActionEvent</c></cell>
-          <cell>User typed Enter key\cr
+          <cell>User typed Enter key</cell></row><row><cell>
 <c>Window, JWindow</c></cell>
           <cell><c>WindowEvent</c></cell>
           <cell>User manipulated window</cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+      
       </tabular>
-      \endTB
+
     </table>
     <p>
-      In viewing Table<nbsp/>13.1, it's important to remember that the classes listed there are arranged in a hierarchy.
+      In viewing  <xref ref="tableAWTEvent">Table</xref>, 
+      it's important to remember that the classes listed there are arranged in a hierarchy.
       This will affect the events that a particular object can generate.
       For example,
       a
-<c>JButton</c> is a <c>JComponent</c>(Fig.
+<c>JButton</c> is a <c>JComponent</c>(
       <xref ref="fig-swing2-guis"></xref>),
-      so in addition to generating <c>ActionEvent</c> s when the user clicks on it,
-      it can also generate <c>MouseEvent</c> s when the user moves the mouse over it.
-      Similarly, because a <c>JTextField</c> is also a <c>JComponent</c>, it can generate <c>KeyEvent</c> s as well as <c>ActionEvent</c> s.
+      so in addition to generating an <c>ActionEvent</c>  when the user clicks on it,
+      it can also generate a <c>MouseEvent</c>  when the user moves the mouse over it.
+      Similarly, because a <c>JTextField</c> is also a <c>JComponent</c>, 
+      it can generate a <c>KeyEvent</c>  as well as an <c>ActionEvent</c>.
     </p>
     <p>
       Note that the more generic events,
@@ -222,18 +238,20 @@ java.awt.event.ActionEvent[ACTION_PERFORMED,cmd=ClickMe]
       or resizing a component, are associated with the more generic components.
       For example,
       the <c>JComponent</c> class contains methods that are used to manage <c>ComponentEvent</c> s.
-      Because they are subclasses of <c>JComponent</c>, <c>JButton</c> s and <c>JTextField</c> s can also use these methods.
+      Because they are subclasses of <c>JComponent</c>, 
+      <c>JButton</c>  and <c>JTextField</c>  can also use these methods.
       Defining the more generic methods in the <c>JComponent</c> superclass is another example of the effective use of inheritance.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Inheritance</title>
+      <title>EFFECTIVE DESIGN: Inheritance</title>
       <p>
         The higher a method is defined in the inheritance hierarchy,
         the broader is its use.
       </p>
     </principle>
     <p>
-      Table<nbsp/>13.2 lists events that are new with the Swing classes.
+      <xref ref="tableSwing">Table</xref> lists events that are new with the 
+      Swing classes.
       Some of the events apply to new components.
       For example,
 <c>JTable</c> and <c>JTree</c> do not have AWT counterparts.
@@ -241,85 +259,150 @@ java.awt.event.ActionEvent[ACTION_PERFORMED,cmd=ClickMe]
       For example,
       a <c>CaretEvent</c> allows the programmer to have control over mouse clicks that occur within a text component.
     </p>
-    <table>
-      \TBT{-5.5pc}{Some of the events that are defined in the Swing library.}
+    <table xml:id="tableSwing">
+      <title>Some of the events that are defined in the Swing library.</title>
       
       <tabular>
-        <row>
-          <cell><c>__________</c></cell>
+       
+        <row bottom="minor">
+          <cell>Component</cell>
+          <cell>Events</cell>
+          <cell>Description</cell>
         </row>
-        <row>
-          <cell>{Component}</cell>
-          <cell>{Events}</cell>
-          <cell>{Description}</cell>
-        </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+        
         <row>
           <cell><c>JPopupMenu</c></cell>
           <cell><c>PopupMenuEvent</c></cell>
-          <cell>User selected a choice\cr
+          <cell>User selected a choice</cell></row><row><cell>
 <c>JComponent</c></cell>
           <cell><c>AncestorEvent</c></cell>
-          <cell>An event occurred in an ancestor\cr
+          <cell>An event occurred in an ancestor</cell></row><row><cell>
 <c>JList</c></cell>
           <cell><c>ListSelectionEvent</c></cell>
-          <cell>User double-clicked a list item\cr</cell>
+          <cell>User double-clicked a list item</cell></row><row><cell></cell>
           <cell><c>ListDataEvent</c></cell>
-          <cell>List's contents were changed\cr
+          <cell>List's contents were changed</cell></row><row><cell>
 <c>JMenu</c></cell>
           <cell><c>MenuEvent</c></cell>
-          <cell>User selected menu item\cr
+          <cell>User selected menu item</cell></row><row><cell>
 <c>JTextComponent</c></cell>
           <cell><c>CaretEvent</c></cell>
-          <cell>Mouse clicked in text\cr</cell>
+          <cell>Mouse clicked in text</cell></row><row><cell></cell>
           <cell><c>UndoableEditEvent</c></cell>
-          <cell>An undoable edit has occurred\cr
+          <cell>An undoable edit has occurred</cell></row><row><cell>
 <c>JTable</c></cell>
           <cell><c>TableModelEvent</c></cell>
-          <cell>Items added/removed from table\cr</cell>
+          <cell>Items added/removed from table</cell></row><row><cell></cell>
           <cell><c>TableColumnModelEvent</c></cell>
-          <cell>A table column was moved\cr
+          <cell>A table column was moved</cell></row><row><cell>
 <c>JTree</c></cell>
           <cell><c>TreeModelEvent</c></cell>
-          <cell>Items added/removed from tree\cr</cell>
+          <cell>Items added/removed from tree</cell></row><row><cell></cell>
           <cell><c>TreeSelectionEvent</c></cell>
-          <cell>User selected a tree node\cr</cell>
+          <cell>User selected a tree node</cell></row><row><cell></cell>
           <cell><c>TreeExpansionEvent</c></cell>
-          <cell>User expanded or collapsed a tree node\cr
+          <cell>User expanded or collapsed a tree node</cell></row><row><cell>
 <c>JWindow</c></cell>
           <cell><c>WindowEvent</c></cell>
           <cell>User manipulated window</cell>
         </row>
-        <row>
-          <cell><c>__________</c></cell>
-        </row>
+    
       </tabular>
-      \endTB
+    
     </table>
     <p>
-      Tables<nbsp/>13.1 and 13.2 provide only a brief summary of these classes and Swing components.
+      These tables provide only a brief summary of these classes and Swing components.
       For further details you should consult the JDK online documentation at
+      <url href="https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html" visual="">https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html</url>.
     </p>
-    <p>
-       }
-    </p>
- <program language="java"><input>
-http://java.sun.com/j2se/1.5.0/docs/api/
- </input></program>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
-            Is it possible to register a component with more than one listener?
-          </p>
-        </li>
-        <li>
-          <p>
-            Is it possible for a component to have two different kinds of listeners?
-          </p>
-        </li>
-      </ol>
-  </subsection>
+    
+  
+    </subsection>
+    <exercises><title>Self-Study Exercises</title>
+      
+          <exercise label="multiple-choice-multiple-answers">
+            <title>Listeners 1</title>
+            
+            <statement>
+                <p>  Is it possible to register a component with more than one listener?
+       </p>         </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p>Yes</p>
+                    </statement>
+                    <feedback>
+                        <p>    A component can indeed be registered with more than one listener.
+                        </p>
+                    </feedback>
+                    </choice>
+                    <choice correct="no">
+                      <statement>
+                          <p>No</p>
+                      </statement>
+                      <feedback>
+                          <p>    A component can be registered with more than one listener.
+                          </p>
+                      </feedback>
+                      </choice>
+</choices>
+<solution>
+  <p>
+    A component can indeed be registered with more than one listener.
+    For example,
+    the <c>ToggleButton</c> 
+    that we defined in <xref ref="chapter-io">Chapter</xref> has two listeners.
+    The first is the button itself,
+    which takes care of toggling the button's label.
+    The second is the frame in which the button is used,
+    which takes care of handling whatever action the button is associated with.
+  </p>
+</solution>
+</exercise>
+
+<exercise label="multiple-choice-multiple-answers">
+  <title>Listeners 2</title>
+  
+  <statement>
+      <p> Is it possible for a component to have two different kinds of listeners?
+
+</p>         </statement>
+  <choices>
+      <choice correct="yes">
+          <statement>
+              <p>Yes</p>
+          </statement>
+          <feedback>
+              <p> For example, <c>ActionEvent</c> and <c>MouseEvent</c>.   </p>
+          </feedback>
+          </choice>
+          <choice correct="no">
+            <statement>
+                <p>No</p>
+            </statement>
+            <feedback>
+                <p>    What about listening both to a click and a mouse event?
+                </p>
+            </feedback>
+            </choice>
+</choices>
+<solution>
+<p>
+    Some components can have two different kinds of listeners.
+    For example, imagine a
+    <q>sticky button</q>
+    that works like this.
+    When you click and release the button,
+    it causes some action to take place,
+    just like a normal button.
+    When you click and hold the mouse button down, the button
+    <q>sticks</q>
+    to the cursor and you can then move it to a new location.
+    This button would need listeners for
+<c>ActionEvent</c>, <c>MouseEvent</c>, and <c>MouseMotionEvent</c>.
+  </p>
+</solution>
+</exercise>  
+          
+    </exercises>
 </section>

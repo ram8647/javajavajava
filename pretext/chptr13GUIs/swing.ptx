@@ -1,15 +1,18 @@
-<section xml:id="java-gu-is-from-aw-tto-swing">
-  <title>Java GUIs: From AWT to Swing</title>
+<section xml:id="swing">
+  <title>Java Swing Library</title>
   <introduction>
-    <p>
+      <p>
       
-      <em>java.sun.com/j2se/1.5.0/docs/api/</em>} \tBOXseven{Ever since the release} of version 1.2 of the Java Development Kit (JDK) in 2000, Java has contained two distinct libraries of GUI components.
-      The <em>Abstract Windowing Toolkit (AWT)</em>
+    Ever since the release of version 1.2 of the Java Development Kit (JDK) in 2000, 
+      Java has contained two distinct libraries of GUI components.
+      The <term>Abstract Windowing Toolkit (AWT)</term>
       has been part of Java since the original 1.0 version of the JDK 1.0.
-      The more advanced <em>Swing component set</em>
+      The more advanced <term>Java Swing library</term>
       was first introduced in JDK 1.1 and was extensively revised in JDK 1.2.
-    </p>
-    <p>
+    
+
+    
+   <!--- <p>
       Although the original version of the AWT was suitable for developing Java applets,
       it wasn't powerful enough to support full-fledged applications.
       Commonly used programs, such as word processors and spreadsheets,
@@ -18,19 +21,22 @@
       A Java GUI program running on a Windows platform had to depend on Windows code for implementations of its buttons and text fields.
       A Java program running on Unix depended upon underlying Unix code for its GUI components.
       Such dependence on the underlying operating system made the AWT less portable and less efficient.
-    </p>
-    <p>
-      In contrast, the Swing GUI components are part of the
-      <em>Java Foundation Classes (JFC)</em>,
+    </p> -->
+    
+      The Swing GUI components are part of the
+      <term>Java Foundation Classes (JFC)</term>,
       a collection of classes that do not depend as much on the underlying platform.
       The Swing library makes it possible to write GUI programs entirely in Java.
       Because they are rendered entirely by Java code, Swing components make it possible to design GUIs that are truly platform independent.
-      Such programs are much more portable than those which rely on AWT components and the underlying platform.
-      A program that uses Swing components will have the same look and feel on a Mac, Windows,
-      or Unix platform.
+      Such programs are much more portable than those which rely on AWT components and 
+      the underlying platform. A program that uses Swing components will have the same look and feel on a Mac, Windows,
+      or Unix platform. The library package <url href="https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html" visual="">javax.swing</url>
+      provides a set of <term>lightweight</term> (all-Java language) components that work the same on all platforms. 
+      
+     
     </p>
   </introduction>
-  <subsection>
+<!--  <subsection>
     <title>Heavyweight Versus Lightweight Components</title>
     <p>
       AWT components are based on the <term>peer model</term>,
@@ -64,24 +70,35 @@
       a lightweight component is drawn and rendered entirely by Java code.
       Because they do not depend on underlying system code, Swing components are more efficient and more portable than corresponding AWT components.
     </p>
-    <figure xml:id="fig-swing1-guis">
-      <caption>Swing classes, part 1: Relationship between
-      the AWT and the top-level Swing windows. REVISION: <c>JWindow</c>
-      extends <c>Window</c>.</caption>
-      <image width="73%" source="chptr13/p472f1.png"/>
-    </figure>
+  -->
+  <subsection>
+    <title>Swing classes</title>
+    
     <p>
       <xref ref="fig-swing1-guis">Figures</xref>
       and <xref ref="fig-swing2-guis"></xref>
       show the relationship between AWT and Swing classes.
       The top-level Swing classes<mdash/>the <c>JApplet</c>, <c>JDialog</c>, <c>JFrame</c>, and <c>JWindow</c><mdash/>are direct subclasses of their corresponding AWT counterparts.
       These are the top-level GUI windows.
-      The remaining Swing components (Fig.
+     </p>
+    <figure xml:id="fig-swing1-guis">
+      <caption>Swing classes, part 1: Relationship between
+      the AWT and the top-level Swing windows. REVISION: <c>JWindow</c>
+      extends <c>Window</c>.</caption>
+      <image width="73%" source="chptr13/p472f1.png"/>
+    </figure>
+    <p>The remaining Swing components (
       <xref ref="fig-swing2-guis"></xref>) are subclasses of <c>java.awt.Component</c> and <c>java.awt.Container</c>. As you can see,
       the names of Swing and AWT components are very similar.
       Swing components that have corresponding AWT components have names that begin with
       <q>J.</q>
     </p>
+    
+    <figure xml:id="fig-swing2-guis">
+      <caption>Swing classes, part 2: Swing GUI components are
+      derived from the <c>JComponent</c> class.</caption>
+      <image width="73%" source="chptr13/p473f1.png"/>
+    </figure>
     <p>
       One might think that because Swing components are superior to their AWT counterparts,
       the AWT package will eventually be dropped.
@@ -89,11 +106,7 @@
       Even if a Java program uses Swing components exclusively,
       that will still not break the dependence on the AWT.
     </p>
-    <figure xml:id="fig-swing2-guis">
-      <caption>Swing classes, part 2: Swing GUI components are
-      derived from the <c>JComponent</c> class.</caption>
-      <image width="73%" source="chptr13/p473f1.png"/>
-    </figure>
+
     <p>
       There are several reasons for this dependence.
       First, Swing's top-level window classes<mdash/><c>JApplet</c>, <c>JDialog</c>, <c>JFrame</c>, and <c>JWindow</c><mdash/>are defined as extensions to their AWT counterparts.
@@ -114,11 +127,64 @@
       but they also will use layouts and other elements from the AWT.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Swing Documentation</title>
+      <title>PROGRAMMING TIP: Swing Documentation</title>
       <p>
-        Complete documentation of the Swing classes is available for downloading or browsing on Sun's Web site at
-<c>http://java.sun.com/reference/api/index.html</c>
+        Complete documentation of the Swing classes is available at <url href="https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html" visual="">https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html</url>.
+      
       </p>
     </principle>
+
+  </subsection>
+
+
+  <subsection xml:id="the-swing-component-set">
+    <title>The Swing Component Set</title>
+    <p>
+      Java's Swing components are defined in a collection of packages named <c>javax.swing.*</c>, which is imported by the code shown in this and subsequent chapters.
+      Swing packages include the following:
+    </p>
+   <program language="java"><input>
+  javax.swing.event.*
+  javax.swing.text.*
+  javax.swing.plaf.*
+   </input></program>
+    <p>
+      The <c>javax.swing.event</c> package defines the various Swing events and their listeners,
+      such as the <c>MenuEvent</c> and the <c>MenuListener</c>. (In the AWT, the AWT events and listeners were defined in <c>java.awt.event</c>.)
+    </p>
+    <p>
+      The <c>javax.swing.text</c> package contains the classes for <c>JTextField</c> and <c>JTextComponent</c>. The Swing text components are more complex than their AWT counterparts.
+      For example,
+      one of their important features is the ability to undo changes made to the text they contain.
+      This feature is crucial for building sophisticated word-processing applications.
+    </p>
+    <p>
+      The <c>javax.swing.plaf</c> package contains Swing's look-and-feel  classes.
+      The term <em>plaf</em> is an acronym for
+      <term>pluggable look and feel</term>.
+      It refers to the fact that changing an application's look and feel is a simple matter of
+      <q>plugging in</q>
+      a different plaf model.
+      Changing how a program looks does not change what it does.
+    </p>
+    <p>
+      Swing's platform-independent look and feel is achieved by placing all the code responsible for drawing a component in a class that is separate from the component itself.
+      For example,
+      in addition to <c>JButton</c>, the class that defines the button control,
+      there will be a separate class responsible for drawing the button on the screen.
+      The drawing class will control the button's color,
+      shape, and other characteristics of its appearance.
+    </p>
+    <p>
+      There are several look-and-feel packages built into Swing.
+      For example,
+      the <c>javax.swing.plaf.motif</c> package contains the classes that implement the Motif interface,
+      a common Unix-based interface.
+      The <c>javax.swing.plaf.windows</c> packages contains classes that support a Windows look and feel,
+      and the <c>javax.swing.plaf.metal</c> package provides classes that support the Metal interface,
+      a Java look and feel.
+      These classes know how to draw each component and how to react to mouse,
+      keyboard, and other events associated with these components.
+    </p>
   </subsection>
 </section>

@@ -1,4 +1,4 @@
-<section xml:id="objectorienteddesign-model-view-controller-architecture">
+<section xml:id="mvc">
   <title>OBJECT-ORIENTED DESIGN:
   Model-View-Controller Architecture</title>
   <introduction>
@@ -55,11 +55,12 @@
       Whenever the mouse button is pressed,
       the controller tells the model to change into the pressed state.
       The model, in turn, generates an event that is passed to the view.
-      The event tells the view that the button needs to be redrawn to reflect its change in state.
+      The event tells the view that the button needs to be redrawn to reflect its change 
+      in state.
     </p>
     <figure xml:id="fig-mvc">
-      <caption>The model-view- controller architecture.</caption>
-      <image width="73%" source="chptr13/9f3.png"/>
+      <caption>The model-view-controller architecture.</caption>
+      <image width="100%" source="chptr13/9f3.png"/>
     </figure>
     <p>
       When the mouse button is released,
@@ -85,7 +86,7 @@
       The point is that for some components, Swing has organized the view and control<mdash/>the look and the feel<mdash/>into a single class.
     </p>
   </introduction>
-  <subsection xml:id="fig-lafs">
+  <subsection>
     <title>Pluggable Look and Feel</title>
     <p>
       The MVC model uses a clear division of labor to implement a GUI component.
@@ -110,9 +111,10 @@ public static void main (String args[]){
   try{
      UIManager.setLookAndFeel(
         "javax.swing.plaf.metal.MetalLookAndFeel");
-  }catch (Exception e) {
+  } catch (Exception e) {
      System.out.err("Exception: " + e.getMessage());
-  }}//main()
+  }
+}//main()
  </input></program>
     <p>
       Java's default, the <em>Metal</em> look and feel,
@@ -120,22 +122,43 @@ public static void main (String args[]){
       For a Windows look,
       you can use the following argument:
 <c>com.sun.java.swing.plaf.windows.WindowsLookAndFeel</c>.
-    </p>
-    <p>
-      Figure<nbsp/>13.4 <image width="73%" source="chptr13/9f4.png"/> shows how the simple application would appear under the three different look-and-feel styles.
-    </p>
+<xref ref="fig-lafs">Figure</xref> shows how the simple application would appear under the three different look-and-feel styles.
+</p>   
+
+    <figure xml:id="fig-lafs"><caption></caption>
+      <image width="73%" source="chptr13/9f4.png"/>
+      </figure>
+   
     </subsection>
     <subsection><title>Self-Study Exercise</title>
-      <ol>
-        <li>
+      
+      <exercise label="jbutton-mvc-q"><title>JButton MVC</title>
+        <statement>
           <p>
-            The MVC architecture is a model of object-oriented design.
+            A <c>JButton</c> has internal model-view-controller components 
+                that interact with each other to produce the button's overall behavior.
+            <figure xml:id="fig-p528f1">
+              <caption>JButton MVC</caption>
+              <image width="100%" source="chptr13/p528f1.png"/>
+            </figure>
             But if a
 <c>JButton</c> is really composed of three separate parts,
             how can we still call it a component?
-            Isn't it really three things?
+            Isn't it really three things? How can a button still be considered a component under the MVC model?
+
           </p>
-        </li>
-      </ol>
+        </statement>
+        <solution>
+          <p>
+            How can a button still be considered a component under the MVC model?
+            This is a good question.
+            The <c>JButton</c> class acts as a wrapper class and hides the model-view-controller details (Fig.
+            <xref ref="fig-p528f1"></xref>).
+            When you instantiate a <c>JButton</c>, you still get a single instance.
+            Think of it this way: Your body consists of several systems that interact (internally) among themselves,
+            but it's still one body that other bodies interact with as a single object.
+          </p>
+        </solution>
+        </exercise>
   </subsection>
 </section>

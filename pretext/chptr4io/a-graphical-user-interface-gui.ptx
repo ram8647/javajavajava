@@ -1,12 +1,15 @@
-<section xml:id="a-graphical-user-interface-gui">
+<section xml:id="ch4-gui">
   <title>A Graphical User Interface (GUI)</title>
   <introduction>
     <p>
       While command-line interfaces are useful,
-      one of the great advantages of the Java language is that its extensive class library makes it relatively easy to develop applications that employ Graphical User Interfaces (GUIs).
-      GUIs have been around now for many years,
+      one of the great advantages of the Java language is that its extensive class library
+       makes it relatively easy to develop applications with 
+       <term>Graphical User Interfaces (GUIs)</term>.
+      Today nearly all personal computing applications are GUI-based.
+
+      <!-- GUIs have been around now for many years,
       since the production of the Macintosh in the early 1980s.
-      Today nearly all the personal computing applications are GUI-based.
       Therefore, it is important that beginning programmers be able design and write programs that resemble,
       albeit on a simpler scale, those programs that they use every day.
       Among other benefits, developing the ability to write GUI programs,
@@ -18,18 +21,21 @@
       In this and subsequent sections,
       we will develop an extensible GUI model that can be used with either a Java application or an applet.
       By <em>extensible</em> we mean a model that can be easily adapted and used in a wide variety of programs.
-      GUI programming involves a computational model known as
-      <term>event-driven programming</term>,
-      which means that GUI programs react to events that are generated mostly by  the user's interactions with elements in the GUI. Therefore,
-      we will have to learn how to use Java's
-      <em>event model</em> to handle simple events.
-    </p>
     <p>
       Given that this is our first look at some complex topics,
       we will keep the discussion as simple as possible.
       This means we will delay discussion of certain issues,
       which we take up in more depth in Chapter<nbsp/>13.
     </p>
+    -->  GUI programming requires
+      <term>event-driven programming</term>,
+      which means that GUI programs react to events that are generated mostly by  the 
+      user's interactions with elements like buttons in the GUI. 
+      We will learn how to use Java's
+      <term>event model</term> to handle simple events. This chapter will provide
+      coding for simple GUIs. More advanced GUI components will be covered in Ch. 13.
+    </p>
+    
   </introduction>
   <subsection>
     <title>Java's GUI Components</title>
@@ -43,7 +49,8 @@
       and the <c>java.awt.TextField</c> class is superseded by the
 <c>javax.swing.JTextField</c> class.
       As these examples show,
-      the newer Swing components add an initial 'J' to the names of their corresponding AWT counterparts.
+      the newer Swing components add an initial 'J' to the names of their corresponding
+      AWT counterparts.
     </p>
     <p>
       <xref ref="fig-guiscreen">Figure</xref>
@@ -66,9 +73,8 @@
       A <term>container</term> is a GUI component that can contain other GUI components.
     </p>
     <figure xml:id="fig-guiscreen">
-      <caption>Various GUI components from the <c>javax.swing</c> package. <term>[Artwork: We
-      need to label the components.]</term></caption>
-      <image width="73%" source="chptr04/guicapture.png"/>
+      <caption>Various GUI components from the <c>javax.swing</c> package. </caption>
+      <image width="73%" source="chptr13/9f6.png"/>
       </figure>
     <p>
       The Swing classes are generally considered to be superior to their AWT  counterparts.
@@ -209,7 +215,10 @@ public class GreeterApp extends Object { ... }
     </p>
     <p>
       The class that created and displayed this window is shown in <xref ref="fig-simpleframe">Figure</xref>.
-      Note the use of the <c>extends</c>
+      Note the use of the <c>extends</c> keyword to define <c>SimpleGUI</c> as a subclass of <c>JFrame</c>. As a subclass, <c>SimpleGUI</c> inherits all of the functionality of a <c>JFrame</c>(
+        <xref ref="fig-framesubclass"></xref>) . That is,
+        it can contain other GUI components.
+        It knows how to resize and close itself, and so on.
     </p>
     <listing xml:id="fig-simpleframe">
       <caption>A top-level window with a title.</caption>
@@ -233,16 +242,13 @@ public class SimpleGUI extends JFrame
 </program>
 
     </listing>
-    <p>
-      keyword to define <c>SimpleGUI</c> as a subclass of <c>JFrame</c>. As a subclass, <c>SimpleGUI</c> inherits all of the functionality of a <c>JFrame</c>(
-      <xref ref="fig-framesubclass"></xref>) . That is,
-      it can contain other GUI components.
-      It knows how to resize and close itself, and so on.
+    <p> 
       The reason we want to define a subclass of <c>JFrame</c>, rather than just use a <c>JFrame</c> instance,
       is because we want eventually to give our subclass additional functionality that is specialized for our application.
-    </p>
+ 
+        </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Specialization</title>
+      <title>EFFECTIVE DESIGN: Specialization</title>
       <p>
         By creating a subclass of <c>JFrame</c> we can specialize its functionality for our application.
       </p>
@@ -299,9 +305,10 @@ public class SimpleGUI extends JFrame
       For this example,
       we will limit our application to that of simply greeting the user,
       just as we did in designing our command-line interface.
-      That means that the user will be prompted to input his or her name and the program will respond by displaying a greeting (
-      <xref ref="fig-guiscreen"></xref>).
-      We will call our GUI <c>GreeterGUI</c>, to suggest its interdependence with the same <c>Greeter</c> computational object that we used with the command-line interface.
+      That means that the user will be prompted to input his or her name and the 
+      program will respond by displaying a greeting.
+      We will call our GUI <c>GreeterGUI</c>, to suggest its interdependence with the 
+      same <c>Greeter</c> computational object that we used with the command-line interface.
     </p>
     <p>
       For this simple application, our GUI will make use of the following components:
@@ -328,13 +335,20 @@ public class SimpleGUI extends JFrame
         </li>
       </ul>
     </p>
-    <figure xml:id="fig-constructors">
-      <caption>Public methods and constructors for basic Swing components.</caption>
-      <image width="50%" source="chptr04/swingmeth.png"/>
-    </figure>
+   <p>Try the <c>GreeterGUI</c> program below.</p>
+
+   <interactive iframe="iframe/repl-greeterGUI-simple.html" width="100%" aspect="1:1"/>
+
     <p>
       <xref ref="fig-constructors">Figure</xref>
-      shows some of the constructors and public methods for the <c>JTextArea</c>, <c>JTextField</c>, <c>JButton</c>, and <c>JLabel</c> components.
+      shows some of the constructors and public methods for the <c>JTextArea</c>, 
+      <c>JTextField</c>, <c>JButton</c>, and <c>JLabel</c> components.
+      </p>
+      <figure xml:id="fig-constructors">
+        <caption>Public methods and constructors for basic Swing components.</caption>
+        <image width="50%" source="chptr04/swingmeth.png"/>
+      </figure>
+      <p>
       The following code segments illustrate how to use these constructors to create instances of these components:
     </p>
 
@@ -345,10 +359,11 @@ private JLabel prompt;
 private JTextField inField;
 private JTextArea display;
 private JButton goButton;
-   // Instantiate the components
+
+// Instantiate the components
 prompt = new JLabel("Please type your name here: ");
 inField = new JTextField(10);   // 10 chars wide
-display = new JTextArea(10, 30);// 10 rows x 30 columns
+display = new JTextArea(5, 20);// 5 rows x 20 columns
 goButton = new JButton("Click here for a greeting!");
     </input>
 </program>
@@ -357,8 +372,8 @@ goButton = new JButton("Click here for a greeting!");
       For this example, we use some of the simpler constructors.
       Thus, we create a <c>JTextField</c> with a size of 10.
       That means it can display 10 characters of input.
-      We create a <c>JTextArea</c> with 10 rows of text,
-      each 30 characters wide.
+      We create a <c>JTextArea</c> with 5 rows of text,
+      each 20 characters wide.
       We create a <c>JButton</c> with a simple text prompt meant to inform the user of how to use the button.
     </p>
   </subsection>
@@ -367,6 +382,8 @@ goButton = new JButton("Click here for a greeting!");
     <p>
       Now that we know how to create GUI components,
       the next task is to add them to the top-level window.
+
+      <!--
       A <c>JFrame</c> is a top-level <c>Container</c>(
       <xref ref="fig-swing1"></xref>),
       but instead of adding the components directly to the <c>JFrame</c> we have to add them to the
@@ -376,10 +393,12 @@ goButton = new JButton("Click here for a greeting!");
     <principle>
       <title>Content Pane</title>
       <p>
-        GUI Components cannot be added directly to a <c>JFrame</c>. They must be added to its content pane.
+        GUI Components cannot be added directly to a <c>JFrame</c>. 
+        They must be added to its content pane.
       </p>
     </principle>
-    <p>
+  -->
+    
       Java's <c>Container</c> class has several <c>add()</c> methods that can be used to insert components into the container:
     </p>
 
@@ -395,8 +414,18 @@ add(String region, Component comp) add comp at region
       The particular <c>add()</c> method to use depends on how we want to arrange the components in the container.
       The layout of a container is controlled by its default
       <term>layout manager</term>,
-      an object  associated with the container that determines the sizing and the arrangement of its contained components.
-      For a content pane,
+      an object  associated with the container that determines the sizing and the 
+      arrangement of its contained components. We used the default <c>FlowLayout</c> where 
+      components are added in order:
+      </p>
+      <program language="java">
+        <input>
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+         </input>
+    </program>
+    
+     
+     <!-- For a content pane,
       the default layout manager is a <c>BorderLayout</c>. This is an arrangement whereby components may be placed in the center of the pane and along its north,
       south, east, and west borders (
       <xref ref="fig-borderlayout"></xref>).
@@ -446,11 +475,13 @@ contentPane.add("South", inputPanel); // Add to JFrame
       This is an appropriate layout for this JPanel because it will place the prompt just to the left of the input <c>JTextField</c>.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Encapsulation</title>
+      <title>EFFECTIVE DESIGN: Encapsulation</title>
       <p>
-<c>JPanel</c> s can be used to group related components in a GUI.
+<c>JPanel</c> can be used to group related components in a GUI.
       </p>
     </principle>
+    -->
+   
   </subsection>
   <subsection>
     <title>Controlling the GUI's Action</title>
@@ -511,7 +542,8 @@ Repeat forever or until the program is stopped
       such as the time that the event occurred and the object,
       such as a <c>JButton</c>, that was the locus of the event.
       For our application,
-      when the user clicks the <c>JButton</c>, the program should input the user's name from the <c>JTextField</c> and display a greeting, such as
+      when the user clicks the <c>JButton</c>, the program should input the user's name 
+      from the <c>JTextField</c> and display a greeting, such as
       <q>Hi John nice to meet you</q>
       in the <c>JTextArea</c>. That is,
       we want the program to execute the following code segment:
@@ -520,23 +552,23 @@ Repeat forever or until the program is stopped
 <program language="java">
     <input>
 String name = inField.getText();
-  display.append(greeter.greet(name) + "\n");
+display.setText("Hello " + name + "\n");
     </input>
 </program>
 
     <p>
-      The first line uses the <c>JTextField.getText()</c> method to get the text that the user typed into the <c>JTextField</c> and stores it in a local variable, <c>name</c>. The second line passes the
-<c>name</c> to the <c>greeter.greet()</c> method and passes the result it gets back to the <c>JTextArea.append()</c> method.
-      This will have the effect of displaying the text at the end of the <c>JTextArea</c>.
+      The first line uses the <c>JTextField.getText()</c> method to get the text that the user 
+      typed into the <c>JTextField</c> and stores it in a local variable, <c>name</c>.
+      The second line sets the text in the <c>JTextArea</c> to the concatenation of "Hello " + the value in the name variable + a new line ("\n").
+
     </p>
     <p>
       In this example,
       we have used a couple of the standard public methods of the <c>JTextField</c> and <c>JTextArea</c> classes.
       For our simple GUI, the methods described in <xref ref="fig-constructors">Figure</xref>
-
-      <em>java.sun.com/j2se/1.5.0/docs/api/</em>} will be sufficient for our needs.
+      will be sufficient for our needs.
       However, if you would like to see the other methods available for these and other Swing components,
-      you should check Java's online API documentation.
+      you should check Ch. 13 and Java's online Swing documentation.
     </p>
   </subsection>
   <subsection>
@@ -567,7 +599,9 @@ String name = inField.getText();
     <input>
 public abstract interface ActionListener
                                 extends EventListener
-{    public abstract void actionPerformed(ActionEvent e);}
+{    
+  public abstract void actionPerformed(ActionEvent e);
+}
     </input>
 </program>
 
@@ -615,10 +649,9 @@ public abstract interface ActionListener
 <program language="java">
     <input>
 public void actionPerformed(ActionEvent e)
-{  if (e.getSource() == goButton)
-   {   String name = inField.getText();
-         display.append(greeter.greet(name) + "\n");
-   }
+{ 
+  String name = inField.getText();
+  display.setText("Hello " + name + "\n");
  }
     </input>
 </program>
@@ -626,9 +659,7 @@ public void actionPerformed(ActionEvent e)
     <p>
       In other words,
       we place the code that we want executed when the button is clicked in the body of the <c>actionPerformed()</c> method.
-      Note that in the if-statement we get the source of the action from the <c>ActionEvent</c> object and check that it was the <c>goButton</c>.
-    </p>
-    <p>
+       
       That explains what gets done when the button is clicked<mdash/>namely,
       the code in <c>actionPerformed()</c> will get executed.
       But it doesn't explain how Java knows that it should call this method in the first place.
@@ -645,8 +676,12 @@ public void actionPerformed(ActionEvent e)
     <input>
 public class GreeterGUI extends Frame
                                implements ActionListener
-{ ...
-  public void buildGUI()
+{ 
+  private JButton goButton;
+  private JTextfield inField;
+  private JTextArea display;
+  ...
+  public GreaterGUI()
   {  ...
      goButton = new JButton("Click here for a greeting!");
      goButton.addActionListener(this);
@@ -654,10 +689,9 @@ public class GreeterGUI extends Frame
   }
   ...
   public void actionPerformed(ActionEvent e)
-  {   if (e.getSource() == goButton)
-      {   String name = inField.getText();
-          display.append(greeter.greet(name) + "\n");
-      }
+  {   
+    String name = inField.getText();
+    display.setText("Hello " + name + "\n");
   }
   ...
 }
@@ -699,62 +733,70 @@ goButton.addActionListener(this)
         <q>me.</q>
       </p>
     </principle>
-  </subsection>
-  <subsection xml:id="self-study-exercisesB14">
+
+
+  <!--
+  <subsection>
     <title>Connecting the GUI to the Computational Object</title>
+  -->
     <p>
       <xref ref="fig-greetergui">Listing</xref>
       gives the complete source code for our <c>GreeterGUI</c> interface.
-      Because there is a lot going on here,
-      it might be helpful to go through the program carefully even though we have introduced most of its elements already.
-      That will help us put together all of the various concepts that we have introduced.
-    </p>
+       </p>
 <listing xml:id="fig-greetergui">
       <caption>Definition of the <c>GreeterGUI</c> class.</caption>
 
 <program language="java">
     <input>
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-public class GreeterGUI extends JFrame
-                            implements ActionListener
-{ private JTextArea display;
-  private JTextField inField;
-  private JButton goButton;
-  private Greeter greeter;
-  public GreeterGUI(String title)
-  { greeter = new Greeter();
-    buildGUI();
-    setTitle(title);
-    pack();
-    setVisible(true);
-  } // GreeterGUI()
-  private void buildGUI()
-  { Container contentPane = getContentPane();
-    contentPane.setLayout(new BorderLayout());
-    display = new JTextArea(10,30);
-    inField = new JTextField(10);
-    goButton = new JButton("Click here for a greeting!");
-    goButton.addActionListener(this);
-    JPanel inputPanel = new JPanel();
-    inputPanel.add(new JLabel("Input your name here: "));
-    inputPanel.add(inField);
-    inputPanel.add(goButton);
-    contentPane.add("Center", display);
-    contentPane.add("South", inputPanel);
-  } // buildGUI()
-  public void actionPerformed(ActionEvent e)
-  { if (e.getSource() == goButton)
-    { String name = inField.getText();
-      display.append(greeter.greet(name) + "\n");
-    }
-  } // actionPerformed()
-}
+    import javax.swing.*;
+    import java.awt.*;
+    import java.awt.event.*;
+    
+    public class GreeterGUI extends JFrame implements ActionListener
+    { 
+      // Declare instance variables for the components
+      private JLabel prompt;
+      private JTextField inField;
+      private JTextArea display;
+      private JButton goButton;
+        
+      /* Constructor: set up GUI */
+      public GreeterGUI()
+      {
+        // Instantiate the GUI components
+        prompt = new JLabel("Please type your name here: ");
+        inField = new JTextField(10);   // 10 chars wide
+        display = new JTextArea(5, 20);// 5 rows x 20 columns
+        goButton = new JButton("Click here for a greeting!");
+        
+        // add the components
+        setLayout(new FlowLayout(FlowLayout.LEFT));  
+        add(prompt);
+        add(inField);
+        add(goButton);
+        add(display);
+      
+        // make go button clickable
+        goButton.addActionListener(this);
+        
+        // widthxheight of window
+        setSize(400,200);
+        // display the JFrame    
+        setVisible(true); 
+      } 
+    
+      /* actionPerformed is called when the button is clicked */
+      public void actionPerformed(ActionEvent e)
+      { 
+        String name = inField.getText();
+        display.setText("Hello " + name + "\n");
+      } 
+    }    
     </input>
 </program>
     </listing>
  
+    <!--
     <p>
       To begin with,
       note the several Java packages that must be included in this program.
@@ -807,84 +849,23 @@ public class GreeterGUI extends JFrame
       Here we see the order in which they are combined.
       Note that we can declare the <c>contentPane</c> and <c>inputPanel</c> variables locally,
       because they are not used elsewhere in the class.
-    </p>
-      <exercises>
-      <title>Self-Study Exercises</title>
-      
-      <exercise label="greeterGUIEx">
-        <title>GreeterGUI</title>
-        <statement>
-          <p>
-            There is a simple modification that we can make to <c>GreeterGUI</c>. 
-            The <c>JTextField</c> can serve both as an input element and as a control element for action events.
-            An <c>ActionEvent</c> is generated whenever the user presses the Return or Enter key in a
-<c>JTextField</c> so that the <c>JButton</c> can be removed.
-            Of course, it will be necessary to designate the <c>inField</c> as an <c>ActionListener</c> in order to take advantage of this feature.
-            Using a development environment that allows GUI creation like replit, make the appropriate changes to the <c>buildGUI()</c> and
-<c>actionPerformed()</c> methods so that the <c>inField</c> can function as both a control and input element.
-            Call the new class <c>GreeterGUI2</c>. Paste the link or code of your program here to turn it in.
-          </p>
-          </statement>
-          <solution>
-            <p>
-              The following modification of <c>GreeterGUI</c> eliminates the <c>JButton</c>.
-  
-  <program language="java">
-      <input>
-  import javax.swing.*;
-  import java.awt.*;
-  import java.awt.event.*;
-  public class GreeterGUI2 extends JFrame
-                           implements ActionListener
-  { private JTextArea display;
-    private JTextField inField;
-    private Greeter greeter;
-    public GreeterGUI2(String title)
-    {   greeter = new Greeter();
-        buildGUI();
-        setTitle(title);
-        pack();
-        setVisible(true);
-    } // GreeterGUI2()
-    private void buildGUI()
-    {   Container contentPane = getContentPane();
-        contentPane.setLayout(new BorderLayout());
-        display = new JTextArea(10,30);
-        inField = new JTextField(10);
-        inField.addActionListener(this);
-        JPanel inputPanel = new JPanel();
-        inputPanel.add(new
-                JLabel("Input your name and type enter: "));
-        inputPanel.add(inField);
-        contentPane.add("Center", display);
-        contentPane.add("South", inputPanel);
-    } // buildGUI()
-    public void actionPerformed(ActionEvent e)
-    {   if (e.getSource() == inField)
-        {   String name = inField.getText();
-            display.append(greeter.greet(name) + "\n");
-        }
-    } // actionPerformed()
-  } // GreeterGUI2
-      </input>
-  </program>
-  </p>
-          </solution>
-          </exercise>
-       
-      </exercises>
-  </subsection>
+    </p> 
+
+  -->
+  </subsection> 
+
   <subsection>
     <title>Using the GUI in a Java Application</title>
     <p>
       As you know, a Java application is a stand alone program,
       one that can be run on its own.
       We have designed our GUI so that it can easily be used with a Java application.
-      We saw in the previous section that the GUI has a reference to the <c>Greeter</c> object,
+    <!--  We saw in the previous section that the GUI has a reference to the <c>Greeter</c> object,
       which is the computational object.
       Therefore, all we need to get the program to run as an application is a <c>main()</c> method.
     </p>
     <p>
+    -->
       One way to use the GUI in an application is simply to create an instance in a <c>main()</c> method.
       The <c>main()</c> method can be placed in the
 <c>GreeterGUI</c> class itself or in a separate class.
@@ -893,10 +874,10 @@ public class GreeterGUI extends JFrame
 
 <program language="java">
     <input>
-public class GreeterApplication
+public class Main
 {  public static void main(String args[])
    {
-      new GreeterGUI("Greeter");
+      GreeterGUI = new GreeterGUI();
    }
 }
     </input>
@@ -904,9 +885,42 @@ public class GreeterApplication
 
     <p>
       The <c>main()</c> method creates an instance of
-<c>GreeterGUI</c>, passing it a string to use as its title.
-      If you prefer,
+<c>GreeterGUI</c>.       If you prefer,
       this same <c>main()</c> method can be incorporated directly into the <c>GreeterGUI</c> class.
     </p>
+    <exercises>
+      <title>Self-Study Exercises</title>
+      
+      <exercise label="greeterGUIEx">
+        <title>GreeterGUI</title>
+        <statement>
+          <p>
+            There is a simple modification that we can make to <c>GreeterGUI</c>. 
+            The <c>JTextField</c> can serve both as an input element and as a control 
+            element for action events.
+            An <c>ActionEvent</c> is generated whenever the user presses the Return or Enter key in a
+<c>JTextField</c>.
+            Of course, it will be necessary to designate the <c>inField</c> as an <c>ActionListener</c> in order to take advantage of this feature.
+            Fork the following repl to make the appropriate changes so that the <c>inField</c> can function as both a 
+            control and input element. Also, change the welcome message.
+          </p>
+          <interactive iframe="iframe/repl-greeterGUI-simple.html" width="100%" aspect="1:1"/>
+          </statement>
+          <solution>
+            <p>
+              The following addition to <c>GreeterGUI</c> allows the button or the textfield (enter key)
+              to be a an actionlistener.
+  
+  <program language="java">
+      <input>
+      inField.addActionListener(this);
+      </input>
+  </program>
+  </p>
+          </solution>
+          </exercise>
+       
+      </exercises>
+
   </subsection>
 </section>

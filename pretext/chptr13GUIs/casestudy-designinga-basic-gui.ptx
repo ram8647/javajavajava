@@ -1,4 +1,4 @@
-<section xml:id="casestudy-designinga-basic-gui">
+<section xml:id="basic-gui">
   <title>CASE STUDY: Designing a Basic GUI</title>
   <introduction>
     <p>
@@ -41,7 +41,7 @@
       output, control, and guidance.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:User Interface</title>
+      <title>EFFECTIVE DESIGN: User Interface</title>
       <p>
         A user interface must effectively perform the tasks of input,
         output, control, and guidance.
@@ -64,14 +64,16 @@
       we will build it out of the following Swing components: <c>JLabel</c>, <c>JTextField</c>, <c>JTextArea</c>, and <c>JButton</c>.
     </p>
   </introduction>
-  <subsection xml:id="fig-p483f1">
+  <subsection>
     <title>The Metric Converter Application</title>
     <introduction>
       <p>
         Suppose the coach of the cross-country team asks you to write a Java application that can be used to convert miles to kilometers.
         The program should let the user input a distance in miles,
         and the program should report the equivalent distance in kilometers.
-        <image width="73%" source="chptr13/p483f1.png"/>
+        <figure xml:id="fig-p483f1"><caption>Metric Converter</caption>
+        <image width="50%" source="chptr13/p483f1.png"/>
+      </figure>
       </p>
       <p>
         Before we design the interface for this,
@@ -84,7 +86,8 @@
 public class MetricConverter {
     public static double milesToKm(double miles) {
         return miles / 0.62;
-    }}
+    }
+  }
  </input></program>
       <p>
         Note that the method takes a <c>double</c> as input and returns a <c>double</c>. Also,
@@ -178,7 +181,7 @@ MetricConverter.milesToKm(10);
         <caption>A design and layout for the Metric
         Converter GUI.<nbsp/>The <em>containment hierarchy</em> (also called a <em>widget
         hierarchy</em>) shows the containment relationships among the components.</caption>
-        <image width="73%" source="chptr13/9f6.png"/>
+        <image width="100%" source="chptr13/9f6.png"/>
       </figure>
       <p>
         <xref ref="fig-metricgui">Figure</xref>
@@ -204,24 +207,28 @@ MetricConverter.milesToKm(10);
         All of the components are contained directly in the <c>JFrame</c>.
       </p>
       <p>
-        Figure<nbsp/>13.11 shows the design of the <c>Converter</c> class,
-        which extends the <c>JFrame</c> class and implements the <c>ActionListener</c> interface.
+        <xref ref="fig-converterclass">Figure</xref> shows the design of the <c>Converter</c> class,
+        which extends the <c>JFrame</c> class and implements the <c>ActionListener</c> 
+        interface.
         As a <c>JFrame</c> subclass,
         a <c>Converter</c> can contain GUI components.
         As an implementor of the <c>ActionListener</c> interface,
-        it also will be able to handle action events through the <c>actionPerformed()</c> method.
+        it also will be able to handle action events through the <c>actionPerformed()</c> 
+        method.
       </p>
       <p>
-        <image width="73%" source="chptr13/p484f1.png"/>
+        <figure xml:id="fig-converterclass"><caption>Converter Class</caption>
+        <image width="50%" source="chptr13/p484f1.png"/>
+      </figure>
       </p>
       <p>
-        <xref ref="fig-converterclass">Figure</xref>
+        <xref ref="listing-converterclass">Listing</xref>
         gives the implementation of the <c>Converter</c> class.
         Note the three packages that are imported.
         The first contains definitions of the Swing classes,
         and the other two contain definitions of AWT events and layout managers that are used in the program.
       </p>
-      <figure xml:id="fig-converterclass">
+      <listing xml:id="listing-converterclass">
         <caption>The <c>Converter</c> class implements a simple GUI interface.</caption>
  <program language="java"><input>
 import javax.swing.*;             // Packages used
@@ -255,14 +262,10 @@ public class Converter extends JFrame
     Converter f = new Converter();
     f.setSize(400, 300);
     f.setVisible(true);
-    f.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-        System.exit(0); // Quit the application
-      }
-    });
+    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   } // main()} // Converter
  </input></program>
-      </figure>
+</listing>
       <p>
         We have to do all initializing tasks in the constructor.
         First, we have to set the <c>JFrame</c>'s layout to <c>FlowLayout</c>. A <em>layout manager</em>
@@ -282,17 +285,22 @@ getContentPane().add(input);
       <p>
         A <term>content pane</term>
             <idx><h>content pane</h></idx>
-        is a <c>JPanel</c> that serves as the working area of the <c>JFrame</c>. It contains all of the frame's components.
-        Java will raise an exception if you attempt to add a component directly to a <c>JFrame</c>.
+        is a <c>JPanel</c> that serves as the working area of the <c>JFrame</c>. 
+        It contains all of the frame's components. 
+        If you want to add a component directly to a <c>JFrame</c>, 
+        you must first set a <c>LayoutManager</c>. The <c>ContentPane</c> has a default <c>BorderLayout</c> manager.
+
       </p>
+      <!-- Not really true if you add a layoutmanager 
       <principle>
-        <title>DEBUGGING TIP:Content Pane</title>
+        <title>DEBUGGING TIP: Content Pane</title>
         <p>
           A <c>JFrame</c> cannot directly contain GUI elements.
           Instead, they must be added to its content pane,
           which can be retrieved using the <c>getContentPane()</c> method.
         </p>
       </principle>
+      -->
       <p>
         The <c>JFrame</c> and all the other top-level Swing windows have an internal structure made up of several distinct objects that can be manipulated by the program.
         Because of this structure, GUI elements can be organized into different layers within the window to create many types of sophisticated layouts.
@@ -306,14 +314,13 @@ getContentPane().add(input);
  <program language="java"><input>
 public static void main(String args[]) {
    Converter f = new Converter();
+   // set size width x height
    f.setSize(400, 300);
+   // show the JFrame
    f.setVisible(true);
-   f.addWindowListener(new WindowAdapter() {
-                         // Quit the application
-       public void windowClosing(WindowEvent e) {
-           System.exit(0);
-       }
-   });} // main()
+   // close when x button is clicked
+   f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+  } // main()
  </input></program>
       <p>
         It is necessary to set both the size and visibility of the frame,
@@ -325,6 +332,7 @@ public static void main(String args[]) {
       </p>
     </subsubsection>
   </subsection>
+  <!--
   <subsection>
     <title>Inner Classes and Adapter Classes</title>
     <p>
@@ -365,7 +373,7 @@ f.addWindowListener(new WindowAdapter() {
       For more details on the inner and anonymous classes, see Appendix<nbsp/>F.
     </p>
     <p>
-      \BOXtwo{Inner Class.}{An inner class is a class defined within another class.
+      An <term>inner class</term> is a class defined within another class.
       Inner classes are mostly used to handle a task that supports the work of the containing class.}
     </p>
     <p>
@@ -386,7 +394,8 @@ f.addWindowListener(new WindowAdapter() {
     </p>
  <program language="java"><input>
 public void windowClosing(WindowEvent e) {
-    System.exit(0);}
+    System.exit(0);
+  }
  </input></program>
     <p>
       The <c>WindowAdapter</c> is defined simply as
@@ -397,7 +406,8 @@ public abstract class WindowAdapter
     public void windowActivated(WindowEvent e) {}
     public void windowClosed(WindowEvent e) {}
     ...
-    // Five other window listener methods}
+    // Five other window listener methods
+  }
  </input></program>
     <p>
       Note that each method is given a trivial implementation ().
@@ -413,7 +423,8 @@ import java.awt.event.*;
 public class WindowCloser extends WindowAdapter {
     public void windowClosing(WindowEvent e) {
         System.exit(0);
-    }}
+    }
+  }
  </input></program>
     <p>
       Given this class,
@@ -434,11 +445,17 @@ f.addWindowListener(new WindowCloser());
       </p>
     </principle>
   </subsection>
-  <subsection xml:id="fig-convertscreen">
+-->
+  <subsection>
     <title>GUI Design Critique</title>
     <p>
-      Figure<nbsp/>13.13 shows the converter interface.
-      <image width="73%" source="chptr13/9f8.png"/> Although our basic GUI design satisfies the demands of input,
+      <xref ref="fig-convertscreen">Figure</xref> shows the converter interface.
+      
+      <figure xml:id="fig-convertscreen"><caption>Converter GUI with flaws</caption>
+      <image width="50%" source="chptr13/9f8.png"/> 
+    </figure>
+      
+      Although our basic GUI design satisfies the demands of input,
       output, control,
       and guidance, it has a few significant design flaws.
     </p>
@@ -453,7 +470,7 @@ f.addWindowListener(new WindowCloser());
 input.setText("");  // Clear the input field
  </input></program>
     <principle>
-      <title>EFFECTIVE DESIGN:Reduce the User's Burden</title>
+      <title>EFFECTIVE DESIGN: Reduce the User's Burden</title>
       <p>
         A GUI should aim to minimize the responsibility placed on the user.
         In general, the program should perform any task that it can perform, unless,
@@ -487,7 +504,7 @@ input.addActionListener(this);
       This will allow users who prefer the keyboard to use just the keyboard.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:User Interface</title>
+      <title>EFFECTIVE DESIGN: User Interface</title>
       <p>
         A GUI should aim to minimize the number of different input devices (mouse,
         keyboard) that the user has to manipulate to perform a particular task.
@@ -503,7 +520,7 @@ input.addActionListener(this);
       You see it frequently in menu-based systems that allow menu items to be selected either by mouse or by special control keys.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Desirable Redundancy</title>
+      <title>EFFECTIVE DESIGN: Desirable Redundancy</title>
       <p>
         Certain forms of redundancy in an interface,
         such as two sets of independent controls
@@ -554,7 +571,7 @@ input.addActionListener(this);
       similar to the way we break long strings of numbers (1-888-889-1999) into subgroups to make them easier to remember.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Reducing Complexity</title>
+      <title>EFFECTIVE DESIGN: Reducing Complexity</title>
       <p>
         Organizing elements into distinct groups by function helps to reduce the GUI's complexity.
       </p>
@@ -568,19 +585,26 @@ input.addActionListener(this);
     <figure xml:id="fig-metricgui2">
       <caption>A widget hierarchy showing the
       containment relationships among the components.</caption>
-      <image width="73%" source="chptr13/9f9.png"/>
+      <image width="100%" source="chptr13/9f9.png"/>
     </figure>
     <p>
-      Incorporating the keypad into the interface requires several changes in the program's design.
+      Incorporating the keypad into the interface requires several changes in the 
+      program's design.
       Because the keypad has such a clearly defined role,
-      let's make it into a separate object by defining a <c>KeyPad</c> class (Fig.<nbsp/>13.15).
+      let's make it into a separate object by defining a <c>KeyPad</c> class 
+      (<xref ref="fig-keypad"></xref>).
       The <c>KeyPad</c> will be a subclass of <c>JPanel</c> and will handle its own <c>ActionEvent</c> s.
       As we saw in Chapter<nbsp/>4,
       a <c>JPanel</c> is a generic container.
       It is a subclass of
-<c>Container</c> via the <c>JComponent</c> class (Fig.
+<c>Container</c> via the <c>JComponent</c> class (
       <xref ref="fig-swing2-guis"></xref>).
-      Its main purpose is to contain and organize <image width="73%" source="chptr13/p490f1.png"/> components that appear together on an interface.
+      Its main purpose is to contain and organize 
+      components that appear together on an interface.
+
+      <figure xml:id="fig-keypad"><caption>KeyPad Class</caption>
+      <image width="50%" source="chptr13/p490f1.png"/> 
+    </figure>
     </p>
     <p>
       In this case,
@@ -614,7 +638,8 @@ buttons = new JButton[NBUTTONS]; // Create the array
 for(int k = 0; k &lt; buttons.length; k++) {
  buttons[k] = new JButton(labels[k]); // Create button
  buttons[k].addActionListener(this); // and a listener
- add(buttons[k]);           // and add it to the panel} // for
+ add(buttons[k]);           // and add it to the panel
+} // for
  </input></program>
     <p>
       This code should be placed in the <c>KeyPad()</c> constructor.
@@ -660,7 +685,7 @@ add(buttons[k]);            //  Add button to panel
       object can then invoke the <c>keypressCallback()</c> method whenever
       a keypad button is pressed, and the <c>Converter</c> can display the
       result of the keypress.</caption>
-      <image width="73%" source="chptr13/p493f1.png"/>
+      <image width="90%" source="chptr13/p493f1.png"/>
     </figure>
  <program language="java"><input>
 private KeyPad keypad = new KeyPad(this);
@@ -671,7 +696,8 @@ private KeyPad keypad = new KeyPad(this);
     </p>
  <program language="java"><input>
 public abstract interface KeyPadClient {
-    public void keypressCallback(String s);}
+    public void keypressCallback(String s);
+  }
  </input></program>
     <p>
       The <c>KeyPad</c> can interact with any class that implements the <c>KeyPadClient</c> interface.
@@ -679,11 +705,11 @@ public abstract interface KeyPadClient {
 <c>keypressCallback()</c> method.
     </p>
     <p>
-      The implementation of <c>KeyPad</c> is shown in Figure<nbsp/>13.17.
+      The implementation of <c>KeyPad</c> is shown in  <xref ref="listing-keypad">Listing</xref>.
       Note that its constructor takes a reference to a <c>KeyPadClient</c> and saves it in an instance variable.
       Its <c>actionPerformed()</c> method then passes the key's label to the <c>KeyPadClient</c>'s callback method.
     </p>
-    <figure xml:id="fig-keypad">
+    <listing xml:id="listing-keypad">
       <caption>The <c>KeyPad</c> object implements a 12-key keypad
       in a <c>JPanel</c>. It has a reference to the <c>KeyPadClient</c> that
       contains the keypad.</caption>
@@ -713,12 +739,13 @@ public class KeyPad extends JPanel implements ActionListener{
   public void actionPerformed(ActionEvent e) {
     String keylabel = ((JButton)e.getSource()).getText();
     kpc.keypressCallback(keylabel);
-  } // actionPerformed()} // KeyPad
+  } // actionPerformed()
+} // KeyPad
  </input></program>
-    </figure>
+    </listing>
     <p>
       Given the <c>KeyPad</c> design,
-      we need to revise our design of the <c>Converter</c> class (Fig.
+      we need to revise our design of the <c>Converter</c> class (
       <xref ref="fig-p493f1"></xref>).
       The <c>Converter</c> will now implement the <c>KeyPadClient</c> interface,
       which means it must provide an implementation of the
@@ -729,7 +756,8 @@ public void keypressCallback(String s) {
     if (s.equals("C"))
         input.setText("");
     else
-        input.setText(input.getText() + s);}
+        input.setText(input.getText() + s);
+}
  </input></program>
     <p>
       Recall that whenever the <c>KeyPad</c> object calls the
@@ -739,12 +767,12 @@ public void keypressCallback(String s) {
       just as if the user typed the key in the text field.
     </p>
     <p>
-      The complete implementation of this revised version of the interface is shown in Figure<nbsp/>13.18 on the next page.
-      The appearance of the interface itself is shown in Figure<nbsp/>3.19.
+      The complete implementation of this revised version of the interface is shown in 
+      <xref ref="listing-convertclass2">Listing</xref>.
+     
     </p>
-    <figure xml:id="fig-convertclass2">
-      <caption>The second version of the <c>Converter</c> class, which
-      implements the GUI shown in Figure 13.19.</caption>
+    <listing xml:id="listing-convertclass2">
+      <caption>The second version of the <c>Converter</c> class.</caption>
       
  <program language="java"><input>
 import javax.swing.*;      // Packages used
@@ -787,21 +815,24 @@ public class Converter extends JFrame   // Version 2
     Converter f = new Converter();
     f.setSize(400, 300);
     f.setVisible(true);
-    f.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-        System.exit(0);  // Quit the application
-      }
-    });
-  } // main()} // Converter
+    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  } // main()
+} // Converter
  </input></program>
-    </figure>
+    </listing>
   </subsection>
-  <subsection xml:id="fig-convertscreen2">
+
+  <subsection>
     <title>GUI Design Critique</title>
     <p>
-      Figure<nbsp/>3.19 shows that despite our <image width="73%" source="chptr13/9f12.png"/> efforts to group the keypad into a rectangular array,
+      <xref ref="fig-convertscreen2"></xref> shows that despite our 
+        efforts to group the keypad into a rectangular array,
       it doesn't appear as a single entity in the interface itself,
       which indicates a layout problem.
+      <figure xml:id="fig-convertscreen2"><caption>Broken Array of Buttons</caption>
+        <image width="73%" source="chptr13/9f12.png"/> 
+        </figure>
+
       The default layout for our <c>KeyPad</c>
       (which is a
 <c>JPanel</c>)
@@ -821,7 +852,7 @@ public class Converter extends JFrame   // Version 2
       it can even keep the user from doing the task at all.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Layout Design</title>
+      <title>EFFECTIVE DESIGN: Layout Design</title>
       <p>
         The appropriate layout and management of GUI elements is an important part of interface design.
         It contributes to the interface's ability to guide the user's action toward the interface's goals.
