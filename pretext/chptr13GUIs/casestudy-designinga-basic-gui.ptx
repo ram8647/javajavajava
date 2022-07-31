@@ -221,6 +221,9 @@ MetricConverter.milesToKm(10);
         <image width="50%" source="chptr13/p484f1.png"/>
       </figure>
       </p>
+      </subsubsection>
+      <subsubsection>
+        <title>The MetricConverter First Implementation</title>
       <p>
         <xref ref="listing-converterclass">Listing</xref>
         gives the implementation of the <c>Converter</c> class.
@@ -263,12 +266,20 @@ public class Converter extends JFrame
     f.setSize(400, 300);
     f.setVisible(true);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  } // main()} // Converter
+  } // main()
+} // Converter
  </input></program>
 </listing>
-      <p>
-        We have to do all initializing tasks in the constructor.
-        First, we have to set the <c>JFrame</c>'s layout to <c>FlowLayout</c>. A <em>layout manager</em>
+
+<p>Try the converter below.</p>
+
+<interactive iframe="iframe/repl-metricConverter.html" width="100%" aspect="1:1"/>
+
+
+<p>
+        We do all initializing tasks in the constructor.
+        First, we  set the <c>JFrame</c>'s layout to <c>FlowLayout</c>. 
+        A <em>layout manager</em>
             <idx><h>layout manager</h></idx>
         is the object that is responsible for sizing and arranging the components in a container so that the elements are organized in the best possible manner.
         A flow layout is the simplest arrangement: The components are arranged left to right in the window,
@@ -528,22 +539,65 @@ input.addActionListener(this);
         make it a more flexible or more widely usable program.
       </p>
     </principle>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
-          <p>
+
+   <exercises><title>Self-Study Exercises</title>
+     <exercise label="roundingEx"><title>Converter Rounding</title>
+        <statement><p>
             Another deficiency in the converter interface is that it doesn't round off its result,
             leading sometimes to numbers with 20 or so digits.
-            Develop Java code to fix this problem.
+            Modify the <c>milesToKm()</c> method below to fix this problem.
           </p>
-        </li>
-        <li>
+          </statement>
+          <program language="java" interactive="activecode"><input>
+            public class MetricConverter {
+                public static double milesToKm(double miles) {
+                  // Change this code to use rounding 
+                    return miles / 0.62;
+                }
+                public static void main(String[] args)
+                {
+                  double miles = 100;
+                  System.out.println(miles + " miles in kms = " 
+                             + MetricConverter.milesToKm(miles));
+                }
+              }
+             </input></program>
+             <hint>
+              To round a double you could use the <c>Math.round()</c> method introduced in Ch. 5.
+             </hint>
+             <solution>
+ <p>
+          To round a double you could use the <c>Math.round()</c> method.
+          For example,
+          suppose the number you want to round is <c>d</c>. 
+          Then the expression <c>Math.round(100 * d)/100.0</c> will round to two decimal 
+          places.
+          Alternatively,
+          you could use the
+<c>java.text.NumberFormat</c> class.
+          Both of these approaches were covered in Chapter<nbsp/>5.
+        </p>
+             </solution>
+             </exercise>
+        
+             <exercise label="redundancyEx"><title>Car Design Redundancy</title>
+              <statement>     
           <p>
             Give an example of desirable redundancy in automobile design.
-          </p>
-        </li>
-      </ol>
+          </p></statement>
+<solution>
+  <p>
+    Many cars today have cruise control as a alternative way to control the accelerator.
+    Push buttons, usually located on the steering wheel,
+    are used to speed up and slow down,
+    so you can drive with your foot or your hand.
+  </p>
+</solution>
+          </exercise>
+      
+      </exercises>
  </subsection>
+
   <subsection xml:id="sec-keypad">
     <title>Extending the Basic GUI: Button Array</title>
     <p>
@@ -820,10 +874,14 @@ public class Converter extends JFrame   // Version 2
 } // Converter
  </input></program>
     </listing>
+
+    <p>Try the Metric Converter with KeyPad below.</p>
+    <interactive iframe="iframe/repl-metricConverterWithKeyPad.html" width="100%" aspect="1:1"/>
+
   </subsection>
 
   <subsection>
-    <title>GUI Design Critique</title>
+    <title>Second GUI Design Critique</title>
     <p>
       <xref ref="fig-convertscreen2"></xref> shows that despite our 
         efforts to group the keypad into a rectangular array,
