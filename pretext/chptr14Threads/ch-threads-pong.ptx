@@ -14,11 +14,17 @@
       Each time the ball bounces off a wall or paddle, it emits a pong sound.
     </p>
   </introduction>
-  <subsection xml:id="fig-pongscreen">
+  <figure xml:id="fig-pongscreen">
+  <caption>Pong game.</caption>
+  <image width="40%" source="chptr14/pongscreen.png"/>
+  </figure>
+  <subsection xml:id="sec-pongscreen">
     <title>A Multithreaded Design</title>
     <p>
       Let's develop a multithreaded GUI to play the game of Pong.
-      <image width="73%" source="chptr14/pongscreensmall.png"/> Figure<nbsp/>14.29 shows how the game's GUI should appear.
+      <xref ref="fig-pongscreen">Figure</xref> shows how the game's GUI should appear.
+    </p>
+    <p>  
       There are three objects involved in this program:
       the frame, which serves as the GUI, the ball,
       which is represented as a blue circle in the program, and the paddle,
@@ -27,6 +33,10 @@
       bouncing off the walls and paddle.
       The paddle's motion is controlled by the user by pressing the up- and down-arrow keys on the keyboard.
     </p>
+    <figure xml:id="fig-pongdesign">
+  <caption>Pong classes.</caption>
+  <image width="50%" source="chptr14/pongdesign.png"/>
+  </figure>
     <p>
       We will develop class definitions for the ball, paddle,
       and the frame.
@@ -40,24 +50,7 @@
       <xref ref="fig-pongdesign">Figure</xref>
       provides an overview of the object-oriented design of the Pong program.
       The <c>PongFrame</c> class is the main class.
-      It uses instances of the <c>Ball</c> and <c>Paddle</c> classes. <c>PongFrame</c> is a subclass of <c>JFrame</c> and
-    </p>
-    <figure xml:id="fig-pongdesign">
-      <caption>Design of the Pong program.</caption>
-      <image width="73%" source="chptr14/pongdesign-sm.png"/>
-    </figure>
-    <p>
-      implements the <c>KeyListener</c> interface.
-      This is another of the several event handlers provided in the <c>java.awt</c> library.
-      This one handles <c>KeyEvent</c> s and the <c>KeyListener</c> interface consists of three abstract methods: <c>keyPressed()</c>, <c>keyTyped()</c>, and <c>keyReleased()</c>, all of which are associated with the act of pressing a key on the keyboard.
-      All three of these methods are implemented in the <c>PongFrame</c> class.
-      A key-typed event occurs when a key is pressed down.
-      A key-release event occurs when a key that has been pressed down is released.
-      A key-press event is a combination of both of these events.
-    </p>
-    <p>
-      The <c>Ball</c> class is a <c>Thread</c> subclass.
-      Its data and methods are designed mainly to keep track of its motion within the program's drawing panel.
+      It uses ly to keep track of its motion within the program's drawing panel.
       The design strategy employed here leaves the drawing of the ball up to the frame.
       The <c>Ball</c> thread itself just handles the movement within the program's drawing panel.
       Note that the <c>Ball()</c> constructor takes a reference to the <c>PongFrame</c>. As we will see,
@@ -82,47 +75,51 @@
   <subsection>
     <title>Implementation of the Pong Program</title>
     <p>
-      We begin our discussion of the program's implementation with the <c>Paddle</c> class implementation (Fig.
-      <xref ref="fig-paddle"></xref>).
+      We begin our discussion of the program's implementation with the <c>Paddle</c> class implementation 
+      (<xref ref="fig-paddle">Listing</xref>).
     </p>
-    <figure xml:id="fig-paddle">
+    <listing xml:id="fig-paddle">
       <caption>Definition of the <c>Paddle</c> class.</caption>
       
  <program language="java"><input>
-public class Paddle {
-    public static final int HEIGHT = 50;  // Paddle size
+class Paddle {
+    public static final int HEIGHT = 50; // Paddle size
     public static final int WIDTH = 10;
-    private static final int DELTA = HEIGHT/2; // Move size
-    private static final int BORDER = 0;
+    private static final int DELTA = HEIGHT / 2; // Move size
+    private static final int BORDER = 20;
     private int gameAreaHeight;
     private int locationX, locationY;
     private PongFrame frame;
-    public Paddle (PongFrame f) {
-       frame = f;
-       gameAreaHeight  = f.getHeight();
-       locationX = f.getWidth()-WIDTH;
-       locationY = gameAreaHeight/2;
+
+    public Paddle(PongFrame f) {
+        frame = f;
+        gameAreaHeight = f.getHeight() - BORDER;
+        locationX = f.getWidth() - WIDTH;
+        locationY = gameAreaHeight / 2;
     } // Paddle()
+
     public void resetLocation() {
-       gameAreaHeight  = frame.getHeight();
-       locationX = frame.getWidth()-WIDTH;
+        gameAreaHeight = frame.getHeight() - BORDER;
+        locationX = frame.getWidth() - WIDTH;
     }
-    public int getX() {
-         return locationX;
-    }
-    public int getY() {
-         return locationY;
-    }
-    public void moveUp () {
-       if (locationY > BORDER )
-           locationY -= DELTA;
+
+    public int getX() { return locationX; }
+
+    public int getY() {  return locationY; }
+
+    public void moveUp() {
+        if (locationY > BORDER)
+            locationY -= DELTA;
     } // moveUp()
+
     public void moveDown() {
-       if (locationY + HEIGHT &lt; gameAreaHeight - BORDER)
-           locationY += DELTA;
-    } // moveDown()} // Paddle
+        if (locationY + HEIGHT &lt; gameAreaHeight + BORDER)
+            locationY += DELTA;
+    } // moveDown()
+} // Paddle
+
  </input></program>
-    </figure>
+    </listing>
     <p>
       Class constants, <c>HEIGHT</c> and <c>WIDTH</c> are used to define the size of the <c>Paddle</c>, which is represented on the frame as a simple rectangle.
       The frame will use the
@@ -156,62 +153,68 @@ g.fillOval(ball.getX(),ball.getY(),ball.SIZE,ball.SIZE);
       As with the paddle,
       the frame uses the ball's <c>getX()</c> and <c>getY()</c> method to determine the ball's current location.
     </p>
-    <figure xml:id="fig-ball">
+    <listing xml:id="fig-ball">
       <caption>Definition of the <c>Ball</c> class.</caption>
       
  <program language="java"><input>
 import javax.swing.*;
 import java.awt.Toolkit;
-public class Ball extends Thread {
-  public static final int SIZE = 10;   // Diameter of the ball
-  private PongFrame frame;           // Reference to the frame
-  private int topWall, bottomWall, leftWall, rightWall;  // Boundaries
-  private int locationX, locationY;     // Current location of the ball
-  private int directionX = 1, directionY = 1; //x- and y-direction (1 or -1)
-  private Toolkit kit = Toolkit.getDefaultToolkit(); //For beep() method
-  public Ball(PongFrame f) {
-    frame = f;
-    locationX = leftWall + 1;                // Set initial location
-    locationY = bottomWall/2;
-  } // Ball()
-  public int getX() {
-    return locationX;
-  } // getX()
-  public int getY() {
-    return locationY;
-  } // getY()
-  public void move() {
-    rightWall = frame.getWidth() - SIZE;   // Define bouncing region
-    leftWall = topWall = 0;                 // And location of walls
-    bottomWall = frame.getHeight() - SIZE;
-    locationX = locationX + directionX; // Calculate a new location
-    locationY = locationY + directionY;
-    if (frame.ballHitsPaddle()){
-      directionX = -1;   //  move toward left wall
-      kit.beep();
-    } //if ball hits paddle
-    if (locationX &lt;= leftWall){
-      directionX = + 1;   //  move toward right wall
-      kit.beep();
-    } //if ball hits left wall
-    if (locationY + SIZE >= bottomWall || locationY &lt;= topWall){
-      directionY = -directionY;      //  reverse direction
-      kit.beep();
-    } //if ball hits top or bottom walls
-    if (locationX  >= rightWall + SIZE) {
-      locationX = leftWall + 1;   // jump back to left wall
-    } //if ball goes through right wall
-  } // move()
-  public void run() {
-    while (true) {
-      move();                // Move
-      frame.repaint();
-      try {  sleep(15);
-      } catch (InterruptedException e) {}
-    } // while
-  } // run()} // Ball
+
+class Ball extends Thread {
+    public static final int SIZE = 10; // Diameter of the ball
+    private PongFrame frame; // Reference to the frame
+    private int topWall, bottomWall, leftWall, rightWall; // Boundaries
+    private int locationX, locationY; // Current location of the ball
+    private int directionX = 1, directionY = 1; // x- and y-direction (1 or -1)
+    private Toolkit kit = Toolkit.getDefaultToolkit(); // For beep() method
+
+    public Ball(PongFrame f) {
+        frame = f;
+        locationX = 50; // Set initial location
+        locationY = 50;
+    } // Ball()
+
+    public int getX() { return locationX; } // getX()
+
+    public int getY() { return locationY; } // getY()
+
+    public void move() {
+        rightWall = frame.getWidth() - SIZE; // Define bouncing region
+        leftWall = 0;
+        topWall = 20; // And location of walls
+        bottomWall = frame.getHeight() - SIZE;
+        locationX = locationX + directionX; // Calculate a new location
+        locationY = locationY + directionY;
+        if (frame.ballHitsPaddle()) {
+            directionX = -1; // move toward left wall
+            kit.beep();
+        } // if ball hits paddle
+        if (locationX &lt;= leftWall) {
+            directionX = +1; // move toward right wall
+            kit.beep();
+        } // if ball hits left wall
+        if (locationY + SIZE >= bottomWall || locationY &lt;= topWall) {
+            directionY = -directionY; // reverse direction
+            kit.beep();
+        } // if ball hits top or bottom walls
+        if (locationX >= rightWall + SIZE) {
+            locationX = leftWall + 1; // jump back to left wall
+        } // if ball goes through right wall
+    } // move()
+
+    public void run() {
+        while (true) {
+            move(); // Move
+            frame.repaint();
+            try {
+                sleep(15);
+            } catch (InterruptedException e) {
+            }
+        } // while
+    } // run()
+} // Ball
  </input></program>
-    </figure>
+    </listing>
     <p>
       Unlike the paddle, however, the ball moves autonomously.
       Its <c>run()</c> method,
@@ -255,7 +258,7 @@ locationY = locationY + directionY;
   <subsection>
     <title>The <c>KeyListener</c>Interface</title>
     <p>
-      The implementation of the <c>PongFrame</c> class is shown in <xref ref="fig-pongapplet">figure</xref>.
+      The implementation of the <c>PongFrame</c> class is shown in <xref ref="fig-pongapplet">Listing</xref>.
       The frame's main task is to manage the drawing of the ball and paddle and to handle the user's key presses.
       Handling keyboard events is a simple matter of implementing the <c>KeyListener</c> interface.
       This works in much the same way as the <c>ActionListener</c> interface,
@@ -265,51 +268,63 @@ locationY = locationY + directionY;
 <c>KeyEvent</c> s, which are passed to the appropriate methods of the
 <c>KeyListener</c> interface.
     </p>
-    <figure xml:id="fig-pongapplet">
+    <listing xml:id="fig-pongapplet">
       <caption>Definition of the <c>PongFrame</c> class.</caption>
  <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 public class PongFrame extends JFrame implements KeyListener {
-     private Ball ball;
-     private Paddle pad;
-     public PongFrame() {
-         setBackground(Color.white);
-         addKeyListener(this);
-         pad = new Paddle(this);  // Create the paddle
-         ball = new Ball(this);      // Create the ball
-         ball.start();
-     } // PongFrame()
-     public void paint (Graphics g ) {
-          g.setColor(getBackground());   // Erase the drawing area
-          g.fillRect(0,0,getWidth(),getHeight());
-          g.setColor(Color.blue);       // Paint the ball
-          g.fillOval(ball.getX(),ball.getY(),ball.SIZE,ball.SIZE);
-          pad.resetLocation();          // Paint the paddle
-          g.setColor(Color.red);
-          g.fillRect(pad.getX(),pad.getY(),Paddle.WIDTH,Paddle.HEIGHT);
-     } // paint()
-      public boolean ballHitsPaddle() {
-          return ball.getX() + Ball.SIZE >= pad.getX()
-             &amp;&amp; ball.getY() >= pad.getY()
-             &amp;&amp; ball.getY() &lt;= pad.getY() + Paddle.HEIGHT;
-     } // ballHitsPaddle()
-     public void keyPressed( KeyEvent e) { // Check for arrow keys
-         int keyCode = e.getKeyCode();
-         if (keyCode == e.VK_UP)            // Up arrow
-             pad.moveUp();
-         else if (keyCode == e.VK_DOWN)     // Down arrow
-             pad.moveDown();
-     } // keyReleased()
-     public void keyTyped(KeyEvent e) {}     // Unused
-     public void keyReleased( KeyEvent e) {} // Unused
-     public static void main(String[] args) {
-       PongFrame f = new PongFrame();
-       f.setSize(400,400);
-       f.setVisible(true);} // PongFrame
+    private Ball ball;
+    private Paddle pad;
+
+    public PongFrame() {
+        setTitle("Pong");
+        setBackground(Color.white);
+        addKeyListener(this);
+        pad = new Paddle(this); // Create the paddle
+        ball = new Ball(this); // Create the ball
+        ball.start();
+    } // PongFrame()
+
+    public void paint(Graphics g) {
+        g.setColor(getBackground()); // Erase the drawing area
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.setColor(Color.blue); // Paint the ball
+        g.fillOval(ball.getX(), ball.getY(), ball.SIZE, ball.SIZE);
+        pad.resetLocation(); // Paint the paddle
+        g.setColor(Color.red);
+        g.fillRect(pad.getX(), pad.getY(), Paddle.WIDTH, Paddle.HEIGHT);
+    } // paint()
+
+    public boolean ballHitsPaddle() {
+        return ball.getX() + Ball.SIZE >= pad.getX()
+                &amp;&amp; ball.getY() >= pad.getY()
+                &amp;&amp; ball.getY() &lt;= pad.getY() + Paddle.HEIGHT;
+    } // ballHitsPaddle()
+
+    public void keyPressed(KeyEvent e) { // Check for arrow keys
+        int keyCode = e.getKeyCode();
+        if (keyCode == e.VK_UP) // Up arrow
+            pad.moveUp();
+        else if (keyCode == e.VK_DOWN) // Down arrow
+            pad.moveDown();
+    } // keyReleased()
+
+    public void keyTyped(KeyEvent e) {
+    } // Unused
+
+    public void keyReleased(KeyEvent e) {
+    } // Unused
+
+    public static void main(String[] args) {
+        PongFrame f = new PongFrame();
+        f.setSize(400, 400);
+        f.setVisible(true);
+    }
+} // PongFrame
  </input></program>
-    </figure>
+    </listing>
     <p>
       There's a bit of redundancy in the <c>KeyListener</c> interface in the sense that a single key press and release generates three <c>KeyEvent</c> s: A key-typed event,
       when the key is pressed, a key-released event, when the key is released,
@@ -397,17 +412,19 @@ public void keyPressed( KeyEvent e) { // Check arrow keys
       thereby making thread programming accessible to programmers.
       However, one of the lessons that should be drawn from this chapter is that multithreaded programs must be carefully designed in order to work effectively.
     </p>
-    </subsection>
-    <subsection><title>Self-Study Exercise</title>
-      <p>
-      <ol>
-        <li>
+    <exercises>
+    <title>Self-Study Exercise</title>
+      <activity>
+      <title>Pong Game</title>
+      <statement>
           <p>
-            Modify the <c>PongFrame</c> program so that it contains a second ball that starts at a 
-            different location from the first ball.
+            Use <url href="https://replit.com/@RalphMorelli/Pong?v=1">Replit</url> 
+            to have a go at Pong. If you want a challenge,
+            add a second ball to the game. You'll have to copy the source code
+            and save it on your own system.
           </p>
-        </li>
-      </ol>
-    </p>
+      </statement>
+      </activity>
+    </exercises>
   </subsection>
 </section>
