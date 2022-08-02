@@ -290,98 +290,16 @@ class Dotty {
     
     <exercises>
     <title>Self-Study Exercise</title>
-    <exercise>
-    <title>Single-threaded</title>
+    <activity>
+    <title>Single-threaded Dotty</title>
     <statement>
     <p>
-      Experiment with the single-threaded version of this program to see
+      Use <url href="https://replit.com/@RalphMorelli/RandomDots1?v=1">Replit</url> to experiment with the 
+      single-threaded version of this program to see
       how unresponsive it is.
     </p>
-  <program language="java" interactive="activecode"><input>
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-
-public class RandomDotGUI extends JFrame implements ActionListener {
-    private Dotty dotty; // The drawing class
-    private JPanel controls = new JPanel();
-    private JPanel canvas = new JPanel();
-    private JButton draw = new JButton("Draw");
-    private JButton clear = new JButton("Clear");
-
-    public RandomDotGUI() {
-        getContentPane().setLayout(new BorderLayout());
-        draw.addActionListener(this);
-        clear.addActionListener(this);
-        controls.add(draw);
-        controls.add(clear);
-        canvas.setBorder(BorderFactory.createTitledBorder("Drawing Canvas"));
-        getContentPane().add("North", controls);
-        getContentPane().add("Center", canvas);
-        getContentPane().setSize(400, 400);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == draw) {
-            dotty = new Dotty(canvas);
-            dotty.draw();
-        } else {
-            dotty.clear();
-        }
-    } // actionPerformed()
-
-    public static void main(String args[]) {
-        RandomDotGUI gui = new RandomDotGUI();
-        gui.setSize(500, 500);
-        gui.setVisible(true);
-    }
-} // RandomDotGUI
-
-class Dotty {
-    // Coordinates
-    private static final int HREF = 20, VREF = 20, LEN = 200;
-    private JPanel canvas;
-    private int nDots; // Number of dots drawn
-    private int firstRed = 0; // Number of the first red dot
-
-    public Dotty(JPanel canv) {
-        canvas = canv;
-    }
-
-    public void draw() {
-        int width = 5; // Dot size
-        int height = 5;
-        nDots = 0;
-        Graphics g = canvas.getGraphics();
-        int k = 0;
-        long bound = 1000000000; // # of iterations
-        while (k &lt; bound) {
-            int x = HREF + (int) (Math.random() * LEN);
-            int y = VREF + (int) (Math.random() * LEN);
-            if (k % 1000000 == 0) { // Every millionth iteration
-                g.fillOval(x, y, width, height); // Draw a dot
-                nDots++;
-                if ((Math.random() &lt; 0.05) &amp;&amp; (firstRed == 0)) {
-                    g.setColor(Color.red); // Change color to red
-                    firstRed = nDots;
-                }
-            }
-            k++;
-        } // while
-    } // draw()
-
-    public void clear() { // Clear screen and report result
-        Graphics g = canvas.getGraphics();
-        g.setColor(canvas.getBackground());
-        g.fillRect(HREF, VREF, LEN + 3, LEN + 3);
-        System.out.println(
-                "Number of dots drawn since first red = " + (nDots - firstRed));
-    } // clear()
-
-} // Dotty
-  </input></program>
   </statement>
-  </exercise>
+  </activity>
   </exercises>
 
   </subsection>
@@ -629,153 +547,64 @@ public void actionPerformed(ActionEvent e) {
     </principle>
     <exercises>
     <title>Self-Study Exercises</title>
-    <exercise>
-    <title>Multi-threaded </title>
+    <activity>
+    <title>Multi-threaded Dotty</title>
     <statement>
-    <ol>
-    <li>
     <p>
-      Experiment with this version of the program notice its improved responsiveness.
+      Use <url href="https://replit.com/@RalphMorelli/RandomDotGUI2?v=1">Replit</url> 
+      to experiment with this version of the program to see its improved responsiveness.
     </p>
-    </li>
-    <li>
+    </statement>
+  </activity>
+  <exercise>
+  <title>Minimum Priority</title>
+  <statement>  
      <p>
-            Instead of sleeping on each iteration,
-            another way to make the interface more responsive would be to 
-            set the threaded <c>Dotty</c>'s priority to a low number,
-            such as <c>Thread.MIN_PRIORITY</c>.
-            Make this change, and experiment with its effect on the program's responsiveness.
-            Is it more or less responsive than sleeping on each iteration?
-            Why?
+            Instead of having <c>Dotty</c> sleep on each iteration,
+            what if we set its priority to <c>Thread.MIN_PRIORITY</c>.
+            What effect would you expect this to have on the program's responsiveness
+            compared to the single-threaded version?
           </p>
-    </li>
-    </ol>
-
-<program language="java" interactive="activecode"><input>
-
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-
-public class RandomDotGUI extends JFrame implements ActionListener {
-
-    private Dotty dotty; // The drawing class
-    private Thread dottyThread;
-    private JPanel controls = new JPanel();
-    private JPanel canvas = new JPanel();
-    private JButton draw = new JButton("Draw");
-    private JButton clear = new JButton("Clear");
-
-    /**
-     * init() sets up the applet interface which consists
-     * of the Draw and Clear buttons.
-     */
-    public RandomDotGUI() {
-        getContentPane().setLayout(new BorderLayout());
-        draw.addActionListener(this);
-        clear.addActionListener(this);
-        controls.add(draw);
-        controls.add(clear);
-        canvas.setBorder(BorderFactory.createTitledBorder("Drawing Canvas"));
-        getContentPane().add("North", controls);
-        getContentPane().add("Center", canvas);
-    } // init()
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == draw) {
-            dotty = new Dotty(canvas);
-            dottyThread = new Thread(dotty);
-            dottyThread.start();
-        } else {
-            dotty.clear();
-        }
-    } // actionPerformed()
-
-    public static void main(String args[]) {
-        RandomDotGUI gui = new RandomDotGUI();
-        gui.setSize(500, 500);
-        gui.setVisible(true);
-    }
-
-} // RandomDotGUI
-
-class Dotty implements Runnable {
-    private static final int HREF = 20, VREF = 20, LEN = 200; // Coordinates
-
-    private JPanel canvas;
-    private int nDots; // Number of dots drawn
-    private int firstRed = 0; // Number of the first red dot
-    private boolean isCleared = false; // The panel has been cleared
-
-    public void run() {
-        draw();
-    }
-
-    /**
-     * Dotty() constructor is given the number of dots to draw
-     * and a reference to the drawing panel.
-     * 
-     * @param dots -- the number of dots
-     * @canv -- the reference to the drawing panel
-     */
-    public Dotty(JPanel canv) {
-        canvas = canv;
-    }
-
-    public void draw() {
-        int width = 5; // Dot size
-        int height = 5;
-        nDots = 0;
-        Graphics g = canvas.getGraphics();
-        int k = 0;
-        long bound = 1000000000;                      // # of iterations
-        while (k &lt; bound &amp;&amp; !isCleared) {
-            int x = HREF + (int) (Math.random() * LEN);
-            int y = VREF + (int) (Math.random() * LEN);
-            if (k % 1000000 == 0) {         // Every millionth iteration
-                g.fillOval(x, y, width, height); // Draw a dot
-                nDots++;
-                if ((Math.random() &lt; 0.05) &amp;&amp; (firstRed == 0)) {
-                    g.setColor(Color.red); // Change color to red
-                    firstRed = nDots;
-                }
-                try {
-                    Thread.sleep(100); // Sleep for an instant
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            k++;
-        } // while
-    } // draw()
-
-    /**
-     * clear() clears the drawing panel
-     */
-    public void clear() {
-        isCleared = true;
-        Graphics g = canvas.getGraphics();
-        g.setColor(canvas.getBackground());
-        g.fillRect(HREF, VREF, LEN + 3, LEN + 3);
-        g.setColor(Color.black);
-        g.drawString("Dots since first red = " + (nDots - firstRed), HREF, VREF + LEN);
-        // System.out.println("Number of dots drawn since first red = " +
-        // (nDrawn-firstRed) );
-    } // clear()
-} // Dotty
-</input></program>
 </statement>
-<solution>
+       <choices>
+        <choice correct="no">
+            <statement>
+                <p>This would decrease responsiveness.</p>
+            </statement>
+            <feedback>
+                <p>No, it would improve responsiveness over the single-threaded version.</p>
+            </feedback>
+        </choice>        
+        <choice correct="no">
+            <statement>
+                <p>Its responsiveness would be about the same.</p>
+            </statement>
+            <feedback>
+                <p>No, it would improve responsiveness over the single-threaded version.</p>
+            </feedback>
+        </choice> 
+        <choice correct="yes">
+            <statement>
+                <p>It would improve responsiveness.</p>
+            </statement>
+            <feedback>
+                <p>Right, it would improve responsiveness over the single-threaded version.</p>
+            </feedback>
+        </choice>
+      </choices><solution>
           <p>
-            If <c>Dotty</c>'s priority is set to the minimum, a low value,
-            this does improve the responsiveness of the interface,
-            but it is less responsive than using a <c>sleep()</c> on each iteration.
+            If <c>Dotty</c>'s priority is set to the minimum,
+            this would improve the responsiveness compared to the
+            single-threaded version. But it would leave control up to the operating system
+            to decide when to control away from the drawing loop. Therefore,
+            forcing the drawing loop to sleep on each iteration, as in our current
+            multithreaded version, would be the more responsive design.
           </p>
 </solution>
 </exercise>
 
 <exercise>
-<title>Round robin</title>
+<title>Round robin scheduling</title>
 <statement>
           <p>
             True or false. round-robin scheduling would ensure the 
@@ -783,7 +612,7 @@ class Dotty implements Runnable {
           </p>
 </statement>
        <choices>
-        <choice correct="notify">
+        <choice correct="no">
             <statement>
                 <p>True</p>
             </statement>
