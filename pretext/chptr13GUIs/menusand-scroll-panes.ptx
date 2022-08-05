@@ -1,15 +1,17 @@
-<section xml:id="menusand-scroll-panes">
+<section xml:id="menus-scrolls">
   <title>Menus and Scroll Panes</title>
   <introduction>
     <p>
-      Pop-up and pull-down menus allow an application or applet to grow in complexity and functionality without cluttering its interface.
+      Pop-up and pull-down menus allow an application  to grow in complexity and 
+      functionality without cluttering its interface.
       Menus are hierarchical in nature.
       A particular menu is divided into a number of menu items,
       which can themselves be further subdivided.
       Java makes it simple to implement menus.
     </p>
     <p>
-      A <c>JMenuBar</c> is an implementation of a menu bar<mdash/>a horizontal list of names that appears at the top of a window (Fig.
+      A <c>JMenuBar</c> is an implementation of a menu bar<mdash/>a horizontal list of 
+      names that appears at the top of a window (
       <xref ref="fig-menuterms"></xref>).
     </p>
     <figure xml:id="fig-menuterms">
@@ -22,8 +24,10 @@
       Almost all applications have a menu bar.
       To construct a menu,
       you add
-<c>JMenu</c> objects to a <c>JMenuBar</c>. A <c>JMenu</c> is essentially a clickable area on a menu bar that is associated with a <c>JPopupMenu</c>, a small window that pops up and displays the menu's <c>JMenuItem</c> s.
-      A menu can also contain <c>JSeparator</c> s, which are dividers that can be placed between menu items to organize them into logical groupings.
+<c>JMenu</c> objects to a <c>JMenuBar</c>. A <c>JMenu</c> is essentially a clickable area 
+on a menu bar that is associated with a <c>JPopupMenu</c>, a small window that pops up and displays the menu's <c>JMenuItem</c> s.
+      A menu can also contain <c>JSeparator</c>s, which are dividers that can be placed 
+      between menu items to organize them into logical groupings.
     </p>
   </introduction>
   <subsection>
@@ -34,7 +38,11 @@
       although you needn't perform them in this order:
     </p>
     <p>
-      \begin{NL} \item Create the individual <c>JMenuItem</c> s. \item Create a <c>JMenu</c> and add the <c>JMenuItem</c> s to it. \item Create a <c>JMenuBar</c> and add the <c>JMenu</c> s to it. \end{NL}
+     <ol>
+      <li> Create the individual <c>JMenuItem</c>s.</li>
+      <li> Create a <c>JMenu</c> and add the <c>JMenuItem</c>s to it. </li>
+      <li>Create a <c>JMenuBar</c> and add the <c>JMenu</c> s to it. </li>
+      </ol>
     </p>
     <p>
       For example,
@@ -51,7 +59,7 @@
     </p>
  <program language="java"><input>
 JMenuBar mBar = new JMenuBar();// Create menu bar
-this.setMenuBar(mBar);   // Add it to this window
+this.setJMenuBar(mBar);   // Add it to this window
  </input></program>
     <p>
       The next step involves creating and adding menus and menu items to the menu bar.
@@ -60,7 +68,7 @@ this.setMenuBar(mBar);   // Add it to this window
       you should break this task into subtasks and define a method for each subtask.
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Method Size</title>
+      <title>EFFECTIVE DESIGN: Method Size</title>
       <p>
         A method that gets longer than 20 to 25 lines is probably trying to do too much and should be divided into separate methods,
         each with a clearly defined task.
@@ -84,7 +92,8 @@ private void initFileMenu() {
     fileMenu.addSeparator();  // Logical separator
     quitItem = new JMenuItem("Quit"); // Quit item
     quitItem.addActionListener(this);
-    fileMenu.add(quitItem);} // initFileMenu()
+    fileMenu.add(quitItem);
+  } // initFileMenu()
  </input></program>
     <p>
       The first two statements in the method create the file menu and add it to the menu bar.
@@ -94,11 +103,11 @@ private void initFileMenu() {
       This has the effect of grouping the file-handling items
       (open and save)
       into one logical category and distinguishing them from the quit item.
-      A separator is represented as a line in the menu (Fig.
+      A separator is represented as a line in the menu (
       <xref ref="fig-menuterms"></xref>).
     </p>
     <principle>
-      <title>EFFECTIVE DESIGN:Logical Design</title>
+      <title>EFFECTIVE DESIGN: Logical Design</title>
       <p>
         In designing interfaces, an effort should be made to use visual cues,
         such as menu item separators and borders,
@@ -113,6 +122,13 @@ private void initFileMenu() {
 <c>setEnabled()</c> method is used to disable both the open and save menu items.
       Implementation of these actions is left as an exercise.
     </p>
+
+    <activity>
+      <statement> <p>Try the File Menu below. Fork the repl and add another menu item to the File Menu. 
+        Add code to the actionPerformed method to print out the command selected.   </p>
+     <interactive iframe="iframe/repl-FileMenu.html" width="100%" aspect="1:1"/>
+   </statement>  
+   </activity>
   </subsection>
   <subsection>
     <title>Menu Hierarchies</title>
@@ -132,7 +148,9 @@ private void initFileMenu() {
     </p>
     <p>
       To help remedy this type of situation,
-      let's add a feature to our editor that will keep track of cuts by storing them in a <c>Vector</c>. This function will be like an
+      let's add a feature to our editor 
+      that will keep track of cuts by storing them in a <c>ArrayList</c>. 
+      his function will be like an
       <q>Unlimited Undo</q>
       operation for cuts.
       For this example,
@@ -145,8 +163,7 @@ private void initFileMenu() {
     <p>
       This kind of menu should occur within the edit menu,
       but it will have its own items.
-      This is a menu within a menu (Fig.
-      <xref ref="fig-menuterms"></xref>),
+      This is a menu within a menu (<xref ref="fig-menuterms"></xref>),
       an example of a <em>cascading</em> drop-down menu.
       The edit menu itself drops down from the menu bar,
       and the recent cuts menu drops down and to the right of where its arrow points.
@@ -171,13 +188,21 @@ private void initEditMenu() {
   editMenu.add(selectItem);
   editMenu.addSeparator();
   cutsMenu = new JMenu("Recent Cuts");//Cuts submenu
-  editMenu.add(cutsMenu);} // initEditMenu()
+  editMenu.add(cutsMenu);
+} // initEditMenu()
  </input></program>
     <p>
       The main difference between this method and the one used to create the file menu is that here we insert an entire submenu as one of the items in the edit menu.
       The <c>cutsMenu</c> will be used to hold the strings that are cut from the document.
       Initially, it will be empty.
     </p>
+
+    <activity>
+      <statement> <p>Fork the FileMenu repl below or use the fork from the previous activity, 
+        to add the Edit menu.  </p>
+     <interactive iframe="iframe/repl-FileMenu.html" width="100%" aspect="1:1"/>
+   </statement>  
+   </activity>
   </subsection>
   <subsection>
     <title>Handling Menu Actions</title>
@@ -197,7 +222,8 @@ private void initEditMenu() {
         with each clause handling a single menu item.
       </p>
       <p>
-        The following <c>actionPerformed()</c> method is used to handle the menu selections for the text editor:
+        The following <c>actionPerformed()</c> method is used to handle the menu 
+        selections for the text editor:
       </p>
  <program language="java"><input>
 public void actionPerformed(ActionEvent e) {
@@ -219,7 +245,8 @@ public void actionPerformed(ActionEvent e) {
   } else {
     JMenuItem item = (JMenuItem)e.getSource(); // Default is cutsMenu
     scratchPad = item.getActionCommand(); // Put cut back in scratchpad
-  }} // actionPerformed()
+  }
+} // actionPerformed()
  </input></program>
       <p>
         The method begins by getting the source of the <c>ActionEvent</c> and casting it into a <c>JMenuItem</c>. It then checks each case of the if-else structure.
@@ -255,14 +282,16 @@ public void actionPerformed(ActionEvent e) {
         So we just assign the cut text from the menu to the <c>scratchpad</c>.
       </p>
       <principle>
-        <title>PROGRAMMING TIP:Default Cases</title>
+        <title>PROGRAMMING TIP: Default Cases</title>
         <p>
           Although the order of the clauses in an if-else structure is usually not important,
           the default clause can sometimes be used to handle cases that can't be referenced by name.
         </p>
       </principle>
+    
     </introduction>
-    <subsubsection xml:id="fig-p514f1">
+
+    <subsubsection>
       <title>Handling Previously Cut Text</title>
       <p>
         The most difficult function in our program is the cut operation.
@@ -276,19 +305,20 @@ public void actionPerformed(ActionEvent e) {
       </p>
  <program language="java"><input>
 private void addRecentCut(String cut) {
-  recentCuts.insertElementAt(cut,0);
+  recentCuts.add(0,cut);
   cutsMenu.removeAll();
   for (int k = 0; k &lt; recentCuts.size(); k++) {
     JMenuItem item =
-     new JMenuItem((String)recentCuts.elementAt(k));
+     new JMenuItem((String)recentCuts.get(k));
     cutsMenu.add( item );
     item.addActionListener(this);
-  }} // addRecentCut()
+  }
+} // addRecentCut()
  </input></program>
       <p>
-        The <c>recentCuts Vector</c> stores the cut strings.
+        The <c>recentCuts ArrayList</c> stores the cut strings.
         Note the use of the <c>insertElementAt()</c> method to insert strings into the vector and the <c>elementAt()</c> method to get strings from the vector.
-        (You may find it helpful to review the section on vectors in Chapter<nbsp/>9.)
+        (You may find it helpful to review the section on ArrayLists in Chapter<nbsp/>9.)
       </p>
       <p>
         Note also how menu items are removed and inserted in menus.
@@ -297,24 +327,39 @@ private void addRecentCut(String cut) {
         using the <c>removeAll()</c> method.
         Then the for loop iterates through the strings stored in the vector,
         making new menu items from them,
-        which are then inserted into the <image width="73%" source="chptr13/p514f1.png"/> <c>cutsMenu</c>. In this way,
+        which are then inserted into the 
+        <c>cutsMenu</c>. In this way,
         the <c>cutsMenu</c> is changed dynamically each time the user cuts a piece of text from the document.
       </p>
-    </subsubsection>
-  </subsection>
-  <subsection xml:id="fig-scrollexample">
-    <title>Adding Scrollbars to a Text Area</title>
+      </subsubsection>
+      </subsection>
+      <subsection><title>The SimpleTextEditor Implementation</title>
+      <activity>
+        <statement> <p>Try the SimpleTextEditor Edit menu below.  </p>
+       <interactive iframe="iframe/repl-SimpleTextEditor.html" width="100%" aspect="1:1"/>
+     </statement>  
+     </activity>
+   
+
+    
+ 
     <p>
-      The design of the <c>SimpleTextEditor</c> class is summarized in <xref ref="fig-p514f1">Figure</xref>
-      and its complete implementation is shown in <xref ref="fig-texteditor">Figure</xref>.
+      The design of the <c>SimpleTextEditor</c> class is summarized in 
+      <xref ref="fig-p514f1">Figure</xref>
+      and its complete implementation is shown in <xref ref="listing-texteditor">Listing</xref>.
+        It uses a <c>BorderLayout</c>, with the <c>JTextArea</c> placed at the center.
+    
     </p>
-    <figure xml:id="fig-texteditor">
-      <caption>A menu-based <c>SimpleTextEditor</c> application, Part I.</caption>
+    <figure xml:id="fig-p514f1"><caption>SimpleTextEditor Class</caption>
+    <image width="50%" source="chptr13/p514f1.png"/> 
+    </figure>
+    <listing xml:id="listing-texteditor">
+      <caption>A menu-based <c>SimpleTextEditor</c> application</caption>
  <program language="java"><input>
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
+import java.util.*;
 public class SimpleTextEditor extends JFrame implements ActionListener{
   private JMenuBar mBar = new JMenuBar();        // Create the menu bar
   private JMenu fileMenu, editMenu, cutsMenu;   // Menu references and items
@@ -322,7 +367,7 @@ public class SimpleTextEditor extends JFrame implements ActionListener{
   private JMenuItem quitItem, openItem, saveItem;       // File items
   private JTextArea display = new JTextArea(); // Here's where the editing occurs
   private String scratchPad = "";              // Scratch pad for cut/paste
-  private Vector recentCuts = new Vector();
+  private ArrayList recentCuts = new ArrayList();
   public SimpleTextEditor() {
     super("Simple Text Editor");     // Set the window title
     this.getContentPane().setLayout(new BorderLayout());
@@ -361,13 +406,7 @@ public class SimpleTextEditor extends JFrame implements ActionListener{
     openItem.setEnabled(false);
     fileMenu.add(openItem);
     saveItem = new JMenuItem("Save");   // Save item
- </input></program>
-    </figure>
-    <figure xml:id="fig_simpletexteditorpart2cont">
-      <caption><em>(continued)</em> The <c>SimpleTextEditor</c>, Part II.</caption>
-      
- <program language="java"><input>
-saveItem.addActionListener(this);
+    saveItem.addActionListener(this);
     saveItem.setEnabled(false);
     fileMenu.add(saveItem);
     fileMenu.addSeparator();    // Logical separator
@@ -397,11 +436,11 @@ saveItem.addActionListener(this);
     }
   } // actionPerformed()
   private void addRecentCut(String cut) {
-    recentCuts.insertElementAt(cut,0);
+    recentCuts.add(0,cut);
     cutsMenu.removeAll();
     for (int k = 0; k &lt; recentCuts.size(); k++) {
       JMenuItem item =
-         new JMenuItem((String)recentCuts.elementAt(k));
+         new JMenuItem((String)recentCuts.get(k));
       cutsMenu.add( item );
       item.addActionListener(this);
     }
@@ -411,12 +450,15 @@ saveItem.addActionListener(this);
     f.setSize(300, 200);
     f.setVisible(true);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  } // main()} // SimpleTextEditor
+  } // main()
+} // SimpleTextEditor
  </input></program>
-    </figure>
-    <p>
-      It uses a <c>BorderLayout</c>, with the <c>JTextArea</c> placed at the center.
-      Note how simple it is to add  scrollbars to the text area:
+</listing>
+    
+</subsection>
+    <subsection>
+      <title>Adding Scrollbars to a Text Area</title>
+    <p> Note how simple it is to add  scrollbars to the text area:
     </p>
  <program language="java"><input>
 this.getContentPane().add(new JScrollPane(display));
@@ -447,27 +489,101 @@ public JScrollPane(Component comp, int vsbPolicy,
       The two integers refer to the vertical and horizontal scrolling policies.
       These cover properties such as whether the scrollbars are always present or just as needed.
       The default policy is to attach scrollbars to the component only when needed.
-      Thus, to see the scrollbars in the <c>SimpleText</c><c>Editor</c>, you would have to shrink the window to the point where all of the text cannot be viewed (Fig.
-      <xref ref="fig-scrollexample"></xref>).
+      Thus, to see the scrollbars in the <c>SimpleText</c><c>Editor</c>, you would have to shrink the window to the point where all of the text cannot be viewed 
+      (<xref ref="fig-scrollexample"></xref>).
       Because the text area in this example is wrapping the text,
       the horizontal scrollbar will never be needed.
+      <figure xml:id="fig-scrollexample"><caption>Scroll Example</caption>
       <image width="73%" source="chptr13/9f25.png"/>
+      </figure>
+      
       </p>
        </subsection>
        <subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+      
+        <exercise label="limitCutsEx"><title>Limit Cuts</title>
+          <statement>
           <p>
-            Modify the <c>addRecentCut()</c> method so it limits the cuts stored in the vector to the last ten cuts.
+          Fork the <url href="https://replit.com/@BerylHoffman/SimpleTextEditor" visual="">https://replit.com/@BerylHoffman/SimpleTextEditor</url>.
+           Modify the <c>addRecentCut()</c> method so it limits the cuts stored in the 
+            ArrayList to the last ten cuts.
           </p>
-        </li>
-        <li>
-          <p>
-            Modify the <c>addRecentCut()</c> method so that it doesn't duplicate cuts already stored in the vector.
-            (<em>Hint</em>: Use the
-<c>indexOf(String)</c> method in the <c>Vector</c> class.)
-          </p>
-        </li>
-      </ol>
+          </statement>
+          <solution>
+            <p>
+              Modify the <c>addRecentCut()</c> method so it limits the cuts stored in the vector to the last ten cuts.
+              Solution: Check the size of the vector after inserting the cut.
+              If it exceeds ten,
+              remove the last element in the vector.
+     <program language="java"><input>
+    private void addRecentCut(String cut) {
+      recentCuts.add(0,cut);
+      if (recentCuts.size() > 10) { // If more than 10 cuts
+        recentCuts.remove(10);  // remove oldest cut
+      }
+      cutsMenu.removeAll();
+      for (int k = 0; k &lt; recentCuts.size(); k++) {
+        JMenuItem item =
+          new JMenuItem((String) recentCuts.get(k));
+        cutsMenu.add(item);
+        item.addActionListener(this);
+      }
+    } // addRecentCut()
+     </input></program>
+            </p>
+          </solution>
+          </exercise>
+       
+          <exercise label="noduplicateCutsEx"><title>No Duplicate Cuts</title>
+            <statement>
+              <p>
+            In your fork above, modify the <c>addRecentCut()</c> method so that it doesn't duplicate 
+            cuts already stored in the ArrayList.
+            </p></statement>
+            <hint><p> Use the
+<c>indexOf(String)</c> method.</p></hint>
+<solution>
+  <p>
+    Modify the <c>addRecentCut()</c> method so that it doesn't duplicate cuts 
+    stored in the ArrayList.
+    Solution: Use the <c>indexOf()</c> method to search for the cut.
+    If it's already there,
+    don't insert the cut.
+<program language="java"><input>
+private void addRecentCut(String cut) {
+if (recentCuts.indexOf(cut) == -1) {// If not already cut
+recentCuts.add(0,cut);
+if (recentCuts.size() > 10) { // If more than 10 cuts
+  recentCuts.removeElementAt(10); // remove oldest
+}
+cutsMenu.removeAll();
+for (int k = 0; k &lt; recentCuts.size(); k++) {
+  JMenuItem item =
+    new JMenuItem((String) recentCuts.get(k));
+  cutsMenu.add(item);
+  item.addActionListener(this);
+  }
+ } // if not already cut
+} // addRecentCut()
+</input></program>
+  </p>
+</solution>
+          </exercise>
+
+          <exercise label="fileEx"><title>FileMenu Actions</title>
+            <statement>
+              <p>
+            In your fork above, implement the actions for the File menu class to save the text into a file.
+            </p></statement>
+            
+<solution>
+  <p>
+    No solution provided for this, but review Chapter 11 on Files.
+
+
+  </p>
+</solution>
+          </exercise>
+        
   </subsection>
 </section>

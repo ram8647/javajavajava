@@ -1,4 +1,4 @@
-<section xml:id="containersand-layout-managers">
+<section xml:id="layout-managers">
   <title>Containers and Layout Managers</title>
   <introduction>
     <p>
@@ -17,7 +17,7 @@
     <p>
     <figure xml:id="fig-concomp">
         <caption>A <em>Container</em> contains components.</caption>
-        <image width="73%" source="chptr13/p495f1.png"/>
+        <image width="50%" source="chptr13/p495f1.png"/>
       </figure>  
     </p>
     <p>
@@ -112,11 +112,11 @@
 getContentPane().setLayout(new FlowLayout());
  </input></program>
     <principle>
-      <title>DEBUGGING TIP:Content Pane</title>
+      <title>DEBUGGING TIP: Content Pane</title>
       <p>
-        Attempting to add a component directly to a <c>JFrame</c> will cause an exception.
-        For a top-level container,
-        components must be added to their content panes.
+      <!----> Attempting to add a component directly to a <c>JFrame</c> will cause an exception.
+      -->   For a top-level container like <c>JFrame</c>,
+        components are added to its content pane.
       </p>
     </principle>
     <table xml:id="tab-default-managers">
@@ -149,8 +149,8 @@ getContentPane().setLayout(new FlowLayout());
   </tabular>
 </table>
   </subsection>
-  <subsection xml:id="fig-convertscreen3">
-    <title>The <c>GridLayout</c>Manager</title>
+  <subsection>
+    <title>The <c>GridLayout</c> Manager</title>
     <p>
       It is simple to remedy the layout problem that affected the keypad in the most recent version of the <c>Converter</c> program.
       The problem was caused by the fact that as a subclass of <c>JPanel</c>, the <c>KeyPad</c> uses a default <c>FlowLayout</c>, which causes its buttons to be arranged in a row.
@@ -165,8 +165,8 @@ setLayout(new GridLayout(4,3,1,1));
  </input></program>
    <p>
       This statement creates a <c>GridLayout</c> object and assigns it as the layout manager for the keypad.
-      It will ensure that the keypad will have four rows and three columns of buttons (Fig.
-      <xref ref="fig-grid-convertscreen"></xref>).
+      It will ensure that the keypad will have four rows and three columns of buttons 
+      (<xref ref="fig-grid-convertscreen"></xref>).
       The last two arguments in the constructor affect the relative spacing between the rows and the columns.
       The higher the number, the larger the spacing.
       As components are added to the keypad,
@@ -182,12 +182,12 @@ setLayout(new GridLayout(4,3,1,1));
         <p>
             <figure xml:id="fig-grid-convertscreen">
         <caption>This version of the <em>metric converter GUI</em> uses a keypad
-        for mouse-based input.  It has an attractive overall layout </caption>
-        <image width="73%" source="chptr13/9f13.png"/>
+        for mouse-based input.  It has an attractive overall layout. </caption>
+        <image width="80%" source="chptr13/converter-keypad.png"/>
       </figure>  
     </p>
      <principle>
-      <title>DEBUGGING TIP:Content Pane</title>
+      <title>DEBUGGING TIP: Content Pane</title>
       <p>
         Top-level containers,
         such as
@@ -196,6 +196,15 @@ setLayout(new GridLayout(4,3,1,1));
         such as <c>JPanel</c>, components are added directly to the container itself.
       </p>
     </principle>
+    <activity>
+     <statement> <p>Try the Metric Converter with KeyPad below. Fork the repl and change 
+      the code in KeyPad.java to add the line above to the KeyPad() constructor to change the layout to GridLayout.
+      Try different numbers in the GridLayout to create a different number of rows and columns.
+     </p>
+    <interactive iframe="iframe/repl-metricConverterWithKeyPad.html" width="100%" aspect="1:1"/>
+  </statement>  
+  </activity>
+
     <p>
       As its name suggests,
       the <c>GridLayout</c> layout manager arranges components in a two-dimensional grid.
@@ -209,7 +218,7 @@ setLayout(new GridLayout(4,3,1,1));
       it usually fails to achieve a completely appropriate layout.
     </p>
     <principle>
-      <title>PROGRAMMING TIP:Grid Layouts</title>
+      <title>PROGRAMMING TIP: Grid Layouts</title>
       <p>
         Make sure the number of components added to a <c>GridLayout</c> is equal to the number of rows times the number of columns.
       </p>
@@ -218,7 +227,7 @@ setLayout(new GridLayout(4,3,1,1));
   <subsection>
     <title>GUI Design Critique</title>
     <p>
-      Although the layout in Figure<nbsp/>13.21 is much improved,
+      Although the layout is much improved,
       there are still some deficiencies.
       One problem is that the <c>convert</c> button seems to be misplaced.
       It would seem to make more sense if it were grouped with the keypad rather than with the input text field.
@@ -232,7 +241,7 @@ setLayout(new GridLayout(4,3,1,1));
 <c>FlowLayout</c> is most sensitive to changes in the size and shape of its container.
     </p>
   </subsection>
-  <subsection xml:id="fig-borderlayout-guis">
+  <subsection>
     <title>The <c>BorderLayout</c>Manager</title>
     <p>
       One way to fix these problems is to use a <c>BorderLayout</c> to divide the frame into five areas:
@@ -251,7 +260,7 @@ public BorderLayout(int hgap, int vgap);
        <p>
     <figure xml:id="fig-borderlayoutgui">
         <caption>Arrangement of the components in a border layout. The relative
-        sizes of the areas will vary
+        sizes of the areas will vary.
         </caption>
         <image width="73%" source="chptr13/9f14.png"/>
       </figure>  
@@ -314,7 +323,7 @@ getContentPane.add(controlPanel,"East");
     <figure xml:id="fig-metricgui3">
       <caption>A border layout design for the metric
       converter program. The dotted lines show the panels.</caption>
-      <image width="73%" source="chptr13/9f15.png"/>
+      <image width="90%" source="chptr13/9f15.png"/>
     </figure>
     <p>
       In a <c>BorderLayout</c>, when one
@@ -336,7 +345,7 @@ getContentPane.add(controlPanel,"East");
     <figure xml:id="fig-convertscreen5">
         <caption>The metric converter,  showing its appearance when a border 
         design is used.</caption>
-        <image width="73%" source="chptr13/9f16.png"/>
+        <image width="80%" source="chptr13/converter-keypad-border.png"/>
       </figure>  
     </p>
     <p>
@@ -363,7 +372,8 @@ public Converter() {
   display.setLineWrap(true);
   display.setEditable(false);
   convert.addActionListener(this);
-  input.addActionListener(this);} // Converter()
+  input.addActionListener(this);
+} // Converter()
  </input></program>
     <p>
       This layout divides the interface into three main panels,
@@ -372,20 +382,59 @@ public Converter() {
       In addition, the control panel contains the keypad panel.
       Thus, the containment hierarchy for this design is much more complex than in our original design.
     </p>
-    </subsection><subsection><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+    </subsection>
+    
+    <subsection><title>Self-Study Exercises</title>
+      
+      <exercise label="converter-border-Ex"> <title>Converter with BorderLayout</title>
+        <statement> <p>Try the Metric Converter with KeyPad in FlowLayout below. 
+          Fork the repl and change the code in KeyPad.java to add the GridLayout (as written in the GridLayout section above) to the KeyPad() constructor to change the layout to GridLayout.
+          Change the Converter() constructor in Converter.java to the code above to use BorderLayout and JPanels.          
+         </p>
+        <interactive iframe="iframe/repl-metricConverterWithKeyPad.html" width="100%" aspect="1:1"/>
+        </statement>
+      <solution>
+        <p>A possible solution is at:
+        <url href="https://replit.com/@BerylHoffman/MetricConverterWithKeypadBorderLayout#Converter.java" visual="">https://replit.com/@BerylHoffman/MetricConverterWithKeypadBorderLayout#Converter.java</url>
+        </p>
+      </solution></exercise>
+
+  
+      <exercise label="borderEx"><title>BorderLayout</title>
+        <statement>
           <p>
-            The border layout for the top window uses the north, center,
+            The border layout for the Converter program above uses the north, center,
             and east regions.
-            What other combinations of areas might be used for these three components?
+            What other combinations of areas might be used for three components?
           </p>
-        </li>
-        <li>
+          </statement>
+          <solution>
+            <p>
+              As an alternative,
+              a north-west-center border layout for the top-level window in the 
+              <c>Converter</c> might work.
+              So might center-south-east and center-south-west.
+              What makes these possible is the fact that the layout manager will use up 
+              space in any edge area that is not assigned a component.
+            </p>
+          </solution>
+        </exercise>
+        
+        <exercise label="flowEx"><title>FlowLayout</title>
+          <statement>
+          
           <p>
-            Why wouldn't a flow layout be appropriate for the control panel?
+            Why wouldn't a flow layout be appropriate for the Key Pad control panel in the Converter program above?
           </p>
-        </li>
-      </ol>
+        </statement>
+        <solution>
+          <p>
+            A flow layout would not be appropriate for the control panel because you would
+             have little control of where the <c>convert</c> button would be placed 
+             relative to the keypad.
+          </p>
+        </solution>
+      </exercise>
+        
   </subsection>
 </section>
