@@ -85,7 +85,7 @@ public class Node {
     </p>
  <figure xml:id="fig-nodeuml">
   <caption>The <c>Node</c> class.</caption>
-  <image width="73%" source="chptr16/nodeuml.png"/>
+  <image width="60%" source="chptr16/nodeuml.png"/>
 </figure>
     <principle>
       <title>Self-Referential Object</title>
@@ -135,33 +135,147 @@ public class Node {
     <principle>
       <title>EFFECTIVE DESIGN: Link Versus Data</title>
       <p>
-        Making a clear distinction between an object's data and those elements used to manipulate the object is an example of the divide-and-conquer principle.
+        Making a clear distinction between an object's data and those elements 
+        used to manipulate the object is an example of the divide-and-conquer principle.
       </p>
     </principle>
- <exercises><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+ <exercises>
+ <title>Self-Study Exercises</title>
+  <exercise xml:id="string-node">
+   <title>New String Node</title>
+        <statement>
           <p>
-            Write a statement to create a new <c>Node</c> whose data consist of the 
-            <c>String</c><q>Hello.</q>
+            Which of the following statements correctly creates a new 
+            <c>Node</c> whose data consist of the <c>String</c><q>Hello.</q>
           </p>
-        </li>
-        <li>
+        </statement>
+        <choices>
+        <choice correct="yes">
+            <statement>
+            <program language="java"><input>
+            Node node = new Node(new String("Hello"));
+            </input></program>
+            </statement>
+            <feedback>
+                <p>That's one way.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+            <program language="java"><input>
+            Node node = new Node("Hello");
+            </input></program>
+            </statement>
+            <feedback>
+                <p>That's one way.</p>
+            </feedback>
+        </choice>        
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+            Node node = new Node(new String("hello"));
+            </input></program>
+            </statement>
+            <feedback>
+                <p>Spelling?</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+            Node node = new Node("hello");
+            </input></program>
+            </statement>
+            <feedback>
+                <p>Spelling?</p>
+            </feedback>
+        </choice>
+        </choices>
+        <hint>
+          <p>The <c>Node</c> constructor has the following signature: <c>public Node(Object obj)</c>.
+          </p>
+        </hint>
+      <solution>
+        <p>Either of these statements would work:
+            <program language="java"><input>
+            Node node = new Node(new String("Hello"));
+            Node node = new Node("Hello");
+            </input></program>
+        </p>
+      </solution>
+    </exercise>  
+
+  <exercise xml:id="int-node">
+   <title>New Integer Node</title>
+        <statement>
           <p>
-            Write a statement to create a new <c>Node</c> whose data consist of the <c>Student</c> named
-            <q>William.</q>
-            Assume that the <c>Student</c> class has a constructor with a <c>String</c> parameter for the student's name.
+            The <c>Integer</c> wrapper class has a constructor with the
+            following signature: <c>Integer(int value)</c>. 
+            Which of the following statements correctly creates a new Node whose data is the value 100. 
           </p>
-        </li>
-      </ol>
-      </exercises>
+        </statement>
+        <choices>
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+              Node node = new Node(100);
+            </input></program>
+            </statement>
+            <feedback>
+                <p>An <c>int</c> is not an <c>Object</c>.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+            <program language="java"><input>
+            Node node = new Node(new Integer(100));
+            </input></program>
+            </statement>
+            <feedback>
+                <p>Correct, you need to use the <c>Integer</c> wrapper.</p>
+            </feedback>
+        </choice>        
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+            Node node = new Node("100");
+            </input></program>
+            </statement>
+            <feedback>
+                <p>We want an integer, not a string.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+            Node node = new int(100);
+            </input></program>
+            </statement>
+            <feedback>
+                <p>You need to use the <c>Integer</c> wrapper.</p>
+            </feedback>
+        </choice>
+        </choices>
+        <hint>
+          <p>The <c>Node</c> constructor has the following signature: <c>public Node(Object obj)</c>.
+          </p>
+        </hint>
+      <solution>
+            <p>The value 100 must be converted into an <c>Object</c>.</p>
+            <program language="java"><input>
+              Node node = new Node(new Integer(100));
+            </input></program>
+      </solution>
+    </exercise>     
+   </exercises>
  </subsection>
   <subsection>
     <title>Example: The Dynamic Phone List</title>
     <p>
       Let's define a <c>PhoneListNode</c> class that can be used to implement a phone list 
       (<xref ref="fig-phoneuml"></xref>).
-      This definition will be a straightforward specialization of the generic <c>Node</c> list defined in the previous section.
+      This definition will be a straightforward specialization of the generic <c>Node</c> 
+      list defined in the previous section.
       Each element of the phone list will consist of a person's name and phone number.
       These will be the node's data and can be stored in two <c>String</c> variables.
       To access these data,
@@ -170,7 +284,7 @@ public class Node {
     </p>
     <figure xml:id="fig-phoneuml">
       <caption>Design of the <c>PhoneListNode</c> class.</caption>
-      <image width="73%" source="chptr16/phoneuml.png"/>
+      <image width="60%" source="chptr16/phoneuml.png"/>
     </figure>
     <listing xml:id="list-phonelistnode">
       <caption>The <c>PhoneListNode</c> class.</caption>
@@ -247,7 +361,7 @@ node2.setNext(node3);
  <figure xml:id="fig-phonelistpic">
   <caption>The phonelist: a linked list of nodes, each of which contains 
   a person's name and phone number.</caption>
- <image width="73%" source="chptr16/phonelistpic.png"/>
+ <image width="60%" source="chptr16/phonelistpic.png"/>
 </figure>
     <p>
       If we wanted to add a fourth node to the end of this 
@@ -261,7 +375,8 @@ node3.setNext(node4);
     <p>
       Although this example illustrates the basic technique for inserting nodes at the end of the list,
       it depends too much on our knowledge of the list.
-      In order to be truly useful we will have to develop a more general set of methods to create and manipulate a list of nodes.
+      In order to be truly useful we will have to develop a more general set of methods to 
+      create and manipulate a list of nodes.
       As we will see,
       a better design would be able to find the end of the list without knowing anything about the list's data.
     </p>
@@ -272,25 +387,82 @@ node3.setNext(node4);
         you should be able to manipulate its elements without knowing anything about its data.
       </p>
     </principle>
-    <exercises><title>Self-Study Exercise</title>
-      <ol>
-        <li>
+    <exercises>
+    <title>Self-Study Exercise</title>
+  <exercise xml:id="phonelist-node">
+   <title>New  PhoneListNode</title>
+        <statement>
           <p>
-            Suppose you know that <c>nodeptr</c> is a reference to the last element of a linked list of <c>PhoneListNode</c> s.
-            Create a new element for
+            Suppose you know that <c>nodeptr</c> is a reference to the last element of a 
+            linked list of <c>PhoneListNode</c>s.
+            Which of the following will correctly create a new <c>PhoneListNode</c> for
             <q>Bill C</q>
             with phone number
             <q>111-202-3331</q>
-            and link it into the end of the list.
+            and link it into the end of the list?
+           </p>
+        </statement>
+        <choices>
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+              PhoneListNode newNode = new PhoneListNode("Bill C", "111-202-3331");
+            </input></program>
+            </statement>
+            <feedback>
+                <p>That creates a node but doesn't link it.</p>
+            </feedback>
+        </choice>      
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+              nodeptr.setNext(newNode);  
+            </input></program>
+            </statement>
+            <feedback>
+                <p>You first need to create <c>newNode</c> and populate it with the correct data.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+            <program language="java"><input>
+              PhoneListNode newNode = new PhoneListNode(Bill C, 111-202-3331);
+              nodeptr.setNext(newNode);  
+            </input></program>
+            </statement>
+            <feedback>
+                <p>The constructor needs String arguments.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+            <program language="java"><input>
+              PhoneListNode newNode = new PhoneListNode("Bill C", "111-202-3331");
+              nodeptr.setNext(newNode);            
+            </input></program>
+            </statement>
+            <feedback>
+                <p>Correct.</p>
+            </feedback>
+        </choice>  
+        </choices>
+        <hint>
+          <p>See the most recent example above.
           </p>
-        </li>
-      </ol>
-      </exercises>
+        </hint>
+      <solution>
+            <program language="java"><input>
+              PhoneListNode newNode = new PhoneListNode("Bill C", "111-202-3331");
+              nodeptr.setNext(newNode); 
+            </input></program>
+      </solution>
+    </exercise> 
+  </exercises>
  </subsection>
   <subsection>
     <title>Manipulating the Phone List</title>
     <p>
-      In addition to the <c>Node</c> s that make a list,
+      In addition to the <c>Node</c>s that make a list,
       we must define a class containing methods to manipulate the list.
       This class will include the insert,
       access, and remove methods.
@@ -303,7 +475,7 @@ node3.setNext(node4);
       <caption>The <c>PhoneList</c> class 
       has a reference to the first node of the list (<c>head</c>) and methods to insert,
       remove, and look up information.</caption>
-      <image width="73%" source="chptr16/phonelistclass.png"/>
+      <image width="60%" source="chptr16/phonelistclass.png"/>
 </figure>
     <p>
       A preliminary coding of the <c>PhoneList</c> class is shown in 
@@ -311,10 +483,12 @@ node3.setNext(node4);
       As you can see there,
       when a new
 <c>PhoneList</c> instance is constructed, <c>head</c> is initialized to
-<c>null</c>, meaning the list is initially empty.  Since we will frequently want to test whether the list is empty,
+<c>null</c>, meaning the list is initially empty.  Since we will frequently want to 
+test whether the list is empty,
       we define the <c>boolean</c><c>isEmpty()</c> method for that purpose.
       As you can see,
-      its definition says that a list is empty when the reference to the <c>head</c> of this list is <c>null</c>.
+      its definition says that a list is empty when the reference 
+      to the <c>head</c> of this list is <c>null</c>.
     </p>
     <principle>
       <title>PROGRAMMING TIP: The <c>null</c>Reference</title>
@@ -346,7 +520,7 @@ public class PhoneList {
     <title>Inserting Nodes into a List</title>
     <p>
       The <c>insert()</c> method will have the task of inserting new
-<c>PhoneListNode</c> s into the list.
+      <c>PhoneListNode</c>s into the list.
       There are a number of ways to do this.
       The node could be inserted at the beginning or at the end of the list,
       or in alphabetical order, or possibly in other ways.
@@ -359,44 +533,46 @@ public class PhoneList {
       <caption>Two cases.  (a) The list is empty before
       the insertion, which takes place at <c>head</c>. (b) The list is not empty,
       so the insertion takes place at the end of the list.</caption>
-      <image width="73%" source="chptr16/insertions.png"/>
+      <image width="60%" source="chptr16/insertions.png"/>
     </figure>
     <p>
       There are two cases we need to worry about for this algorithm.
       First,  if the list is empty,
-      we can insert the node by simply setting <c>head</c> to point to the node [<xref ref="fig-insertions">Figure</xref>(a)]. Second,
+      we can insert the node by simply setting <c>head</c> to point to the node 
+      [<xref ref="fig-insertions">Figure</xref>(a)]. Second,
       if the list is not empty, we must move through, or <em>traverse</em>,
           <idx><h>traverse</h></idx>
-      the links of the list until we find the last node and insert the new node after it [<xref ref="fig-insertions">Figure</xref>(b)]. In this case,
+      the links of the list until we find the last node and insert the 
+      new node after it [<xref ref="fig-insertions">Figure</xref>(b)]. In this case,
       we want to set the
-<c>next</c> variable of the last node to point to the new node.
+      <c>next</c> variable of the last node to point to the new node.
       This gives us the following algorithm:
     </p>
  <program language="java"><input>
 public void insert(PhoneListNode newNode) {
   if (isEmpty())
-    head = newNode;        // Insert at head of list
+    head = newNode;                   // Insert at head of list
   else {
-    PhoneListNode current = head; // Start traversal at head
-    while (current.getNext() != null)// While not last node
-      current = current.getNext(); //   go to next node
-    current.setNext( newNode );  // Do the insertion
+    PhoneListNode current = head;     // Start traversal at head
+    while (current.getNext() != null) // While not at the last node
+      current = current.getNext();    //   go to next node
+    current.setNext( newNode );       // Do the insertion
   } // else
 } // insert()
  </input></program>
     <p>
       Recall that when nodes are linked,
       their <c>next</c> variables are non-<c>null</c>. So when a node's <c>next</c> variable is
-<c>null</c>, that indicates the end of the list<mdash/>there's no next node.
+      <c>null</c>, that indicates the end of the list<mdash/>there's no next node.
       Thus, our algorithm begins by checking if the list is empty.
       If so, we assign <c>head</c> the reference to <c>newNode</c>, the
-<c>PhoneListNode</c> that's being inserted.
+      <c>PhoneListNode</c> that's being inserted.
     </p>
     <p>
       If the list is not empty, then we need to find the last node.
       In order  to traverse the list,
       we will need a temporary variable,
-<c>current</c>, which will always point to the current node.
+      <c>current</c>, which will always point to the current node.
       It's important to understand the while loop used here:
     </p>
  <program language="java"><input>
@@ -408,12 +584,16 @@ while (current.getNext() != null)   // Entry condition
       The loop variable, <c>current</c>, is initialized by setting it to point to the head of the list.
       The entry condition tests whether the <c>next</c> link,
       leading out of <c>current</c>, is
-<c>null</c>(<xref ref="fig-inserting"></xref>).
-      That is, when the link coming out of a node is <c>null</c>, then that node is the last node in the list [<xref ref="fig-inserting">Figure</xref>(c)]. Inside the while loop,
-      the update expression simply assigns the next node to <c>current</c>. In that way, <c>current</c> will point to each successive node until the last node is found.
+      <c>null</c>(<xref ref="fig-inserting"></xref>).
+      That is, when the link coming out of a node is <c>null</c>, then that 
+      node is the last node in the list [<xref ref="fig-inserting">Figure</xref>(c)]. 
+      Inside the while loop,
+      the update expression simply assigns the next node to <c>current</c>. 
+      In that way, <c>current</c> will point to each successive node until the last node is found.
       It's very important that the loop exits when <c>current.getNext()</c> is <c>null</c><mdash/>that is,
       when the next pointer of the current node is null.
-      That way <c>current</c> is pointing to  the last node and can be used to set its <c>next</c> variable to the node being inserted [<xref ref="fig-inserting">Figure</xref>(d)]. Thus,
+      That way <c>current</c> is pointing to  the last node and can be used to set 
+      its <c>next</c> variable to the node being inserted [<xref ref="fig-inserting">Figure</xref>(d)]. Thus,
       after the loop is exited, <c>current</c> still points to the last node.
       At that point,
       the <c>setNext()</c> method is used to link <c>newNode</c> into the list as the new last node.
@@ -421,7 +601,7 @@ while (current.getNext() != null)   // Entry condition
     <figure xml:id="fig-inserting">
       <caption>The temporary variable <c>current</c> is
       used to traverse the list to find its end.</caption>
-      <image width="73%" source="chptr16/inserting.png"/>
+      <image width="60%" source="chptr16/inserting.png"/>
     </figure>
     <principle>
       <title>DEBUGGING TIP: List Traversal</title>
@@ -447,17 +627,18 @@ while (current.getNext() != null)   // Entry condition
 public void print() {
   if (isEmpty())
      System.out.println("Phone list is empty");
-  PhoneListNode current = head; // Start traversal at head
-  while (current != null) {      // While not end of list
-    System.out.println( current.toString() ); // print data
-    current = current.getNext();       //  go to next node
+  PhoneListNode current = head;               // Start traversal at head
+  while (current != null) {                   // While not end of list
+    System.out.println( current.toString() ); //  print data
+    current = current.getNext();              //  go to next node
   }
 } // print()
  </input></program>
     <p>
       Note the differences between this while loop and the one used in the <c>insert()</c> method.
       In this case,
-      we exit the loop when <c>current</c> becomes <c>null</c>; there's no action to be taken after the loop is exited.
+      we exit the loop when <c>current</c> becomes <c>null</c>; there's no action to be taken 
+      after the loop is exited.
       The printing takes place within the loop.
       Thus, in this case,
       the entry condition, <c>(current != null)</c>, signifies that the task has been completed.
@@ -470,7 +651,7 @@ public void print() {
         points to the nodes in the list,
         if you need to refer to the last node in the list after the traversal loop exits,
         then your exit condition should be
-<c>p.getNext() == null</c>. If you have finished processing the nodes when the loop exits,
+        <c>p.getNext() == null</c>. If you have finished processing the nodes when the loop exits,
         your exit condition should be <c>p == null</c>.
       </p>
     </principle>
@@ -479,11 +660,16 @@ public void print() {
     <title>Looking up a Node in a List</title>
     <p>
       Because the record associated with a person can be located anywhere in the list,
-      the traversal strategy must also be used to look  up someone's phone number in the <c>PhoneList</c>. Here again we start at the <c>head</c> of the list and traverse through the <c>next</c> links until we find the node containing the desired phone number.
+      the traversal strategy must also be used to look  up someone's phone number 
+      in the <c>PhoneList</c>. Here again we start at the <c>head</c> of the list 
+      and traverse through the <c>next</c> links until we find the node containing 
+      the desired phone number.
       This method takes the name of the person as a parameter.
-      There are three cases to worry about: (1) The list is empty; (2) the normal case where the person named is found in the list;
+      There are three cases to worry about: (1) The list is empty; (2) the normal 
+      case where the person named is found in the list;
       and (3) the person named is not in the list.
-      Because the method returns a <c>String</c>, we can return error messages in the first and third cases:
+      Because the method returns a <c>String</c>, we can return error messages 
+      in the first and third cases:
     </p>
  <program language="java"><input>
 public String getPhone(String name) {
@@ -512,18 +698,67 @@ public String getPhone(String name) {
        it is necessary to test whether the name was found or not after the loop is exited.
       Then appropriate action can be taken.
     </p>
-    <exercises><title>Self-Study Exercise</title>
-      <ol>
-        <li>
+    <exercises>
+    <title>Self-Study Exercise</title>
+ <exercise xml:id="loop-exit">
+   <title>Loop Exit Condition</title>
+        <statement>
           <p>
             What if the exit condition for the while loop in <c>getPhone()</c> were stated as
- <program language="java"><input>
-((current.getNext() != null) || (!current.getName().equals(name)))
- </input></program>
+              <program language="java"><input>
+              ((current.getNext() != null) || (!current.getName().equals(name)))
+              </input></program>
           </p>
-        </li>
-      </ol>
-      </exercises>
+        </statement>
+        <choices>
+        <choice correct="no">
+            <statement>
+              <p>It would cause the loop to be skipped entirely.</p>
+            </statement>
+            <feedback>
+                <p>No, it may cause the loop to exit beforee the correct name is found.</p>
+            </feedback>
+        </choice>      
+        <choice correct="no">
+            <statement>
+            <p>It may cause an infinite loop.</p>
+            </statement>
+            <feedback>
+              <p>No, it may cause the loop to exit beforee the correct name is found.</p>
+            </feedback>
+        </choice>
+        <choice correct="no">
+            <statement>
+              <p>This condition should also work.</p>
+            </statement>
+            <feedback>
+                <p>No, it may cause the loop to exit beforee the correct name is found.</p>
+            </feedback>
+        </choice>
+        <choice correct="yes">
+            <statement>
+            <p>
+          It will cause the loop to exit for any nonnull node.
+          </p>
+            </statement>
+            <feedback>
+                <p>Correct. The exit condition is too general.
+          It will cause the loop to exit as soon as a nonnull node is encountered,
+          whether or not the node matches the one being sought.</p>
+            </feedback>
+        </choice>  
+        </choices>
+        <hint>
+          <p>Apply the condition on the example given in the text.
+          </p>
+        </hint>
+      <solution>
+          The exit condition is too general.
+          It will cause the loop to exit as soon as a nonnull node is encountered,
+          whether or not the node matches the one being sought.
+      </solution>
+    </exercise>     
+  </exercises>
       
  </subsection>
   <subsection>
@@ -532,10 +767,11 @@ public String getPhone(String name) {
       By far the most difficult task is that of removing a node from a  list.
       In the <c>PhoneList</c> we use the person's name to identify the node,
       and we return a <c>String</c> that can be used to report either success or failure.
-      There are four cases to worry about in designing this algorithm: (1) The list is empty, (2) the first node is being removed, (3) some other node is being removed,
+      There are four cases to worry about in designing this algorithm: (1) The list is empty, 
+      (2) the first node is being removed, (3) some other node is being removed,
       and (4) the named person is not in the list.
       The same traversal strategy we used in
-<c>getPhone()</c> is used here,
+      <c>getPhone()</c> is used here,
       with the same basic while loop for cases 3 and 4.
     </p>
     <p>
@@ -549,17 +785,22 @@ public String getPhone(String name) {
 public String remove(String name) { // Remove an entry by name
   if (isEmpty())                         // Case 1: empty list
     return "Phone list is empty";
-  PhoneListNode current = head;
+
+  PhoneListNode current = head;         // Initialize traverse
   PhoneListNode previous = null;
+
   if (current.getName().equals(name)) { // Case 2: remove first node
     head = current.getNext();
     return "Removed " + current.toString() ;
   }
+
+                                        // Start traverse
   while ((current.getNext() != null) &amp;&amp;
                               (!current.getName().equals(name)))  {
     previous = current;
     current = current.getNext();
   }
+
   if (current.getName().equals(name)) { // Case 3: remove named node
     previous.setNext(current.getNext());
     return "Removed " + current.toString();
@@ -569,10 +810,12 @@ public String remove(String name) { // Remove an entry by name
  </input></program>
 </listing>
     <p>
-We      use <c>current</c> as the traversal variable.
+      We use <c>current</c> as the traversal variable.
       If the named node is the first node,
       we simply need to set <c>head</c> to
-<c>current.getNext()</c>, which has the effect of making <c>head</c> point to the second node in the list [<xref ref="fig-removal">Figure</xref>(a)]. Once the node is cut out from the chain of links,
+      <c>current.getNext()</c>, which has the effect of making <c>head</c> point to 
+      the second node in the list [<xref ref="fig-removal">Figure</xref>(a)]. Once 
+      the node is cut out from the chain of links,
       there will be no further reference to it.
       In this case, Java will recapture the memory it uses when it does garbage collection.
     </p>
@@ -678,19 +921,209 @@ public static void main(String argv[]) {
         test each of the cases identified in each of the removal and insertion methods.
       </p>
     </principle>
-   <exercises><title>Self-Study Exercises</title>
-      <ol>
-        <li>
+   <exercises>
+   <title>Self-Study Exercises</title>
+    <exercise xml-id="test-phonelist">
+    <title>PhoneList Test</title>
+      <statement>
           <p>
-            Trace through the <c>main()</c> method line by line and predict its output.
+            The complete implementation of the <c>PhoneList</c> app is given here.
+            Experiment with it to see how it works. Then add a new node to the list
+            with your name and number. Print the list. Then remove your entry and print again. 
           </p>
-        </li>
-        <li>
+          <program language="java" interactive="activecode"><input>
+public class PhoneList {
+    private PhoneListNode head;
+
+    public PhoneList() {
+        head = null; // Start with empty list
+    }
+
+    public boolean isEmpty() { // Defines an empty list
+        return head == null;
+    }
+
+    public void insert(PhoneListNode newNode) {
+        if (isEmpty())
+            head = newNode; // Insert at head of list
+        else {
+            PhoneListNode current = head; // Start traversal at head
+            while (current.getNext() != null) // While not at the last node
+                current = current.getNext(); // go to next node
+            current.setNext(newNode); // Do the insertion
+        } // else
+    } // insert()
+
+    public String getPhone(String name) {
+        if (isEmpty()) // Case 1: Empty list
+            return "Phone list is empty";
+        else {
+            PhoneListNode current = head;
+            while ((current.getNext() != null) &amp;&amp;
+                    (!current.getName().equals(name)))
+                current = current.getNext();
+            if (current.getName().equals(name))
+                return current.getData(); // Case 2: Found name
+            else // Case 3: No such person
+                return ("Sorry.  No entry for " + name);
+        } // else
+    } // getPhone()
+
+    public String remove(String name) { // Remove an entry by name
+        if (isEmpty()) // Case 1: empty list
+            return "Phone list is empty";
+
+        PhoneListNode current = head; // Initialize traverse
+        PhoneListNode previous = null;
+
+        if (current.getName().equals(name)) { // Case 2: remove first node
+            head = current.getNext();
+            return "Removed " + current.toString();
+        }
+
+        // Start traverse
+        while ((current.getNext() != null) &amp;&amp;
+                (!current.getName().equals(name))) {
+            previous = current;
+            current = current.getNext();
+        }
+
+        if (current.getName().equals(name)) { // Case 3: remove named node
+            previous.setNext(current.getNext());
+            return "Removed " + current.toString();
+        } else
+            return ("Sorry.  No entry for " + name); // Case 4: node not found
+    } // remove()
+
+    public void print() {
+        if (isEmpty())
+            System.out.println("Phone list is empty");
+        PhoneListNode current = head; // Start traversal at head
+        while (current != null) { // While not end of list
+            System.out.println(current.toString()); // print data
+            current = current.getNext(); // go to next node
+        }
+    } // print()
+
+    public static void main(String argv[]) {
+        // Create list and insert nodes
+        PhoneList list = new PhoneList();
+        list.insert(new PhoneListNode("Roger M", "997-0020"));
+        list.insert(new PhoneListNode("Roger W", "997-0086"));
+        list.insert(new PhoneListNode("Rich P", "997-0010"));
+        list.insert(new PhoneListNode("Jane M", "997-2101"));
+        list.insert(new PhoneListNode("Stacy K", "997-2517"));
+        // Test whether insertions worked
+        System.out.println("Phone Directory");
+        list.print();
+        // Test whether lookups work
+        System.out.println("Looking up numbers by name");
+        System.out.println(list.getPhone("Roger M"));
+        System.out.println(list.getPhone("Rich P"));
+        System.out.println(list.getPhone("Stacy K"));
+        System.out.println(list.getPhone("Mary P"));
+        System.out.println(list.remove("Rich P"));
+        System.out.println("Phone Directory");
+        list.print();
+        // Test removals, printing list after each removal
+        System.out.println(list.remove("Roger M"));
+        System.out.println("Phone Directory");
+        list.print();
+        System.out.println(list.remove("Stacy K"));
+        System.out.println("Phone Directory");
+        list.print();
+        System.out.println(list.remove("Jane M"));
+        System.out.println("Phone Directory");
+        list.print();
+        System.out.println(list.remove("Jane M"));
+        System.out.println("Phone Directory");
+        list.print();
+        System.out.println(list.remove("Roger W"));
+        System.out.println("Phone Directory");
+        list.print();
+        System.out.println(list.remove("Roger W"));
+        System.out.println("Phone Directory");
+        list.print();
+    } // main()
+
+} // PhoneList
+
+class PhoneListNode {
+    private String name;
+    private String phone;
+    private PhoneListNode next;
+
+    public PhoneListNode(String s1, String s2) {
+        name = s1;
+        phone = s2;
+        next = null;
+    } // PhoneListNode()
+
+    public void setData(String s1, String s2) {
+        name = s1;
+        phone = s2;
+    } // setData()
+
+    public String getName() {
+        return name;
+    } // getName()
+
+    public String getData() {
+        return name + " " + phone;
+    } // getData()
+
+    public String toString() {
+        return name + " " + phone;
+    } // toString()
+
+    public void setNext(PhoneListNode nextPtr) {
+        next = nextPtr;
+    } // setNext()
+
+    public PhoneListNode getNext() {
+        return next;
+    } // getNext()
+} // PhoneListNode
+          </input></program>
+      </statement>
+    </exercise>
+      
+    <exercise xml-id="test-phonelist-2">
+    <title>PhoneList Test, Part 2</title>
+      <statement>
           <p>
-            Design a test of <c>PhoneList</c> that shows that new elements can be inserted into a list after some or all of its previous nodes have been removed.
+            Using the code on the previous exercise,
+            design and implement a test of <c>PhoneList</c> that shows that new elements 
+            can be inserted into a list after all of its previous nodes have been removed.
           </p>
-        </li>
-      </ol>
-      </exercises>
+      </statement>
+      <solution>
+              <p>
+          Executing something like the following method calls will test whether it is possible 
+          to insert items into a list after all items have been removed:
+          </p>
+ <program language="java"><input>
+// Create and insert some nodes
+PhoneList list = new PhoneList();
+list.insert(new PhoneListNode("Roger M", "997-0020"));
+list.insert(new PhoneListNode("Roger W", "997-0086"));
+list.print();
+System.out.println(list.remove("Roger M") );
+System.out.println(list.remove("Roger W") );
+list.print();
+       // List should be empty
+list.insert(new PhoneListNode("Rich P", "997-0010"));
+list.insert(new PhoneListNode("Jane M", "997-2101"));
+list.insert(new PhoneListNode("Stacy K", "997-2517"));
+list.print();
+System.out.println(list.remove("Jane M"));
+System.out.println(list.remove("Stacy K"));
+System.out.println(list.remove("Rich P"));
+list.print();
+       // List should be empty
+ </input></program>
+      </solution>
+    </exercise>
+  </exercises>
   </subsection>
 </section>
