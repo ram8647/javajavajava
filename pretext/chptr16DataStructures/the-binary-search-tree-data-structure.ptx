@@ -13,24 +13,24 @@
     This creates a tree-like structure,
     as shown in <xref ref="fig-btree-ds">Figure</xref>.
     Note that some of the references to other nodes might
-  </p>
-  <figure xml:id="fig-btree-ds">
-    <caption>A binary search tree of <c>PhoneTreeNode</c> s.</caption>
-    <image width="73%" source="chptr16/btree.png"/>
-  </figure>
-  <p>
     be null.
     The trunk of the tree corresponds to the node labeled <c>root</c>. In computer science,
     trees are almost always drawn upside down.
     Thus the trunk of the tree, <c>root</c>, is at the top of the figure.
   </p>
+  <figure xml:id="fig-btree-ds">
+    <caption>A binary search tree of <c>PhoneTreeNodes</c>.</caption>
+    <image width="73%" source="chptr16/btree.png"/>
+  </figure>
+  
+    
   <p>
     If we assume that the objects contained in a tree are from a class that implements the <c>Comparable</c> interface,
     then a <term>binary search tree</term>
     is a binary tree in which the objects are ordered so that the object at a particular node is greater than the objects stored in its left subtree and less than the objects stored in its right subtree.
   </p>
   <p>
-    Figure<nbsp/>16.36 shows a binary search tree with the phone list data that we have used throughout the chapter.
+    <xref ref="fig-btree-ds">Figure</xref>. shows a binary search tree with the phone list data that we have used throughout the chapter.
     Objects are compared by comparing the names alphabetically.
     From the figure it is easy to see that searching for a object should start at the root of the tree.
     At each node,
@@ -43,7 +43,8 @@
     This is one of the main advantages of using a binary search tree over a linked list.
   </p>
   <p>
-    The <c>TreeSet</c> and <c>TreeMap</c> classes implement sophisticated algorithms for inserting and removing data from a tree,
+    The <c>TreeSet</c> and <c>TreeMap</c> classes implement sophisticated algorithms 
+    for inserting and removing data from a tree,
     which guarantees that the tree remains relatively balanced.
     The details of these algorithms are beyond the scope of this book,
     but would be a subject of study in a standard
@@ -86,25 +87,213 @@ public class PhoneTree {
     The <c>PhoneTree</c> version is very simple:
   </p>
  <program language="java"><input>
-public boolean contains(String nam, String pho){
-    if (root == null) return false;
-    else return root.contains(nam, pho);
+  /**
+  * contains() returns true if and only if the binary tree
+  * which root points to has a node with its name variable 
+  * equal to nam.
+  * @param nam is a string to be searched for.
+  * @return true if nam is contained in the tree which root 
+  * points to.
+  */   
+  public boolean contains(String nam, String pho){
+     if (root == null) 
+         return false;
+     else 
+         return root.contains(nam, pho);
   } // contains() in PhoneTree
  </input></program>
   <p>
-    The implementation of the <c>contains()</c> method of <c>PhoneTreeNode</c> is only slightly more involved.
+    The implementation of the <c>contains()</c> method of <c>PhoneTreeNode</c> is only 
+    slightly more involved. This is a recursive method that checks the name at the current 
+    node (it is first called with the root node), 
+    and if <c>nam</c> is alphabetically after it, it recursively looks to see if the 
+    right subtree contains it, or if it is alphabetically before it, it checks the left subtree. 
+    It is possible to implement this with a loop or recursion.
   </p>
  <program language="java"><input>
 public boolean contains(String nam, String pho){
     if (name.equals(nam))
         return true;
-    else if(name.compareTo(nam) &lt; 0) { // name &lt; nam
-        if (right == null) return false;
-        else return right.contains(nam, pho);
-    } else { { // name > nam}
-        if (left == null) return false;
-        else return left.contains(nam, pho);
+    else if (name.compareTo(nam) &lt; 0) { // name &lt; nam
+        if (right == null) 
+            return false;
+        else 
+            return right.contains(nam, pho);
+    } else {  // name > nam
+        if (left == null) 
+           return false;
+        else 
+           return left.contains(nam, pho);
     }
   } // contains() in PhoneTreeNode
  </input></program>
+
+ <p>The <c>insert</c> method has a very similar structure to the contains method above. 
+  Here is the pseudocode algorithm for it.</p>
+ <program language="java"><input>
+  Insert a new PhoneTreeNode:
+  if name compared to num is &lt;= 0:
+    if right is null
+        set right to a new PhoneTreeNode constructed with nam and pho
+    else 
+        call right.insert(nam, pho) recursively
+  else 
+    if left is null
+      set left to a new PhoneTreeNode constructed with nam and pho
+    else 
+        call left.insert recursively
+   </input></program>
+
+   <exercises><title>Self-Study Exercise</title>
+    <exercise label="bstEx">
+      <statement>
+          <p>
+          Using the pseudocode above and the <c>contains</c> method as a guide, write the 
+          <c>insert</c> method in the <c>PhoneTree</c> and <c>PhoneTreeNode</c>. 
+        Run to test the methods with the main method below. </p>  </statement>
+          <program language="java" interactive="activecode"><input>
+ /*
+ * The PhoneTree class
+ * Description: A binary search tree of PhoneTreeNodes.
+ */
+ public class PhoneTree {
+     private PhoneTreeNode root; // points to the binary tree
+ 
+     public PhoneTree(){ root = null; }
+ 
+     /**
+     * contains() returns true if and only if the binary tree
+     * which root points to has a node with its name variable 
+     * equal to nam.
+     * @param nam is a string to be searched for.
+     * @return true if nam is contained in the tree which root 
+     * points to.
+     */
+     public boolean contains(String nam, String pho){
+         if (root == null) 
+             return false;
+         else 
+             return root.contains(nam, pho);
+     } // contains()
+ 
+     /**
+     * insert(nam,pho): If the root node is null, set the root to a new PhoneTreeNode 
+     * using the parameters, else call root.insert defined PhoneTreeNode below. 
+     * @param nam and @param pho are the name and phone number for the PhoneTreedNode.
+     * @return true if nam is contained in the tree which root 
+     * points to.
+     */
+     public void insert(String nam, String pho){ 
+        // Write this method
+
+
+     }
+ 
+   public static void main(String[] args)
+   {
+       PhoneTree tree = new PhoneTree();
+       tree.insert("Pat","123-4567");
+       tree.insert("Chris", "987-6543");
+       System.out.println("Is Pat in tree? " + tree.contains("Pat","123-4567"));
+       System.out.println("Is Chris in tree? " + tree.contains("Chris","987-6543"));
+       System.out.println("Is Sandy in tree? " + tree.contains("Sandy","123-1234"));
+   }
+ 
+ } // PhoneTree class
+ 
+ /*
+ * The PhoneTreeNode class
+ * Description: This class is for a Node in the tree 
+ * that contains the data (name, phone) and left and right 
+ * pointers to the left and right subtrees.
+ */
+  class PhoneTreeNode {
+     private String name; // data
+     private String phone;  // data
+     private PhoneTreeNode left;  // points to the left subtree
+     private PhoneTreeNode right;  // points to the right subtree
+ 
+     public PhoneTreeNode(String nam, String pho){ 
+         name = nam; 
+         phone = pho;
+         left = null;
+         right = null;
+     }
+ 
+     public void setData(String nam, String pho){  name = nam; phone = pho;}
+ 
+     public String getName(){ return name; }
+ 
+     /**
+     * contains() returns true if and only if there is a
+     * node in the subtree rooted at this node which has
+     * a name variable equal to nam.
+     * @param nam is a string to be searched for.
+     * @return true if nam is contained in the subtree rooted at 
+     * this node.
+     */
+     public boolean contains(String nam, String pho){
+         if (name.equals(nam))
+             return true;
+         else if(name.compareTo(nam) &lt; 0) { // name &lt; nam
+             if (right == null) 
+                 return false;
+             else 
+                 return right.contains(nam, pho);
+         } else { // name > nam
+             if (left == null) 
+                 return false;
+             else 
+                 return left.contains(nam, pho);
+         } // else
+     } // contains()
+ 
+     /**
+     * insert() compares the current node's name to the parameter nam
+     * to recursively find the correct place in the tree. It creates a new
+     * node in the subtree rooted at this node which has
+     * a name variable equal to nam.
+     * @param nam and @param pho are the name and phonenumber 
+     * for the new PhoneTreeNode.
+     */
+     public void insert(String nam, String pho){    
+        
+         // Write this method using the pseudocode above
+
+
+
+
+     } // insert
+
+ } // PhoneTreeNode class
+</input></program> 
+ <solution>
+  <p>In class <c>PhoneTree</c>:</p>
+  <program language="java"><input>
+    public void insert(String nam, String pho){ 
+      if (root == null) 
+            root = new PhoneTreeNode(nam, pho);
+       else 
+            root.insert(nam, pho);
+     }
+  </input></program>
+  <p>In class <c>PhoneTreeNode</c>:</p>
+  <program language="java"><input>
+    public void insert(String nam, String pho){    
+      if (name.compareTo(nam) &lt;= 0) { // name &lt;= nam
+          if (right == null) 
+              right = new PhoneTreeNode(nam, pho);
+          else 
+              right.insert(nam, pho);
+      } else { // name > nam
+          if (left == null) 
+              left = new PhoneTreeNode(nam, pho);
+          else 
+              left.insert(nam, pho);
+      } // else
+  } // insert
+  </input></program>
+ </solution>
+ </exercise>
+ </exercises>
 </section>

@@ -1,5 +1,5 @@
 <section xml:id="set-map">
-  <title>Using the <c>Set</c> and <c>Map</c>Interfaces</title>
+  <title>Using the <c>Set</c> and <c>Map</c> Interfaces</title>
   <introduction>
     <p>
       The <c>Set</c> and <c>Map</c> interfaces are similar to the <c>List</c> interface in that there are multiple classes in the collections framework that implement them.
@@ -117,6 +117,118 @@ public int hashCode(){
     return name.hashCode();
   } // hashCode()
  </input></program>
+
+ <activity label="Setdemo"><statement>
+  <p>  Run the code below. Try adding a new PhoneRecord to the Set.</p>
+  </statement>
+  <program language="java" interactive="activecode"><input>
+  import java.util.*;
+  
+  public class SetOfPhoneRecords {    
+  
+    public static void testSet() {
+      Set&lt;PhoneRecord> theSet = new TreeSet&lt;PhoneRecord>();
+      // new HashSet&lt;PhoneRecord>(); could also be used.
+      theSet.add(new PhoneRecord("Roger M", "090-997-2918"));
+      theSet.add(new PhoneRecord("Jane M", "090-997-1987"));
+      theSet.add(new PhoneRecord("Stacy K", "090-997-9188"));
+      theSet.add(new PhoneRecord("Gary G", "201-119-8765"));
+      theSet.add(new PhoneRecord("Jane M", "090-987-6543"));
+      System.out.println("Testing TreeSet and Set");
+      PhoneRecord ph1 =
+          new PhoneRecord("Roger M", "090-997-2918");
+      PhoneRecord ph2 =
+          new PhoneRecord("Mary Q", "090-242-3344");
+      System.out.print("Roger M contained in theSet is ");
+      System.out.println(theSet.contains(ph1));
+      System.out.print("Mary Q contained in theSet is ");
+      System.out.println(theSet.contains(ph2));
+      for (PhoneRecord pr : theSet)
+          System.out.println(pr);
+        } // testSet
+
+    public static void main( String argv[] ) {
+      testSet();
+    } // main
+  } // SetOfPhoneRecords
+  
+  /** The PhoneRecord class
+  * Description: Contains a single name and phone number.
+  * This version of the class implements comparable.
+  */
+  class PhoneRecord implements Comparable{
+      private String name;
+      private String phone;
+  
+      /**
+      * PhoneRecord constructor
+      * Creates an object containing the name and number.
+      * @param aName is a person's name.
+      * @param aPhone is a phone number for aName.
+      */
+      public PhoneRecord(String aName, String aPhone){
+          name = aName;
+          phone = aPhone;
+      } // PhoneRecord() constructor
+  
+      /**
+      * toString() overides the toString() of the Object class.
+      * @return is a String with this object's name and number.
+      */
+      public String toString(){
+          return name + " " + phone;
+      } // toString()
+  
+      /**
+      * getName returns the value of the name variable
+      * @return name.
+      */
+      public String getName(){
+          return name;
+      } // getName()
+  
+      /**
+      * getPhone returns the value of the phone variable
+      * @return phone.
+      */
+      public String getPhone(){
+          return phone;
+      } // getPhone()
+  
+      /**
+      * equals() overides the equals() of the Object class.
+      * @param ob is a PhoneRecord object.
+      * @return is true if the name variable of the two
+      * PhoneRecord objects are equal as Strings.
+      */
+      public boolean equals(Object ob){
+          return name.equals(((PhoneRecord)ob).getName());
+      } // equals()
+  
+      /**
+      * compareTo() implements the Comparable interface.
+      * @param ob is a PhoneRecord object.
+      * @return is -1, 0, or +1 if the name variable of
+      * this PhoneRecord object is less, equal, or greater
+      * than ob.name as Strings. 
+      */
+       public int compareTo(Object ob){
+          return name.compareTo(((PhoneRecord)ob).getName());
+      } // compareTo()
+  
+      /**
+      * hashCode() overides hashCode() of the Object class.
+      * @param ob is a PhoneRecord object.
+      * @return is the hashCode() value of name as a String.
+      */
+      public int hashCode(){
+          return name.hashCode();
+      } // hashCode()
+  
+  } // PhoneRecord
+   </input></program>
+  </activity>
+  
     <p>
       The output of the <c>TestSet()</c> method is listed below:
     </p>
@@ -172,7 +284,8 @@ public int hashCode(){
     <p>
       The programmer might write a short method like that in <xref ref="listing-maptest">Listing</xref>
       to demonstrate how the <c>Map&lt;K,V&gt;</c> and
-<c>TreeMap&lt;K,V&gt;</c> structures will be used.
+<c>TreeMap&lt;K,V&gt;</c> structures will be used. Note that this code has been simplified to just store 
+pairs of Strings, names and phone numbers, but it could be adapted to store names and PhoneRecords.
     </p>
     <listing xml:id="listing-maptest">
       <caption>A method that demonstrates use of the interface <c>Map&lt;K,V&gt;</c>
@@ -189,11 +302,44 @@ public static void testMap() {
   theMap.put("Jane M", "090-233-0000");
   System.out.println("Testing TreeMap and Map");
   System.out.print("Stacy K has phone ");
-  System.out.print(theMap.get("Stacy K");
+  System.out.println(theMap.get("Stacy K"));
   System.out.print("Jane M has phone ");
-  System.out.print(theMap.get("Jane M");} // testList
+  System.out.println(theMap.get("Jane M"));
+} // testMap
  </input></program>
     </listing>
+
+    <activity label="Mapdemo"><statement>
+      <p>  Run the code below. Try adding a new name and phone pair to the Map.</p>
+      </statement>
+      <program language="java" interactive="activecode"><input>
+      import java.util.*;
+      
+      public class MapOfPhones {    
+      
+        public static void testMap() {
+          Map&lt;String, String> theMap =
+             new TreeMap&lt;String,String>();
+          // new HashMap&lt;K,V&gt;(); could also be used
+          theMap.put("Roger M", "090-997-2918");
+          theMap.put("Jane M", "090-997-1987");
+          theMap.put("Stacy K", "090-997-9188");
+          theMap.put("Gary G", "201-119-8765");
+          theMap.put("Jane M", "090-233-0000");
+          System.out.println("Testing TreeMap and Map");
+          System.out.print("Stacy K has phone ");
+          System.out.println(theMap.get("Stacy K"));
+          System.out.print("Jane M has phone ");
+          System.out.println(theMap.get("Jane M"));
+        } // testMap
+        
+        public static void main(String args[]) {
+          testMap();
+        } // main()
+      }
+       </input></program>
+      </activity>
+
     <p>
       The output for this test program is:
     </p>
@@ -202,7 +348,55 @@ Stacy K has phone 090-997-9188
 Jane M has phone 090-233-0000
  </input></program>
     <p>
-      Notice the the second phone number for <c>Jane M</c> is the one that is stored in the data structure.
+      Notice the the second phone number for <c>Jane M</c> is the one that is stored in 
+      the data structure.
     </p>
+
+    <exercises><title>Self-Study Exercise</title>
+      <exercise label="mapEx">
+        <statement>
+            <p>
+            Using the activity above as a guide, create a Map that translates words from
+          English to another language.</p>  </statement>
+            <program language="java" interactive="activecode"><input>
+              import java.util.*;
+
+              public class TranslateMap {
+
+                // define a test method using the one in the activity above as a guide
+                // to create a Map that pairs English words with words in another language.
+                // Write a main method that calls the test method
+
+              }
+            </input></program>
+          <hint><p>For example, you could put the pair cat and gato in the Map to translate cat into Spanish.</p></hint>
+            <solution>
+              <program language="java"><input>
+                import java.util.*;
+                
+                public class TranslateMap {  
+                
+                  public static void testMap() {
+                    Map&lt;String, String> theMap =
+                       new TreeMap&lt;String,String>();
+                    // new HashMap&lt;K,V&gt;(); could also be used
+                    theMap.put("cat", "gato");
+                    theMap.put("dog", "perro");
+              
+                    System.out.print("cat in Spanish: ");
+                    System.out.println(theMap.get("cat"));
+                    System.out.print("dog in Spanish: ");
+                    System.out.println(theMap.get("dog"));
+                  } // testMap
+                  
+                  public static void main(String args[]) {
+                    testMap();
+                  } // main()
+                }       
+              </input>
+                </program>
+            </solution>
+        </exercise>
+        </exercises>  
   </subsection>
 </section>
