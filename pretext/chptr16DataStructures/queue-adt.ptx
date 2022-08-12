@@ -10,8 +10,8 @@
       Think of the waiting line at the salad bar.
       You enter the line at the rear and you leave the line at the front (<xref ref="fig-queue"></xref>).
     </p>
-    <sidebyside>
-      The queue operations are conventionally called <em>enqueue</em><idx><h>enqueue</h></idx>, 
+    <p>
+      The queue operations are conventionally called <term>enqueue</term><idx><h>enqueue</h></idx>, 
       for insert, and <term>dequeue</term><idx><h>dequeue</h></idx>,
       for remove, respectively.  Thus, the queue ADT stores a list of data
       and supports the following operations:
@@ -32,7 +32,7 @@
           </p>
         </li>
       </ul>
-    </sidebyside>
+    </p>
     <p>
       Queues are useful for a number of computing tasks.
       For example, the ready, waiting,
@@ -44,13 +44,13 @@
     <figure xml:id="fig-queue">
       <caption>A queue is a list that permits insertions
       at the rear and removals at the front only.</caption>
-      <image width="73%" source="chptr16/queue.png"/>
+      <image width="60%" source="chptr16/queue.png"/>
     </figure>
   </introduction>
   <subsection xml:id="fig-queueuml">
     <title>The <c>Queue</c> Class</title>
     <p>
-      The <c>Queue</c> class is also trivial to derive from <c>List</c>(<xref ref="fig-queueadtuml">Figure</xref>).
+      The <c>Queue</c> class is also trivial to derive from <c>List</c> (<xref ref="fig-queueadtuml">Figure</xref>).
       Here we just restrict operations to the <c>insertAtRear()</c> and <c>removeFirst()</c> 
       methods (<xref ref="listing-queueadt">Listing</xref>).
       To test the methods of this class,
@@ -60,9 +60,9 @@
       the letters of the test string will come out of the queue in the same order they went in<mdash/>FIFO.
     </p>
     <figure xml:id="fig-queueadtuml">
-      <caption>The <c>Queue</c>'s <c>enqueue()</c> and <c>dequeue()</c> methods are
+      <caption>The <c>Queue</c>'s <c>enqueue()</c> and <c>dequeue()</c> methods
       can use the <c>List</c>'s <c>insertAtRear()</c> and <c>removeFirst()</c> methods, respectively.</caption>
-      <image width="73%" source="chptr16/queueuml.png"/>
+      <image width="60%" source="chptr16/queueuml.png"/>
     </figure>
 
     <listing xml:id="listing-queueadt">
@@ -81,6 +81,8 @@ public class Queue extends List {
 }// Queue
  </input></program>
     </listing>
+
+<!--
     <listing xml:id="listing-queueadttest">
       <caption>A method to test the <c>Queue</c>ADT. Letters inserted
       in a queue come out in the same order they went in.</caption>
@@ -102,6 +104,8 @@ public static void main(String argv[]) {
 } // main()
  </input></program>
     </listing>
+
+-->    
     <principle>
       <title>EFFECTIVE DESIGN: ADTs</title>
       <p>
@@ -110,15 +114,168 @@ public static void main(String argv[]) {
         they can be used in a wide range of applications.
       </p>
     </principle>
-    <exercises><title>Self-Study Exercise</title>
-      <ol>
-        <li>
+    
+   <exercises>
+    <title>Self-Study Exercise</title>
+        <exercise label="queue-test">
+    <title>Queue Test</title>
+      <statement>
           <p>
-            Define a <c>peekLast()</c> method for the <c>Queue</c> class.
-            It should take no parameters and return an <c>Object</c>. It should return a reference to the <c>Object</c> stored in the last <c>Node</c> of the list without removing<nbsp/>it.
+            The complete implementation of the <c>Queue</c> ADT as a subclass of <c>List</c>
+            is given here. To test it, add code to
+            the main method that enqueues every character in a string,
+            then prints the queue, then de-queues all elements of the queue. 
+            (Note: the <c>Character(char)</c> 
+            constructor has been deprecated. To create a <c>Character</c> object,
+            you can use the static method <c>Character.valueOf(char)</c> instead.)
           </p>
-        </li>
-      </ol>
-      </exercises>
+          <program language="java" interactive="activecode"><input>
+public class Queue extends List {
+    public Queue() {
+        super(); // Initialize the list
+    }
+
+    public void enqueue(Object obj) {
+        insertAtRear(obj);
+    }
+
+    public Object dequeue() {
+        return removeFirst();
+    }
+
+    // Complete the main() method.
+    public static void main(String argv[]) {
+        Queue queue = new Queue();
+        String string = "Hello this is a test string";
+        System.out.println("String: " + string);
+
+        // Enqueue, print, dequeue
+
+    } // main()
+
+} // Queue
+
+class List {
+    protected Node head;
+
+    public List() {
+        head = null;
+    }
+
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+    public void print() {
+        if (isEmpty())
+            System.out.println("List is empty");
+        Node current = head;
+        while (current != null) {
+            System.out.println(current.toString());
+            current = current.getNext();
+        }
+    } // print()
+
+    protected void insertAtFront(Object obj) {
+        Node newnode = new Node(obj);
+        newnode.setNext(head);
+        head = newnode;
+    }
+
+    protected void insertAtRear(Object obj) {
+        if (isEmpty())
+            head = new Node(obj);
+        else {
+            Node current = head; // Start at head of list
+            while (current.getNext() != null) // Find the end of the list
+                current = current.getNext();
+            current.setNext(new Node(obj)); // Create and insert newNode
+        }
+    } // insertAtRear()
+
+    protected Object removeFirst() {
+        if (isEmpty()) // Empty List
+            return null;
+        Node first = head;
+        head = head.getNext();
+        return first.getData();
+    } // removeFirst()
+
+    protected Object removeLast() {
+        if (isEmpty()) // empty list
+            return null;
+        Node current = head;
+        if (current.getNext() == null) {// Singleton list
+            head = null;
+            return current.getData();
+        }
+        Node previous = null; // All other cases
+        while (current.getNext() != null) {
+            previous = current;
+            current = current.getNext();
+        }
+        previous.setNext(null);
+        return current.getData();
+    } // removeLast()
+} // List
+</input></program>
+      </statement>
+        <hint>
+        <p>Your algorithm should loop through the string enqueing each character onto the queue.
+        Once all the characters have been stored, use another loop to dequeue all the characters 
+        until the queue is empty.
+        </p>
+        </hint>
+        <solution>
+  <program language="java"><input>
+    public static void main(String argv[]) {
+        Queue queue = new Queue();
+        String string = "Hello this is a test string";
+        System.out.println("String: " + string);
+        for (int k = 0; k &lt; string.length(); k++)
+            queue.enqueue(Character.valueOf(string.charAt(k)));
+        System.out.println("The current queue:");
+        queue.print();
+        Object o = null;
+        System.out.println("Dequeuing:");
+        while (!queue.isEmpty()) {
+            o = queue.dequeue();
+            System.out.print(o.toString());
+        }
+    } // main()
+</input></program>
+      </solution>
+    </exercise>
+    <exercise label="queue-peek">
+    <title>Queue Peek</title>
+      <statement>
+          <p>
+            Using the code on the previous exercise,
+            define a <c>peekLast()</c> method for the <c>Queue</c> class.
+            It should take no parameters and return an <c>Object</c>. It should return 
+            a reference to the <c>Object</c> stored in the last <c>Node</c> of the 
+            queue without removing<nbsp/>it.         
+          </p>
+      </statement>
+      <solution>
+        <p>
+          The <c>peekLast()</c> method can be modeled after the
+<c>List.removeLast()</c> method:
+ <program language="java"><input>
+public Object peekLast() {
+  if (isEmpty())
+    return null;
+  else {
+    Node current = head;               // Start at head of list
+    while (current.getNext() != null)  // Find end of  list
+      current = current.getNext();
+      return  current;                 // Return last node
+    }
+} // peekLast()
+ </input></program>
+        </p>
+      </solution>
+    </exercise>    
+ </exercises>    
   </subsection>
 </section>

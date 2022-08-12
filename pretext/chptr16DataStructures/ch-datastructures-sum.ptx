@@ -64,8 +64,7 @@
       <cell>value</cell>
        </row>
        <row>
-      <cell>link</cell>
-      <cell>vector</cell>
+        <cell>link</cell>
        </row>
       </tabular>
     </p>
@@ -75,21 +74,21 @@
     <ul>
       <li>
         <p>
-          A <em>data structure</em> is used to organize data and make them more efficient to process.
-          An array is an example of a <em>static structure</em>,
+          A <term>data structure</term> is used to organize data and make them more efficient to process.
+          An array is an example of a <term>static structure</term>,
           since its size does not change during a program's execution.
-          A vector is an example of a <em>dynamic structure</em>,
+          An <c>ArrayList</c> is an example of a <term>dynamic structure</term>,
           one whose size can grow and shrink during a program's execution.
         </p>
       </li>
       <li>
         <p>
-          A <em>linked list</em> is a linear structure in which the individual nodes of the list are joined together by references.
-          A <em>reference</em> is a variable that refers to an object.
-          Each node in the list has a <em>link</em>
+          A <term>linked list</term> is a linear structure in which the individual nodes of the list are joined together by references.
+          A <term>reference</term> is a variable that refers to an object.
+          Each node in the list has a <term>link</term>
           variable that refers to another node.
           An object that can refer to the same kind of object is said to be
-          <em>self-referential</em>.
+          <term>self-referential</term>.
         </p>
       </li>
       <li>
@@ -133,7 +132,7 @@
       </li>
       <li>
         <p>
-          An <em>Abstract Data Type (ADT)</em>
+          An <term>Abstract Data Type (ADT)</term>
           is a concept that combines two elements: A collection of data,
           and the operations that can be performed on the data.
           For the list ADT, the data are the values (<c>Object</c> s or <c>int</c> s) contained in the nodes that make up the list,
@@ -154,18 +153,18 @@
       </li>
       <li>
         <p>
-          A <em>stack</em> is a list that allows insertions and removals only at the front of the list.
-          A stack insertion is called a <em>push</em>
-          and a removal is called a <em>pop</em>.
+          A <term>stack</term> is a list that allows insertions and removals only at the front of the list.
+          A stack insertion is called a <term>push</term>
+          and a removal is called a <term>pop</term>.
           The first element in a stack is usually called the top of the stack.
           The <c>Stack</c>ADT can easily be defined as a subclass of <c>List</c>. Stacks are used for managing the method call and return in most programming languages.
         </p>
       </li>
       <li>
         <p>
-          A <em>queue</em> is a list that only allows insertions at the rear and removals from the front of a list.
-          A queue insertion is called <em>enqueue</em>,
-          and a removal is called <em>dequeue</em>.
+          A <term>queue</term> is a list that only allows insertions at the rear and removals from the front of a list.
+          A queue insertion is called <term>enqueue</term>,
+          and a removal is called <term>dequeue</term>.
           The
 <c>Queue</c>ADT can easily be defined as a subclass of <c>List</c>. Queues are used for managing the various lists used by the CPU scheduler<mdash/>such as the ready,
           waiting, and blocked queues.
@@ -173,7 +172,7 @@
       </li>
       <li>
         <p>
-          A <em>binary search tree</em> is a binary tree in which the ordered data stored at any node is greater than all data stored in the left subtree and is less than all data stored in the right subtree.
+          A <term>binary search tree</term> is a binary tree in which the ordered data stored at any node is greater than all data stored in the left subtree and is less than all data stored in the right subtree.
         </p>
       </li>
     </ul>
@@ -183,209 +182,4 @@
   <title>Solutions to Self-Study Exercises</title>
 </solutions>
 
-<subsection>
-<title>Solutions to Self-Study Exercises</title>
-  <p>
-   <ol>
-      <li>
-        <p>
-           <program language="java"><input>
-Node node = new Node(new String("Hello"));
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-           <program language="java"><input>
-Node node = new Node(new Student("William"));
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-           <program language="java"><input>
-PhoneListNode newNode =
-         new PhoneListNode("Bill C", "111-202-3331");
-nodeptr.setNext(newNode);
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The following condition is too general.
-          It will cause the loop to exit as soon as a nonnull node is encountered,
-          whether or not the node matches the one being sought.
- <program language="java"><input>
-((current.getNext() != null) ||
-                  (!current. getName().equals(name)))
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The <c>PhoneList</c> program will generate the following output,
-          which has been edited slightly to improve its readability:
- <program language="java"><input>
-Phone Directory
----------------
-Roger M 997-0020    Roger W 997-0086    Rich P  997-0010
-Jane M  997-2101    Stacy K 997-2517
-Looking up numbers by name
-   Roger M 997-0020
-   Rich P 997-0010
-   Stacy K 997-2517
-   Sorry. No entry for Mary P
-Removed Rich P  997-0010
-Phone Directory
----------------
-Roger M 997-0020    Roger W 997-0086   Jane M  997-2101
-Stacy K 997-2517
-Removed Roger M 997-0020
-Phone Directory
----------------
-Roger W 997-0086    Jane M  997-2101    Stacy K 997-2517
-Removed Stacy K 997-2517
-Phone Directory
----------------
-Roger W 997-0086    Jane M  997-2101
-Removed Jane M  997-2101
-Phone Directory
----------------
-Roger W 997-0086
-Sorry. No entry for Jane M
-Phone Directory
----------------
-Roger W 997-0086
-Removed Roger W 997-0086
-Phone Directory
----------------
-Phone list is empty
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          Executing the following method calls will test whether it is possible to insert items into a list after items have been removed:
- <program language="java"><input>
-// Create and insert some nodes
-PhoneList list = new PhoneList();
-list.insert(new PhoneListNode("Roger M", "997-0020"));
-list.insert(new PhoneListNode("Roger W", "997-0086"));
-System.out.println(list.remove("Roger M") );
-list.insert(new PhoneListNode("Rich P", "997-0010"));
-System.out.println(list.remove("Roger W"));
-list.insert(new PhoneListNode("Jane M", "997-2101"));
-list.insert(new PhoneListNode("Stacy K", "997-2517"));
-System.out.println(list.remove("Jane M"));
-System.out.println(list.remove("Stacy K"));
-list.print();
-       // List should be empty
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The List ADT program will produce the following output:
- <program language="java"><input>
-Generic List
----------------
-Hello, World!
-8647
-Roger M 997-0020
-Jane M 997-2101
-Stacy K 997-2517
-  Removed Stacy K 997-2517
-Generic List:
-Hello, World!
-8647
-Roger M 997-0020
-Jane M 997-2101
-  Removed Jane M 997-2101
-Generic List:
-Hello, World!
-8647
-Roger M 997-0020
-  Removed Hello, World!
-Generic List:
-8647
-Roger M 997-0020
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          Executing the following method calls will test whether it is possible to insert items into a
-  <c>List</c> after items have been removed:
- <program language="java"><input>
-// Create and insert some nodes
-List list = new List();
-list.insertAtFront(new PhoneRecord("Roger M", "997-0020"));
-list.insertAtFront(new PhoneRecord("Roger W", "997-0086"));
-System.out.println("Current List Elements");
-list.print();
-Object o = list.removeLast();   // Remove last element
-list.insertAtFront(o); // Insert at the front of the list
-System.out.println("Current List Elements");
-list.print();
-o = list.removeFirst();
-System.out.println("Removed " + o.toString());
-o = list.removeFirst();
-System.out.println("Removed " + o.toString());
-list.insertAtRear(o);
-System.out.println("Current List Elements");
-list.print();       // List should have one element
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The <c>peek()</c> method should just return the first node without deleting it:
- <program language="java"><input>
-public Object peek() {
-     return head;}
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The <c>peekLast()</c> method can be modeled after the
-<c>List.removeLast()</c> method:
- <program language="java"><input>
-public Object peekLast() {
-  if (isEmpty())
-    return null;
-  else {
-    Node current = head;         // Start at head of list
-    while (current.getNext() != null)// Find end of  list
-      current = current.getNext();
-      return  current;                 // Return last node
-    }} // peekLast()
- </input></program>
-        </p>
-      </li>
-      <li>
-        <p>
-          The following class tests the <c>java.util.Stack&lt;E&gt;</c> class:
- <program language="java"><input>
-import java.util.*;
-public class StackTest{
-public static void main( String argv[] ) {
-   Stack&lt;Character> stack = new Stack&lt;Character>();
-   String string = "Hello this is a test string";
-   System.out.println("String: " + string);
-   for (int k = 0; k &lt; string.length(); k++)
-     stack.push(new Character(string.charAt(k)));
-   Character ch = null;
-   String reversed = "";
-   while (!stack.empty()) {
-     ch  = stack.pop();
-     reversed = reversed + ch.charValue();
-   }
-   System.out.println("Reversed String: " + reversed);} // main()} // StackTest class
- </input></program>
-        </p>
-      </li>
-    </ol>
-  </p>
-</subsection>
 </section>
