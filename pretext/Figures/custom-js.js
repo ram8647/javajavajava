@@ -1,26 +1,23 @@
 // Custom js file
 // Change text of buttons
-let previousButton = document.querySelector('#previousbutton');
-let nextButton = document.querySelector('#nextbutton');
-let upButton = document.querySelector('#upbutton');
-previousButton.style.content = 'none'; // clear ::after that pretext adds - but didn't work
-previousButton.textContent = '<';
-nextButton.style.content = 'none';
-nextButton.textContent = '>';
-upButton.style.content = 'none';
-upButton.textContent = '^';
+var prevbtn = document.querySelector('.previous-button');
+var nextbtn = document.querySelector('.next-button');
+var upbtn = document.querySelector('.up-button');
+prevbtn.style.content = 'none'; // clear ::after that pretext adds - but didn't work
+prevbtn.textContent = '<';
+nextbtn.style.content = 'none';
+nextbtn.textContent = '>';
+upbtn.style.content = 'none';
+upbtn.textContent = '^';
 
-
-// works locally in pretext.js version 13
 document.onreadystatechange = function () {
     if (document.readyState == "complete") 
-       window.mathbook.toggleSidebarLeft(false);
+       if (typeof toggletoc !== undefined) 
+          toggletoc();  // pretext v. 0.2, on Runestone   
+       else if (window.mathbook != null)
+          window.mathbook.toggleSidebarLeft(false); // pretext v. 0.13, in local versi
 }
 
-
-
-// or this toggles side nav closed in Runestone version but not local, pretext.js version 3
-toggletoc(); 
 
 
 
