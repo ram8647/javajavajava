@@ -1,0 +1,1 @@
+import javax.swing.*;public class GreeterApplet extends JApplet {    public void init() {        new GreeterGUI("Greeter");   }}

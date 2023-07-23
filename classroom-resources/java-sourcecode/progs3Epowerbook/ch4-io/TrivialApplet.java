@@ -1,0 +1,1 @@
+/*	Trivial applet that displays a string - 4/96 PNL*/import java.awt.*;import java.applet.Applet;import java.awt.event.*;public class TrivialApplet extends Applet{	private SimpleGUI gui;		public void init() {	    gui = new SimpleGUI(this);	}	}

@@ -1,0 +1,1 @@
+/* * WordGuess.java * An n-player version of the Word Guess Game * To compile: javac -classpath nplayer.jar:. WordGuess.java * To run: java -classpath nplayer.jar:. WordGuess */

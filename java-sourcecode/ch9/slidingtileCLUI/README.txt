@@ -1,1 +1,0 @@
-/* * SlidingTilePuzzle.java * A CLUI-based version of the game. * To compile: javac -classpath nplayer.jar:. SlidingTilePuzzle.java * To run: java -classpath nplayer.jar:. SlidingTilePuzzle */

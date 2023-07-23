@@ -1,0 +1,1 @@
+public class TakeAwayGUIApp {	public static void main(String args[]) {	    new TakeAwayGUI("Take Away Game");		}}

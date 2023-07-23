@@ -1,0 +1,1 @@
+public class OneRowNimGUIApp {   public static void main(String args[])	{   new OneRowNimGUI("OneRowNim");		} //main()} //OneRowNimGUIApp class

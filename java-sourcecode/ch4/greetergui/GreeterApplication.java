@@ -1,1 +1,0 @@
-public class GreeterApplication {	public static void main(String args[]) {	    new GreeterGUI("Greeter");		}}

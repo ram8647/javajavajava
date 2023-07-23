@@ -1,1 +1,0 @@
-/* * SlidingGUI.java * A GUI for the SlidingTilePuzzle.java * To compile: javac -classpath nplayer.jar:. SlidingGUI.java * To run: java -classpath nplayer.jar:. SlidingGUI */

@@ -1,1 +1,0 @@
-public class TakeAwayGame {    private int nSticks = 21;    public TakeAwayGame() { }    public TakeAwayGame(int n) {        nSticks = n;    }        public void takeAway(int n) {        nSticks = nSticks - n;    }    public int sticksLeft() {        return nSticks;    }}

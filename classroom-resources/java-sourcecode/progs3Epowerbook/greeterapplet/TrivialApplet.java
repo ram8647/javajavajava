@@ -1,0 +1,1 @@
+/*	Trivial applet that displays a string*/import java.awt.*;import java.applet.Applet;import javax.swing.*;public class TrivialApplet extends Applet{	public void init() {        new SimpleGUI("Greeter");	}}

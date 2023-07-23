@@ -1,1 +1,0 @@
-This is a Java2 stationery.  The version of MRJ that was availablewhen CodeWarrior Pro 5 shipped did not support Java2; therefore, thisstationery will not run.  It is intended for Java2 development only.
