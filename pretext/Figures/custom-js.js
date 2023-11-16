@@ -1,5 +1,6 @@
 // Custom js file
 // Change text of buttons
+/*
 const prevbtn = document.querySelector('.previous-button');
 const nextbtn = document.querySelector('.next-button');
 const upbtn = document.querySelector('.up-button');
@@ -18,7 +19,7 @@ document.onreadystatechange = function () {
    // hide navbar - hides but leaves space
    // document.querySelector("ptx-sidebar").className = "hidden";
 
-}   
+//}   
        
 
 
