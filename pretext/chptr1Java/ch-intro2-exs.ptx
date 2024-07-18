@@ -802,7 +802,7 @@ String target = "Everywhere a quack quack.";
 boolean passed = checkCodeNotContains("doesn't contain line 8 of Old MD",target);
 assertTrue(passed);
 }
-
+}
 
 	  ]]>
 	</tests>
@@ -837,133 +837,129 @@ assertTrue(passed);
 	</input>
 	<tests>
 	  <![CDATA[
-		   import static org.junit.Assert.*;
-                   import org.junit.*;
-                   import java.io.*;
-                   import java.util.Scanner;
-                   import java.util.ArrayList;
-                   import java.util.Arrays;
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RunestoneTests extends CodeTestHelper
 {
-public RunestoneTests()
-{
-super("Patterns");
-}
+    public RunestoneTests()
+    {
+	super("Patterns");
+    }
 
-protected String getStaticMethodOutputFull(String className,String methodName, Object[] arguments)// throws IOException
-{
-try {
-Class<?> locC = Class.forName(className);
-methods = locC.getDeclaredMethods();
-Method m = null;
-for (Method n : methods) {
-if (n.getName().equals(methodName)) {
-if (checkStaticMethod(n) && checkReturnType(n,
-"void")) {
-m = n;
-break;
-}
-}
-}
-if (m == null) {
-return "No method called " + methodName + " in class " + className);
-}
-
-
-setupStreams();
-
-if (arguments != null)
-if (checkParameters(m, arguments) || m.getName().equals("main"))
-m.invoke(null, arguments);
-else
-errorMessage = "Arguments incorrect (3)";
-else
-m.invoke(null);
-
-String output = outContent.toString();
-cleanUpStreams();
-return output;
-} catch (Exception e) {
-if (errorMessage.equals("")) {
-errorMessage = stackToString(e);
-// errorMessage += "\nMethod " + m.getName() + " could not be invoked (3)";
-
-}
-}
-
-if (errorMessage.equals("")) {
-// errorMessage = stackToString(e);
-errorMessage = "Method " + m.getName() + " with parameters " + Arrays.toString(arguments)
-+ " does not exist";
-}
-
-cleanUpStreams();
-return errorMessage;
-}
+    protected String getStaticMethodOutputFull(String className,String methodName, Object[] arguments)// throws IOException
+    {
+	try {
+	    Class<?> locC = Class.forName(className);
+	    methods = locC.getDeclaredMethods();
+	    Method m = null;
+	    for (Method n : methods) {
+		if (n.getName().equals(methodName)) {
+		    if (checkStaticMethod(n) && checkReturnType(n,
+								"void")) {
+			m = n;
+			break;
+		    }
+		}
+	    }
+	    if (m == null) {
+		return "No method called " + methodName + " in class " + className;
+	    }
 
 
+	    setupStreams();
 
-}
+	    if (arguments != null)
+		if (checkParameters(m, arguments) || m.getName().equals("main"))
+		    m.invoke(null, arguments);
+		else
+		    errorMessage = "Arguments incorrect (3)";
+	    else
+		m.invoke(null);
 
-private String expectedShapes =
-"*****\n" +
-" ****\n" +
-"  ***\n" +
-"   **\n" + 
-"    *\n" +
-"\n" +
-"*****\n" +
-"*   *\n" +
-"*   *\n" +
-"*   *\n" +	       
-"*****\n" +
-"\n" +
-"*****\n" +
-"* * *\n" +
-" * * \n" +
-"* * *\n" +
-"*****\n";
+	    String output = outContent.toString();
+	    cleanUpStreams();
+	    return output;
+	} catch (Exception e) {
+	    if (errorMessage.equals("")) {
+		errorMessage = stackToString(e);
+		// errorMessage += "\nMethod " + m.getName() + " could not be invoked (3)";
 
-@Test
-public void testShapes()
-{
-Scanner expected = new Scanner(expectedShapes);
-Scanner actual = new
-Scanner(getStaticMethodOutputFull("Patterns","main",
-null));
-boolean passes = true;
-int line = 1;
-while (expected.hasNextLine() &&
-actual.hasNextLine()) {
-String expect = expected.nextLine();
-String act = actual.nextLine();
-passes = passes && getResults(expect,act,"line " + line + "
+	    }
+	}
+
+	if (errorMessage.equals("")) {
+	    // errorMessage = stackToString(e);
+	    errorMessage = "Method " + m.getName() + " with parameters " + Arrays.toString(arguments)
+		+ " does not exist";
+	}
+
+	cleanUpStreams();
+	return errorMessage;
+    }
+
+
+
+
+
+    private String expectedShapes =
+	"*****\n" +
+	" ****\n" +
+	"  ***\n" +
+	"   **\n" + 
+	"    *\n" +
+	"\n" +
+	"*****\n" +
+	"*   *\n" +
+	"*   *\n" +
+	"*   *\n" +	       
+	"*****\n" +
+	"\n" +
+	"*****\n" +
+	"* * *\n" +
+	" * * \n" +
+	"* * *\n" +
+	"*****\n";
+
+    @Test
+    public void testShapes()
+    {
+	Scanner expected = new Scanner(expectedShapes);
+	Scanner actual = new
+	    Scanner(getStaticMethodOutputFull("Patterns","main",
+					      null));
+	boolean passes = true;
+	int line = 1;
+	while (expected.hasNextLine() &&
+	       actual.hasNextLine()) {
+	    String expect = expected.nextLine();
+	    String act = actual.nextLine();
+	    passes = passes && getResults(expect,act,"line " + line + "
 matches");
-++line;
-}
-while (expected.hasNextLine()) {
-String expect = expected.nextLine();
-String act = "";
-passes = passes && getResults(expect,act,"line " + line + "
+	    ++line;
+	}
+	while (expected.hasNextLine()) {
+	    String expect = expected.nextLine();
+	    String act = "";
+	    passes = passes && getResults(expect,act,"line " + line + "
 missing");
-++line;
-}
-while (actual.hasNextLine()) {
-String expect = "";
-String act = actual.nextLine();
-passes = passes && getResults(expect,act,"line " + line + "
+	    ++line;
+	}
+	while (actual.hasNextLine()) {
+	    String expect = "";
+	    String act = actual.nextLine();
+	    passes = passes && getResults(expect,act,"line " + line + "
 extra");
-++line;
-}
+	    ++line;
+	}
 
 
-assertTrue(passes);
-}
-
-
-
-
+	assertTrue(passes);
+    }
 }
 	  ]]>
 	</tests>
@@ -1010,105 +1006,120 @@ assertTrue(passes);
 	</input>
 	<tests>
           <![CDATA[
-                   import static org.junit.Assert.*;
-                   import org.junit.*;
-                   import java.io.*;
-                   import java.util.List;
-                   import java.util.ArrayList;
-                   import java.util.Arrays;
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
 
 public class RunestoneTests extends CodeTestHelper
 {
 
-public RunestoneTests() {
-super("Temperature");
-} 
-@Test
-public void test1()
-{
-String target = "1 Private";
-String actual = testPrivateInstanceVariables();
-boolean passed =
-recordResult(target,actual,"only 1 private field");
-assertTrue(passed);
-}
-@Test
-public void test1b()
-{
-boolean found = true;
-String[] types = {"double"};
-String fieldTypes =
-testInstanceVariableTypes(types);
-if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
-found = false;
-} else {
-String[] typeNames = fieldTypes.trim().split(" ");
-if(typeNames.length != 1 || !typeNames[0].equals("double")) {
-found = false;
-}
-if(types[0] != null) {
-found = false;
-}
-
-}
-
-expect(true,found,"has exactly 1 double field");
-}
-
-@Test
-public void test2()
-{
-try {
-double testValue = 5.0;
-Object[] testValues = {testValue};
-setDefaultTestValues(testValues);
-Object t = getTestInstance();
-Method m = t.getClass().getMethod("getTemp",null);
-double target = testValue;
-expect(target,(Double)m.invoke(t),
-"constructor and getter work for " + testValue);
-} catch(Exception e) {
-expect(String.valueOf(target),"exception",
-"constructor and/or getter don't work");
-}
-}
-@Test
-public void test2b()
-{
-try {
-double testValue = 100.0;
-Object[] testValues = {testValue};
-setDefaultTestValues(testValues);
-Object t = getTestInstance();
-Method m = t.getClass().getMethod("getTemp",null);
-double target = testValue;
-expect(target,(Double)m.invoke(t),
-"constructor and getter work for " + testValue);
-} catch(Exception e) {
-expect(String.valueOf(target),"exception",
-"constructor and/or getter don't work");
-}
-}
+    public RunestoneTests() {
+	super("Temperature");
+    }
 
 
-@Test
-public void test3()
-{
-try {
-double testValue = -60.0;
-Object[] testValues = {testValue};
-setDefaultTestValues(testValues);
-Object t = getTestInstance();
-Method m = t.getClass().getMethod("getTemp",null);
-double target = testValue;
-expect(target,(Double)m.invoke(t),
-"constructor and getter work for " + testValue);
-} catch(Exception e) {
-expect(String.valueOf(target),"exception",
-"constructor and/or getter don't work");
+    private Object getTestInstance(Object[] defaultTestValues) {
+        try {
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance(defaultTestValues);
+
+        } catch (Exception e) {
+            errorMessage = "Couldn't call constructor";
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "1 Private";
+	String actual = testPrivateInstanceVariables();
+	boolean passed =
+	    expect(target,actual,"only 1 private field");
+	assertTrue(passed);
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"double"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 1 || !typeNames[0].equals("double")) {
+		found = false;
+	    }
+	    if(types[0] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 1 double field");
+    }
+
+    @Test
+    public void test2()
+    {
+	    double testValue = 5.0;
+	    double target = testValue;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getTemp");
+	    expect(target,(Double)m.invoke(t),
+		   "constructor and getter work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getter don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+	    double testValue = 100.0;
+	    double target = testValue;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getTemp");
+	    expect(target,(Double)m.invoke(t),
+		   "constructor and getter work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getter don't work");
+	}
+    }
+
+
+    @Test
+    public void test3()
+    {
+	    double testValue = -60.0;
+	    double target = testValue;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getTemp");
+	    expect(target,(Double)m.invoke(t),
+		   "constructor and getter work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getter don't work");
+	}
+    }
 }
-}
-}
+
           ]]>
 	</tests>
       </program>
