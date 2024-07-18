@@ -863,6 +863,122 @@ public class RunestoneTests extends CodeTestHelper
 	s.flush();
 	return s.toString();
     }
+    /*
+     * Methods for getting / checking method details
+     * ---------------------------------
+     */
+    protected boolean checkStaticMethod(Method m) {
+
+        String header = m.toGenericString();
+        String[] info = header.split(" ");
+
+        if (!info[1].equals("static")) {
+            // errorMessage = "Method " + m.getName() + " is not static";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected boolean checkReturnType(Method m, String rType) {
+        String header = m.toGenericString();
+        String[] info = header.split(" ");
+
+        if (checkStaticMethod(m))
+            return info[2].equals(rType);
+
+        return info[1].equals(rType);
+    }
+
+protected Class<?>[] getArgumentTypes(Object[] args) {
+        if (args == null)
+            return null;
+
+        Class<?>[] argTypes = new Class<?>[args.length];
+
+        for (int i = 0; i < args.length; i++) {
+            // System.out.println("Argument: " + args[i] + "\tType: ");
+
+            if (args[i] instanceof Integer) {
+                argTypes[i] = Integer.TYPE;
+            } else if (args[i] instanceof Double) {
+                argTypes[i] = Double.TYPE;
+            } else if (args[i] instanceof Boolean) {
+                argTypes[i] = Boolean.TYPE;
+            } else if (args[i] instanceof String) {
+                argTypes[i] = String.class;
+            } else if (args[i].getClass().isArray()) {
+                if (args[i].getClass().getComponentType().equals(int.class)) {
+                    argTypes[i] = int[].class;
+                } else if (args[i].getClass().getComponentType().equals(double.class)) {
+                    argTypes[i] = double[].class;
+                } else if (args[i].getClass().getComponentType().equals(boolean.class)) {
+                    argTypes[i] = boolean[].class;
+                } else if (args[i].getClass().getComponentType().equals(String.class)) {
+                    argTypes[i] = String[].class;
+                } else if (args[i].getClass().getComponentType().isArray()) {
+                    if (args[i].getClass().getComponentType().equals(int[].class)) {
+                        argTypes[i] = int[][].class;
+                    } else if (args[i].getClass().getComponentType().equals(double[].class)) {
+                        argTypes[i] = double[][].class;
+                    } else if (args[i].getClass().getComponentType().equals(boolean[].class)) {
+                        argTypes[i] = boolean[][].class;
+                    } else if (args[i].getClass().getComponentType().equals(String[].class)) {
+                        argTypes[i] = String[][].class;
+                    } else {
+                        argTypes[i] = Object[][].class;
+                    }
+                } else {
+                    argTypes[i] = Object[].class;
+                }
+            } else {
+                argTypes[i] = Object.class;
+            }
+        }
+
+        return argTypes;
+    }
+
+ protected boolean checkParameters(Method m, Object[] arguments) {
+        String header = m.toGenericString().replace(className + ".", "");
+
+        // ???: Is this still needed. As we discovered, it doesn't handle the
+        // case where the main method has a throws clause. I *think* that maybe
+        // with the other fix at line 321, this may not be needed anymore? I'm
+        // not sure. -Peter
+        if (header.equals("public static void main(java.lang.String[])"))
+            return true;
+
+        Class<?>[] params = m.getParameterTypes();
+
+        if (arguments == null || params == null) {
+            return true;
+        }
+
+        Class<?>[] argTypes = getArgumentTypes(arguments);
+
+        // System.out.println("\n***************************\nHeader: " + header +
+        // "\nClass: " + className + "\n");
+        // System.out.println(m.getName());
+        // System.out.println("Params: " + Arrays.toString(params) + "\nArgTypes: " +
+        // Arrays.toString(argTypes));
+        String errorMessage = "";
+        if (params.length == arguments.length) {
+            for (int i = 0; i < params.length; i++) {
+                // System.out.println(params[i] + "\t" + argTypes[i]);
+                if (params[i] != argTypes[i]) {
+
+                    errorMessage = "Parameter and Argument types do not match";
+                    return false;
+                }
+            }
+        } else {
+            errorMessage = "Parameter and Argument lengths do not match";
+            return false;
+        }
+
+        return true;
+    }
 
     protected String getStaticMethodOutputFull(String className,String methodName, Object[] arguments)// throws IOException
     {
@@ -1034,6 +1150,7 @@ public class RunestoneTests extends CodeTestHelper
 
 
     private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
         try {
 	    Class<?> c = Class.forName("Temperature");
             Constructor[] ctors = c.getDeclaredConstructors();
