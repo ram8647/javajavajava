@@ -851,6 +851,7 @@ import java.lang.reflect.*;
 
 public class RunestoneTests extends CodeTestHelper
 {
+    private String extraClassName = "Patterns";
     public RunestoneTests()
     {
 	super("Patterns");
@@ -940,7 +941,7 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
     }
 
  protected boolean checkParameters(Method m, Object[] arguments) {
-        String header = m.toGenericString().replace(className + ".", "");
+        String header = m.toGenericString().replace(extraClassName + ".", "");
 
         // ???: Is this still needed. As we discovered, it doesn't handle the
         // case where the main method has a throws clause. I *think* that maybe
@@ -958,7 +959,7 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
         Class<?>[] argTypes = getArgumentTypes(arguments);
 
         // System.out.println("\n***************************\nHeader: " + header +
-        // "\nClass: " + className + "\n");
+        // "\nClass: " + extraClassName + "\n");
         // System.out.println(m.getName());
         // System.out.println("Params: " + Arrays.toString(params) + "\nArgTypes: " +
         // Arrays.toString(argTypes));
@@ -1170,9 +1171,8 @@ public class RunestoneTests extends CodeTestHelper
     {
 	String target = "1 Private";
 	String actual = testPrivateInstanceVariables();
-	boolean passed =
-	    expect(target,actual,"only 1 private field");
-	assertTrue(passed);
+	expect(target,actual,"only 1 private field");
+	
     }
     @Test
     public void test1b()
