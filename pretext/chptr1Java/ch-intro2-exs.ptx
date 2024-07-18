@@ -984,10 +984,11 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
     protected String getStaticMethodOutputFull(String className,String methodName, Object[] arguments)// throws IOException
     {
         String errorMessage = "";
+	Method m = null;
 	try {
 	    Class<?> locC = Class.forName(className);
 	    methods = locC.getDeclaredMethods();
-	    Method m = null;
+	    
 	    for (Method n : methods) {
 		if (n.getName().equals(methodName)) {
 		    if (checkStaticMethod(n) && checkReturnType(n,
@@ -1025,7 +1026,8 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
 
 	if (errorMessage.equals("")) {
 	    // errorMessage = stackToString(e);
-	    errorMessage = "Method " + m.getName() + " with parameters " + Arrays.toString(arguments)
+	    if (m != null) {
+	    errorMessage = "Method " + methodName + " with parameters " + Arrays.toString(arguments)
 		+ " does not exist";
 	}
 
