@@ -716,11 +716,11 @@
     <exercise label="jpdd_println_coding_1_rhyme">
       <statement>
 	<p>
-	  Modify the <c>OldMacDonald</c> class to
+	  Modify the <c>NurseryRhyme</c> class to
 	  <q>sing</q>
 	  either
 	  <q>Mary Had a Little Lamb</q>
-	  or your favorite nursery rhyme.
+	  or your favorite nursery rhyme instead of Old MacDonald had a farm.
 	</p>
       </statement>
       <program label="jpdd_nursery_rhyme" interactive="activecode" language="java">
@@ -761,45 +761,49 @@ super("NurseryRhyme");
 public void test1()
 {
 String target = "Old MacDonald had a farm";
-boolean passed = checkCodeNotContains("doesn't contain line 1 or 9 of Old MD",target);
+boolean passed = checkCodeNotContains("line 1 or 9 of Old MD",target);
 assertTrue(passed);
 }
 @Test
 public void test2()
 {
 String target = "E I E I O.";
-boolean passed = checkCodeNotContains("doesn't contain line 2,4,or 10 of Old MD",target);
+boolean passed = checkCodeNotContains("line 2,4,or 10 of Old MD",target);
 assertTrue(passed);
 }
 @Test
 public void test3()
 {
 String target = "And on his farm he had a duck.";
-boolean passed = checkCodeNotContains("doesn't contain line 3 of Old MD",target);
+boolean passed = checkCodeNotContains("line 3 of Old MD",target);
 assertTrue(passed);
 }
+@Test
 public void test4()
 {
 String target = "With a quack quack here.";
-boolean passed = checkCodeNotContains("doesn't contain line 5 of Old MD",target);
+boolean passed = checkCodeNotContains("line 5 of Old MD",target);
 assertTrue(passed);
 }
+@Test
 public void test5()
 {
 String target = "And a quack quack there.";
-boolean passed = checkCodeNotContains("doesn't contain line 6 of Old MD",target);
+boolean passed = checkCodeNotContains("line 6 of Old MD",target);
 assertTrue(passed);
 }
+@Test
 public void test6()
 {
 String target = "Here a quack, there a quack,";
-boolean passed = checkCodeNotContains("doesn't contain line 7 of Old MD",target);
+boolean passed = checkCodeNotContains("line 7 of Old MD",target);
 assertTrue(passed);
 }
+@Test
 public void test7()
 {
 String target = "Everywhere a quack quack.";
-boolean passed = checkCodeNotContains("doesn't contain line 8 of Old MD",target);
+boolean passed = checkCodeNotContains("line 8 of Old MD",target);
 assertTrue(passed);
 }
 }
@@ -843,6 +847,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.lang.reflect.*;
 
 public class RunestoneTests extends CodeTestHelper
 {
@@ -851,8 +856,17 @@ public class RunestoneTests extends CodeTestHelper
 	super("Patterns");
     }
 
+    protected String stackToString(Exception e) {
+	StringWriter s = new StringWriter();
+	PrintWriter p = new PrintWriter(s);
+	e.printStackTrace(p);
+	s.flush();
+	return s.toString();
+    }
+
     protected String getStaticMethodOutputFull(String className,String methodName, Object[] arguments)// throws IOException
     {
+        String errorMessage = "";
 	try {
 	    Class<?> locC = Class.forName(className);
 	    methods = locC.getDeclaredMethods();
@@ -938,22 +952,19 @@ public class RunestoneTests extends CodeTestHelper
 	       actual.hasNextLine()) {
 	    String expect = expected.nextLine();
 	    String act = actual.nextLine();
-	    passes = passes && getResults(expect,act,"line " + line + "
-matches");
+	    passes = passes && getResults(expect,act,"line " + line + " matches");
 	    ++line;
 	}
 	while (expected.hasNextLine()) {
 	    String expect = expected.nextLine();
 	    String act = "";
-	    passes = passes && getResults(expect,act,"line " + line + "
-missing");
+	    passes = passes && getResults(expect,act,"line " + line + " missing");
 	    ++line;
 	}
 	while (actual.hasNextLine()) {
 	    String expect = "";
 	    String act = actual.nextLine();
-	    passes = passes && getResults(expect,act,"line " + line + "
-extra");
+	    passes = passes && getResults(expect,act,"line " + line + " extra");
 	    ++line;
 	}
 
@@ -1024,6 +1035,7 @@ public class RunestoneTests extends CodeTestHelper
 
     private Object getTestInstance(Object[] defaultTestValues) {
         try {
+	    Class<?> c = Class.forName("Temperature");
             Constructor[] ctors = c.getDeclaredConstructors();
             Constructor ctor = ctors[0];
 
