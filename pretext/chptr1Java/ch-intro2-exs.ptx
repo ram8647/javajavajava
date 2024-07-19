@@ -1027,25 +1027,19 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
 
 	if (errorMessage.equals("")) {
 	    // errorMessage = stackToString(e);
-	    if (m != null) {
 	    errorMessage = "Method " + methodName + " with parameters " + Arrays.toString(arguments)
 		+ " does not exist";
-	}
 
-	cleanUpStreams();
-	return errorMessage;
-    }
+	    }
 
-
-
+	   cleanUpStreams();
+	   return errorMessage;
+        }
 
 
-    
 
-    @Test
-    public void testShapes()
-    {
-      String expectedShapes =
+
+ protected String expectedShapes =
 	"*****\n" +
 	" ****\n" +
 	"  ***\n" +
@@ -1063,6 +1057,12 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
 	" * * \n" +
 	"* * *\n" +
 	"*****\n";
+    
+
+    @Test
+    public void testShapes()
+    {
+      
 	Scanner expected = new Scanner(expectedShapes);
 	Scanner actual = new
 	    Scanner(getStaticMethodOutputFull("Patterns","main",
