@@ -1073,19 +1073,19 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
 	       actual.hasNextLine()) {
 	    String expect = expected.nextLine();
 	    String act = actual.nextLine();
-	    passes = passes && getResults(expect,act,"line " + line + " matches");
+	    passes = passes && getResults(expect,act,"line " + line + " matches",expect.equals(act));
 	    ++line;
 	}
 	while (expected.hasNextLine()) {
 	    String expect = expected.nextLine();
 	    String act = "";
-	    passes = passes && getResults(expect,act,"line " + line + " missing");
+	    passes = passes && getResults(expect,act,"line " + line + " missing",expect.equals(act));
 	    ++line;
 	}
 	while (actual.hasNextLine()) {
 	    String expect = "";
 	    String act = actual.nextLine();
-	    passes = passes && getResults(expect,act,"line " + line + " extra");
+	    passes = passes && getResults(expect,act,"line " + line + " extra",expect.equals(act));
 	    ++line;
 	}
 
