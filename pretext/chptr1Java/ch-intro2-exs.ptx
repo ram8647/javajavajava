@@ -1043,14 +1043,176 @@
 
       <statement>
 	<p>
-	  Design a class to represent a geometric rectangle with a given length and width,
-	  such that it is capable of calculating the area and the perimeter of the rectangle.
+	  Design and implement a class to represent a geometric rectangle with a given length and width,
+	  such that it is capable of calculating the area and the
+	  perimeter of the rectangle. A main method for the class is
+	  below that should work once your class is fully
+	  implemented. (Note the tests will only work if you make all
+	  of your variables and return types as <c>double</c>.
 	</p>
       </statement>
       <program label="jpdd_code_rectangle_class_task" interactive="activecode" language="java">
 	<input>
 
+	  public class Rectangle {
+
+	     // TODO: implement fields and methods for Rectangle class
+
+	     // this will run the class
+	     public static void main(String[] args) {
+             Rectangle r = new Rectangle(5,15);
+
+	     System.out.println("The perimiter of the rectangle is " + 
+	                        r.getPerimeter());
+	     System.out.println("The area of the rectangle is " + r.getArea());
+	     
+	     }
+
+	  } 
+
         </input>
+	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("Rectangle");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("Rectangle");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance(defaultTestValues);
+
+        } catch (Exception e) {
+            errorMessage = "Couldn't call constructor";
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "2 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"exactly 2 private fields");
+	
+    }
+    
+
+   @Test
+    public void testArea1()
+    {
+    double length = 5.0;
+    double width = 12.0;
+    double expectedPerimeter = length*2 + width *2;
+    double expectedArea = length * width;
+	try {
+	    Object[] testValues = {length, width};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getArea");
+	    expect(targetPerimeter,(Double)m.invoke(t),
+		   "constructor and getArea work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getArea don't work");
+	}
+	}
+	
+    @Test
+    public void test2()
+    {
+    double length = 5.0;
+    double width = 12.0;
+    double expectedPerimeter = length*2 + width *2;
+    double expectedArea = length * width;
+	try {
+	    Object[] testValues = {length, width};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getPerimeter");
+	    expect(targetPerimeter,(Double)m.invoke(t),
+		   "constructor and getPerimeter work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getPerimeter don't work");
+	}
+	}
+
+@Test
+    public void testArea2()
+    {
+    double length = 50;
+    double width =  2;
+    double expectedPerimeter = length*2 + width *2;
+    double expectedArea = length * width;
+	try {
+	    Object[] testValues = {length, width};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getArea");
+	    expect(targetPerimeter,(Double)m.invoke(t),
+		   "constructor and getArea work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getArea don't work");
+	}
+	}
+	
+    @Test
+    public void testPerimeter2()
+    {
+    double length = 50;
+    double width = 2;
+    double expectedPerimeter = length*2 + width *2;
+    double expectedArea = length * width;
+	try {
+	    Object[] testValues = {length, width};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getPerimeter");
+	    expect(targetPerimeter,(Double)m.invoke(t),
+		   "constructor and getPerimeter work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getPerimeter don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+	    double testValue = 100.0;
+	    double target = testValue;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("getTemp");
+	    expect(target,(Double)m.invoke(t),
+		   "constructor and getter work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or getter don't work");
+	}
+    }
+
+
+    
+}
+
+          ]]>
+	</tests>
 	</program>
     </exercise>
     <exercise label="jpdd_println_coding_1_rhyme">
