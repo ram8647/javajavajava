@@ -841,6 +841,7 @@
 	</block>
       </blocks>
     </exercise>
+    <!-- Problem 13 -->
     <exercise label="jpdd_caesar_cipher">
       	<title>Shift Cipher (a la Julius Caesar)</title>
       <statement>
@@ -894,6 +895,7 @@
 	<q>sxccohv duh ixq,</q>
 	which you know to be a Caesar cipher.
       </p>
+    <!-- Problem 14a -->
       <exercise label="jpdd_caesar_decipher_part1">
 	<title>Decipher the Text</title>
 	<statement>
@@ -916,6 +918,7 @@
           </var>
       </setup>
       </exercise>
+    <!-- Problem 14b -->
       <exercise label="jpdd_caesar_decipher_part2">
 	<title>Determine the Decipher algorithm</title>
 	<statement>
@@ -960,6 +963,7 @@
 	</choices>
       </exercise>
     </exercisegroup>
+    <!-- Problem 15 -->
     <exercise label="jpdd_average">
       	<title>Running average</title>
       <statement>
@@ -1037,7 +1041,8 @@
 	</setup>
 	
       </exercise>
-      
+          <!-- Problem 18 -->
+
     <exercise label="jpdd_rectangle_design">
       	<title>Rectangle class</title>
 
@@ -1215,6 +1220,7 @@ public class RunestoneTests extends CodeTestHelper
 	</tests>
 	</program>
     </exercise>
+    <!-- Problem 19 -->
     <exercise label="jpdd_println_coding_1_rhyme">
       	<title>Nursery Rhyme printing</title>
 
@@ -1317,6 +1323,7 @@ assertTrue(passed);
       </program>
       
     </exercise>
+    <!-- Problem 20 -->
     <exercise label="jpdd_println_coding_2_paterns">
 	<title>Printing patterns</title>
       <statement>
@@ -1602,6 +1609,7 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
 	</tests>
       </program>
     </exercise>
+    <!-- Problem 21 -->
     <exercise label="jpdd_println_coding_3_initials">
 	<title>Printing Initials</title>
       <statement>
@@ -1626,6 +1634,7 @@ protected Class<?>[] getArgumentTypes(Object[] args) {
 	</input>
       </program>
     </exercise>
+    <!-- Problem 22 -->
     <exercise label="jpdd_challenge_1_temperature">
 	<title>Temperature class</title>
       <statement>
@@ -1765,6 +1774,7 @@ public class RunestoneTests extends CodeTestHelper
       </program>
     </exercise>
   
+    <!-- Problem 23 -->
   <exercise  label="jpdd_challenge_2_tax_whiz">
 	<title>Tax Whiz Challenge</title>
     <statement>
@@ -1780,6 +1790,7 @@ public class RunestoneTests extends CodeTestHelper
     </statement>
   </exercise>
     
+    <!-- Problem 24 -->
   <exercise label="jpdd_variables_1">
     	<title>Variable Tracing</title>
     <statement>
@@ -1850,6 +1861,7 @@ num2 = num1 + num2;
 	  
     </setup>
     </exercise>
+    <!-- Problem 25 -->
     <exercise label="jpdd_variables_2">
 	<title>Variable initialization</title>
   <statement>
@@ -1905,6 +1917,7 @@ num2 = num1 + num2;
           </var>
 	</setup>	
     </exercise>
+    <!-- Problem 26 -->
     <exercise label="jpdd_uml_diagram_1">
       	<title>UML Riddle</title>
 
@@ -1914,8 +1927,9 @@ num2 = num1 + num2;
 	contain a method named <c>getRiddle()</c> that would return both the riddle's question and answer.
       </p>
       </statement>
-      <response/>
+      <response attachment='yes' />
     </exercise>
+    <!-- Problem 27 -->
     <exercise label="jpdd_uml_diagram_2">
       	<title>UML Circle</title>
 
@@ -1927,9 +1941,10 @@ num2 = num1 + num2;
 	returns a <c>double</c>. Its attributes should be designated as private and its method as public.
       </p>
     </statement>
-          <response/>
+          <response attachment='yes' />
 
     </exercise>
+    <!-- Problem 28 -->
     <exercise label="jpdd_uml_diagram_3">
       	<title>UML Triangle</title>
 
@@ -1941,9 +1956,10 @@ num2 = num1 + num2;
 	Draw a UML diagram to represent this triangle.
       </p>
     </statement>
-          <response/>
+          <response attachment='yes' />
 
     </exercise>
+    <!-- Problem 29 -->
     <exercise label="jpdd_uml_diagram_4">
     	<title>UML to Java</title>
     <statement>
@@ -1962,6 +1978,135 @@ num2 = num1 + num2;
 
 	</cd>
       </input>
+	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("Person");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("Person");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance(null);
+
+} catch (Exception e) {
+try {
+Class<?> c = Class.forName("Person");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+return ctor.newInstance(defaultTestValues);
+}catch (Exception e2) {
+errorMessage = "Couldn't call constructor";
+}
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "2 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"exactly 2 private fields");
+	
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"String","String"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 2 || !typeNames[0].equals("String")
+	    || !typeNames[1].equals("String") ) {
+		found = false;
+	    }
+	    if(types[0] != null || types[1] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 2 String fields");
+    }
+
+    @Test
+    public void test2()
+    {
+    String name = "Jenny";
+    String phone = "867-5309";
+	    String target = name;
+	try {
+	    Object[] testValues = {name,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("printName");
+	    setupStreams();
+	    m.invoke(t)
+	    cleanUpStreams();
+            String result = outContent.toString().trim();
+	    if (result.equals("null")) {
+	      target = "null";
+            }
+	    expect(target,result,
+		   "constructor and printName work for " + name);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or printName don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+	    String name = "Jenny";
+    String phone = "867-5309";
+	    String target = name;
+	try {
+	    Object[] testValues = {name,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("printPhone");
+	    setupStreams();
+	    m.invoke(t)
+	    cleanUpStreams();
+            String result = outContent.toString().trim();
+	    if (result.equals("null")) {
+	      target = "null";
+            }
+	    expect(target,result,
+		   "constructor and printPhone work for " + phone);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "constructor and/or printPhone don't work");
+	}
+    }
+
+
+   
+}
+
+          ]]>
+	</tests>
       
 
     </program>
