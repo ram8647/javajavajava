@@ -1126,15 +1126,15 @@ public class RunestoneTests extends CodeTestHelper
     double length = 5.0;
     double width = 12.0;
     double expectedPerimeter = length*2 + width *2;
-    double expectedArea = length * width;
+    double targetArea = length * width;
 	try {
 	    Object[] testValues = {length, width};
 	    Object t = getTestInstance(testValues);
 	    Method m = t.getClass().getMethod("getArea");
-	    expect(targetPerimeter,(Double)m.invoke(t),
+	    expect(targetArea,(Double)m.invoke(t),
 		   "constructor and getArea work for " + testValue);
 	} catch(Exception e) {
-	    expect(String.valueOf(target),"exception",
+	    expect(String.valueOf(targetArea),"exception",
 		   "constructor and/or getArea don't work");
 	}
 	}
@@ -1144,7 +1144,7 @@ public class RunestoneTests extends CodeTestHelper
     {
     double length = 5.0;
     double width = 12.0;
-    double expectedPerimeter = length*2 + width *2;
+    double targetPerimeter = length*2 + width *2;
     double expectedArea = length * width;
 	try {
 	    Object[] testValues = {length, width};
@@ -1153,7 +1153,7 @@ public class RunestoneTests extends CodeTestHelper
 	    expect(targetPerimeter,(Double)m.invoke(t),
 		   "constructor and getPerimeter work for " + testValue);
 	} catch(Exception e) {
-	    expect(String.valueOf(target),"exception",
+	    expect(String.valueOf(targetPerimeter),"exception",
 		   "constructor and/or getPerimeter don't work");
 	}
 	}
@@ -1164,15 +1164,15 @@ public class RunestoneTests extends CodeTestHelper
     double length = 50;
     double width =  2;
     double expectedPerimeter = length*2 + width *2;
-    double expectedArea = length * width;
+    double targetArea = length * width;
 	try {
 	    Object[] testValues = {length, width};
 	    Object t = getTestInstance(testValues);
 	    Method m = t.getClass().getMethod("getArea");
-	    expect(targetPerimeter,(Double)m.invoke(t),
+	    expect(targetArea,(Double)m.invoke(t),
 		   "constructor and getArea work for " + testValue);
 	} catch(Exception e) {
-	    expect(String.valueOf(target),"exception",
+	    expect(String.valueOf(targetArea),"exception",
 		   "constructor and/or getArea don't work");
 	}
 	}
@@ -1182,7 +1182,7 @@ public class RunestoneTests extends CodeTestHelper
     {
     double length = 50;
     double width = 2;
-    double expectedPerimeter = length*2 + width *2;
+    double targetPerimeter = length*2 + width *2;
     double expectedArea = length * width;
 	try {
 	    Object[] testValues = {length, width};
@@ -1191,26 +1191,11 @@ public class RunestoneTests extends CodeTestHelper
 	    expect(targetPerimeter,(Double)m.invoke(t),
 		   "constructor and getPerimeter work for " + testValue);
 	} catch(Exception e) {
-	    expect(String.valueOf(target),"exception",
+	    expect(String.valueOf(targetPerimeter),"exception",
 		   "constructor and/or getPerimeter don't work");
 	}
     }
-    @Test
-    public void test2b()
-    {
-	    double testValue = 100.0;
-	    double target = testValue;
-	try {
-	    Object[] testValues = {testValue};
-	    Object t = getTestInstance(testValues);
-	    Method m = t.getClass().getMethod("getTemp");
-	    expect(target,(Double)m.invoke(t),
-		   "constructor and getter work for " + testValue);
-	} catch(Exception e) {
-	    expect(String.valueOf(target),"exception",
-		   "constructor and/or getter don't work");
-	}
-    }
+    
 
 
     
@@ -1344,7 +1329,9 @@ assertTrue(passed);
 	<input>
 	<cd>
 
+public class Patterns {
 
+}
 
 
 
@@ -1950,7 +1937,7 @@ num2 = num1 + num2;
 
     </exercise>
     <!-- Problem 28 -->
-    <exercise label="jpdd_uml_diagram_3">
+    <exercise label="jpdd_uml_diagram_3" attachment="yes">
       	<title>UML Triangle</title>
 
     <statement>
@@ -1961,7 +1948,7 @@ num2 = num1 + num2;
 	Draw a UML diagram to represent this triangle.
       </p>
     </statement>
-          <response attachment='yes' />
+          <response />
 
     </exercise>
     <!-- Problem 29 -->
