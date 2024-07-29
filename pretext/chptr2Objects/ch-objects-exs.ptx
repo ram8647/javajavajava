@@ -990,6 +990,166 @@ int value = 7;
 
 	}
       </input>
+      	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("Cube");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("Cube");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance((Object[])null);
+
+} catch (Exception e) {
+try {
+Class<?> c = Class.forName("NumberCruncher");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+return ctor.newInstance(defaultTestValues);
+}catch (Exception e2) {
+errorMessage = "Couldn't call constructor";
+}
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "1 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"exactly 1 private field");
+	
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"int"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 1 || !typeNames[0].equals("int")
+	    || !typeNames[1].equals("int") ) {
+		found = false;
+	    }
+	    if(types[0] != null || types[1] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 1 int fields");
+    }
+
+    @Test
+    public void test2()
+    {
+    int value = 3;
+    int target = 6 * value * value;
+    String methodName = "getSurfaceArea";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + " don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+int value = 7;
+    	    int target = 6 * value * value;
+	String methodName = "getSurfaceArea";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    
+    }
+
+ @Test
+    public void test3()
+    {
+int value = 4;
+    	    int target = value * value * value;
+	String methodName = "getVolume";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    
+    }
+
+
+@Test
+    public void test4()
+    {
+int value = 9;
+    	    int target = value * value * value;
+	String methodName = "getVolume";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    
+    }
+
+ 
+   
+}
+
+          ]]>
+	</tests>
+
       </program>
     </exercise>
     <exercise label="joex_cube_user_class_definition">
@@ -1027,6 +1187,70 @@ int value = 7;
       </input>
       </program>
     </exercise>
+
+    <exercise label="joex_cube_user_side_choice">
+      <statement>
+        <p>
+          Challenge: Modify your solution to the previous exercise so that it lets the user input the side of the cube.
+          Follow the example shown in this chapter's
+          <q>From the Java Library</q>
+          section.
+          Challenge: Define a Java class that represents an address book entry, <c>Entry</c>, which consists of a name,
+          address, and phone number,
+          all represented as <c>String</c> s.
+          For the class's interface,
+          define methods to set and get the values of each of its instance variables.
+          Thus, for the <c>name</c> variable,
+          it should have a <c>setName()</c> and a <c>getName()</c> method. \secEXRHone{UML Exercises}
+        </p>
+      </statement>
+      <program label="joex_cube_user_side_choice_prg" language="java"
+	       interactive="activecode"><input>
+	// copy Cube code from above and paste it as a protected class
+	// (with a public constructor)
+
+	public class CubeUser {
+
+	public static void main(String[] args) {
+
+	}
+
+	}
+      </input>
+      </program>
+    </exercise>
+
+
+
+     <exercise label="joex_address_book_class">
+      <statement>
+        <p>
+          Challenge: Define a Java class that represents an address book entry, <c>Entry</c>, which consists of a name,
+          address, and phone number,
+          all represented as <c>String</c> s.
+          For the class's interface,
+          define methods to get the values of each of its instance variables.
+          Thus, for the <c>name</c> variable,
+          it should have a <c>getName()</c> method. The constructor
+	  should take the name, address, and phone number as arguments. 
+        </p>
+      </statement>
+      <program label="joex_address_book_code" language="java"
+	       interactive="activecode"><input>
+	
+	public class AddressBookEntry {
+
+	
+
+	}
+      </input>
+      </program>
+    </exercise>
+
+
+
+
+    
     <exercise label="joex_uml_language_classes" attachment="yes">
       <statement>
         <p>
