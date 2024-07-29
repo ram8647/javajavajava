@@ -516,7 +516,51 @@
 	{
 	}
 	}
-      </input></program>
+      </input>
+	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("NumberAdder");
+    }
+    
+    @Test
+    public void test1()
+    {
+    String target = "25";
+	String actual = getMethodOutput("main");
+	expect(true, actual.contains(target),"output contains " + target);
+	
+    }
+    @Test
+    public void test1b()
+    {
+        String target = "300"
+
+	String actual = getMethodOutput("main");
+	expect(true, actual.contains(target2),"output contains " + target);
+
+    }
+
+    
+
+}
+
+
+          ]]>
+	</tests>
+
+      </program>
     </exercise>
     <exercise label="joex_number_adder_describe">
       <statement>
@@ -529,39 +573,55 @@
       </statement>
       <response />
     </exercise>
-    <exercisegroup>
-      <title>Concept Pairs</title>
-      <introduction>
+    <exercise label="joex_matching_terms">
+      <title>Matching Concepts Objects</title>
+      <setup>
         <p>
-          Explain the difference between each of the following pairs
-	  of concepts.
+         Match the Object terms to definitions.
 	</p>
-      </introduction>
-      <exercise label="joex_method_def_vs_method_call">
-	<statement>
-          <p>
-            A method definition and a method call.
-          </p>
-        </statement>
-	<response />
+      </setup>
+            <matches>
+	<match>
+	  <order>1</order>
+          <premise><em>method definition</em></premise>
+          <response>the part of the code that contains the exe-
+cutable statements that the method performs </response>
+	</match>
+	<match>
+	  <order>2</order>
+          <premise><em>method call</em></premise>
+          <response>the act of calling the method to perform the task it is meant to perform.</response>
+	</match>
+	<match>
+	  <order>3</order>
+          <premise><em>declaring a variable of reference type</em></premise>
+          <response>Specifying an object type and an identifier for
+	  the object</response>
+	</match>
+	<match>
+	  <order>4</order>
+          <premise><em>creating an instance</em></premise>
+          <response>using the keyword <c>new</c> along with an
+	  object's constructor.</response>
+	</match>
+	<match>
+	  <order>5</order>
+	  <premise><em>primitive type variable</em> </premise>
+          <response>an identifier that has memory for the actual value
+	  of the variable</response>
+	</match>
+	<match>
+	  <order>6</order>
+          <premise><em>reference type variable</em> </premise>
+          <response>an identifier that has memory for the reference to
+	  the object that holds the values of the variable.</response>
+	</match>
+	
+      </matches>
+
+      
       </exercise>
-      <exercise label="joex_declare_vs_instantiate">
-	<statement>
-          <p>
-            Declaring a variable of reference type and creating an instance.
-          </p>
-        </statement>
-	<response />
-      </exercise>
-      <exercise label="joex_primitive_vs_reference_type">
-	<statement>
-          <p>
-            A variable of reference type and a variable of primitive type.
-          </p>
-        </statement>
-	<response />
-      </exercise>
-    </exercisegroup>
+    
     
     <exercise label="joex_number_cruncher">
       <statement>
@@ -570,17 +630,329 @@
 	  single <c>int</c> variable as its only instance
 	  variable(a.k.a. field).
           Then define methods that perform the following operations on its number:
-          get, double, triple, square, and cube that returns the
+          getVal, doubleVal, tripleVal, squareVal, and cubeVal that returns the
 	  result, but doesn't modify the object.
           Set the initial value of the number with a constructor as was done with the instance variables in the <c>Riddle</c> class.
         </p>
       </statement>
       <program label="joex_number_cruncher_class" language="java"
 	       interactive="activecode"><input>
-	public class NumberCruncter {
+	public class NumberCruncher {
 
 	}
       </input>
+      	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("NumberCruncher");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("NumberCruncher");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance((Object[])null);
+
+} catch (Exception e) {
+try {
+Class<?> c = Class.forName("NumberCruncher");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+return ctor.newInstance(defaultTestValues);
+}catch (Exception e2) {
+errorMessage = "Couldn't call constructor";
+}
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "1 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"exactly 1 private field");
+	
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"int"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 1 || !typeNames[0].equals("int")
+	    || !typeNames[1].equals("int") ) {
+		found = false;
+	    }
+	    if(types[0] != null || types[1] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 1 int fields");
+    }
+
+    @Test
+    public void test2()
+    {
+    int value = 3;
+    int target = 3;
+    String methodName = "get";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+int value = 3;
+    	    int target = 6;
+	String methodName = "doubleVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+ @Test
+    public void test3()
+    {
+int value = 4;
+    	    int target = 12;
+	String methodName = "tripleVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+
+@Test
+    public void test4()
+    {
+int value = 4;
+    	    int target = 16;
+	String methodName = "squareVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+@Test
+    public void test5()
+    {
+int value = 3;
+    	    int target = 27;
+	String methodName = "cubeVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+
+@Test
+    public void test6()
+    {
+    int value = 5;
+    int target = 5;
+    String methodName = "get";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    }
+    @Test
+    public void test7()
+    {
+int value = 5;
+    	    int target = 10;
+	String methodName = "doubleVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+ @Test
+    public void test8()
+    {
+int value = 1;
+    	    int target = 3;
+	String methodName = "tripleVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+
+@Test
+    public void test9()
+    {
+int value = 6;
+    	    int target = 36;
+	String methodName = "squareVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+@Test
+    public void test10()
+    {
+int value = 7;
+    	    int target = 343;
+	String methodName = "cubeVal";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + " work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't work");
+	}
+    
+    }
+
+
+@Test
+    public void test11()
+    {
+    int value = 5;
+    int target = 5;
+    String methodName = "get";
+	try {
+	    Object[] testValues = {value};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod("doubleVal");
+	    m.invoke(t);
+	    t.getClass().getMethod("doubleVal");
+	    m.invoke(t);
+	    t.getClass().getMethod("tripleVal");
+	    m.invoke(t);
+	    t.getClass().getMethod("squareVal");
+	    m.invoke(t);
+	    t.getClass().getMethod("cubeVal");
+	    m.invoke(t);
+	    m = t.getClass().getMethod(methodName); 
+	    int actual = m.invoke(t);
+	    expect(target,actual,
+		   "doubleVal, tripleVal,squareVal, and cubeVal don't" +
+		   " change the value");
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " + " methodName + " don't " +
+		   "work, or doubleVal, tripleVal, squareVal, or " +
+		   "cubeVal changes the value");
+	}
+    }
+
+   
+}
+
+          ]]>
+	</tests>
+
       </program>
     </exercise>
     <exercise label="joex_number_cruncher_instance">
