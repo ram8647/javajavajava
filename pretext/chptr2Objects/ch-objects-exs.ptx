@@ -1019,7 +1019,7 @@ public class RunestoneTests extends CodeTestHelper
 
 } catch (Exception e) {
 try {
-Class<?> c = Class.forName("NumberCruncher");
+Class<?> c = Class.forName("Cube");
             Constructor[] ctors = c.getDeclaredConstructors();
             Constructor ctor = ctors[0];
 
@@ -1052,10 +1052,10 @@ errorMessage = "Couldn't call constructor";
 	} else {
 	    String[] typeNames = fieldTypes.trim().split(" ");
 	    if(typeNames.length != 1 || !typeNames[0].equals("int")
-	    || !typeNames[1].equals("int") ) {
+	    ) {
 		found = false;
 	    }
-	    if(types[0] != null || types[1] != null) {
+	    if(types[0] != null) {
 		found = false;
 	    }
 
@@ -1227,6 +1227,221 @@ int value = 9;
 
 	}
       </input>
+      	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("AddressBookEntry");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("AddressBookEntry");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance((Object[])null);
+
+} catch (Exception e) {
+try {
+Class<?> c = Class.forName("AddressBookEntry");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+return ctor.newInstance(defaultTestValues);
+}catch (Exception e2) {
+errorMessage = "Couldn't call constructor";
+}
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "3 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"exactly 3 private fields");
+	
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"String","String","String"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 3 || !typeNames[0].equals("String")
+	    || !typeNames[1].equals("String") || !typeNames[2].equals("String") ) {
+		found = false;
+	    }
+	    if(types[0] != null || types[1] != null || types[2] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 3 String fields");
+    }
+
+    @Test
+    public void test2()
+    {
+    String name = "Drew Dynomite"; 
+    String address = "3 Pie Lane Apt. 14"; 
+    String phone = "314-159-2653"; 
+    String target = name;
+    String value = name;
+    String methodName = "getName";
+	try {
+	    Object[] testValues = {name,address,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    String actual = (String) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+    String name = "Drew Dynomite"; 
+    String address = "3 Pie Lane Apt. 14"; 
+    String phone = "314-159-2653"; 
+    String target = address;
+    String value = target;
+    String methodName = "getAddress";
+	try {
+	    Object[] testValues = {name,address,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    String actual = (String) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+
+ @Test
+    public void test3()
+    {
+    String name = "Drew Dynomite"; 
+    String address = "3 Pie Lane Apt. 14"; 
+    String phone = "314-159-2653"; 
+    String target = phone;
+    String value = target;
+    String methodName = "getPhone";
+	try {
+	    Object[] testValues = {name,address,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    String actual = (String) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    
+    }
+
+
+    @Test
+    public void test4()
+    {
+    String name = "Cam Coder"; 
+    String address = "264 H Drive"; 
+    String phone = "640-480-1080"; 
+    String target = name;
+    String value = name;
+    String methodName = "getName";
+	try {
+	    Object[] testValues = {name,address,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    String actual = (String) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+    @Test
+    public void test5()
+    {
+    String name = "Cam Coder"; 
+    String address = "264 H Drive"; 
+    String phone = "640-480-1080"; 
+    String target = address;
+    String value = target;
+    String methodName = "getAddress";
+	try {
+	    Object[] testValues = {name,address,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    String actual = (String) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+
+ @Test
+    public void test6()
+    {
+    String name = "Cam Coder"; 
+    String address = "264 H Drive"; 
+    String phone = "640-480-1080"; 
+    String target = phone;
+    String value = target;
+    String methodName = "getPhone";
+	try {
+	    Object[] testValues = {name,address,phone};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    String actual = (String) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    
+    }
+
+
+
+   
+}
+
+          ]]>
+	</tests>
+
       </program>
     </exercise>
 
