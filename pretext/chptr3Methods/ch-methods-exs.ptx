@@ -464,7 +464,17 @@
 	Then write a <c>main()</c> method that calls the other methods to print the whole song.
       </p>
     </statement>
-    <response />
+    <program label="jmex_twelve_days_prg_main" language="java"
+	       interactive="activecode"><input>
+      public class TwelveDays {
+          public static void main(String[] args) {
+
+          }
+	
+      }
+      </input>
+      </program>
+
   </exercise>
   <exercise label="jmex_code_twelve_days_verse">
     <statement>
@@ -520,11 +530,223 @@
 	The name can be any string, but the rating should be one of the following values:
 	<q>high,</q> <q>medium,</q> or <q>none.</q> Write the following methods for this class:
 	a constructor, <c>Donor(String,String)</c>, that allows you to set both the donor's 
-	name and rating; and access methods to set and get both the name and rating of a donor.
+	name and rating; and access methods to get both the name and rating of a donor.
 	Write a complete Java application program.
       </p>
     </statement>
-    <response />
+          <program label="jmex_donor_class" language="java"
+	       interactive="activecode"><input>
+	public class Donor {
+
+	}
+      </input>
+      	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("Donor");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("Donor");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance((Object[])null);
+
+} catch (Exception e) {
+try {
+Class<?> c = Class.forName("Donor");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+return ctor.newInstance(defaultTestValues);
+}catch (Exception e2) {
+errorMessage = "Couldn't call constructor";
+}
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "2 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"exactly 2 private field");
+	
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"String", "String"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 1 || !typeNames[0].equals("String")
+	    || !typeNames[1].equals("String") ) {
+		found = false;
+	    }
+	    if(types[0] != null || types[1] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 2 String fields");
+    }
+
+    @Test
+    public void test2()
+    {
+    String name = "Max Money";
+    String rating = "high";
+    String value = name;
+    String target = value;
+    String methodName = "getName";
+	try {
+	    Object[] testValues = {name,rating};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+	}
+@Test
+    public void test3()
+    {
+    String name = "Max Money";
+    String rating = "high";
+    String value = rating;
+    String target = value;
+    String methodName = "getRating";
+	try {
+	    Object[] testValues = {name,rating};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+
+    @Test
+    public void test4()
+    {
+    String name = "Monarch Butterfly";
+    String rating = "medium";
+    String value = name;
+    String target = value;
+    String methodName = "getName";
+	try {
+	    Object[] testValues = {name,rating};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+	}
+@Test
+    public void test5()
+    {
+    String name = "Monarch Butterfly";
+    String rating = "medium";
+    String value = rating;
+    String target = value;
+    String methodName = "getRating";
+	try {
+	    Object[] testValues = {name,rating};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+
+    @Test
+    public void test6()
+    {
+    String name = "Bad Value";
+    String rating = "bad rating";
+    String value = rating;
+    String target = "none";
+    String methodName = "getRating";
+	try {
+	    Object[] testValues = {name,rating};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+	}
+@Test
+    public void test7()
+    {
+    String name = "No Rating";
+    String rating = "none";
+    String value = rating;
+    String target = value;
+    String methodName = "getRating";
+	try {
+	    Object[] testValues = {name,rating};
+	    Object t = getTestInstance(testValues);
+	    Method m = t.getClass().getMethod(methodName);
+	    int actual = (Integer) m.invoke(t);
+	    expect(target,actual,
+		   "constructor and " + methodName + "() work for " + value);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),e.toString(),
+		   "constructor and/or " +  methodName + "() don't work");
+	}
+    }
+
+
+   
+   
+}
+
+          ]]>
+	</tests>
+
+      </program>
+
   </exercise>
   <exercise label="jmex_code_challenge_copy_monitor">
     <statement>
