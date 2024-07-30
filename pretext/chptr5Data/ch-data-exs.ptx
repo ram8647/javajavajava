@@ -975,10 +975,19 @@ public class RunestoneTests extends CodeTestHelper
 	    return ctor.newInstance(defaultTestValues);
 
         } catch (Exception e) {
+	    try {
+	
+	    Class<?> c = Class.forName("Temperature");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance();
+	    }catch (Exception f) {
             errorMessage = "Couldn't call constructor";
+	    }
         }
 
-        return null;
+        return errorMessage;
     }
     
     @Test
