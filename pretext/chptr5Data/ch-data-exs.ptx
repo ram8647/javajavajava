@@ -582,7 +582,7 @@ their inheritance relationships and/or associations.
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -612,7 +612,7 @@ public class MethodTester {
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -642,7 +642,7 @@ public class MethodTester {
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -669,7 +669,7 @@ public class MethodTester {
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -693,7 +693,7 @@ public class MethodTester {
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -722,7 +722,7 @@ public class MethodTester {
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -746,7 +746,7 @@ public class MethodTester {
 public class MethodTester {
     public static int square(int n) {
         return n * n;
-}
+    }
     public static void main(String args[]) {
         System.out.println("5 squared = " + square(5));
     }
@@ -943,15 +943,160 @@ public class PrintTable {
 </statement>       
  <program label="jdex_code_temperature_units_task" interactive="activecode" language="java">
 <input>
-public class MethodTester {
-    public static int square(int n) {
-        return n * n;
-}
-    public static void main(String args[]) {
-        System.out.println("5 squared = " + square(5));
-    }
+public class Temperature {
+    
 }
 </input>
+	<tests>
+          <![CDATA[
+import static org.junit.Assert.*;
+import org.junit.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.reflect.*;
+
+public class RunestoneTests extends CodeTestHelper
+{
+
+    public RunestoneTests() {
+	super("Temperature");
+    }
+
+
+    private Object getTestInstance(Object[] defaultTestValues) {
+        String errorMessage = "";
+        try {
+	    Class<?> c = Class.forName("Temperature");
+            Constructor[] ctors = c.getDeclaredConstructors();
+            Constructor ctor = ctors[0];
+
+	    return ctor.newInstance(defaultTestValues);
+
+        } catch (Exception e) {
+            errorMessage = "Couldn't call constructor";
+        }
+
+        return null;
+    }
+    
+    @Test
+    public void test1()
+    {
+	String target = "1 Private";
+	String actual = testPrivateInstanceVariables();
+	expect(target,actual,"only 1 private field");
+	
+    }
+    @Test
+    public void test1b()
+    {
+	boolean found = true;
+	String[] types = {"double"};
+	String fieldTypes =
+	    testInstanceVariableTypes(types);
+	if (fieldTypes.trim().equals("") || fieldTypes.equals("fail")) {
+	    found = false;
+	} else {
+	    String[] typeNames = fieldTypes.trim().split(" ");
+	    if(typeNames.length != 1 || !typeNames[0].equals("double")) {
+		found = false;
+	    }
+	    if(types[0] != null) {
+		found = false;
+	    }
+
+	}
+
+	expect(true,found,"has exactly 1 double field");
+    }
+
+    //    setFahrenheit(double)
+    //    getFahrenheit():double
+    //    setCelsius(double)
+    //    getCelsius():double
+
+    @Test
+    public void test2()
+    {
+	    double testValue = 5.0;
+	    double target = testValue;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m1 = t.getClass().getMethod("setFahrenheit");
+	    m1.invoke(t,testValue),
+	    Method m = t.getClass().getMethod("getFahrenheit");
+	    expect(target,(Double)m.invoke(t),
+		   "setFahrenheit and getFahrenheit work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "setter and/or getter for fahrenheit don't work");
+	}
+    }
+    @Test
+    public void test2b()
+    {
+	    double testValue = 20.0;
+	    double target = testValue;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m1 = t.getClass().getMethod("setCelcius");
+	    m1.invoke(t,testValue),
+	    Method m = t.getClass().getMethod("getCelcius");
+	    expect(target,(Double)m.invoke(t),
+		   "setCelcius and getCelcius work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "setter and/or getter for celcius don't work");
+	}
+    }
+
+
+    @Test
+    public void test3()
+    {
+	    double testValue = 32.0;
+	    double target = (testValue-32.0)*5.0/9.0;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m1 = t.getClass().getMethod("setFahrenheit");
+	    m1.invoke(t,testValue),
+	    Method m = t.getClass().getMethod("getCelcius");
+	    expect(target,(Double)m.invoke(t),
+		   "setFahrenheit and getCelcius work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "setFahrenheit and/or getCelcius don't work");
+	}
+    }
+
+@Test
+    public void test4()
+    {
+	    double testValue = 100.0;
+	    double target = testValue*9.0/5.0+32.0;
+	try {
+	    Object[] testValues = {testValue};
+	    Object t = getTestInstance(testValues);
+	    Method m1 = t.getClass().getMethod("setCelcius");
+	    m1.invoke(t,testValue),
+	    Method m = t.getClass().getMethod("getFahrenheit");
+	    expect(target,(Double)m.invoke(t),
+		   "setFahrenheit and getFahrenheit work for " + testValue);
+	} catch(Exception e) {
+	    expect(String.valueOf(target),"exception",
+		   "setCelcius and/or getFahrenheit don't work");
+	}
+    }
+}
+
+          ]]>
+	</tests>
+
 </program>       
  </exercise>
 </exercises>
