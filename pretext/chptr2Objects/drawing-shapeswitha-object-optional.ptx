@@ -293,10 +293,85 @@ public class HelloWorldCanvas extends Canvas
     </input>
     </program>
     </listing>
-     <p>You can run this Java Swing application below.  Note how we repeatedly use the <c>g.setColor()</c> method to change <c>g</c>'s 
+     <p>You can run this Java Canvas application below.  Note how we repeatedly use the <c>g.setColor()</c> method to change <c>g</c>'s 
      current color before drawing each element of our picture. Can you change the colors and the width of the shapes?
     </p>
-     <interactive iframe="iframe/repl-hello-world.html" width="100%" aspect="1:1"/>
+
+<datafile label="htmlimageutil-src" filename="HtmlImageUtil.java" editable="no" hide="yes">
+<pre>
+<![CDATA[
+        import javax.imageio.ImageIO;
+        import java.awt.image.BufferedImage;
+        import javax.swing.ImageIcon;
+        import java.awt.*;
+        import java.io.*;
+        import java.awt.geom.*;
+        
+        import java.io.ByteArrayOutputStream;
+        import java.util.Base64;
+
+        public class HtmlImageUtil {
+        
+	    /**
+             * Method to show the canvas as an html image
+	     * by printing it to its base64 byte encoding
+	     * encapsualted as an img tag
+             */
+            public static void show(Canvas c, int width, int height)
+               {
+                   try {
+                       ByteArrayOutputStream output = new ByteArrayOutputStream();
+        	       BufferedImage bufImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                       Graphics2D g = bufImage.createGraphics();
+                       c.paint(g);
+                       ImageIO.write(buffImage, "png", output);
+                       String result = 
+                            Base64.getEncoder().encodeToString(output.toByteArray());
+                            
+                       System.out.println("&ltimg src=\"data:image/png;base64," + result + "\"/>");
+                   } catch (IOException e) {
+                       System.out.println("Errors occured in image conversion");
+                   }
+               }
+        
+            
+        }
+       ]]> 
+</pre>
+</datafile>
+
+<program label="ds_hello_world_canvas_practice_prg" interactive="activecode" language="java"  datafile="HtmlImageUtil.java">
+    <input>
+import java.awt.*;
+import javax.swing.JFrame;
+
+public class HelloWorldCanvas extends Canvas
+{
+    public void paint(Graphics g) {
+        g.setColor(Color.cyan);      // Set color
+        g.fillRect(25, 25, 140, 40); // Fill rectangle
+        g.setColor(Color.blue);      // Set color
+        g.drawRect(25, 25, 140, 40); // Outline rectangle
+        g.setColor(Color.black);     // Set color
+        g.drawString("Hello, World!", 50, 50); // Display string
+        g.setColor(Color.yellow);
+        g.fillOval(25, 75, 140, 40); // Fill oval
+        g.setColor(Color.red);
+        g.drawOval(25, 75, 140, 40); // Outline oval
+        g.setColor(Color.black);
+        g.drawString("Welcome to Java", 50, 100);
+    }//paint()
+
+    public static void main(String[] args){
+        HelloWorldCanvas c = new HelloWorldCanvas();
+	// instead of using Swing, show to the web page:
+        HtmlImageUtil.show(c,300, 300);
+    } //main
+} //HelloWorldCanvas
+    </input>
+    </program>
+    
+
   </statement>
 </activity> 
      <p>
