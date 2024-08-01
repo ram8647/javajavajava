@@ -1,11 +1,11 @@
 /*
  * File: CheckerBoard.java
  * Author: Java, Java, Java
- * Description: Draws a checker board.
+ * Description: Draws a 340x340 checker board.
  */
 import java.awt.*;
 
-public class CheckerBoard {
+public class CheckerBoard extends Canvas {
                                         // Default values for a standard checkerboard
     private final int LEFT_X = 10;                     // Position of left
     private final int UPPER_Y = 10;                    // upper corner
@@ -60,7 +60,7 @@ public class CheckerBoard {
      * draw() is the public method that handles drawing of the checkerboard.
      * @param g is a reference to the current Graphics object
      */
-    public void draw(Graphics g) {                     // Draw board and checkers
+    public void paint(Graphics g) {                     // Draw board and checkers
 	drawBoard(g);
 	drawCheckers(g);
     } // draw()
