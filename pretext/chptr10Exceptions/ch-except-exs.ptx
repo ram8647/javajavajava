@@ -353,7 +353,7 @@
     </statement>
       <response />
     </exercise>
-               <exercise label="jexcex_tracing_call_stack_1">       
+               <exercise label="jexcex_tracing_call_stack_1"  attachment="yes">       
 <title>Call Stack</title>       
  <statement>
 
@@ -394,7 +394,7 @@ public class ExerciseExample {
     </statement>
       <response />
     </exercise>
-               <exercise label="jexcex_static_scoping">       
+               <exercise label="jexcex_static_scoping"  attachment="yes">       
 <title>Static Scoping</title>       
  <statement>
 
@@ -452,7 +452,17 @@ declared</c><ellipsis /> .
         <q>ERROR: Negative value in X coordinate.</q>
       </p>
     </statement>
-      <response />
+      <program label="jaex_try_catch_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+	        public static void main(String args[]) {
+	            // write try/catch block here.
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jexcex_trace_int_field">       
 <title>Trace IntField</title>       
@@ -508,8 +518,18 @@ declared</c><ellipsis /> .
         Exceptions thrown with this constructor should return the constructor's argument when <c>getMessage()</c> is invoked.
       </p>
     </statement>
-      <response />
-    </exercise>
+      <program label="jaex_invalid_password_prg" interactive="activecode" language="java">
+	<input>
+public class InvalidPasswordException extends RuntimeException {		
+    public static void main(String args[]) {
+		    
+    }
+}
+</input>
+</program>    
+
+	       </exercise>
+
                <exercise label="jexcex_extend_int_field">       
 <title>Extend IntField</title>       
  <statement>
@@ -519,8 +539,45 @@ declared</c><ellipsis /> .
         In other words,
         it should throw an exception if the user types in a value lower than the lower bound or greater than the upper bound.
       </p>
-    </statement>
-      <response />
+ </statement>
+ <datafile label="intfield-src" filename="IntField.java" editable="no" hide="yes">
+<pre>
+<![CDATA[
+
+import javax.swing.*;
+public class IntField extends JTextField {
+    private int bound = Integer.MAX_VALUE;
+    public IntField (int size) {
+        super(size);
+    }
+    public IntField(int size, int max) {
+        super(size);
+        bound = max;
+    }
+    public int getInt() throws NumberFormatException,
+                               IntOutOfRangeException {
+        int num = Integer.parseInt(getText());
+        if (num > bound)
+            throw new IntOutOfRangeException(bound);
+        return num;
+    } // getInt()
+} // IntField
+]]>
+</pre>
+</datafile>
+      <program label="jaex_min_max_int_field_prg" interactive="activecode" language="java">
+<input>
+ public class MinMaxIntField extends IntField {
+   // fill in your code here
+ 
+   public static void main(String args[]) {
+       // add some code to test your new field
+		    
+   }
+}
+</input>
+</program>    
+
     </exercise>
                <exercise label="jexcex_null_pointer_q">       
 <title>Null In Sort</title>       
