@@ -167,12 +167,11 @@ private void drawBoxes(Graphics g, int level,
             location and the length of its side.)</p>
             </li>
             </ol>
-     <program language="java" interactive="activecode"><input>
+     <program label="draw_box_recursive" language="java" interactive="activecode"  datafile="HtmlImageUtil.java"><input>
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class Boxes {
+public class Boxes extends Canvas {
 
     private int level = 9;
 
@@ -186,33 +185,21 @@ public class Boxes {
     } // drawBoxes()
 
     /**
-     * draw() is the public method that handles drawing of the boxes 
+     * paint() is the public method that handles drawing of the boxes 
      * @param g is a reference to the current Graphics object
      */
-    public void draw(Graphics g) {
+    public void paint(Graphics g) {
         drawBoxes(g, level, 20, 20, 300, 10);
-    } // draw()
+    } // paint()
 
     public static void main(String args[]) {
-        new DrawingGUI("Boxes");
+        Boxes b = new Boxes();
+        // display code changed to work in ActiveCode
+        HtmlImageUtil.show(b,340,360);
     }
 } // Boxes
 
-class DrawingGUI extends JFrame {
 
-    public DrawingGUI(String title) {
-        setTitle(title);
-        setVisible(true);
-        setSize(340, 360);
-        getContentPane().add(new DrawingPanel());
-    }
-}
-
-class DrawingPanel extends JPanel {
-    public void paintComponent(Graphics g) {
-        new Boxes().draw(g); // Create a Boxes object and call draw()
-    }
-}
  </input></program>      
     </statement>
     <solution>
@@ -342,10 +329,52 @@ private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
 <activity>
 <title>Sierpinski Gasket</title>
 <statement>
-  <p>
-    <url href="https://replit.com/@RalphMorelli/SierpinskiGasket?v=1" visual="">Click on this repl</url>
-     to explore the various levels of the Sierpinski Gasket. 
-  </p>
+  <program label="draw_sierpinski_recursive" language="java" interactive="activecode"  datafile="HtmlImageUtil.java"><input>
+import javax.swing.*;
+import java.awt.*;
+
+public class Triangles extends Canvas {
+
+    private int level = 9;
+
+    /**
+ * drawGasket()---recursively draws the Sierpinski gasket
+ *  pattern, with points (p1X, p1Y),(p2X, p2Y),(p3X, p3Y)
+ *  representing the vertices of its enclosing triangle.
+ * level (>= 0) is the recursion parameter (base: = 0)
+ */
+private void drawGasket(Graphics g, int lev, int p1X, int p1Y,
+                   int p2X, int p2Y, int p3X, int p3Y) {
+    g.drawLine(p1X, p1Y, p2X, p2Y);  // Draw a triangle
+    g.drawLine(p2X, p2Y, p3X, p3Y);
+    g.drawLine(p3X, p3Y, p1X, p1Y);
+    if (lev > 0) { // If more levels, draw 3 smaller gaskets
+      int q1X = (p1X + p2X) / 2;    int q1Y = (p1Y + p2Y) / 2;
+      int q2X = (p1X + p3X) / 2;    int q2Y = (p1Y + p3Y) / 2;
+      int q3X = (p2X + p3X) / 2;    int q3Y = (p2Y + p3Y) / 2;
+      drawGasket(g, lev - 1, p1X, p1Y, q1X, q1Y, q2X, q2Y);
+      drawGasket(g, lev - 1, p2X, p2Y, q1X, q1Y, q3X, q3Y);
+      drawGasket(g, lev - 1, p3X, p3Y, q2X, q2Y, q3X, q3Y);
+    } // if
+} // drawGasket()
+
+    /**
+     * paint() is the public method that handles drawing of the boxes 
+     * @param g is a reference to the current Graphics object
+     */
+    public void paint(Graphics g) {
+        drawGasket(g, level, 10, 10, 390, 10,200,390);
+    } // paint()
+
+    public static void main(String args[]) {
+        Triangles b = new Triangles();
+        // display code changed to work in ActiveCode
+        HtmlImageUtil.show(b,400,400);
+    }
+} // Triangles
+
+
+ </input></program>      
 </statement>
 </activity>
   </subsection>
