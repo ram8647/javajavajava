@@ -704,7 +704,7 @@ n1 = temp;
 
         <p>
           Explain why the following method does not successfully swap the values of its two parameters?
-          Hint: Think about the difference between value and reference parameters.
+          <hint>Think about the difference between value and reference parameters.</hint>
  <program language="java"><input>
 public void swapEm(int n1, int n2) {
     int temp = n1;
@@ -823,7 +823,58 @@ public void swapEm(int n1, int n2) {
       </statement>
       <response />
     </exercise>
-                 <exercise label="jaex_code_average_array_method">       
+
+      <exercisegroup>
+ <title>Writing Array Methods</title>
+ <introduction>
+<p>
+    Each of the  problems that follow asks you to write a method.
+    Of course, as you are developing the method in a stepwise
+    fashion, you should test it. Here's a simple application
+    program that you can use for this purpose:
+</p>
+<program language="java"><input>
+import java.util.Arrays;
+
+public class MethodTester {
+    public static String stringify(Object[] s) {
+        StringBuffer sb = new StringBuffer();
+        int width = 0;
+	final int MAX_WIDTH = 60;
+	for(Object o : s) {
+	   if(width + o.toString().length() >= MAX_WIDTH) {
+	      sb.append("\n");
+	      width = 0;
+	   }
+           sb.append(o.toString());
+	   sb.append(",");
+	   width += o.toString().length() + 1;
+	}
+	if (sb.charAt(sb.length()-1) == ',') {
+           sb.deleteCharAt(sb.length()-1);
+	   sb.append("\n");
+	}
+
+	return sb.toString();
+    }
+    public static void main(String args[]) {
+        Integer[] x = new Integer[100];
+        Arrays.fill(x,12345);
+        System.out.println("the array is:\n" + stringify(x));
+    }
+}
+
+</input></program>
+    <p>
+        Just replace
+        the <c> stringify()</c> method with your method. Note that
+        you must declare your method <c> static</c> if you want
+        to call it directly from <c> main()</c> as we do here.
+    </p>
+    </introduction>
+      
+
+    <exercise label="jaex_code_average_array_method">       
 <title>Array Average Method</title>       
  <statement>
 
@@ -831,7 +882,19 @@ public void swapEm(int n1, int n2) {
           Write a method that will compute the average of all the elements of a two-dimensional array of <c>float</c>.
         </p>
       </statement>
-      <response />
+      <program label="jaex_average_two_d_prg" interactive="activecode" language="java">
+<input>
+	    public class MethodTester {
+		public static Object renameMe(Object[] arr) {
+		    return null;
+		}
+		public static void main(String args[]) {
+		    System.out.println("Array something:  " + renameMe(null));
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_find_last_greater">       
 <title>Find Last Greater</title>       
@@ -844,8 +907,21 @@ public void swapEm(int n1, int n2) {
           and returns the location of the last element of the array that is greater than or equal to the second parameter.
         </p>
       </statement>
-      <response />
-    </exercise>
+      <program label="jaex_last_greater_prg" interactive="activecode" language="java">
+<input>
+	    public class MethodTester {
+		public static Object renameMe(Object[] arr) {
+		    return null;
+		}
+		public static void main(String args[]) {
+		    System.out.println("Array something:  " + renameMe(null));
+		}
+	    }
+</input>
+</program>    
+
+		 </exercise>
+      </exercisegroup>
                  <exercise label="jaex_code_test_magic_square">       
 <title>Test Magic Square</title>       
  <statement>
@@ -865,7 +941,16 @@ public void swapEm(int n1, int n2) {
  </input></program>
         </p>
       </statement>
-      <response />
+      <program label="jaex_magic_square_prg" interactive="activecode" language="java">
+<input>
+	    public class MagicSquare {
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_bigger_magic_square">       
 <title>Test Bigger Magic Square</title>       
@@ -876,7 +961,17 @@ public void swapEm(int n1, int n2) {
           up to <m>4\; \times\; 4</m>.
         </p>
       </statement>
-      <response />
+      <program label="jaex_bigger_magic_prg" interactive="activecode" language="java">
+<input>
+	    public class BiggerMagicSquare {
+		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_relative_frequencies">       
 <title>Relative Frequencies</title>       
@@ -886,7 +981,16 @@ public void swapEm(int n1, int n2) {
           Modify the <c>AnalyzeFreq</c> program so that it can display the relative frequencies of the 10 most frequent and 10 least frequent letters.
         </p>
       </statement>
-      <response />
+      <program label="jaex_analyze_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_sort_and_merge">       
 <title>Sort Then Merge</title>       
@@ -900,7 +1004,16 @@ public void swapEm(int n1, int n2) {
           into one 50-element array.
         </p>
     </statement>
-      <response />
+      <program label="jaex_merge_sort_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jaex_code_big_integer">       
 <title>Implement BigInteger</title>       
@@ -914,7 +1027,16 @@ public void swapEm(int n1, int n2) {
 	  <c>java.math.BigInteger</c> for your implementation)
         </p>
     </statement>
-      <response />
+      <program label="jaex_big_int_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jaex_code_client_purchases">       
 <title>Client Purchases Structure</title>       
@@ -928,7 +1050,16 @@ public void swapEm(int n1, int n2) {
           Others may have 50 purchases.
         </p>
       </statement>
-      <response />
+      <program label="jaex_comp_warehouse_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_test_anagrams">       
 <title>Test Anagrams</title>       
@@ -941,7 +1072,16 @@ public void swapEm(int n1, int n2) {
           Write a Java program that accepts two words as input and determines if they are anagrams.
         </p>
     </statement>
-      <response />
+      <program label="jaex_anagram_test_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jaex_code_anagram_dictionary">       
 <title>Anagram Dictionary</title>       
@@ -966,7 +1106,16 @@ eflt:  felt left
 opt:   opt pot top
  </input></program>
       </statement>
-      <response />
+      <program label="jaex_anagram_dict_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_distance_class">       
 <title>Distance Class</title>       
@@ -982,7 +1131,16 @@ opt:   opt pot top
           Another useful method would tell the user the closest city to a given city.
         </p>
       </statement>
-      <response />
+      <program label="jaex_distance_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_word_guess_keyboard">       
 <title>Word Guess Game</title>       
@@ -993,7 +1151,16 @@ opt:   opt pot top
           Use a <c>KeyboardReader</c>.
         </p>
       </statement>
-      <response />
+      <program label="jaex_word_guess_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_word_guesser_class">       
 <title>Word Guesser Class</title>       
@@ -1003,11 +1170,20 @@ opt:   opt pot top
           Write a smarter version of the <c>WordGuesser</c> class that
           <q>knows</q>
           which letters of the English language are most frequent.
-          HINT: Rather than using random guesses,
-          store the player's guesses in a string in order of decreasing frequency: "ETAONRISHLGCMFBDGPUKJVWQXYZ".
+          <hint>Rather than using random guesses,
+          store the player's guesses in a string in order of decreasing frequency: "ETAONRISHLGCMFBDGPUKJVWQXYZ".</hint>
         </p>
       </statement>
-      <response />
+      <program label="jaex_guess_class_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jaex_code_cli_sliding">       
 <title>Sliding Tiles CLI</title>       
@@ -1017,7 +1193,16 @@ opt:   opt pot top
           Write a command line interface, CLI, version of the <c>SlidingTilePuzzle</c>. You will need to make modifications to the <c>SlidingTilePuzzle</c> class.
         </p>
       </statement>
-      <response />
+      <program label="jaex_tile_cli_prg" interactive="activecode" language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
     </exercises>
 </section>
