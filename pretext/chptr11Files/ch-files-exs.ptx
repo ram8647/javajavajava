@@ -319,8 +319,20 @@
       <p>
         Write a program that reads a text file and reports the number of characters and lines contained in the file.
       </p>
-    </statement>
-      <response />
+ </statement>
+ <program label="jfex_file_stats_prg" interactive="activecode" language="java"  datafile="HtmlImageUtil.java">
+   <input>
+public class Program {		
+    public static void main(String args[]) {
+          // HtmlImageUtil.java is available to this program
+          String filename = "HtmlImageUtil.java"; 
+		    
+    }
+}
+
+
+    </input>
+ </program>
     </exercise>
                <exercise label="jfex_code_file_word_counter">       
 <title>Word Counter</title>       
@@ -350,26 +362,94 @@
  <statement>
 
       <p>
-        Write a program that will read a file of <c>int</c> s into memory,
+        Write a program that will read a file of <c>int</c>s into memory,
         sort them in ascending order,
         and output the sorted data to a second file.
       </p>
-    </statement>
-      <response />
+ </statement>
+ <datafile label="short_ints_file" filename="jfex_sort_me.txt"
+	   editable="no" hide="yes">
+   <pre>
+     131
+     20
+     40
+     100
+     1
+     48
+     10000
+     79
+     200
+     21
+     3
+     9
+     101
+     35
+</pre>
+ </datafile>
+      <program label="jfex_sort_ascending_prg" interactive="activecode"
+	       language="java" datafile="jfex_sort_me.txt">
+<input>
+	    public class Program {		
+	        public static void main(String args[]) {
+	            String filename = "jfex_sort_me.txt"; // file to sort
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_merge_files">       
 <title>Sorted Merge Files</title>       
  <statement>
 
       <p>
-        Write a program that will read two files of <c>int</c> s, which are already sorted into ascending order,
+        Write a program that will read two files of <c>int</c>s, which are already sorted into ascending order,
         and merge their data.
         For example,
         if one file contains 1, 3, 5, 7, 9, and the other contains 2, 4, 6, 8, 10,
         then the merged file should contain 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
       </p>
-    </statement>
-      <response />
+ </statement>
+  <datafile label="sorted_ints_file_a" filename="jfex_sorted_a.txt"
+	   editable="no" hide="yes">
+   <pre>
+     3
+     7
+     11
+     12
+     14
+     18
+     33
+</pre>
+ </datafile>
+  <datafile label="sorted_ints_file_b" filename="jfex_sorted_b.txt"
+	   editable="no" hide="yes">
+   <pre>
+     5
+     6
+     8
+     15
+     19
+     22
+     28
+     35
+</pre>
+ </datafile>
+
+      <program label="jfex_file_merge_prg" interactive="activecode"
+	       language="java" datafile="jfex_sorted_a.txt jfex_sorted_b.txt">
+<input>
+	    public class Program {		
+	        public static void main(String args[]) {
+	            String sortedfile1 = "jfex_sorted_a.txt";
+		    String sortedfile2 = "jfex_sorted_b.txt";
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_read_file_method">       
 <title>Read File Method</title>       
@@ -379,13 +459,37 @@
         Suppose you have a file of data for a geological survey.
         Each record consists of a longitude,
         a latitude, and an amount of rainfall,
-        all represented by <c>double</c> s.
+        all represented by <c>double</c>s.
         Write a method to read this file's data and print them on the screen,
         one record per line.
         The method should be <c>void</c> and it should take the name of the file as its only parameter.
       </p>
-    </statement>
-      <response />
+ </statement>
+ <datafile label="lat_lon_rain_file" filename="jfex_lat_lon_rain.txt"
+	   editable="no" hide="yes">
+ <pre>
+30.0 75.00  9.4047737
+30.0 77.50  0.4994003
+30.0 78.75  5.9408302
+27.5 72.50  0.3945955
+27.5 78.75 23.1913109
+25.0 72.50  1.7190878
+25.0 75.00  6.0424900
+25.0 77.50  0.6005277
+25.0 78.75  9.5088654
+ </pre>
+ </datafile>
+      <program label="jfex_lat_lon_prg" interactive="activecode"
+	       language="java" datafile="jfex_lat_lon_rain.txt">
+	<input>
+public class Program {		
+    public static void main(String args[]) {
+        String filename = "jfex_lat_lon_rain.txt"; // the data file.
+    }
+}
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_generate_records_to_file">       
 <title>Generate Records to File</title>       
@@ -400,7 +504,17 @@
         and rainfalls have values in the range 0 to 20 inches.
       </p>
     </statement>
-      <response />
+      <program label="jfex_gen_record_prg" interactive="activecode"
+	       language="java">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_copy_file_program">       
 <title>Safe file Copy</title>       
@@ -413,7 +527,17 @@
         <hint>Read and write the file as a file of <c>byte</c>.</hint>
       </p>
     </statement>
-      <response />
+      <program label="jfex_copy_file_prg" interactive="activecode"
+	       language="java" datafile="jfex_lat_lon_rain.txt">
+<input>
+	    public class Program {		
+		public static void main(String args[]) {
+		    String filename = "jfex_lat_lon_rain.txt"; // the data file.
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_address_class">       
 <title>Address Class</title>       
@@ -428,7 +552,16 @@
 <c>writeToFile()</c> methods.
       </p>
     </statement>
-      <response />
+      <program label="jfex_address_prg" interactive="activecode" language="java">
+<input>
+	    public class Address {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_student_with_address">       
 <title>Student with Address</title>       
@@ -440,7 +573,16 @@
         Modify the <c>ObjectIO</c> program to accommodate this new definition of <c>Student</c> and test your program.
       </p>
     </statement>
-      <response />
+      <program label="jfex_student_address_prg" interactive="activecode" language="java">
+<input>
+	    public class Student {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                <exercise label="jfex_code_directory_listing">       
 <title>Directory Listing</title>       
@@ -474,7 +616,16 @@ Listing for directory: myfiles
         This number can't easily be converted into a date, so just report its value.
       </p>
       </statement>
-      <response />
+      <program label="jfex_directory_prg" interactive="activecode" language="java">
+<input>
+	    public class Directory {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jfex_code_save_game">       
 <title>Save OneRowNim Game</title>       
@@ -483,11 +634,20 @@ Listing for directory: myfiles
       <p>
         Challenge: Modify the <c>OneRowNimGUI</c> class that is listed in Chapter<nbsp/>4's Figure<nbsp/> 4-25 so 
         that the user can save the position of the game to a file or open and read a game position from a file.
-        You should add two new <c>JButton</c> s to the GUI interface.
+        You should add two new <c>JButton</c>s to the GUI interface.
         Use the object serialization example as a model for your input and output streams.
       </p>
       </statement>
-      <response />
+      <program label="jfex_save_one_row_prg" interactive="activecode" language="java">
+<input>
+	    public class OnewRowNimGUI {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jfex_code_grep_program">       
 <title>Java Grep Program</title>       
@@ -500,7 +660,16 @@ Listing for directory: myfiles
         Write a Java version of this program that prompts the user for the name of the file and the string to search for.
       </p>
       </statement>
-      <response />
+      <program label="jfex_grep_prg" interactive="activecode" language="java">
+<input>
+	    public class GrepProgram {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
                  <exercise label="jfex_code_copy_file">       
 <title>Copy File to file or directory</title>       
@@ -519,7 +688,16 @@ Listing for directory: myfiles
         copy the old file to the new file.
       </p>
     </statement>
-      <response />
+      <program label="jfex_copy_more_prg" interactive="activecode" language="java">
+<input>
+	    public class Copy {		
+		public static void main(String args[]) {
+		    
+		}
+	    }
+</input>
+</program>    
+
     </exercise>
   </exercises>
 </section>
