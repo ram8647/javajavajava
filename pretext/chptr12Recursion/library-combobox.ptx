@@ -73,11 +73,13 @@
     <p>
       The first step is to declare and instantiate the <c>JComboBox</c>es as instance variables:
     </p>
- <program language="java"><input>
+    <program language="java"><input>
+      	      <![CDATA[
 private String items[] =
     {"Sierpinski Gasket","Nested Boxes"};
-private JComboBox patterns = new JComboBox(items);
-private JComboBox levels = new JComboBox();
+private JComboBox<String> patterns = new JComboBox<>(items);
+private JComboBox<String> levels = new JComboBox<>();
+]]>
  </input></program>
     <p>
       Note that in this case we pass the constructor for the 
@@ -167,20 +169,21 @@ public void itemStateChanged(ItemEvent e) {
 -->
     <listing xml:id="fig-recursivepatterns">
       <caption>The <c>RecursivePatterns</c> program.</caption>
- <program language="java"><input>
+      <program language="java"><input>
+	<![CDATA[
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
 public class RecursivePatterns extends JFrame implements ItemListener  {
   private String choices[] = {"Sierpinski Gasket", "Nested Boxes"};
-  private JComboBox patterns = new JComboBox(choices); // Pattern choices
-  private JComboBox levels = new JComboBox();          // Level choices
+  private JComboBox<String> patterns = new JComboBox<>(choices); // Pattern choices
+  private JComboBox<String> levels = new JComboBox<>();          // Level choices
   private Canvas canvas = new Canvas();                // Drawing panel
   private JPanel controls = new JPanel();
 
   public RecursivePatterns() {
-    for (int k=0; k &lt; 10; k++)            // Add 10 levels
+    for (int k=0; k < 10; k++)            // Add 10 levels
       levels.addItem(k + "" );
     patterns.setSelectedItem(choices[0]); // Initialize menus
     levels.setSelectedItem("4");
@@ -204,7 +207,8 @@ public class RecursivePatterns extends JFrame implements ItemListener  {
       JFrame f = new RecursivePatterns();
       f.setVisible(true);
    }
-} // RecursivePatterns
+   } // RecursivePatterns
+   ]]>
  </input></program>
 </listing>
 
@@ -314,20 +318,21 @@ public class Canvas extends JPanel {
             <li><p>Add your revised method to the <c>RecursivePatterns</c> program as a third pattern.</p>
             </li>
             </ol>
- <program language="java" interactive="activecode"><input>
+	    <program language="java" interactive="activecode" datafile="HtmlImageUtil.java"><input>
+	      <![CDATA[ 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class RecursivePatterns extends JFrame implements ItemListener {
     private String choices[] = { "Sierpinski Gasket", "Nested Boxes" };
-    private JComboBox patterns = new JComboBox(choices); // Pattern choices
-    private JComboBox levels = new JComboBox(); // Level choices
+    private JComboBox<String> patterns = new JComboBox<>(choices); // Pattern choices
+    private JComboBox<String> levels = new JComboBox<>(); // Level choices
     private Canvas canvas = new Canvas(); // Drawing panel
     private JPanel controls = new JPanel();
 
     public RecursivePatterns() {
-        for (int k = 0; k &lt; 10; k++) // Add 10 levels
+        for (int k = 0; k < 10; k++) // Add 10 levels
             levels.addItem(k + "");
         patterns.setSelectedItem(choices[0]); // Initialize menus
         levels.setSelectedItem("4");
@@ -349,7 +354,9 @@ public class RecursivePatterns extends JFrame implements ItemListener {
 
     public static void main(String args[]) {
         JFrame f = new RecursivePatterns();
-        f.setVisible(true);
+        // instead of using Swing, show to the web page:
+        HtmlImageUtil.show(f,500, 500);
+
     }
 } // RecursivePatterns
 
@@ -430,7 +437,8 @@ class Canvas extends JPanel {
                     side - 2 * delta, delta);
         }
     } // drawBoxes()
-} // Canvas
+    } // Canvas
+    ]]>
  </input></program>
 </statement>
 <solution>
