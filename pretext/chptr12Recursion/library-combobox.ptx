@@ -315,7 +315,8 @@ public class Canvas extends JPanel {
             that reduces the length of the side at each level by a fixed ratio of the length of the side, 
             for example, 10 percent.</p>
             </li>
-            <li><p>Add your revised method to the <c>RecursivePatterns</c> program as a third pattern.</p>
+            <li><p>Add your revised method to the
+	    <c>RecursivePatterns</c> program below as a third pattern.</p>
             </li>
             </ol>
 	    <program language="java" interactive="activecode" datafile="HtmlImageUtil.java"><input>
@@ -324,38 +325,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class RecursivePatterns extends JFrame implements ItemListener {
-    private String choices[] = { "Sierpinski Gasket", "Nested Boxes" };
-    private JComboBox<String> patterns = new JComboBox<>(choices); // Pattern choices
-    private JComboBox<String> levels = new JComboBox<>(); // Level choices
-    private Canvas canvas = new Canvas(); // Drawing panel
-    private JPanel controls = new JPanel();
-
-    public RecursivePatterns() {
-        for (int k = 0; k < 10; k++) // Add 10 levels
-            levels.addItem(k + "");
-        patterns.setSelectedItem(choices[0]); // Initialize menus
-        levels.setSelectedItem("4");
-        canvas.setBorder(BorderFactory.createTitledBorder("Drawing Canvas"));
-        controls.add(levels); // Control panel for menus
-        controls.add(patterns);
-        getContentPane().add(controls, "North"); // Add controls
-        getContentPane().add(canvas, "Center"); // Add drawing panel
-        levels.addItemListener(this); // Register menus with listener
-        patterns.addItemListener(this);
-        setSize(canvas.WIDTH, canvas.HEIGHT + controls.getSize().width);
-    } // init()
-
-    public void itemStateChanged(ItemEvent e) {
-        canvas.setPattern(patterns.getSelectedIndex(),
-                levels.getSelectedIndex());
-        repaint(); // Repaint the JFrame
-    } // itemStateChanged()
-
+public class RecursivePatterns {
     public static void main(String args[]) {
-        JFrame f = new RecursivePatterns();
-        // instead of using Swing, show to the web page:
-        HtmlImageUtil.show(f,500, 500);
+        Canvas f = new Canvas();
+        for(int i = 0; i < 2; ++i) {
+            for (int j = 3; j < 10; ++j) {
+              f.setPattern(i,j);
+              f.setBackground(Color.white);
+              // instead of using Swing, show to the web page:
+              HtmlImageUtil.show(f,400, 400);
+                System.out.println("<br/>");
+            }
+        }
 
     }
 } // RecursivePatterns
