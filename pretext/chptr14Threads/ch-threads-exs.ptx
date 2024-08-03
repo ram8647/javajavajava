@@ -1,102 +1,350 @@
 <section xml:id="ch-template-exs">
     <title>Chapter Exercises</title>
+
+<exercises>
+<title>Thread Exercises</title>
+
+
     <p><term>Note:</term> For programming exercises, <term>first</term> draw a UML class diagram 
     describing all classes and their inheritance relationships and/or associations.}
       </p>
-      <p>
-    <ol>
-      <li>
-        <p>
-          Explain the difference between the following pairs of terms:
-          <ol>
-            Blocked and <em>ready</em>. Priority and <em>round-robin</em> scheduling. Producer and <em>consumer</em>. Monitor and <em>lock</em>. Concurrent and <em>time slicing</em>. Mutual exclusion and <em>critical section</em>. Busy and <em>nonbusy</em> waiting.
-          </ol>
-        </p>
-       </li>
-      <li>
+
+
+
+<exercise label="jthx_matching_java_definitions">
+      <title>Java Concept Matching</title>
+      <statement>
+	<p>
+          Match each of the following 
+	  Thread concepts.
+	</p>
+      </statement>
+      <matches>
+	<match>
+	  <order>1</order>
+          <premise><em>blocked</em></premise>
+          <response>prevented from running when it is waiting for some kind of I/O operation to complete </response>
+	</match>
+	<match>
+	  <order>2</order>
+          <premise><em>ready</em></premise>
+          <response>waiting for the CPU to become available.</response>
+	</match>
+	<match>
+	  <order>3</order>
+          <premise><em>priority</em> scheduling</premise>
+          <response>scheduling threads according to relative priority. Higher priority threads get the CPU first</response>
+	</match>
+	<match>
+	  <order>4</order>
+          <premise><em>round-robin</em> scheduling</premise>
+          <response> threads of the same priority take turns using the CPU with each thread getting a fixed amount (quantum) of time. </response>
+	</match>
+	<match>
+	  <order>5</order>
+	  <premise><em>producer</em> </premise>
+          <response>a thread that produces a resource and acts like a source </response>
+	</match>
+	<match>
+	  <order>6</order>
+          <premise><em>consumer</em>  </premise>
+          <response>a thread that uses a resource and acts like a sink </response>
+	</match>
+	<match>
+	  <order>7</order>
+          <premise>monitor</premise>
+          <response> a mechanism that guarantees mutually exclusive access to a synchronized method among a group of cooperating threads.</response>
+	</match>
+	<match>
+	  <order>8</order>
+          <premise>lock</premise>
+          <response>a mechanism to prevent other threads from using an objects synchronized methods </response>
+	</match>
+	<match>
+	  <order>9</order>
+          <premise> concurrent </premise>
+          <response>having multiple threads sharing a CPU over a period of time</response>
+	</match>
+	<match>
+	  <order>10</order>
+          <premise> time slicing </premise>
+          <response>a method of sharing the cpu between threads by giving each thread a small amount of the CPU's time.</response>
+	</match>
+	<match>
+	  <order>11</order>
+          <premise> busy waiting </premise>
+          <response>when the CPU is in a trivial loop for a fixed amount of time to delay a thread's progress</response>
+	</match>
+
+<match>
+	  <order>12</order>
+          <premise>nonbusy waiting </premise>
+          <response>a thread gives up the CPU to another thread while waiting for an event or condition to occur.</response>
+	</match>
+
+<match>
+	  <order>13</order>
+          <premise> mutual exclusion </premise>
+          <response>among a group of threads, one and only one thread has access to a certain resource at a time.</response>
+	</match>
+
+<match>
+	  <order>14</order>
+          <premise> critical section </premise>
+          <response>a part of code that should be executed in a mutually exclusive manner by a group of threads.</response>
+	</match>
+
+      </matches>
+      </exercise>
+
+         <exercisegroup>
+    <title>Fill in the Blanks</title>
+    <introduction>
+
         <p>
           Fill in the blanks.
-          <ol>
-            <li>
+          </p>
+	  </introduction>
+                     <exercise label="jthx_fill_in_1">       
+<title></title>       
+ <statement>
+            
               <p>
-                <c>__________</c> happens when a CPU's time is divided among several different threads.
+                <var width="15"/> happens when a CPU's time is divided among several different threads.
               </p>
-            </li>
-            <li>
+            </statement>
+      <setup>
+          <var case="insensitive">
+            <condition string="Time slicing|concurrency|scheduling">
+              <feedback>
+		<p>Correct, Time slicing is expected, but concurrency
+		and scheduling were also accepted.</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+		<p>Try again. You may want to review the technical terms from this chapter.</p>
+              </feedback>
+            </condition>
+          </var>
+	</setup>	
+
+    </exercise>
+                                 <exercise label="jthx_fill_in_2">       
+<title></title>       
+ <statement>
+
               <p>
-                A method that should not be interrupted during its execution is known as a <c>__________</c> .
+                A method that should not be interrupted during its execution is known as a <var width="22"/> .
               </p>
-            </li>
-            <li>
+            </statement>
+      <setup>
+          <var case="synchronized method">
+            <condition string="abstract">
+              <feedback>
+		<p>Correct</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+		<p>Try again. You may want to review the technical terms from this chapter.</p>
+              </feedback>
+            </condition>
+          </var>
+	</setup>	
+
+    </exercise>
+                                 <exercise label="jthx_fill_in_3">       
+<title></title>       
+ <statement>
+
               <p>
-                The scheduling algorithm in which each thread gets an equal portion of the CPU's time is known as <c>__________</c> .
+                The scheduling algorithm in which each thread gets an equal portion of the CPU's time is known as <var width="25"/> .
               </p>
-            </li>
-            <li>
+            </statement>
+      <setup>
+          <var case="insensitive">
+            <condition string="round-robin
+			       scheduling|round-robin|round
+			       robin|round robin scheduling">
+              <feedback>
+		<p>Correct</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+		<p>Try again. You may want to review the technical terms from this chapter.</p>
+              </feedback>
+            </condition>
+          </var>
+	</setup>	
+
+    </exercise>
+                                 <exercise label="jthx_fill_in_4">       
+<title></title>       
+ <statement>
+
               <p>
-                The scheduling algorithm in which some threads can preempt other threads is known as <c>__________</c>.
+                The scheduling algorithm in which some threads can preempt other threads is known as <var width="20"/>.
               </p>
-            </li>
-            <li>
+            </statement>
+      <setup>
+          <var case="priority scheduling|priority">
+            <condition string="abstract">
+              <feedback>
+		<p>Correct</p>
+              </feedback>
+            </condition>
+	    
+            <condition string=".*">
+              <feedback>
+		<p>Try again. You may want to review the technical terms from this chapter.</p>
+              </feedback>
+            </condition>
+          </var>
+	</setup>	
+
+    </exercise>
+                                 <exercise label="jthx_fill_in_5">       
+<title></title>       
+ <statement>
+
               <p>
-                A <c>__________</c> is a mechanism that enforces mutually exclusive access to a synchronized method.
+                A <var width="15"/> is a mechanism that enforces mutually exclusive access to a synchronized method.
               </p>
-            </li>
-            <li>
+            </statement>
+      <setup>
+          <var case="insensitive">
+            <condition string="monitor">
+              <feedback>
+		<p>Correct</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+		<p>Try again. You may want to review the technical terms from this chapter.</p>
+              </feedback>
+            </condition>
+          </var>
+	</setup>	
+
+    </exercise>
+                                 <exercise label="jthx_fill_in_6">       
+<title></title>       
+ <statement>
+
               <p>
-                A thread that performs an I/O operation may be forced into the <c>__________</c> state until the operation is completed.
+                A thread that performs an I/O operation may be forced into the <var width="15"/> state until the operation is completed.
               </p>
-            </li>
-          </ol>
-        </p>
-      </li>
-      <li>
+            </statement>
+      <setup>
+          <var case="insensitive">
+            <condition string="locked">
+              <feedback>
+		<p>Correct</p>
+              </feedback>
+            </condition>
+            <condition string=".*">
+              <feedback>
+		<p>Try again. You may want to review the technical terms from this chapter.</p>
+              </feedback>
+            </condition>
+          </var>
+	</setup>	
+
+    </exercise>
+          
+    </exercisegroup>
+                           <exercise label="jthx_time_slicing">       
+<title>Describe Time Slicing</title>       
+ <statement>
+
         <p>
           Describe the concept of <em>time slicing</em>
           as it applies to CPU scheduling.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_concurrence_single_vs_multiple_procs">       
+<title>Single vs. Multiple Processors</title>       
+ <statement>
+
         <p>
           What's the difference in the way concurrent threads would be implemented on a computer with several processors and on a computer with a single processor?
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_io_block">       
+<title>I/O Operation Blocking</title>       
+ <statement>
+
         <p>
           Why are threads put into the <em>blocked</em>
           state when they perform an I/O operation?
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_sleep_vs_ready">       
+<title>Sleep vs. Ready</title>       
+ <statement>
+
         <p>
           What's the difference between a thread in the sleep state and a thread in the ready state?
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_deadlock">       
+<title>Deadlock</title>       
+ <statement>
+
         <p>
           <term>Deadlock</term> is a situation that occurs when one thread is holding a resource that another thread is waiting for,
           while the other thread is holding a resource that the first thread is waiting for.
           Describe how deadlock can occur at a four-way intersection with cars entering from each branch.
           How can it be avoided?
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_starvation">       
+<title>Starvation</title>       
+ <statement>
+
         <p>
           <term>Starvation</term> can occur if one thread is repeatedly preempted by other threads.
           Describe how starvation can occur at a four-way intersection and how it can be avoided.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_code_runnable">       
+<title>Implement Random Number Runnable</title>       
+ <statement>
+
         <p>
           Use the <c>Runnable</c> interface to define a thread that repeatedly generates random numbers in the interval 2 through 12.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_code_bakery_extension">       
+<title>Two Clerk Bakery</title>       
+ <statement>
+
         <p>
           Create a version of the <c>Bakery</c> program that uses two clerks to serve customers.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_priority_numbers">       
+<title>Priority Numbers</title>       
+ <statement>
+
         <p>
           Modify the <c>Numbers</c> program so that the user can interactively create <c>NumberThread</c> s and assign them a priority.
           Modify the <c>NumberThread</c> s so that they print their numbers indefinitely
@@ -107,25 +355,45 @@
           What happens when you introduce a higher-priority thread into the mix?
           What happens when you introduce a lower-priority thread into the mix?
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_code_bouncing_ball">       
+<title>Bouncing Ball Thread</title>       
+ <statement>
+
         <p>
           Create a bouncing ball simulation in which a single ball (thread) bounces up and down in a vertical line.
           The ball should bounce off the bottom and top of the enclosing frame.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_code_bouncing_balls">       
+<title>Bouncing Balls Threads</title>       
+ <statement>
+
         <p>
           Modify the simulation in the previous exercise so that more than one ball can be introduced.
           Allow the user to introduce new balls into the simulation by pressing the space bar or clicking the mouse.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_code_more_bouncing_balls">       
+<title>Wild Bouncing Balls</title>       
+ <statement>
+
         <p>
           Modify your solution to the previous problem by having the balls bounce off the wall at a random angle.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_reader_writer_counting">       
+<title>Counting with threads</title>       
+ <statement>
+
         <p>
           <term>Challenge:</term> One type of producer/consumer problem is the
           <em>reader/writer</em> problem.
@@ -138,8 +406,13 @@
           the reader thread shouldn't read a value from the text field until there's a value to be read.
           The writer thread shouldn't write a value to the text field until the reader has read the previous value.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_code_banner_sign">       
+<title>Sign Program</title>       
+ <statement>
+
         <p>
           <term>Challenge:</term> Create a streaming banner thread that moves a simple message across a panel.
           The message should repeatedly enter at the left edge of the panel and exit from the right edge.
@@ -147,8 +420,13 @@
           That way it can be added to any user interface.
           One of its constructors should take a <c>String</c> argument that lets the user set the banner's message.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_slide_show">       
+<title>Slide Show Program</title>       
+ <statement>
+
         <p>
           <term>Challenge:</term> Create a slide show program,
           which repeatedly cycles through an array of images.
@@ -157,8 +435,13 @@
           Give the user some controls that let it pause, stop, start,
           speed up, and slow down the images.
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_horse_race_sim">       
+<title>Horse Racing Simulator</title>       
+ <statement>
+
         <p>
           <term>Challenge:</term> Create a horse race simulation,
           using separate threads for each of the horses.
@@ -169,14 +452,20 @@
           Have the horses implement the <c>Drawable</c> interface,
           which we introduced in Chapter<nbsp/>{chapter-inheritance}. 
         </p>
-      </li>
-      <li>
+      </statement>
+      <response />
+    </exercise>
+                           <exercise label="jthx_digital_clock_ap">       
+<title>Digital Clock Application</title>       
+ <statement>
+
         <p>
 		<term>Challenge:</term> Create a multithreaded digital clock application.
           One thread should keep time in an endless while loop.
           The other thread should be responsible for updating the screen each second.        
           </p>
-      </li>
-    </ol>
-    </p>
+      </statement>
+      <response />
+    </exercise>
+    </exercises>
 </section> 

@@ -1,9 +1,10 @@
 <section xml:id="drawing-linesand-defining-graphical-methods-optional">
   <title>Drawing Lines and Defining Graphical Methods (Optional)</title>
   <p>
-    We used a <c>Graphics</c> object in the previous chapter to draw rectangles and ovals in a JFrame window.
+    We used a <c>Graphics</c> object in the previous chapter to draw
+    rectangles and ovals in a Canvas which are then displayed in a JFrame window.
     The <c>Graphics</c> class also possesses a method for drawing a line segment.
-    Problems involving drawing pictures in an JFrame window using a series of line segments can be a source of examples of defining useful methods and also of making good use of loops.
+    Problems involving drawing pictures on a Canvas using a series of line segments can be a source of examples of defining useful methods and also of making good use of loops.
   </p>
   <p>
     The <c>Graphics</c> class has a public instance method with the header:
@@ -17,7 +18,7 @@ public  void  drawLine(int x1, int y1, int x2, int y2)
     a line segment from the point <m>(10,10)</m> to the point <m>(10,60)</m>.
   </p>
   <p>
-    Consider the problem of creating an Swing program with a method called <c>drawSticks()</c> to draw any specified number of vertical line segments.
+    Consider the problem of creating a Swing program with a method called <c>drawSticks()</c> to draw any specified number of vertical line segments.
     This method might be useful for an graphical user interface to the <c>OneRowNim</c> game to draw the number of sticks at a given point in a game.
     Suppose that this method must have an
 <c>int</c> parameter to specify the number of vertical lines to draw and two <c>int</c> parameters to specify the location of the top endpoint of the left most line segment.
@@ -48,18 +49,19 @@ public void drawSticks(Graphics g,int x,int y,int num)
        </input></program>   
        <activity label="draw-sticks">
         <statement><p>
-   Run the program below listed in <xref ref="fig-drawsticksprog">Listing</xref> and  <url href="https://replit.com/@BerylHoffman/DrawSticks" visual="" target="_blank">DrawSticks on repl</url>. 
+   Run the program below listed in <xref ref="fig-drawsticksprog">Listing</xref>. 
    Can you change the number of lines it draws?
    </p>
   
   <listing xml:id="fig-drawsticksprog">
-    <caption>A Swing Class with a method for drawing a set of sticks.</caption>
+    <caption>A Canvas Class with a method for drawing a set of sticks.</caption>
  <program language="java"><input>
-/** DrawLineCanvas   demonstrates some graphics commands.
+/** DrawSticksCanvas demonstrates some graphics commands.
  *It draws a set of 12 vertical lines and a set of 7 lines.
  */
-import java.awt.*;
-import javax.swing.JFrame;
+ import java.awt.*;
+ import javax.swing.*;
+
 public class DrawSticksCanvas extends Canvas
   /** drawSticks(g,x,y,num) will draw num vertical line
    * segments.  The line segments are 10 pixels apart and
@@ -75,16 +77,67 @@ public class DrawSticksCanvas extends Canvas
       } // while
   } // drawSticks()
   public void paint(Graphics g)
-  {   drawSticks(g, 25, 25, 12);
+  {
+      g.setColor(Color.red);
+      drawSticks(g, 25, 25, 12);
       g.setColor(Color.cyan);
       drawSticks(g, 25, 125, 7);
   } // paint()
-   } // DrawSticksCanvas
+
+  // every java program needs a main to run!
+  public static void main(String[] args){
+      DrawSticksCanvas c = new DrawSticksCanvas();
+      JFrame f = new JFrame("Draw Sticks Program");
+      f.add(c);
+      f.setSize(200,300);
+      f.setVisible(true);
+  }
+} // DrawSticksCanvas
  </input></program>
 </listing>
-<interactive iframe="iframe/repl-draw-sticks.html" width="100%" aspect="1:1"/>
  </statement>
- </activity>
+<program label="drawsticks_canvas_practice_prg" interactive="activecode" language="java"  datafile="HtmlImageUtil.java">
+  <input>
+    <![CDATA[
+import java.awt.*;
+import javax.swing.*;
+
+public class DrawSticksCanvas extends Canvas
+{
+    /** drawSticks(g,x,y,num) will draw num vertical line
+     * segments.  The line segments are 10 pixels apart and
+     * 50 pixels long. The top endpoint of the left most
+     *line segment is at the point (x,y).
+     */
+    public void drawSticks(Graphics g, int x, int y, int num)
+    {   int k = 0;
+        while (k < num)
+        {   g.drawLine(x, y, x, y + 50);
+            x = x + 10;
+            k = k + 1;
+        } // while
+    } // drawSticks()
+
+    public void paint(Graphics g)
+    {
+	g.setColor(Color.red);
+	drawSticks(g, 25, 25, 12);
+        g.setColor(Color.cyan);
+        drawSticks(g, 25, 125, 7);
+    } // paint()
+
+        // every java program needs a main to run!
+    public static void main(String[] args){
+        DrawSticksCanvas c = new DrawSticksCanvas();
+        // display code changed to work in ActiveCode
+        HtmlImageUtil.show(c,200,300);
+    }
+
+} // DrawSticksCanvas
+]]>
+    </input>
+</program>
+       </activity>
 
   <p>
     Note that the body of <c>drawSticks()</c> uses a while-loop to draw the lines and declares and initializes a local variable to zero to use for counting the number of lines drawn.
@@ -100,13 +153,11 @@ public class DrawSticksCanvas extends Canvas
   </p>
   <p>
     An image of the <c>DrawSticksCanvas</c> as it appears in a window is shown in <xref ref="fig-drawstickseps">Figure</xref>.
-   <!-- Try it online at
-    <url href="https://replit.com/@BerylHoffman/DrawSticks" visual="" target="_blank">DrawSticks on repl</url>. 
-   --></p>
+   </p>
   <p>
     <figure xml:id="fig-drawstickseps">
       <caption>The DrawSticksCanvas as displayed in a Java window.</caption>
-    <image width="80%" source="chptr03/drawsticks.png"/>
+    <image width="40%" source="chptr03/drawsticks.png"/>
     </figure>
 
 

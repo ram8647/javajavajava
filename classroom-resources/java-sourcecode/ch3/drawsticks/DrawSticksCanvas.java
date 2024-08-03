@@ -1,7 +1,7 @@
 /*
- * File: DrawSticksApplet.java
+ * File: DrawSticksCanvas.java
  * Author: Java Java Java
- * Description: This applet uses Java's built-in 
+ * Description: This uses Java's built-in 
  *  drawing methods to draw vertical lines on its window.
  *  It draws a set of 12 vertical lines and a set of 7 lines.
  */
@@ -26,7 +26,9 @@ public class DrawSticksCanvas extends Canvas
     } // drawSticks()
 
     public void paint(Graphics g)
-    {   drawSticks(g, 25, 25, 12);
+    {
+	g.setColor(Color.red);
+	drawSticks(g, 25, 25, 12);
         g.setColor(Color.cyan);
         drawSticks(g, 25, 125, 7);
     } // paint()
@@ -36,7 +38,7 @@ public class DrawSticksCanvas extends Canvas
         DrawSticksCanvas c = new DrawSticksCanvas();
         JFrame f = new JFrame("Draw Sticks Program");
         f.add(c);
-        f.setSize(200,200);
+        f.setSize(200,300);
         f.setVisible(true);
     }
 
