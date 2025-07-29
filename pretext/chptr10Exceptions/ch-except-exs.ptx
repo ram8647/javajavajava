@@ -453,14 +453,23 @@ declared</c><ellipsis /> .
       </p>
     </statement>
       <program label="jexcex_try_catch_prg" interactive="activecode" language="java">
-<input>
-	    public class Program {		
+<preamble>
+      import java.util.Scanner;
+	    public class Program {	
+          private static Scanner keyboard = 
+              new Scanner(System.in);	
 	        public static void main(String args[]) {
+              int x = keyboard.nextInt();
 	            // write try/catch block here.
+              </preamble><code>
+
+              </code>
+              <postamble>
 		    
 		}
 	    }
-</input>
+</postamble>
+<stdin>4</stdin>
 </program>    
 
     </exercise>
@@ -519,13 +528,40 @@ declared</c><ellipsis /> .
       </p>
     </statement>
       <program label="jexcex_invalid_password_prg" interactive="activecode" language="java">
-	<input>
+	<preamble>
+import java.util.Scanner;
 public class InvalidPasswordException extends RuntimeException {		
+    private static Scanner keyboard = 
+              new Scanner(System.in);
     public static void main(String args[]) {
-		    
+		    String attempt = keyboard.nextLine();
+        if(validPassword(attempt)) {
+          System.out.println("You're in!");
+        } else {
+          System.out.println("Go away!");
+        }
     }
+    public static boolean validPassword(String guess) {
+      if(guess.equals("When you know you know.")){
+        return true;
+      } else {
+        // change the constructor to add your own message
+        </preamble>
+        <code>
+        throw new InvalidPasswordException();
+      }
+    }
+
+    // Add default constructor here
+
+    // Add second constructor here
+
+    </code>
+    <postamble>
+
 }
-</input>
+</postamble>
+<stdin>The world's longest password attempt is longer than this.</stdin>
 </program>    
 
 	       </exercise>
@@ -539,8 +575,38 @@ public class InvalidPasswordException extends RuntimeException {
         In other words,
         it should throw an exception if the user types in a value lower than the lower bound or greater than the upper bound.
       </p>
+      <p> You'll notice in <c>IntField</c>, <xref ref="fig-intfield2" />, that the 
+      upper bound is private. That means that you'll need to use the parent <c>getInt()</c> method
+      to check the upper bound, and you'll only need to check the lower bound yourself. 
+      The <c>size</c> parameter of the <c>IntField</c> constructors specifies the number of characters
+      that the field should show, and it has nothing to do with the value of the number in the field.
+      </p>
  </statement>
- <datafile label="intfield-src" filename="IntField.java" editable="no" hide="yes">
+<datafile xml:id="intoutofrangeexception-src" label="intoutofrangeexception-src" filename="IntOutOfRangeException.java" editable="no" hide="yes">
+<pre>
+<![CDATA[
+public class IntOutOfRangeException extends Exception 
+    {
+      public IntOutOfRangeException (int Bound) 
+      {
+        super("The input value exceeds the bound " + Bound);
+      }
+      
+      public static void main(String[] args) throws IntOutOfRangeException
+      {
+          int bound = 10;
+          int num = 11;
+          if (num > bound)
+              throw new IntOutOfRangeException(bound);
+          else
+              System.out.println(num + " is in range!");
+          
+      }
+  }
+]]>
+</pre>
+</datafile>
+ <datafile xml:id="intfield-src" label="intfield-src" filename="IntField.java" editable="no" hide="yes">
 <pre>
 <![CDATA[
 
@@ -566,17 +632,47 @@ public class IntField extends JTextField {
 </pre>
 </datafile>
       <program label="jexcex_min_max_int_field_prg"
-	       interactive="activecode" language="java" datafile="IntField.java">
-<input>
+	       interactive="activecode" language="java"  
+         add-files="intoutofrangeexception-src,intfield-src">
+<preamble>
+import java.util.Scanner;
+
+
  public class MinMaxIntField extends IntField {
-   // fill in your code here
- 
-   public static void main(String args[]) {
-       // add some code to test your new field
-		    
-   }
+ 		
+    private static Scanner keyboard = 
+              new Scanner(System.in);
+    public static void main(String args[]) {
+		    String fieldEntry = keyboard.nextLine();
+        if(checkField(fieldEntry)) {
+          System.out.println("In Range");
+        } else {
+          System.out.println("Maybe next time...");
+        }
+    }
+    </preamble>
+    <code>
+    public static boolean checkField(String field) {
+      // create a MinMaxIntField
+
+      // call setText on the MinMaxIntField using the field parameter
+
+      // call getInt() to make sure that the field paramater is valid.
+
+      // return true when there is not an exception.
+
+    }
+    // add the single field you need for MinMaxIntField here
+
+    // write the constructor for MinMaxIntField here
+
+    // write the overloaded getInt() method here
+
+   </code>
+   <postamble>
 }
-</input>
+</postamble>
+<stdin>-100000</stdin>
 </program>    
 
     </exercise>
