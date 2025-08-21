@@ -153,8 +153,8 @@ System.out.println(riddle.getAnswer());
 <subsection>
   <title>Scanner Peculiarities</title>
     <p>
-      The <c>Scanner</c> class is designed to work with a wide variety of input streams, not just
-      keyboard input. Because of this, it has some features that don't work well with simple 
+      The <c>Scanner</c> class is designed to work with a wide variety of <term>text</term> input streams, not just
+      keyboard input. Because of this, it has some features that can be confusing with simple 
       keyboard input.
     </p>
     <p>
@@ -194,8 +194,10 @@ int num2 = sc.nextInt();
       inputting when it encounters the blank space.
     </p> 
     <p>
-      In order to get a <c>Scanner</c> object to read strings that contain spaces,
-      we must call the <c>useDelimiter()</c> method to tell <c>Scanner</c> to include 
+      Typically, in order to get a <c>Scanner</c> object to read strings that contain spaces,
+      we would use the <c>nextLine()</c> method instead of the <c>next()</c> method.
+      If we want to use <c>next()</c>, then we must call the <c>useDelimiter()</c> 
+      method to tell <c>Scanner</c> to include 
       only carriage returns and enter keys as its delimiters.
       For example, the following statement, which works on most Windows systems,
     </p>
@@ -213,7 +215,7 @@ sc = sc.useDelimiter("\r\n");
   <subsection>
     <title>Exceptions</title>
     <p>
-      There are lots of things that csn go wrong when performing input. For example, if your
+      There are lots of things that can go wrong when performing input. For example, if your
       program calls <c>nextInt()</c> to input an integer and the user types <q>hello</q>,
       the program will be terminated with an error message.
     </p>
@@ -277,9 +279,27 @@ public class TestKeyboardReader
             Modify the <c>main()</c> method of the <c>TestScanner</c> class 
             (<xref ref="list-scannerprog">Listing</xref>)
              so that it reads a real number (a decimal number) from the keyboard rather than an integer. 
-             You will need to test this in a development environment that allows user input.
+             You can test this below by changing the <term>Input for Program</term> from 25 to 2.5, and you should 
+             see a result of 6.25.
           </p>
           </statement>
+          <program label="testScanner-code" language="java" 
+              xml:id="testScanner-code" interactive="activecode">
+          <code>
+import java.util.Scanner;
+public class TestScanner
+{
+  public static void main(String[] args)
+  {               
+    Scanner sc = new Scanner(System.in);   // Create Scanner object
+    System.out.print("Input an integer:"); // Prompt
+    int num = sc.nextInt();                // Read an integer
+    System.out.println(num + " squared = " + num * num);
+  } //main()
+} // TestScanner class
+          </code>
+          <stdin>25</stdin>
+          </program>
           <solution>
             <p>
               A main method that reads and squares a real number is given below. 
